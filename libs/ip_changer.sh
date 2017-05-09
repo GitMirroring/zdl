@@ -51,11 +51,12 @@ function check_ip {
 	if show_mode_in_tty "$this_mode" "$this_tty"
 	then
 	    $reconnecter
-	    rm -rf "$path_tmp/links_timer.txt"
+
 	else
 	    $reconnecter &>/dev/null
-	    rm -rf "$path_tmp/links_timer.txt"
 	fi
+
+	rm -rf "$path_tmp/links_timer.txt" "$path_tmp/cookies.zdl"
 	
     elif [ -f "$path_tmp"/proxy ] &&
 	     [[ ! "$(cat "$path_tmp"/proxy)" =~ [0-9.]+ ]]
@@ -74,11 +75,11 @@ function check_ip {
 	    if show_mode_in_tty "$this_mode" "$this_tty"
 	    then
 		$reconnecter
-		rm -rf "$path_tmp/links_timer.txt"
+
 	    else
 		$reconnecter &>/dev/null
-		rm -rf "$path_tmp/links_timer.txt"
 	    fi
+	    rm -rf "$path_tmp/links_timer.txt" "$path_tmp/cookies.zdl"
 
 	else
 	    new_ip_proxy
@@ -229,7 +230,7 @@ function new_ip_proxy {
     maxspeed=0
     minspeed=25
     unset speed type_speed search_proxy num_speed
-    rm -f "$path_tmp/proxy.tmp"
+    rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl"
 
     if [ -s "$path_tmp"/proxy ]
     then
