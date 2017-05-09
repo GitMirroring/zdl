@@ -27,7 +27,7 @@
 ## zdl-extension types: download
 ## zdl-extension name: MultiUp (multi-link)
 
-if [[ "$url_in" =~ multiup\.org ]]
+if [[ "$url_in" =~ multiup\. ]]
 then
     url_1="${url_in//en\/}"
     url_1="${url_1//download\/}"
@@ -44,12 +44,13 @@ then
 	_log 3
 	
     else
-	url_2='https://multiup.org/en/mirror/'$(grep mirror <<< "$html" |tail -n1 |
+	link_parser "$url_in"
+	url_2="${parser_proto}${parser_domain}"/en/mirror/$(grep mirror <<< "$html" |tail -n1 |
 						       sed -r 's|.+mirror\/([^"]+)\"[^"]+|\1|g')
-	
+
 	html=$(wget -qO- "${url_2}")
 
-	for service in '\/\/clicknupload.' 'mega.nz\/\#' 'uptobox.com\/'
+	for service in '\/\/clicknupload.' 'uptobox.com\/' 'mega\.nz\/\#'
 	do
 	    url_in_tmp=$(grep -P "$service" <<< "$html"|
 				sed -r 's|[^"]+\"([^"]+)\".*|\1|g')
@@ -71,7 +72,7 @@ then
 	
 	replace_url_in "$url_in_tmp"
 
-	[[ "$url_in" =~ multiup\.org ]] &&
+	[[ "$url_in" =~ multiup\. ]] &&
 	    _log 2
     fi	
 fi
