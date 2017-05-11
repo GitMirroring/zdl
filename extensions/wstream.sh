@@ -50,11 +50,11 @@ if [[ "$url_in" =~ wstream ]]
 then
     unset html html2 movie_definition
     
-    # if [ -z "$(grep -v wstream "$path_tmp/links_loop.txt" &>/dev/null)" ]
-    # then
-    # 	print_c 1 "Cookies cancellati"
-    # 	rm -rf "$path_tmp/cookies.zdl"           
-    # fi
+    if [ -z "$(grep -v wstream "$path_tmp/links_loop.txt" &>/dev/null)" ]
+    then
+    	print_c 1 "Cookies cancellati"
+    	rm -rf "$path_tmp/cookies.zdl"           
+    fi
     
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
