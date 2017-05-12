@@ -63,7 +63,7 @@ then
 		--save-cookies="$path_tmp/cookies.zdl"           \
 		-qO-)
 
-    if [[ "$html" =~ (File Not Found|File doesn\'t exits) ]]
+    if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
     then
 	_log 3
 
@@ -102,7 +102,7 @@ then
 		((vidoza_loops++))
 		html2=$(wget -qO- -t1 -T$max_waiting           \
 			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}")
-
+		
 		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
