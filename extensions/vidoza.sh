@@ -83,7 +83,7 @@ then
 	    ['l']="Low"
 	)
 
-	grep -P "download_video.+','o','.+Download" <<< "$html" &&
+	grep -P "download_video.+','o','.+Download" <<< "$html" &>/dev/null &&
 	    o=o
 						       
 	for mode_stream in $o n l
@@ -101,12 +101,13 @@ then
 	    do
 		((vidoza_loops++))
 		html2=$(wget -qO- -t1 -T$max_waiting           \
-			     "https://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}")
+			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}")
 
-		url_in_file=$(wget -qO- -t1 -T$max_waiting     \
-				   "$url_in"                   |
-				     grep 'Direct Download Link' |
+		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
+
+		url_in_file="${url_in_file#*url=}"
+		url_in_file=$(urldecode "$url_in_file")
 
 		((vidoza_loops < 2)) && sleep 1
 	    done
