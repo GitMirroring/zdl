@@ -122,106 +122,119 @@ function OL_decode3 {
 
 
 
-if [[ "$url_in" =~ (openload\.) ]]
+# if [[ "$url_in" =~ (openload\.) ]]
+# then
+#     if [[ "$url_in" =~ (openload.+stream.+~) ]]
+#     then
+# 	openload_data=$(wget -S --spider "$url_in" 2>&1)
+	
+# 	url_in_file=$(grep Location <<< "$openload_data" |
+# 			     head -n1 |
+# 			     sed -r 's|.+\s(.+)$|\1|g')
+
+# 	file_in=$(grep filename <<< "$openload_data" |
+# 			 sed -r 's|.+\"([^"]+).+|\1|g')
+
+# 	[ -z "$file_in" ] && file_in="${url_in_file##*\/}"
+
+# 	countdown- 6
+	
+#     else
+# 	URL_in="$(sed -r 's|\/F\/|/f/|g' <<< "$url_in")"
+# 	#URL_in="$(sed -r 's|\/embed\/|/f/|g' <<< "$url_in")"
+# 	URL_in="$(sed -r 's|\/f\/|/embed/|g' <<< "$url_in")"
+
+# 	html=$(wget -t 1 -T $max_waiting                      \
+#     		    -qO-                                      \
+#     		    --retry-connrefused                       \
+#     		    --keep-session-cookies                    \
+#     		    --save-cookies="$path_tmp"/cookies.zdl    \
+#     		    --user-agent="$user_agent"                \
+#     		    "${URL_in}")
+
+# 	file_in=$(grep '<title>' <<< "$html" |sed -r 's/.+\<title>([^|]+)\ \|\ openload.+/\1/g')
+
+# 	if [[ "$file_in" =~ ([fF]{1}ile [nN]{1}ot [fF]{1}ound) ]]
+# 	then
+# 	    _log 3
+	    
+# 	# elif [ -n "$html" ]
+# 	# then
+	    
+# 	#     html2=$(awk '/\^o/{print}' <<< "$html"   |
+# 	#     		   tail -n1                |
+# 	#     		   sed -r 's|[^>]+>(.+)|\1|g') #>"$path_tmp/aaencoded.js"
+
+
+# 	#     echo "${html2%%var*}" >"$path_tmp/aaencoded.js"
+# 	#     #	    sed -r 's|[^>]+>(.+)</script.+|\1|g' >"$path_tmp/aaencoded.js" 
+
+# 	#     #echo "$html" > HTML.html
+# 	#     php_aadecode "$path_tmp/aaencoded.js" > "$path_tmp/aadecoded.js"
+
+# 	#     html3=$(awk '/_\^o/{print}' <<< "$html"   | 
+# 	#     		   tail -n1                |
+# 	#     		   sed -r 's|^(.+)<\/script.+|\1|g') #>"$path_tmp/aaencoded.js"
+
+	    
+# 	#     echo "${html3%%var*}" >"$path_tmp/aaencoded.js"
+# 	#     #	    sed -r 's|[^>]+>(.+)</script.+|\1|g' >"$path_tmp/aaencoded.js" 
+
+# 	#     #echo "$html" > HTML.html
+# 	#     php_aadecode "$path_tmp/aaencoded.js" > "$path_tmp/aadecoded.js"
+
+# 	#     hiddenurl1=$(grep '"streamurl' -B2 <<< "$html" | head -n1 |
+# 	#     			sed -r 's|.+\">(.+)<\/span>.*|\1|g')
+
+# 	#     hiddenurl1=$(htmldecode "$hiddenurl1")
+# 	#     hiddenurl1="${hiddenurl1//\\/\\\\}"
+# 	#     hiddenurl1="${hiddenurl1//\'/\\\'}"
+# 	#     hiddenurl1="${hiddenurl1//\"/\\\"}"
+# 	#     hiddenurl1="${hiddenurl1//\`/\\\`}"
+# 	#     hiddenurl1="${hiddenurl1//\$/\\\$}"
+
+# 	#     hiddenurl2=$(grep '"streamurl' -B1 <<< "$html" | head -n1 |
+# 	#     			sed -r 's|.+\">(.+)<\/span>.*|\1|g')
+	    
+# 	#     hiddenurl2=$(htmldecode "$hiddenurl2")
+# 	#     hiddenurl2="${hiddenurl2//\\/\\\\}"
+# 	#     hiddenurl2="${hiddenurl2//\'/\\\'}"
+# 	#     hiddenurl2="${hiddenurl2//\"/\\\"}"
+# 	#     hiddenurl2="${hiddenurl2//\`/\\\`}"
+# 	#     hiddenurl2="${hiddenurl2//\$/\\\$}"
+
+# 	#     # #sperimentale:
+# 	#     # hiddenurl=$(grep '"streamurl' -B1 <<< "$html" | head -n1 |
+# 	#     # 			sed -r 's|.+\">(.+)<\/span>.*|\1|g')
+# 	#     # echo "$hiddenurl"
+# 	#     # echo "$html" >"openload-page.html"
+# 	#     # #awk '/_\^o/{print}' <<< "$html" | tee "openload-aaencoded.js"
+# 	#     # php_aadecode "openload-aaencoded.js" > "openload-aadecoded.js"
+# 	#     # php_aadecode "openload-page.html" > "openload-page-aadecoded.html"
+	    
+	    
+# 	#     # countdown- 6
+	    
+# 	#     # OL_decode 1
+# 	#     # OL_decode2 "$hiddenurl1" "$hiddenurl2"
+# 	#     # OL_decode3 "$hiddenurl1" "$hiddenurl2"
+#         fi
+#     fi
+#     end_extension
+# fi
+
+if [[ "$url_in" =~ openload\. ]]
 then
-    if [[ "$url_in" =~ (openload.+stream.+~) ]]
+    if command -v phantomjs &>/dev/null
     then
-	openload_data=$(wget -S --spider "$url_in" 2>&1)
-	
-	url_in_file=$(grep Location <<< "$openload_data" |
-			     head -n1 |
-			     sed -r 's|.+\s(.+)$|\1|g')
+	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in")
+	url_in_file=$(head -n1 <<< "$openload_data")
+	file_in=$(tail -n1 <<< "$openload_data")
+	sanitize_file_in
 
-	file_in=$(grep filename <<< "$openload_data" |
-			 sed -r 's|.+\"([^"]+).+|\1|g')
-
-	[ -z "$file_in" ] && file_in="${url_in_file##*\/}"
-
-	countdown- 6
-	
     else
-	URL_in="$(sed -r 's|\/F\/|/f/|g' <<< "$url_in")"
-	#URL_in="$(sed -r 's|\/embed\/|/f/|g' <<< "$url_in")"
-	URL_in="$(sed -r 's|\/f\/|/embed/|g' <<< "$url_in")"
-
-	html=$(wget -t 1 -T $max_waiting                      \
-    		    -qO-                                      \
-    		    --retry-connrefused                       \
-    		    --keep-session-cookies                    \
-    		    --save-cookies="$path_tmp"/cookies.zdl    \
-    		    --user-agent="$user_agent"                \
-    		    "${URL_in}")
-
-	file_in=$(grep '<title>' <<< "$html" |sed -r 's/.+\<title>([^|]+)\ \|\ openload.+/\1/g')
-
-	if [[ "$file_in" =~ ([fF]{1}ile [nN]{1}ot [fF]{1}ound) ]]
-	then
-	    _log 3
-	    
-	# elif [ -n "$html" ]
-	# then
-	    
-	#     html2=$(awk '/\^o/{print}' <<< "$html"   |
-	#     		   tail -n1                |
-	#     		   sed -r 's|[^>]+>(.+)|\1|g') #>"$path_tmp/aaencoded.js"
-
-
-	#     echo "${html2%%var*}" >"$path_tmp/aaencoded.js"
-	#     #	    sed -r 's|[^>]+>(.+)</script.+|\1|g' >"$path_tmp/aaencoded.js" 
-
-	#     #echo "$html" > HTML.html
-	#     php_aadecode "$path_tmp/aaencoded.js" > "$path_tmp/aadecoded.js"
-
-	#     html3=$(awk '/_\^o/{print}' <<< "$html"   | 
-	#     		   tail -n1                |
-	#     		   sed -r 's|^(.+)<\/script.+|\1|g') #>"$path_tmp/aaencoded.js"
-
-	    
-	#     echo "${html3%%var*}" >"$path_tmp/aaencoded.js"
-	#     #	    sed -r 's|[^>]+>(.+)</script.+|\1|g' >"$path_tmp/aaencoded.js" 
-
-	#     #echo "$html" > HTML.html
-	#     php_aadecode "$path_tmp/aaencoded.js" > "$path_tmp/aadecoded.js"
-
-	#     hiddenurl1=$(grep '"streamurl' -B2 <<< "$html" | head -n1 |
-	#     			sed -r 's|.+\">(.+)<\/span>.*|\1|g')
-
-	#     hiddenurl1=$(htmldecode "$hiddenurl1")
-	#     hiddenurl1="${hiddenurl1//\\/\\\\}"
-	#     hiddenurl1="${hiddenurl1//\'/\\\'}"
-	#     hiddenurl1="${hiddenurl1//\"/\\\"}"
-	#     hiddenurl1="${hiddenurl1//\`/\\\`}"
-	#     hiddenurl1="${hiddenurl1//\$/\\\$}"
-
-	#     hiddenurl2=$(grep '"streamurl' -B1 <<< "$html" | head -n1 |
-	#     			sed -r 's|.+\">(.+)<\/span>.*|\1|g')
-	    
-	#     hiddenurl2=$(htmldecode "$hiddenurl2")
-	#     hiddenurl2="${hiddenurl2//\\/\\\\}"
-	#     hiddenurl2="${hiddenurl2//\'/\\\'}"
-	#     hiddenurl2="${hiddenurl2//\"/\\\"}"
-	#     hiddenurl2="${hiddenurl2//\`/\\\`}"
-	#     hiddenurl2="${hiddenurl2//\$/\\\$}"
-
-	#     # #sperimentale:
-	#     # hiddenurl=$(grep '"streamurl' -B1 <<< "$html" | head -n1 |
-	#     # 			sed -r 's|.+\">(.+)<\/span>.*|\1|g')
-	#     # echo "$hiddenurl"
-	#     # echo "$html" >"openload-page.html"
-	#     # #awk '/_\^o/{print}' <<< "$html" | tee "openload-aaencoded.js"
-	#     # php_aadecode "openload-aaencoded.js" > "openload-aadecoded.js"
-	#     # php_aadecode "openload-page.html" > "openload-page-aadecoded.html"
-	    
-	    
-	#     # countdown- 6
-	    
-	#     # OL_decode 1
-	#     # OL_decode2 "$hiddenurl1" "$hiddenurl2"
-	#     # OL_decode3 "$hiddenurl1" "$hiddenurl2"
-        fi
+	_log 35
     fi
+    
     end_extension
 fi
-
-
-    

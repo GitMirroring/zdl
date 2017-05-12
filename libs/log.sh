@@ -177,6 +177,11 @@ function _log {
 	    msg="Reindirizzamento: $url_in --> $2"
 	    color_code=4
 	    ;;
+	35)
+	    msg="$url_in --> Download non supportato: installa phantomjs"
+	    set_link - "$url_in"
+	    ;;
+
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]

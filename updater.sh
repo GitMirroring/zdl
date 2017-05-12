@@ -513,6 +513,7 @@ ESTENSIONI:
 	deps['openssl']=openssl
 	deps['desktop-file-install']=desktop-file-utils
 	deps['curl']=curl
+	deps['phantomjs']=phantomjs
 	## deps['ffmpeg']=ffmpeg
 
 	## php-mbstring
