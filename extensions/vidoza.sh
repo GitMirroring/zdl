@@ -146,6 +146,7 @@ then
 	then
 	    url_in_file="${url_in_file//https\:/http:}"
 	    file_in="${url_in_file##*\/}"
+	    file_in="${file_in%\&file_id=*}"
 	fi
 
 	[ -z "$url_in_timer" ] &&
