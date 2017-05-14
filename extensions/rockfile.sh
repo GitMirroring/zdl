@@ -43,16 +43,16 @@ if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
     domain_rockfile="rockfile.eu"
     
-    curl                                                                                   \
-    	 -A "$user_agent"                                                                  \
-    	 -c "$path_tmp/cookies.zdl"                                                        \
-    	 -D "$path_tmp/header.zdl"                                                         \
-	 -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
-    	 -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-	 -H 'Accept-Encoding: "gzip, deflate"'                                             \
-	 -H 'DNT: "1"'                                                                     \
-	 -H 'Connection: "keep-alive"'                                                     \
-    	 "$url_in" > "$path_tmp"/cloudflare.html
+    curl                                                                                  \
+    	-A "$user_agent"                                                                  \
+    	-c "$path_tmp/cookies.zdl"                                                        \
+    	-D "$path_tmp/header.zdl"                                                         \
+	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    	-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+	-H 'Accept-Encoding: "gzip, deflate"'                                             \
+	-H 'DNT: "1"'                                                                     \
+	-H 'Connection: "keep-alive"'                                                     \
+    	"$url_in" > "$path_tmp"/cloudflare.html
 
     if ! command -v phantomjs &>/dev/null
     then
@@ -76,20 +76,21 @@ then
 	    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
     	    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
 	    -H 'Accept-Encoding: "gzip, deflate"'                                           \
-	    -H 'DNT: "1"'                                                                   \     
+	    -H 'DNT: "1"'                                                                   \
 	    -H "Referer: \"$url_in\""                                                       \
 	    -H "Cookie: \"${cookie_rockfile}\""                                             \
 	    -H 'Connection: "keep-alive"'                                                   \
 	    -d "$get_data"                                                                  \
 	    -G                                                                              \
 	    "http://rockfile.eu/cdn-cgi/l/chk_jschl" >/dev/null
-
+	
+	
 	cookie_rockfile=$(grep Set-Cookie "$path_tmp/header2.zdl" |
 				 cut -d' ' -f2 |
 				 tr '\n' ' ')
 	
 	cookie_rockfile="${cookie_rockfile%';'*}"
-	
+
 	html=$(curl                                                                                \
 		   -A "$user_agent"                                                                \
 		   -b "$path_tmp/cookies.zdl"                                                      \
