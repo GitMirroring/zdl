@@ -43,15 +43,15 @@ if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
     domain_rockfile="rockfile.eu"
     
-    curl \
-    	 -A "$user_agent" \
-    	 -c "$path_tmp/cookies.zdl" \
-    	 -D "$path_tmp/header.zdl" \
-	 -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"' \
-    	 -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"' \
-	 -H 'Accept-Encoding: "gzip, deflate"' \
-	 -H 'DNT: "1"' \
-	 -H 'Connection: "keep-alive"' \
+    curl                                                                                   \
+    	 -A "$user_agent"                                                                  \
+    	 -c "$path_tmp/cookies.zdl"                                                        \
+    	 -D "$path_tmp/header.zdl"                                                         \
+	 -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    	 -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+	 -H 'Accept-Encoding: "gzip, deflate"'                                             \
+	 -H 'DNT: "1"'                                                                     \
+	 -H 'Connection: "keep-alive"'                                                     \
     	 "$url_in" > "$path_tmp"/cloudflare.html
 
     if ! command -v phantomjs &>/dev/null
@@ -69,19 +69,19 @@ then
 
 	countdown- 4
 
-	curl \
-	    -A "$user_agent" \
-	    -c "$path_tmp/cookies.zdl" \
-	    -D "$path_tmp/header2.zdl" \
-	    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"' \
-    	    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"' \
-	    -H 'Accept-Encoding: "gzip, deflate"' \
-	    -H 'DNT: "1"' \
-	    -H "Referer: \"$url_in\"" \
-	    -H "Cookie: \"${cookie_rockfile}\"" \
-	    -H 'Connection: "keep-alive"' \
-	    -d "$get_data" \
-	    -G \
+	curl                                                                                \
+	    -A "$user_agent"                                                                \
+	    -c "$path_tmp/cookies.zdl"                                                      \
+	    -D "$path_tmp/header2.zdl"                                                      \
+	    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    	    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+	    -H 'Accept-Encoding: "gzip, deflate"'                                           \
+	    -H 'DNT: "1"'                                                                   \     
+	    -H "Referer: \"$url_in\""                                                       \
+	    -H "Cookie: \"${cookie_rockfile}\""                                             \
+	    -H 'Connection: "keep-alive"'                                                   \
+	    -d "$get_data"                                                                  \
+	    -G                                                                              \
 	    "http://rockfile.eu/cdn-cgi/l/chk_jschl" >/dev/null
 
 	cookie_rockfile=$(grep Set-Cookie "$path_tmp/header2.zdl" |
@@ -90,18 +90,18 @@ then
 	
 	cookie_rockfile="${cookie_rockfile%';'*}"
 	
-	html=$(curl \
-		   -A "$user_agent" \
-		   -b "$path_tmp/cookies.zdl" \
-		   -c "$path_tmp/cookies2.zdl" \
-		   -D "$path_tmp/header2.zdl" \
-		   -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"' \
-    		   -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"' \
-		   -H 'Accept-Encoding: "gzip, deflate"' \
-		   -H 'DNT: "1"' \
-		   -H "Referer: \"$url_in\"" \
-		   -H "Cookie: \"${cookie_rockfile}\"" \
-		   -H 'Connection: "keep-alive"' \
+	html=$(curl                                                                                \
+		   -A "$user_agent"                                                                \
+		   -b "$path_tmp/cookies.zdl"                                                      \
+		   -c "$path_tmp/cookies2.zdl"                                                     \
+		   -D "$path_tmp/header2.zdl"                                                      \
+		   -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    		   -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+		   -H 'Accept-Encoding: "gzip, deflate"'                                           \
+		   -H 'DNT: "1"'                                                                   \
+		   -H "Referer: \"$url_in\""                                                       \
+		   -H "Cookie: \"${cookie_rockfile}\""                                             \
+		   -H 'Connection: "keep-alive"'                                                   \
 		   "$url_in" 2>&1)
 
 	if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
@@ -119,9 +119,9 @@ then
 
 	    post_data="${post_data##*document.write\(\&}&${method_free}=Regular Download"
 
-	    html=$(curl                                \
-		       -b "$path_tmp"/cookies2.zdl      \
-		       -A "$user_agent"                  \
+	    html=$(curl                                   \
+		       -b "$path_tmp"/cookies2.zdl        \
+		       -A "$user_agent"                   \
 		       -d "$post_data"                    \
 		       "${url_in}")
 	    
@@ -163,11 +163,11 @@ then
 		    countdown- $timer
 		    sleeping 2
 		    
-		    url_in_file=$(curl "${url_in}"       \
-				       -b "$path_tmp"/cookies2.zdl           \
-				       -A "$user_agent"                       \
-				       -d "$post_data"                   |
-					 grep -P '[^\#]+btn_downloadLink'         |
+		    url_in_file=$(curl "${url_in}"                             \
+				       -b "$path_tmp"/cookies2.zdl             \
+				       -A "$user_agent"                        \
+				       -d "$post_data"                           |
+					 grep -P '[^\#]+btn_downloadLink'        |
 					 sed -r 's|.+href=\"([^"]+)\".+|\1|g')
 		    url_in_file=$(sanitize_url "$url_in_file")
 		fi
