@@ -181,7 +181,10 @@ function _log {
 	    msg="$url_in --> Download non supportato: installa phantomjs"
 	    set_link - "$url_in"
 	    ;;
-
+	36)
+	    msg="$url_in --> Download non supportato: inserisci il codice captcha usando un browser web"
+	    set_link - "$url_in"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]

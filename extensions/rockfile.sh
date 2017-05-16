@@ -139,38 +139,45 @@ then
 		if [[ "$code" =~ ^[0-9]+$ ]]
 		then
 		    print_c 1 "Pseudo-captcha: $code"
+
+		    unset post_data
+		    input_hidden "$html"
+		    post_data="${post_data##*'(&'}&code=$code"
+		    post_data="${post_data//'&down_script=1'}"
+
+		    errMsg=$(grep 'Devi attendere' <<< "$html" |
+				    sed -r 's|[^>]+>([^<]+)<.+|\1|g')
+		    
+		    if [[ "$html" =~ (You can download files up to) ]]
+		    then
+			_log 4
+
+		    elif [ -n "$code" ]
+		    then
+			timer=$(grep countdown_str <<< "$html"          |
+				       head -n1                         |
+				       sed -r 's|.+>([0-9]+)<.+|\1|g')
+
+			countdown- $timer
+			sleeping 2
+			
+			url_in_file=$(curl "${url_in}"                             \
+					   -b "$path_tmp"/cookies2.zdl             \
+					   -A "$user_agent"                        \
+					   -d "$post_data"                           |
+					     grep -P '[^\#]+btn_downloadLink'        |
+					     sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+			url_in_file=$(sanitize_url "$url_in_file")
+		    fi
+
 		else
 		    print_c 3 "Pseudo-captcha: codice non trovato"
-		fi
 
-		unset post_data
-		input_hidden "$html"
-		post_data="${post_data##*'(&'}&code=$code"
-		post_data="${post_data//'&down_script=1'}"
-
-		errMsg=$(grep 'Devi attendere' <<< "$html" |
-				sed -r 's|[^>]+>([^<]+)<.+|\1|g')
-		
-		if [[ "$html" =~ (You can download files up to) ]]
-		then
-		    _log 4
-
-		elif [ -n "$code" ]
-		then
-		    timer=$(grep countdown_str <<< "$html"          |
-				   head -n1                         |
-				   sed -r 's|.+>([0-9]+)<.+|\1|g')
-
-		    countdown- $timer
-		    sleeping 2
-		    
-		    url_in_file=$(curl "${url_in}"                             \
-				       -b "$path_tmp"/cookies2.zdl             \
-				       -A "$user_agent"                        \
-				       -d "$post_data"                           |
-					 grep -P '[^\#]+btn_downloadLink'        |
-					 sed -r 's|.+href=\"([^"]+)\".+|\1|g')
-		    url_in_file=$(sanitize_url "$url_in_file")
+		    if [[ "$html" =~ google.+recaptcha ]]
+		    then
+			url_in_timer=true
+			_log 36
+		    fi
 		fi
 	    fi
 	fi
