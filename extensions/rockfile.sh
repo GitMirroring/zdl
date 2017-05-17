@@ -57,6 +57,7 @@ function check_cloudflare {
 
     if grep jschl_answer <<< "$target" &>/dev/null
     then
+	print_c 2 "Rilevato Cloudflare"
 	return 0
     else
 	return 1
@@ -67,10 +68,8 @@ if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
     domain_rockfile="rockfile.eu"
 
-    if check_clodflare "$url_in"
-    then
-	print_c 2 "Rilevato Cloudflare"
-	
+    if check_cloudflare "$url_in"
+    then	
 	curl                                                                                  \
     	    -A "$user_agent"                                                                  \
     	    -c "$path_tmp/cookies.zdl"                                                        \
@@ -167,6 +166,11 @@ then
 	    url_in_timer=$((${BASH_REMATCH[1]} * 60))
 	    set_link_timer "$url_in" $url_in_timer
 	    _log 33 $url_in_timer
+
+	elif [[ "$html" =~ (No Available traffic to download this file. Remaining traffic[^.]+\.) ]]
+	then
+	    errMsg="${BASH_REMATCH[1]//<*>}"
+	    _log 2
 
 	else
 	    code=$(pseudo_captcha "$html")
