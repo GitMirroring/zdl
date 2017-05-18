@@ -41,6 +41,7 @@ function get_jschl_answer {
 
 function check_cloudflare {
     local target="$1"
+    local html
 
     if url "$target"
     then
@@ -55,7 +56,7 @@ function check_cloudflare {
 	return 1
     fi
 
-    if grep jschl_answer <<< "$target" &>/dev/null
+    if grep jschl_answer <<< "$html" &>/dev/null
     then
 	print_c 2 "Rilevato Cloudflare"
 	return 0
