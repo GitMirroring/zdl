@@ -144,17 +144,17 @@ function simply_debrid {
     		      "https://simply-debrid.com/generate#show"              \
     		      -qO-)
 
-    local html_url='https://simply-debrid.com/'$(grep -Po 'inc/generate/name.php[^"]+' <<< "$html")
-
+    local html_url='http://simply-debrid.com/'$(grep -Po 'inc/generate/name.php[^"]+' <<< "$html")
+    
     url "$html_url" &&
 	print_c 4 "... $html_url ..."
 
     wget -qO /dev/null 'https://simply-debrid.com/inc/generate/adb.php?nok=1' \
     	 --keep-session-cookies --save-cookies="$path_tmp/cookies.zdl"
-
-	json_data=$(wget --load-cookies="$path_tmp/cookies.zdl"                 \
-			 "$html_url" -qO- |
-			   sed -r 's|\\\/|/|g')
+    
+    json_data=$(wget --load-cookies="$path_tmp/cookies.zdl"                 \
+		     "$html_url" -qO- |
+		       sed -r 's|\\\/|/|g')
     
     if [[ "$json_data" =~ '"error":0' ]]
     then

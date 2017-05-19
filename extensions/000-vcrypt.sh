@@ -25,25 +25,38 @@
 #
 
 ## zdl-extension types: shortlinks
-## zdl-extension name: vcrypt.pw
+## zdl-extension name: vcrypt
 
 if [ "$url_in" != "${url_in//vcrypt.}" ]
 then
-    url_in_new=$(wget -S --spider "$url_in"    2>&1 |
+    url_vcrypt=$(wget -S --spider "$url_in"    2>&1 |
 		     grep -P '[lL]{1}ocation:' |
 		     grep -v 'vcrypt' |
 		     head -n1 |
 		     awk '{print $2}')
 
-    url_in_new="http${url_in_new##*http}"
+    url_vcrypt="http${url_vcrypt##*http}"
 
-    if [[ ! "$url_in_new" =~ vcrypt ]] &&
-	   url "$url_in_new"
+    if [[ ! "$url_vcrypt" =~ vcrypt ]] &&
+	   url "$url_vcrypt"
     then
-	replace_url_in "$url_in_new" ||
+	replace_url_in "$url_vcrypt" ||
 	    _log 2
     else
-	_log 2
+	url_vcrypt=$(curl -v "$url_in"  2>&1     |
+			 grep location           |
+			 awk '{print $3}'        |
+			 sed -r 's|vcrypt\.pw|vcrypt.net|g' |
+			 sed -r 's|http\:|https:|g' |
+			 tail -n1 |
+			 tr -d '\r')
+
+	url_vcrypt=$(curl "$url_vcrypt" -d 'go=go'     |
+			    grep refresh               |
+			    sed -r "s|.+url=([^']+)'.*|\1|g")
+
+	replace_url_in "$url_vcrypt" ||
+	    _log 2
     fi
 fi
 
