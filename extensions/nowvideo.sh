@@ -28,7 +28,23 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Nowvideo
 
-if [ "$url_in" != "${url_in//'nowvideo.'}" ]
+
+# if [[ "$url_in" =~ nowvideo\.pw ]]
+# then
+
+#     # servono link funzionanti
+#     html=$(curl "$url_in")
+#     input_hidden "$html"
+
+#     echo "$post_data --- ${url_in//video/videos}"
+
+#     html=$(curl -d "$post_data" "${url_in//\/video/\/videos}")
+#     grep title <<< "$html"
+#     grep source <<< "$html"
+#     end_extension
+    
+    
+if [[ "$url_in" =~ nowvideo\. ]]
 then
     if [[ "$url_in" =~ 'http://nowvideo' ]]
     then

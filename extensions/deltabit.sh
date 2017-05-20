@@ -26,31 +26,31 @@
 
 ## ZDL add-on
 ## zdl-extension types: streaming download
-## zdl-extension name: Vidoza (HD)
+## zdl-extension name: Deltabit (HD)
 
-function add_vidoza_definition {
-    set_line_in_file + "$url_in $1" "$path_tmp"/vidoza-definitions
+function add_deltabit_definition {
+    set_line_in_file + "$url_in $1" "$path_tmp"/deltabit-definitions
 }
 
-function del_vidoza_definition {
-    set_line_in_file - "$url_in $1" "$path_tmp"/vidoza-definitions
+function del_deltabit_definition {
+    set_line_in_file - "$url_in $1" "$path_tmp"/deltabit-definitions
 }
 
-function get_vidoza_definition {
+function get_deltabit_definition {
     declare -n ref="$1"
 
-    if test -f "$path_tmp"/vidoza-definitions
+    if test -f "$path_tmp"/deltabit-definitions
     then
-	ref=$(grep -P "^$url_in (o|n|l){1}$" "$path_tmp"/vidoza-definitions |
+	ref=$(grep -P "^$url_in (o|n|l){1}$" "$path_tmp"/deltabit-definitions |
 		     cut -f2 -d' ')
     fi
 }
 
-if [[ "$url_in" =~ vidoza ]] 
+if [[ "$url_in" =~ deltabit ]] 
 then
     unset html html2 movie_definition
     
-    if [ -z "$(grep -v vidoza "$path_tmp/links_loop.txt" &>/dev/null)" ]
+    if [ -z "$(grep -v deltabit "$path_tmp/links_loop.txt" &>/dev/null)" ]
     then
     	print_c 1 "Cookies cancellati"
     	rm -rf "$path_tmp/cookies.zdl"           
@@ -70,11 +70,11 @@ then
     else
 	download_video=$(grep -P 'download_video.+Download' <<< "$html" |head -n1)
 
-	hash_vidoza="${download_video%\'*}"
-	hash_vidoza="${hash_vidoza##*\'}"
+	hash_deltabit="${download_video%\'*}"
+	hash_deltabit="${hash_deltabit##*\'}"
 
-	id_vidoza="${download_video#*download_video\(\'}"
-	id_vidoza="${id_vidoza%%\'*}"
+	id_deltabit="${download_video#*download_video\(\'}"
+	id_deltabit="${id_deltabit%%\'*}"
 
 	declare -A movie_definition
 	movie_definition=(
@@ -85,31 +85,31 @@ then
 
 	grep -P "download_video.+','o','.+Download" <<< "$html" &>/dev/null &&
 	    o=o
+
+	## file_in:
+	input_hidden "$html"
 						       
 	for mode_stream in $o n l
 	do
-	    get_vidoza_definition mode_stream_test
+	    get_deltabit_definition mode_stream_test
 
 	    [ -n "$mode_stream_test" ] &&
 		mode_stream="$mode_stream_test"
 
 	    print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
 	    
-	    vidoza_loops=0
+	    deltabit_loops=0
 	    while ! url "$url_in_file" &&
-		    ((vidoza_loops < 2))
+		    ((deltabit_loops < 2))
 	    do
-		((vidoza_loops++))
+		((deltabit_loops++))
 		html2=$(wget -qO- -t1 -T$max_waiting           \
-			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}")
-		
-		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
+			     "http://deltabit.co/dl?op=download_orig&id=${id_deltabit}&mode=${mode_stream}&hash=${hash_deltabit}")
+
+		url_in_file=$(grep -P 'http.+Download' <<< "$html2" |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
-		url_in_file="${url_in_file#*url=}"
-		url_in_file=$(urldecode "$url_in_file")
-
-		((vidoza_loops < 2)) && sleep 1
+		((deltabit_loops < 2)) && sleep 1
 	    done
 
 	    if ! url "$url_in_file" &&
@@ -119,34 +119,30 @@ then
 		set_link_timer "$url_in" $url_in_timer
 		_log 33 $url_in_timer
 
-		add_vidoza_definition $mode_stream
+		add_deltabit_definition $mode_stream
+		break
+
+	    elif url "$url_in_file"
+	    then
+		print_c 1 "Disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+		set_deltabit_definition $mode_stream
 		break
 
 	    else
-		if ! url "$url_in_file"
-		then
-		    url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
-	     				 sed -r 's|.+\"([^"]+)\".+|\1|g')
-		fi
-		
-		if url "$url_in_file"
-		then
-		    print_c 1 "Disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
-		    set_vidoza_definition $mode_stream
-		    break
-
-		else
-		    print_c 3 "Non è disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
-		    del_vidoza_definition $mode_stream
-		fi
+		print_c 3 "Non è disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+		del_deltabit_definition $mode_stream
 	    fi
 	done
 	
 	if url "$url_in_file"
 	then
 	    url_in_file="${url_in_file//https\:/http:}"
-	    file_in="${url_in_file##*\/}"
-	    file_in="${file_in%\&file_id=*}"
+
+	    if [ -z "$file_in" ]
+	    then
+		file_in="${url_in_file##*\/}"
+		file_in="${file_in%\&file_id=*}"
+	    fi
 	fi
 
 	[ -z "$url_in_timer" ] &&
