@@ -185,7 +185,8 @@ function standard_box {
     header_box "$header_msg"
 
     [ -n "$init_msg" ] &&
-	echo -ne "$init_msg"
+	echo -ne "$init_msg" ||
+	    echo
     
     [ -f "$path_tmp/downloader" ] && 
 	downloader_in=$(cat "$path_tmp/downloader")
