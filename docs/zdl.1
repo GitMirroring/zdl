@@ -1,16 +1,16 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Sat May 20 15:27:14 2017" "GNU" "User Commands"
+.TH "ZigzagDownLoader (ZDL)" "1" "Mon May 22 20:47:12 2017" "GNU" "User Commands"
 .SH NOME\	
 \fBzdl\fP - CLI download manager per \fIGNU/Linux\fP e \fIMicrosoft Windows + Cygwin\fP.\
 
-
-.SH SINTASSI\	
+\
+.SH SINTASSI	
 \fBzdl [\fP\fIOPZIONI\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB] \fP
 
 
 .SH DESCRIZIONE\	
 \fIZigzagDownLoader\fP gestisce gli scaricamenti di alcuni downloader come \fIAria2\fP, \fIAxel\fP, \fIWget\fP, \fIRTMPDump\fP o \fIcURL\fP\&. Inoltre, può estrarre l'URL dei file da scaricare da servizi di file hosting e video streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC, senza alcuna interazione via CHAT. Estende \fIConkeror\fP, \fIXXXTerm/Xombrero\fP, \fIFirefox\fP (attraverso l'estensione \fIFlashgot\fP) e \fIMicrosoft Windows\fP (tramite \fICygwin\fP).
-
-.SS Argomenti\	
+\
+.SS Argomenti	
 L'ordine delle opzioni e degli altri argomenti non è importante:
 
 
@@ -163,8 +163,8 @@ Cancella i file temporanei dei download completati
 .RS -5
 
 
-\
-.SS Socket e interfacce utente:	
+
+.SS Socket e interfacce utente:\	
 
 .RS 5
 
@@ -240,8 +240,8 @@ Porte TCP e UDP aperte: verificare le impostazioni del router
 .RS -5
 
 
-\
-.SS Filtri:	
+
+.SS Filtri:\	
 
 .RS 5
 
@@ -335,8 +335,8 @@ usa Zile, un micro editor GNU in stile Emacs
 .RS -5
 
 
-\
-.SS Avvio con proxy:	
+
+.SS Avvio con proxy:\	
 
 .RS 5
 
@@ -378,8 +378,8 @@ Avvia ZDL attivando il proxy indicato dall'utente, per l'intera durata del downl
 .RS -5
 
 
-\
-.SS Configurazione:	
+
+.SS Configurazione:\	
 
 .RS 5
 
@@ -397,10 +397,10 @@ Per scaricare lo stream incorporando ZDL in nuovi script, il modello generico de
 
 .RS -5
 
-
-.SH PANORAMICA\	
 \
-.SS Servizi	
+.SH PANORAMICA	
+
+.SS Servizi\	
 ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream video (da Youtube, Nowvideo, Dailymotion\&...) per mezzo di estensioni dei browser, ed i file condivisi attraverso i seguenti servizi di hosting e di streaming, direttamente dal link (bypassando il player delle pagine web):
 
 
@@ -411,7 +411,7 @@ ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream
 .RS -5
 \fI\fP\fBVideo in streaming saltando il player del browser:\fP\fI\fP
 .RS 5
-Auroravid/Novamov, Dailymotion, Deltabit (HD), Exashare, Fastvideo, IDoWatch, Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla), Nowvideo, Openload, Portalevideo.unimi.it, Putstream, Rapidvideo.tv, Raptu.com/Rapidvideo.com, Rocvideo, Sockshare (HD), Speedvideo (HD), Streamin, Thevideo, TubeOffLine.com (tutti i servizi: Biqle), Tutti i video in streaming di tipo .m3u8, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza (HD), Vidto, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP)
+Auroravid/Novamov, Dailymotion, Deltabit (HD), Exashare, Fastvideo, Flashx.tv, IDoWatch, Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla), Nowvideo, Openload, Portalevideo.unimi.it, Putstream, Rapidvideo.tv, Raptu.com/Rapidvideo.com, Rocvideo, Sockshare (HD), Speedvideo (HD), Streamin, Thevideo, TubeOffLine.com (tutti i servizi: Biqle), Tutti i video in streaming di tipo .m3u8, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza (HD), Vidto, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP)
 
 
 .RS -5
@@ -428,7 +428,7 @@ Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable ed altri serviz
 .RS -5
 \fI\fP\fBShort links:\fP\fI\fP
 .RS 5
-bc.vc, cb01, Masklink, q.gs, Shortlink, swzz.xyz, vcrypt
+bc.vc, cb01, linkup, Masklink, q.gs, Shortlink, swzz.xyz, vcrypt
 
 .RS -5
 \fI\fP\fBTutti i file scaricabili con le seguenti estensioni dei browser:\fP\fI\fP
@@ -443,8 +443,8 @@ Aria2 (anche torrent), Axel, cURL, RTMPDump, Wget, youtube-dl (comando per elenc
 .RS -5
 
 
-
-.SS Avvio\	
+\
+.SS Avvio	
 ZDL può essere avviato in diversi modi:
 
 
@@ -461,9 +461,8 @@ ZDL può essere avviato in diversi modi:
 .IP "\fI1.\fP" 3
 generando automaticamente la lista dei link per il download:
 
-
-.RS 5
-
+.RS 0
+.IP "\fI1.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 apri un terminale ed entra nella directory che dovrà contenere i file scaricati
@@ -545,8 +544,8 @@ nella modalità "non interattiva" (standard), digitando il tasto \fBi\fP
 
 
 
-
-.SS Arresto\	
+\
+.SS Arresto	
 ZDL può essere fermato in diversi modi:
 
 .RS 5
