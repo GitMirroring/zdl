@@ -185,6 +185,11 @@ function _log {
 	    msg="$url_in --> Download non supportato: inserisci il codice captcha usando un browser web"
 	    set_link - "$url_in"
 	    ;;
+	37)
+	    msg="$url_in --> Il servizio rileva l'uso di AdBlock o di un software come Kodi/XBMC/TV BOX (come ZigzagDownLoader). 
+Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link dalla coda."
+	    set_link - "$url_in"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]

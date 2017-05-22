@@ -183,12 +183,13 @@ function standard_box {
 	header_msg="Help dei comandi" ||
 	    header_msg="Modalità in standard output${header_lite_msg}"
     header_box "$header_msg"
-    
-    echo -e -n "$init_msg"
+
+    [ -n "$init_msg" ] &&
+	echo -ne "$init_msg"
     
     [ -f "$path_tmp/downloader" ] && 
 	downloader_in=$(cat "$path_tmp/downloader")
-    print_c 0 "\n\n${BBlue}Downloader:${Color_Off} $downloader_in\t${BBlue}Directory:${Color_Off} $PWD\n"
+    print_c 0 "\n${BBlue}Downloader:${Color_Off} $downloader_in\t${BBlue}Directory:${Color_Off} $PWD\n"
     #[ -z "$1" ] && services_box
     
     commands_box
