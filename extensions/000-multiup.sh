@@ -50,9 +50,9 @@ then
 
 	html=$(wget -qO- "${url_2}")
 
-	for service in '\/\/clicknupload.' 'uptobox.com\/' 'mega\.nz\/\#'
+	for service in '\/\/clicknupload.' 'uptobox.com\/' 'mega\.nz\/\#' 'openload\.co\/'
 	do
-	    url_in_tmp=$(grep -P "$service" <<< "$html"|
+	    url_in_tmp=$(grep -P "http.+$service" <<< "$html"|
 				sed -r 's|[^"]+\"([^"]+)\".*|\1|g')
 
 	    if url "$url_in_tmp"
@@ -64,12 +64,16 @@ then
 		    'mega.nz\/\#') 
 			extension_mega "$url_in_tmp"
 			;;
+		    'openload\.co\/')
+			extension_openload "$url_in_tmp"
+			;;
 		esac
- 		! url "$url_in_file" ||
+		
+ 		url "$url_in_file" &&
 		    break
 	    fi
 	done
-	
+
 	replace_url_in "$url_in_tmp"
 
 	[[ "$url_in" =~ multiup\. ]] &&

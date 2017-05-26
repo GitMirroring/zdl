@@ -30,11 +30,16 @@
 
 if [ "$url_in" != "${url_in//flashx.}" ]
 then
-    html=$(wget -qO- \
+    html=$(wget -SO- \
 		--user-agent="$user_agent" \
 		--keep-session-cookies \
 		--save-cookies=$path_tmp/cookies.zdl \
 		"$url_in")
+
+    #echo "$html" >TEST
+#    sed -r 's|(\$\.cookie.+)\;$|console.log(\1);|g' -i TEST
+#    sed -r "s|(^.+cookie\('aff.+$)|\1\nconsole.log(document.cookie);|g" -i TEST
+    #url_flashx=$(grep Location <<< "$html" |head -n1 |cut -d' ' -f2)
 
     input_hidden "$html"
     post_data+="&imhuman=Proceed to video"
@@ -50,10 +55,16 @@ then
 			cut -d"'" -f4)
 
     cookie_string="aff=${cookie_aff}; file_id=${cookie_file_id}"
-    
+    cookie_vars_js="var aff=${cookie_aff}; 
+var file_id=${cookie_file_id};"
+
+    #sed -r "s|^.+cookie\('([^']+)', '([^']+)'.+|\1 = \"\2\";|g" -i TEST
+
     # echo "$cookie_code"
     # echo "$cookie_string"
 
+    #phantomjs --cookies-file=$path_tmp/cookies.zdl "$path_usr"/extensions/flashx.js TEST
+    
     countdown- 5
     html=$(curl -v \
 		-D headers-dump \

@@ -32,7 +32,7 @@ then
     html=$(wget -qO- --post-data="urllist=$url_in" "http://adf.boxxod.net")
 
     url_qgs=$(grep dlhere <<< "$html" |
-		     sed -r "s|.+href='([^']+).+|\1|g")
+		     sed -r "s|.+href='([^']+)'.+|\1|g")
 
     replace_url_in "$url_qgs" ||
 	_log 12

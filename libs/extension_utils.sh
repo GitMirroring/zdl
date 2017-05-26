@@ -473,6 +473,21 @@ function extension_mega {
     fi
 }
 
+
+function extension_openload {
+    if command -v phantomjs &>/dev/null
+    then
+	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$1")
+	url_in_file=$(head -n1 <<< "$openload_data")
+	file_in=$(tail -n1 <<< "$openload_data")
+	sanitize_file_in
+	
+    else
+	_log 35
+    fi
+}
+
+
 function get_location { # 1=url 2=variable_to_new_url  
     local location=$(wget -S --spider "$1" 2>&1 |
 			 awk '/Location:/{print $2}')
