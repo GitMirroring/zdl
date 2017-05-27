@@ -151,10 +151,11 @@ var displayLinks = function (op) {
                 }
 
                 return displayLinks();
-            }
+            } else {
 
-            document.getElementById("output-links").innerHTML = "";
-            return displayLinks();
+		document.getElementById("output-links").innerHTML = "";
+		return displayLinks();
+	    }
         }
     });
 };

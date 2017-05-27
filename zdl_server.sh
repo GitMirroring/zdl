@@ -1272,7 +1272,7 @@ if (data) {
 			if ! check_instance_prog &>/dev/null &&
 				! check_instance_daemon &>/dev/null
 			then
-			    set_line_in_file + "$PWD" "$server_paths"
+			    set_line_in_file + "$(realpath "$PWD")" "$server_paths"
 			    mkdir -p "$path_tmp"
 			    date +%s >"$path_tmp"/.date_daemon
 			    nohup /bin/bash zdl --silent "$PWD" &>/dev/null &

@@ -576,7 +576,7 @@ fi
 export pid_prog=$$
 
 mkdir -p "$path_server"
-set_line_in_file + "$PWD" "$path_server"/paths.txt
+set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
 
 if [[ "${args[*]}" =~ \-s ]]
 then
