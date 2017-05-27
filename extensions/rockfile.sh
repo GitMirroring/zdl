@@ -194,8 +194,9 @@ then
 
 		elif [ -n "$code" ]
 		then
-		    timer=$(grep countdown_str <<< "$html"          |
-				   head -n1                         |
+		    timer=$(grep countdown_str -A2 <<< "$html"      |
+				   head -n3                         |
+				   tail -n1                         |
 				   sed -r 's|.+>([0-9]+)<.+|\1|g')
 
 		    countdown- $timer
