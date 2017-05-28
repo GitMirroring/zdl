@@ -116,6 +116,7 @@ function sprint_c {
 
 function print_header { # $1=label ; $2=color ; $3=header pattern
     local text line hpattern color
+    
     text="$1"
     [ -n "$text" ] && text=" $text " 
     color="$2"

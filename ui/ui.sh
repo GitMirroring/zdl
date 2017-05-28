@@ -25,6 +25,8 @@
 #
 
 function show_downloads {
+    local cols=$(cat "$path_tmp"/columns)
+    
     if show_mode_in_tty "$this_mode" "$this_tty"
     then
 	if data_stdout
@@ -33,7 +35,7 @@ function show_downloads {
 		   awk -f $path_usr/libs/common.awk                 \
 		   -f $path_usr/ui/colors-${background}.awk.sh      \
 		   -f $path_usr/ui/ui.awk                           \
-		   -v col="$COLUMNS"                                \
+		   -v cols="$cols"                                  \
 		   -v Color_Off="$Color_Off"                        \
 		   -v Background="$Background"                      \
 		   -e "BEGIN {$awk_data display()}" 
@@ -61,7 +63,7 @@ function show_downloads_lite {
 	       awk -f $path_usr/libs/common.awk                \
 	       -f $path_usr/ui/colors-${background}.awk.sh     \
 	       -f $path_usr/ui/ui.awk                          \
-	       -v col="$COLUMNS"                               \
+	       -v cols="$COLUMNS"                              \
 	       -v lines="$LINES"                               \
 	       -v no_clear="$no_clear"                         \
 	       -v this_mode="lite"                             \
@@ -141,7 +143,7 @@ function show_downloads_extended {
 	       awk -f $path_usr/libs/common.awk                    \
 	       -f $path_usr/ui/colors-${background}.awk.sh         \
 	       -f $path_usr/ui/ui.awk                              \
-	       -v col="$COLUMNS"                                   \
+	       -v cols="$COLUMNS"                                  \
 	       -v zdl_mode="extended"                              \
 	       -v Color_Off="$Color_Off"                           \
 	       -v Background="$Background"                         \

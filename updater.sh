@@ -455,6 +455,7 @@ ESTENSIONI:
 	deps['fuser']=psmisc
 	deps['openssl']=openssl
 	deps['curl']=curl
+	## deps['tput']=ncurses-bin
 
 	for cmd in "${!deps[@]}"
 	do
@@ -514,6 +515,7 @@ ESTENSIONI:
 	deps['desktop-file-install']=desktop-file-utils
 	deps['curl']=curl
 	deps['phantomjs']=phantomjs
+	## deps['tput']=ncurses-bin
 	## deps['ffmpeg']=ffmpeg
 
 	## php-mbstring

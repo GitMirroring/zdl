@@ -50,7 +50,7 @@ function header (text, pattern, fgcolor, bgcolor,       max, pattern_line) {
 	text = " " text " "
 	max = length(text)
     }
-    for (h=0; h<(col - max); h++) {
+    for (h=0; h<(cols - max); h++) {
 	pattern_line = pattern_line pattern
     }
     pattern_line = fgcolor bgcolor text pattern_line Color_Off
@@ -129,7 +129,7 @@ function show_downloads () {
 
 function show_downloads_lite () {
     for (i=0; i<length(pid_out); i++) {
-	file_out_chunk[i] = " " substr(file_out[i], 1, col-36) " "
+	file_out_chunk[i] = " " substr(file_out[i], 1, cols-36) " "
 
 	progress_bar = make_progress()
 
@@ -238,8 +238,8 @@ function make_progress (size_bar, progress_bar, progress) {
     }
 
     if (! int(percent_out[i])) percent_out[i] = 0
-    size_bar = int((col-info_space) * percent_out[i]/100)
-    diff_size_bar = (col-info_space) - size_bar
+    size_bar = int((cols-info_space) * percent_out[i]/100)
+    diff_size_bar = (cols-info_space) - size_bar
 
     bar = ""
     diff_bar = ""
@@ -284,14 +284,14 @@ function make_progress (size_bar, progress_bar, progress) {
 }
 
 function clear_after (item, num_spaces, spaces, i) {
-    num_spaces = int(col - (col - 13 + length(item)))
+    num_spaces = int(cols - (cols - 13 + length(item)))
     for (i=0; i<num_spaces; i++)
 	item = item " "
     return item 
 }
 
 function clear_lite () {
-    spaces = int((lines-i-4) * col)
+    spaces = int((lines-i-4) * cols)
     for (c=1; c<spaces; c++)
 	code = code Background " "
 }

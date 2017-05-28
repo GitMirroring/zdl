@@ -1495,7 +1495,8 @@ else
 	this_mode=daemon
 	start_mode_in_tty "lite" "${this_tty}" 
     fi
-
+    
+    echo "$COLUMNS" > "$path_tmp"/columns
     {
 	main_loop 2>/dev/null &
 	loops_pid=$!
@@ -1513,6 +1514,8 @@ else
     while check_pid $loops_pid ||
 	    [ -s "$path_tmp/links_loop.txt" ] 
     do
+	echo "$COLUMNS" > "$path_tmp"/columns
+	
 	if [ "$this_mode" == "lite" ]
 	then
 	    show_downloads_lite
