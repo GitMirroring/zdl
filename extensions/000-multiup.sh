@@ -50,7 +50,7 @@ then
 
 	html=$(wget -qO- "${url_2}")
 
-	for service in '\/\/clicknupload.' 'uptobox.com\/' 'mega\.nz\/\#' 'openload\.co\/'
+	for service in '\/\/clicknupload.' 'mega\.nz\/\#' 'uptobox.com\/' 'openload\.co\/'
 	do
 	    url_in_tmp=$(grep -P "http.+$service" <<< "$html"|
 				sed -r 's|[^"]+\"([^"]+)\".*|\1|g')
@@ -58,6 +58,9 @@ then
 	    if url "$url_in_tmp"
 	    then
 		case "$service" in
+		    'uptobox.com\/')
+			extension_uptobox "$url_in_tmp"
+			;;
 		    '\/\/clicknupload.')
 			extension_clicknupload "$url_in_tmp"
 			;;

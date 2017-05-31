@@ -27,39 +27,10 @@
 ## zdl-extension types: download
 ## zdl-extension name: Uptobox
 
+
 if [ "$url_in" != "${url_in//uptobox.}" ]
 then
-    html=$(wget -t 2 -T $max_waiting                      \
-		-qO-                                      \
-		--retry-connrefused                       \
-		--keep-session-cookies                    \
-		--save-cookies=$path_tmp/cookies.zdl      \
-		--user-agent="$user_agent"                \
-		"$url_in")
-
-    if [[ "$html" =~ 'you can wait '([0-9]+) ]]
-    then
-	url_in_timer=$((${BASH_REMATCH[1]} * 60))
-	set_link_timer "$url_in" $url_in_timer
-	_log 33 $url_in_timer
-    fi
-
-    unset post_data
-    input_hidden "$html" #### $file_in == POST[fname]
-    sleep 2    
-    html2=$(wget -t 2 -T $max_waiting                        \
-		 -qO-                                        \
-		 --load-cookies=$path_tmp/cookies.zdl        \
-		 --save-cookies=$path_tmp/cookies2.zdl       \
-		 --post-data="$post_data"                    \
-		 --user-agent="$user_agent"                  \
-		 "$url_in")
-
-    url_in_file=$(grep "Click here to start your download" -B2 <<< "$html2" | head -n1 | sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
-
-    unset post_data
-
-    url_in_file=$(sanitize_url "$url_in_file")
+    extension_uptobox "$url_in"
 
     if ! url "$url_in_file" ||
 	    [ "$url_in_file" == "$url_in" ]
