@@ -25,7 +25,7 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Raptu.com/Rapidvideo.com
+## zdl-extension name: Raptu.com/Rapidvideo.com (HD)
 
 if [[ "$url_in" =~ (raptu|rapidvideo)\.com ]]
 then
