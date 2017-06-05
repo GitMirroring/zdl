@@ -51,7 +51,11 @@ then
 
     file_in_tol=$(get_title "$html")
 
-    html=$(wget -t1 -T 20 -qO- "http://www.tubeoffline.com/downloadFrom.php?host=${host}&video=${url_in}")
+    html=$(wget -t1 -T 20 \
+		--keep-session-cookies \
+		--save-cookies="$path_tmp/cookies.zdl" \
+		-qO- \
+		"http://www.tubeoffline.com/downloadFrom.php?host=${host}&video=${url_in}")
     
     url_in_file=$(grep -P 'Best.+http' <<< "$html")
     

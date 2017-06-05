@@ -155,7 +155,7 @@ then
 			     tr -d '\r')
 
 	post_data="${post_data##*document.write\(\&}&${method_free}=Regular Download"
-	
+
 	html=$(curl                                   \
 		   -b "$path_tmp"/cookies2.zdl        \
 		   -A "$user_agent"                   \

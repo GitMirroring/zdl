@@ -25,17 +25,19 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Raptu.com/Rapidvideo.com
+## zdl-extension name: Streamango
 
-if [[ "$url_in" =~ (raptu|rapidvideo)\.com ]]
+if [[ "$url_in" =~ streamango ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in")
 
-    file_in=$(get_title "$html")
+    ## file_in=$(get_title "$html")
 
-    url_in_file=$(grep mp4 <<< "$html" | tr -d '\\')
-    url_in_file="${url_in_file##*file\":\"}"
-    url_in_file="${url_in_file%%\"*}"
+    url_in_file=$(grep 'video/mp4' <<< "$html" | tr -d '\\')
+    url_in_file="${url_in_file%\"*}"
+    url_in_file="http:${url_in_file##*\"}"
+    url_in_file=$(get_location "$url_in_file")
+    file_in="${url_in_file##*\/}"
 
     end_extension
 fi

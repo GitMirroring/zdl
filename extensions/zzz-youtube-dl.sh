@@ -35,7 +35,10 @@ if command -v youtube-dl &>/dev/null &&
        ! dler_type "wget" "$url_in" &&
        ! dler_type "rtmp" "$url_in"
 then
-    youtube-dl -R 1 --get-url --get-filename "$url_in" &>"$path_tmp"/youtube-dl.data &
+    youtube-dl -R 1 \
+	       --get-url \
+	       --get-filename "$url_in" \
+	       --cookies "$path_tmp"/cookies.zdl &>"$path_tmp"/youtube-dl.data &
     pid_yt_dl=$!
 
     for i in {20..0}
