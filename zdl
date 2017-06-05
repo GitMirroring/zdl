@@ -70,6 +70,7 @@ function update_updater {
 
 	mkdir -p "$path_tmp"
 	cd "$path_tmp"
+
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 	
 	print_c 1 "Download in corso: attendere..."
