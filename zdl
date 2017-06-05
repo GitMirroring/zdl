@@ -95,17 +95,22 @@ function update_updater {
 
 	package="zdl-2.0.tar.gz"
 	print_c 1 "Aggiornamento di $PROG con $package"
-	tar -xzf "$package"
+	tar -xzf "$package" 2>/dev/null &&
+	    {		
+		mv "${package%.tar.gz}" $prog
 
-	mkdir -p $prog
-	mv "${package%.tar.gz}" $prog
-
-	## manutenzione: ##############
-	# cp -r $HOME/zdl-git/code $prog
-	cd $prog
-
-	source updater.sh
-	update
+		## manutenzione: ##############
+		# cp -r $HOME/zdl-git/code $prog
+		cd $prog
+		
+		source updater.sh
+		update
+	    } ||
+		{
+		    print_c 3 "Aggiornamento fallito: non è possibile aprire il pacchetto $package"
+		    pause
+		    cd - &>/dev/null
+		}
 
     else
 	init_msg+="${BGreen}$PROG è già alla versione più recente\n"
