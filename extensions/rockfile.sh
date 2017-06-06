@@ -148,7 +148,6 @@ then
     elif [ -n "$html" ]
     then
 	input_hidden "$html"
-	file_in="$postdata_fname"
 
 	method_free=$(grep -P 'method_.*free.+freeDownload' <<< "$html" |
 			     sed -r 's|.+(method_.*free)\".+|\1|g' |
@@ -223,6 +222,12 @@ then
 	fi
     fi
 
+    if [ -z "$file_in" ] &&
+	   url "$url_in_file"
+    then
+	file_in="${url_in_file##*\/}"
+    fi
+    
     try_end=25
     [ -n "$premium" ] &&
 	print_c 2 "Rockfile potrebbe aver attivato il captcha: in tal caso, risolvi prima i passaggi richiesti dal sito web" ||
