@@ -36,8 +36,6 @@ function init_log {
 
 function _log {
     local color_code=3
-    # [ -n "$2" ] &&
-    # 	url_in="$2"
     
     [ -n "$file_in" ] &&
 	msg_file_in=" $file_in"
@@ -92,7 +90,7 @@ function _log {
 	    set_link - "$url_in"
 	    ;;
 	12)
-	    msg="$url_in --> Non è un URL adatto per $name_prog\n"
+	    msg="$2 --> Non è un URL adatto per $name_prog\n"
 	    set_link - "$url_in"
 	    ;;
 	13)

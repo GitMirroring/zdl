@@ -29,5 +29,7 @@
 
 if [[ "$url_in" =~ cinemalibero ]]
 then
-    replace_url_in $(get_location "$url_in")
+    cinemalibero_url=$(get_location "$url_in")
+    replace_url_in "$cinemalibero_url"
+    unset cinemalibero_url
 fi

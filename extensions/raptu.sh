@@ -29,13 +29,25 @@
 
 if [[ "$url_in" =~ (raptu|rapidvideo)\.com ]]
 then
-    html=$(wget --user-agent="$user_agent" -qO- "$url_in")
+    if [[ "$url_in" =~ rapidvideo ]]
+    then
+	raptu_url="$(get_location "$url_in")"
+	replace_url_in "$raptu_url"
+    fi
 
-    file_in=$(get_title "$html")
+    html=$(curl -A "$user_agent" "$url_in" 2>&1)
+    
+    if grep 'We are sorry' <<< "$html" &>/dev/null
+    then
+	_log 3
 
-    url_in_file=$(grep mp4 <<< "$html" | tr -d '\\')
-    url_in_file="${url_in_file##*file\":\"}"
-    url_in_file="${url_in_file%%\"*}"
+    else
+	file_in=$(get_title "$html")
 
-    end_extension
+	url_in_file=$(grep mp4 <<< "$html" | tr -d '\\')
+	url_in_file="${url_in_file##*file\":\"}"
+	url_in_file="${url_in_file%%\"*}"
+
+	end_extension
+    fi
 fi
