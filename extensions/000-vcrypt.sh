@@ -29,14 +29,9 @@
 
 if [ "$url_in" != "${url_in//vcrypt.}" ]
 then
-    url_vcrypt=$(wget -S --spider "$url_in"    2>&1 |
-		     grep -P '[lL]{1}ocation:' |
-		     grep -v 'vcrypt' |
-		     head -n1 |
-		     awk '{print $2}')
-
+    url_vcrypt=$(get_location "$url_in")
     url_vcrypt="http${url_vcrypt##*http}"
-
+    
     if [[ ! "$url_vcrypt" =~ vcrypt ]] &&
 	   url "$url_vcrypt"
     then
