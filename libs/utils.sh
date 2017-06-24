@@ -33,7 +33,7 @@ function size_file {
 }
 
 function trim {
-    echo $1
+    tr -d '\r' <<< $1
 }
 
 function urldecode {
@@ -317,6 +317,14 @@ function set_ext {
     fi
 }
 
+function check_captcha {    
+    if [[ "$1" =~ $captcha_services ]] 
+    then
+	_log 36
+	return 1
+    fi
+}
+
 function replace_url_in {
     if url "$1"
     then
@@ -327,11 +335,15 @@ function replace_url_in {
 	    set_link - "$url_in"
 	    url_in="$1"
 	    set_link + "$url_in"
+
+	    check_captcha "$url_in" ||
+		return 1
 	fi
 	
 	return 0
 	
     else
+	_log 12 "$1"
 	return 1
     fi
 }

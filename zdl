@@ -1300,6 +1300,9 @@ function main_loop {
 		url_in="${url_in## }"
 		url_in="${url_in%% }"
 
+		check_captcha "$url_in" ||
+		    continue
+
 		print_c 0
 		header_box "Link da processare:"
 		print_c 0 "$url_in\n"

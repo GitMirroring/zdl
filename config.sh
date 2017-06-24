@@ -160,6 +160,8 @@ no_check_ext=(
     \.m3u8
 )
 
+captcha_services="(keeplinks)"
+
 ## massima durata tentativi di connessione (Wget)
 max_waiting=40
 

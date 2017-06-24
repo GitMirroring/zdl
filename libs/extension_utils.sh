@@ -528,9 +528,11 @@ function extension_openload {
 
 
 function get_location { # 1=url 2=variable_to_new_url  
-    local location=$(wget -S --spider "$1" 2>&1 |
-			 awk '/Location:/{print $2}' |
+    local location=$(curl -v "$1" 2>&1 |
+			 awk '/Location:/{print $3}' |
 			 head -n1)
+
+    location=$(trim "$location") 
 
     if [ -n "$2" ]
     then
