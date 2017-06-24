@@ -73,9 +73,11 @@ then
 				    	     head -n1                         |
 				    	     sed -r 's|.+ ([^ ]+)\;$|\1|g') )
 
-	url_in_file="http://${url_in_file#*'///'}"
-	url_in_file="${url_in_file%'/'*}"
-	
+	url_in_file="${url_in_file#*'///'}"
+
+	[[ ! "$url_in_file" =~ ^http ]] &&
+	    url_in_file="http://${url_in_file}"
+
 	end_extension
     fi
 fi

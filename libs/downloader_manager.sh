@@ -154,7 +154,10 @@ function check_wget {
     countdown- 30 &
     pid_countdown=$!
     
-    wget_checked=$(wget -t3 -T10 -S --spider --user-agent="$user_agent" "$url_in_file" 2>&1)
+    wget_checked=$(wget -t3 -T10 \
+			-S --spider \ 
+			--user-agent="$user_agent" \
+			"$url_in_file" 2>&1)
     kill -9 $pid_countdown
     
     if [[ "$wget_checked" =~ (Remote file does not exist|failed: Connection refused) ]]
