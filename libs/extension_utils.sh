@@ -514,9 +514,18 @@ function extension_mega {
 
 
 function extension_openload {
+    local url_in="$1"
+
+    if curl "$url_in" -A "$user_agent" 2>&1 |
+	   grep "Sorry" &>/dev/null
+    then
+	_log 3
+	return 1
+    fi
+
     if command -v phantomjs &>/dev/null
     then
-	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$1")
+	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in")
 	url_in_file=$(head -n1 <<< "$openload_data")
 	file_in=$(tail -n1 <<< "$openload_data")
 	sanitize_file_in
