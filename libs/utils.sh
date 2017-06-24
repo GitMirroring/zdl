@@ -326,14 +326,16 @@ function check_captcha {
 }
 
 function replace_url_in {
-    if url "$1"
+    local url2chk=$(trim "$1")
+    
+    if url "$url2chk"
     then
-	if [ "$1" != "$url_in" ]
+	if [ "$url2chk" != "$url_in" ]
 	then
-	    _log 34 "$1"
+	    _log 34 "$url2chk"
 	    
 	    set_link - "$url_in"
-	    url_in="$1"
+	    url_in="$url2chk"
 	    set_link + "$url_in"
 
 	    check_captcha "$url_in" ||
@@ -343,7 +345,8 @@ function replace_url_in {
 	return 0
 	
     else
-	_log 12 "$1"
+	echo dentro $1
+	_log 12 "$url2chk"
 	return 1
     fi
 }

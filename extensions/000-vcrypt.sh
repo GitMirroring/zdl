@@ -38,19 +38,31 @@ then
 	replace_url_in "$url_vcrypt" ||
 	    _log 2
     else
-	url_vcrypt=$(curl -v "$url_in"  2>&1     |
-			 grep location           |
-			 awk '{print $3}'        |
+	url_vcrypt=$(curl -v "$url_in"  2>&1       |
+			 grep 'ocation:'  |
+			 awk '{print $3}'          |
 			 sed -r 's|vcrypt\.pw|vcrypt.net|g' |
 			 sed -r 's|http\:|https:|g' |
 			 tail -n1 |
 			 tr -d '\r')
 
-	url_vcrypt=$(curl "$url_vcrypt" -d 'go=go'     |
-			    grep refresh               |
+	url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go' |
+			    grep refresh            |
 			    sed -r "s|.+url=([^']+)'.*|\1|g")
 
-	replace_url_in "$url_vcrypt" ||
+	if ! url "$url_vcrypt2"
+	then
+	    url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go' 2>&1 |
+			      grep 'ocation:'  |
+			      awk '{print $3}')
+	fi
+
+	if [[ "$url_vcrypt2" =~ http.*http ]]
+	then
+	    url_vcrypt2="http${url_vcrypt2##*http}"
+	fi
+
+	replace_url_in "$url_vcrypt2" ||
 	    _log 2
     fi
 fi
