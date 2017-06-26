@@ -327,7 +327,7 @@ function check_captcha {
 
 function replace_url_in {
     local url2chk=$(trim "$1")
-    
+
     if url "$url2chk"
     then
 	if [ "$url2chk" != "$url_in" ]
@@ -345,7 +345,6 @@ function replace_url_in {
 	return 0
 	
     else
-	echo dentro $1
 	_log 12 "$url2chk"
 	return 1
     fi

@@ -29,11 +29,11 @@
 
 if [[ "$url_in" =~ (raptu|rapidvideo)\.com ]]
 then
-    if [[ "$url_in" =~ rapidvideo ]]
-    then
-	raptu_url="$(get_location "$url_in")"
-	replace_url_in "$raptu_url"
-    fi
+    # if [[ "$url_in" =~ rapidvideo ]]
+    # then
+    # 	get_location "$url_in" raptu_url
+    # 	replace_url_in "$raptu_url"
+    # fi
 
     html=$(curl -A "$user_agent" "$url_in" 2>&1)
     
