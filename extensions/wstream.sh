@@ -55,13 +55,13 @@ then
     	print_c 1 "Cookies cancellati"
     	rm -rf "$path_tmp/cookies.zdl"           
     fi
-    
+
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
 		--user-agent="Firefox"                           \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO-)
+		-qO- -o /dev/null)
 
     if [[ "$html" =~ (File Not Found|File doesn\'t exits) ]]
     then
@@ -100,13 +100,15 @@ then
 		do
 		    ((wstream_loops++))
 		    html2=$(wget -qO- -t1 -T$max_waiting           \
-				 "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}")
+				 "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}" \
+				 -o /dev/null)
 		    
 		    input_hidden "$html2"
 
 		    url_in_file=$(wget -qO- -t1 -T$max_waiting     \
 				       "$url_in"                   \
-				       --post-data="$post_data" |
+				       --post-data="$post_data"    \
+				       -o /dev/null                  |
 					 grep 'Direct Download Link' |
 					 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
