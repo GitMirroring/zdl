@@ -342,7 +342,7 @@ function anydownload {
 	url_in=$(urldecode "${url_in#*url=}")
 	url_in=$(sed -r 's|\s{1}|%20|g' <<< "$url_in")
 
-	URL_IN=$(wget -qO- "$url_in"               |
+	URL_IN=$(wget -qO- "$url_in" -o /dev/null  |
 			grep 'xdcc' 2>/dev/null    |
 			head -n1                   |
 			sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
@@ -350,7 +350,7 @@ function anydownload {
     elif [[ "$url_in" =~ IRCdownload\.php ]] &&
 	 [[ ! "$url_in" =~ adfly ]]
     then
-	html=$(wget -qO- "$url_in")
+	html=$(wget -qO- "$url_in" -o /dev/null)
 	echo "$html" >OUT
 	
 	irc_host=$(grep server0 <<< "$html" |
@@ -385,7 +385,7 @@ function extension_clicknupload {
 		    "$url_in"                                        \
 		    --user-agent="Firefox"                           \
 		    --keep-session-cookies="$path_tmp/cookies.zdl"   \
-		    -qO-)
+		    -qO- -o /dev/null)
 	
 	[ -z "$html" ] &&
 	    command -v curl >/dev/null && 
@@ -401,13 +401,13 @@ function extension_clicknupload {
 
 	    html=$(wget "$url_in"                       \
 			--post-data="$post_data"        \
-			-qO-)
+			-qO- -o /dev/null)
 
 	    input_hidden "$html"
 
 	    html=$(wget "$url_in"                       \
 			--post-data="$post_data"        \
-			-qO-)
+			-qO- -o /dev/null)
 
 	    url_in_file=$(grep downloadbtn <<< "$html" |
 				 sed -r "s|.+open\('([^']+)'\).+|\1|g")
@@ -429,7 +429,14 @@ function extension_uptobox {
 		--keep-session-cookies                    \
 		--save-cookies="$path_tmp"/cookies.zdl    \
 		--user-agent="$user_agent"                \
-		"$url_in")
+		"$url_in"                                 \
+		-o /dev/null)
+
+    if [[ "$html" =~ (File not found) ]]
+    then
+	_log 3
+	return 1
+    fi
 
     if [[ "$html" =~ 'you can wait '([0-9]+) ]]
     then
@@ -447,7 +454,8 @@ function extension_uptobox {
 		 --save-cookies="$path_tmp"/cookies2.zdl     \
 		 --post-data="$post_data"                    \
 		 --user-agent="$user_agent"                  \
-		 "$url_in")
+		 "$url_in"                                   \
+		 -o /dev/null)
 
     url_in_file=$(grep "Click here to start your download" -B2 <<< "$html2" |
 			 head -n1                                           |
@@ -476,7 +484,7 @@ function extension_mega {
 
 	iv="${b64_hex_key:32:16}0000000000000000"
 
-	json_data=$(wget -qO- --post-data='[{"a":"g","g":1,"p":"'$id'"}]' https://eu.api.mega.co.nz/cs)
+	json_data=$(wget -qO- --post-data='[{"a":"g","g":1,"p":"'$id'"}]' https://eu.api.mega.co.nz/cs -o /dev/null)
 
 	url_in_file="${json_data%\"*}"
 	url_in_file="${url_in_file##*\"}"
