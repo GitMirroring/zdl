@@ -34,10 +34,11 @@ then
     
     if [[ ! "$url_in" =~ embed ]]
     then
-	htm=$(wget -qO- "$url_in"                        \
-		    --user-agent="$user_agent"            \
-		    --keep-session-cookies                \
-		    --save-cookies="$path_tmp"/cookies.zdl)
+	htm=$(wget -qO- "$url_in"                          \
+		    --user-agent="$user_agent"             \
+		    --keep-session-cookies                 \
+		    --save-cookies="$path_tmp"/cookies.zdl \
+		    -o /dev/null)
 
 	input_hidden "$htm"
     fi
@@ -45,7 +46,8 @@ then
     html=$(wget -qO- "$url_in"                          \
 		--user-agent="$user_agent"              \
 		--load-cookies="$path_tmp"/cookies.zdl  \
-		--post-data="$post_data")
+		--post-data="$post_data"                \
+		-o /dev/null)
 
     unset post_data
     
