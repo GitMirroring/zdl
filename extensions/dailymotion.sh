@@ -31,9 +31,12 @@
 if [ "$url_in" != "${url_in//dailymotion.com\/video}" ]
 then
     echo -e ".dailymotion.com\tTRUE\t/\tFALSE\t0\tff\toff" > "$path_tmp"/cookies.zdl
-    html="$(wget -t 1 -T $max_waiting --load-cookies="$path_tmp"/cookies.zdl -q "$url_in" -O-)"
+    html=$(wget -t 1 -T $max_waiting \
+		--load-cookies="$path_tmp"/cookies.zdl \
+		"$url_in" \
+		-qO- -o /dev/null)
 
-    if [ ! -z "$html" ]
+    if [ -n "$html" ]
     then
 	file_in=$(grep "title>" <<< "$html")
 	file_in="${file_in#*'<title>'}"
@@ -42,8 +45,9 @@ then
 	url_in2="${url_in//'/video/'//embed/video/}"
 	url_in2="${url_in2%%_*}"
 
-	code=$(urldecode "$(wget -t 1 -T $max_waiting -q $url_in2 -O -)" | grep mp4\?auth)
-	if [ ! -z "$code" ]
+	code=$(urldecode "$(wget -t 1 -T $max_waiting -q $url_in2 -O - -o /dev/null)" | grep mp4\?auth)
+
+	if [ -n "$code" ]
 	then
 	    auth="${code##*'mp4?auth='}"
 	    auth="${auth%%\"*}"

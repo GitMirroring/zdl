@@ -55,7 +55,7 @@ function update_updater {
     [ ! -f $path_conf/version ] &&
 	echo "0" >"$path_conf/version"
     
-    remote_version=$(wget -qO- "${URL_ROOT}version")
+    remote_version=$(curl "${URL_ROOT}version")
     [[ ! "$remote_version" =~ ^([0-9]+)$ ]] &&
 	remote_version=0
     
@@ -462,7 +462,7 @@ then
 	    then
 		referer="$6"
 		ext="${file_in##*.}"
-		file_in2=$(wget "$referer" -qO- | grep "&amp;title=")
+		file_in2=$(curl "$referer" | grep "&amp;title=")
 		file_in2="${file_in2#*'&amp;title='}"
 		file_in2="${file_in2::240}"
 		[ -n "$file_in2" ] &&

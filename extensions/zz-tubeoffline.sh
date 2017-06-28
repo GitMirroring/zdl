@@ -47,7 +47,7 @@ then
 		-qO- \
 		--keep-session-cookies \
 		--save-cookies="$path_tmp/cookies.zdl" \
-		"$url_in")
+		"$url_in" -o /dev/null)
 
     file_in_tol=$(get_title "$html")
 
@@ -55,7 +55,8 @@ then
 		--keep-session-cookies \
 		--save-cookies="$path_tmp/cookies.zdl" \
 		-qO- \
-		"http://www.tubeoffline.com/downloadFrom.php?host=${host}&video=${url_in}")
+		"http://www.tubeoffline.com/downloadFrom.php?host=${host}&video=${url_in}" \
+		-o /dev/null)
     
     url_in_file=$(grep -P 'Best.+http' <<< "$html")
     

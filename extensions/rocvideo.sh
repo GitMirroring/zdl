@@ -34,7 +34,7 @@ then
 		 --keep-session-cookies                   \
 		 --save-cookies="$path_tmp/cookies.zdl"   \
 		 --user-agent="$user_agent"               \
-		 "$url_in")
+		 "$url_in" -o /dev/null)
 
     input_hidden "$html"
 
@@ -42,7 +42,7 @@ then
 	 	       --user-agent="$user_agent"                             \
 		       --load-cookies="$path_tmp/cookies.zdl"                 \
 		       --post-data="${post_data}&method_free=Continue video"  \
-		       "$url_in" |
+		       "$url_in" -o /dev/null |
 			 grep 'p,a,c,k,e,d')
 
     packed_args "$html_packed"

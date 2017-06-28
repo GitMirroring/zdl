@@ -36,7 +36,7 @@ then
 		--user-agent="Firefox"                           \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO-)
+		-qO- -o /dev/null)
     
     [ -z "$html" ] &&
 	command -v curl >/dev/null && 
@@ -53,7 +53,7 @@ then
 	html=$(wget "$url_in"                       \
 		    --post-data="$post_data"        \
 		    --load-cookies="$path_tmp/cookies.zdl"   \
-		    -qO-)
+		    -qO- -o /dev/null)
 
 	if [[ "$html" =~ 'to download bigger files' ]]
 	then
@@ -74,7 +74,7 @@ then
 
 	    html=$(wget "$url_in"                       \
 			--post-data="$post_data"        \
-			-qO-)
+			-qO- -o /dev/null)
 
 	    url_in_file=$(grep downloadbtn -B1 <<< "$html"  |
 				 head -n1                   |

@@ -61,7 +61,7 @@ then
 		--user-agent="Firefox"                           \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO-)
+		-qO- -o /dev/null)
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
     then
@@ -101,7 +101,8 @@ then
 	    do
 		((vidoza_loops++))
 		html2=$(wget -qO- -t1 -T$max_waiting           \
-			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}")
+			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}" \
+			     -o /dev/null)
 		
 		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')

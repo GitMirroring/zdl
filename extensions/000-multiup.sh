@@ -31,12 +31,12 @@ if [[ "$url_in" =~ multiup\. ]]
 then
     url_1="${url_in//en\/}"
     url_1="${url_1//download\/}"
-    html=$(wget -qO- "${url_1}")
+    html=$(curl "${url_1}")
 
     if [[ "$url_in" =~ download\/ ]] &&
 	   [[ ! "$url_in" =~ en\/ ]]
     then
-	html="$(wget -qO- "$url_in")"
+	html=$(curl "$url_in")
     fi	
 
     if [[ "$html" =~ (File not found) ]]       
@@ -48,7 +48,7 @@ then
 	url_2="${parser_proto}${parser_domain}"/en/mirror/$(grep mirror <<< "$html" |tail -n1 |
 						       sed -r 's|.+mirror\/([^"]+)\"[^"]+|\1|g')
 
-	html=$(wget -qO- "${url_2}")
+	html=$(curl "${url_2}")
 
 	for service in '\/\/clicknupload.' 'mega\.nz\/\#' 'uptobox.com\/' 'openload\.co\/'
 	do

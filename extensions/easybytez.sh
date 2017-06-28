@@ -40,7 +40,8 @@ then
 		    --retry-connrefused                       \
 		    --keep-session-cookies                    \
 		    --save-cookies="$path_tmp"/cookies.zdl    \
-		    "http://www.easybytez.com/login.html")
+		    "http://www.easybytez.com/login.html"     \
+		    -o /dev/null)
 
 	## post_data
 	input_hidden "$html"
@@ -66,7 +67,8 @@ then
 		--load-cookies="$path_tmp"/cookies.zdl     \
 		--keep-session-cookies                     \
 		--save-cookies="$path_tmp"/cookies.zdl     \
-		"$url_in") 
+		"$url_in"                                  \
+		-o /dev/null)
 
     file_in=$(grep '<span class="name">' <<< "$html")
     file_in="${file_in#*>}"
@@ -95,7 +97,7 @@ then
 		    --keep-session-cookies                           \
 		    --save-cookies="$path_tmp"/cookies.zdl           \
 		    --post-data="${post_data}"                       \
-		    "$url_in" -qO-) 
+		    "$url_in" -qO- -o /dev/null) 
 
 	countdown=$(grep Wait <<< "$html" |
 			   sed -r 's|.+\">(.+)<\/span>.+<\/span.+|\1|')
@@ -117,7 +119,7 @@ then
 			--keep-session-cookies                                  \
 			--save-cookies="$path_tmp"/cookies.zdl                  \
 			--post-data="${post_data}"                              \
-			"$url_in" -qO-)
+			"$url_in" -qO- -o /dev/null)
 	    print_c 2 "\nAttendi:"
 	    countdown- "$countdown"
 	    redirect "$url_in"

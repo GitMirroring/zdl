@@ -36,7 +36,7 @@ then
     		--save-cookies="$path_tmp"/cookies.zdl       \
     		--no-check-certificate                       \
     		--user-agent="$user_agent"                   \
-    		"$url_in" -qO- )
+    		"$url_in" -qO- -o /dev/null)
 
     if check_connection &&
 	    [ -z "$html" ]
@@ -73,9 +73,9 @@ then
 
 	if ! url "$url_in_file"
 	then
-	    url_in_file=$(wget -t3 -T10 -qO- "http://zoninoz.altervista.org/api.php?uri=$url_in" |tail -n1)
+	    url_in_file=$(wget -t3 -T10 -qO- "http://zoninoz.altervista.org/api.php?uri=$url_in" -o /dev/null |tail -n1)
 
-	    videoType=$(wget --spider -S "$url_in_file" 2>&1| grep 'Content-Type:')
+	    videoType=$(wget --spider -S "$url_in_file" -o /dev/null 2>&1| grep 'Content-Type:')
 	    videoType="${videoType##*\/}"
 
 	    [ -n "$videoType" ] && file_in="$title.$videoType"

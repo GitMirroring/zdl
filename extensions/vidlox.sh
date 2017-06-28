@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//vidlox.}" ]
 then
-    html=$(wget -qO- "$url_in")
+    html=$(curl "$url_in")
 
     file_in=$(trim "$(grep '<title>' -A2 <<< "$html" | sed -n 2p)")
     file_in="${file_in#Watch }"

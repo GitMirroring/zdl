@@ -76,9 +76,8 @@ function add_container {
     local new
     unset new
     container=$(urlencode "$1")
-    URLlist=$(wget "http://dcrypt.it/decrypt/paste"     \
-		   --post-data="content=${container}"   \
-		   -qO- |
+    URLlist=$(curl "http://dcrypt.it/decrypt/paste"  \
+		   -d "content=${container}"        |
 		     egrep -e "http" -e "://")
 
     while read line
@@ -204,9 +203,7 @@ function scrape_url {
 
 	baseURL="${url_page%'/'*}"
 
-	html=$(wget -qO-                         \
-		    --user-agent="$user_agent"   \
-		    "$url_page"                    |
+	html=$(curl -A "$user_agent" "$url_page"                      |
 		      tr "\t\r\n'" '   "'                             | 
 		      grep -i -o '<a[^>]\+href[ ]*=[ \t]*"[^"]\+"'    | 
 		      sed -e 's/^.*"\([^"]\+\)".*$/\1/g' 2>/dev/null)

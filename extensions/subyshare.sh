@@ -34,7 +34,7 @@ then
 		--keep-session-cookies                     \
 		--save-cookies="$path_tmp"/cookies.zdl     \
 		--user-agent="$user_agent"                 \
-		-qO- "${url_in}")
+		-qO- "${url_in}" -o /dev/null)
     
     if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
     then
@@ -51,7 +51,7 @@ then
 		    --load-cookies="$path_tmp"/cookies.zdl      \
 		    --user-agent="$user_agent"                  \
 		    --post-data="$post_data"                    \
-		    "${url_in}")
+		    "${url_in}" -o /dev/null)
 
 	code=$(pseudo_captcha "$html")
 

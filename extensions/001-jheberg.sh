@@ -54,15 +54,14 @@ then
 		     --referer="$REDIRECT"                        \
 		     --header='X-Requested-With: XMLHttpRequest'  \
 		     --post-data="slug=${slug}&hoster=${hoster}"  \
-		     "$GETLINK" -qO-)
+		     "$GETLINK" -qO- -o /dev/null)
+
 	reurl="${reurl%\"*}"
 	reurl="${reurl##*\"}"
 
 	url "$reurl" && break
     done
 
-    url "$reurl" &&
-	print_c 1 "$url_in sostituito con $reurl" &&
-	replace_url_in "$reurl" ||
-	    _log 2
+    replace_url_in "$reurl" ||
+	_log 2
 fi

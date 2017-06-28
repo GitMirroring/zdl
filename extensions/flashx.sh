@@ -34,7 +34,7 @@ then
 		--user-agent="$user_agent" \
 		--keep-session-cookies \
 		--save-cookies=$path_tmp/cookies.zdl \
-		"$url_in")
+		"$url_in" -o /dev/null)
 
     #echo "$html" >TEST
 #    sed -r 's|(\$\.cookie.+)\;$|console.log(\1);|g' -i TEST

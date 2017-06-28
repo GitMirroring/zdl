@@ -29,7 +29,7 @@
 
 if [[ "$url_in" =~ streamango ]]
 then
-    html=$(wget --user-agent="$user_agent" -qO- "$url_in")
+    html=$(curl -A "$user_agent" "$url_in")
 
     ## file_in=$(get_title "$html")
 

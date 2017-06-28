@@ -39,7 +39,7 @@ then
     html=$(wget --keep-session-cookies \
 		--save-cookies="$path_tmp"/cookies.zdl \
 		--user-agent="$user_agent" \
-		-qO- "$url_in")
+		-qO- "$url_in" -o /dev/null)
     
     html_unpacked=$(unpack "$html")
     

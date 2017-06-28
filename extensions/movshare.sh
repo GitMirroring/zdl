@@ -36,7 +36,7 @@ then
     html=$(wget -t 1 -T $max_waiting \
 		--keep-session-cookies \
 		--save-cookies="$path_tmp"/cookies.zdl \
-		"$url_in" -qO- )
+		"$url_in" -qO- -o /dev/null)
 
     if [ -n "$html" ]
     then
@@ -57,7 +57,7 @@ then
 			    --user-agent="$user_agent"               \
 			    --post-data="${post_data}"               \
 			    --load-cookies="$path_tmp"/cookies.zdl \
-			    -qO-)
+			    -qO- -o /dev/null)
 
 	    fi
 

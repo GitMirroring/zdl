@@ -32,22 +32,27 @@ function decodejs_zinwa {
     instr="${1//\'}"
     icount="$2"
     arr=( ${instr//','/ } )
-    for ((i=1; i<=$icount; i++)); do
+    for ((i=1; i<=$icount; i++))
+    do
 	chars[ $(( $icount-$i+1 )) ]="${arr[$(( ${#arr[*]}-1 ))]}"
 	unset arr[$(( ${#arr[*]}-1 ))]
     done
+
     arr=( ${chars[*]} ${arr[*]} )
     restr=''
-    for ((i=0; i<${#arr[*]}; i++)); do
+
+    for ((i=0; i<${#arr[*]}; i++))
+    do
 	restr="${restr}$(code2char ${arr[$i]})"
     done
+
     echo "$restr"
 }
 
 if [ "$url_in" != "${url_in//'zinwa.'}" ]
 then
     print_c 2 "Attendi...\n"
-    html=$(wget -t 1 -T $max_waiting -q "$url_in" -O-)
+    html=$(wget -t 1 -T $max_waiting -q "$url_in" -O- -o /dev/null)
 
     if [ ! -z "$html" ]
     then

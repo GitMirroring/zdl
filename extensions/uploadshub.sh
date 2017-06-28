@@ -35,7 +35,7 @@ then
 		--keep-session-cookies                    \
 		--save-cookies="$path_tmp"/cookies.zdl    \
 		--user-agent="$user_agent"                \
-		"$url_in")
+		"$url_in" -o /dev/null)
 
     if [[ "$html" =~ (File Not Found) ]]
     then
@@ -45,7 +45,7 @@ then
 	input_hidden "$html"
 
 
-	html2=$(wget -qO- --user-agent="$user_agent" --post-data="${post_data}" "$url_in")
+	html2=$(curl -A "$user_agent" -d "${post_data}" "$url_in")
 
 	url_in_file=$(grep -P '<a href.+uploadshub.com.+<!--' <<< "$html2" |
 			     sed -r 's|[^"]+\"([^"]+)\".+|\1|')

@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//idowatch.}" ]
 then
-    html=$(wget "$url_in" -qO- --user-agent="$user_agent")
+    html=$(curl "$url_in" -A "$user_agent")
 
     if [[ "$html" =~ (File Not Found) ]]
     then

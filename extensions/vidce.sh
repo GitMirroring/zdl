@@ -33,7 +33,7 @@ then
 		 --keep-session-cookies                   \
 		 --save-cookies="$path_tmp/cookies.zdl"   \
 		 --user-agent="$user_agent"               \
-		 "$url_in")
+		 "$url_in" -o /dev/null)
     
     if [[ "$html" =~ (File Not Found) ]]
     then

@@ -31,7 +31,7 @@ if [[ "$url_in" =~ (fastvideo.|putstream.|vidto.) ]]
 then
     if [[ ! "$url_in" =~ embed ]]
     then
-	html=$(wget -qO- --user-agent="$user_agent" "${url_in}")
+	html=$(curl -A "$user_agent" "${url_in}")
 	
 	if [[ "$url_in" =~ (putstream.) ]]
 	then
@@ -49,7 +49,7 @@ then
 	url_packed="$url_in"
     fi
 
-    html_embed=$(wget "$url_packed" -qO- --user-agent="$user_agent")
+    html_embed=$(curl "$url_packed" -A "$user_agent")
 
     if grep 'DELETED' <<< "$html_embed" &>/dev/null
     then

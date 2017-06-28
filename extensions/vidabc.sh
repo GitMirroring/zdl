@@ -34,7 +34,7 @@ then
 		--user-agent="Firefox"                           \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO-)
+		-qO- -o /dev/null)
 
     input_hidden "$html"
 
@@ -43,7 +43,7 @@ then
     html=$(wget -qO-                                       \
 		"${url_in#.html}"                          \
 		--load-cookies="$path_tmp/cookies.zdl"     \
-		--post-data="$post_data")
+		--post-data="$post_data" -o /dev/null)
 
     if [[ "$html" =~ (File Not Found|File doesn\'t exits) ]]
     then
@@ -67,14 +67,12 @@ then
 		    ((stream_loops < 3))
 	    do
 		((stream_loops++))
-		html2=$(wget -qO- "http://vidabc.com/dl?op=download_orig&id=${id_stream}&mode=${mode_stream}&hash=${hash_stream}")
+		html2=$(curl "http://vidabc.com/dl?op=download_orig&id=${id_stream}&mode=${mode_stream}&hash=${hash_stream}")
 		
 		input_hidden "$html2"
 
-		url_in_file=$(wget -qO- \
-				   "$url_in" \
-				   --post-data="$post_data" |
-				     grep 'Direct Download Link' |
+		url_in_file=$(curl "$url_in" -d "$post_data"      |
+				     grep 'Direct Download Link'  |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
 		((stream_loops < 3)) && sleep 1

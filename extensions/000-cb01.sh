@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//cb01.}" ]
 then
-    cb01_redirect=$(wget -S --spider "${url_in//serietv\/}" 2>&1 | awk '/Location:/{print $2}' | head -n1)
+    cb01_redirect=$(get_location "${url_in//serietv\/}")
 
     if url "$cb01_redirect"
     then
@@ -42,8 +42,7 @@ fi
 
 if [ "$url_in" != "${url_in//k4pp4.}" ]
 then
-    html=$(wget -qO- "$url_in" |
-		  grep 'Clicca per proseguire')
+    html=$(curl "$url_in" | grep 'Clicca per proseguire')
 
     html="${html#*\"}"
     

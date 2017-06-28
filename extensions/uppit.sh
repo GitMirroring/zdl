@@ -34,13 +34,13 @@ then
 	   "$url_in"                                \
 	   --user-agent="$user_agent"               \
 	   --save-cookies="$path_tmp"/cookies.zdl   \
-	   --keep-session-cookies)
+	   --keep-session-cookies -o /dev/null)
     input_hidden "$html"
 
     html=$(wget -qO-                               \
 	 "$url_in"                                 \
 	 --post-data="${post_data}&method_free= "  \
-	 --load-cookies="$path_tmp"/cookies.txt)
+	 --load-cookies="$path_tmp"/cookies.txt -o /dev/null)
     input_hidden "$html"
 
     url_in_file=$(grep Download <<< "$html" |

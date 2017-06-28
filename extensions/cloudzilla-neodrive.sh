@@ -31,7 +31,7 @@
 if [[ "$url_in" =~ (cloudzilla.to|neodrive.co)/share/file ]]
 then
     file_in=$(wget -t1 -T$max_waiting              \
-		   -qO- "$url_in"                 |
+		   -qO- "$url_in" -o /dev/null    |
 		     grep download_hdr -A1        |
 		     tail -n1                     |
 		     sed -r "s|^.+title=\"([^\"]+)\".+$|\1|")
@@ -65,8 +65,8 @@ then
 	#     break_loop=true
 	# fi
 
-	url_in_file=$(wget -qO- "${url_in//'share/file/'/embed/}" |
-			     grep 'var vurl'                      |
+	url_in_file=$(wget -qO- "${url_in//'share/file/'/embed/}" -o /dev/null  |
+			     grep 'var vurl'                                    |
 			     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
 	[ -z "$url_in_file" ] &&

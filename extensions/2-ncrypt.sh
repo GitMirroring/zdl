@@ -25,9 +25,10 @@
 #
 
 
-if [ "$url_in" != "${url_in//'ncrypt.in/folder'}" ]; then
+if [ "$url_in" != "${url_in//'ncrypt.in/folder'}" ]
+then
     set_link - "$url_in"
-    html=$(wget -q -O- "$url_in"|grep ".dlc")
+    html=$(curl "$url_in" |grep ".dlc")
     html="${html%.dlc\"*}.dlc"
     container_url="${html##*\"}"
     container_url="http://ncrypt.in${container_url}"

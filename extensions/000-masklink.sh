@@ -30,8 +30,7 @@
 
 if [[ "$url_in" =~ (masklink.) ]]
 then
-    html=$(wget -qO- "$url_in" \
-		   --user-agent="$user_agent")
+    html=$(curl "$url_in" -A "$user_agent")
 
     html=$(grep 'Click here to proceed' <<< "$html" |
 		  sed -r "s|.+href='([^']+)'.+|\1|g")

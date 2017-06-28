@@ -29,18 +29,13 @@
 
 if [[ "$url_in" =~ dropbox.com ]]
 then
-    out=$(wget -S --spider                             \
-	       --keep-session-cookies                  \
-	       --save-cookies="$path_tmp/cookies.zdl"  \
-	       "$url_in"                               \
-	       2>&1)
+    get_location "$url_in" url_in_file
+
+    echo "$url_in_file"
     
-    url_in_file=$(grep -P 'Location: ' <<< "$out"     |
-			 head -n1                     |
-			 sed -r 's|.*Location:\s*||')
-    
-    file_in=$(grep -P 'filename="' <<< "$out" |
-		     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
+    file_in="${url_in%\?*}"
+    file_in="${file_in##*\/}"
+    sanitize_file_in
     
     headers=(-H "Referer: dropbox.com")
     

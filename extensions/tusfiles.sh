@@ -36,7 +36,7 @@ then
 		--retry-connrefused                      \
 		--keep-session-cookies                   \
 		--save-cookies="$path_tmp"/cookies.zdl   \
-		"$url_in")
+		"$url_in" -o /dev/null)
 
     if [[ "$html" =~ (The file you are trying to download is no longer available) ]]
     then

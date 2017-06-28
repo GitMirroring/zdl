@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//metacafe.}" ]
 then
-    html=$(wget -qO- "$url_in")
+    html=$(curl "$url_in")
 
     file_in=$(trim "$(grep '<title>' -A2 <<< "$html" | sed -n 2p)")
     url_in_file=$(grep m3u8 <<< "$html" | head -n1 | tr -d '\\' |

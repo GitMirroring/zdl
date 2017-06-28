@@ -142,7 +142,7 @@ function simply_debrid {
     		      --save-cookies="$path_tmp/cookies.zdl"                 \
     		      --post-data="link=$url&submit=GENERATE TEXT LINKS"     \
     		      "https://simply-debrid.com/generate#show"              \
-    		      -qO-)
+    		      -qO- -o /dev/null)
 
     local html_url='http://simply-debrid.com/'$(grep -Po 'inc/generate/name.php[^"]+' <<< "$html")
     
@@ -152,8 +152,8 @@ function simply_debrid {
     wget -qO /dev/null 'https://simply-debrid.com/inc/generate/adb.php?nok=1' \
     	 --keep-session-cookies --save-cookies="$path_tmp/cookies.zdl"
     
-    json_data=$(wget --load-cookies="$path_tmp/cookies.zdl"                 \
-		     "$html_url" -qO- |
+    json_data=$(curl -b "$path_tmp/cookies.zdl"     \
+		     "$html_url"                 |
 		       sed -r 's|\\\/|/|g')
     
     if [[ "$json_data" =~ '"error":0' ]]
@@ -342,7 +342,7 @@ function anydownload {
 	url_in=$(urldecode "${url_in#*url=}")
 	url_in=$(sed -r 's|\s{1}|%20|g' <<< "$url_in")
 
-	URL_IN=$(wget -qO- "$url_in" -o /dev/null  |
+	URL_IN=$(curl "$url_in"                    |
 			grep 'xdcc' 2>/dev/null    |
 			head -n1                   |
 			sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
@@ -350,7 +350,7 @@ function anydownload {
     elif [[ "$url_in" =~ IRCdownload\.php ]] &&
 	 [[ ! "$url_in" =~ adfly ]]
     then
-	html=$(wget -qO- "$url_in" -o /dev/null)
+	html=$(curl "$url_in")
 	echo "$html" >OUT
 	
 	irc_host=$(grep server0 <<< "$html" |
@@ -545,8 +545,11 @@ function extension_openload {
 
 
 function get_location { # 1=url 2=variable_to_new_url  
-    local location=$(curl -v "$1" 2>&1 |
-			 awk '/ocation:/{print $3}' |
+    local location=$(curl -v                          \
+			  "$1"                        \
+			  -c "$path_tmp"/cookies.zdl  \
+			  2>&1                          |
+			 awk '/ocation:/{print $3}'     |
 			 head -n1)
 
     location=$(trim "$location") 

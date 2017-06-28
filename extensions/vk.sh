@@ -30,13 +30,17 @@
 
 if [ "$url_in" != "${url_in//vk.com\/video_ext.php}" ]
 then
-    html="$(wget -t 1 -T $max_waiting --keep-session-cookies --save-cookies="$path_tmp"/cookies.zdl "$url_in" -q -O-)"
+    html=$(wget -t 1 -T $max_waiting \
+		--keep-session-cookies \
+		--save-cookies="$path_tmp"/cookies.zdl \
+		"$url_in" -q -O- -o /dev/null)
 
-    if [ ! -z "$html" ]
+    if [ -n "$html" ]
     then
 	if [[ $(grep prohibited <<< "$html") ]]
 	then
 	    _log 11
+
 	else
 	    data_in_file=$(grep cache <<< "$html" 2>/dev/null | head -n 3 | tail -n 1)
 	    if [[ "$data_in_file" =~ http ]]
@@ -58,8 +62,9 @@ then
 	    file_in="${file_in%%\"*}"
 	    file_in="${file_in::240}"
 	fi
+
     else
-	_log
+	_log 2
     fi
     
 elif [ "$url_in" != "${url_in//vk.com\/video}" ]
@@ -67,7 +72,7 @@ then
     html=$(wget -t 1 -T $max_waiting                     \
 		--keep-session-cookies                   \
 		--save-cookies="$path_tmp"/cookies.zdl   \
-		"$url_in" -qO-)
+		"$url_in" -qO- -o /dev/null)
 
     if [ -n "$html" ]
     then
@@ -89,6 +94,7 @@ then
 	    file_in="${file_in%%\"*}"
 	    file_in="${file_in::240}"
 	fi
+	
     else
 	_log 2
     fi

@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//swzz.xyz}" ]
 then
-    html=$(wget -qO- "$url_in")
+    html=$(curl "$url_in")
 
     if [[ "$html" =~ (Link Non Trovato) ]]
     then

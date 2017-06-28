@@ -32,7 +32,7 @@ then
     id_thevideo="${url_in##*\/}"
     url_qualities="https://thevideo.me/download/getqualities/${id_thevideo}"
 
-    code_mode_hash=( $(wget -t 1 -T $max_waiting "$url_qualities" -qO- |
+    code_mode_hash=( $(wget -t 1 -T $max_waiting "$url_qualities" -qO- -o /dev/null |
 			    grep download_video | tail -n1 |
 			    sed -r "s|.+\('(.+)','(.+)','(.+)'\).+|\1 \2 \3|g") )
 

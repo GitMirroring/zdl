@@ -37,7 +37,7 @@ then
 		--user-agent="$user_agent"               \
 		--keep-session-cookies                   \
 		--save-cookies="$path_tmp"/cookies.zdl   \
-		-qO-)
+		-qO- -o /dev/null)
 
     if [ -n "$html" ]
     then
@@ -56,7 +56,7 @@ then
 			    --post-data="${post_data}&submit=submit" \
 			    --keep-session-cookies                   \
 			    --save-cookies="$path_tmp"/cookies.zdl   \
-			    -qO-)
+			    -qO- -o /dev/null)
 	    fi
 
 	    if grep "yet ready" <<< "$html" &>/dev/null
@@ -84,7 +84,7 @@ then
 		    flashvars_file="${flashvars_file#*'flashvars.file='\"}"
 		    flashvars_file="${flashvars_file%\"*}"
 		    
-		    myip=$(wget -t 1 -T $max_waiting -qO- http://indirizzo-ip.com/ip.php)
+		    myip=$(wget -t 1 -T $max_waiting -qO- http://indirizzo-ip.com/ip.php -o /dev/null)
 
 		    flashvars_key=$(grep "$myip" <<< "$html")
 		    flashvars_key="${flashvars_key#*\"}"

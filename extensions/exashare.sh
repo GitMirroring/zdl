@@ -33,7 +33,8 @@ if [ "$url_in" != "${url_in//exashare.}" ]
 then
     html=$(wget -qO- -t 1 -T $max_waiting                \
 		--user-agent="$user_agent"               \
-		"$url_in")
+		"$url_in"                                \
+		-o /dev/null)
 
     input_hidden "$html"
 
@@ -43,7 +44,8 @@ then
     url_in_file=$(wget -qO-                                                              \
 		       --user-agent="$user_agent"                                        \
 		       --post-data="${post_data#op=search&}&imhuman=Proceed to video"    \
-		       "$url_in"                             |
+		       "$url_in"                                                         \
+		       -o /dev/null                          |
 			 grep 'file: "'                      |
 			 sed -r 's|[^"]+"([^"]+)"[^"]+|\1|g')
 

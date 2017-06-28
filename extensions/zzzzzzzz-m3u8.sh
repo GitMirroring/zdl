@@ -39,7 +39,7 @@ function post_m3u8_genlink {
     	url_m3u8="$url_in"
     fi
 
-    files=$(wget -qO- "$url_m3u8" |grep -vP '^#')
+    files=$(curl "$url_m3u8" |grep -vP '^#')
     baseurl="${url_m3u8%\/*}"
 
     set_link - "$url_in"

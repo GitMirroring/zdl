@@ -40,7 +40,7 @@ then
 
     html_embed=$(wget -qO-                                   \
 		      --user-agent="$user_agent"             \
-		      "$url_packed")
+		      "$url_packed" -o /dev/null)
 
     if [ -z "$html_embed" ] &&
 	   command -v curl >/dev/null

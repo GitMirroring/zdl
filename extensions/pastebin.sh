@@ -30,7 +30,7 @@
 if [[ "$url_in" =~ pastebin.com/([^/]+) ]]
 then
     url_in_file=http://pastebin.com/download/${BASH_REMATCH[1]}
-    file_in=$(get_title "$(wget -qO- "$url_in")").txt
+    file_in=$(get_title "$(curl "$url_in")").txt
     headers=(-H "Referer: pastebin")
     axel_parts=1
     

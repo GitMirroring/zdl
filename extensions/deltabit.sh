@@ -61,7 +61,7 @@ then
 		--user-agent="Firefox"                           \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO-)
+		-qO- -o /dev/null)
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
     then
@@ -104,7 +104,8 @@ then
 	    do
 		((deltabit_loops++))
 		html2=$(wget -qO- -t1 -T$max_waiting           \
-			     "http://deltabit.co/dl?op=download_orig&id=${id_deltabit}&mode=${mode_stream}&hash=${hash_deltabit}")
+			     "http://deltabit.co/dl?op=download_orig&id=${id_deltabit}&mode=${mode_stream}&hash=${hash_deltabit}" \
+			     -o /dev/null)
 
 		url_in_file=$(grep -P 'http.+Download' <<< "$html2" |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')

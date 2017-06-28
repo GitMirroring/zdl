@@ -28,36 +28,6 @@
 ## zdl-extension name: Streamin
 
 
-# if [ "$url_in" != "${url_in//'streamin.to'}" ]
-# then
-#     html=$(wget	-qO- "$url_in")
-
-#     if [[ "$html" =~ (File Deleted|file was deleted) ]]
-#     then
-# 	_log 3
-
-#     elif [ -n "$html" ]
-#     then
-# 	input_hidden "$html"
-# 	file_in="$postdata_fname"
-# 	countdown- 6
-# 	html=$(wget -qO-                      \
-# 		    --post-data="$post_data"  \
-# 		    "$url_in")
-	
-# 	streamer=$(grep streamer <<< "$html"                |
-# 			  sed -r 's|^.+\"([^"]+)\".+$|\1|')
-	
-# 	playpath=$(grep file:  <<< "$html"                  |
-# 			  head -n2                          |
-# 			  tail -n1                          |
-# 			  sed -r 's|^.+\"([^"]+)\".+$|\1|')
-#     else
-# 	_log 2
-#     fi
-# fi
-
-
 if [ "$url_in" != "${url_in//'streamin.to'}" ]
 then    
     if [[ ! "$url_in" =~ embed ]]
@@ -70,10 +40,10 @@ then
     url_title="${url_in//embed-}"
     url_title="${url_title//-640x360.html}"
     
-    html=$(wget -qO- "$url_title")
+    html=$(curl "$url_title")
     input_hidden "$html"
     
-    html=$(wget -qO- "$url_in")
+    html=$(curl "$url_in")
     unpacked=$(unpack "$html")
     
     url_in_file="${unpacked#*file\:\"}"

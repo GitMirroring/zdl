@@ -42,17 +42,12 @@ then
 		   http://www.shortlink.li/ajax/getLink          \
 		   --post-data="short=$shortcode"                \
 		   --user-agent="$user_agent"                    \
-		   --load-cookies="$path_tmp/cookies.zdl"   |
+		   --load-cookies="$path_tmp/cookies.zdl"        \
+		   -o /dev/null                             |
 		     sed -r 's|.+\"([^"]+)\"\}$|\1|g'       |
 		     sed -r 's|\\||g')
     new_url="$(sanitize_url "$new_url")"
     
-    if url "$new_url"
-    then
-	set_link - "$url_in"
-	url_in="$new_url"
-	set_link + "$url_in"	
-    else
+    replace_url_in "$new_url" ||
 	break_loop=true
-    fi
 fi

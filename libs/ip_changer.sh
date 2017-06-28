@@ -101,11 +101,11 @@ function get_ip {
     if [ -n "$2" ] && [ -s "$path_tmp"/proxy-active ]
     then
 	export http_proxy=$(cat "$path_tmp"/proxy-active)
-	proxy_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php)
+	proxy_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
 	unset http_proxy
     fi
     
-    real_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php)
+    real_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
 }
 
 
@@ -166,6 +166,7 @@ function check_speed {
 			 --user-agent="$user_agent"          \
 			 -O /dev/null                        \
 			 "${list_proxy_url[$proxy_server]}"  \
+			 -o /dev/null                        \
 			 2>&1 | grep '\([0-9.]\+ [KM]B/s\)')
 	
 
