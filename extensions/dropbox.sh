@@ -31,8 +31,6 @@ if [[ "$url_in" =~ dropbox.com ]]
 then
     get_location "$url_in" url_in_file
 
-    echo "$url_in_file"
-    
     file_in="${url_in%\?*}"
     file_in="${file_in##*\/}"
     sanitize_file_in
