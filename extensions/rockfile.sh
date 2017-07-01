@@ -27,44 +27,6 @@
 ## zdl-extension types: download
 ## zdl-extension name: Rockfile
 
-function get_jschl_answer {
-    local page="$1"
-    local domain="$2"
-    
-    sed -r 's|setTimeout|//|g' -i "$page"
-    sed -r 's|\}, 4000|//|g' -i "$page"
-    sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
-    sed -r 's|f.submit|//|g' -i "$page"
-
-    jschl_answer=$(phantomjs "$path_usr"/extensions/cloudflare.js "$page")
-}
-
-function check_cloudflare {
-    local target="$1"
-    local html
-
-    if url "$target"
-    then
-	html=$(curl "$target")
-
-    elif [ -f "$target" ]
-    then
-	html=$(cat "$target")
-
-    elif [ -z "$target" ]
-    then
-	return 1
-    fi
-
-    if grep jschl_answer <<< "$html" &>/dev/null
-    then
-	print_c 2 "Rilevato Cloudflare"
-	return 0
-    else
-	return 1
-    fi
-}
-
 if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
     domain_rockfile="rockfile.eu"

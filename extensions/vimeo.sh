@@ -30,23 +30,12 @@
 
 if [[ "$url_in" =~ vimeo\.com\/([0-9]+) ]]
 then
-    html=$(curl "https://player.vimeo.com/video/${BASH_REMATCH[1]}")
-    html2="$html"
-
-    if [ -z "$html" ]
+    if command -v youtube-dl &>/dev/null
     then
-	html2=$(curl "$url_in")
-	url_embed=$(grep GET <<< "$html2" |
-			   sed -r 's|.+GET\",\"([^"]+)\".+|\1|g')
-	html=$(curl "$url_embed")
+	json_vimeo=$(youtube-dl --dump-json "$url_in")
+	url_in_file=$(nodejs -e "var json = $json_vimeo; console.log(json.formats[2].url);")
+	file_in=$(nodejs -e "var json = $json_vimeo; console.log(json.description);")"_${BASH_REMATCH[1]}.mp4"
     fi
-
-    url_in_file=$(grep -P 'token=' <<< "$(echo -e "${html//http/\\nhttp}")")
-    url_in_file="${url_in_file%%\"*}"
-
-    ext="${url_in_file%'?'*}"
-    ext="${ext##*'.'}"
-    file_in=$(get_title "$html2").$ext
-
-    end_extension
+    
+    #end_extension
 fi
