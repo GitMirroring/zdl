@@ -96,7 +96,7 @@ then
 		     --header='X-Requested-With: XMLHttpRequest'  \
 		     --post-data="slug=${slug}&hoster=${hoster}"  \
 		     "$GETLINK" -qO-)
-echo "reurl: $reurl"
+#echo "reurl: $reurl"
 	reurl="${reurl%\"*}"
 	reurl="${reurl##*\"}"
 

@@ -30,5 +30,8 @@
 
 if [[ "$url_in" =~ bc\.vc ]]
 then
-    replace_url_in "${url_in#*bc.vc\/[^/]*\/}"    
+    [ "${url_in#*bc.vc\/[^/]*\/}" != "$url_in" ] &&
+	url "${url_in#*bc.vc\/[^/]*\/}" &&
+	replace_url_in "${url_in#*bc.vc\/[^/]*\/}" || 
+	    _log 32
 fi
