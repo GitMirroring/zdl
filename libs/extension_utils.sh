@@ -342,7 +342,7 @@ function anydownload {
 	url_in=$(urldecode "${url_in#*url=}")
 	url_in=$(sed -r 's|\s{1}|%20|g' <<< "$url_in")
 
-	URL_IN=$(curl "$url_in"                    |
+	URL_IN=$(curl "$url_in" -s                 |
 			grep 'xdcc' 2>/dev/null    |
 			head -n1                   |
 			sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
@@ -350,7 +350,7 @@ function anydownload {
     elif [[ "$url_in" =~ IRCdownload\.php ]] &&
 	 [[ ! "$url_in" =~ adfly ]]
     then
-	html=$(curl "$url_in")
+	html=$(curl "$url_in" -s)
 	echo "$html" >OUT
 	
 	irc_host=$(grep server0 <<< "$html" |
@@ -389,7 +389,7 @@ function extension_clicknupload {
 	
 	[ -z "$html" ] &&
 	    command -v curl >/dev/null && 
-	    html=$(curl "$url_in") 
+	    html=$(curl "$url_in" -s) 
 
 	if [[ "$html" =~ (File Not Found) ]]
 	then
@@ -590,7 +590,7 @@ function check_cloudflare {
 
     if url "$target"
     then
-	html=$(curl "$target")
+	html=$(curl "$target" -s)
 
     elif [ -f "$target" ]
     then
