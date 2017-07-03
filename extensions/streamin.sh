@@ -40,16 +40,24 @@ then
     url_title="${url_in//embed-}"
     url_title="${url_title//-640x360.html}"
     
-    html=$(curl "$url_title")
+    html=$(curl -s -c "$path_tmp"/cookies.zdl "$url_title")
+
     input_hidden "$html"
-    
-    html=$(curl "$url_in")
-    unpacked=$(unpack "$html")
-    
-    url_in_file="${unpacked#*file\:\"}"
-    url_in_file="${url_in_file%%\"*}"
 
-    file_in="${file_in}.${url_in_file##*.}"
+    html=$(curl -s "$url_in")
 
-    end_extension
+    if grep 'File was deleted' <<< "$html" &>/dev/null
+    then
+	_log 3
+
+    else
+	unpacked=$(unpack "$html")
+	
+	url_in_file="${unpacked#*file\:\"}"
+	url_in_file="${url_in_file%%\"*}"
+
+	file_in="${file_in}.${url_in_file##*.}"
+
+	end_extension
+    fi
 fi
