@@ -95,6 +95,25 @@ then
 		       -H 'Connection: "keep-alive"'                                                   \
 		       "$url_in" 2>&1)
 	fi
+	
+	if [[ "$html" =~ 'The document has moved'.+href=\"(.+)\".+$ ]]
+	then
+	    html=$(curl                                                                                \
+		       -A "$user_agent"                                                                \
+		       -b "$path_tmp/cookies.zdl"                                                      \
+		       -c "$path_tmp/cookies2.zdl"                                                     \
+		       -D "$path_tmp/header2.zdl"                                                      \
+		       -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    		       -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+		       -H 'Accept-Encoding: "gzip, deflate"'                                           \
+		       -H 'DNT: "1"'                                                                   \
+		       -H "Referer: \"$url_in\""                                                       \
+		       -H "Cookie: \"${cookie_rockfile}\""                                             \
+		       -H 'Connection: "keep-alive"'                                                   \
+		       "${BASH_REMATCH[1]}" 2>&1)
+
+	fi
+	
     else
 	html=$(curl -v \
 		   -A "$user_agent" \
