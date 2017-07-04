@@ -52,7 +52,13 @@ then
 	
 	url_in_new=$(sanitize_url "${url_in_new}")
 
-	replace_url_in "$url_in_new" ||
-	    _log 2
+	if url "$url_in_new"
+	then
+	    replace_url_in "$url_in_new" ||
+		_log 2
+
+	else
+	    _log 3
+	fi
     fi
 fi
