@@ -100,6 +100,9 @@ then
 	   [[ "$html" =~ 'The document has moved'.+href=\"(.+)\".+$ ]]
 	then
 	    url_http="${BASH_REMATCH[1]}"
+
+	    replace_url_in "$url_http"
+	    
 	    html=$(curl                                                                                \
 		       -A "$user_agent"                                                                \
 		       -b "$path_tmp/cookies.zdl"                                                      \
@@ -112,7 +115,7 @@ then
 		       -H "Referer: \"$url_in\""                                                       \
 		       -H "Cookie: \"${cookie_rockfile}\""                                             \
 		       -H 'Connection: "keep-alive"'                                                   \
-		       "$url_http" 2>&1)
+		       "$url_in" 2>&1)
 	fi
 	
     else
@@ -141,7 +144,7 @@ then
 		   -b "$path_tmp"/cookies2.zdl        \
 		   -A "$user_agent"                   \
 		   -d "$post_data"                    \
-		   "$url_http")
+		   "$url_in")
 
 	if [[ "$html" =~ 'have to wait '([0-9]+) ]]
 	then
