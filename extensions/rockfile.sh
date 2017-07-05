@@ -30,6 +30,7 @@
 if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
     domain_rockfile="rockfile.eu"
+    replace_url_in "${url_in//https/http}"
 
     if check_cloudflare "$url_in"
     then	
