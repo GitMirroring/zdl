@@ -116,25 +116,62 @@ function noproxy {
 
 ## servizi che offrono liste di proxy
 function ip_adress {
+    local proxy_regex
     ## ip-adress.com
 
     rm -f "$path_tmp/proxy2.tmp"
-    
+
     for proxy_type in ${proxy_types[*]}
     do
-	grep "Proxy_Details" "$path_tmp/proxy.tmp" |
-	    grep "${proxy_type}" >> "$path_tmp/proxy2.tmp"
+	case "$proxy_type" in
+	    Transparent)
+		proxy_regex='<td>transparent'
+		;;
+	    Anonymous)
+		proxy_regex='<td>anonymous'
+		;;
+	    Elite)
+		proxy_regex='<td>highly-anonymous'
+		;;
+	esac
+	
+	grep "${proxy_regex}" "$path_tmp/proxy.tmp" -B1  |
+	    grep href |
+	    sed -r "s|.+>([^>]+)</a>([^<]+)<.+|\1\2:$proxy_type|g"  >> "$path_tmp/proxy2.tmp"
+	
     done
 
     max=$(wc -l < "$path_tmp/proxy2.tmp")
     string_line=$(sed -n "${line}p" "$path_tmp/proxy2.tmp")
     
-    proxy="${string_line#*Proxy_Details\/}"
+    proxy="${string_line}"
     [ "$proxy" != "${proxy%:Anonymous*}" ] && proxy_type="Anonymous"
     [ "$proxy" != "${proxy%:Transparent*}" ] && proxy_type="Transparent"
     [ "$proxy" != "${proxy%:Elite*}" ] && proxy_type="Elite"
     proxy="${proxy%:${proxy_type}*}"
 }
+
+
+# function ip_adress {
+#     ## ip-adress.com
+
+#     rm -f "$path_tmp/proxy2.tmp"
+# 
+#     for proxy_type in ${proxy_types[*]}
+#     do
+# 	grep "Proxy_Details" "$path_tmp/proxy.tmp" |
+# 	    grep "${proxy_type}" >> "$path_tmp/proxy2.tmp"
+#     done
+
+#     max=$(wc -l < "$path_tmp/proxy2.tmp")
+#     string_line=$(sed -n "${line}p" "$path_tmp/proxy2.tmp")
+    
+#     proxy="${string_line#*Proxy_Details\/}"
+#     [ "$proxy" != "${proxy%:Anonymous*}" ] && proxy_type="Anonymous"
+#     [ "$proxy" != "${proxy%:Transparent*}" ] && proxy_type="Transparent"
+#     [ "$proxy" != "${proxy%:Elite*}" ] && proxy_type="Elite"
+#     proxy="${proxy%:${proxy_type}*}"
+# }
 
 function proxy_list {
     ## proxy-list.org
@@ -259,17 +296,19 @@ function new_ip_proxy {
 	line=1
 	while [ -z "$proxy" ]
 	do		
-	    if [ ! -f "$path_tmp/proxy.tmp" ]
+	    if [ ! -s "$path_tmp/proxy.tmp" ]
 	    then
 		wget -q -t 1 -T 20                              \
 		     --user-agent="$user_agent"                 \
 		     ${list_proxy_url[$proxy_server]}           \
 		     -qO "$path_tmp/proxy.tmp"
-		
+
 		print_c 4 "Ricerca lista proxy $proxy_server: ${list_proxy_url[$proxy_server]}"
 	    fi
 
-	    [ -f "$path_tmp/proxy.tmp" ] && $proxy_server
+	    [ -s "$path_tmp/proxy.tmp" ] &&
+		$proxy_server ||
+		    sleep 1
 
 	    for ((p=0; p<${#proxy_done[*]}; p++))
 	    do
@@ -292,7 +331,7 @@ function new_ip_proxy {
 		   [ -z "$string_line" ]
 	    then
 		rm -f "$path_tmp/proxy.tmp"
-		line=0
+		line=1
 	    fi
 	    
 	    [ -n "$line" ] && (( line++ ))
