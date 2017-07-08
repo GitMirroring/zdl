@@ -193,20 +193,16 @@ function check_speed {
     print_c 2 "\nTest velocità di download:"
 
     i=0
-    while (( $i<3 ))
+    while (( i<3 ))
     do
 	i=${#speed[*]}
-	#speed[$i]=`wget -t 1 -T $max_waiting -O /dev/null "http://indirizzo-ip.com/ip.php" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)'`
-	#speed[$i]=`wget -t 1 -T $max_waiting -O /dev/null "$url_in" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)'`
+	#speed[$i]=$(wget -t 1 -T 60 -O /dev/null "http://indirizzo-ip.com/ip.php" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)' )
+	#speed[$i]=$(wget -t 1 -T $max_waiting -O /dev/null "$url_in" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)' )
 
-	speed[$i]=$(wget -t 1 -T $max_waiting                \
-			 --user-agent="$user_agent"          \
-			 -O /dev/null                        \
-			 "${list_proxy_url[$proxy_server]}"  \
-			 -o /dev/null                        \
-			 2>&1 | grep '\([0-9.]\+ [KM]B/s\)')
+	wget -t 1 -T $max_waiting --user-agent="$user_agent" -O /dev/null "${list_proxy_url[$proxy_server]}" -o "$path_tmp"/speed-test-proxy
+
+	speed[$i]=$(grep '\([0-9.]\+ [KM]B/s\)' "$path_tmp"/speed-test-proxy)
 	
-
 	if [ -n "${speed[$i]}" ]
 	then
 	    speed[$i]="${speed[$i]#*'('}"
