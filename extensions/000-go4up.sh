@@ -29,24 +29,28 @@
 
 if [[ "$url_in" =~ 'go4up.com/dl/' ]]
 then
-    html=$(curl "$url_in")
+    [ "${url_in}" != "${url_in//http\:/https:}" ] &&
+	replace_url_in "${url_in//http\:/https:}"
     
+    html=$(curl -s "$url_in")
+
     url_js=$(grep -A4 'function loadlinks' <<< "$html" |
 		    grep 'url: '                       |
 		    sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
-    url_js="http://go4up.com${url_js}"
+    url_js="https://go4up.com${url_js}"
 
-    url_json=$(curl "$url_js" | tr -d '\')
-    
+    url_json=$(curl -s "$url_js" 2>&1 | tr -d '\\')
+
     url_json="${url_json#*href=\"}"
-    url_json="http://go4up.com${url_json%%\"*}"
+
+    url_json="https://go4up.com${url_json%%\"*}"
 
     replace_url_in "$url_json" || end_extension
 fi
 
 if [[ "$url_in" =~ 'go4up.com/rd/' ]]
 then
-    html=$(curl "$url_in")
+    html=$(curl -s "$url_in")
 
     if [[ "$html" =~ (Error link not available) ]]
     then
