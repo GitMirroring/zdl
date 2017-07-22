@@ -31,13 +31,10 @@ if [ "$url_in" != "${url_in//'youtube.com/watch'}" ]
 then
     replace_url_in "$(urldecode "${url_in%%'&'*}")"
     
-    html=$(wget -Nc -e convert-links=off                     \
-    		--keep-session-cookies                       \
-    		--save-cookies="$path_tmp"/cookies.zdl       \
-    		--no-check-certificate                       \
-    		--user-agent="$user_agent"                   \
-    		"$url_in" -qO- -o /dev/null)
-
+    html=$(curl -c "$path_tmp"/cookies.zdl \
+		-A "$user_agent" \
+		"$url_in")
+    
     if check_connection &&
 	    [ -z "$html" ]
     then
