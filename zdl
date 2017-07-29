@@ -1431,6 +1431,10 @@ function main_loop {
 		    continue
 		fi
 
+		## temporaneo: da qualche tempo, wget genera file di log nelle subshell
+		## urge convertire inegralmente zdl all'uso di curl (conversione già avviata)
+		rm -f wget-log*
+		
 		#### DOWNLOAD ####
 		if [ -z "$premium" ] &&                                                 
 		       check_in_file &&                                                         

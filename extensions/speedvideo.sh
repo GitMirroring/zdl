@@ -31,6 +31,8 @@
 if [[ "$url_in" =~ (speedvideo.) ]]
 then
     ## url_embed=$(grep -oP 'http://[^"]+embed-[^"]+' <<< "$html")
+    # [ "${url_in//http\:/https:}" != "$url_in" ] &&
+    # 	replace_url_in "${url_in//http\:/https:}"
     
     if [[ ! "$url_in" =~ embed ]]
     then
@@ -39,7 +41,7 @@ then
 		    --keep-session-cookies                 \
 		    --save-cookies="$path_tmp"/cookies.zdl \
 		    -o /dev/null)
-
+	
 	input_hidden "$htm"
     fi
 
@@ -79,6 +81,9 @@ then
 
 	[[ ! "$url_in_file" =~ ^http ]] &&
 	    url_in_file="http://${url_in_file}"
+
+	[ -n "$file_in" ] && url "$url_in_file" &&
+	    file_in="${file_in}.${url_in_file##*.}"
 
 	end_extension
     fi
