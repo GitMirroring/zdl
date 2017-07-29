@@ -1461,6 +1461,10 @@ function main_loop {
 		    unset no_newip
 		fi
 
+		## temporaneo: da qualche tempo, wget genera file di log nelle subshell
+		## urge convertire inegralmente zdl all'uso di curl (conversione già avviata)
+		rm -f wget-log*
+
 		newip_add_host
 		from_loop=true
 

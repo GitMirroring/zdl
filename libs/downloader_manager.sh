@@ -157,6 +157,8 @@ function check_wget {
     wget -t3 -T10 -S --spider -U "$user_agent" "$url_in_file" -o "$path_tmp"/wget_checked
     kill -9 $pid_countdown
 
+    wget_checked=$(cat "$path_tmp"/wget_checked)
+
     if grep -P '(Remote file does not exist|failed: Connection refused)' "$path_tmp"/wget_checked &>/dev/null
     then
 	rm -rf "$path_tmp"/wget_checked 
