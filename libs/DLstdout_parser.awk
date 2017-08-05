@@ -294,9 +294,14 @@ function progress_out (chunk,           progress_line, line, cmd) {
 			speed_out[i] = matched[1]*1024
 		    }
 		    else {
-			match(progress_line, /DL:([0-9.]+)/, matched)
-			speed_out[i] = matched[1]
-			#/1024
+			match(progress_line, /DL:([0-9.]+)Ki/, matched)
+			if (matched[1]) {
+			    speed_out[i] = matched[1]
+			}
+			else {
+			    match(progress_line, /DL:([0-9.]+)B/, matched)
+			    speed_out[i] = matched[1]/1024
+			}
 		    }
 		    match(progress_line, /ETA:(.+)\]/, matched)
 		    eta_out[i] = matched[1]
