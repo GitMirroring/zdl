@@ -31,8 +31,7 @@ if [[ "$url_in" =~ cinemalibero ]]
 then
     cinemalibero_url=$(get_location "$url_in")
 
-    if ! url "$cinemalibero_url" ||
-	    ! replace_url_in "$cinemalibero_url"
+    if ! replace_url_in "$cinemalibero_url"
     then
 	cinemalibero_url=$(curl -s "$url_in" |
 				  grep refresh |
