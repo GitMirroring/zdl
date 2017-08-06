@@ -29,8 +29,8 @@
 
 if [[ "$url_in" =~ 'go4up.com/dl/' ]]
 then
-    [ "${url_in}" != "${url_in//http\:/https:}" ] &&
-	replace_url_in "${url_in//http\:/https:}"
+    [ "${url_in}" != "${url_in//'http://go4up'/https://dl.go4up}" ] &&
+	replace_url_in "${url_in//'http://go4up'/https://dl.go4up}"
     
     html=$(curl -s "$url_in")
 
