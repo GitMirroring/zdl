@@ -342,7 +342,7 @@ function anydownload {
 	url_in=$(urldecode "${url_in#*url=}")
 	url_in=$(sed -r 's|\s{1}|%20|g' <<< "$url_in")
 
-	URL_IN=$(curl "$url_in" -s                 |
+	URL_IN=$(curl "$url_in" -s 2>/dev/null     |
 			grep 'xdcc' 2>/dev/null    |
 			head -n1                   |
 			sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
