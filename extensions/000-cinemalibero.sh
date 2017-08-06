@@ -31,12 +31,12 @@ if [[ "$url_in" =~ cinemalibero ]]
 then
     cinemalibero_url=$(get_location "$url_in")
 
-    if ! replace_url_in "$cinemalibero_url"
-    then
-	cinemalibero_url=$(curl -s "$url_in" |
-				  grep refresh |
-				  sed -r 's|.+url=([^ "]+).*|\1|g')
-	replace_url_in "$cinemalibero_url" 
-    fi
+    replace_url_in "$cinemalibero_url"
+    
+    cinemalibero_url=$(curl -s "$url_in" |
+			      grep refresh |
+			      sed -r 's|.+url=([^ "]+).*|\1|g')
+    replace_url_in "$cinemalibero_url" 
+    
     unset cinemalibero_url
 fi
