@@ -61,12 +61,13 @@ function post_m3u8_genlink {
 
 if [[ "$url_in" =~ \.m3u8\?*.* ]] ||
        [[ "$url_in_file" =~ \.m3u8\?*.* ]]
-then    
+then
     downloader_in=FFMpeg
 
-    [[ "$url_in" =~ \.m3u8\?*.* ]] &&
+    [ -z "$url_in_file" ] &&
+	[[ "$url_in" =~ \.m3u8\?*.* ]] &&
 	url_in_file="$url_in"
-
+    
     [ -z "$file_in" ] &&
 	file_in="${url_in_file##*\/}"
 
@@ -81,6 +82,5 @@ then
     else
 	unset file_in url_in_file
     fi
-
 fi
 

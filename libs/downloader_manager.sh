@@ -177,11 +177,12 @@ function download {
     if ! dler_type "no-check" "$url_in" &&
 	    [ -z "$debrided" ]
     then
-	if ! dler_type "no-resume" "$url_in" &&
-		! dler_type "rtmp" "$url_in" &&
-		! dler_type "wget" "$url_in" &&
-		! dler_type "youtube-dl" "$url_in" &&
-		! check_wget
+	if [ "$downloader_in" != "FFMpeg" ] &&
+	       ! dler_type "no-resume" "$url_in" &&
+	       ! dler_type "rtmp" "$url_in" &&
+	       ! dler_type "wget" "$url_in" &&
+	       ! dler_type "youtube-dl" "$url_in" &&
+	       ! check_wget
 	then
 	    if [[ ! "$wget_checked" =~ (HTTP/[0-9.]+ 503) ]]
 	    then
