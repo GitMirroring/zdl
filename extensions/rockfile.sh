@@ -206,8 +206,9 @@ then
 	fi
     fi
 
-    if [ -z "$file_in" ] &&
-	   url "$url_in_file"
+    if   url "$url_in_file" &&
+	    [ -z "$file_in" ] ||
+		[[ "$file_in" =~ (input type) ]]	 
     then
 	file_in="${url_in_file##*\/}"
     fi
