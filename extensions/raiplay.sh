@@ -27,10 +27,12 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: RaiPlay (HD)
 
+
 if [[ "$url_in" =~ raiplay ]]
 then
-    html=$(curl -s "$url_in")
-
+    ## html=$(curl -s "$url_in")
+    html=$(wget -qO- "$url_in" -o /dev/null)
+    
     file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
     
     url_raiplay=$(grep data-video-url <<< "$html" |
