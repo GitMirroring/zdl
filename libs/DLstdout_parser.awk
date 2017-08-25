@@ -151,7 +151,8 @@ function check_stdout () {
     if ((percent_out[i] == 100) ||
 	(downloaded_length > 4000000)) {
 	add_line(file_out[i], ".zdl_tmp/pipe_files.txt")
-    } else if (exists(".zdl_tmp/pipe_files.txt")) {
+    }
+    else if (exists(".zdl_tmp/pipe_files.txt")) {
     	rm_line(file_out[i], ".zdl_tmp/pipe_files.txt")
     }
 
@@ -179,7 +180,8 @@ function yellow_progress () {
 	}
 	array_out(percent_out[i], "percent_out")
 	close(c)
-    } else {
+    }
+    else {
 	percent_out[i] = 0
 	speed_out[i] = 0
 	speed_out_type[i] = "KB/s"
@@ -222,12 +224,14 @@ function progress_out (chunk,           progress_line, line, cmd) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_file(file_out[i])
 	    percent_out[i] = 100
-	} else if (progress_abort[i]) {
+	}
+	else if (progress_abort[i]) {
 	    bash_var("url_in", "")
 	    percent_out[i] = 0
 	    code = code "_log 3 \"" url_out[i] "\"; "
 	    system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp " file_out[i] " " file_out[i] ".st " file_out[i] ".aria2")
-	} else if ((speed_out[i] > 0) && (speed_out[i] ~ /^[0-9]+$/)) {
+	}
+	else if ((speed_out[i] > 0) && (speed_out[i] ~ /^[0-9]+$/)) {
 	    speed_out_type[i] = "KB/s"
 	    ## mancano ancora:
 	    if (int(speed_out[i]) != 0 && int(speed_out[i]) > 0) {
@@ -631,16 +635,22 @@ BEGIN {
 	if (dler ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl/) {
 	    url_out_file[i] = $0
 	    array_out(url_out_file[i], "url_out_file")
-	} else if (dler ~ /RTMPDump|cURL/) {
+	}
+	else if (dler ~ /RTMPDump|cURL/) {
 	    streamer_out[i] = $0
 	    array_out(streamer_out[i], "streamer_out")
+	}
+	else if (dler ~ /FFMpeg/) {
+	    url_out_file[i] = $0
+	    array_out(url_out_file[i], "url_out_file")	    
 	}
     }
     if (FNR == 7) {
 	if (dler ~ /RTMPDump|cURL/) {
 	    playpath_out[i] = $0
 	    array_out(playpath_out[i], "playpath_out")
-	} else if (dler ~ /Aria2|Axel/) {
+	}
+	else if (dler ~ /Aria2|Axel/) {
 	    axel_parts_out[i] = $0
 	    aria2_parts_out[i] = $0
 	    array_out(axel_parts_out[i], "axel_parts_out")
@@ -674,7 +684,8 @@ END {
 	    if (downloader_out[I] ~ /cURL|RTMPDump/) {
 		json = json "\"playpath\":\"" playpath_out_[I] "\","
 		json = json "\"streamer\":\"" streamer_out[I] "\","
-	    } else {
+	    }
+	    else {
 		json = json "\"url\":\"" url_out_file[I] "\","
 	    }
     	    json = json "\"downloader\":\"" downloader_out[I] "\","

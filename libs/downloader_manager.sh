@@ -521,7 +521,9 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 $url_in
 FFMpeg
 ${pid_prog}
-$file_in" > "$path_tmp/${file_in}_stdout.tmp"
+$file_in
+$url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
+	    
  	    ;;
 
 	youtube-dl)
