@@ -46,7 +46,7 @@ function get_wstream_definition {
     fi
 }
 
-if [[ "$url_in" =~ wstream ]] 
+if [[ "$url_in" =~ http[s]*://[w.]*wstream ]] 
 then
     unset html html2 movie_definition
     
