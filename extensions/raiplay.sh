@@ -34,6 +34,7 @@ then
     html=$(wget -qO- "$url_in" -o /dev/null)
     
     file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
+    file_in="${file_in#Film\: }"
     
     url_raiplay=$(grep data-video-url <<< "$html" |
 		 sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')

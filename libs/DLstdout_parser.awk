@@ -632,17 +632,13 @@ BEGIN {
 	if (dler ~ /Aria2|Axel/) yellow_progress()
     }
     if (FNR == 6) {
-	if (dler ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl/) {
+	if (dler ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg/) {
 	    url_out_file[i] = $0
 	    array_out(url_out_file[i], "url_out_file")
 	}
 	else if (dler ~ /RTMPDump|cURL/) {
 	    streamer_out[i] = $0
 	    array_out(streamer_out[i], "streamer_out")
-	}
-	else if (dler ~ /FFMpeg/) {
-	    url_out_file[i] = $0
-	    array_out(url_out_file[i], "url_out_file")	    
 	}
     }
     if (FNR == 7) {

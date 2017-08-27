@@ -523,8 +523,9 @@ FFMpeg
 ${pid_prog}
 $file_in
 $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
-	    
- 	    ;;
+
+	    downwait=$((downwait+10))
+	    ;;
 
 	youtube-dl)
 	    ## provvisorio per youtube-dl non gestito	    
