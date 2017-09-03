@@ -34,6 +34,8 @@ function show_downloads {
 	    cols=$(cat "$path_tmp"/columns)
 	    sleep 0.1
 	done
+    else
+	local cols=$COLUMNS
     fi
     
     if show_mode_in_tty "$this_mode" "$this_tty"
