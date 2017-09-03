@@ -25,13 +25,16 @@
 #
 
 function show_downloads {
-    local cols=$(cat "$path_tmp"/columns)
-
-    while [ -z "$cols" ] || ((cols==0))
-    do
-	cols=$(cat "$path_tmp"/columns)
-	sleep 0.1
-    done
+    if test -f "$path_tmp"/columns
+    then
+	local cols=$(cat "$path_tmp"/columns)
+	
+	while [ -z "$cols" ] || ((cols==0))
+	do
+	    cols=$(cat "$path_tmp"/columns)
+	    sleep 0.1
+	done
+    fi
     
     if show_mode_in_tty "$this_mode" "$this_tty"
     then
