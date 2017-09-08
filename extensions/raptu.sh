@@ -44,8 +44,8 @@ then
     else
 	file_in=$(get_title "$html")
 
-	url_in_file=$(grep mp4 <<< "$html" | tr -d '\\')
-	url_in_file="${url_in_file##*file\":\"}"
+	url_in_file=$(grep mp4 <<< "$html" | tr -d '\\' |tail -n1)
+	url_in_file="${url_in_file#*\"}"
 	url_in_file="${url_in_file%%\"*}"
 
 	end_extension
