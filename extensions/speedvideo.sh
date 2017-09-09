@@ -36,13 +36,18 @@ then
     
     if [[ ! "$url_in" =~ embed ]]
     then
-	htm=$(wget -qO- "$url_in"                          \
-		    --user-agent="$user_agent"             \
-		    --keep-session-cookies                 \
-		    --save-cookies="$path_tmp"/cookies.zdl \
-		    -o /dev/null)
-	
+	# htm=$(wget -qO- "$url_in"                          \
+	# 	    --user-agent="$user_agent"             \
+	# 	    --keep-session-cookies                 \
+	# 	    --save-cookies="$path_tmp"/cookies.zdl \
+	# 	    -o /dev/null)
+
+	htm=$(curl -A "$user_agent" \
+		   -c "$path_tmp"/cookies.zdl \
+		   "$url_in")
+
 	input_hidden "$htm"
+	post_data+="&imhuman=Proceed to video"
     fi
 
     html=$(wget -qO- "$url_in"                          \
