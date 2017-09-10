@@ -543,7 +543,6 @@ function extension_openload {
     fi
 }
 
-
 function get_location { # 1=url 2=variable_to_new_url  
     local location=$(curl -v                          \
 			  "$1"                        \

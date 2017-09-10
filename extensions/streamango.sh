@@ -29,15 +29,16 @@
 
 if [[ "$url_in" =~ streamango ]]
 then
-    html=$(curl -s -A "$user_agent" "$url_in")
+    if command -v phantomjs &>/dev/null
+    then
+	url_in_file=$(phantomjs "$path_usr"/extensions/streamango-phantomjs.js "$url_in" |
+			     tail -n1)
 
-    ## file_in=$(get_title "$html")
-
-    url_in_file=$(grep 'video/mp4' <<< "$html" | tr -d '\\')
-    url_in_file="${url_in_file%\"*}"
-    url_in_file="http:${url_in_file##*\"}"
-    url_in_file=$(get_location "$url_in_file")
-    file_in="${url_in_file##*\/}"
+	file_in="${url_in_file##*\/}"
+	
+    else
+	_log 35
+    fi
 
     end_extension
 fi
