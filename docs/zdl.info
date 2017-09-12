@@ -483,9 +483,8 @@ _Video in streaming saltando il player del browser:_
      Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
      Speedvideo (HD), Streamango, Streamin, Thevideo, TubeOffLine.com
      (tutti i servizi: Biqle), Tutti i video in streaming di tipo
-     .m3u8, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza
-     (HD), Vidto, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa
-     (RTMP) 
+     .m3u8, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza,
+     Vidto, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Clicknupload, Cyberlocker, Deltabit (HD), Dropbox, Easybytez,
@@ -493,7 +492,7 @@ _File hosting:_
      Mega, MultiUp (multi-link), Nowdownload, Openload, Ozofiles,
      Pastebin, Rockfile, Sockshare (HD), Subyshare, TubeOffLine.com
      (tutti i servizi: Biqle), Tusfiles, Uload, Uploadshub, Uppit,
-     Uptobox, Vidoza (HD), WStream (HD) 
+     Uptobox, Vidoza, WStream (HD) 
 
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
@@ -1250,18 +1249,18 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 30)
+                                                               (line 29)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
-                                                               (line 22)
+                                                               (line 21)
 * file hosting:                          Servizi streaming/hosting.
-                                                               (line 22)
+                                                               (line 21)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 30)
+                                                               (line 29)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 34)
+                                                               (line 33)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1352,25 +1351,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL6602
 Node: Servizi streaming/hosting14007
-Node: Avviare ZDL17872
-Node: Arrestare ZDL20308
-Node: Controllare i download21413
-Node: Manuali d'uso25704
-Node: Modi26120
-Node: Readline29386
-Node: Editor30938
-Node: Omonimie32163
-Node: IRC/XDCC33698
-Node: Torrent35388
-Node: Filtri36272
-Node: Creare nuove estensioni36593
-Node: Software consigliati38355
-Node: Conkeror39756
-Node: zdl-xterm e XXXTerm/Xombrero40767
-Node: Installazione e aggiornamento42691
-Node: Tags45726
-Node: Copying48527
-Node: Contatti49577
+Node: Avviare ZDL17857
+Node: Arrestare ZDL20293
+Node: Controllare i download21398
+Node: Manuali d'uso25689
+Node: Modi26105
+Node: Readline29371
+Node: Editor30923
+Node: Omonimie32148
+Node: IRC/XDCC33683
+Node: Torrent35373
+Node: Filtri36257
+Node: Creare nuove estensioni36578
+Node: Software consigliati38340
+Node: Conkeror39741
+Node: zdl-xterm e XXXTerm/Xombrero40752
+Node: Installazione e aggiornamento42676
+Node: Tags45711
+Node: Copying48512
+Node: Contatti49562
 
 End Tag Table
 

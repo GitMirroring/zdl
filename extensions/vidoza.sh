@@ -26,7 +26,7 @@
 
 ## ZDL add-on
 ## zdl-extension types: streaming download
-## zdl-extension name: Vidoza (HD)
+## zdl-extension name: Vidoza
 
 function add_vidoza_definition {
     set_line_in_file + "$url_in $1" "$path_tmp"/vidoza-definitions
@@ -46,112 +46,128 @@ function get_vidoza_definition {
     fi
 }
 
-if [[ "$url_in" =~ vidoza ]] 
+if [[ "$url_in" =~ vidoza ]] &&
+       [[ ! "$url_in" =~ \/v.mp4$ ]]
 then
-    unset html html2 movie_definition
+    html=$(curl -v \
+		-A "$user_agent" \
+		"$url_in" \
+		2>&1)
+
+    url_in_file=$(grep sources <<< "$html")
+    url_in_file="${url_in_file#*file:\"}"
+    url_in_file="${url_in_file%%\"*}"
+
+    file_in=$(grep 'var curFileName' <<< "$html")
+    file_in="${file_in#*\"}"
+    file_in="${file_in%%\"*}"
+
+    end_extension
     
-    if [ -z "$(grep -v vidoza "$path_tmp/links_loop.txt" &>/dev/null)" ]
-    then
-    	print_c 1 "Cookies cancellati"
-    	rm -rf "$path_tmp/cookies.zdl"           
-    fi
+    # unset html html2 movie_definition
     
-    html=$(wget -t1 -T$max_waiting                               \
-		"$url_in"                                        \
-		--user-agent="Firefox"                           \
-		--keep-session-cookies                           \
-		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO- -o /dev/null)
+    # if [ -z "$(grep -v vidoza "$path_tmp/links_loop.txt" &>/dev/null)" ]
+    # then
+    # 	print_c 1 "Cookies cancellati"
+    # 	rm -rf "$path_tmp/cookies.zdl"           
+    # fi
+    
+    # html=$(wget -t1 -T$max_waiting                               \
+    # 		"$url_in"                                        \
+    # 		--user-agent="Firefox"                           \
+    # 		--keep-session-cookies                           \
+    # 		--save-cookies="$path_tmp/cookies.zdl"           \
+    # 		-qO- -o /dev/null)
 
-    if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
-    then
-	_log 3
+    # if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
+    # then
+    # 	_log 3
 
-    else
-	download_video=$(grep -P 'download_video.+Download' <<< "$html" |head -n1)
+    # else
+    # 	download_video=$(grep -P 'download_video.+Download' <<< "$html" |head -n1)
 
-	hash_vidoza="${download_video%\'*}"
-	hash_vidoza="${hash_vidoza##*\'}"
+    # 	hash_vidoza="${download_video%\'*}"
+    # 	hash_vidoza="${hash_vidoza##*\'}"
 
-	id_vidoza="${download_video#*download_video\(\'}"
-	id_vidoza="${id_vidoza%%\'*}"
+    # 	id_vidoza="${download_video#*download_video\(\'}"
+    # 	id_vidoza="${id_vidoza%%\'*}"
 
-	declare -A movie_definition
-	movie_definition=(
-	    ['o']="Original"
-	    ['n']="Normal"
-	    ['l']="Low"
-	)
+    # 	declare -A movie_definition
+    # 	movie_definition=(
+    # 	    ['o']="Original"
+    # 	    ['n']="Normal"
+    # 	    ['l']="Low"
+    # 	)
 
-	grep -P "download_video.+','o','.+Download" <<< "$html" &>/dev/null &&
-	    o=o
+    # 	grep -P "download_video.+','o','.+Download" <<< "$html" &>/dev/null &&
+    # 	    o=o
 						       
-	for mode_stream in $o n l
-	do
-	    get_vidoza_definition mode_stream_test
+    # 	for mode_stream in $o n l
+    # 	do
+    # 	    get_vidoza_definition mode_stream_test
 
-	    [ -n "$mode_stream_test" ] &&
-		mode_stream="$mode_stream_test"
+    # 	    [ -n "$mode_stream_test" ] &&
+    # 		mode_stream="$mode_stream_test"
 
-	    print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
+    # 	    print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
 	    
-	    vidoza_loops=0
-	    while ! url "$url_in_file" &&
-		    ((vidoza_loops < 2))
-	    do
-		((vidoza_loops++))
-		html2=$(wget -qO- -t1 -T$max_waiting           \
-			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}" \
-			     -o /dev/null)
+    # 	    vidoza_loops=0
+    # 	    while ! url "$url_in_file" &&
+    # 		    ((vidoza_loops < 2))
+    # 	    do
+    # 		((vidoza_loops++))
+    # 		html2=$(wget -qO- -t1 -T$max_waiting           \
+    # 			     "http://vidoza.net/dl?op=download_orig&id=${id_vidoza}&mode=${mode_stream}&hash=${hash_vidoza}" \
+    # 			     -o /dev/null)
 		
-		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
-				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
+    # 		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
+    # 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
-		url_in_file="${url_in_file#*url=}"
-		url_in_file=$(urldecode "$url_in_file")
+    # 		url_in_file="${url_in_file#*url=}"
+    # 		url_in_file=$(urldecode "$url_in_file")
 
-		((vidoza_loops < 2)) && sleep 1
-	    done
+    # 		((vidoza_loops < 2)) && sleep 1
+    # 	    done
 
-	    if ! url "$url_in_file" &&
-		    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
-	    then
-		url_in_timer=$((${BASH_REMATCH[1]} * 60))
-		set_link_timer "$url_in" $url_in_timer
-		_log 33 $url_in_timer
+    # 	    if ! url "$url_in_file" &&
+    # 		    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
+    # 	    then
+    # 		url_in_timer=$((${BASH_REMATCH[1]} * 60))
+    # 		set_link_timer "$url_in" $url_in_timer
+    # 		_log 33 $url_in_timer
 
-		add_vidoza_definition $mode_stream
-		break
+    # 		add_vidoza_definition $mode_stream
+    # 		break
 
-	    else
-		if ! url "$url_in_file"
-		then
-		    url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
-	     				 sed -r 's|.+\"([^"]+)\".+|\1|g')
-		fi
+    # 	    else
+    # 		if ! url "$url_in_file"
+    # 		then
+    # 		    url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
+    # 	     				 sed -r 's|.+\"([^"]+)\".+|\1|g')
+    # 		fi
 		
-		if url "$url_in_file"
-		then
-		    print_c 1 "Disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
-		    set_vidoza_definition $mode_stream
-		    break
+    # 		if url "$url_in_file"
+    # 		then
+    # 		    print_c 1 "Disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+    # 		    set_vidoza_definition $mode_stream
+    # 		    break
 
-		else
-		    print_c 3 "Non è disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
-		    del_vidoza_definition $mode_stream
-		fi
-	    fi
-	done
+    # 		else
+    # 		    print_c 3 "Non è disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+    # 		    del_vidoza_definition $mode_stream
+    # 		fi
+    # 	    fi
+    # 	done
 	
-	if url "$url_in_file"
-	then
-	    url_in_file="${url_in_file//https\:/http:}"
-	    file_in="${url_in_file##*\/}"
-	    file_in="${file_in%\&file_id=*}"
-	fi
+    # 	if url "$url_in_file"
+    # 	then
+    # 	    url_in_file="${url_in_file//https\:/http:}"
+    # 	    file_in="${url_in_file##*\/}"
+    # 	    file_in="${file_in%\&file_id=*}"
+    # 	fi
 
-	[ -z "$url_in_timer" ] &&
-	    end_extension ||
-		unset url_in_timer
-    fi
+    # 	[ -z "$url_in_timer" ] &&
+    # 	    end_extension ||
+    # 		unset url_in_timer
+    # fi
 fi
