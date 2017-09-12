@@ -60,7 +60,7 @@ then
 
     file_in=$(grep 'var curFileName' <<< "$html")
     file_in="${file_in#*\"}"
-    file_in="${file_in%%\"*}"
+    file_in="${file_in%%\"*}"."${url_in_file##*.}"
 
     end_extension
     
