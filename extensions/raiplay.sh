@@ -31,10 +31,19 @@
 if [[ "$url_in" =~ raiplay ]]
 then
     ## html=$(curl -s "$url_in")
-    html=$(wget -qO- "$url_in" -o /dev/null)
-    
-    file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
-    file_in="${file_in#Film\: }"
+    html=$(wget -qO- "$url_in" -o /dev/null)    
+
+    raiplay_subtitle=$(grep vodJson <<< "$html")
+    raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
+    raiplay_subtitle="${raiplay_subtitle%%';</script>'*}"
+
+    file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
+
+    if [ -z "$file_in" ]
+    then
+	file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
+	file_in="${file_in#Film\: }"
+    fi
     
     url_raiplay=$(grep data-video-url <<< "$html" |
 		 sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
@@ -42,6 +51,8 @@ then
     url_raiplay=$(get_location "$url_raiplay")
 
     url_in_file=$(curl -s "$url_raiplay" | tail -n1)
+
+    downwait_extra=20
 fi
 									   
 

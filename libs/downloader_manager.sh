@@ -171,6 +171,12 @@ function check_wget {
 
 function download {
     downwait=6
+    if [[ "$downwait_extra" =~ ^[0-9]+$ ]]
+    then
+	downwait=$((downwait+downwait_extra))
+	unset downwait_extra
+    fi
+    
     export LANG="$prog_lang"
     export LANGUAGE="$prog_lang"
 
