@@ -30,17 +30,30 @@
 
 if [[ "$url_in" =~ raiplay ]]
 then
-    ## html=$(curl -s "$url_in")
     html=$(wget -qO- "$url_in" -o /dev/null)    
 
     raiplay_subtitle=$(grep vodJson <<< "$html")
     raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
     raiplay_subtitle="${raiplay_subtitle%%';</script>'*}"
 
-    file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
+    #### non sicuro: serve una sandbox
+    ## file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
 
-    if [ -z "$file_in" ]
+    json_name="${raiplay_subtitle##*\"name\":\"}"
+    json_name=$(trim "${json_name%%\"*}")
+    json_subtitle="${raiplay_subtitle##*\"subtitle\":\"}"
+    json_subtitle=$(trim "${json_subtitle%%\"*}")
+
+    if [ -n "$json_name" ]
     then
+	file_in="$json_name"
+
+	if [ -n "$json_subtitle" ]
+	then
+	   file_in="$file_in - $json_subtitle"
+	fi
+	
+    else
 	file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
     fi
     file_in="${file_in#Film\: }"

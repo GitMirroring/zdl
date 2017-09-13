@@ -56,6 +56,10 @@ then
     then
 	_log 3
 
+    elif [[ "${htm}${html}" =~ 'Video is transfer on streaming server now'.+'Please Wait' ]]
+    then
+	_log 17
+	
     else
 	linkfile=$(grep 'file: base64_decode' <<< "$html"   |
 			  head -n1                          |
