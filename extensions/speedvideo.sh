@@ -71,20 +71,32 @@ then
 			      sed -r 's|.+\"([^"]+)\".+|\1|g')
 	fi
 
-	var2=$(grep base64_decode <<< "$html" |
-		      sed -r 's|.+ ([^ ]+)\)\;$|\1|g' | head -n1)
+	if grep 'label: "HD"' <<< "$html" >/dev/null
+	then
+	    linkfile=$(grep 'label: "HD"' -B 1 <<< "$html" |
+			      head -n1)
+	    linkfile="${linkfile#*\'}"
+	    linkfile="${linkfile%\'*}"
+	fi
+	get_location "$linkfile" url_in_file
 	
+	if ! url "$url_in_file" 
+	then		
+	    var2=$(grep base64_decode <<< "$html" |
+			  sed -r 's|.+ ([^ ]+)\)\;$|\1|g' | head -n1)
+	    
 
-	url_in_file=$(base64_decode "$linkfile"     \
-				    $(grep "$var2" <<< "$html"                |
-				    	     head -n1                         |
-				    	     sed -r 's|.+ ([^ ]+)\;$|\1|g') )
+	    url_in_file=$(base64_decode "$linkfile"     \
+					$(grep "$var2" <<< "$html"                |
+				    		 head -n1                         |
+				    		 sed -r 's|.+ ([^ ]+)\;$|\1|g') )
 
-	url_in_file="${url_in_file#*'///'}"
+	    url_in_file="${url_in_file#*'///'}"
 
-	[[ ! "$url_in_file" =~ ^http ]] &&
-	    url_in_file="http://${url_in_file}"
-
+	    [[ ! "$url_in_file" =~ ^http ]] &&
+		url_in_file="http://${url_in_file}"
+	fi
+	
 	[ -n "$file_in" ] && url "$url_in_file" &&
 	    file_in="${file_in}.${url_in_file##*.}"
 
