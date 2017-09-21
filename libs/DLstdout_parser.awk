@@ -283,7 +283,7 @@ function progress_out (chunk,           progress_line, line, cmd) {
 	    	progress_abort[i] = chunk[y]
 	    	break
 	    }
-	    if ((chunk[y] ~ "download completed") && (! exists(file_out[i]".aria2"))) {
+	    if (((chunk[y] ~ "download completed") || (chunk[y] ~ "SEED")) && (! exists(file_out[i]".aria2"))) {
 	    	progress_end[i] = chunk[y]
 	    } 
 	    if (chunk[y] ~ /\%/) {
