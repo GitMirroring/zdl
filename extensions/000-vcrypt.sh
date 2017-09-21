@@ -67,10 +67,17 @@ then
 
 	if [[ "$url_in" =~ cryptopen ]]
 	then
-	    url_vcrypt2=$(curl "$url_in" -s |
-				 grep iframe |
+	    html=$(curl "$url_in" -s)
+
+	    url_vcrypt2=$(grep iframe <<< "$html" |
 				 sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
-	    
+
+	    if ! url "$url_vcrypt2"
+	    then
+		url_vcrypt2=$(grep Download <<< "$html" |
+				     sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+	    fi
+
 	    replace_url_in "$url_vcrypt2" ||
 		_log 2
 	fi
