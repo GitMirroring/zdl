@@ -33,16 +33,16 @@ page.settings.userAgent = 'Mozilla/5.0 (Linux; Android 6.0; LENNY3 Build/MRA58K)
 
 page.open(system.args[1], function(status) {
     var info = page.evaluate(function() {
-	return $.base64.decode("aHR0cHM6Ly9vcGVubG9hZC5jby9mL2k1UGJWUlFIQ3pz");
+	return document.getElementById('link-obfuscated').href;
     });
     console.log(info);
 
     phantom.exit();
 });
 
-// page.onInitialized = function() {
-//     page.evaluate(function() {
-// 	delete window.callPhantom;
-// 	delete window._phantom;
-//     });
-// };
+page.onInitialized = function() {
+    page.evaluate(function() {
+	delete window.callPhantom;
+	delete window._phantom;
+    });
+};

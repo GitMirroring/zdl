@@ -82,7 +82,7 @@ then
 
 		if ! url "$url_vcrypt2"
 		then
-		    url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
+		    url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in") 
 		fi
 	    fi
 
