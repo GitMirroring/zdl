@@ -24,23 +24,24 @@
 # zoninoz@inventati.org
 #
 
-## zdl-extension types: shortlinks
-## zdl-extension name: q.gs
+## zdl-extension types: streaming
+## zdl-extension name: Vidtome
 
-if [[ "$url_in" =~ 'http://q.gs' ]]
+if [[ "$url_in" =~ (vidtome\.) ]]
 then
-    html=$(curl -d "urllist=$url_in" "http://adf.boxxod.net")
-
-    url_qgs=$(grep dlhere <<< "$html" |
-    		     sed -r "s|.+href='([^']+)'.+|\1|g")
-
-    if ! url "$url_qgs"
-    then
-	get_location "$url_in" url_qgs
-    fi
+    html=$(curl -s "$url_in")
+    input_hidden "$html"
+    post_data="op=${post_data#*'&op='}"
     
-    replace_url_in "$url_qgs" ||
-	_log 12
+    link_parser "$url_in"
+    action_url="${parser_proto}${parser_domain}/play/${parser_path}"
+
+    url_in_file=$(curl -d "$post_data" "$action_url" 2>&1 |
+		      grep 'file:' |
+		      sed -r 's|.+\"([^"]+)\".+|\1|g')
+
+    file_in=$(grep 'video-page-head' <<< "$html" |
+	   sed -r 's|.+>(.+)<.+|\1|g')."${url_in_file##*.}"
+    
+    end_extension
 fi
-
-

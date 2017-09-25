@@ -27,7 +27,7 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Fastvideo, Putstream, Vidto
 
-if [[ "$url_in" =~ (fastvideo.|putstream.|vidto.) ]]
+if [[ "$url_in" =~ (fastvideo\.|putstream\.|vidto\.) ]]
 then
     if [[ ! "$url_in" =~ embed ]]
     then

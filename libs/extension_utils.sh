@@ -550,7 +550,7 @@ function get_location { # 1=url 2=variable_to_new_url
 			  2>&1                          |
 			 awk '/ocation:/{print $3}'     |
 			 head -n1)
-
+    
     location=$(trim "$location") 
 
     if [ -n "$2" ]
