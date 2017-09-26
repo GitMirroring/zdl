@@ -69,20 +69,17 @@ then
 	then	    
 	    html=$(curl "$url_in" -s)
 
-	    
-
 	    url_vcrypt2=$(grep iframe <<< "$html" |
 				 sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
 
 	    if ! url "$url_vcrypt2"
-	    then
-		
+	    then		
 		url_vcrypt2=$(grep Download <<< "$html" |
-				     sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+				     sed -r 's|.+href=\"([^"]+)\".+|\1|g' |head -n1)
 
 		if ! url "$url_vcrypt2"
 		then
-		    url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in") 
+		    url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
 		fi
 	    fi
 
