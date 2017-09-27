@@ -45,7 +45,7 @@ then
 			 sed -r 's|http\:|https:|g'          |
 			 tail -n1                            |
 			 tr -d '\r')
-
+				    
 	url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go'   |
 			    grep refresh                 |
 			    sed -r "s|.+url=([^']+)'.*|\1|g")
@@ -57,6 +57,19 @@ then
 			      awk '{print $3}')
 	fi
 
+	url_vcrypt2=$(trim "${url_vcrypt2}")7
+	
+	if [[ "$url_vcrypt2" =~ fastshield ]]
+	then
+	    data_vcrypt=$(curl -v "$url_vcrypt2" \
+			       -d 'go=go' \
+			       -A "$user_agent" 2>&1)
+			  
+	    url_vcrypt2=$(grep 'ocation:' <<< "$data_vcrypt" |
+				 head -n1|
+				 awk '{print $3}')
+	fi
+	
 	if [[ "$url_vcrypt2" =~ http.*http ]]
 	then
 	    url_vcrypt2="http${url_vcrypt2##*http}"
