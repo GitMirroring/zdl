@@ -29,42 +29,22 @@
 
 if [ "$url_in" != "${url_in//'tusfiles.net'}" ]
 then
-    html=$(wget -qO-                                     \
-		-t 1 -T $max_waiting                     \
-		--no-check-certificate                   \
-		--user-agent="$user_agent"               \
-		--retry-connrefused                      \
-		--keep-session-cookies                   \
-		--save-cookies="$path_tmp"/cookies.zdl   \
-		"$url_in" -o /dev/null)
-
+    html=$(curl -s -c "$path_tmp"/cookies.zdl "$url_in")
+    
     if [[ "$html" =~ (The file you are trying to download is no longer available) ]]
     then
 	_log 3
     else
 	input_hidden "$html"
 
-	post_data="${post_data#*&}"
+	url_in_file=$(curl -v -d "$post_data" "$url_in" 2>&1 |
+			  grep 'Location:' |
+			  cut -d' ' -f3)
 
-	file_in=$(grep 'URL=' <<< "$html")
-	file_in="${file_in#*\]}"
-	file_in="${file_in% - *\[*}"
+	url_in_file=$(trim "$url_in_file")
 
-	if [ ! -f "$path_tmp"/cookies.zdl ]
-	then
-	    touch "$path_tmp"/cookies.zdl
-	fi
-
-	url_in_file="$url_in"
+	file_in=${url_in_file##*\/}
 	
-	# redirect "$url_in"
-
-	# if ! url "$url_in_file" ||
-    	# 	[ "$url_in_file" == "$url_in" ] ||
-	# 	[ "$url_in_file" == "https://tusfiles.net" ] ||
-    	# 	[ -z "$file_in" ]
-	# then
-    	#     _log 2
-	# fi
+	end_extension
     fi
 fi
