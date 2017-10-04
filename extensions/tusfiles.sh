@@ -29,22 +29,31 @@
 
 if [ "$url_in" != "${url_in//'tusfiles.net'}" ]
 then
-    html=$(curl -s -c "$path_tmp"/cookies.zdl "$url_in")
-    
-    if [[ "$html" =~ (The file you are trying to download is no longer available) ]]
+    if [[ "$url_in" =~ '/d/' ]]
     then
-	_log 3
-    else
-	input_hidden "$html"
-
-	url_in_file=$(curl -v -d "$post_data" "$url_in" 2>&1 |
-			  grep 'Location:' |
-			  cut -d' ' -f3)
-
-	url_in_file=$(trim "$url_in_file")
-
+	url_in_file="$url_in"
 	file_in=${url_in_file##*\/}
 	
 	end_extension
+
+    else
+	html=$(curl -s -c "$path_tmp"/cookies.zdl "$url_in")
+	
+	if [[ "$html" =~ (The file you are trying to download is no longer available) ]]
+	then
+	    _log 3
+	else
+	    input_hidden "$html"
+
+	    url_in_file=$(curl -v -d "$post_data" "$url_in" 2>&1 |
+			      grep 'Location:')
+
+	    url_in_file="${url_in_file#*Location: }"
+	    url_in_file=$(trim "$url_in_file")
+
+	    file_in=${url_in_file##*\/}
+	    
+	    end_extension
+	fi
     fi
 fi

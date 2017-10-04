@@ -151,7 +151,6 @@ no_check_ext=(
     dropbox\.
     pastebin\.
     easybytez\.
-    tusfiles\.
     'mega.(co|nz)'
     ^magnet\:
     \.torrent$
