@@ -29,25 +29,29 @@
 
 if [[ "$url_in" =~ (raptu|rapidvideo)\.com ]]
 then
-    # if [[ "$url_in" =~ rapidvideo ]]
-    # then
-    # 	get_location "$url_in" raptu_url
-    # 	replace_url_in "$raptu_url"
-    # fi
-
     html=$(curl -A "$user_agent" "$url_in" 2>&1)
     
     if grep 'We are sorry' <<< "$html" &>/dev/null
     then
 	_log 3
 
-    else
-	file_in=$(get_title "$html")
+    else	
+	if grep -P 'q=1080p' <<< "$html" >/dev/null
+	then
+	    html=$(curl -A "$user_agent" "${url_in}&q=1080p" 2>&1)
+	    
+	elif grep -P 'q=720p' <<< "$html" >/dev/null
+	then
+	    html=$(curl -A "$user_agent" "${url_in}&q=720p" 2>&1)
+	    
+	fi
 
-	url_in_file=$(grep mp4 <<< "$html" | tr -d '\\' |tail -n1)
+	url_in_file=$(grep source <<< "$html" | tr -d '\\' |tail -n1)
 	url_in_file="${url_in_file#*\"}"
 	url_in_file="${url_in_file%%\"*}"
 
+	file_in=$(get_title "$html")."${url_in_file##*.}"
+	
 	end_extension
     fi
 fi
