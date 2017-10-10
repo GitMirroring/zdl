@@ -146,8 +146,12 @@ then
 		   -A "$user_agent"                   \
 		   -d "$post_data"                    \
 		   "$url_in")
+	
+	if grep -P 'You can download files up.+only' <<< "$html" >/dev/null
+	then
+	    _log 11
 
-	if [[ "$html" =~ 'have to wait '([0-9]+) ]]
+	elif [[ "$html" =~ 'have to wait '([0-9]+) ]]
 	then
 	    url_in_timer=$((${BASH_REMATCH[1]} * 60))
 	    set_link_timer "$url_in" $url_in_timer
