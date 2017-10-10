@@ -99,17 +99,19 @@ then
 			((wstream_loops < 2))
 		do
 		    ((wstream_loops++))
-		    html2=$(wget -qO- -t1 -T$max_waiting           \
-				 "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}" \
-				 -o /dev/null)
-		    
+		    html2=$(curl -s "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}")
+
 		    input_hidden "$html2"
 
-		    url_in_file=$(wget -qO- -t1 -T$max_waiting     \
-				       "$url_in"                   \
-				       --post-data="$post_data"    \
-				       -o /dev/null                  |
-					 grep 'Direct Download Link' |
+		    if [ -n "$post_data" ]
+		    then
+			url_in_file=$(curl -s -d "$post_data" "$url_in")
+
+		    else
+			url_in_file=$(curl -s "$url_in")
+		    fi
+
+		    url_in_file=$(grep 'Direct Download Link' <<< "$url_in_file" |
 					 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
 		    ((wstream_loops < 2)) && sleep 1
