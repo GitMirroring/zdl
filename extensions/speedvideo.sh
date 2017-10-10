@@ -50,17 +50,18 @@ then
 		--post-data="$post_data"                \
 		-o /dev/null)
 
-    unset post_data
+    unset post_data    
     
     if [[ "${htm}${html}" =~ 'File Not Found' ]] 
     then
 	_log 3
 
-    elif [[ "${htm}${html}" =~ 'Video is transfer on streaming server now'.+'Please Wait' ]]
+    elif [[ "${htm}${html}" =~ 'Video is processing now' ]]
     then
 	_log 17
 	
-    else
+    elif [ -n "$html" ]
+    then
 	linkfile=$(grep 'file: base64_decode' <<< "$html"   |
 			  head -n1                          |
 			  sed -r 's|.+\"([^"]+)\".+|\1|g')
