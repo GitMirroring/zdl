@@ -51,6 +51,14 @@ then
 	url_in_file="${url_in_file%%\"*}"
 
 	file_in=$(get_title "$html")."${url_in_file##*.}"
+
+	if ! url "$url_in_file"
+	then
+	    url_in_file=$(grep source <<< "$html" | tr -d '\\')
+	    url_in_file="${url_in_file%\]*}"
+	    url_in_file="${url_in_file##*'file":"'}"
+	    url_in_file="${url_in_file%%\"*}"
+	fi
 	
 	end_extension
     fi
