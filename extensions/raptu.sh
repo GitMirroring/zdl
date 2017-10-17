@@ -29,6 +29,11 @@
 
 if [[ "$url_in" =~ (raptu|rapidvideo)\.com ]]
 then
+    if [[ "$url_in" =~ (rapidvideo|raptu)\.com\/e\/ ]]
+    then
+	replace_url_in "${url_in/'/e/'/'/v/'}"
+    fi
+    
     html=$(curl -A "$user_agent" "$url_in" 2>&1)
     
     if grep 'We are sorry' <<< "$html" &>/dev/null
