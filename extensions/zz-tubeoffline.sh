@@ -59,6 +59,8 @@ then
 		-o /dev/null)
     
     url_in_file=$(grep -P 'Best.+http' <<< "$html")
+    ! url "$url_in_file" &&
+	url_in_file=$(grep -P 'download>DOWNLOAD' <<< "$html" |head -n1)
     
     ! url "${url_in_file}" &&
 	url_in_file=$(grep -P 'http.+DOWNLOAD' <<< "$html" |head -n1)
