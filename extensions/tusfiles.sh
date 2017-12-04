@@ -44,11 +44,10 @@ then
 	    _log 3
 	else
 	    input_hidden "$html"
-
-	    url_in_file=$(curl -v -d "$post_data" "$url_in" 2>&1 |
-			      grep 'Location:')
-
-	    url_in_file="${url_in_file#*Location: }"
+	    
+	    url_in_file=$(curl -v -d "$post_data" "$url_in" 2>&1)	    
+	    url_in_file=$(grep location <<<  "$url_in_file")
+	    url_in_file="${url_in_file#*location: }"
 	    url_in_file=$(trim "$url_in_file")
 
 	    file_in=${url_in_file##*\/}
