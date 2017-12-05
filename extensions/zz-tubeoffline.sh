@@ -67,6 +67,10 @@ then
 
     url_in_file="http${url_in_file#*http}"
     url_in_file="${url_in_file%%\"*}"
+
+    [ "$url_in_file" == 'https://www.tubeoffline.com/modhead.php' ] &&
+	unset url_in_file
+    
 ##    url_in_file="${url_in_file//https\:/http:}"
 
     if url "$url_in_file" &&
