@@ -83,5 +83,9 @@ then
 
     else
 	unset file_in url_in_file
+
+	[[ "$url_in" =~ biqle ]] &&
+	    ! url "$url_in_file" &&
+	    _log 2
     fi
 fi
