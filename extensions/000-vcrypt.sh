@@ -100,7 +100,7 @@ then
 		_log 2
 
 
-	elif [[ "$url_in" =~ cryptop\/ ]]
+	elif [[ "$url_in" =~ cryptop ]]
 	then
 	    html=$(curl "$url_in" -s)
 	    url_vcrypt2=$(grep Download <<< "$html" |
