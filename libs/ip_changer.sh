@@ -152,27 +152,6 @@ function ip_adress {
 }
 
 
-# function ip_adress {
-#     ## ip-adress.com
-
-#     rm -f "$path_tmp/proxy2.tmp"
-# 
-#     for proxy_type in ${proxy_types[*]}
-#     do
-# 	grep "Proxy_Details" "$path_tmp/proxy.tmp" |
-# 	    grep "${proxy_type}" >> "$path_tmp/proxy2.tmp"
-#     done
-
-#     max=$(wc -l < "$path_tmp/proxy2.tmp")
-#     string_line=$(sed -n "${line}p" "$path_tmp/proxy2.tmp")
-    
-#     proxy="${string_line#*Proxy_Details\/}"
-#     [ "$proxy" != "${proxy%:Anonymous*}" ] && proxy_type="Anonymous"
-#     [ "$proxy" != "${proxy%:Transparent*}" ] && proxy_type="Transparent"
-#     [ "$proxy" != "${proxy%:Elite*}" ] && proxy_type="Elite"
-#     proxy="${proxy%:${proxy_type}*}"
-# }
-
 function proxy_list {
     ## proxy-list.org
     for proxy_type in ${proxy_types[*]}

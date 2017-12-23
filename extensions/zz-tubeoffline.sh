@@ -58,6 +58,12 @@ then
 		"http://www.tubeoffline.com/downloadFrom.php?host=${host}&video=${url_in}" \
 		-o /dev/null)
     
+    if [ -z "$html" ]
+    then
+	html=$(curl -s -c "$path_tmp/cookies.zdl" \
+		    "http://www.tubeoffline.com/downloadFrom.php?host=${host}&video=${url_in}")
+    fi
+    
     url_in_file=$(grep -P 'Best.+http' <<< "$html")
     ! url "$url_in_file" &&
 	url_in_file=$(grep -P 'download>DOWNLOAD' <<< "$html" |head -n1)
