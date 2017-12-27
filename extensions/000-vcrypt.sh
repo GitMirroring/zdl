@@ -114,6 +114,21 @@ then
 		replace_url_in "$url_vcrypt2" ||
 		    _log 2
 	    fi
+
+	elif [[ "$url_in" =~ opencryptxx ]]
+	then
+	    html=$(curl "$url_in" -s)
+	    url_vcrypt2=$(grep Download <<< "$html" |
+				 head -n1)
+
+	    if [[ "$url_vcrypt2" =~ http ]]
+	    then
+		url_vcrypt2="${url_vcrypt2##*http}"
+		url_vcrypt2="http${url_vcrypt2%%\"*}"
+	    
+		replace_url_in "$url_vcrypt2" ||
+		    _log 2
+	    fi
 	fi
     fi
 fi
