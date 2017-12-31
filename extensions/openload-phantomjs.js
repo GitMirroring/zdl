@@ -41,7 +41,7 @@ page.settings.userAgent = 'Mozilla/5.0 (Linux; Android 6.0; LENNY3 Build/MRA58K)
 page.open('https://openload.co/embed/' + id + '/', function(status) {
     var info = page.evaluate(function() {
 	return {
-	    decoded_id: document.getElementById('streamurl').innerHTML,
+	    decoded_id: document.getElementById('streamuri').innerHTML,
 	    title: document.querySelector('meta[name="og:title"],'
 					  + 'meta[name=description]').content
 	};
