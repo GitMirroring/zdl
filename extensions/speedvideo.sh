@@ -30,10 +30,14 @@
 
 if [[ "$url_in" =~ (speedvideo.) ]]
 then
-    ## url_embed=$(grep -oP 'http://[^"]+embed-[^"]+' <<< "$html")
-    # [ "${url_in//http\:/https:}" != "$url_in" ] &&
-    # 	replace_url_in "${url_in//http\:/https:}"
-    
+    if [[ "$url_in" =~ embed ]]
+    then
+	url_embed="${url_in//'embed-'}"
+	url_embed="${url_embed//http\:/https:}"
+
+	replace_url_in "${url_embed%'-'*}"
+    fi
+
     if [[ ! "$url_in" =~ embed ]]
     then
 	htm=$(curl -A "$user_agent" \
