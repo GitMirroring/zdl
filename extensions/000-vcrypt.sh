@@ -27,7 +27,16 @@
 ## zdl-extension types: shortlinks
 ## zdl-extension name: vcrypt
 
-if [ "$url_in" != "${url_in//vcrypt.}" ]
+if [[ "$url_in" =~ vcrypt.+opencrypt ]]
+then
+    html=$(curl "$url_in")
+    url_vcrypt=$(grep Download <<< "$html" |head -n1)
+    url_vcrypt="${url_vcrypt#*\"}"
+    url_vcrypt="${url_vcrypt%%\"*}"
+    replace_url_in "$url_vcrypt" ||
+	_log 2
+
+elif [ "$url_in" != "${url_in//vcrypt.}" ]
 then
     url_vcrypt=$(get_location "$url_in")
     url_vcrypt="http${url_vcrypt##*http}"
