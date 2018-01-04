@@ -523,6 +523,7 @@ function extension_mega {
 
 function extension_openload {
     local url_in="$1"
+    local stream_id
 
     if curl "$url_in" -A "$user_agent" 2>&1 |
 	   grep "Sorry" &>/dev/null
@@ -533,7 +534,12 @@ function extension_openload {
 
     if command -v phantomjs &>/dev/null
     then
-	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in")
+	html=$(curl "$url_in")
+	stream_id=$(grep 'id="streamur' <<< "$html")
+	stream_id="${stream_id%\"*}"
+	stream_id="${stream_id##*\"}"
+	
+	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in" "$stream_id")
 	url_in_file=$(head -n1 <<< "$openload_data")
 	file_in=$(tail -n1 <<< "$openload_data")
 	sanitize_file_in

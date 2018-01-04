@@ -39,13 +39,14 @@ id = match[1];
 page.settings.userAgent = 'Mozilla/5.0 (Linux; Android 6.0; LENNY3 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.132 Mobile Safari/537.36';
 
 page.open('https://openload.co/embed/' + id + '/', function(status) {
-    var info = page.evaluate(function() {	
+    var stream_id = system.args[2];
+    var info = page.evaluate(function(stream_id) {	
 	return {
-	    decoded_id: document.getElementById('streamurj').innerHTML, 
+	    decoded_id: document.getElementById(stream_id).innerHTML, 
 	    title: document.querySelector('meta[name="og:title"],'
 					  + 'meta[name=description]').content
 	};
-    });
+    }, stream_id);
     var url = 'https://openload.co/stream/' + info.decoded_id + '?mime=true';
     console.log(url + separator + info.title);
     phantom.exit();
