@@ -39,9 +39,9 @@ id = match[1];
 page.settings.userAgent = 'Mozilla/5.0 (Linux; Android 6.0; LENNY3 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.132 Mobile Safari/537.36';
 
 page.open('https://openload.co/embed/' + id + '/', function(status) {
-    var info = page.evaluate(function() {
+    var info = page.evaluate(function() {	
 	return {
-	    decoded_id: document.getElementById('streamuri').innerHTML,
+	    decoded_id: document.getElementById('streamurj').innerHTML, 
 	    title: document.querySelector('meta[name="og:title"],'
 					  + 'meta[name=description]').content
 	};
