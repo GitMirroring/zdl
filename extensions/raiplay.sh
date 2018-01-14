@@ -63,7 +63,11 @@ then
     
     url_raiplay=$(get_location "$url_raiplay")
 
-    url_in_file=$(curl -s "$url_raiplay" | tail -n1)
+    url_in_file=$(curl -s "$url_raiplay" \
+		       -A "$user_agent" \
+		       -c "$path_tmp/cookies.zdl")
+    #echo "$url_in_file"
+    url_in_file=$(tail -n1 <<< "$url_in_file")
 
     downwait_extra=20
 fi
