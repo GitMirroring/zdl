@@ -586,7 +586,7 @@ function get_jschl_answer {
     sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
     sed -r 's|f.submit|//|g' -i "$page"
 
-    jschl_answer=$(phantomjs "$path_usr"/extensions/cloudflare.js "$page")
+    jschl_answer=$(/usr/bin/phantomjs "$path_usr"/extensions/cloudflare.js "$page")
 }
 
 function check_cloudflare {
