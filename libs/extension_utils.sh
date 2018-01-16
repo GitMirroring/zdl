@@ -534,12 +534,12 @@ function extension_openload {
 
     if command -v phantomjs &>/dev/null
     then
-	html=$(curl "$url_in")
+	html=$(curl -s "$url_in")
 	stream_id=$(grep 'id="streamur' <<< "$html")
 	stream_id="${stream_id%\"*}"
 	stream_id="${stream_id##*\"}"
 	
-	openload_data=$(phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in" "$stream_id")
+	openload_data=$(/usr/bin/phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in" "$stream_id")
 	url_in_file=$(head -n1 <<< "$openload_data")
 	file_in=$(tail -n1 <<< "$openload_data")
 	sanitize_file_in
