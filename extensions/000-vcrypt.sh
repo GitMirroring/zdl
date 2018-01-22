@@ -47,89 +47,167 @@ then
 			 sed -r 's|http\:|https:|g'          |
 			 tail -n1                            |
 			 tr -d '\r')
-				    
-	url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go'   |
-			    grep refresh                 |
-			    sed -r "s|.+url=([^']+)'.*|\1|g")
-
-	if ! url "$url_vcrypt2"
+	if ! url "$url_vcrypt"
 	then
-	    url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go' 2>&1 |
-			      grep 'ocation:'                   |
-			      awk '{print $3}')
-	fi
+	    if check_cloudflare "$url_in"
+	    then	
+		curl                                                                                  \
+    		    -A "$user_agent"                                                                  \
+    		    -c "$path_tmp/cookies.zdl"                                                        \
+    		    -D "$path_tmp/header.zdl"                                                         \
+		    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    		    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+		    -H 'Accept-Encoding: "gzip, deflate"'                                             \
+		    -H 'DNT: "1"'                                                                     \
+		    -H 'Connection: "keep-alive"'                                                     \
+    		    "$url_in" > "$path_tmp"/cloudflare.html
 
-	url_vcrypt2=$(trim "${url_vcrypt2}")7
-	
-	if [[ "$url_vcrypt2" =~ fastshield ]]
-	then
-	    data_vcrypt=$(curl -v "$url_vcrypt2" \
-			       -d 'go=go' \
-			       -A "$user_agent" 2>&1)
-			  
-	    url_vcrypt2=$(grep 'ocation:' <<< "$data_vcrypt" |
-				 head -n1|
-				 awk '{print $3}')
-	fi
-	
-	if [[ "$url_vcrypt2" =~ http.*http ]]
-	then
-	    url_vcrypt2="http${url_vcrypt2##*http}"
-	fi
-	
-	replace_url_in "$url_vcrypt2" ||
-	    _log 2
+		if ! command -v phantomjs &>/dev/null
+		then
+		    _log 35
 
-	if [[ "$url_in" =~ cryptopen ]]
-	then	    
-	    html=$(curl "$url_in" -s)
+		else
+		    domain="${url_in#*\/\/}"
+		    domain="${domain%%\/*}"
+		    get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
+		    
+		    input_hidden "$path_tmp"/cloudflare.html
 
-	    url_vcrypt2=$(grep iframe <<< "$html" |
-				 sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
+		    get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
+		    cookie_rockfile=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
+
+		    countdown- 6
+
+		    curl                                                                                \
+			-A "$user_agent"                                                                \
+			-c "$path_tmp/cookies.zdl"                                                      \
+			-D "$path_tmp/header2.zdl"                                                      \
+			-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    			-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+			-H 'Accept-Encoding: "gzip, deflate"'                                           \
+			-H 'DNT: "1"'                                                                   \
+			-H "Referer: \"$url_in\""                                                       \
+			-H "Cookie: \"${cookie_rockfile}\""                                             \
+			-H 'Connection: "keep-alive"'                                                   \
+			-d "$get_data"                                                                  \
+			-G                                                                              \
+			"http://vcrypt.net/cdn-cgi/l/chk_jschl" >/dev/null
+		    
+		    
+		    cookie_rockfile=$(grep Set-Cookie "$path_tmp/header2.zdl" |
+					     cut -d' ' -f2 |
+					     tr '\n' ' ')
+		    cookie_rockfile="${cookie_rockfile%';'*}"
+
+		    html=$(curl -v                                                                               \
+				-A "$user_agent"                                                                \
+				-b "$path_tmp/cookies.zdl"                                                      \
+				-c "$path_tmp/cookies2.zdl"                                                     \
+				-D "$path_tmp/header2.zdl"                                                      \
+				-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    				-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+				-H 'Accept-Encoding: "gzip, deflate"'                                           \
+				-H 'DNT: "1"'                                                                   \
+				-H "Referer: \"$url_in\""                                                       \
+				-H "Cookie: \"${cookie_rockfile}\""                                             \
+				-H 'Connection: "keep-alive"'                                                   \
+				"${url_in}" 2>&1)
+
+		    if [[ "$html" =~ location.*\/http ]]
+		    then
+			url_vcrypt=$(grep -P 'location.+\/http' <<< "$html")
+			url_vcrypt="http${url_vcrypt#*\/http}"
+
+			replace_url_in "$url_vcrypt" ||
+			    _log 2
+		    fi
+		fi
+	    fi		
+	else
+
+	    url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go'   |
+				 grep refresh                 |
+				 sed -r "s|.+url=([^']+)'.*|\1|g")
 
 	    if ! url "$url_vcrypt2"
-	    then		
-		url_vcrypt2=$(grep Download <<< "$html" |
-				     sed -r 's|.+href=\"([^"]+)\".+|\1|g' |head -n1)
-
-		if ! url "$url_vcrypt2"
-		then
-		    url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
-		fi
+	    then
+		url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go' 2>&1 |
+				  grep 'ocation:'                   |
+				  awk '{print $3}')
 	    fi
 
+	    url_vcrypt2=$(trim "${url_vcrypt2}")7
+	    
+	    if [[ "$url_vcrypt2" =~ fastshield ]]
+	    then
+		data_vcrypt=$(curl -v "$url_vcrypt2" \
+				   -d 'go=go' \
+				   -A "$user_agent" 2>&1)
+		
+		url_vcrypt2=$(grep 'ocation:' <<< "$data_vcrypt" |
+				     head -n1|
+				     awk '{print $3}')
+	    fi
+	    
+	    if [[ "$url_vcrypt2" =~ http.*http ]]
+	    then
+		url_vcrypt2="http${url_vcrypt2##*http}"
+	    fi
+	    
 	    replace_url_in "$url_vcrypt2" ||
 		_log 2
 
+	    if [[ "$url_in" =~ cryptopen ]]
+	    then	    
+		html=$(curl "$url_in" -s)
 
-	elif [[ "$url_in" =~ cryptop ]]
-	then
-	    html=$(curl "$url_in" -s)
-	    url_vcrypt2=$(grep Download <<< "$html" |
-				 head -n1)
+		url_vcrypt2=$(grep iframe <<< "$html" |
+				     sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
 
-	    if [[ "$url_vcrypt2" =~ http ]]
-	    then
-		url_vcrypt2="${url_vcrypt2##*http}"
-		url_vcrypt2="http${url_vcrypt2%%\"*}"
-	    
+		if ! url "$url_vcrypt2"
+		then		
+		    url_vcrypt2=$(grep Download <<< "$html" |
+					 sed -r 's|.+href=\"([^"]+)\".+|\1|g' |head -n1)
+
+		    if ! url "$url_vcrypt2"
+		    then
+			url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
+		    fi
+		fi
+
 		replace_url_in "$url_vcrypt2" ||
 		    _log 2
-	    fi
 
-	elif [[ "$url_in" =~ opencryptxx ]]
-	then
-	    html=$(curl "$url_in" -s)
-	    url_vcrypt2=$(grep Download <<< "$html" |
-				 head -n1)
 
-	    if [[ "$url_vcrypt2" =~ http ]]
+	    elif [[ "$url_in" =~ cryptop ]]
 	    then
-		url_vcrypt2="${url_vcrypt2##*http}"
-		url_vcrypt2="http${url_vcrypt2%%\"*}"
-	    
-		replace_url_in "$url_vcrypt2" ||
-		    _log 2
+		html=$(curl "$url_in" -s)
+		url_vcrypt2=$(grep Download <<< "$html" |
+				     head -n1)
+
+		if [[ "$url_vcrypt2" =~ http ]]
+		then
+		    url_vcrypt2="${url_vcrypt2##*http}"
+		    url_vcrypt2="http${url_vcrypt2%%\"*}"
+		    
+		    replace_url_in "$url_vcrypt2" ||
+			_log 2
+		fi
+
+	    elif [[ "$url_in" =~ opencryptxx ]]
+	    then
+		html=$(curl "$url_in" -s)
+		url_vcrypt2=$(grep Download <<< "$html" |
+				     head -n1)
+
+		if [[ "$url_vcrypt2" =~ http ]]
+		then
+		    url_vcrypt2="${url_vcrypt2##*http}"
+		    url_vcrypt2="http${url_vcrypt2%%\"*}"
+		    
+		    replace_url_in "$url_vcrypt2" ||
+			_log 2
+		fi
 	    fi
 	fi
     fi

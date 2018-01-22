@@ -58,7 +58,7 @@ then
 
 	    cookie_rockfile=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
 	    
-	    countdown- 4
+	    countdown- 6
 
 	    curl                                                                                \
 		-A "$user_agent"                                                                \
