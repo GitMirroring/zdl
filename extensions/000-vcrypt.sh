@@ -190,9 +190,6 @@ then
 	    fi
 	    
 
-	    # ! url "$url_vcrypt2" &&
-	    # 	url_vcrypt2="$url_in"
-	    
 	    if [[ "$url_in" =~ cryptopen ]]
 	    then	    
 		html=$(curl "$url_in" -s)
@@ -264,8 +261,9 @@ then
 		fi
 	    fi
 	else
-	    replace_url_in "$url_vcrypt2" ||
-		_log 2
+	    url "$url_vcrypt2" &&
+		replace_url_in "$url_vcrypt2" ||
+		    _log 2
 	fi
     fi
 fi
