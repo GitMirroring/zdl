@@ -127,14 +127,14 @@ then
 	    then
 		get_by_cloudflare "$url_in" html
 
-		if [[ "$html" =~ location.*\/http ]]
+		if [[ "$html" =~ [lL]{1}ocation.*\/http ]]
 		then
-		    url_vcrypt2=$(grep -P 'location.+\/http' <<< "$html")
+		    url_vcrypt2=$(grep -P '[lL]{1}ocation.+\/http' <<< "$html")
 		    url_vcrypt2="http${url_vcrypt2#*\/http}"
 
-		elif [[ "$html" =~ location ]]
+		elif [[ "$html" =~ [lL]{1}ocation ]]
 		then
-		    url_vcrypt2=$(grep -P 'location.+http' <<< "$html")
+		    url_vcrypt2=$(grep -P '[lL]{1}ocation.+http' <<< "$html")
 		    url_vcrypt2="http${url_vcrypt2#*http}"
 		fi
 	    fi		
