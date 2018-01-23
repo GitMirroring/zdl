@@ -79,6 +79,7 @@ then
 	declare -A movie_definition
 	movie_definition=(
 	    ['o']="Original"
+	    ['h']="High"
 	    ['n']="Normal"
 	    ['l']="Low"
 	)
@@ -89,7 +90,7 @@ then
 	## file_in:
 	input_hidden "$html"
 						       
-	for mode_stream in $o n l
+	for mode_stream in $o h n l
 	do
 	    get_akvideo_definition mode_stream_test
 
