@@ -101,18 +101,62 @@ function get_by_cloudflare {
     
 }
 
+function get_fastshield {
+    declare -n ref="$2"
+    local url_fastshield="$1"
+    
+    if [[ "$url_fastshield" =~ fastshield ]]
+    then
+	url "$url_fastshield" &&
+	    print_c 4 "$url_fastshield" ||
+		_log 2
+	
+	if check_cloudflare "$url_fastshield"
+	then
+	    get_by_cloudflare "$url_fastshield" html
+	fi		
+	
+	data_vcrypt=$(curl -v "${url_fastshield}" \
+	    		   -d 'go=go' \
+			   -b "$path_tmp/cookies2.zdl" \
+			   -H "Cookie: \"${cookie_cloudflare}\""                                           \
+			   -H 'Connection: "keep-alive"'                                                   \
+	    		   -A "$user_agent" 2>&1)
+
+	ref=$(grep 'ocation:' <<< "$data_vcrypt" |
+	    		     head -n1|
+	    		     awk '{print $3}')
+	
+	ref=$(trim "${ref}")
+
+	url "$ref" &&
+	    (
+		print_c 4 "$ref" 
+		return 0
+	    ) ||
+		(
+		    _log 2
+		    return 1
+		)
+    fi
+}
+
 if [ "$url_in" != "${url_in//vcrypt.}" ] &&
        [[ ! "$url_in" =~ vcrypt.+opencrypt ]]
 then
     url_vcrypt=$(get_location "$url_in")
     url_vcrypt="http${url_vcrypt##*http}"
-    
+
+
+
     if [[ ! "$url_vcrypt" =~ vcrypt ]] &&
 	   url "$url_vcrypt"
     then
 	replace_url_in "$url_vcrypt" ||
 	    _log 2
-    else
+
+    elif ! get_fastshield "$url_vcrypt" url_vcrypt2
+    then	
 	url_vcrypt=$(curl -v "$url_in"  2>&1                 |
 			 grep 'ocation:'                     |
 			 awk '{print $3}'                    |
@@ -150,122 +194,97 @@ then
 				  awk '{print $3}')
 	    fi
 	fi
-
+	
 	url_vcrypt2=$(trim "${url_vcrypt2}")
 
 	if [[ "$url_vcrypt2" =~ vcrypt ]]
 	then	    
-	    if [[ "$url_vcrypt2" =~ fastshield ]]
-	    then
-		url "$url_vcrypt2" &&
-		    print_c 4 "$url_vcrypt2" ||
-			_log 2
-		
-		if check_cloudflare "$url_vcrypt2"
-		then
-		    get_by_cloudflare "$url_vcrypt2" html
-		fi		
-		
-		data_vcrypt=$(curl -v "${url_vcrypt2}" \
-	    			   -d 'go=go' \
-				   -b "$path_tmp/cookies2.zdl" \
-				   -H "Cookie: \"${cookie_cloudflare}\""                                           \
-				   -H 'Connection: "keep-alive"'                                                   \
-	    			   -A "$user_agent" 2>&1)
-
-		url_vcrypt2=$(grep 'ocation:' <<< "$data_vcrypt" |
-	    			     head -n1|
-	    			     awk '{print $3}')
-		
-		url_vcrypt2=$(trim "${url_vcrypt2}")
-
-		url "$url_vcrypt2" &&
-		    print_c 4 "$url_vcrypt2" ||
-			_log 2
-	    fi
+	    get_fastshield "$url_vcrypt2" url_vcrypt2
 	    
 	    if [[ "$url_vcrypt2" =~ http.*http ]]
 	    then
 		url_vcrypt2="http${url_vcrypt2##*http}"
 	    fi
-	    
+	fi
 
-	    if [[ "$url_in" =~ cryptopen ]]
-	    then	    
-		html=$(curl "$url_in" -s)
+	
 
-		url_vcrypt2=$(grep iframe <<< "$html" |
-				     sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
+	if [[ "$url_in" =~ cryptopen ]]
+	then	    
+	    html=$(curl "$url_in" -s)
+
+	    url_vcrypt2=$(grep iframe <<< "$html" |
+				 sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
+
+	    if ! url "$url_vcrypt2"
+	    then		
+		url_vcrypt2=$(grep Download <<< "$html" |
+				     sed -r 's|.+href=\"([^"]+)\".+|\1|g' |head -n1)
 
 		if ! url "$url_vcrypt2"
-		then		
-		    url_vcrypt2=$(grep Download <<< "$html" |
-					 sed -r 's|.+href=\"([^"]+)\".+|\1|g' |head -n1)
-
-		    if ! url "$url_vcrypt2"
-		    then
-			url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
-		    fi
-		fi
-
-		replace_url_in "$url_vcrypt2" ||
-		    _log 2
-
-
-	    elif [[ "$url_in" =~ cryptop ]]
-	    then
-		html=$(curl "$url_in" -s)
-		url_vcrypt2=$(grep Download <<< "$html" |
-				     head -n1)
-
-		if [[ "$url_vcrypt2" =~ http ]]
 		then
-		    url_vcrypt2="${url_vcrypt2##*http}"
-		    url_vcrypt2="http${url_vcrypt2%%\"*}"
-		    
-		    replace_url_in "$url_vcrypt2" ||
-			_log 2
-		fi
-
-	    elif [[ "$url_in" =~ opencryptxx ]]
-	    then
-		html=$(curl "$url_in" -s)
-		url_vcrypt2=$(grep Download <<< "$html" |
-				     head -n1)
-
-		if [[ "$url_vcrypt2" =~ http ]]
-		then
-		    url_vcrypt2="${url_vcrypt2##*http}"
-		    url_vcrypt2="http${url_vcrypt2%%\"*}"
-		    
-		    replace_url_in "$url_vcrypt2" ||
-			_log 2
-		fi
-		
-	    elif [[ "$url_vcrypt2" =~ opencryptz ]]
-	    then
-		check_cloudflare "$url_vcrypt2" &&
-		    get_by_cloudflare "$url_vcrypt2" html
-		
-		url_vcrypt2=$(grep Download <<< "$html" |
-				     head -n1)
-
-		if [[ "$url_vcrypt2" =~ http ]]
-		then
-		    url_vcrypt2="${url_vcrypt2##*http}"
-		    url_vcrypt2="http${url_vcrypt2%%\"*}"
-
-		    [ "$url_in" != "$url_vcrypt2" ] &&
-			replace_url_in "$url_vcrypt2" ||
-			    _log 2
+		    url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
 		fi
 	    fi
-	else
-	    url "$url_vcrypt2" &&
+
+	    replace_url_in "$url_vcrypt2" ||
+		_log 2
+
+
+	elif [[ "$url_in" =~ cryptop ]]
+	then
+	    html=$(curl "$url_in" -s)
+	    url_vcrypt2=$(grep Download <<< "$html" |
+				 head -n1)
+
+	    if [[ "$url_vcrypt2" =~ http ]]
+	    then
+		url_vcrypt2="${url_vcrypt2##*http}"
+		url_vcrypt2="http${url_vcrypt2%%\"*}"
+		
 		replace_url_in "$url_vcrypt2" ||
 		    _log 2
+	    fi
+
+	elif [[ "$url_in" =~ opencryptxx ]]
+	then
+	    html=$(curl "$url_in" -s)
+	    url_vcrypt2=$(grep Download <<< "$html" |
+				 head -n1)
+
+	    if [[ "$url_vcrypt2" =~ http ]]
+	    then
+		url_vcrypt2="${url_vcrypt2##*http}"
+		url_vcrypt2="http${url_vcrypt2%%\"*}"
+		
+		replace_url_in "$url_vcrypt2" ||
+		    _log 2
+	    fi
+	    
+	elif [[ "$url_vcrypt2" =~ opencryptz ]]
+	then
+	    check_cloudflare "$url_vcrypt2" &&
+		get_by_cloudflare "$url_vcrypt2" html
+	    
+	    url_vcrypt2=$(grep Download <<< "$html" |
+				 head -n1)
+
+	    if [[ "$url_vcrypt2" =~ http ]]
+	    then
+		url_vcrypt2="${url_vcrypt2##*http}"
+		url_vcrypt2="http${url_vcrypt2%%\"*}"
+
+		[ "$url_in" != "$url_vcrypt2" ] &&
+		    replace_url_in "$url_vcrypt2" ||
+			_log 2
+	    fi
 	fi
+    else
+	url "$url_vcrypt2" &&
+	    replace_url_in "$url_vcrypt2" ||
+		_log 2
     fi
+
 fi
 
 if [[ "$url_in" =~ vcrypt.+opencrypt ]]
