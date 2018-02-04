@@ -30,7 +30,7 @@
 
 if [[ "$url_in" =~ raiplay ]]
 then
-    html=$(wget -qO- "$url_in" -o /dev/null)    
+    html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
 
     raiplay_subtitle=$(grep vodJson <<< "$html")
     raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
@@ -60,13 +60,17 @@ then
     
     url_raiplay=$(grep data-video-url <<< "$html" |
 		 sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
-    
-    url_raiplay=$(get_location "$url_raiplay")
 
-    url_in_file=$(curl -s "$url_raiplay" \
-		       -A "$user_agent" \
-		       -c "$path_tmp/cookies.zdl")
-    #echo "$url_in_file"
+    url "$url_raiplay" &&
+	url_raiplay=$(get_location "$url_raiplay") ||
+	    url_raiplay=$(grep contentUrl <<< "$html" |
+				 sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
+
+    url_in_file=$(wget -qO- "$url_raiplay" \
+		       --user-agent="$user_agent" \
+		       --save-cookies="$path_tmp/cookies.zdl" \
+		       -o /dev/null)
+
     url_in_file=$(tail -n1 <<< "$url_in_file")
 
     downwait_extra=20

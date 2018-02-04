@@ -31,6 +31,7 @@ if [[ "$url_in" =~ cinemalibero ]]
 then
     cinemalibero_url=$(get_location "$url_in")
 
-    replace_url_in "$cinemalibero_url" ||
-	_log 2
+    url "$cinemalibero_url" &&
+	replace_url_in "$cinemalibero_url" ||
+	    _log 2
 fi
