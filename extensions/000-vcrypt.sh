@@ -144,10 +144,11 @@ function get_fastshield {
 if [ "$url_in" != "${url_in//vcrypt.}" ] &&
        [[ ! "$url_in" =~ vcrypt.+opencrypt ]]
 then
+    [[ "$url_in" =~ \.pw\/ ]] &&
+	replace_url_in "${url_in//.pw\//.net\/}"
+    
     url_vcrypt=$(get_location "$url_in")
     url_vcrypt="http${url_vcrypt##*http}"
-
-
 
     if [[ ! "$url_vcrypt" =~ vcrypt ]] &&
 	   url "$url_vcrypt"
@@ -280,8 +281,8 @@ then
 	    fi
 	fi
     else
-	url "$url_vcrypt2" &&
-	    replace_url_in "$url_vcrypt2" ||
+	url "$url_vcrypt" &&
+	    replace_url_in "$url_vcrypt" ||
 		_log 2
     fi
 
