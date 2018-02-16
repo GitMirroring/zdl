@@ -307,51 +307,6 @@ then
     fi
 fi
 
-	
-    # elif ! get_fastshield "$url_vcrypt" url_vcrypt2
-    # then	
-
-    # 	if ! url "$url_vcrypt"
-    # 	then
-    # 	else
-    # 	fi
-	
-
-
-    # 	if [[ "$url_vcrypt2" =~ vcrypt ]]
-    # 	then	    
-    # 	    get_fastshield "$url_vcrypt2" url_vcrypt2
-	    
-    # 	    if [[ "$url_vcrypt2" =~ http.*http ]]
-    # 	    then
-    # 		url_vcrypt2="http${url_vcrypt2##*http}"
-    # 	    fi
-    # 	fi
-
-	
-
-	
-    # elif [[ "$url_vcrypt2" =~ opencryptz ]]
-    # then
-    # 	echo AAAAAAAAAAAA
-    # 	check_cloudflare "$url_vcrypt2" &&
-    # 	    get_by_cloudflare "$url_vcrypt2" html
-	
-    # 	url_vcrypt2=$(grep Download <<< "$html" |
-    # 			     head -n1)
-    # 	echo "url: $url_vcrypt2"
-    # 	if [[ "$url_vcrypt2" =~ http ]]
-    # 	then
-    # 	    url_vcrypt2="${url_vcrypt2##*http}"
-    # 	    url_vcrypt2="http${url_vcrypt2%%\"*}"
-
-    # 	    [ "$url_in" != "$url_vcrypt2" ] &&
-    # 		replace_url_in "$url_vcrypt2" ||
-    # 		    _log 2
-    # 	fi
-    # fi
-
-
 if [[ "$url_in" =~ vcrypt.+opencrypt ]]
 then    
     check_cloudflare "$url_in" &&
