@@ -29,36 +29,52 @@
 
 if [ "$url_in" != "${url_in//swzz.xyz}" ]
 then
-    html=$(curl "$url_in")
+    get_location "$url_in" url_in_new
 
-    if [[ "$html" =~ (Link Non Trovato) ]]
+    if url "$url_in_new"
     then
-	_log 3
+	url_in_new=$(curl -s "$url_in_new"     |
+			    grep location.href |
+			    head -n1)
+	url_in_new="${url_in_new#*\"}"
+	url_in_new="${url_in_new%%\"*}"
 
-    else
-	if [[ "$html" =~ 'p,a,c,k,e,d' ]]
-	then
-	    html=$(unpack "$html")
-	fi
-	
-	url_in_new=$(grep -P 'var link\s*=' <<< "$html" |
-			    sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
-	
-	if [ -z "$url_in_new" ]
-	then
-	    url_in_new=$(grep 'btn-wrapper link' <<< "$html" |
-				sed -r 's|[^"]+\"([^"]+)\".+|\1|')
-	fi
-	
-	url_in_new=$(sanitize_url "${url_in_new}")
-
-	if url "$url_in_new"
-	then
+	url "$url_in_new" &&
 	    replace_url_in "$url_in_new" ||
 		_log 2
 
-	else
+    else
+	html=$(curl "$url_in")
+
+	if [[ "$html" =~ (Link Non Trovato) ]]
+	then
 	    _log 3
+
+	else
+	    if [[ "$html" =~ 'p,a,c,k,e,d' ]]
+	    then
+		html=$(unpack "$html")
+	    fi
+	    
+	    url_in_new=$(grep -P 'var link\s*=' <<< "$html" |
+				sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
+	    
+	    if [ -z "$url_in_new" ]
+	    then
+		url_in_new=$(grep 'btn-wrapper link' <<< "$html" |
+				    sed -r 's|[^"]+\"([^"]+)\".+|\1|')
+	    fi
+	    
+	    url_in_new=$(sanitize_url "${url_in_new}")
+
+	    if url "$url_in_new"
+	    then
+		replace_url_in "$url_in_new" ||
+		    _log 2
+
+	    else
+		_log 3
+	    fi
 	fi
     fi
 fi

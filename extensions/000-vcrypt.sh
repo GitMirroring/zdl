@@ -75,8 +75,8 @@ function get_by_cloudflare {
 	
 	
 	cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
-				 cut -d' ' -f2 |
-				 tr '\n' ' ')
+				   cut -d' ' -f2 |
+				   tr '\n' ' ')
 	cookie_cloudflare="${cookie_cloudflare%';'*}"
 
 	ref=$(curl -v                                                                              \
@@ -124,8 +124,8 @@ function get_fastshield {
 	    		   -A "$user_agent" 2>&1)
 
 	ref=$(grep 'ocation:' <<< "$data_vcrypt" |
-	    		     head -n1|
-	    		     awk '{print $3}')
+	    	     head -n1|
+	    	     awk '{print $3}')
 	
 	ref=$(trim "${ref}")
 
