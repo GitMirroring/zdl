@@ -320,8 +320,8 @@ function set_link_timer {
     get_ip ip
     
     del_link_timer "$link"
-    
-    #echo "$link $ip $timeout" >>"$links_timer"
+
+    echo "$link $ip $timeout" >>"$links_timer"
     _log 33 "$2"
 }
 
@@ -936,21 +936,6 @@ function del_pid_url {
     if [ -f "$path_tmp/${type_pid}" ]
     then
 	sed -r "/^.+ ${url//\//\\/}$/d" -i "$path_tmp/${type_pid}" 2>/dev/null
-    fi
-}
-
-function set_try_counter {
-    (( try_counter[$1]++ ))
-}
-
-function get_try_counter {
-    if [ -z "${try_counter[$1]}" ]
-    then
-    	try_counter[$1]=0
-    	echo 0
-
-    else
-    	echo ${try_counter[$1]}
     fi
 }
 

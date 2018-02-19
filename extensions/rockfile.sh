@@ -29,6 +29,7 @@
 
 if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
+    rm -f "$path_tmp"/cookies*.zdl "$path_tmp"/headers*.zdl 
     domain_rockfile="rockfile.co"
 #    replace_url_in "${url_in//https/http}"
 
@@ -75,9 +76,24 @@ then
 	then
 	    _log 11
 
-	elif [[ "$html" =~ 'have to wait '([0-9]+) ]]
+	elif [[ "$html" =~ 'have to wait '([0-9]*)[^0-9]*([0-9]*)[^0-9]*([0-9]*)' seconds until' ]]
 	then
-	    url_in_timer=$((${BASH_REMATCH[1]} * 60))
+	    url_in_timer=0
+	    time_rematch=( "${BASH_REMATCH[@]}" )
+
+	    if [[ "${time_rematch[1]}" =~ ^[0-9]+$ && "${time_rematch[2]}" =~ ^[0-9]+$ && "${time_rematch[3]}" =~ ^[0-9]+$ ]]
+	    then
+		url_in_timer=$(( ${time_rematch[1]}*60*60 + ${time_rematch[2]}*60 + $[time_rematch[3]} ))
+
+	    elif [[ "${time_rematch[1]}" =~ ^[0-9]+$ && "${time_rematch[2]}" =~ ^[0-9]+$ ]]
+	    then
+		url_in_timer=$(( ${time_rematch[1]}*60 + ${time_rematch[2]} ))
+
+	    elif [[ "${time_rematch[1]}" =~ ^[0-9]+$ ]]
+	    then
+		url_in_timer=$(( ${time_rematch[1]} ))
+	    fi
+	    
 	    set_link_timer "$url_in" $url_in_timer
 	    _log 33 $url_in_timer
 
@@ -129,6 +145,9 @@ then
 		then
 		    url_in_timer=true
 		    _log 36
+
+		else
+		    _log 2
 		fi
 	    fi
 	fi

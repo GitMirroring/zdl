@@ -299,6 +299,22 @@ function get_title {
 	sed -r 's|.*<[Tt]{1}itle[^>]*>([^<]+)<.+|\1|g'
 }
 
+function set_try_counter {
+    (( try_counter[$1]++ ))
+}
+
+function get_try_counter {
+    if [ -z "${try_counter[$1]}" ]
+    then
+    	try_counter[$1]=0
+    	echo 0
+
+    else
+    	echo ${try_counter[$1]}
+    fi
+}
+
+
 function end_extension {
     local count
 
