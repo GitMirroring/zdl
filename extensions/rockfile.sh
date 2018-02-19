@@ -36,101 +36,109 @@ then
     then
 	get_by_cloudflare "$url_in" html
 
-	if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
+    else
+	html=$(curl -s "$url_in")
+
+    fi
+
+    if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
+    then
+	_log 3
+
+    elif [ -n "$html" ]
+    then
+	input_hidden "$html"
+
+	method_free=$(grep -P 'method_.*free.+freeDownload' <<< "$html" |
+			     sed -r 's|.+(method_.*free)\".+|\1|g' |
+			     tr -d '\r')
+
+	post_data="${post_data##*document.write\(\&}&${method_free}=Regular Download"
+
+	html=$(curl -v                                                                              \
+		    -A "$user_agent"                                                                \
+		    -b "$path_tmp"/cookies2.zdl                                                     \
+		    -c "$path_tmp/cookies3.zdl"                                                     \
+		    -D "$path_tmp/header3.zdl"                                                      \
+		    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    		    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+		    -H 'Accept-Encoding: "gzip, deflate"'                                           \
+		    -H "Referer: \"$url_in\""                                                       \
+		    -H "Cookie: \"${cookie_cloudflare}\""                                           \
+		    -H 'DNT: "1"'                                                                   \
+		    -H 'Connection: "keep-alive"'                                                   \
+		    -H 'Upgrade-Insecure-Requests: "1"'                                             \
+		    -d "$post_data"                                                                 \
+		    "$url_in")	    
+
+	if grep -P 'You can download files up.+only' <<< "$html" >/dev/null
 	then
-	    _log 3
+	    _log 11
 
-	elif [ -n "$html" ]
+	elif [[ "$html" =~ 'have to wait '([0-9]+) ]]
 	then
-	    input_hidden "$html"
+	    url_in_timer=$((${BASH_REMATCH[1]} * 60))
+	    set_link_timer "$url_in" $url_in_timer
+	    _log 33 $url_in_timer
 
-	    method_free=$(grep -P 'method_.*free.+freeDownload' <<< "$html" |
-				 sed -r 's|.+(method_.*free)\".+|\1|g' |
-				 tr -d '\r')
+	elif [[ "$html" =~ (No Available traffic to download this file. Remaining traffic[^.]+\.) ]]
+	then
+	    errMsg="${BASH_REMATCH[1]//<*>}"
+	    _log 2
 
-	    post_data="${post_data##*document.write\(\&}&${method_free}=Regular Download"
+	else
+	    code=$(pseudo_captcha "$html")
 
-	    html=$(curl -v                                                                              \
-			-A "$user_agent"                                                                \
-			-b "$path_tmp"/cookies2.zdl                                                     \
-			-c "$path_tmp/cookies3.zdl"                                                     \
-			-D "$path_tmp/header3.zdl"                                                      \
-			-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    			-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-			-H 'Accept-Encoding: "gzip, deflate"'                                           \
-			-H "Referer: \"$url_in\""                                                       \
-			-H "Cookie: \"${cookie_cloudflare}\""                                           \
-			-H 'DNT: "1"'                                                                   \
-			-H 'Connection: "keep-alive"'                                                   \
-			-H 'Upgrade-Insecure-Requests: "1"'                                             \
-			-d "$post_data"                                                                 \
-			"$url_in")	    
-
-	    if grep -P 'You can download files up.+only' <<< "$html" >/dev/null
+	    if [[ "$code" =~ ^[0-9]+$ ]]
 	    then
-		_log 11
+		print_c 1 "Pseudo-captcha: $code"
 
-	    elif [[ "$html" =~ 'have to wait '([0-9]+) ]]
-	    then
-		url_in_timer=$((${BASH_REMATCH[1]} * 60))
-		set_link_timer "$url_in" $url_in_timer
-		_log 33 $url_in_timer
+		unset post_data
+		input_hidden "$html"
+		post_data="${post_data##*'(&'}&code=$code"
+		post_data="${post_data//'&down_script=1'}"
 
-	    elif [[ "$html" =~ (No Available traffic to download this file. Remaining traffic[^.]+\.) ]]
-	    then
-		errMsg="${BASH_REMATCH[1]//<*>}"
-		_log 2
+		errMsg=$(grep 'Devi attendere' <<< "$html" |
+				sed -r 's|[^>]+>([^<]+)<.+|\1|g')
+		
+		if [[ "$html" =~ (You can download files up to) ]]
+		then
+		    _log 4
+
+		elif [ -n "$code" ]
+		then
+		    timer=$(grep countdown_str <<< "$html" |
+				   sed -r 's|.+>([0-9]+)<.+|\1|g')
+		    
+		    countdown- $timer
+		    sleeping 2
+		    
+		    url_in_file=$(curl "${url_in}"                             \
+				       -b "$path_tmp"/cookies2.zdl             \
+				       -A "$user_agent"                        \
+				       -d "$post_data"                           |
+					 grep -P '[^\#]+btn_downloadLink'        |
+					 sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+		    url_in_file=$(sanitize_url "$url_in_file")
+		fi
 
 	    else
-		code=$(pseudo_captcha "$html")
+		print_c 3 "Pseudo-captcha: codice non trovato"
 
-		if [[ "$code" =~ ^[0-9]+$ ]]
+		if [[ "$html" =~ google.+recaptcha ]]
 		then
-		    print_c 1 "Pseudo-captcha: $code"
-
-		    unset post_data
-		    input_hidden "$html"
-		    post_data="${post_data##*'(&'}&code=$code"
-		    post_data="${post_data//'&down_script=1'}"
-
-		    errMsg=$(grep 'Devi attendere' <<< "$html" |
-				    sed -r 's|[^>]+>([^<]+)<.+|\1|g')
-		    
-		    if [[ "$html" =~ (You can download files up to) ]]
-		    then
-			_log 4
-
-		    elif [ -n "$code" ]
-		    then
-			timer=$(grep countdown_str <<< "$html" |
-				       sed -r 's|.+>([0-9]+)<.+|\1|g')
-			
-			countdown- $timer
-			sleeping 2
-			
-			url_in_file=$(curl "${url_in}"                             \
-					   -b "$path_tmp"/cookies2.zdl             \
-					   -A "$user_agent"                        \
-					   -d "$post_data"                           |
-					     grep -P '[^\#]+btn_downloadLink'        |
-					     sed -r 's|.+href=\"([^"]+)\".+|\1|g')
-			url_in_file=$(sanitize_url "$url_in_file")
-		    fi
-
-		else
-		    print_c 3 "Pseudo-captcha: codice non trovato"
-
-		    if [[ "$html" =~ google.+recaptcha ]]
-		    then
-			url_in_timer=true
-			_log 36
-		    fi
+		    url_in_timer=true
+		    _log 36
 		fi
 	    fi
 	fi
+
+    else
+	_log 2
     fi
 
-    if   url "$url_in_file" &&
+
+    if url "$url_in_file" &&
 	    [ -z "$file_in" ] ||
 		[[ "$file_in" =~ (input type) ]]	 
     then
