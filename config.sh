@@ -81,7 +81,8 @@ list_proxy_url['ip_adress']="http://www.ip-adress.com/proxy_list/" ###"http://zo
 list_proxy_url['proxy_list']="http://proxy-list.org/en/index.php"
 
 #user_agent="Mozilla/5.0 (X11; Linux x36_64; rv:10.0.7) Gecko/20100101 Firefox/10.0.7 Iceweasel/10.0.7"
-user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"
+#user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"
+user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
 user_lang="$LANG"
 user_language="$LANGUAGE"
 prog_lang='en_US.UTF-8:en'
