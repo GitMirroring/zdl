@@ -299,6 +299,7 @@ function check_link_timer {
 	if [ "$this_ip" != "$that_ip" ] ||
 	       ((now >= timeout))
 	then
+	    del_link_timer "$link"
 	    return 0
 	else
 	    print_c 3 "$url_in -> Link in pausa: mancano $(seconds_to_human $((timeout - now)) )"

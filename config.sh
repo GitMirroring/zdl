@@ -477,6 +477,8 @@ function init {
     [ -z "$pid_prog" ] && pid_prog=$$ 
 
     get_conf
+    update_tubeoffline &
+    
     this_tty=$(tty)
 
     if ! check_instance_prog &&

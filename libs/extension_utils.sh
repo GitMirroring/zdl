@@ -719,3 +719,33 @@ function get_by_cloudflare {
 	cookie_cloudflare="${cookie_cloudflare%';'*}"
     fi
 }
+
+function update_tubeoffline {
+    local hosts n
+
+    hosts=$(curl -s "https://www.tubeoffline.com/sitemap.php"  |
+		   grep -Po '>[^<>]+</a'                       |
+		   sed -r 's|>(.+)<.+|\1|g'                    |
+		   tr '[:upper:]' '[:lower:]'                  |
+		   tr -d ' ')
+
+    n=$(wc -l <<< "$hosts")
+    hosts=$(head -n $((n - 6)) <<< "$hosts")
+    tail -n $((n - 6 - 7)) <<< "$hosts" > "$path_conf"/tubeoffline-hosts.txt
+}
+
+function check_tubeoffline {
+    local host result
+
+    if [ -s "$path_conf"/tubeoffline-hosts.txt ]
+    then
+	result=$(awk -v host="$1" "($host ~ $0){print $0}" "$path_conf"/tubeoffline-hosts.txt)
+
+	[ -n "$result" ] &&
+	    return 0 ||
+		return 1
+    else
+	## se ancora non esiste un elenco degli host di tubeoffline, tenta ugualmente
+	return 0
+    fi
+}
