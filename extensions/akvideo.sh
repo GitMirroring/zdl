@@ -41,7 +41,7 @@ function get_akvideo_definition {
 
     if test -f "$path_tmp"/akvideo-definitions
     then
-	ref=$(grep -P "^$url_in (o|n|l){1}$" "$path_tmp"/akvideo-definitions |
+	ref=$(grep -P "^$url_in (o|h|n|l){1}$" "$path_tmp"/akvideo-definitions |
 		     cut -f2 -d' ')
     fi
 }
@@ -57,11 +57,11 @@ then
     fi
     
     html=$(wget -t1 -T$max_waiting                               \
-		"$url_in"                                        \
-		--user-agent="Firefox"                           \
-		--keep-session-cookies                           \
-		--save-cookies="$path_tmp/cookies.zdl"           \
-		-qO- -o /dev/null)
+    		"$url_in"                                        \
+    		--user-agent="Firefox"                           \
+    		--keep-session-cookies                           \
+    		--save-cookies="$path_tmp/cookies.zdl"           \
+    		-qO- -o /dev/null)
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
     then
@@ -109,8 +109,13 @@ then
 			     "https://akvideo.stream/dl?op=download_orig&id=${id_akvideo}&mode=${mode_stream}&hash=${hash_akvideo}" \
 			     -o /dev/null)
 
-		url_in_file=$(grep 'Direct Download' <<< "$html2" |
+		url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
+				     head -n1 |
 				     sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+
+		! url "$url_in_file" &&
+		    url_in_file=$(grep 'Direct Download' <<< "$html2" |
+					 sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
 
 		((akvideo_loops < 2)) && sleep 1
 	    done
