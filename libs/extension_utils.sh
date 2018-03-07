@@ -208,6 +208,8 @@ function aaextract {
 }
 
 function nodejs_eval {
+    local jscode
+    
     if [ -f "$1" ]
     then
 	jscode="$(cat "$1")"
@@ -233,6 +235,8 @@ function nodejs_eval {
 }
 
 function unpack {
+    local jscode
+    
     jscode=$(grep -P 'eval.+p,a,c,k,e' <<< "$1" | 
 		    sed -r 's|.*eval||g')
 
@@ -712,6 +716,83 @@ function get_by_cloudflare {
 		   -H 'Connection: "keep-alive"'                                                   \
 		   -H 'Upgrade-Insecure-Requests: "1"'                                             \
 		   "${url_in}" 2>&1)
+	
+	cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
+				   cut -d' ' -f2 |
+				   tr '\n' ' ')
+	cookie_cloudflare="${cookie_cloudflare%';'*}"
+    fi
+}
+
+function get_location_by_cloudflare {
+    local url_in="$1"
+    declare -n ref="$2"
+    local location_chunk
+    
+    curl                                                                                  \
+    	-A "$user_agent"                                                                  \
+    	-c "$path_tmp/cookies.zdl"                                                        \
+    	-D "$path_tmp/header.zdl"                                                         \
+	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    	-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+	-H 'Accept-Encoding: "gzip, deflate"'                                             \
+	-H 'DNT: "1"'                                                                     \
+	-H 'Connection: "keep-alive"'                                                     \
+    	"$url_in" > "$path_tmp"/cloudflare.html
+
+    if ! command -v phantomjs &>/dev/null
+    then
+	_log 35
+
+    else
+	domain="${url_in#*\/\/}"
+	domain="${domain%%\/*}"
+	get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
+	
+	input_hidden "$path_tmp"/cloudflare.html
+
+	get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
+	cookie_cloudflare=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
+
+	countdown- 6
+
+	curl                                                                                \
+	    -A "$user_agent"                                                                \
+	    -c "$path_tmp/cookies.zdl"                                                      \
+	    -D "$path_tmp/header2.zdl"                                                      \
+	    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    	    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+	    -H 'Accept-Encoding: "gzip, deflate"'                                           \
+	    -H "Referer: \"$url_in\""                                                       \
+	    -H "Cookie: \"${cookie_cloudflare}\""                                           \
+	    -H 'DNT: "1"'                                                                   \
+	    -H 'Connection: "keep-alive"'                                                   \
+	    -H 'Upgrade-Insecure-Requests: "1"'                                             \
+	    -d "$get_data"                                                                  \
+	    -G                                                                              \
+	    "http://$domain/cdn-cgi/l/chk_jschl" >/dev/null
+
+	cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
+				   cut -d' ' -f2 |
+				   tr '\n' ' ')
+	cookie_cloudflare="${cookie_cloudflare%';'*}"
+
+	ref=$(curl -v                                                                              \
+		   -A "$user_agent"                                                                \
+		   -b "$path_tmp/cookies.zdl"                                                      \
+		   -c "$path_tmp/cookies2.zdl"                                                     \
+		   -D "$path_tmp/header2.zdl"                                                      \
+		   -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    		   -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+		   -H 'Accept-Encoding: "gzip, deflate"'                                           \
+		   -H "Referer: \"$url_in\""                                                       \
+		   -H 'DNT: "1"'                                                                   \
+		   -H 'Connection: "keep-alive"'                                                   \
+		   -H 'Upgrade-Insecure-Requests: "1"'                                             \
+		   "${url_in}" 2>&1 |
+		  awk '/ocation.+http/{print $3}')
+
+	ref=$(trim "$ref")
 	
 	cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
 				   cut -d' ' -f2 |
