@@ -153,6 +153,10 @@ then
 	    fi
 	fi
 
+	max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
+	(( max_dl > 1 )) &&
+	    set_temp_proxy
+	
 	[ -z "$url_in_timer" ] &&
 	    end_extension ||
 		unset url_in_timer

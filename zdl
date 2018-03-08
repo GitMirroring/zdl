@@ -1240,7 +1240,7 @@ function main_loop {
     then	
 	nline=1
 	while :
-	do
+	do	    
 	    if [ -s "$start_file" ]
 	    then
 		nlines=$(wc -l < "$start_file")		
@@ -1280,7 +1280,8 @@ function main_loop {
 	    fi
 
 	    unset pid_in file_in url_in_file
-
+	    unset_temp_proxy
+	    
 	    if [ -f "$path_tmp/downloader" ]
 	    then
 		downloader_in=$(cat "$path_tmp/downloader")

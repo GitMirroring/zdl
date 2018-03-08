@@ -84,7 +84,6 @@ function check_ip {
 	else
 	    new_ip_proxy
 	fi
-
 	
     elif [ -s "$path_tmp"/proxy ] &&
 	     [[ "$(cat "$path_tmp"/proxy)" =~ [0-9.]+ ]]
@@ -338,5 +337,20 @@ function new_ip_proxy {
     export LANG="$user_lang"
     export LANGUAGE="$user_language"
     print_c 4 "\nAvvio connessione: $url_in ..."
+}
+
+function set_temp_proxy {
+    new_ip_proxy
+    print_c 4 "Attivato proxy temporaneo"
+    touch "$path_tmp"/temp-proxy
+}
+
+function unset_temp_proxy {
+    if [ -f "$path_tmp"/temp-proxy ]
+    then
+	rm "$path_tmp"/temp-proxy
+	noproxy
+	print_c 4 "Disattivato proxy temporaneo"
+    fi
 }
 
