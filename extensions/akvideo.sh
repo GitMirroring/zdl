@@ -153,9 +153,16 @@ then
 	    fi
 	fi
 
-	max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
-	(( max_dl > 1 )) &&
-	    set_temp_proxy
+	if data_stdout
+	then
+	    max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
+	    
+	    if ( [ -z "$max_dl" ] || (( max_dl > 1 )) ) &&
+		     (( "${#pid_alive[*]}" > 0 )) 
+	    then	
+		set_temp_proxy
+	    fi
+	fi
 	
 	[ -z "$url_in_timer" ] &&
 	    end_extension ||
