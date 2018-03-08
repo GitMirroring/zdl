@@ -91,6 +91,7 @@ function check_ip {
 	 #[ "$update_defined_proxy" == "true" ]
     then
 	export http_proxy=$(cat "$path_tmp"/proxy)
+	export https_proxy=$http_proxy
     fi
 }
 
@@ -101,6 +102,7 @@ function get_ip {
     if [ -n "$2" ] && [ -s "$path_tmp"/proxy-active ]
     then
 	export http_proxy=$(cat "$path_tmp"/proxy-active)
+	
 	proxy_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
 	unset http_proxy
     fi
@@ -110,8 +112,8 @@ function get_ip {
 
 
 function noproxy {
-    unset http_proxy
-    export http_proxy
+    unset http_proxy https_proxy
+    export http_proxy https_proxy
 }
 
 ## servizi che offrono liste di proxy
@@ -318,8 +320,8 @@ function new_ip_proxy {
 	(( $search_proxy >= 100 )) && break
 	unset search_proxy num_speed
 	
-	http_proxy="$proxy"
-	export http_proxy
+	export http_proxy="$proxy"
+	export https_proxy=$http_proxy
 	print_c 0 "Proxy: $http_proxy ($proxy_type)\n"
 
 	unset myip
