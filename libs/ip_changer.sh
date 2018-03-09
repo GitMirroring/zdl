@@ -340,6 +340,7 @@ function new_ip_proxy {
 }
 
 function set_temp_proxy {
+    echo $@ >> "$path_tmp"/proxy
     new_ip_proxy
     print_c 4 "Attivato proxy temporaneo"
     touch "$path_tmp"/temp-proxy
