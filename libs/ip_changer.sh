@@ -277,7 +277,8 @@ function new_ip_proxy {
 		wget -q -t 1 -T 20                              \
 		     --user-agent="$user_agent"                 \
 		     ${list_proxy_url[$proxy_server]}           \
-		     -qO "$path_tmp/proxy.tmp"
+		     -O "$path_tmp/proxy.tmp"                   \
+		     -o /dev/null
 
 		print_c 4 "Ricerca lista proxy $proxy_server: ${list_proxy_url[$proxy_server]}"
 	    fi
