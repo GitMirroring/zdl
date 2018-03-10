@@ -650,7 +650,6 @@ function check_cloudflare {
     fi
 }
 
-
 function get_by_cloudflare {
     local url_in="$1"
     declare -n ref="$2"
