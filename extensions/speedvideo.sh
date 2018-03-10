@@ -60,7 +60,7 @@ then
     then
 	_log 3
 
-    elif [[ "${htm}${html}" =~ 'Video is processing now' ]]
+    elif [[ "${htm}${html}" =~ 'Video is '(processing|transfer on streaming server)' now' ]]
     then
 	_log 17
 	
