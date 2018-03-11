@@ -476,8 +476,8 @@ servizi di hosting e di streaming, direttamente dal link (bypassando il
 player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
-     Akvideo (HD), Auroravid/Novamov, Dailymotion, Deltabit (HD),
-     Exashare, Fastvideo, Flashx.tv, IDoWatch, Metacafe,
+     Akvideo (HD), Auroravid/Novamov, Dailymotion, Deltabit (HD), Dplay
+     (HD), Exashare, Fastvideo, Flashx.tv, IDoWatch, Metacafe,
      Movshare/Wholecloud, Neodrive (ex Cloudzilla), Nowvideo, Openload,
      Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
      Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
@@ -1352,25 +1352,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL6602
 Node: Servizi streaming/hosting14007
-Node: Avviare ZDL17899
-Node: Arrestare ZDL20335
-Node: Controllare i download21440
-Node: Manuali d'uso25731
-Node: Modi26147
-Node: Readline29413
-Node: Editor30965
-Node: Omonimie32190
-Node: IRC/XDCC33725
-Node: Torrent35415
-Node: Filtri36299
-Node: Creare nuove estensioni36620
-Node: Software consigliati38382
-Node: Conkeror39783
-Node: zdl-xterm e XXXTerm/Xombrero40794
-Node: Installazione e aggiornamento42718
-Node: Tags45753
-Node: Copying48554
-Node: Contatti49604
+Node: Avviare ZDL17911
+Node: Arrestare ZDL20347
+Node: Controllare i download21452
+Node: Manuali d'uso25743
+Node: Modi26159
+Node: Readline29425
+Node: Editor30977
+Node: Omonimie32202
+Node: IRC/XDCC33737
+Node: Torrent35427
+Node: Filtri36311
+Node: Creare nuove estensioni36632
+Node: Software consigliati38394
+Node: Conkeror39795
+Node: zdl-xterm e XXXTerm/Xombrero40806
+Node: Installazione e aggiornamento42730
+Node: Tags45765
+Node: Copying48566
+Node: Contatti49616
 
 End Tag Table
 
