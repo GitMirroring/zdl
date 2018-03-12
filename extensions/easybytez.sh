@@ -57,7 +57,9 @@ then
 	     --save-cookies="$path_tmp"/cookies.zdl                       \
 	     -O /dev/null                                                 \
 	     --post-data="${post_data}&login=${user}&password=${pass}"    \
-	     "http://www.easybytez.com"
+	     "http://www.easybytez.com"                                   \
+	     -o /dev/null
+	
 	unset post_data user pass
     fi
 
