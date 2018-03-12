@@ -1183,6 +1183,7 @@ then
     then
 	binding=true
 	standard_box
+
 	readline_links
  	#stty -echo
 
@@ -1489,7 +1490,11 @@ reset_exit
 function read_binding {
     ## trap SIGINT ==> return
     #export TMOUT=1
+    
+    #(( num_bind++ ))
+    #touch test-binding-$num_bind
     read -e -t 1 -n 1 binding_in_loop
+    #rm test-binding-$num_bind
 }
 
 
@@ -1509,6 +1514,8 @@ else
 	start_mode_in_tty "lite" "${this_tty}" 
     fi
     
+    rm -f "$path_tmp/stop-binding"     
+
     echo "$COLUMNS" > "$path_tmp"/columns
     {
 	main_loop 2>/dev/null &
@@ -1522,7 +1529,7 @@ else
     bindings
 
     [ "$this_mode" == "lite" ] && fclear
-    rm -f "$path_tmp/stop-binding" 
+
 
     while check_pid $loops_pid ||
 	    [ -s "$path_tmp/links_loop.txt" ] 
@@ -1535,7 +1542,14 @@ else
 	    read_binding 
 
 	else
-	    read_binding 
+	    read_binding
+	    # "$path_usr"/libs/read-binding.sh
+	    # [ -s "$path_tmp"/binding-in-loop ] &&
+	    # 	binding_in_loop=$(cat "$path_tmp"/binding-in-loop)
+	    #pid=$!
+	    #fg
+	    
+	    #jobs -l >jobs-list-$(date +%s)
 	fi
 
 	if [ -f "$path_tmp"/stop-binding ]
@@ -1606,3 +1620,4 @@ then
 fi
 
 echo -en "\e[0m\e[J"
+kill %? &>/dev/null

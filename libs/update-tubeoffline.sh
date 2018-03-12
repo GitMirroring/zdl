@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/bin/bash
 #
 # ZigzagDownLoader (ZDL)
 # 
@@ -24,24 +24,18 @@
 # zoninoz@inventati.org
 #
 
-function ffmpeg_stdout {
-    ppid=$2
-    cpid=$(children_pids $ppid)
-    ##    trap_sigint $cpid $ppid
-    echo "$cpid $ppid" >"$path_tmp"/ffmpeg-pids
-    
-    pattern='frame.+size.+'
 
-    [[ "$format" =~ (mp3|flac) ]] &&
-	pattern='size.+kbits/s'
-    
-    while check_pid $cpid
-    do
-	tail $1-*.log 2>/dev/null             |
-	    grep -oP "$pattern"               |
-	    sed -r "s|^(.+)$|\1                                         \n|g" |
-	    tr '\n' '\r'
-	sleep 1
-    done
-}
+path_usr="/usr/local/share/zdl"
+path_conf="$HOME/.zdl"
+
+hosts=$(curl -s "https://www.tubeoffline.com/sitemap.php"  |
+	       grep -Po '>[^<>]+</a'                       |
+	       sed -r 's|>(.+)<.+|\1|g'                    |
+	       tr '[:upper:]' '[:lower:]'                  |
+	       tr -d ' ')
+
+n=$(wc -l <<< "$hosts")
+hosts=$(head -n $((n - 6)) <<< "$hosts")
+tail -n $((n - 6 - 7)) <<< "$hosts" > "$path_conf"/tubeoffline-hosts.txt
+
 

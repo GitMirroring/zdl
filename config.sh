@@ -470,6 +470,7 @@ function check_default_downloader {
 }
 
 function init {
+    set -m
     mkdir -p "$path_tmp"
 
     file_log="${prog}_log.txt"
@@ -477,7 +478,7 @@ function init {
     [ -z "$pid_prog" ] && pid_prog=$$ 
 
     get_conf
-    update_tubeoffline &
+    nohup "$path_usr"/libs/update-tubeoffline.sh &>/dev/null &
     
     this_tty=$(tty)
 

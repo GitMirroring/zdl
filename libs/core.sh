@@ -249,13 +249,13 @@ function set_line_in_file { 	#### usage:
 		    
 		    sed -e "s,^${item}$,,g" \
 			-e '/^$/d' -i "$file_target" 2>/dev/null
-
+		    
 		    if (( $(wc -l < "$file_target") == 0 ))
 		    then
 			rm "$file_target"
 		    fi
 		    result=0
-
+		    
 		else
 		    result=1
 		fi
@@ -347,19 +347,20 @@ function check_link {
 }
 
 function set_link {
-    local url_test="${2}"
-    if [ "$1" == "+" ] &&
+    local op="$1"
+    local url_test="$2"
+    
+    if [ "$op" == "+" ] &&
 	   ! url "$url_test"
     then
 	_log 12 "$url_test"
-	set_link - "$url_test"
 	return 1
 
     else
-	[ "$1" == "+" ] &&
+	[ "$op" == "+" ] &&
 	    url_test="${url_test%'#20\x'}"
 
-	set_line_in_file "$1" "$url_test" "$path_tmp/links_loop.txt" &&
+	set_line_in_file "$op" "$url_test" "$path_tmp/links_loop.txt" &&
 	    return 0 ||
 		return 1
     fi

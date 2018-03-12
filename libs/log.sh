@@ -91,7 +91,7 @@ function _log {
 	    ;;
 	12)
 	    msg="$2 --> Non è un URL adatto per $name_prog\n"
-	    set_link - "$url_in"
+	    set_link - "$2"
 	    ;;
 	13)
 	    msg="$url_in --> Il file$msg_file_in non sarà scaricato, perché corrisponde alla regex: $no_file_regex"
