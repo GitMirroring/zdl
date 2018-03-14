@@ -815,13 +815,12 @@ function update_tubeoffline {
 }
 
 function check_tubeoffline {
-    local host result
+    local result
 
     if [ -s "$path_conf"/tubeoffline-hosts.txt ]
     then
-	result=$(awk -v host="$1" "($host ~ $0){print $0}" "$path_conf"/tubeoffline-hosts.txt)
-
-	[ -n "$result" ] &&
+	link_parser "$1"
+	grep -q "${parser_domain%.*}" "$path_conf"/tubeoffline-hosts.txt &&
 	    return 0 ||
 		return 1
     else
