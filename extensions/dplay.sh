@@ -49,7 +49,7 @@ then
 	# url_in_file="${url_in_file%\?*}"
 	# url_in_file="${url_in_file%\/*}/${__in_file}"
 	# curl -A Firefox -v "$url_in_file" -o OUT
-	unset url_in_file
+	unset url_in_file file_in
 	_log 32
 	
     else 
