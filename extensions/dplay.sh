@@ -36,12 +36,25 @@ then
     dplayJSON=${dplayJSON#*\"}
     dplayJSON=${dplayJSON%\"*}
     dplayJSON=$(echo -e "$dplayJSON" | tr -d '\')
-
+    
     url_in_file=$(nodejs -e "var json = $dplayJSON; console.log(json.data.attributes.streaming.hls.url)")
-    __in_file=$(curl "$url_in_file" |tail -n1)
+    __in_file=$(curl -s "$url_in_file" |tail -n1)
 
-    url_in_file=$(sed -r "s|[^/]+m3u8|$__in_file|g" <<< "$url_in_file") 
-
+    #echo -e "$url_in_file\n$__in_file"
+    
+    if grep -q URI <<< "$__in_file"
+    then
+	# __in_file="${__in_file%\"}"
+	# __in_file="${__in_file##*\"}"
+	# url_in_file="${url_in_file%\?*}"
+	# url_in_file="${url_in_file%\/*}/${__in_file}"
+	# curl -A Firefox -v "$url_in_file" -o OUT
+	_log 32
+	
+    else 
+	url_in_file=$(sed -r "s|[^/]+m3u8|$__in_file|g" <<< "$url_in_file") 
+    fi
+    
     file_in="${url_in%\/*}"
     file_in="${file_in##*\/}"
 
