@@ -266,14 +266,11 @@ function readline_links {
     while :
     do
 	trap_sigint
-	read -e -t 1 link
-	
-	if [ -n "${link// }" ]
-	then
-	    link=$(sanitize_url "$link")
-	    set_link + "$link"
-	    unset break_loop
-	fi
+	read -e link
+	link=$(sanitize_url "$link")
+	set_link + "$link"
+	unset break_loop
+
     done
 }
 
