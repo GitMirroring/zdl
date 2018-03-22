@@ -34,6 +34,7 @@ then
     file_in=$(grep 'title :' <<< "$html")
     file_in="${file_in#*\"}"
     file_in="${file_in%\"*}"
+    file_in="${file_in//\//-}"
     url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
     url_in_file=$(curl -s "$url_in_file" | tail -n1)
 
