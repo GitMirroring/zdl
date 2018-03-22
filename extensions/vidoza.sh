@@ -39,6 +39,10 @@ then
     if [[ "$html" =~ (Video is processing now) ]]
     then
 	_log 17
+
+    elif [[ "$html" =~ (The file was deleted) ]]
+    then
+	_log 3
 	
     else
 	url_in_file=$(grep sources <<< "$html")
