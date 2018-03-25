@@ -67,6 +67,10 @@ then
     then
 	_log 3
 
+    elif [[ "$html" =~ (Video is processing now) ]]
+    then
+	_log 17
+	
     else
 	download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
