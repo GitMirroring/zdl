@@ -69,34 +69,43 @@ then
     
 elif [ "$url_in" != "${url_in//vk.com\/video}" ]
 then
-    html=$(wget -t 1 -T $max_waiting                     \
-		--keep-session-cookies                   \
-		--save-cookies="$path_tmp"/cookies.zdl   \
-		"$url_in" -qO- -o /dev/null)
-
-    if [ -n "$html" ]
+    if command -v youtube-dl 2>/dev/null
     then
-	if grep prohibited <<< "$html" >/dev/null
-	then
-	    _log 11
-	    
-	else
-	    data_in_file=$(grep cache <<< "$html" 2>/dev/null)
-	    url_in_file="${data_in_file##*cache}"
-	    url_in_file="${url_in_file#*'\":\"'}"
-	    url_in_file="${url_in_file%%'\"'*}"
-	    url_in_file="${url_in_file//'\\\'}"
-
-	    ext="${url_in_file##*'.'}"
-	    ext="${ext%'?'*}"
-	    data_in_file=$(grep title <<< "$html" 2>/dev/null)
-	    file_in="${data_in_file##*title\":\"}"
-	    file_in="${file_in%%\"*}"
-	    file_in="${file_in::240}"
-	fi
+	json_vk=$(youtube-dl --dump-json "$url_in")
+	url_in_file=$(nodejs -e "var json=$json_vk; console.log(json.url)")
+	file_in=$(nodejs -e "var json=$json_vk; console.log(json.fulltitle)")
+	ext=$(nodejs -e "var json=$json_vk; console.log(json.ext)")
 	
     else
-	_log 2
+	html=$(wget -t 1 -T $max_waiting                     \
+    		    --keep-session-cookies                   \
+    		    --save-cookies="$path_tmp"/cookies.zdl   \
+    		    "$url_in" -qO- -o /dev/null)
+
+	if [ -n "$html" ]
+	then
+    	    if grep prohibited <<< "$html" >/dev/null
+    	    then
+    		_log 11
+		
+    	    else
+    		data_in_file=$(grep cache <<< "$html" 2>/dev/null)
+    		url_in_file="${data_in_file##*cache}"
+    		url_in_file="${url_in_file#*'\":\"'}"
+    		url_in_file="${url_in_file%%'\"'*}"
+    		url_in_file="${url_in_file//'\\\'}"
+
+    		ext="${url_in_file##*'.'}"
+    		ext="${ext%'?'*}"
+    		data_in_file=$(grep title <<< "$html" 2>/dev/null)
+    		file_in="${data_in_file##*title\":\"}"
+    		file_in="${file_in%%\"*}"
+    		file_in="${file_in::240}"
+    	    fi
+	    
+	else
+    	    _log 2
+	fi
     fi
 fi
 
