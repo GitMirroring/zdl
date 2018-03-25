@@ -69,7 +69,7 @@ then
     
 elif [ "$url_in" != "${url_in//vk.com\/video}" ]
 then
-    if command -v youtube-dl 2>/dev/null
+    if command -v youtube-dl &>/dev/null
     then
 	json_vk=$(youtube-dl --dump-json "$url_in")
 	url_in_file=$(nodejs -e "var json=$json_vk; console.log(json.url)")
