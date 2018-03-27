@@ -615,22 +615,9 @@ function check_cloudflare {
 
     if url "$target"
     then
-	if [ -z "$post_data" ]
-	then
-	    html=$(curl -s                   \
-	    		-A "$user_agent"     \
-			"$target" )
-	    
-	## implementare caso:
-	## se pagina precedente è scaricata da cloudflare
-	#
-	# else
-	#     html=$(curl -s                            \
-	# 		-b "$path_tmp"/cookies2.zdl   \
-	#     		-A "$user_agent"              \
-	#     		-d "$post_data"               \
-	# 		"$target" )
-	fi
+	html=$(curl -s                   \
+	    	    -A "$user_agent"     \
+		    "$target" )
 
     elif [ -f "$target" ]
     then
@@ -699,7 +686,7 @@ function get_by_cloudflare {
 		-G                                                                              \
 		"$proto://$domain/cdn-cgi/l/chk_jschl" >"$path_tmp"/cloudflare-output.html
 
-	    grep -s jschl_answer "$path_tmp"/cloudflare-output.html &&
+	    grep -s jschl_answer "$path_tmp"/cloudflare-output.html ||
 		break
 	       
 	done
@@ -763,21 +750,27 @@ function get_location_by_cloudflare {
 
 	countdown- 6
 
-	curl                                                                                \
-	    -A "$user_agent"                                                                \
-	    -c "$path_tmp/cookies.zdl"                                                      \
-	    -D "$path_tmp/header2.zdl"                                                      \
-	    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    	    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-	    -H 'Accept-Encoding: "gzip, deflate"'                                           \
-	    -H "Referer: \"$url_in\""                                                       \
-	    -H "Cookie: \"${cookie_cloudflare}\""                                           \
-	    -H 'DNT: "1"'                                                                   \
-	    -H 'Connection: "keep-alive"'                                                   \
-	    -H 'Upgrade-Insecure-Requests: "1"'                                             \
-	    -d "$get_data"                                                                  \
-	    -G                                                                              \
-	    "http://$domain/cdn-cgi/l/chk_jschl" >/dev/null
+	for proto in http https
+	do
+	    curl                                                                                \
+		-A "$user_agent"                                                                \
+		-c "$path_tmp/cookies.zdl"                                                      \
+		-D "$path_tmp/header2.zdl"                                                      \
+		-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    		-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+		-H 'Accept-Encoding: "gzip, deflate"'                                           \
+		-H "Referer: \"$url_in\""                                                       \
+		-H "Cookie: \"${cookie_cloudflare}\""                                           \
+		-H 'DNT: "1"'                                                                   \
+		-H 'Connection: "keep-alive"'                                                   \
+		-H 'Upgrade-Insecure-Requests: "1"'                                             \
+		-d "$get_data"                                                                  \
+		-G                                                                              \
+		"http://$domain/cdn-cgi/l/chk_jschl" >/dev/null
+	    
+	    grep -s jschl_answer "$path_tmp"/cloudflare-output.html ||
+		break	    
+	done
 
 	cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
 				   cut -d' ' -f2 |
@@ -805,6 +798,10 @@ function get_location_by_cloudflare {
 				   cut -d' ' -f2 |
 				   tr '\n' ' ')
 	cookie_cloudflare="${cookie_cloudflare%';'*}"
+
+	url "$ref" ||
+		return 1
+	
     fi
 }
 
