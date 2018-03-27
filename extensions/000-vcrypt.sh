@@ -124,13 +124,13 @@ then
     else    
 	[[ "$url_in" =~ \.pw\/ ]] &&
 	    replace_url_in "${url_in//.pw\//.net\/}"
-	
+
 	url_vcrypt=$(get_location "$url_in")
 	url_vcrypt="http${url_vcrypt##*http}"
 	
 	[[ "$url_vcrypt" =~ http\:\/ ]] &&
 	    url_vcrypt="${url_vcrypt//http:/https:}"
-	
+
 	if ! url "$url_vcrypt"
 	then
 	    url_vcrypt=$(curl -v "$url_in"  2>&1                 |
@@ -146,17 +146,26 @@ then
 	then
 	    if check_cloudflare "$url_in"
 	    then
-		get_by_cloudflare "$url_in" html
+		get_location_by_cloudflare "$url_in" url_in_location
 
-		if [[ "$html" =~ [lL]{1}ocation.*\/http ]]
+		if url "$url_in_location"
 		then
-		    url_vcrypt=$(grep -P '[lL]{1}ocation.+\/http' <<< "$html")
-		    url_vcrypt="http${url_vcrypt#*\/http}"
-
-		elif [[ "$html" =~ [lL]{1}ocation ]]
-		then
-		    url_vcrypt=$(grep -P '[lL]{1}ocation.+http' <<< "$html")
-		    url_vcrypt="http${url_vcrypt#*http}"
+		    unset url_vcrypt
+		    replace_url_in "$url_in_location"
+		    
+		else
+		    get_by_cloudflare "$url_in" html
+		    
+		    if [[ "$html" =~ [lL]{1}ocation.*\/http ]]
+		    then
+			url_vcrypt=$(grep -P '[lL]{1}ocation.+\/http' <<< "$html")
+			url_vcrypt="http${url_vcrypt#*\/http}"
+			
+		    elif [[ "$html" =~ [lL]{1}ocation ]]
+		    then
+			url_vcrypt=$(grep -P '[lL]{1}ocation.+http' <<< "$html")
+			url_vcrypt="http${url_vcrypt#*http}"
+		    fi
 		fi
 	    fi
 	fi
@@ -228,7 +237,8 @@ then
 	    url "$url_vcrypt2" &&
 		replace_url_in "$url_vcrypt2" ||
 		    _log 2
-	else
+	elif [[ "$url_in" =~ vcrypt ]]
+	then
 	    _log 2
 	fi
     fi

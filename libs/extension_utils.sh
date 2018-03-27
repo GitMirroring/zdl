@@ -681,21 +681,29 @@ function get_by_cloudflare {
 
 	countdown- 6
 
-	curl                                                                                \
-	    -A "$user_agent"                                                                \
-	    -c "$path_tmp/cookies.zdl"                                                      \
-	    -D "$path_tmp/header2.zdl"                                                      \
-	    -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    	    -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-	    -H 'Accept-Encoding: "gzip, deflate"'                                           \
-	    -H "Referer: \"$url_in\""                                                       \
-	    -H "Cookie: \"${cookie_cloudflare}\""                                           \
-	    -H 'DNT: "1"'                                                                   \
-	    -H 'Connection: "keep-alive"'                                                   \
-	    -H 'Upgrade-Insecure-Requests: "1"'                                             \
-	    -d "$get_data"                                                                  \
-	    -G                                                                              \
-	    "http://$domain/cdn-cgi/l/chk_jschl" >/dev/null
+	for proto in http https
+	do
+	    curl                                                                                \
+		-A "$user_agent"                                                                \
+		-c "$path_tmp/cookies.zdl"                                                      \
+		-D "$path_tmp/header2.zdl"                                                      \
+		-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
+    		-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
+		-H 'Accept-Encoding: "gzip, deflate"'                                           \
+		-H "Referer: \"$url_in\""                                                       \
+		-H "Cookie: \"${cookie_cloudflare}\""                                           \
+		-H 'DNT: "1"'                                                                   \
+		-H 'Connection: "keep-alive"'                                                   \
+		-H 'Upgrade-Insecure-Requests: "1"'                                             \
+		-d "$get_data"                                                                  \
+		-G                                                                              \
+		"$proto://$domain/cdn-cgi/l/chk_jschl" >"$path_tmp"/cloudflare-output.html
+
+	    grep -s jschl_answer "$path_tmp"/cloudflare-output.html &&
+		break
+	       
+	done
+	
 
 	cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
 				   cut -d' ' -f2 |
