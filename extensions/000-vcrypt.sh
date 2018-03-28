@@ -210,34 +210,37 @@ then
 
 	if [[ "$url_vcrypt2" =~ opencryptz ]]
 	then
-	    if check_cloudflare "$url_vcrypt2"
-	    then
-		get_location_by_cloudflare "$url_vcrypt2" url_vcrypt2_location ||
-		    get_by_cloudflare "$url_vcrypt2" html
+	    while [[ "$url_vcrypt2" =~ (opencryptz|cloudflare) ]]
+	    do
+		if check_cloudflare "$url_vcrypt2"
+		then
+		    get_location_by_cloudflare "$url_vcrypt2" url_vcrypt2_location ||
+			get_by_cloudflare "$url_vcrypt2" html
 
-	    else
-		html=$(curl -A "$user_agent" "$url_vcrypt2")
-	    fi
+		else
+		    html=$(curl -A "$user_agent" "$url_vcrypt2")
+		fi
 
-	    if url "$url_vcrypt2_location"
-	    then
-		url_vcrypt2="$url_vcrypt2_location"
-		unset url_vcrypt2_location
+		if url "$url_vcrypt2_location"
+		then
+		    url_vcrypt2="$url_vcrypt2_location"
+		    unset url_vcrypt2_location
 
-	    else
-		url_vcrypt2=$(grep Download <<< "$html" |
-				 head -n1)
-	    fi
-	    
-	    url "$url_vcrypt2" ||
-		url_vcrypt2=$(grep -P '.+\"http[s]*\:[^"]+\".+' <<< "$html" |
-				     sed -r 's|.+\"(http[s]*:[^"]+)\".+|\1|g')
+		else
+		    url_vcrypt2=$(grep Download <<< "$html" |
+					 head -n1)
+		fi
+		
+		url "$url_vcrypt2" ||
+		    url_vcrypt2=$(grep -P '.+\"http[s]*\:[^"]+\".+' <<< "$html" |
+					 sed -r 's|.+\"(http[s]*:[^"]+)\".+|\1|g')
 
-	    if [[ "$url_vcrypt2" =~ http ]]
-	    then
-		url_vcrypt2="${url_vcrypt2##*http}"
-		url_vcrypt2="http${url_vcrypt2%%\"*}"
-	    fi
+		if [[ "$url_vcrypt2" =~ http ]]
+		then
+		    url_vcrypt2="${url_vcrypt2##*http}"
+		    url_vcrypt2="http${url_vcrypt2%%\"*}"
+		fi
+	    done
 	fi
 
 	
