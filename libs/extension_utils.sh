@@ -555,7 +555,8 @@ function extension_openload {
     if command -v phantomjs &>/dev/null
     then
 	html=$(curl -s "$url_in")
-	stream_id=$(grep 'id="streamur' <<< "$html")
+	# stream_id=$(grep 'id="streamur' <<< "$html")
+	stream_id=$(grep 'style="" class="" id="' <<< "$html")
 	stream_id="${stream_id%\"*}"
 	stream_id="${stream_id##*\"}"
 	

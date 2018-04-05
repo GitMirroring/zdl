@@ -38,7 +38,7 @@ id = match[1];
 
 page.settings.userAgent = 'Mozilla/5.0 (Linux; Android 6.0; LENNY3 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.132 Mobile Safari/537.36';
 
-page.open('https://openload.co/embed/' + id + '/', function(status) {
+page.open('https://openload.co/f/' + id + '/', function(status) {
     var stream_id = system.args[2];
     var info = page.evaluate(function(stream_id) {	
 	return {
