@@ -203,10 +203,22 @@ function scrape_url {
 
 	baseURL="${url_page%'/'*}"
 
-	html=$(curl -A "$user_agent" "$url_page"                      |
-		      tr "\t\r\n'" '   "'                             | 
-		      grep -i -o '<a[^>]\+href[ ]*=[ \t]*"[^"]\+"'    | 
-		      sed -e 's/^.*"\([^"]\+\)".*$/\1/g' 2>/dev/null)
+	if check_cloudflare "$url_page"
+	then
+	    get_by_cloudflare "$url_page" html
+	    
+	else
+	    html=$(curl -s -A "$user_agent" "$url_page")
+	fi
+
+	if [ -n "$html" ]
+	then
+	    html=$(tr "\t\r\n'" '   "' <<< "$html"                        | 
+			  grep -i -o '<a[^>]\+href[ ]*=[ \t]*"[^"]\+"'    | 
+			  sed -e 's/^.*"\([^"]\+\)".*$/\1/g' 2>/dev/null)
+	else
+	    return 1
+	fi
 
 	while read line
 	do
