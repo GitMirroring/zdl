@@ -118,10 +118,13 @@ then
 		if [ -n "$post_data" ] &&
 		       [ "$post_data" != '=' ]
 		then
-		    url_in_file=$(curl -s -d "$post_data" "${url_in}#")
+		    url_in_file=$(curl -s \
+				       -d "$post_data" \
+				       -H 'Upgrade-Insecure-Requests: "1"' \
+				       "${url_in}#")
 
 		else
-		    url_in_file=$(curl -s "${url_in}#")
+		    print_c 3 "Nessun post-data"
 		fi
 
 		#grep 'Direct Download Link' -C5 <<< "$url_in_file"
@@ -180,7 +183,7 @@ then
 
 	    if [ ! -f "$path_tmp"/filename_"$file_in".txt ] ||
 		   [ ! -f "$path_tmp"/url_in_wstreaming.txt ] ||
-		   ! grep -s "$url_in" "$path_tmp"/url_in_wstreaming.txt
+		   ! grep -q "$url_in" "$path_tmp"/url_in_wstreaming.txt
 	    then
 		print_c 1 "Verrà estratto anche il file di streaming con definizione migliore"
 		url_in_wstreaming=$(grep sources <<< "$html" |tail -n1)
