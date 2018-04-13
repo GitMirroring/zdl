@@ -180,7 +180,7 @@ then
 
 	    if [ ! -f "$path_tmp"/filename_"$file_in".txt ] ||
 		   [ ! -f "$path_tmp"/url_in_wstreaming.txt ] ||
-		   ! grep "$url_in" "$path_tmp"/url_in_wstreaming.txt
+		   ! grep -s "$url_in" "$path_tmp"/url_in_wstreaming.txt
 	    then
 		print_c 1 "Verrà estratto anche il file di streaming con definizione migliore"
 		url_in_wstreaming=$(grep sources <<< "$html" |tail -n1)
