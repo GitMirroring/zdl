@@ -673,7 +673,7 @@ then
     done
 fi
 ## se non è modalità interattiva, allora sono validi i comandi "standard"
-bindings
+#bindings
 
 
 if [[ "${args[*]}" =~ (--lite|-l) ]]
@@ -1488,13 +1488,7 @@ function main_loop {
 reset_exit
 
 function read_binding {
-    ## trap SIGINT ==> return
-    #export TMOUT=1
-    
-    #(( num_bind++ ))
-    #touch test-binding-$num_bind
     read -e -t 1 -n 1 binding_in_loop
-    #rm test-binding-$num_bind
 }
 
 
@@ -1526,8 +1520,10 @@ else
 	this_mode=lite
 
     cursor off
+    read -t 1
     bindings
-
+    set -m
+    
     [ "$this_mode" == "lite" ] && fclear
 
 
@@ -1543,11 +1539,6 @@ else
 
 	else
 	    read_binding
-	    # "$path_usr"/libs/read-binding.sh
-	    # [ -s "$path_tmp"/binding-in-loop ] &&
-	    # 	binding_in_loop=$(cat "$path_tmp"/binding-in-loop)
-	    #pid=$!
-	    #fg
 	    
 	    #jobs -l >jobs-list-$(date +%s)
 	fi

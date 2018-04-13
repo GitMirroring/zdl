@@ -50,15 +50,15 @@ if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
 then
     unset html html2 movie_definition
     
-    if [ -z "$(grep -v wstream "$path_tmp/links_loop.txt" &>/dev/null)" ]
-    then
-    	print_c 1 "Cookies cancellati"
-    	rm -rf "$path_tmp/cookies.zdl"           
-    fi
+    # if [ -z "$(grep -v wstream "$path_tmp/links_loop.txt" &>/dev/null)" ]
+    # then
+    # 	print_c 1 "Cookies cancellati"
+    # 	rm -rf "$path_tmp/cookies.zdl"           
+    # fi
 
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
-		--user-agent="Firefox"                           \
+		--user-agent="$user_agent"                       \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
 		-qO- -o /dev/null)
@@ -92,7 +92,7 @@ then
 		[ -n "$mode_stream_test" ] &&
 		    mode_stream="$mode_stream_test"
 
-		print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
+		#print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
 		
 		wstream_loops=0
 		while ! url "$url_in_file" &&
@@ -101,6 +101,10 @@ then
 		    ((wstream_loops++))
 		    html2=$(curl -s "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}")
 
+		    if [[ "$html" =~ (You can download files up) ]]
+		    then
+			break
+		    fi
 		    input_hidden "$html2"
 
 		    if [ -n "$post_data" ]
@@ -114,7 +118,7 @@ then
 		    url_in_file=$(grep 'Direct Download Link' <<< "$url_in_file" |
 					 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
-		    ((wstream_loops < 2)) && sleep 1
+		    ((wstream_loops < 2)) && countdown- 5
 		done
 
 		if ! url "$url_in_file" &&
@@ -151,15 +155,28 @@ then
 	if url "$url_in_file"
 	then
 	    url_in_file="${url_in_file//https\:/http:}"
-	    file_in="${url_in_file##*\/}"
-	    
+	    if [ -z "$file_in" ]
+	    then
+		file_in="${url_in_file##*\/}"
+	    fi
 	else
-	    unpacked=$(unpack "$html")
-	    url_in_file="${unpacked%.mp4*}.mp4"
-	    url_in_file="${url_in_file##*\"}"
+	    print_c 3 "Non è disponibile il filmato con definizione Original"
+	    url_in_file=$(grep sources <<< "$html" |tail -n1)
+	    url_in_file="${url_in_file#*\"}"
+	    url_in_file="${url_in_file%%\"*}"
+	    
+	    if [ -z "$file_in" ]
+	    then
+		file_in=$(grep -P "META.+description" <<< "$html")
+		file_in="${file_in%\"*}"
+		file_in="${file_in##*\"}"
+	    fi
+	    # unpacked=$(unpack "$html")
+	    # url_in_file="${unpacked%.mp4*}.mp4"
+	    # url_in_file="${url_in_file##*\"}"
 
-	    file_in="${unpacked#*'title:'\"}"
-	    file_in="${file_in%%\"*}"
+	    # file_in="${unpacked#*'title:'\"}"
+	    # file_in="${file_in%%\"*}"
 	fi
 
 	[ -z "$url_in_timer" ] &&

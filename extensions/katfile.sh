@@ -29,7 +29,8 @@
 ## zdl-extension name: Katfile
 
 
-if [ "$url_in" != "${url_in//katfile\.}" ]
+if [ "$url_in" != "${url_in//katfile\.}" ] &&
+       [[ ! "$url_in" =~ ':8080' ]]
 then
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
