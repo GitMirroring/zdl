@@ -30,16 +30,19 @@
 if [[ "$url_in" =~ (vidtome\.) ]]
 then
     html=$(curl -s "$url_in")
+
+    countdown- 5
+    
     input_hidden "$html"
     post_data="op=${post_data#*'&op='}"
-    
+
     link_parser "$url_in"
-    action_url="${parser_proto}${parser_domain}/play/${parser_path}"
+    action_url="${parser_proto}${parser_domain}/plays/${parser_path}"
 
-    url_in_file=$(curl -d "$post_data" "$action_url" 2>&1 |
-		      grep 'file:' |
-		      sed -r 's|.+\"([^"]+)\".+|\1|g')
-
+    url_in_file=$(curl -s -d "$post_data" "$action_url" 2>&1 |
+		      grep 'source: "' | sed -n 2p |
+		      sed -r 's|.+source: \"([^"]+)\".+|\1|g')
+    
     file_in=$(grep 'video-page-head' <<< "$html" |
 	   sed -r 's|.+>(.+)<.+|\1|g')."${url_in_file##*.}"
     
