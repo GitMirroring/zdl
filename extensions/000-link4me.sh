@@ -48,14 +48,16 @@ then
 	input_hidden "$html"
 
 	countdown- 10
-	curl -v \
-	     -A "$user_agent" \
-	     -b "$path_tmp/cookies.zdl" \
-	     -c "$path_tmp/cookies2.zdl" \
-	     -H 'DNT: "1"' \
-	     -H 'Connection: "keep-alive"' \
-	     http://link4.me/custom_theme/build/img/skip-ad.png 1>/dev/null  2>"$path_tmp/link4-header.txt"
+	# curl -v \
+	#      -A "$user_agent" \
+	#      -b "$path_tmp/cookies.zdl" \
+	#      -c "$path_tmp/cookies2.zdl" \
+	#      -H 'DNT: "1"' \
+	#      -H 'Connection: "keep-alive"' \
+	#      http://link4.me/custom_theme/build/img/skip-ad.png 1>/dev/null  2>"$path_tmp/link4-header.txt"
 
+	## la pagina principale dovrebbe generare altri valori nel cookie, forse con javascript: AdskeeperStorage: "..."; MarketGidStorage: "..."; ab: "1"
+	## gli stessi valori sono inviati anche per la richiesta di http://link4.me/custom_theme/build/img/skip-ad.png, come nella request qua sopra
 	curl -v \
 	     -A "$user_agent" \
 	     -b "$path_tmp/cookies2.zdl" \
