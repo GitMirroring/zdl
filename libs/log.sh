@@ -188,6 +188,10 @@ function _log {
 Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link dalla coda."
 	    set_link - "$url_in"
 	    ;;
+	38)
+	    msg="$url_in --> Servizio non supportato: usa il web browser per risolvere l'estrazione dell'URL del file"
+	    set_link - "$url_in"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]
