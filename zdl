@@ -673,7 +673,7 @@ then
     done
 fi
 ## se non è modalità interattiva, allora sono validi i comandi "standard"
-#bindings
+bindings
 
 
 if [[ "${args[*]}" =~ (--lite|-l) ]]
