@@ -673,7 +673,7 @@ then
     done
 fi
 ## se non è modalità interattiva, allora sono validi i comandi "standard"
-bindings
+#bindings
 
 
 if [[ "${args[*]}" =~ (--lite|-l) ]]
@@ -1181,6 +1181,9 @@ then
 
     if [ -z "$from_editor" ] && [ "$this_mode" != "daemon" ]
     then
+	read -t 0
+	bindings
+	read -t 0
 	binding=true
 	standard_box
 
@@ -1520,8 +1523,9 @@ else
 	this_mode=lite
 
     cursor off
-    read -t 1
+    read -t 0
     bindings
+    read -t 0
     set -m
     
     [ "$this_mode" == "lite" ] && fclear
