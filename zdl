@@ -673,8 +673,7 @@ then
     done
 fi
 ## se non è modalità interattiva, allora sono validi i comandi "standard"
-#bindings
-
+bindings
 
 if [[ "${args[*]}" =~ (--lite|-l) ]]
 then
@@ -1181,9 +1180,9 @@ then
 
     if [ -z "$from_editor" ] && [ "$this_mode" != "daemon" ]
     then
-	read -t 0
-	bindings
-	read -t 0
+	# read -t 0
+	# bindings
+	# read -t 0
 	binding=true
 	standard_box
 
@@ -1523,9 +1522,10 @@ else
 	this_mode=lite
 
     cursor off
-    read -t 0
-    bindings
-    read -t 0
+
+    ## sblocca read_binding, che non si temporizza con "-e" (serve un numero intero: perché?)
+    read -t 1
+
     set -m
     
     [ "$this_mode" == "lite" ] && fclear
@@ -1543,7 +1543,6 @@ else
 
 	else
 	    read_binding
-	    
 	    #jobs -l >jobs-list-$(date +%s)
 	fi
 

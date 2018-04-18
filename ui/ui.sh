@@ -268,7 +268,9 @@ function readline_links {
 	trap_sigint
 	read -e link
 	link=$(sanitize_url "$link")
-	set_link + "$link"
+
+	[ -n "$link" ] &&
+	    set_link + "$link"
 	unset break_loop
 
     done
