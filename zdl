@@ -1524,6 +1524,7 @@ else
     cursor off
 
     ## sblocca read_binding, che non si temporizza con "-e" (serve un numero intero: perché?)
+    bindings
     read -t 1
 
     set -m
