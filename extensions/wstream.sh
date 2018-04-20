@@ -68,10 +68,17 @@ then
 	_log 3
 
     else
-	download_video=$(grep -P 'download_video' <<< "$html" | head -n1)
+	download_video=$(grep -P "download_video.+'o'" <<< "$html" | head -n1)
 
-	if [ -n "$download_video" ]
+	if [ -z "$download_video" ]
 	then
+	    msg_wstream="File \"Original\" non disponibile: verrà estratto il file di streaming migliore"
+	    set_link - "$url_in"
+	    url_in_timer=true
+	    
+	else
+	    msg_wstream="Verrà estratto anche il file di streaming con definizione migliore"
+	    
 	    hash_wstream="${download_video%\'*}"
 	    hash_wstream="${hash_wstream##*\'}"
 
@@ -185,13 +192,14 @@ then
 		   [ ! -f "$path_tmp"/url_in_wstreaming.txt ] ||
 		   ! grep -q "$url_in" "$path_tmp"/url_in_wstreaming.txt
 	    then
-		print_c 1 "Verrà estratto anche il file di streaming con definizione migliore"
 		url_in_wstreaming=$(grep sources <<< "$html" |tail -n1)
 		url_in_wstreaming="${url_in_wstreaming#*\"}"
 		url_in_wstreaming="${url_in_wstreaming%%\"*}"
 		set_link + "$url_in_wstreaming"
 		echo "$url_in_wstreaming" >"$path_tmp"/filename_"$file_in".txt
 		echo "$url_in" >>"$path_tmp"/url_in_wstreaming.txt
+
+		print_c 1 "${msg_wstream} --> $url_in_wstreaming"
 	    fi
 	fi
 
