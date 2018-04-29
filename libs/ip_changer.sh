@@ -270,8 +270,8 @@ function new_ip_proxy {
 	print_c 1 "\nAggiorna proxy (${proxy_types[*]// /, }):"
 	
 	line=1
-	while [ -z "$proxy" ]
-	do		
+	# while [ -z "$proxy" ]
+	# do		
 	    if [ ! -s "$path_tmp/proxy.tmp" ]
 	    then
 		wget -q -t 1 -T 20                              \
@@ -315,7 +315,7 @@ function new_ip_proxy {
 	    [ -n "$proxy" ] &&
 		[ "${proxy_done[*]}" == "${proxy_done[*]//$proxy}" ] &&
 		proxy_done[${#proxy_done[*]}]="$proxy"
-	done
+	# done
 
 	(( $search_proxy >= 100 )) && break
 	unset search_proxy num_speed

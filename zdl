@@ -1430,7 +1430,7 @@ function main_loop {
 		fi
 
 		## temporaneo: da qualche tempo, wget genera file di log nelle subshell
-		## urge convertire inegralmente zdl all'uso di curl (conversione già avviata)
+		## urge convertire integralmente zdl all'uso di curl (conversione già avviata)
 		rm -f wget-log*
 		
 		#### DOWNLOAD ####
