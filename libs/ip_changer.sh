@@ -284,7 +284,10 @@ function new_ip_proxy {
 	    fi
 
 	    [ -s "$path_tmp/proxy.tmp" ] &&
-		$proxy_server ||
+		(
+		    (( line == $(wc -l < "$path_tmp/proxy.tmp") )) && line=1
+		    $proxy_server
+		) ||
 		    sleep 1
 
 	    for ((p=0; p<${#proxy_done[*]}; p++))
