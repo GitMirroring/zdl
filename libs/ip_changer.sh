@@ -96,13 +96,13 @@ function check_ip {
 
 function get_ip {
     declare -n real_ip="$1"
-    declare -n proxy_ip="$2"
+    declare -n proxy_address="$2"
 
     if [ -n "$2" ] && [ -s "$path_tmp"/proxy-active ]
     then
 	export http_proxy=$(cat "$path_tmp"/proxy-active)
 	
-	proxy_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
+	proxy_address=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
 	unset http_proxy
     fi
     
@@ -120,8 +120,6 @@ function ip_adress {
     local proxy_regex
     ## ip-adress.com
 
-    rm -f "$path_tmp/proxy2.tmp"
-
     for proxy_type in ${proxy_types[*]}
     do
 	case "$proxy_type" in
@@ -136,40 +134,87 @@ function ip_adress {
 		;;
 	esac
 	
-	grep "${proxy_regex}" "$path_tmp/proxy.tmp" -B1  |
+	grep "${proxy_regex}" "$path_tmp/proxy_page.html" -B1  |
 	    grep href |
-	    sed -r "s|.+>([^>]+)</a>([^<]+)<.+|\1\2:$proxy_type|g"  >> "$path_tmp/proxy2.tmp"
-	
+	    sed -r "s|.+>([^>]+)</a>([^<]+)<.+|\1\2:$proxy_type|g"  >> "$path_tmp/proxy_list.txt"	
     done
-
-    max=$(wc -l < "$path_tmp/proxy2.tmp")
-    string_line=$(sed -n "${line}p" "$path_tmp/proxy2.tmp")
-    
-    proxy="${string_line}"
-    [ "$proxy" != "${proxy%:Anonymous*}" ] && proxy_type="Anonymous"
-    [ "$proxy" != "${proxy%:Transparent*}" ] && proxy_type="Transparent"
-    [ "$proxy" != "${proxy%:Elite*}" ] && proxy_type="Elite"
-    proxy="${proxy%:${proxy_type}*}"
 }
 
 
 function proxy_list {
+    #### attualmente non ancora integrata nel più recente sistema
     ## proxy-list.org
+    
     for proxy_type in ${proxy_types[*]}
     do
-	html=$(grep -B 4 "${proxy_type}" "$path_tmp/proxy.tmp" |grep class)
+	html=$(grep -B 4 "${proxy_type}" "$path_tmp/proxy_page.html" |grep class)
     done
-    n=$(( $(wc -l <<< "$html")/4 ))
-    proxy_type=$(sed -n $(( ${line}*4 ))p <<< "$html")
-    proxy_type="${proxy_type%%'</'*}"
-    proxy_type="${proxy_type##*>}"
+    ## da fare:
+    ## sostituire $html con "$path_tmp"/proxy_list.txt: accodare in modo uniforme questi proxy con quelli dell'altro servizio
+    
 
-    proxy=$(sed -n $(( ${line}*4-3 ))p <<< "$html")
-    proxy="${proxy#*proxy\">}"
-    proxy="${proxy%<*}"
+    ## get_proxy proxy:
+    ##
+    # n=$(( $(wc -l <<< "$html")/4 ))
+    # proxy_type=$(sed -n $(( ${line}*4 ))p <<< "$html")
+    # proxy_type="${proxy_type%%'</'*}"
+    # proxy_type="${proxy_type##*>}"
+
+    # proxy=$(sed -n $(( ${line}*4-3 ))p <<< "$html")
+    # proxy="${proxy#*proxy\">}"
+    # proxy="${proxy%<*}"
 }
 
-function check_speed {	
+function get_proxy_list {
+    wget -q -t 1 -T 20                              \
+	 --user-agent="$user_agent"                 \
+	 ${list_proxy_url[$proxy_server]}           \
+	 -O "$path_tmp/proxy_page.html"             \
+	 -o /dev/null
+
+    print_c 4 "Ricerca lista proxy $proxy_server: ${list_proxy_url[$proxy_server]}"
+
+
+    if [ -s "$path_tmp/proxy_page.html" ]
+    then
+	$proxy_server
+    else
+	print_c 3 "Proxy non disponibili, riprovo più tardi"
+	break
+    fi
+}
+
+function get_proxy {
+    declare -n ref_address="$1"
+    declare -n ref_type="$2"
+    
+    local max=$(wc -l < "$path_tmp/proxy_list.txt")
+    local proxy_line=$(head -n1 "$path_tmp/proxy_list.txt")
+    
+    [[ "$proxy_line" =~ Anonymous ]] && ref_type="Anonymous"
+    [[ "$proxy_line" =~ Transparent ]] && ref_type="Transparent"
+    [[ "$proxy_line" =~ Elite ]] && ref_type="Elite"
+    
+    ref_address="${proxy_line%:${ref_type}*}"
+}
+
+function del_proxy {
+    local proxy_address="$1"
+    local proxy_type="$2"
+    if [ -s "$path_tmp/proxy_list.txt" ]
+    then
+	grep -v "${proxy_address}:${proxy_type}" "$path_tmp/proxy_list.txt" >"$path_tmp/proxy_list.temp"
+	mv "$path_tmp/proxy_list.temp" "$path_tmp/proxy_list.txt"
+    fi
+}
+
+function check_speed {
+    local maxspeed=0
+    local minspeed=25
+    local num_speed type_speed speed
+
+    local proxy_address="$1"
+    
     print_c 2 "\nTest velocità di download:"
 
     i=0
@@ -179,7 +224,10 @@ function check_speed {
 	#speed[$i]=$(wget -t 1 -T 60 -O /dev/null "http://indirizzo-ip.com/ip.php" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)' )
 	#speed[$i]=$(wget -t 1 -T $max_waiting -O /dev/null "$url_in" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)' )
 
-	wget -t 1 -T $max_waiting --user-agent="$user_agent" -O /dev/null "${list_proxy_url[$proxy_server]}" -o "$path_tmp"/speed-test-proxy
+	wget -t 1 -T $max_waiting \
+	     --user-agent="$user_agent" \
+	     -O /dev/null "$proxy_address" \
+	     -o "$path_tmp"/speed-test-proxy
 
 	speed[$i]=$(grep '\([0-9.]\+ [KM]B/s\)' "$path_tmp"/speed-test-proxy)
 	
@@ -241,9 +289,6 @@ function new_ip_proxy {
     export LANG="$prog_lang"
     export LANGUAGE="$prog_lang"
     
-    maxspeed=0
-    minspeed=25
-    unset speed type_speed search_proxy num_speed
     rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl"
 
     if [ -s "$path_tmp"/proxy ]
@@ -266,82 +311,45 @@ function new_ip_proxy {
     while true
     do
 	noproxy
-	unset proxy
+	unset proxy_address proxy_type
 	print_c 1 "\nAggiorna proxy (${proxy_types[*]// /, }):"
 	
 	line=1
 	# while [ -z "$proxy" ]
-	# do		
-	    if [ ! -s "$path_tmp/proxy.tmp" ]
-	    then
-		wget -q -t 1 -T 20                              \
-		     --user-agent="$user_agent"                 \
-		     ${list_proxy_url[$proxy_server]}           \
-		     -O "$path_tmp/proxy.tmp"                   \
-		     -o /dev/null
-
-		print_c 4 "Ricerca lista proxy $proxy_server: ${list_proxy_url[$proxy_server]}"
-	    fi
-
-	    [ -s "$path_tmp/proxy.tmp" ] &&
-		(
-		    (( line == $(wc -l < "$path_tmp/proxy.tmp") )) && line=1
-		    $proxy_server
-		) ||
-		    sleep 1
-
-	    for ((p=0; p<${#proxy_done[*]}; p++))
-	    do
-		[ "${proxy_done[$p]}" == "$proxy" ] &&
-		    unset proxy
-	    done
-	    
-	    if [ -z "$string_line" ]
-	    then
-		sleeping 3
-		(( search_proxy++ ))
-		
-		(( $search_proxy >= 100 )) &&
-		    print_c 3 "Finora nessun proxy disponibile: tentativo con proxy disattivato" &&
-		    noproxy &&
-		    break
-	    fi
-
-	    if (( "$line" >= "$max" )) ||
-		   [ -z "$string_line" ]
-	    then
-		rm -f "$path_tmp/proxy.tmp"
-		line=1
-	    fi
-	    
-	    [ -n "$line" ] && (( line++ ))
-	    [ -n "$proxy" ] &&
-		[ "${proxy_done[*]}" == "${proxy_done[*]//$proxy}" ] &&
-		proxy_done[${#proxy_done[*]}]="$proxy"
-	# done
-
-	(( $search_proxy >= 100 )) && break
-	unset search_proxy num_speed
+	# do
+	if [ ! -s "$path_tmp/proxy_list.txt" ]
+	then
+	    get_proxy_list
+	fi
+	get_proxy proxy_address proxy_type
 	
-	export http_proxy="$proxy"
+	export http_proxy="$proxy_address"
 	export https_proxy=$http_proxy
 	print_c 0 "Proxy: $http_proxy ($proxy_type)\n"
+	
+	del_proxy "$proxy_address" "$proxy_type"
 
-	unset myip
-	unset speed
+	if check_speed "$proxy_address"
+	then
+	    break
 
-	check_speed && break ||
-		show_downloads
-
+	elif [ ! -s "$path_tmp/proxy_list.txt" ]
+	then
+	    print_c 3 "Proxy attualmente non disponibile: tentativo con proxy disattivato"
+	    break
+	    
+	else
+	    show_downloads
+	fi
     done
-    unset maxspeed 
     
-    rm -f "$path_tmp/proxy.tmp"
+    [ ! -s "$path_tmp/proxy_list.txt" ] && rm -f "$path_tmp/proxy_list.txt"
 
     export LANG="$user_lang"
     export LANGUAGE="$user_language"
     print_c 4 "\nAvvio connessione: $url_in ..."
 }
+
 
 function set_temp_proxy {
     (( $# )) &&
