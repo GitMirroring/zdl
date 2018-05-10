@@ -192,6 +192,10 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
 	    msg="$url_in --> Servizio non supportato: usa il web browser per risolvere l'estrazione dell'URL del file"
 	    set_link - "$url_in"
 	    ;;
+	39)
+	    msg="$url_in --> Il tuo indirizzo IP è stato bannato dal server: impossibile raggiungere il file attraverso questo link" 
+	    set_link - "$url_in"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]
