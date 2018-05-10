@@ -25,6 +25,7 @@
 #
 
 #### change IP address
+ip_server_url="http://indirizzo-ip.com/ip.php"
 
 function newip_add_host {
     local host
@@ -102,15 +103,19 @@ function get_ip {
     then
 	export http_proxy=$(cat "$path_tmp"/proxy-active)
 	
-	proxy_address=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
+	proxy_address=$(wget -qO- -t1 -T20 "$ip_server_url" -o /dev/null)
 	unset http_proxy
     fi
     
-    real_ip=$(wget -qO- -t1 -T20 http://indirizzo-ip.com/ip.php -o /dev/null)
+    real_ip=$(wget -qO- -t1 -T20 "$ip_server_url" -o /dev/null)
 }
 
 
 function noproxy {
+    unset_proxy
+}
+
+function unset_proxy {
     unset http_proxy https_proxy
     export http_proxy https_proxy
 }
@@ -209,12 +214,11 @@ function del_proxy {
 }
 
 function check_speed {
+    ## $1 == url to test
     local maxspeed=0
     local minspeed=25
     local num_speed type_speed speed
 
-    local proxy_address="$1"
-    
     print_c 2 "\nTest velocità di download:"
 
     i=0
@@ -226,7 +230,7 @@ function check_speed {
 
 	wget -t 1 -T $max_waiting \
 	     --user-agent="$user_agent" \
-	     -O /dev/null "$proxy_address" \
+	     -O /dev/null "$1" \
 	     -o "$path_tmp"/speed-test-proxy
 
 	speed[$i]=$(grep '\([0-9.]\+ [KM]B/s\)' "$path_tmp"/speed-test-proxy)
@@ -288,6 +292,7 @@ function check_speed {
 function new_ip_proxy {
     export LANG="$prog_lang"
     export LANGUAGE="$prog_lang"
+    local test_url
     
     rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl"
 
@@ -314,9 +319,6 @@ function new_ip_proxy {
 	unset proxy_address proxy_type
 	print_c 1 "\nAggiorna proxy (${proxy_types[*]// /, }):"
 	
-	line=1
-	# while [ -z "$proxy" ]
-	# do
 	if [ ! -s "$path_tmp/proxy_list.txt" ]
 	then
 	    get_proxy_list
@@ -329,7 +331,10 @@ function new_ip_proxy {
 	
 	del_proxy "$proxy_address" "$proxy_type"
 
-	if check_speed "$proxy_address"
+	url "$url_in" && test_url="$url_in" ||
+		test_url="$ip_server_url"
+	
+	if check_speed "$test_url"
 	then
 	    break
 

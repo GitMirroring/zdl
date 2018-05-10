@@ -30,7 +30,7 @@
 if [ "$url_in" != "${url_in//rapidcrypt.net}" ]
 then
     html=$(curl -s "$url_in")
-    url_rapidcrypt=$(grep -P 'Click to continue' <<< "$html" |
+    url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
 			    sed -r 's|.+href=\"([^"]+)\".+|\1|g')
     replace_url_in "$url_rapidcrypt"    
 fi
