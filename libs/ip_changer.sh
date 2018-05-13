@@ -218,7 +218,8 @@ function check_speed {
     local maxspeed=0
     local minspeed=25
     local num_speed type_speed speed
-
+    local test_url="$1"
+    
     print_c 2 "\nTest velocità di download:"
 
     i=0
@@ -230,7 +231,7 @@ function check_speed {
 
 	wget -t 1 -T $max_waiting \
 	     --user-agent="$user_agent" \
-	     -O /dev/null "$1" \
+	     -O /dev/null "$test_url" \
 	     -o "$path_tmp"/speed-test-proxy
 
 	speed[$i]=$(grep '\([0-9.]\+ [KM]B/s\)' "$path_tmp"/speed-test-proxy)
@@ -331,7 +332,9 @@ function new_ip_proxy {
 	
 	del_proxy "$proxy_address" "$proxy_type"
 
-	url "$url_in" && test_url="$url_in" ||
+	url "$url_in" &&
+	    [[ "$url_in" =~ ^http ]] &&
+	    test_url="$url_in" ||
 		test_url="$ip_server_url"
 	
 	if check_speed "$test_url"
