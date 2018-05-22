@@ -97,10 +97,10 @@ function check_ip {
 
 function get_ip {
     declare -n real_ip="$1"
-    declare -n proxy_address="$2"
 
     if [ -n "$2" ] && [ -s "$path_tmp"/proxy-active ]
     then
+	declare -n proxy_address="$2"
 	export http_proxy=$(cat "$path_tmp"/proxy-active)
 	
 	proxy_address=$(wget -qO- -t1 -T20 "$ip_server_url" -o /dev/null)
