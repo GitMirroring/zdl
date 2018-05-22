@@ -847,9 +847,14 @@ then
 	if [ "${args[i]}" == '--ip' ]
 	then 
 	    unset args[i]
-	    get_ip myip proxyip
+	    get_ip myip
 	    print_c 0 "\n"
 	    separator-
+	    if [ -n "$http_proxy" ]
+	    then
+		print_c 1 "Rilevato proxy HTTP: $http_proxy"
+	    fi
+	    
 	    if [ -n "$myip" ]
 	    then
 		print_c 1 "Indirizzo IP: $myip"
