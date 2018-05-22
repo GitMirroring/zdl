@@ -847,7 +847,7 @@ then
 	if [ "${args[i]}" == '--ip' ]
 	then 
 	    unset args[i]
-	    get_ip myip
+	    get_ip myip proxyip
 	    print_c 0 "\n"
 	    separator-
 	    if [ -n "$myip" ]
