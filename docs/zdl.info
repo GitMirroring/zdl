@@ -477,11 +477,11 @@ player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
      Akvideo (HD), Auroravid/Novamov, Dailymotion, Deltabit (HD), Dplay
-     (HD), Exashare, Fastvideo, Flashx.tv, IDoWatch, La7 (HD),
-     Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla), Nowvideo,
-     Openload, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
-     Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare
-     (HD), Speedvideo (HD), Streamango, Streamin, Thevideo,
+     (HD), Exashare, Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano,
+     La7 (HD), Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla),
+     Nowvideo, Openload, Portalevideo.unimi.it, Putstream, RaiPlay
+     (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Thevideo,
      TubeOffLine.com (tutti i servizi: Biqle), Tutti i video in
      streaming di tipo .m3u8, VidABC, Vidce, Videowood, Vidhappy
      (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
@@ -500,8 +500,8 @@ _Link generati dal web (anche dopo captcha):_
      ed altri servizi 
 
 _Short links:_
-     bc.vc, cb01, cinemalibero, linkup, Masklink, q.gs, Rapidcrypt,
-     Shortlink, swzz.xyz, vcrypt
+     4snip, bc.vc, cb01, cinemalibero, link4.me, linkup, Masklink,
+     q.gs, Rapidcrypt, Shortlink, swzz.xyz, vcrypt
 
 _Tutti i file scaricabili con le seguenti estensioni dei browser:_
      _Flashgot_ di _Firefox/Iceweasel/Icecat_, funzione `M-x zdl' di
@@ -1352,25 +1352,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL6602
 Node: Servizi streaming/hosting14007
-Node: Avviare ZDL17933
-Node: Arrestare ZDL20369
-Node: Controllare i download21474
-Node: Manuali d'uso25765
-Node: Modi26181
-Node: Readline29447
-Node: Editor30999
-Node: Omonimie32224
-Node: IRC/XDCC33759
-Node: Torrent35449
-Node: Filtri36333
-Node: Creare nuove estensioni36654
-Node: Software consigliati38416
-Node: Conkeror39817
-Node: zdl-xterm e XXXTerm/Xombrero40828
-Node: Installazione e aggiornamento42752
-Node: Tags45787
-Node: Copying48588
-Node: Contatti49638
+Node: Avviare ZDL17969
+Node: Arrestare ZDL20405
+Node: Controllare i download21510
+Node: Manuali d'uso25801
+Node: Modi26217
+Node: Readline29483
+Node: Editor31035
+Node: Omonimie32260
+Node: IRC/XDCC33795
+Node: Torrent35485
+Node: Filtri36369
+Node: Creare nuove estensioni36690
+Node: Software consigliati38452
+Node: Conkeror39853
+Node: zdl-xterm e XXXTerm/Xombrero40864
+Node: Installazione e aggiornamento42788
+Node: Tags45823
+Node: Copying48624
+Node: Contatti49674
 
 End Tag Table
 
