@@ -90,7 +90,13 @@ function _log {
 	    set_link - "$url_in"
 	    ;;
 	12)
-	    msg="$2 --> Non è un URL adatto per $name_prog\n"
+	    if [ -n "$2" ]
+	    then
+		msg="$2 --> Non è un URL adatto per $name_prog\n"
+
+	    else
+		msg="URL non trovato"
+	    fi
 	    set_link - "$2"
 	    ;;
 	13)
