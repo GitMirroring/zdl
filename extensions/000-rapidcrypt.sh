@@ -33,8 +33,9 @@ then
     then
 	get_by_cloudflare "$url_in" html
     else
-        html=$(curl -s "$url_in")
+	html=$(curl -s "$url_in")
     fi
+
     url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
 			    sed -r 's|.+href=\"([^"]+)\".+|\1|g')
     replace_url_in "$url_rapidcrypt"    
