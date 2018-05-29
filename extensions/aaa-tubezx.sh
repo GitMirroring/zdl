@@ -1,1 +1,0 @@
-/home/zoninoz/.zdl/extensions/aaa-tubezx.sh
