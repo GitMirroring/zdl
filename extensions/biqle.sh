@@ -23,30 +23,9 @@
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
 #
-## ZDL add-on
-## zdl-extension types: streaming
-## zdl-extension name: IlFattoQuotidiano
 
 
-if [[ "$url_in" =~ ilfattoquotidiano ]]
+if [[ "$url_in" =~ biqle ]]
 then
-    html=$(curl -s "$url_in")
-    url_in_file=$(grep 'playlist: \[' <<< "$html" |
-			 sed -r 's|.+\":\"([^"]+\.m3u8)\".+|\1|g' |
-			 tr -d '\\' | head -n1)
-    print_c 4 "$url_in_file"
-    
-    if url "$url_in_file"
-    then
-	url_in_file=$(curl -s "$url_in_file" |
-			     grep http |
-			     head -n1)
-	print_c 4 "$url_in_file"
-    fi
-    
-    file_in=$(get_title "$html")
-
-    end_extension
+    biqle_data=$(/usr/bin/phantomjs "$path_usr"/extensions/biqle-phantomjs.js "$url_in")
 fi
-									   
-

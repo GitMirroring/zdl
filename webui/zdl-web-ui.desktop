@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[it]=
 Comment=
-Exec=zdl --web-ui
+Exec=zdl --web-ui "/home/zoninoz/downloads"
 GenericName[it]=ZigzagDownLoader --web-ui
 GenericName=ZigzagDownLoader --web-ui
 Icon=/usr/local/share/zdl/webui/zdl.png
