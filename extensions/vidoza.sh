@@ -36,7 +36,8 @@ then
 		"$url_in" \
 		2>&1)
 
-    if ! grep -q 'source src=' <<< "$html"
+    if ! grep -q 'source src=' <<< "$html" &&
+	    [[ ! "$url_in" =~ embed ]]
     then
     	link_parser "$url_in"
 	replace_url_in "$parser_proto$parser_domain"/embed-"${parser_path%.html}".html
