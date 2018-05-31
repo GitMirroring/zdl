@@ -472,22 +472,23 @@ function extension_uptobox {
     unset post_data
     input_hidden "$html" #### $file_in == POST[fname]
 
-    countdown- 30
+    if [ "$post_data" != '=' ]
+    then
+	countdown- 30
 
-    html=$(curl -s                              \
-		-b "$path_tmp"/cookies0.zdl     \
-		-c "$path_tmp"/cookies.zdl      \
-		-d "$post_data"                 \
-		-A "$user_agent"                \
-		"$url_in")
-    
+	html=$(curl -s                              \
+		    -b "$path_tmp"/cookies0.zdl     \
+		    -c "$path_tmp"/cookies.zdl      \
+		    -d "$post_data"                 \
+		    -A "$user_agent"                \
+		    "$url_in")
+    fi
+
     url_in_file=$(grep "Click here to start your download" -B1 <<< "$html" |
 			 head -n1                                          |
 			 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
     unset post_data
-
-    url_in_file=$(sanitize_url "$url_in_file")
 }
 
 function extension_mega {
