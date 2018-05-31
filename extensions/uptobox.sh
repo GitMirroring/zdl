@@ -28,7 +28,7 @@
 ## zdl-extension name: Uptobox
 
 
-if [ "$url_in" != "${url_in//uptobox.}" ]
+if [[ "$url_in" =~ uptobox\. && ! "$url_in" =~ \/dl\/ ]]
 then
     extension_uptobox "$url_in"
 
@@ -44,4 +44,6 @@ then
     else
 	axel_parts=2
     fi
+
+    end_extension
 fi   

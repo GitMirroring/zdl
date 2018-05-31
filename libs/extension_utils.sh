@@ -50,11 +50,17 @@ function input_hidden {
 	for ((i=1; i<=$(wc -l <<< "$datatmp"); i++))
 	do
 	    data=$(sed -n "${i}p" <<< "$datatmp" |grep name)
-	    name=${data#*name=\"}
+	    name=${data#*name=}
+	    name=${name#\"}
+	    name=${name#\'}
 	    name=${name%%\"*}
+	    name=${name%%\'*}
 
-	    value=${data#*value=\"}
+	    value=${data#*value=}
+	    value=${value#\"}
+	    value=${value#\'}
 	    value=${value%%\"*}
+	    value=${value%%\'*}
 
 	    [ -n "$name" ] && eval postdata_$name=\"${value}\"
 	    
@@ -443,14 +449,12 @@ function extension_uptobox {
     local url_in="$1"
     local html post_data
     
-    html=$(wget -t 2 -T $max_waiting                      \
-		-qO-                                      \
-		--retry-connrefused                       \
-		--keep-session-cookies                    \
-		--save-cookies="$path_tmp"/cookies.zdl    \
-		--user-agent="$user_agent"                \
-		"$url_in"                                 \
-		-o /dev/null)
+    html=$(curl -s                             \
+		-c "$path_tmp"/cookies0.zdl    \
+		-A "$user_agent"               \
+		"$url_in")
+
+    file_in=$(get_title "$html")
 
     if [[ "$html" =~ (File not found) ]]
     then
@@ -467,18 +471,18 @@ function extension_uptobox {
 
     unset post_data
     input_hidden "$html" #### $file_in == POST[fname]
-    sleep 2    
-    html2=$(wget -t 2 -T $max_waiting                        \
-		 -qO-                                        \
-		 --load-cookies="$path_tmp"/cookies.zdl      \
-		 --save-cookies="$path_tmp"/cookies2.zdl     \
-		 --post-data="$post_data"                    \
-		 --user-agent="$user_agent"                  \
-		 "$url_in"                                   \
-		 -o /dev/null)
 
-    url_in_file=$(grep "Click here to start your download" -B2 <<< "$html2" |
-			 head -n1                                           |
+    countdown- 30
+
+    html=$(curl -s                              \
+		-b "$path_tmp"/cookies0.zdl     \
+		-c "$path_tmp"/cookies.zdl      \
+		-d "$post_data"                 \
+		-A "$user_agent"                \
+		"$url_in")
+    
+    url_in_file=$(grep "Click here to start your download" -B1 <<< "$html" |
+			 head -n1                                          |
 			 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
     unset post_data
