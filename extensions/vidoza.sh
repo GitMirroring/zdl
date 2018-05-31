@@ -36,6 +36,16 @@ then
 		"$url_in" \
 		2>&1)
 
+    if ! grep -q 'source src=' <<< "$html"
+    then
+    	link_parser "$url_in"
+	replace_url_in "$parser_proto$parser_domain"/embed-"${parser_path%.html}".html
+	html=$(curl -v \
+		    -A "$user_agent" \
+		    "$url_in" \
+		    2>&1)	
+    fi
+
     if [[ "$html" =~ (Video is processing now) ]]
     then
 	_log 17
@@ -45,10 +55,10 @@ then
 	_log 3
 	
     else
-	url_in_file=$(grep sources <<< "$html")
-	url_in_file="${url_in_file#*file:\"}"
+	url_in_file=$(grep 'source src=' <<< "$html")
+	url_in_file="${url_in_file#*\"}"
 	url_in_file="${url_in_file%%\"*}"
-
+	
 	file_in=$(grep 'var curFileName' <<< "$html")
 	file_in="${file_in#*\"}"
 	file_in="${file_in%%\"*}"
