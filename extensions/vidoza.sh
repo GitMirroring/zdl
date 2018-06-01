@@ -36,7 +36,7 @@ then
 		"$url_in" \
 		2>&1)
 
-    if ! grep -q 'source src=' <<< "$html" &&
+    if ! grep -qP '(source src=|sources: )' <<< "$html" &&
 	    [[ ! "$url_in" =~ embed ]]
     then
     	link_parser "$url_in"
@@ -59,6 +59,13 @@ then
 	url_in_file=$(grep 'source src=' <<< "$html")
 	url_in_file="${url_in_file#*\"}"
 	url_in_file="${url_in_file%%\"*}"
+
+	if ! url "$url_in_file"
+	then
+	    url_in_file=$(grep 'sources: ' <<< "$html")
+	    url_in_file="${url_in_file#*\"}"
+	    url_in_file="${url_in_file%%\"*}"
+	fi
 	
 	file_in=$(grep 'var curFileName' <<< "$html")
 	file_in="${file_in#*\"}"
