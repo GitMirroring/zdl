@@ -29,14 +29,29 @@
 
 if [ "$url_in" != "${url_in//rapidcrypt.net}" ]
 then
-    if check_cloudflare "$url_in"
-    then
-	get_by_cloudflare "$url_in" html
-    else
-	html=$(curl -s "$url_in")
-    fi
+    for i in 0 1
+    do
+	if check_cloudflare "$url_in"
+	then
+	    get_by_cloudflare "$url_in" html
+	    
+	else
+	    html=$(curl -s "$url_in")
+	fi
 
-    url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
-			    sed -r 's|.+href=\"([^"]+)\".+|\1|g')
-    replace_url_in "$url_rapidcrypt"    
+	url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
+				sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+
+	if ! url "$url_rapidcrypt"
+	then
+	    url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
+				    sed -r 's|.+href=([^>]+)>.+|\1|g')
+	fi
+	
+	if url "$url_rapidcrypt"
+	then
+	    replace_url_in "$url_rapidcrypt"
+	    break
+	fi
+    done
 fi
