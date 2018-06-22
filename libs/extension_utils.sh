@@ -462,9 +462,9 @@ function extension_uptobox {
 	return 1
     fi
 
-    if [[ "$html" =~ 'you can wait '([0-9]+) ]]
+    if [[ "$html" =~ 'you can wait '([0-9]+)' hours '([0-9]+)' minutes '([0-9]+)' seconds' ]]
     then
-	url_in_timer=$((${BASH_REMATCH[1]} * 60))
+	url_in_timer=$((${BASH_REMATCH[1]} * 60 * 60 + ${BASH_REMATCH[2]} * 60 + ${BASH_REMATCH[3]}))
 	set_link_timer "$url_in" $url_in_timer
 	_log 33 $url_in_timer
     fi
