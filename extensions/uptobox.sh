@@ -30,20 +30,21 @@
 
 if [[ "$url_in" =~ uptobox\. && ! "$url_in" =~ \/dl\/ ]]
 then
-    extension_uptobox "$url_in"
-
-    if ! url "$url_in_file" ||
-	    [ "$url_in_file" == "$url_in" ]
+    if extension_uptobox "$url_in"
     then
-	if [[ "$html" =~ (File not found) ]]
+	if ! url "$url_in_file" ||
+		[ "$url_in_file" == "$url_in" ]
 	then
-    	    _log 3
+	    if [[ "$html" =~ (File not found) ]]
+	    then
+    		_log 3
+	    else
+    		_log 2
+	    fi
 	else
-    	    _log 2
+	    axel_parts=2
 	fi
-    else
-	axel_parts=2
-    fi
 
-    end_extension
+	end_extension
+    fi
 fi   

@@ -490,6 +490,7 @@ function extension_uptobox {
 			 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 
     unset post_data
+    return 0
 }
 
 function extension_mega {
