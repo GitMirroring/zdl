@@ -470,6 +470,12 @@ then
 		    file_in="${file_in2%%\"*}.$ext"
 	    fi
 
+	    if [ ! -d "$directory" ] &&
+		   command -v zenity &>/dev/null
+	    then
+		directory=$(zenity --file-selection --directory 2>/dev/null)
+	    fi
+	    
 	    cd "$directory"
 	    mkdir -p "${path_tmp}"
 	    
