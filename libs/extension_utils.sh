@@ -478,7 +478,7 @@ function extension_uptobox {
 
     elif [[ "$html" =~ 'you can wait '([0-9]+)' seconds' ]]
     then
-	url_in_timer=$((${BASH_REMATCH[1]}))
+	url_in_timer=${BASH_REMATCH[1]}
 	set_link_timer "$url_in" $url_in_timer
 	_log 33 $url_in_timer
 	return 1
