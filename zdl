@@ -471,6 +471,12 @@ then
 	    fi
 
 	    if [ ! -d "$directory" ] &&
+		   command -v yad &>/dev/null
+	    then
+		directory=$(yad --file-selection --directory 2>/dev/null)
+	    fi
+
+	    if [ ! -d "$directory" ] &&
 		   command -v zenity &>/dev/null
 	    then
 		directory=$(zenity --file-selection --directory 2>/dev/null)
