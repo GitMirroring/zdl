@@ -470,6 +470,9 @@ then
 		    file_in="${file_in2%%\"*}.$ext"
 	    fi
 
+	    test -s /tmp/zigzagdownloader-dirbase &&
+		cd $(cat /tmp/zigzagdownloader-dirbase)
+	    
 	    if [ ! -d "$directory" ] &&
 		   command -v yad &>/dev/null
 	    then
@@ -481,7 +484,8 @@ then
 	    then
 		directory=$(zenity --file-selection --directory 2>/dev/null)
 	    fi
-	    
+
+	    echo "$directory" >/tmp/zigzagdownloader-dirbase
 	    cd "$directory"
 	    mkdir -p "${path_tmp}"
 	    
