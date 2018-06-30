@@ -1522,8 +1522,6 @@ then
     done 
 
 else
-
-else
     if [ "$lite_mode" == true ] ||
 	   [ "$this_mode" == lite ]
     then
