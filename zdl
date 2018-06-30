@@ -471,23 +471,17 @@ then
 	    fi
 
 	    test -s /tmp/zigzagdownloader-dirbase &&
-		cd $(cat /tmp/zigzagdownloader-dirbase)
+		cd $(cat /tmp/zigzagdownloader-dirbase) ||
+		    cd "$HOME"
 	    
-	    if [ ! -d "$directory" ] &&
-		   command -v yad &>/dev/null
+	    if [ ! -d "$directory" ]
 	    then
-		directory=$(yad --file-selection --directory 2>/dev/null)
-	    fi
-
-	    if [ ! -d "$directory" ] &&
-		   command -v zenity &>/dev/null
-	    then
-		directory=$(zenity --file-selection --directory 2>/dev/null)
+		get_downloadpath directory
 	    fi
 
 	    echo "$directory" >/tmp/zigzagdownloader-dirbase
 	    cd "$directory"
-	    mkdir -p "${path_tmp}"
+	    mkdir -p "$path_tmp"
 	    
 	    if [ -e "$cfile" ]
 	    then
@@ -511,6 +505,7 @@ then
 		else
 		    $prog "$url_in" $stream_params --stop
 		fi
+		
 	    else
 		xterm -tn "xterm-256color"                                                                          \
 		      -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"                                       \

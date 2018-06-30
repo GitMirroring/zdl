@@ -288,3 +288,16 @@ function quit_clear {
 	    ;;
     esac
 }
+
+function get_downloadpath {
+    declare -n ref="$1"
+    
+    if command -v yad &>/dev/null
+    then
+	ref=$(yad --file-selection --directory --centre --width=700 --height=500 2>/dev/null)
+	
+    elif command -v zenity &>/dev/null
+    then
+	ref=$(zenity --file-selection --directory 2>/dev/null)
+    fi
+}
