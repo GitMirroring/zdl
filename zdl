@@ -570,7 +570,7 @@ then
 		
 		date +%s >"$path_tmp"/.date_daemon
 
-		nohup /bin/bash zdl ${args[*]} --silent "$PWD" &>/dev/null &
+		nohup /bin/bash zdl ${args[*]} --silent "$PWD" & #>/dev/null &
 		
 		print_c 4 "${name_prog}:       "
 		print_c 1 "Avviato in modalità demone in $PWD\n"
@@ -1247,7 +1247,7 @@ function main_loop {
 	   [ -z "$lite_mode" ]	
     then
     	start_file="$path_tmp/links_loop.txt"
-   	sleep 10
+   	sleep 5
 	post_process
 
     elif zero_dl
@@ -1496,11 +1496,14 @@ function main_loop {
 	    unset break_loop post_data not_available exceeded
 	done 
 
-	touch "$path_tmp"/stop-binding
-	while [ -f "$path_tmp"/stop-binding ]
-	do
-	    sleep 0.1
-	done
+	if [ "$this_mode" != "daemon" ]
+	then
+	    touch "$path_tmp"/stop-binding
+	    while [ -f "$path_tmp"/stop-binding ]
+	    do
+		sleep 0.1
+	    done
+	fi
     fi
 }
 
@@ -1515,9 +1518,11 @@ if [ "$this_mode" == "daemon" ]
 then
     while true
     do
-	main_loop || break
-    done
-    
+	main_loop &>/dev/null || break
+    done 
+
+else
+
 else
     if [ "$lite_mode" == true ] ||
 	   [ "$this_mode" == lite ]
@@ -1553,12 +1558,14 @@ else
 	    [ -s "$path_tmp/links_loop.txt" ] 
     do
 	echo "$COLUMNS" > "$path_tmp"/columns
+
+	
 	
 	if [ "$this_mode" == "lite" ]
-	then
+	then	    
 	    show_downloads_lite
 	    read_binding 
-
+	    
 	else
 	    read_binding
 	    #jobs -l >jobs-list-$(date +%s)
