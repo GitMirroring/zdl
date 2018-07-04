@@ -583,7 +583,8 @@ function extension_openload {
 	
 	openload_data=$(/usr/bin/phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in" "$stream_id")
 	url_in_file=$(head -n1 <<< "$openload_data")
-	file_in=$(tail -n1 <<< "$openload_data")
+	#file_in=$(tail -n1 <<< "$openload_data")
+	file_in=$(get_title "$html")
 	sanitize_file_in
 	
     else
