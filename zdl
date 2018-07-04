@@ -185,8 +185,8 @@ then
 	if [[ "${args[i]}" =~ ^(-u|--update)$ ]]
 	then
 	    unset args[i]
-	    unset autoupdate
 	fi
+	unset autoupdate
     done
 fi    
        
