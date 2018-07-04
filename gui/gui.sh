@@ -479,7 +479,6 @@ function get_GUI_ID {
 function run_gui {
     prog=zdl
     path_tmp=".${prog}_tmp"
-#    quit_last
     
     path_usr="/usr/local/share/${prog}"
     start_file="$path_tmp"/links_loop.txt
@@ -505,19 +504,22 @@ function run_gui {
     then
 	for ((i=0; i<${#ARGV[@]}; i++))
 	do
-	    test -s /tmp/zigzagdownloader-dirbase &&
-		cd $(cat /tmp/zigzagdownloader-dirbase) ||
-		    cd "$HOME"
-	    
-	    if [ ! -d "$directory" ]
+	    if [[ "${ARGV[i]}" =~ ^(--path-gui)$ ]]
 	    then
-		get_download_path directory
+		test -s /tmp/zigzagdownloader-dirbase &&
+		    cd $(cat /tmp/zigzagdownloader-dirbase) ||
+			cd "$HOME"
+		
+		if [ ! -d "$directory" ]
+		then
+		    get_download_path directory
+		fi
+
+		echo "$directory" >/tmp/zigzagdownloader-dirbase
+		cd "$directory"
+
+		unset ARGV[i]
 	    fi
-
-	    echo "$directory" >/tmp/zigzagdownloader-dirbase
-	    cd "$directory"
-
-	    unset ARGV[i]
 	done
     fi
     
