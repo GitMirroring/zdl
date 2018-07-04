@@ -43,12 +43,12 @@ page.open('https://openload.co/f/' + id + '/', function(status) {
     var info = page.evaluate(function(stream_id) {	
 	return {
 	    decoded_id: document.getElementById(stream_id).innerHTML, 
-	    title: document.querySelector('meta[name="og:title"],'
-					  + 'meta[name=description]').content
+	    title_file: document.querySelector('meta[name="og:title"],'
+					       + 'meta[name=description]').content
 	};
     }, stream_id);
     var url = 'https://openload.co/stream/' + info.decoded_id + '?mime=true';
-    console.log(url + separator + info.title);
+    console.log(url + separator + info.title_file);
     phantom.exit();
 });
 
