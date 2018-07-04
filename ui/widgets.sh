@@ -71,9 +71,12 @@ function print_c {
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	       [ -n "$redirected_link" ]
     then
-	print_case "$1"
-	
-	echo -ne "$2\n"
+	print_case "$1" 
+
+	################## test: salviamo in un file log una parte dell'output da usare in altre UI: 
+	echo -ne "$2\n" |
+	    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" | sed -r 's|^$||g' | tee -a "$path_tmp"/log_term.txt 2>/dev/null
+
 	[ -z "$3" ] &&
 	    echo -ne "${Color_Off}" ||
 		print_case "$3"
@@ -289,15 +292,3 @@ function quit_clear {
     esac
 }
 
-function get_downloadpath {
-    declare -n ref="$1"
-    
-    if command -v yad &>/dev/null
-    then
-	ref=$(yad --file-selection --directory --centre --width=700 --height=500 2>/dev/null)
-	
-    elif command -v zenity &>/dev/null
-    then
-	ref=$(zenity --file-selection --directory 2>/dev/null)
-    fi
-}

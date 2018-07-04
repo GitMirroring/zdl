@@ -605,3 +605,7 @@ function seconds_to_human {
 	return 1
     fi
 }
+
+function discolour {
+    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" <<< "$1"
+}

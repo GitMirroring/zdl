@@ -202,6 +202,9 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
 	    msg="$url_in --> Il tuo indirizzo IP è stato bannato dal server: impossibile raggiungere il file attraverso questo link" 
 	    set_link - "$url_in"
 	    ;;
+	40)
+	    msg="Impossibile avviare la GUI: è necessario installare yad"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]

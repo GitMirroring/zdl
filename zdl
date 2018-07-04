@@ -32,6 +32,7 @@ source $path_usr/config_manager.sh
 
 source $path_usr/ui/widgets.sh
 source $path_usr/ui/ui.sh
+source $path_usr/gui/gui.sh
 
 source $path_usr/libs/core.sh
 source $path_usr/libs/downloader_manager.sh
@@ -177,21 +178,18 @@ then
     done
 fi
 
-
-if [ "${args[*]}" != "${args[*]//--web-ui}" ]
+if [[ "${args[*]}" =~ (-g|--silent) ]]
 then
     for ((i=0; i<=$max_args; i++))
     do
-	if [ "${args[i]}" == '--web-ui' ]
+	if [[ "${args[i]}" =~ ^(-u|--update)$ ]]
 	then
 	    unset args[i]
-	    run_web_client "${args[@]}" 
-	    exit
+	    unset autoupdate
 	fi
     done
-fi
-    
-
+fi    
+       
 if [ "${args[*]}" != "${args[*]//--update}" ] ||
        [ "${args[*]}" != "${args[*]//-u}" ]
 then
@@ -241,6 +239,36 @@ then
 	fi
     done
 fi
+
+if [[ "${args[*]}" =~ (--gui|-g) ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
+	then
+	    unset args[i]
+	    exec 0<&-
+	    run_gui "${args[@]}" &>/dev/null &
+	    disown
+	    exit
+	fi
+    done
+fi
+
+
+if [ "${args[*]}" != "${args[*]//--web-ui}" ]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [ "${args[i]}" == '--web-ui' ]
+	then
+	    unset args[i]
+	    run_web_client "${args[@]}" 
+	    exit
+	fi
+    done
+fi
+    
 
 
 if [ "${args[*]}" == "${args[*]//--silent}" ] &&
@@ -363,7 +391,7 @@ then
 	    unset args[i]
 	    this_mode="daemon"
 	    ## this_tty= importato da zdl --daemon
-	    sleeping_pause=5
+	    sleeping_pause=3
 
 	    if [ "$(urldecode ${args[i+1]})" == "$PWD" ]
 	    then
@@ -419,6 +447,7 @@ then
 	    then
 		export DISPLAY=":0"
 	    fi
+	    
 	    url_in="$2"
 	    url_in="${url_in// /20%}"	    
 	    test_dir_3="$3"
@@ -476,7 +505,7 @@ then
 	    
 	    if [ ! -d "$directory" ]
 	    then
-		get_downloadpath directory
+		get_download_path directory
 	    fi
 
 	    echo "$directory" >/tmp/zigzagdownloader-dirbase
@@ -505,6 +534,11 @@ then
 		else
 		    $prog "$url_in" $stream_params --stop
 		fi
+
+	    elif [[ "${args[*]}" =~ '--gui' ]]
+	    then
+	    	#export pid_prog=$$
+	    	nohup $prog "${args[@]}" &>/dev/null &
 		
 	    else
 		xterm -tn "xterm-256color"                                                                          \
@@ -570,7 +604,7 @@ then
 		
 		date +%s >"$path_tmp"/.date_daemon
 
-		nohup /bin/bash zdl ${args[*]} --silent "$PWD" & #>/dev/null &
+		nohup /bin/bash zdl ${args[*]} --silent "$PWD" &>/dev/null &
 		
 		print_c 4 "${name_prog}:       "
 		print_c 1 "Avviato in modalità demone in $PWD\n"
@@ -698,6 +732,18 @@ then
 	fi
     done
 fi
+
+# if [[ "${args[*]}" =~ (--gui|-g) ]]
+# then
+#     for ((i=0; i<=$max_args; i++))
+#     do
+# 	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
+# 	then
+# 	    this_mode=gui
+# 	    unset args[i]
+# 	fi
+#     done
+# fi
 
 
 if ! check_instance_prog &&
@@ -1194,22 +1240,25 @@ then
 	echo "$pid_prog" > "$path_tmp/.pid.zdl"
     fi
 
-    if [ -z "$from_editor" ] && [ "$this_mode" != "daemon" ]
+    if [ -z "$from_editor" ] 
     then
-	# read -t 0
-	# bindings
-	# read -t 0
-	binding=true
-	standard_box
+	if [ "$this_mode" != "daemon" ]
+	then
+	    # read -t 0
+	    # bindings
+	    # read -t 0
+	    binding=true
+	    standard_box
 
-	bindings
-	readline_links
- 	#stty -echo
+	    bindings
+	    readline_links
+ 	    #stty -echo
 
-	post_readline=true
-	
-	bind -x "\"\ex\":\"\"" 2>/dev/null
-	bind -x "\"\C-x\":\"\"" 2>/dev/null	
+	    post_readline=true
+	    
+	    bind -x "\"\ex\":\"\"" 2>/dev/null
+	    bind -x "\"\C-x\":\"\"" 2>/dev/null
+	fi
     fi
     
     if [ -f "$start_file" ]
@@ -1229,7 +1278,7 @@ if check_instance_daemon &&
 	[ "$this_mode" != "daemon" ] ||
 	    check_instance_prog	    
 then
-    redirect_links 
+    redirect_links
 
 else
     echo "$pid_prog" > "$path_tmp/.pid.zdl"
