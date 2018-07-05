@@ -251,7 +251,8 @@ function get_links_gui {
 		  --image="gtk-execute" \
 		  --borders=5 \
 		  --window-icon="$ICON" \
-		  --text="<b>Modifica la lista dei link da cui avviare lo scaricamento</b>:
+		  --text="<b>ZigzagDownLoader</b>\n\n<b>Directory:</b> $PWD\n
+Modifica la lista dei link da cui avviare lo scaricamento:
 vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignorati)\n" \
 		  --text-info \
 		  --editable \
@@ -330,12 +331,6 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 	esac    
     } &
     get_links_gui_pid=$!
-}
-
-function quit_last {
-    local last_gui=$(ls -1 "$path_tmp"/gui-pid.*|sort|tail -n1)
-    local last_id="${last_gui##*\.}"
-    quit_gui "$path_tmp"/gui-pid.$last_id "$path_tmp"/yad-pid.$last_id
 }
 
 function quit_gui {
@@ -489,6 +484,16 @@ function get_GUI_ID {
     GUI_ID=$(date +%s)
 }
 
+function check_instance_gui {
+    local pid
+    
+    while read pid
+    do
+	check_pid $pid && return 0
+    done < <(cat "$path_tmp"/gui-pid.*)
+    return 1
+}
+
 function run_gui {
     exec 0<&-
     echo >"$gui_log"
@@ -540,6 +545,9 @@ function run_gui {
     
     start_daemon "${ARGV[@]}"
 
+    check_instance_gui &&
+	exit
+    
     while ! check_instance_prog &&
 	    ! check_instance_daemon
     do
