@@ -196,7 +196,14 @@ function start_daemon_gui {
     then
 	mkdir -p "$path_tmp"
 	date +%s >"$path_tmp"/.date_daemon
-	nohup /bin/bash zdl --silent "$PWD" "${ARGV[@]}" &>/dev/null &
+	if [ -n "${ARGV[*]}" ]
+	then
+	    nohup /bin/bash zdl --silent "$PWD" "${ARGV[@]}" &>/dev/null &
+	    unset ARGV
+	else
+	    nohup /bin/bash zdl --silent "$PWD" &>/dev/null &
+	fi
+
     else
 	for item in "${ARGV[@]}"
 	do
@@ -232,6 +239,16 @@ function stop_daemon_gui {
 	    start_daemon_msg="<b>${name_prog}:</b>\n\nProgramma terminato in\n\t$PWD\n\n Puoi controllarlo con:\n\t$prog -i \"$PWD\"\n"
 	    return 0
 	fi
+    fi
+}
+
+function toggle_daemon_gui {
+    if check_instance_daemon &>/dev/null ||
+	    check_instance_prog &>/dev/null
+    then
+	stop_daemon_gui
+    else
+	start_daemon_gui
     fi
 }
 
@@ -369,7 +386,7 @@ function kill_yad_loop {
 	kill -9 $(cat "$pid_yad_loop_file")
 }
 
-function display_downloads {
+function display_downloads_gui {
     local res i err_msg yad_bars
 
     while ! get_multiprogress_yad_args yad_bars
@@ -407,12 +424,11 @@ function display_downloads {
 	--image "$IMAGE" \
 	--image-on-top \
 	--auto-close \
-	--button="Editor dei link:bash -c \"echo 3 >'$path_tmp'/yad-button-click\"" \
-	--button="Console:bash -c \"echo 4 >'$path_tmp'/yad-button-click\"" \
-	--button="Attiva ZDL:bash -c \"echo 0 >'$path_tmp'/yad-button-click\"" \
-	--button="Disattiva ZDL:bash -c \"echo 1 >'$path_tmp'/yad-button-click\"" \
-	--button="Termina i downloader:bash -c \"echo 2 >'$path_tmp'/yad-button-click\"" \
-	--button="Esci!gtk-close:bash -c \"echo quit >'$path_tmp'/yad-button-click\"" \
+	--button="Editor dei link:bash -c \"echo get_links_gui >'$path_tmp'/yad-button-click\"" \
+	--button="Console:bash -c \"echo display_console_gui >'$path_tmp'/yad-button-click\"" \
+	--button="ZDL on/off!gtk-execute:bash -c \"echo toggle_daemon_gui >'$path_tmp'/yad-button-click\"" \
+	--button="Termina i downloader:bash -c \"echo kill_downloads >'$path_tmp'/yad-button-click\"" \
+	--button="Esci!gtk-close:bash -c \"echo quit_gui >'$path_tmp'/yad-button-click\"" \
 	--window-icon "$ICON" \
 	--title "ZigzagDownLoader" \
 	--text "<b>Directory:</b> $PWD" < <(
@@ -424,32 +440,9 @@ function display_downloads {
 
 	    if [ -s "$path_tmp"/yad-button-click ]
 	    then
-		res=$(cat "$path_tmp"/yad-button-click)
+		cmd=$(cat "$path_tmp"/yad-button-click)
 		rm "$path_tmp"/yad-button-click
-		
-		case $res in
-		    quit)
-			quit_gui
-			break
-			;;
-		    0)
-			start_daemon
-			unset start_daemon_msg
-			;;
-		    1)
-			stop_daemon_gui
-			unset stop_daemon_gui_msg
-			;;
-		    2)
-			kill_downloads
-			;;
-		    3)
-			get_links_gui
-			;;
-		    4)
-			display_console_gui
-			;;
-		esac
+		$cmd
 	    fi
 	    
 	done 2>/dev/null 
@@ -534,7 +527,7 @@ function run_gui {
     
     while :
     do
-	display_downloads
+	display_downloads_gui
 	sleep 1
     done &
     pid_gui_loop=$!

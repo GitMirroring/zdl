@@ -30,10 +30,6 @@ source $path_usr/docs/help.sh
 source $path_usr/config.sh
 source $path_usr/config_manager.sh
 
-source $path_usr/ui/widgets.sh
-source $path_usr/ui/ui.sh
-source $path_usr/gui/gui.sh
-
 source $path_usr/libs/core.sh
 source $path_usr/libs/downloader_manager.sh
 source $path_usr/libs/DLstdout_parser.sh
@@ -44,6 +40,10 @@ source $path_usr/libs/ip_changer.sh
 source $path_usr/libs/log.sh
 source $path_usr/libs/post_processor.sh
 source $path_usr/libs/ffmpeg_utils.sh
+
+source $path_usr/ui/widgets.sh
+source $path_usr/ui/ui.sh
+source $path_usr/gui/gui.sh
 
 function update_updater {
     fclear
