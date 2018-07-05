@@ -240,6 +240,45 @@ then
     done
 fi
 
+
+for ((i=0; i<"${#args[@]}"; i++)) 
+do
+    if [ -d "${args[i]}" ]
+    then
+	cd "${args[i]}" 
+	echo "${args[i]}" >/tmp/zigzagdownloader-dirbase
+	unset args[i]
+	break
+    fi
+done
+
+
+if [[ "${args[@]}" =~ (--path-gui) ]]
+then
+    for ((i=0; i<${#args[@]}; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--path-gui)$ ]]
+	then
+	    test -s /tmp/zigzagdownloader-dirbase &&
+		cd $(cat /tmp/zigzagdownloader-dirbase) ||
+		    cd "$HOME"
+	    
+	    if [ ! -d "$path_gui" ]
+	    then
+		get_download_path path_gui
+	    fi
+
+	    echo "$path_gui" >/tmp/zigzagdownloader-dirbase
+	    cd "$path_gui"
+
+	    unset args[i] path_gui
+	fi
+    done
+fi
+
+gui_log="$path_tmp"/gui-log.txt
+touch "$gui_log"
+
 if [[ "${args[*]}" =~ (--gui|-g) ]]
 then
     for ((i=0; i<=$max_args; i++))
@@ -254,6 +293,7 @@ then
 	fi
     done
 fi
+
 
 
 if [ "${args[*]}" != "${args[*]//--web-ui}" ]

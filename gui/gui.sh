@@ -198,7 +198,7 @@ function start_daemon_gui {
 	date +%s >"$path_tmp"/.date_daemon
 	nohup /bin/bash zdl --silent "$PWD" "${ARGV[@]}" &>/dev/null &
     else
-	for item in "$@"
+	for item in "${ARGV[@]}"
 	do
 	    url "$item" &&
 		set_link + "$item"
@@ -500,50 +500,15 @@ function run_gui {
 	_log 40
 	exit 1
     fi
-
-    ARGV=( "$@" )
-    for ((i=0; i<"s{#ARGV[@]}"; i++)) 
-    do
-	if [ -d "s{ARGV[i]}" ]
-	then
-	    cd "s{ARGV[i]}" 
-	    echo "s{ARGV[i]}" >/tmp/zigzagdownloader-dirbase
-	    unset ARGV[i]
-	    break
-	fi
-    done
     
-    local directory
-    if [[ "${ARGV[@]}" =~ (--path-gui) ]]
-    then
-	for ((i=0; i<${#ARGV[@]}; i++))
-	do
-	    if [[ "${ARGV[i]}" =~ ^(--path-gui)$ ]]
-	    then
-		test -s /tmp/zigzagdownloader-dirbase &&
-		    cd $(cat /tmp/zigzagdownloader-dirbase) ||
-			cd "$HOME"
-		
-		if [ ! -d "$directory" ]
-		then
-		    get_download_path directory
-		fi
+    ARGV=( "$@" )
 
-		echo "$directory" >/tmp/zigzagdownloader-dirbase
-		cd "$directory"
-
-		unset ARGV[i]
-	    fi
-	done
-    fi
     prog=zdl
     path_tmp=".${prog}_tmp"
     
     path_usr="/usr/local/share/${prog}"
     start_file="$path_tmp"/links_loop.txt
 
-    gui_log="$path_tmp"/gui-log.txt
-    touch "$gui_log"
     exec 0<&-
     echo >"$gui_log"
 
