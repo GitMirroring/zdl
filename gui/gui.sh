@@ -30,8 +30,10 @@ function get_download_path {
     if command -v yad &>/dev/null
     then
 	ref=$(yad --file-selection \
+		  --borders=5 \
 		  --directory \
 		  --centre \
+		  --window-icon "$ICON" \
 		  --width=700 \
 		  --height=500 \
 		  --button="Abbandona!gtk-no:1" \
@@ -234,88 +236,100 @@ function stop_daemon {
 }
 
 function get_links_gui {
-    declare -a links
-    local matched
+    {
+	declare -a links
+	local matched
 
-    local start_file_tmp=$(tempfile)
-    if [ -s "$start_file" ]
-    then
-	cp "$start_file" "$start_file_tmp"
-    fi
-    
-    links=(
-	$(yad --title="Editor links" \
-	      --image="gtk-execute" \
-	      --text="<b>Modifica la lista dei link da cui avviare lo scaricamento</b>:
-vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignorati)" \
-	      --text-info \
-	      --editable \
-	      --show-uri \
-	      --uri-color=blue \
-	      --listen \
-	      --tail \
-	      --filename="$start_file_tmp" \
-	      --width=800 \
-	      --button="Salva!gtk-ok:0" \
-	      --button="Annulla!gtk-no:1" \
-	      --button="Esci!gtk-close:2")
-    )
-    
-    case $? in
-	0)
-	    local link msg
-	    
-	    if [ -n "${links[*]}" ]
-	    then
-		if [ -s "$start_file" ]
-		then
-		    while read line
-		    do
-			unset matched
-			
-			for link in "${links[@]}"
-			do
-			    if [ "$line" == "$(sanitize_url "$link")" ]
-			    then
-				matched=true
-				break
-			    fi
-			done		    
-			[[ $matched ]] || set_link - "$line"
-
-		    done < "$start_file"
-		fi
+	local start_file_tmp=$(tempfile)
+	if [ -s "$start_file" ]
+	then
+	    cp "$start_file" "$start_file_tmp"
+	fi
+	
+	links=(
+	    $(yad --title="Editor links" \
+		  --image="gtk-execute" \
+		  --borders=5 \
+		  --window-icon="$ICON" \
+		  --text="<b>Modifica la lista dei link da cui avviare lo scaricamento</b>:
+vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignorati)\n" \
+		  --text-info \
+		  --editable \
+		  --show-uri \
+		  --uri-color=blue \
+		  --listen \
+		  --tail \
+		  --filename="$start_file_tmp" \
+		  --centre \
+		  --width=800 \
+		  --button="Salva!gtk-ok:0" \
+		  --button="Annulla!gtk-no:1" \
+		  --button="Esci!gtk-close:2")
+	)
+	
+	case $? in
+	    0)
+		local link msg
 		
-		for link in "${links[@]}"
-		do
-		    link=$(sanitize_url "$link")
-		    [ -n "$link" ] &&
-			msg+=$(set_link + "$link")
-		done
+		if [ -n "${links[*]}" ]
+		then
+		    if [ -s "$start_file" ]
+		    then
+			while read line
+			do
+			    unset matched
+			    
+			    for link in "${links[@]}"
+			    do
+				if [ "$line" == "$(sanitize_url "$link")" ]
+				then
+				    matched=true
+				    break
+				fi
+			    done		    
+			    [[ $matched ]] || set_link - "$line"
 
-	    else
-		rm -f "$start_file"
-	    fi
+			done < "$start_file"
+		    fi
+		    
+		    for link in "${links[@]}"
+		    do
+			link=$(sanitize_url "$link")
+			[ -n "$link" ] &&
+			    msg+=$(set_link + "$link")
+		    done
 
-	    rm -f  "$start_file_tmp"
-	    
-	    if [ -n "$msg" ]
-	    then
-		msg=$(discolour "$msg")
-		msg="<b>Alcuni link non sono stati accettati</b> perché non hanno la forma corretta, ecco i messaggi di errore (il riepilogo è salvato nel file zdl_log.txt):\n\n$msg"
-		yad --title="Attenzione!" --text-info --image="gtk-dialog-error" --text="$msg" --button="gtk-ok:0"
-	    fi
-	    return 0
-	    ;;
+		else
+		    rm -f "$start_file"
+		fi
 
-	1)
-	    return 1
-	    ;;
-	2)
-	    quit_gui
-	    return 2
-	    ;;
-    esac    
+		rm -f  "$start_file_tmp"
+		
+		if [ -n "$msg" ]
+		then
+		    msg=$(sanitize_text "$msg")
+		    msg="<b>Alcuni link non sono stati accettati</b> perché non hanno la forma corretta, ecco i messaggi di errore (il riepilogo è salvato nel file zdl_log.txt):\n\n$msg"
+		    yad --centre \
+			--title="Attenzione!" \
+			--window-icon="$ICON" \
+			--borders=5 \
+			--image "dialog-error" \
+			--text="$msg" \
+			--button="gtk-ok:0"
+		fi
+		return 0
+		;;
+
+	    1)
+		return 1
+		;;
+	    2)
+		quit_gui
+		return 2
+		;;
+	esac    
+    } &
+    get_links_gui_pid=$!
 }
 
 function quit_last {
@@ -366,10 +380,19 @@ function display_downloads {
     while ! get_multiprogress_yad_args yad_bars
     do
     	get_links_gui
+	wait $get_links_gui_pid
+	
     	if [ ! -s "$start_file" ]
     	then
     	    err_msg="<b>$name_prog:</b>\n\nNon è stato inserito alcun link valido: vuoi ripetere l'operazione?\nRispondendo di no terminerai tutto."
-    	    if ! yad --image "dialog-question" --title="Attenzione" --text="$err_msg" --button="gtk-yes:0" --button="gtk-no:1"
+    	    if ! yad --window-icon="$ICON" \
+		 --borders=5 \
+		 --image "dialog-question" \
+		 --title="Attenzione" \
+		 --text="$err_msg" \
+		 --button="gtk-yes:0" \
+		 --button="gtk-no:1" \
+		 --centre
     	    then
     		stop_daemon
     		quit_gui
@@ -381,10 +404,11 @@ function display_downloads {
 
     rm -f "$path_tmp"/yad-button-click
 
-#    yad	--plug=1 --tabnum=1 \
     yad --multi-progress \
+	--align=right \
 	$yad_bars \
 	--bar="ZDL:PULSE" \
+	--borders=5 \
 	--image "$IMAGE" \
 	--image-on-top \
 	--auto-close \
@@ -395,7 +419,6 @@ function display_downloads {
 	--button="Termina i downloader:bash -c \"echo 2 >'$path_tmp'/yad-button-click\"" \
 	--button="Esci!gtk-close:bash -c \"echo quit >'$path_tmp'/yad-button-click\"" \
 	--window-icon "$ICON" \
-	--icon "$ICON" \
 	--title "ZigzagDownLoader" \
 	--text "<b>Directory:</b> $PWD" < <(
 	while : 
@@ -415,15 +438,11 @@ function display_downloads {
 			break
 			;;
 		    0)
-			start_daemon #&&
-			    # yad --image "gtk-ok" --text="$start_daemon_msg" --button="gtk-close:0" ||
-			    # 	yad --image "gtk-dialog-error" --text="$start_daemon_msg" --button="gtk-close:0"
+			start_daemon
 			unset start_daemon_msg
 			;;
 		    1)
-			stop_daemon #&&
-			    # yad --image "gtk-ok" --text="$start_daemon_msg" --button="gtk-close:0" ||
-			    # 	yad --image "gtk-no" --text="$start_daemon_msg" --button="gtk-close:0"
+			stop_daemon
 			unset stop_daemon_msg
 			;;
 		    2)
@@ -433,31 +452,7 @@ function display_downloads {
 			get_links_gui
 			;;
 		    4)
-			yad --title="Console" \
-			    --image="gtk-execute" \
-			    --text="<b>$name_prog</b>:\n\nConsole dei processi di estrazione e donwload" \
-			    --text-info \
-			    --show-uri \
-			    --uri-color=blue \
-			    --listen \
-			    --tail \
-			    --filename="$path_tmp"/log_term.txt \
-			    --icon "$ICON" \
-			    --width=800 --height=600 < <(
-			    while read line
-			    do
-				echo "$line"
-				check_instance_daemon ||
-				    check_instance_prog ||
-				    break
-				sleep 1
-			    done < <(tail "$path_tmp"/log_term.txt)
-			) &
-			    # while :
-			    # do
-			    # 	tail "$path_tmp"/log_term.txt
-			    # 	sleep 1
-			    # done) &
+			display_console_gui
 			;;
 		esac
 	    fi
@@ -472,11 +467,31 @@ function display_downloads {
     return 0
 }
 
+function display_console_gui {
+    tail -f "$gui_log" </dev/null |
+	sanitize_text |
+	yad --title="Console" \
+	    --image="gtk-execute" \
+	    --text="<b>$name_prog</b>:\n\nConsole dei processi di estrazione e donwload" \
+	    --text-info \
+	    --show-uri \
+	    --uri-color=blue \
+	    --listen \
+	    --tail \
+	    --filename="$gui_log" \
+	    --window-icon="$ICON" \
+	    --center \
+	    --borders=5 \
+	    --width=800 --height=600 &
+}
+
 function get_GUI_ID {
     GUI_ID=$(date +%s)
 }
 
 function run_gui {
+    exec 0<&-
+    echo >"$gui_log"
     prog=zdl
     path_tmp=".${prog}_tmp"
     

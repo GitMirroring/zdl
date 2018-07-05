@@ -586,6 +586,8 @@ function extension_openload {
 	#file_in=$(tail -n1 <<< "$openload_data")
 	file_in=$(get_title "$html")
 	sanitize_file_in
+	file_in="${file_in%__openload*}"
+	sanitize_file_in
 	
     else
 	_log 35

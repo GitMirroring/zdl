@@ -606,6 +606,13 @@ function seconds_to_human {
     fi
 }
 
-function discolour {
-    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" <<< "$1"
+function sanitize_text {
+    if [[ $1 ]]
+    then
+	sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" <<< "$1" |
+	    sed -r "s|([─]+)|\n|g"
+    else
+	stdbuf -i0 -o0 -e0 sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" |
+	    stdbuf -i0 -o0 -e0 sed -r "s|([─]+)|\n|g"
+    fi
 }

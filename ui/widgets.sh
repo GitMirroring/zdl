@@ -66,17 +66,26 @@ function print_case {
 	    ;;	
     esac
 }
-    
+
+function print_filter {
+    local ads="$2"
+    if [ -f "$gui_log" ]
+    then
+ 	echo -ne "$1$ads" | tee -a "$gui_log" 
+	
+    else
+	echo -ne "$1$ads" 
+    fi
+}
+
 function print_c {
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	       [ -n "$redirected_link" ]
     then
-	print_case "$1" 
-
-	################## test: salviamo in un file log una parte dell'output da usare in altre UI: 
-	echo -ne "$2\n" |
-	    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" | sed -r 's|^$||g' | tee -a "$path_tmp"/log_term.txt 2>/dev/null
-
+	print_case "$1"
+	
+	print_filter "$2" "\n"
+	
 	[ -z "$3" ] &&
 	    echo -ne "${Color_Off}" ||
 		print_case "$3"
@@ -127,7 +136,8 @@ function print_header { # $1=label ; $2=color ; $3=header pattern
     [ -z "$hpattern" ] && hpattern="\ "
     
     eval printf -v line "%.0s${hpattern}" {1..$(( $COLUMNS-${#text} ))}
-    echo -en "${color}${text}$line${Color_Off}"
+    #echo -en "${color}${text}$line${Color_Off}"
+    print_filter "${color}${text}$line${Color_Off}"
 }
 
 function separator- {
