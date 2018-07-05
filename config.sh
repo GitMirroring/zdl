@@ -87,9 +87,6 @@ user_lang="$LANG"
 user_language="$LANGUAGE"
 prog_lang='en_US.UTF-8:en'
 
-gui_log="$path_tmp"/gui-log.txt
-touch "$gui_log"
-
 newip_hosts=(
     rockfile
     uptobox

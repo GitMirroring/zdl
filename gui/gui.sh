@@ -189,8 +189,8 @@ function get_multiprogress_yad_args {
     [ -z "$bars" ] && return 1 || return 0
 }
 
-function start_daemon {
-    local item
+function start_daemon_gui {
+    local item arg
     if ! check_instance_prog &>/dev/null &&
 	    ! check_instance_daemon &>/dev/null
     then
@@ -207,7 +207,7 @@ function start_daemon {
     start_daemon_msg="<b>${name_prog}:</b>\n\nProgramma attivo in\n\t$PWD\n\n Puoi controllarlo con:\n\t$prog -i \"$PWD\"\n"
 }
 
-function stop_daemon {
+function stop_daemon_gui {
     local pid
     
     if [ -d "$path_tmp" ]
@@ -389,7 +389,7 @@ function display_downloads {
 		 --button="gtk-no:1" \
 		 --centre
     	    then
-    		stop_daemon
+    		stop_daemon_gui
     		quit_gui
     	    fi
     	fi
@@ -437,8 +437,8 @@ function display_downloads {
 			unset start_daemon_msg
 			;;
 		    1)
-			stop_daemon
-			unset stop_daemon_msg
+			stop_daemon_gui
+			unset stop_daemon_gui_msg
 			;;
 		    2)
 			kill_downloads
@@ -467,7 +467,7 @@ function display_console_gui {
 	sanitize_text |
 	yad --title="Console" \
 	    --image="gtk-execute" \
-	    --text="<b>$name_prog</b>:\n\nConsole dei processi di estrazione e donwload" \
+	    --text="<b>$name_prog</b>:\n\nConsole dei processi di estrazione e donwload\n\n" \
 	    --text-info \
 	    --show-uri \
 	    --uri-color=blue \
@@ -495,31 +495,25 @@ function check_instance_gui {
 }
 
 function run_gui {
-    exec 0<&-
-    echo >"$gui_log"
-    prog=zdl
-    path_tmp=".${prog}_tmp"
-    
-    path_usr="/usr/local/share/${prog}"
-    start_file="$path_tmp"/links_loop.txt
-    ICON="$path_usr"/webui/zdl.png
-    IMAGE="browser-download"
-    
-    ARGV=( "$@" )
-    local directory
-
-    get_GUI_ID
-    pid_gui_file="$path_tmp"/gui-pid.$GUI_ID
-    yad_links="$path_tmp"/yad_links.$GUI_ID
-    pid_yad_loop_file="$path_tmp"/yad-pid.$GUI_ID
-    rm -f "$path_tmp"/yad-button-click
-    
     if ! hash yad
     then
 	_log 40
 	exit 1
     fi
 
+    ARGV=( "$@" )
+    for ((i=0; i<"s{#ARGV[@]}"; i++)) 
+    do
+	if [ -d "s{ARGV[i]}" ]
+	then
+	    cd "s{ARGV[i]}" 
+	    echo "s{ARGV[i]}" >/tmp/zigzagdownloader-dirbase
+	    unset ARGV[i]
+	    break
+	fi
+    done
+    
+    local directory
     if [[ "${ARGV[@]}" =~ (--path-gui) ]]
     then
 	for ((i=0; i<${#ARGV[@]}; i++))
@@ -542,8 +536,27 @@ function run_gui {
 	    fi
 	done
     fi
+    prog=zdl
+    path_tmp=".${prog}_tmp"
     
-    start_daemon "${ARGV[@]}"
+    path_usr="/usr/local/share/${prog}"
+    start_file="$path_tmp"/links_loop.txt
+
+    gui_log="$path_tmp"/gui-log.txt
+    touch "$gui_log"
+    exec 0<&-
+    echo >"$gui_log"
+
+    ICON="$path_usr"/webui/zdl.png
+    IMAGE="browser-download"
+    
+    get_GUI_ID
+    pid_gui_file="$path_tmp"/gui-pid.$GUI_ID
+    yad_links="$path_tmp"/yad_links.$GUI_ID
+    pid_yad_loop_file="$path_tmp"/yad-pid.$GUI_ID
+    rm -f "$path_tmp"/yad-button-click
+    
+    start_daemon_gui
 
     check_instance_gui &&
 	exit
