@@ -196,7 +196,7 @@ function start_daemon_gui {
     then
 	mkdir -p "$path_tmp"
 	date +%s >"$path_tmp"/.date_daemon
-	nohup /bin/bash zdl --silent "$PWD" "$@" &>/dev/null &
+	nohup /bin/bash zdl --silent "$PWD" "${ARGV[@]}" &>/dev/null &
     else
 	for item in "$@"
 	do
