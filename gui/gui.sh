@@ -38,7 +38,7 @@ function get_download_path {
 		  --height=500 \
 		  --button="Abbandona!gtk-no:1" \
 		  --button="Seleziona!gtk-yes:0" \
-		   2>/dev/null)
+		  2>/dev/null)
 	if [[ $? == 1 ]]
 	then
 	    exit 1
@@ -48,111 +48,107 @@ function get_download_path {
     fi
 }
 
-function add_yad_links {
+function add_links_file_gui {
     if [ -s "$start_file" ]
     then
-	cp "$start_file" "$yad_links" &&
+	cp "$start_file" "$links_file_gui" &&
 	    return 0 || return 1
     else
-	rm -f "$yad_links" 
+	rm -f "$links_file_gui" 
 	return 1
     fi
 }
 
-function check_yad_links {
-    local new_gui=1
-    if [ -s "$start_file" ]
+function check_yad_multiprogress {
+    local num_link_bars_status
+    get_data_progress num_link_bars_status
+    if (( num_link_bars_status != num_link_bars ))
     then
-	(( $(wc -l < "$start_file") == $(wc -l < "$yad_links") )) && new_gui=0
-	cp "$start_file" "$yad_links"
-    else
-	[ -s "$yad_links" ] &&
-	    (( $(wc -l < "$yad_links") >0 )) || new_gui=0
-	rm -f "$yad_links"
+	num_link_bars=$num_link_bars_status
+	kill_yad_multiprogress
     fi
-    return $new_gui
 }
 
 function get_data_progress {
-    local links_file="$path_tmp"/yad_links.$GUI_ID
-    local links_file_diff="$path_tmp"/yad_links_diff.$GUI_ID
-    echo > "$links_file_diff"
-    local num_links=$(wc -l "$links_file")
-    local i link
+    unset url_out_gui \
+	  file_out_gui \
+	  percent_out_gui \
+	  eta_out_gui \
+	  speed_out_gui \
+	  pid_out_gui \
+	  text_out_gui
+    
+    add_links_file_gui    
+    echo > "$links_file_gui_diff"
+    rm -f "$links_file_gui_complete"
+
+    local item i link
+
+    url_out_gui=()
+    file_out_gui=()
+    percent_out_gui=()
+    eta_out_gui=()
+    speed_out_gui=()
+    pid_out_gui=()
+    text_out_gui=()
+    
     local n=1
-    local text
-    local item
     
     if data_stdout
     then
-	for ((i=0; i<${#pid_out[*]}; i++))
+	for ((i=0; i<${#url_out[*]}; i++))
 	do
+	    url_out_gui[$n]="${url_out[i]}"
+	    file_out_gui[$n]="${file_out[i]}"
+	    eta_out_gui[$n]="${eta_out[i]}"
+	    speed_out_gui[$n]="${speed_out[i]%.*}${speed_out_type[i]}"
+	    pid_out_gui[$n]="${pid_out[i]}"
+	    percent_out_gui[$n]="${percent_out[i]}"
+	    
 	    if [ -n ${file_out[i]} ]
 	    then
 		item="${file_out[i]}"
 	    else
 		item="${url_out[i]}"
 	    fi
-		    
-	    if grep -qP "${url_out[i]}" "$links_file" 
+	    
+	    if check_pid ${pid_out_gui[$n]}
 	    then
-		if [[ ${pid_alive[i]} ]]
-		then
-		    text="$item   ${percent_out[i]}\%   ${eta_out[i]}   ${speed_out[i]}${speed_out_type[i]}"
-	
-		    echo "$n:#$text"
-		    echo "$n:${percent_out[i]}"
+		text_out_gui[$n]="$item   ${percent_out[i]}\%   ${eta_out[i]}   ${speed_out_gui[n]}"
+	    fi	
 
-		    status=NORM
-
-		    echo "${url_out[i]}" >> "$links_file_diff"
-		    ((n++))
-		    
-		else
-		    if [ ${percent_out[i]} == 100 ]
-		    then
-			text="$item   download completato"
-			
-			echo "$n:#$text"
-			echo "$n:100"
-			
-		    else
-			text="$item   attendi"
-			
-			echo "$n:#$text"
-			echo "$n:0"
-		    fi
-		    
-		    status=NORM
-
-		    echo "${url_out[i]}" >> "$links_file_diff"
-		    ((n++))
-		fi
+	    if [ -z "${text_out_gui[$n]}" ]
+	    then
+		text_out_gui[$n]="$item   attendi"
+	    fi
+	    
+	    if [ ${percent_out[i]} == 100 ]
+	    then
+		text_out_gui[$n]="$item   download completato"
+		grep "${url_out[i]}" "$links_file_gui_complete" ||
+		    set_line_in_file + "${url_out[i]}" "$links_file_gui_complete"
+	    fi
+	    
+	    if url "${url_out_gui[$n]}" &&
+		    [ -n "${text_out_gui[$n]}" ] && [ -n "${percent_out_gui[$n]}" ]
+	    then
+		echo "${url_out[i]}" >> "$links_file_gui_diff"
+		((n++))
 	    fi
 	done
 
-	for link in $(awk 'NR == FNR {file1[$0]++; next} !($0 in file1)' "$links_file_diff" "$links_file")
+	for link in $(awk 'NR == FNR {file1[$0]++; next} !($0 in file1)' "$links_file_gui_diff" "$links_file_gui")
 	do
-	    text="${link%%'&'*}   attendi"
-	    
-	    echo "$n:#$text"
-	    echo "$n:0"
-
-	    status=NORM
-
+	    text_out_gui[$n]="${link%%'&'*}   attendi"
+	    percent_out_gui[$n]=0
 	    ((n++))
 	done
 	
     else
-	for link in $(cat "$links_file")
+	for link in $(cat "$links_file_gui")
 	do
-	    text="${link%%'&'*}   attendi"
-
-	    echo "$n:#$text"
-	    echo "$n:0"
-
-	    status=NORM
-
+	    text_out_gui[$n]="${link%%'&'*}   attendi"
+	    percent_out_gui[$n]=0
 	    ((n++))
 	done		 
     fi
@@ -160,33 +156,59 @@ function get_data_progress {
     if check_instance_daemon ||
 	    check_instance_prog
     then
-	echo "$n:#Attivo"
-	echo "$n:100"
+	text_out_gui[$n]="Attivo"
+	percent_out_gui[$n]="50"
 
     else
-	echo "$n:#Non attivo"
+	text_out_gui[$n]="Non attivo"
+	percent_out_gui[$n]=""
     fi
 
-    num_bars=$((n-1))
-}
-
-function get_multiprogress_yad_args {
-    declare -n bars="$1"
-    local i url
-    declare -a _bars
-
-    add_yad_links    
-
-    if [ -s "$yad_links" ]
+    if [[ $1 ]]
     then
-	for ((i=1; i<=$(wc -l < "$yad_links"); i++))
-	do
-	    _bars+=( "--bar=$i:NORM" )
-	done
-	bars="${_bars[*]}"
+	declare -n ref=$1
+	## togliere la barra di stato (attività ZDL)
+	## e assegnare il numero totale di barre dei soli link:
+	ref=$((n-1))
+	# echo "$ref =~ $((n-1)) "
+	# echo "${url_out_gui[*]}"
     fi
     
-    [ -z "$bars" ] && return 1 || return 0
+    if [ -z "$ref" ]
+    then
+	for i in $(seq 1 $n)
+	do
+	    echo "$i:#${text_out_gui[i]}"
+	    [ -n "${percent_out_gui[i]}" ] &&
+		echo "$i:${percent_out_gui[i]}"	
+	done
+    fi
+}
+
+function get_yad_multiprogress_args {
+    declare -n bars="$1"
+    declare -n ref="$2"
+    local i 
+    declare -a _bars
+
+    ## global (array non possono essere usati per riferimento):
+    unset yad_download_buttons
+    
+    get_data_progress num_link_bars
+    for ((i=1; i<=$num_link_bars; i++))
+    do
+	_bars+=( "--bar=$i:NORM" )
+
+	## da implementare:
+	yad_download_buttons+=( --button="$i:bash -c \"echo admin_download_gui $i >kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\"" )
+    done
+    bars="${_bars[*]}"
+    ref=$num_link_bars
+    ( [ -z "$bars" ] || [ -z "${yad_download_buttons[*]}" ] ) && return 1 || return 0
+}
+
+function admin_download_gui {
+    echo "$1">OUT
 }
 
 function start_daemon_gui {
@@ -354,104 +376,122 @@ function quit_gui {
     local pid item
     declare -a pids
 
-    if [[ $1 && $2 ]]
-    then
-	pid_gui_file=$1
-	pid_yad_loop_file=$2
-    fi
-    
-    for item in "$pid_yad_loop_file" "$pid_gui_file"
+    for item in "$yad_multiprogress_pid_file" "$gui_pid_file" #"$yad_fields_pid_file"
     do
-	if [ -s "$item" ]
-	then
-	    pids+=( $(cat "$item") )
-	fi
+    	if [ -s "$item" ]
+    	then
+    	    pids+=( $(cat "$item") )
+	    rm "$item"
+    	fi
     done
 
     for pid in ${pids[@]}
     do
-	kill -9 $pid
+	kill -9 $pid 2>/dev/null
     done
 }
 
-function new_gui {
-    [ -s "$pid_yad_loop_file" ] &&
-	kill -9 $(cat "$pid_yad_loop_file") &&
-	return 0 ||
-	    return 1
+function kill_yad_multiprogress {
+    local pid
+    
+    if [ -s "$yad_multiprogress_pid_file" ]
+    then
+	pid=$(cat "$yad_multiprogress_pid_file")
+	rm "$yad_multiprogress_pid_file"
+	kill -9 $pid &&
+	    return 0 ||
+		return 1
+    fi
 }
 
-function kill_yad_loop {
-    [ -s "$pid_yad_loop_file" ] &&
-	kill -9 $(cat "$pid_yad_loop_file")
+function exe_button_result {
+    if [ -s "$yad_button_result_file" ]
+    then
+	cmd=( $(cat "$yad_button_result_file") )
+	rm "$yad_button_result_file"
+
+	"${cmd[@]}"
+    fi
+}
+
+function display_links_manager_gui {
+    :
+}
+ 
+function display_downloads_manager_gui {
+    :
+    #	--button="Termina i downloader:bash -c \"echo kill_downloads >'$yad_button_result_file'\"" \
+    #	"${yad_download_buttons[@]}"
+}
+
+function start_links_gui {
+    :
+        # while ! get_yad_multiprogress_args yad_bars num_link_bars
+    # do
+    # 	get_links_gui
+    # 	wait $get_links_gui_pid
+
+    # 	if [ "$?" == 1 ]
+    # 	then
+    # 	    break
+
+    # 	elif [ ! -s "$start_file" ]
+    # 	then
+    # 	    err_msg="<b>$name_prog:</b>\n\nNon è stato inserito alcun link valido: vuoi ripetere l'operazione?\nRispondendo di no terminerai tutto."
+    # 	    if ! yad --window-icon="$ICON" \
+    # 		 --borders=5 \
+    # 		 --image "dialog-question" \
+    # 		 --title="Attenzione" \
+    # 		 --text="$err_msg" \
+    # 		 --button="gtk-yes:0" \
+    # 		 --button="gtk-no:1" \
+    # 		 --centre
+    # 	    then
+    # 		stop_daemon_gui
+    # 		quit_gui
+    		
+    # 	    fi
+    # 	fi
+    # done
 }
 
 function display_downloads_gui {
     local res i err_msg yad_bars
+    get_yad_multiprogress_args yad_bars num_link_bars
 
-    while ! get_multiprogress_yad_args yad_bars
-    do
-    	get_links_gui
-	wait $get_links_gui_pid
-	
-    	if [ ! -s "$start_file" ]
-    	then
-    	    err_msg="<b>$name_prog:</b>\n\nNon è stato inserito alcun link valido: vuoi ripetere l'operazione?\nRispondendo di no terminerai tutto."
-    	    if ! yad --window-icon="$ICON" \
-		 --borders=5 \
-		 --image "dialog-question" \
-		 --title="Attenzione" \
-		 --text="$err_msg" \
-		 --button="gtk-yes:0" \
-		 --button="gtk-no:1" \
-		 --centre
-    	    then
-    		stop_daemon_gui
-    		quit_gui
-    	    fi
-    	fi
-	
-    	sleep 0.5
-    done
+    rm -f "$yad_button_result_file"
 
-    rm -f "$path_tmp"/yad-button-click
-
-    yad --multi-progress \
+    while : 
+    do		    
+	check_yad_multiprogress
+	get_data_progress
+	sleep 0.5
+	    
+	exe_button_result
+	    
+    done 2>/dev/null |
+	yad \
+	--multi-progress \
 	--align=right \
 	$yad_bars \
 	--bar="ZDL:PULSE" \
-	--borders=5 \
-	--image "$IMAGE" \
+	--image="$IMAGE" \
 	--image-on-top \
-	--auto-close \
-	--button="Editor dei link:bash -c \"echo get_links_gui >'$path_tmp'/yad-button-click\"" \
-	--button="Console:bash -c \"echo display_console_gui >'$path_tmp'/yad-button-click\"" \
-	--button="ZDL on/off!gtk-execute:bash -c \"echo toggle_daemon_gui >'$path_tmp'/yad-button-click\"" \
-	--button="Termina i downloader:bash -c \"echo kill_downloads >'$path_tmp'/yad-button-click\"" \
-	--button="Esci!gtk-close:bash -c \"echo quit_gui >'$path_tmp'/yad-button-click\"" \
+	--text="<b>Directory:</b> $PWD" \
+	--buttons-layout=center \
+	--button="Links:bash -c \"echo get_links_gui >'$yad_button_result_file'\"" \
+	--button="Downloads:bash -c \"echo kill_downloads >'$yad_button_result_file'\"" \
+	--button="Console ZDL:bash -c \"echo display_console_gui >'$yad_button_result_file'\"" \
+	--button="Dis/Attiva ZDL!gtk-execute:bash -c \"echo toggle_daemon_gui >'$yad_button_result_file'\"" \
+	--button="Esci!gtk-close:bash -c \"echo quit_gui >'$yad_button_result_file'\"" \
 	--window-icon "$ICON" \
 	--title "ZigzagDownLoader" \
-	--text "<b>Directory:</b> $PWD" < <(
-	while : 
-	do		    
-	    check_yad_links || new_gui
-	    get_data_progress
-	    sleep 0.5
+	--border=5 & 
 
-	    if [ -s "$path_tmp"/yad-button-click ]
-	    then
-		cmd=$(cat "$path_tmp"/yad-button-click)
-		rm "$path_tmp"/yad-button-click
-		$cmd
-	    fi
-	    
-	done 2>/dev/null 
-    ) &
-
-    pid_yad_loop=$!
-    echo "$pid_yad_loop" >"$pid_yad_loop_file"
-        
-    wait $pid_yad_loop
+    yad_multiprogress_pid=$!
+    echo "$yad_multiprogress_pid" >"$yad_multiprogress_pid_file"
+    
+    wait $yad_multiprogress_pid
     return 0
 }
 
@@ -477,13 +517,27 @@ function get_GUI_ID {
     GUI_ID=$(date +%s)
 }
 
+function check_instance_yad_multiprogress {
+    if [ -s "$yad_multiprogress_pid_file" ]
+    then
+	check_pid $(cat "$yad_multiprogress_pid_file") &&
+	    {
+		return 0
+	    } || {
+		return 1
+	    }
+    else
+	return 1
+    fi
+}
+
 function check_instance_gui {
     local pid
     
     while read pid
     do
 	check_pid $pid && return 0
-    done < <(cat "$path_tmp"/gui-pid.*)
+    done < <(cat "$path_tmp"/gui_pid.* 2>/dev/null)
     return 1
 }
 
@@ -509,10 +563,14 @@ function run_gui {
     IMAGE="browser-download"
     
     get_GUI_ID
-    pid_gui_file="$path_tmp"/gui-pid.$GUI_ID
-    yad_links="$path_tmp"/yad_links.$GUI_ID
-    pid_yad_loop_file="$path_tmp"/yad-pid.$GUI_ID
-    rm -f "$path_tmp"/yad-button-click
+    gui_pid_file="$path_tmp"/gui_pid.$GUI_ID
+    links_file_gui="$path_tmp"/links_file_gui.$GUI_ID
+    links_file_gui_diff="$path_tmp"/links_file_gui_diff.$GUI_ID
+    links_file_gui_complete="$path_tmp"/links_file_gui_complete.$GUI_ID
+    yad_button_result_file="$path_tmp"/yad_button_result.txt
+    yad_multiprogress_pid_file="$path_tmp"/yad_multiprogress_pid.$GUI_ID
+    yad_fields_pid_file="$path_tmp"/yad-fields-pid.$GUI_ID
+    rm -f "$yad_button_result_file"
     
     start_daemon_gui
 
@@ -530,10 +588,10 @@ function run_gui {
 	display_downloads_gui
 	sleep 1
     done &
-    pid_gui_loop=$!
-    echo "$pid_gui_loop" >"$pid_gui_file"
+    gui_pid=$!
+    echo "$gui_pid" >"$gui_pid_file"
 
-    wait "$pid_gui_loop"
+    wait "$gui_pid"
 }
 
 ####################################################
