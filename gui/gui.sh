@@ -1079,8 +1079,8 @@ function run_gui {
     YAD_ZDL=(
 	--window-icon="$ICON"
 	--borders=5
-	--selectable-labels
     )
+    #	--selectable-labels
 
     start_daemon_gui
 

@@ -136,7 +136,7 @@ function run_web_client {
 }
 
 function run_browser {
-    local url="$1"
+    local uri="$1"
     local port="$2"
     local default_port="80"    
     local default_url="http://127.0.0.1"
@@ -146,16 +146,16 @@ function run_browser {
     then
 	port="$default_port"
     fi
-    if ! url "$url"
+    if [ -n "$uri" ]
     then
-	url="${default_url}$port"
+	uri="${default_url}:$port"
     fi
 	
     while check_port $port
     do
 	sleep 0.1
     done
-    x_www_browser "$url" &
+    x_www_browser "$uri" &
 }
 
 function x_www_browser {
