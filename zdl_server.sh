@@ -1247,7 +1247,6 @@ if (data) {
 		   check_port "${line[1]}"
 	    then
 		run_zdl_server "${line[1]}" &>/dev/null
-		init_client
 		
 	    else
 		echo "already-in-use" >"$path_server"/run-server.$socket_port
