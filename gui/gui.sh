@@ -32,7 +32,7 @@ function get_download_path {
 	ref=$(yad --file-selection \
 		  --borders=5 \
 		  --directory \
-		  --centre \
+		  --center \
 		  --window-icon "$ICON" \
 		  --width=700 \
 		  --height=500 \
@@ -287,7 +287,7 @@ function display_link_error_gui {
     local msg="$1"
     msg=$(sanitize_text "$msg")
     msg="<b>Alcuni link non sono stati accettati</b> perché non hanno la forma corretta, ecco i messaggi di errore (il riepilogo è salvato nel file zdl_log.txt):\n\n$msg"
-    yad --centre \
+    yad --center \
 	--title="Attenzione!" \
 	--window-icon="$ICON" \
 	--borders=5 \
@@ -323,7 +323,6 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		  --listen \
 		  --tail \
 		  --filename="$start_file_tmp" \
-		  --centre \
 		  --width=800 \
 		  --button="Salva!gtk-ok:0" \
 		  --button="Annulla!gtk-no:1")
@@ -548,7 +547,7 @@ function display_download_manager_gui {
 		    if (( ${#res[@]}>0 ))
 		    then
 			set_link - "${res[0]}"
-			kill -9 "${res[4]}" &>/dev/null
+			kill -9 "${res[5]}" &>/dev/null
 			rm -f "${res[2]}" "${res[2]}.st" "${res[2]}.zdl" "${res[2]}.aria2" "$path_tmp"/"${res[2]}_stdout.tmp"
 		    fi
 		    ;;
@@ -584,20 +583,105 @@ function display_download_manager_gui {
 function yad_download_manager_dclick {
     declare -a res
     res=( "$@" )
-    local text
-    yad --text "${res[@]}" \
-	--&    
+
+    local text="$TEXT\n\n<b>Link:</b>\n${res[0]}\n\nScegli cosa fare"
+    {
+	while read line
+	do
+	    case $line in
+    		0)
+		    kill -9 "${res[5]}" &>/dev/null
+		    ;;
+		1)
+		    set_link - "${res[0]}"
+		    kill -9 "${res[5]}" &>/dev/null
+		    rm -f "${res[2]}" "${res[2]}.st" "${res[2]}.zdl" "${res[2]}.aria2" \
+		       "$path_tmp"/"${res[2]}_stdout.tmp"
+		    ;;
+	    esac
+	    kill -9 $(cat "$path_tmp"/dclick_yad-pid)
+	    
+	done < <(
+	    yad --text "$text" \
+    		     --title="Azione su un download" \
+    		     --image="gtk-execute" \
+    		     --button="Arresta":"bash -c 'echo 0'"  \
+    		     --button="Elimina":"bash -c 'echo 1'"  \
+    		     --button="Chiudi!gtk-close":0  \
+    		     "$YAD_ZDL" &
+	    local pid=$!
+	    echo $pid >"$path_tmp"/dclick_yad-pid
+	)
+    } &
 }
 
 function display_download_manager_opts {
-    :
-    # num_downloads
-    # downloader predefinito
-    #
+    declare -a dlers=( Aria2 Wget Axel )
+    local dler=$(cat "$path_tmp"/downloader)
+    dlers=( ${dlers[@]//$dler} )
+    local downloaders="${dler}!"
+    downloaders+=$(tr ' ' '!' <<< "${dlers[*]}")
+
+    local max_dl="$(cat "$path_tmp"/max-dl)!0..20"
+  
+    local text="$TEXT\n\n$downloaders - $max_dl"
+    
+    {
+	declare -a res=($(yad --title="Opzioni di download" \
+			  --text="$text" \
+			  --form \
+			  --separator=' ' \
+			  --center \
+			  --field="Downloader predefinito":CB "${downloaders#\!}"\
+			  --field="Downloads simultanei":NUM "${max_dl#\!}"\
+			  --button="Esegui!gtk-execute":0  \
+			  --button="Chiudi!gtk-close":1  \
+			  ${YAD_ZDL[@]}))
+	case $? in
+	    0)
+		echo ${res[0]} >"$path_tmp"/downloader
+		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
+		return 0
+		;;
+	    1)
+		return 1
+		;;
+	esac
+    } &
+	
 }
 
-function add_link_gui {
-    echo "$@"
+function display_download_manager_log {
+    declare -a uri_opts=(
+	--show-uri
+	--uri-color=blue 
+    )
+
+    exec 0<&-
+    if [ -s "$links_log" ]
+    then
+	(( $(wc -l <"$links_log") >1000 )) && unset uri_opts
+	   
+	tail -f "$downloads_log" </dev/null |
+	yad --title="Elenco dei link" \
+	    --image="gtk-execute" \
+	    --text="${TEXT}\n\nLog delle operazioni di download: in particolare, sono registrati i tentativi senza successo e i reindirizzamenti\n" \
+	    --text-info \
+	    --tail \
+	    "${uri_opts[@]}" \
+	    --listen \
+	    --filename="$downloads_log" \
+	    --button="Chiudi!gtk-ok":0 \
+	    "${YAD_ZDL[@]}" \
+	    --width=800 --height=600 &
+	    
+    else
+	yad --title="Attenzione!" \
+	    --text="Il file $downloads_log non è disponibile in $PWD" \
+	    --image="dialog-error" \
+	    --button="Chiudi!gtk-ok:0" \
+	    "${YAD_ZDL[@]}" &
+    fi
 }
 
 function browse_xdcc_search {
@@ -832,7 +916,7 @@ function display_sockets_gui {
 			    --text="$msg_server"
 		    } &			
 	        else
-		    yad --image=gtk-dialog-error \
+		    yad --image="dialog-error" \
 			--text="<b>Porta $socket_port non valida!</b>\nInserire una porta TCP valida (assicurati che sia libera):\nnumero naturale compreso fra 1024 e 65535"
 		    return 1
 		fi
@@ -975,6 +1059,7 @@ function run_gui {
     
     get_GUI_ID
     links_log="links.txt"
+    downloads_log="zdl_log.txt"
     gui_pid_file="$path_tmp"/gui_pid.$GUI_ID
     links_file_gui="$path_tmp"/links_file_gui.$GUI_ID
     links_file_gui_diff="$path_tmp"/links_file_gui_diff.$GUI_ID
@@ -990,11 +1075,10 @@ function run_gui {
     
     YAD_ZDL=(
 	--window-icon="$ICON"
-	--center
 	--borders=5
 	--selectable-labels
     )
-    
+
     start_daemon_gui
 
     check_instance_gui &&
