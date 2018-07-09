@@ -64,6 +64,7 @@ path_tmp=".${prog}_tmp"
 mkdir -p "$path_tmp"
 
 path_server="$HOME"/.zdl/zdl.d
+#path_server=/tmp/zdl.d
 mkdir -p "$path_server"
 
 path_conf="$HOME/.${prog}"

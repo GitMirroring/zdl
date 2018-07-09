@@ -1,8 +1,8 @@
 #!/bin/bash
 
-zdl -s $1 --no-stop &
-disown
-## exit status in "$path_tmp"/zdl-sockets-exit :
+/usr/local/bin/zdl -s $1 --no-stop 
+
+## exit status in "$path_server"/zdl-sockets-exit :
 # 0 = started
 # 1 = already in use at port $1
 # 2 = failed

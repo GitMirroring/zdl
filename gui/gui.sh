@@ -400,7 +400,7 @@ function quit_gui {
     local pid item
     declare -a pids
 
-    for item in "$yad_multiprogress_pid_file" "$gui_pid_file"
+    for item in "$yad_multiprogress_pid_file"
     do
     	if [ -s "$item" ]
     	then
@@ -413,6 +413,7 @@ function quit_gui {
     do
 	kill -9 $pid 2>/dev/null
     done
+    return 5
 }
 
 function kill_yad_multiprogress {
@@ -493,7 +494,7 @@ function load_download_manager_gui {
 function display_download_manager_gui {
     exec 33<&-
     exec 44<&-
-    exec 0<&-
+    
     export PIPE_03=/tmp/yadpipe03.$GUI_ID
     test -e $PIPE_03 && rm -f $PIPE_03
     mkfifo $PIPE_03
@@ -504,7 +505,7 @@ function display_download_manager_gui {
     mkfifo $PIPE_04
     exec 44<> $PIPE_04
 
-    local text="${TEXT}\n\nSeleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere la funzione:" 
+    local text="${TEXT}\n\nSeleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere la funzione o fai doppio click su un download:" 
 
     {
 	declare -a res
@@ -654,81 +655,67 @@ function display_download_manager_opts {
     } &
 }
 
+function display_old_links_gui {
+    display_file_gui "$links_log" \
+		     "Elenco dei link" \
+		     "${TEXT}\n\nElenco dei link già immessi\n"
+    
+}
+
 function display_download_manager_log {
+    display_file_gui "$downloads_log" \
+		     "Risultati attività di download" \
+		     "${TEXT}\n\nLog delle operazioni di download: in particolare, sono registrati i tentativi senza successo e i reindirizzamenti\n"
+}
+
+function display_file_gui {
+    local filename="$1"
+    local title="$2"
+    local text="$3"
+    
     declare -a uri_opts=(
 	--show-uri
 	--uri-color=blue 
     )
-
-    exec 0<&-
-    if [ -s "$links_log" ]
-    then
-	(( $(wc -l <"$links_log") >1000 )) && unset uri_opts
-	   
-	tail -f "$downloads_log" </dev/null |
-	yad --title="Elenco dei link" \
-	    --image="gtk-execute" \
-	    --text="${TEXT}\n\nLog delle operazioni di download: in particolare, sono registrati i tentativi senza successo e i reindirizzamenti\n" \
-	    --text-info \
-	    --tail \
-	    "${uri_opts[@]}" \
-	    --listen \
-	    --filename="$downloads_log" \
-	    --button="Chiudi!gtk-ok":0 \
-	    "${YAD_ZDL[@]}" \
-	    --width=800 --height=600 &
+    {
+	if [ -f "$filename" ]
+	then
+	    (( $(wc -l <"$filename") >1000 )) && unset uri_opts
 	    
-    else
-	yad --title="Attenzione!" \
-	    --text="Il file $downloads_log non è disponibile in $PWD" \
-	    --image="dialog-error" \
-	    --button="Chiudi!gtk-ok:0" \
-	    "${YAD_ZDL[@]}" &
-    fi
+	    tail -f "$filename" |
+		yad --title="$title" \
+		    --image="gtk-execute" \
+		    --text="$text" \
+		    --text-info \
+		    --tail \
+		    "${uri_opts[@]}" \
+		    --listen \
+		    --filename="$filename" \
+		    --button="Cancella il file!gtk-execute":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
+		    --button="Chiudi!gtk-close":0 \
+		    "${YAD_ZDL[@]}" \
+		    --width=800 --height=600
+	    
+	else
+	    yad --title="Attenzione!" \
+		--text="Il file $filename non è disponibile in $PWD" \
+		--image="dialog-error" \
+		--center \
+		--on-top \
+		--button="Chiudi!gtk-ok:0" \
+		"${YAD_ZDL[@]}"
+	fi
+    } &
 }
 
 function browse_xdcc_search {
     x-www-browser "http://www.xdcc.eu/search.php?searchkey=$1" &
 }
 
-function display_old_links_gui {
-    declare -a uri_opts=(
-	--show-uri
-	--uri-color=blue 
-    )
-
-    exec 0<&-
-    if [ -s "$links_log" ]
-    then
-	(( $(wc -l <"$links_log") >1000 )) && unset uri_opts
-	   
-	tail -f "$links_log" </dev/null |
-	yad --title="Elenco dei link" \
-	    --image="gtk-execute" \
-	    --text="${TEXT}\n\nElenco dei link già immessi\n" \
-	    --text-info \
-	    --tail \
-	    "${uri_opts[@]}" \
-	    --listen \
-	    --filename="$links_log" \
-	    --button="Chiudi!gtk-ok":0 \
-	    "${YAD_ZDL[@]}" \
-	    --width=800 --height=600 &
-	    
-    else
-	yad --title="Attenzione!" \
-	    --text="Il file links.txt non è disponibile in $PWD" \
-	    --image="dialog-error" \
-	    --button="Chiudi!gtk-ok:0" \
-	    "${YAD_ZDL[@]}" &
-    fi
-}
-
 function display_link_manager_gui {
     local IFS_old="$IFS"
     IFS="€"
     local msg
-    # - file torrent
 
     {
 	declare -a res
@@ -846,7 +833,7 @@ function display_sockets_gui {
     declare -a socket_ports=( $(get_status_sockets_gui) )
     local text="${TEXT}\n\nAvvia e arresta connessioni web (socket TCP): indicare una porta TCP libera\n\n"    
     local msg_img msg_server
-    
+
     local default_port=8080
     if [ -n "${socket_ports[*]}" ]
     then
@@ -858,73 +845,69 @@ function display_sockets_gui {
 	done
     fi
     
-    local completion_ports="^${default_port}"
     if [ -n "${socket_ports[*]}" ]
     then
 	text+="<b>Socket già attivi:</b>\n"
 	for port in "${socket_ports[@]}"
 	do
-	    completion_ports+="!$port"
 	    text+="$port\n"
 	done
 	text+="\n"
     else
-	text+="Socket non ancora avviati\n"
+	text+="<b>Socket non ancora avviati</b>\n"
     fi
    
     {
 	res=($(yad --form \
 		  --text "$text" \
-		  --field="Porta socket:CE" "$completion_ports" \
+		  --field="Porta socket:NUM" "$default_port!1024..65535" \
 		  --field="Comando:CB" "Avvia!Arresta" \
 		  --separator=' ' \
 		  "${YAD_ZDL[@]}"))
 	case $? in
 	    0)
-		# if [ "${res[1]}" == Avvia ]
-		# then
-		#     local socket_port="${res[0]}"
-		#     #/usr/local/bin/zdl -s "$socket_port" --no-input &
-		# fi
-
 		local socket_port="${res[0]}"
 
 		if [[ "$socket_port" =~ ^([0-9]+)$ ]] &&
 		       ((socket_port > 1024)) && ((socket_port < 65535))
 		then
-		    {
-			if [ "${res[1]}" == Avvia ]
+		    if [ "${res[1]}" == Avvia ]
+		    then
+			if ! check_instance_server $socket_port &>/dev/null
 			then
-			    zdl-sockets $socket_ports
-			    while [ ! -s "$path_tmp"/zdl-sockets-exit ]
-			    do
-				sleep 0.1
-			    done
-
-			    case $(cat "$path_tmp"/zdl-sockets-exit) in
-				0)
-				    msg_server="Avviato nuovo socket alla porta $socket_port"
-			     	    msg_img="gtk-ok"
-				    ;;
-				1)
-			    	    msg_server="Socket già in uso alla porta $socket_port"
-			    	    msg_img="gtk-dialog-error"
-				    ;;
-				2)
-				    msg_server="Avviato nuovo socket alla porta $socket_port"
-			    	    msg_img="gtk-ok"
-				    ;;
-			    esac
+	    		    unset start_socket
+	    		    if run_zdl_server $socket_port
+	    		    then
+			    	msg_server="Avviato nuovo socket alla porta $socket_port"
+			        msg_img="gtk-ok"
+				
+			    elif ! check_port "$socket_port"
+			    then
+			        msg_server="Socket già in uso alla porta $socket_port"
+			        msg_img="gtk-dialog-error"
+				
+			    else
+			    	msg_server="Avviato nuovo socket alla porta $socket_port"
+			        msg_img="gtk-ok"
+			    fi
+			    
 			else
 			    msg_server="Da implementare"
 			fi
 			yad --image="$msg_img" \
-			    --text="$msg_server"
-		    } &			
-	        else
-		    yad --image="dialog-error" \
-			--text="<b>Porta $socket_port non valida!</b>\nInserire una porta TCP valida (assicurati che sia libera):\nnumero naturale compreso fra 1024 e 65535"
-		    return 1
+			    --center \
+			    --on-top \
+			    "${YAD_ZDL[@]}" \
+			    --text="$msg_server" &
+			return 
+	            else
+			yad --image="dialog-error" \
+			    --center \
+			    --on-top \
+			    "${YAD_ZDL[@]}" \
+			    --text="<b>Porta $socket_port non valida!</b>\n\nInserire come porta TCP un numero naturale compreso fra 1024 e 65535" &
+			return 1
+		    fi
 		fi
 		;;
 	    1)
@@ -942,12 +925,11 @@ function display_multiprogress_gui {
 
     while : 
     do
-	exec 0<&-
 	check_yad_multiprogress
 	get_data_progress
 	sleep 0.3
 	    
-	exe_button_result "$yad_multiprogress_result_file"
+	exe_button_result "$yad_multiprogress_result_file" || break
 	    
     done 2>/dev/null |
 	yad --multi-progress \
@@ -971,11 +953,10 @@ function display_multiprogress_gui {
     echo "$yad_multiprogress_pid" >"$yad_multiprogress_pid_file"
     
     wait $yad_multiprogress_pid
-    return 0
+    return 1
 }
 
 function display_console_gui {
-    exec 0<&-
     tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
 	    --image="gtk-execute" \
@@ -1024,20 +1005,14 @@ function check_instance_gui {
 		then
 		    return 0
 		else
-		    kill -9 $(cat "$path_tmp"/gui_pid.$pid_id 2>/dev/null) &>/dev/null
 		    return 1
 		fi
 	    fi
 	done < <(ls -1t "$path_tmp"/yad_multiprogress_pid.*)
-    else
-	while read line
-	do	    
-	    kill -9 $line &>/dev/null
-	done < <(cat "$path_tmp"/gui_pid.* 2>/dev/null)
     fi
-    rm -f "$path_tmp"/gui_pid.*
     return 1
 }
+
 
 function run_gui {
     if ! hash yad
@@ -1054,8 +1029,6 @@ function run_gui {
     path_usr="/usr/local/share/${prog}"
     start_file="$path_tmp"/links_loop.txt
 
-    exec 0<&-
-
     IMAGE="$path_usr"/webui/zdl-64x64.png
     IMAGE2="$path_usr"/webui/zdl-32x32.png
     #IMAGE="browser-download"
@@ -1066,7 +1039,6 @@ function run_gui {
     get_GUI_ID
     links_log="links.txt"
     downloads_log="zdl_log.txt"
-    gui_pid_file="$path_tmp"/gui_pid.$GUI_ID
     links_file_gui="$path_tmp"/links_file_gui.$GUI_ID
     links_file_gui_diff="$path_tmp"/links_file_gui_diff.$GUI_ID
     links_file_gui_complete="$path_tmp"/links_file_gui_complete.$GUI_ID
@@ -1095,16 +1067,13 @@ function run_gui {
     do
 	sleep 0.1
     done
-    
+
     while :
     do
 	display_multiprogress_gui
+	[ "$?" == 5 ] && break
 	sleep 1
     done &
-    gui_pid=$!
-    echo "$gui_pid" >"$gui_pid_file"
-
-    wait "$gui_pid"
 }
 
 ####################################################

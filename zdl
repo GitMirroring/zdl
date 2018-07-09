@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/bin/bash -i 
 #
 # ZigzagDownLoader (ZDL)
 # 
@@ -195,7 +195,7 @@ fi
 
 
 
-if [[ "${args[*]}" =~ (-g|--silent|--no-update) ]]
+if [[ "${args[*]}" =~ (-g|-s|--no-update|--no-stop) ]] ## silent - sockets - gui
 then
     for ((i=0; i<=$max_args; i++))
     do
@@ -303,9 +303,9 @@ then
 	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
 	then
 	    unset args[i]
-	    exec 0<&-
-	    run_gui "${args[@]}" &>/dev/null &
-	    disown
+
+	    ## non in background! altrimenti salta la gestione dei socket
+	    run_gui "${args[@]}" &>/dev/null
 	    exit
 	fi
     done
@@ -438,6 +438,7 @@ then
 	fi
     done
 fi
+
 
 if [ "${args[*]}" != "${args[*]//--silent}" ]
 then
@@ -686,7 +687,9 @@ fi
 export pid_prog=$$
 
 mkdir -p "$path_server"
-set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
+
+#set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
+echo "$(realpath "$PWD")" >>"$path_server"/paths.txt
 
 if [[ "${args[*]}" =~ \-s ]]
 then
@@ -717,19 +720,19 @@ then
 		then
 		    msg_server="Avviato nuovo socket alla porta $socket_port"
 		    init_msg+="$(sprint_c 1 "$msg_server\n")"
+		    echo 0 >"$path_server"/zdl-sockets-exit
 		fi
-		echo 0 >"$path_tmp"/zdl-sockets-exit
 		
 	    elif ! check_port "$socket_port"
 	    then
 		msg_server="Socket già in uso alla porta $socket_port (puoi specificare una nuova porta con: -s PORTA oppure --socket=PORTA)"
 		init_msg+="$(sprint_c 3 "$msg_server\n")"
-		echo 1 >"$path_tmp"/zdl-sockets-exit
+		echo 1 >"$path_server"/zdl-sockets-exit
 		
 	    else
 		msg_server="Socket non avviato alla porta $socket_port"		
 		init_msg+="$(sprint_c 3 "$msg_server\n")"
-		echo 2 >"$path_tmp"/zdl-sockets-exit
+		echo 2 >"$path_server"/zdl-sockets-exit
 	    fi
 	fi
     done
