@@ -518,21 +518,22 @@ ${BBlue} * ${Color_Off}│ ${BBlue}schermata principale${Color_Off}\n"
 			E)
 			    for i in ${inputs[*]}
 			    do
+				set_link - "${url_out[$i]}"
 				kill_url "${url_out[$i]}" 'xfer-pids'
 				kill_url "${url_out[$i]}" 'irc-pids'
 				
 				kill -9 ${pid_out[$i]} &>/dev/null
 				rm -f "${file_out[$i]}" "${file_out[$i]}.st" "${file_out[$i]}.zdl" "${file_out[$i]}.aria2" "$path_tmp"/"${file_out[$i]}_stdout.tmp"
-				set_link - "${url_out[$i]}"
+
 			    done
 			    ;;
 
 			T)
 			    for i in ${inputs[*]}
 			    do
+				set_link - "${url_out[$i]}"
 				kill -9 ${pid_out[$i]} &>/dev/null
 				rm -f "$path_tmp"/"${file_out[$i]}_stdout.tmp"
-				set_link - "${url_out[$i]}"
 			    done
 			    ;;
 

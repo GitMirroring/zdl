@@ -132,17 +132,30 @@ function run_web_client {
     fi
     
     [ ! -d /cygdrive ] &&
-	run_browser $port
+	run_browser http://127.0.0.1 $port
 }
 
 function run_browser {
-    local port="$1"
-    
+    local url="$1"
+    local port="$2"
+    local default_port="80"    
+    local default_url="http://127.0.0.1"
+
+
+    if [[ ! "$port" =~ ^([0-9]+)$ ]]
+    then
+	port="$default_port"
+    fi
+    if ! url "$url"
+    then
+	url="${default_url}$port"
+    fi
+	
     while check_port $port
     do
 	sleep 0.1
     done
-    x_www_browser "http://localhost:$port" &
+    x_www_browser "$url" &
 }
 
 function x_www_browser {

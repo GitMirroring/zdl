@@ -71,7 +71,8 @@ function print_filter {
     local ads="$2"
     if [ -f "$gui_log" ]
     then
- 	echo -ne "$1$ads" | tee -a "$gui_log" 
+ 	echo -ne "$1$ads" | tee "$path_tmp"/print_filter_output
+	sanitize_text <"$path_tmp"/print_filter_output >>"$gui_log" 
 	
     else
 	echo -ne "$1$ads" 

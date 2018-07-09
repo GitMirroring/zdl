@@ -131,6 +131,21 @@ OPZIONI
        --no-complete           Cancella i file temporanei dei download completati
 
 
+Socket e interfacce utente:
+  -s [porta], --socket[=porta]
+                               Avvia il programma collegandolo a un socket. 
+                               Se non indicata, la porta è quella predefinita.
+
+  --web-ui
+                               Interfaccia utente web. Avvia il programma 
+                               in modalità demone nella directory corrente o, 
+                               eventualmente, in quella passata come argomento, 
+                               un socket alla porta predefinita o, se occupata 
+                               da un'altra applicazione, alla prima porta libera 
+                               e il browser predefinito all'indirizzo dell'interfaccia 
+                               utente. 
+
+
 IRC/XDCC:
   -x,  --xdcc                  Avvia l'inserimento interattivo di tre dati:
                                1) l'host del server IRC (HOST)

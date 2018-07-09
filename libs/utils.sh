@@ -360,6 +360,7 @@ function replace_url_in {
 }
 
 function sanitize_url {
+    declare -n ref="$2"
     data=$(anydownload "$1")
     
     data="${data%%'?'}"
@@ -372,8 +373,13 @@ function sanitize_url {
     data="${data//')'/%29}"
     data="${data//'['/%5B}"
     data="${data//']'/%5D}"
-    
-    echo "$data"
+
+    if [[ $2 ]]
+    then
+	ref="$data"
+    else
+	echo "$data"
+    fi
 }
 
 function sanitize_file_in {
@@ -575,6 +581,22 @@ function parse_int {
     else
 	ref=""
 	return 1
+    fi
+}
+
+function length_to_human {
+    local length_K=$(($1/1024))
+    local length_M=$((length_K/1024))
+    if ((length_M > 0))
+    then
+	printf "%.2fMB" $length_M
+	
+    elif ((length_K > 0))
+    then
+	printf "%.2fKB" $length_K
+	
+    else
+	echo "$length_B B"
     fi
 }
 
