@@ -308,7 +308,7 @@ function update {
     chmod +rx -R .
 
     
-    if ! try mv zdl zdl-xterm $BIN
+    if ! try mv zdl zdl-xterm zdl-sockets $BIN
     then
 	print_c 3 "$op non riuscit${suffix}. Riprova un'altra volta"
 	exit 1

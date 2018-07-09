@@ -895,23 +895,24 @@ function display_sockets_gui {
 		    {
 			if [ "${res[1]}" == Avvia ]
 			then
-			    if ! check_instance_server $socket_port &>/dev/null
-			    then
-				if run_zdl_server $socket_port
-				then
-				    msg_server="Avviato nuovo socket alla porta $socket_port"
-				    msg_img="gtk-ok"
-				fi
+			    zdl-sockets $socket_ports
+			    # if ! check_instance_server $socket_port &>/dev/null
+			    # then
+			    # 	if run_zdl_server $socket_port
+			    # 	then
+			    # 	    msg_server="Avviato nuovo socket alla porta $socket_port"
+			    # 	    msg_img="gtk-ok"
+			    # 	fi
 				
-			    elif ! check_port "$socket_port"
-			    then
-				msg_server="Socket già in uso alla porta $socket_port"
-				msg_img="gtk-dialog-error"
+			    # elif ! check_port "$socket_port"
+			    # then
+			    # 	msg_server="Socket già in uso alla porta $socket_port"
+			    # 	msg_img="gtk-dialog-error"
 
-			    else
-				msg_server="Socket non avviato alla porta $socket_port"
-				msg_img="gtk-dialog-error"
-			    fi
+			    # else
+			    # 	msg_server="Socket non avviato alla porta $socket_port"
+			    # 	msg_img="gtk-dialog-error"
+			    # fi
 			else
 			    msg_server="Da implementare"
 			fi

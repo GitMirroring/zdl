@@ -1,0 +1,4 @@
+#!/bin/bash
+
+zdl -s $1 --no-stop &
+disown
