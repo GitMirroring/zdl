@@ -400,20 +400,27 @@ function quit_gui {
     local pid item
     declare -a pids
 
-    for item in "$yad_multiprogress_pid_file"
-    do
-    	if [ -s "$item" ]
-    	then
-    	    pids+=( $(cat "$item") )
-	    rm "$item"
-    	fi
-    done
+    ## utile se si vogliono uccidere altri processi di cui si dispone di un "pid_file":
+    ##
+    # for item in "$yad_multiprogress_pid_file"
+    # do
+    # 	if [ -s "$item" ]
+    # 	then
+    # 	    pids+=( $(cat "$item") )
+    # 	    rm "$item"
+    # 	fi
+    # done
 
-    for pid in ${pids[@]}
-    do
-	kill -9 $pid 2>/dev/null
-    done
-    return 5
+    # for pid in ${pids[@]}
+    # do
+    # 	kill -9 $pid 2>/dev/null
+    # done
+
+    ## più efficiente per uno:
+    pid=$(cat "$yad_multiprogress_pid_file")
+    rm "$yad_multiprogress_pid_file"
+    kill -9 $pid 2>/dev/null
+    echo $GUI_ID > "$exit_file"
 }
 
 function kill_yad_multiprogress {
@@ -825,12 +832,15 @@ Non hai inserito un campo del form necessario ad effettuare il download tramite 
     IFS=$IFS_old
 }
 
-function get_status_sockets_gui {
-    :
-}
-
 function display_sockets_gui {
-    declare -a socket_ports=( $(get_status_sockets_gui) )
+    declare -a socket_ports
+    local port
+    while read port
+    do
+	! check_port $port &&
+	    socket_ports+=( $port )
+    done < "$path_server"/socket-ports
+
     local text="${TEXT}\n\nAvvia e arresta connessioni web (socket TCP): indicare una porta TCP libera\n\n"    
     local msg_img msg_server
 
@@ -859,61 +869,71 @@ function display_sockets_gui {
    
     {
 	res=($(yad --form \
-		  --text "$text" \
-		  --field="Porta socket:NUM" "$default_port!1024..65535" \
-		  --field="Comando:CB" "Avvia!Arresta" \
-		  --separator=' ' \
-		  "${YAD_ZDL[@]}"))
-	case $? in
-	    0)
-		local socket_port="${res[0]}"
+		   --text "$text" \
+		   --field="Porta socket:NUM" "$default_port!1024..65535" \
+		   --field="Comando:CB" "Avvia!Arresta" \
+		   --field="Esegui!gtk-ok!0":FBTN "bash -c 'echo ok %1 %2'" \
+		   --button="Chiudi!gtk-close":0 \
+		   --separator=' ' \
+		   "${YAD_ZDL[@]}"))
 
+	local socket_port="${res[1]}"
+	[ "${res[0]}" == ok ] &&
+	    {
 		if [[ "$socket_port" =~ ^([0-9]+)$ ]] &&
 		       ((socket_port > 1024)) && ((socket_port < 65535))
 		then
-		    if [ "${res[1]}" == Avvia ]
+		    if [ "${res[2]}" == Avvia ]
 		    then
 			if ! check_instance_server $socket_port &>/dev/null
 			then
 	    		    unset start_socket
 	    		    if run_zdl_server $socket_port
 	    		    then
-			    	msg_server="Avviato nuovo socket alla porta $socket_port"
-			        msg_img="gtk-ok"
+				msg_server="Avviato nuovo socket alla porta $socket_port"
+				msg_img="gtk-ok"
 				
 			    elif ! check_port "$socket_port"
 			    then
-			        msg_server="Socket già in uso alla porta $socket_port"
-			        msg_img="gtk-dialog-error"
+				msg_server="Socket già in uso alla porta $socket_port"
+				msg_img="gtk-dialog-error"
 				
 			    else
-			    	msg_server="Avviato nuovo socket alla porta $socket_port"
-			        msg_img="gtk-ok"
+				msg_server="Socket alla porta $socket_port fallito"
+				msg_img="gtk-dialog-error"
 			    fi
+			fi	    
+		    else
+			if ! check_port $socket_port
+			then
+			    kill_server $socket_port
+			    sleep 2
 			    
+			    if ! check_port $socket_port
+			    then
+				msg_server="Arresto socket fallito alla porta $socket_port"
+				msg_img="gtk-dialog-error"
+			    else
+				msg_server="Arrestato socket alla porta $socket_port"
+				msg_img="gtk-ok"
+			    fi
 			else
-			    msg_server="Da implementare"
+			    msg_server="Socket già chiuso uso alla porta $socket_port"
+			    msg_img="gtk-dialog-error"
 			fi
-			yad --image="$msg_img" \
-			    --center \
-			    --on-top \
-			    "${YAD_ZDL[@]}" \
-			    --text="$msg_server" &
-			return 
-	            else
-			yad --image="dialog-error" \
-			    --center \
-			    --on-top \
-			    "${YAD_ZDL[@]}" \
-			    --text="<b>Porta $socket_port non valida!</b>\n\nInserire come porta TCP un numero naturale compreso fra 1024 e 65535" &
-			return 1
 		    fi
+		else
+		    msg_server="<b>Porta $socket_port non valida!</b>\n\nInserire come porta TCP un numero naturale compreso fra 1024 e 65535"
+		    msg_img="dialog-error"
 		fi
-		;;
-	    1)
-		return 1
-		;;
-	esac
+
+		yad --image="$msg_img" \
+		    --center \
+		    --on-top \
+		    "${YAD_ZDL[@]}" \
+		    --button="Chiudi":0 \
+		    --text="$msg_server" &
+	    }
     } &
 }
 
@@ -1068,10 +1088,12 @@ function run_gui {
 	sleep 0.1
     done
 
+    exit_file="$path_tmp"/exit_file.$GUI_ID
+    echo 0 > "$exit_file"
     while :
     do
 	display_multiprogress_gui
-	[ "$?" == 5 ] && break
+	[ $(cat "$exit_file") == $GUI_ID  ] && break
 	sleep 1
     done &
 }
