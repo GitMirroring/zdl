@@ -820,7 +820,7 @@ function display_sockets_gui {
 				msg_img="gtk-dialog-error"
 			    fi
 			else
-
+:
 			fi
 			yad --image="$msg_img" \
 			    --text="$msg_server"
