@@ -718,15 +718,18 @@ then
 		    msg_server="Avviato nuovo socket alla porta $socket_port"
 		    init_msg+="$(sprint_c 1 "$msg_server\n")"
 		fi
+		echo 0 >"$path_tmp"/zdl-sockets-exit
 		
 	    elif ! check_port "$socket_port"
 	    then
 		msg_server="Socket già in uso alla porta $socket_port (puoi specificare una nuova porta con: -s PORTA oppure --socket=PORTA)"
 		init_msg+="$(sprint_c 3 "$msg_server\n")"
-
+		echo 1 >"$path_tmp"/zdl-sockets-exit
+		
 	    else
 		msg_server="Socket non avviato alla porta $socket_port"		
 		init_msg+="$(sprint_c 3 "$msg_server\n")"
+		echo 2 >"$path_tmp"/zdl-sockets-exit
 	    fi
 	fi
     done

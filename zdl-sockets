@@ -2,3 +2,7 @@
 
 zdl -s $1 --no-stop &
 disown
+## exit status in "$path_tmp"/zdl-sockets-exit :
+# 0 = started
+# 1 = already in use at port $1
+# 2 = failed
