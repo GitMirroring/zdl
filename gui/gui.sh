@@ -300,14 +300,14 @@ function display_link_error_gui {
 function edit_links_gui {
     {
 	declare -a links
-	local matched
+	local matched text
 
 	local start_file_tmp=$(tempfile)
 	if [ -s "$start_file" ]
 	then
 	    cp "$start_file" "$start_file_tmp"
 	fi
-	TEXT+="\n\nModifica la lista dei link da cui avviare lo scaricamento:
+	text="$TEXT\n\nModifica la lista dei link da cui avviare lo scaricamento:
 vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignorati)\n"
 	
 	links=(
@@ -315,7 +315,7 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		  --image="gtk-execute" \
 		  --borders=5 \
 		  --window-icon="$ICON" \
-		  --text="$TEXT" \
+		  --text="$text" \
 		  --text-info \
 		  --editable \
 		  --show-uri \
@@ -502,7 +502,7 @@ function display_download_manager_gui {
     mkfifo $PIPE_04
     exec 44<> $PIPE_04
 
-    TEXT+="\n\nSeleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere la funzione:" 
+    local text="${TEXT}\n\nSeleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere la funzione:" 
 
     {
 	declare -a res
@@ -513,7 +513,7 @@ function display_download_manager_gui {
 		       --multiple \
 		       --title="Downloads" \
 		       --width=1200 --height=300 \
-		       --text="$TEXT" \
+		       --text="$text" \
 		       --expand-column=3 \
 		       --hide-column=6 \
 		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID:NUM" \
@@ -540,7 +540,6 @@ function display_download_manager_gui {
 		    then
 			for ((i=5; i<${#res[@]}; i=i+6))
 			do
-			    echo "${res[i]}" >>RES-PIDS
 		    	    kill -9 "${res[i]}" &>/dev/null
 			done
 		    fi
@@ -585,7 +584,7 @@ function display_download_manager_gui {
 function yad_download_manager_dclick {
     declare -a res
     res=( "$@" )
-    local TEXT
+    local text
     yad --text "${res[@]}" \
 	--&    
 }
@@ -758,7 +757,8 @@ function get_status_sockets_gui {
 
 function display_sockets_gui {
     declare -a socket_ports=( $(get_status_sockets_gui) )
-    local TEXT+="Avvia e arresta connessioni web (socket TCP): indicare una porta TCP libera\n\n"    
+    local text="${TEXT}\n\nAvvia e arresta connessioni web (socket TCP): indicare una porta TCP libera\n\n"    
+    local msg_img msg_server
     
     local default_port=8080
     if [ -n "${socket_ports[*]}" ]
@@ -774,22 +774,20 @@ function display_sockets_gui {
     local completion_ports="^${default_port}"
     if [ -n "${socket_ports[*]}" ]
     then
-	TEXT+="<b>Socket già attivi:</b>\n"
+	text+="<b>Socket già attivi:</b>\n"
 	for port in "${socket_ports[@]}"
 	do
 	    completion_ports+="!$port"
-	    TEXT+="$port\n"
+	    text+="$port\n"
 	done
-	TEXT+="\n"
+	text+="\n"
     else
-	TEXT+="Socket non ancora avviati\n"
+	text+="Socket non ancora avviati\n"
     fi
-    
-
-
+   
     {
 	res=($(yad --form \
-		  --text "$TEXT" \
+		  --text "$text" \
 		  --field="Porta socket:CE" "$completion_ports" \
 		  --field="Comando:CB" "Avvia!Arresta" \
 		  --separator=' ' \
@@ -809,17 +807,22 @@ function display_sockets_gui {
 				if run_zdl_server $socket_port
 				then
 				    msg_server="Avviato nuovo socket alla porta $socket_port"
+				    msg_img="gtk-ok"
 				fi
 				
 			    elif ! check_port "$socket_port"
 			    then
 				msg_server="Socket già in uso alla porta $socket_port"
+				msg_img="gtk-dialog-error"
 
 			    else
-				msg_server="Socket non avviato alla porta $socket_port"		
+				msg_server="Socket non avviato alla porta $socket_port"
+				msg_img="gtk-dialog-error"
 			    fi
+			else
+
 			fi
-			yad --image=gtk-dialog-error \
+			yad --image="$msg_img" \
 			    --text="$msg_server"
 		    } &			
 		else
@@ -860,7 +863,7 @@ function display_multiprogress_gui {
 	    --text="$TEXT" \
 	    --buttons-layout=center \
 	    --button="Links:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Downloads:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Downloads!browser-download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Console ZDL:bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Dis/Attiva ZDL core!gtk-execute:bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="ZDL sockets!gtk-execute:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
