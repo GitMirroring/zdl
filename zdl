@@ -179,16 +179,16 @@ then
 fi
 
 ##############################
-if [[ "${args[*]}" =~ (--no-input) ]]
+if [[ "${args[*]}" =~ (--no-stop) ]]
 then
     for ((i=0; i<=$max_args; i++))
     do
-	if [[ "${args[i]}" =~ ^(--no-input)$ ]]
+	if [[ "${args[i]}" =~ ^(--no-stop)$ ]]
 	then
 	    unset args[i]
 	fi
     done
-    no_input=true
+    no_stop=true
     unset autoupdate
 fi    
 ###############################
@@ -1290,7 +1290,7 @@ fi
 
 #############################################################################
 if [ -z "$start_file" ] &&
-       [ "$no_input" != true ]
+       [ "$no_stop" != true ]
 then
     start_file="$path_tmp/links_loop.txt"
     if ! check_instance_prog

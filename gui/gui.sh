@@ -26,6 +26,7 @@
 
 function get_download_path {
     declare -n ref="$1"
+    ICON="$path_usr"/webui/icon-32x32.png
     
     if command -v yad &>/dev/null
     then
@@ -34,6 +35,8 @@ function get_download_path {
 		  --directory \
 		  --center \
 		  --window-icon "$ICON" \
+		  --borders=5 \
+		  --selectable-labels \
 		  --width=700 \
 		  --height=500 \
 		  --button="Abbandona!gtk-no:1" \
@@ -313,8 +316,6 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 	links=(
 	    $(yad --title="Editor links" \
 		  --image="gtk-execute" \
-		  --borders=5 \
-		  --window-icon="$ICON" \
 		  --text="$text" \
 		  --text-info \
 		  --editable \
@@ -322,10 +323,12 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		  --uri-color=blue \
 		  --listen \
 		  --tail \
+		  --width=800 --height=600 \
 		  --filename="$start_file_tmp" \
 		  --width=800 \
 		  --button="Salva!gtk-ok:0" \
-		  --button="Annulla!gtk-no:1")
+		  --button="Annulla!gtk-no:1" \
+		  "${YAD_ZDL}")
 	)
 	
 	case $? in
@@ -624,31 +627,31 @@ function display_download_manager_opts {
 
     local max_dl="$(cat "$path_tmp"/max-dl)!0..20"
   
-    local text="$TEXT\n\n$downloaders - $max_dl"
+    local text="$TEXT\n\n"
     
     {
-	declare -a res=($(yad --title="Opzioni di download" \
-			  --text="$text" \
-			  --form \
-			  --separator=' ' \
-			  --center \
-			  --field="Downloader predefinito":CB "${downloaders#\!}"\
-			  --field="Downloads simultanei":NUM "${max_dl#\!}"\
-			  --button="Esegui!gtk-execute":0  \
-			  --button="Chiudi!gtk-close":1  \
-			  ${YAD_ZDL[@]}))
-	case $? in
-	    0)
-		echo ${res[0]} >"$path_tmp"/downloader
-		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
-		return 0
-		;;
-	    1)
-		return 1
-		;;
-	esac
+	while read -a res
+	do
+    		    echo ${res[0]} >"$path_tmp"/downloader
+    		    echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
+
+	    kill -9 $(cat "$path_tmp"/optsdl_yad-pid)
+	    
+	done < <(
+	    yad --title="Opzioni di download" \
+    		--text="$text" \
+    		--form \
+    		--separator=' ' \
+    		--center \
+    		--field="Downloader predefinito":CB "${downloaders#\!}"\
+    		--field="Downloads simultanei":NUM "${max_dl#\!}"\
+    		--field="Esegui!gtk-execute":FBTN "bash -c 'echo %1 %2'"  \
+		--button="Chiudi!gtk-close":1  \
+    		${YAD_ZDL[@]} &
+	    local pid=$!
+	    echo $pid >"$path_tmp"/optsdl_yad-pid
+	)
     } &
-	
 }
 
 function display_download_manager_log {

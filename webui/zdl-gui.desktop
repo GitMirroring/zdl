@@ -1,0 +1,20 @@
+[Desktop Entry]
+Comment[it]=
+Comment=
+Exec=zdl --gui --path-gui
+GenericName[it]=ZigzagDownLoader --gui
+GenericName=ZigzagDownLoader --gui
+Icon=/usr/local/share/zdl/webui/icon-32x32.png
+MimeType=
+Name[it]=ZDL
+Name=ZDL
+NoDisplay=false
+StartupNotify=true
+Terminal=false
+Categories=Network;WebBrowser;
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

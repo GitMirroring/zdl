@@ -515,6 +515,7 @@ ESTENSIONI:
 	deps['desktop-file-install']=desktop-file-utils
 	deps['curl']=curl
 	deps['phantomjs']=phantomjs
+	deps['yad']=yad
 	## deps['tput']=ncurses-bin
 	## deps['ffmpeg']=ffmpeg
 
