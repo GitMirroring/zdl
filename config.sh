@@ -478,8 +478,11 @@ function init {
     [ -z "$pid_prog" ] && pid_prog=$$ 
 
     get_conf
-    nohup "$path_usr"/libs/update-tubeoffline.sh &>/dev/null &
-    
+    (
+	exec 1>&-
+	exec 2>&-
+	nohup "$path_usr"/libs/update-tubeoffline.sh &>/dev/null
+    ) &
     this_tty=$(tty)
 
     if ! check_instance_prog &&

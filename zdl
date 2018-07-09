@@ -178,6 +178,23 @@ then
     done
 fi
 
+##############################
+if [[ "${args[*]}" =~ (--no-input) ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--no-input)$ ]]
+	then
+	    unset args[i]
+	fi
+    done
+    no_input=true
+    unset autoupdate
+fi    
+###############################
+
+
+
 if [[ "${args[*]}" =~ (-g|--silent|--no-update) ]]
 then
     for ((i=0; i<=$max_args; i++))
@@ -287,7 +304,7 @@ then
 	then
 	    unset args[i]
 	    exec 0<&-
-	    run_gui "${args[@]}" & #>/dev/null &
+	    run_gui "${args[@]}" &>/dev/null &
 	    disown
 	    exit
 	fi
@@ -1271,8 +1288,9 @@ then
     post_readline=true
 fi
 
-
-if [ -z "$start_file" ]
+#############################################################################
+if [ -z "$start_file" ] &&
+       [ "$no_input" != true ]
 then
     start_file="$path_tmp/links_loop.txt"
     if ! check_instance_prog

@@ -489,9 +489,9 @@ function load_download_manager_gui {
 }
 
 function display_download_manager_gui {
-    33<&-
-    44<&-
-    0<&-
+    exec 33<&-
+    exec 44<&-
+    exec 0<&-
     export PIPE_03=/tmp/yadpipe03.$GUI_ID
     test -e $PIPE_03 && rm -f $PIPE_03
     mkfifo $PIPE_03
@@ -610,7 +610,7 @@ function display_old_links_gui {
 	--uri-color=blue 
     )
 
-    0<&-
+    exec 0<&-
     if [ -s "$links_log" ]
     then
 	(( $(wc -l <"$links_log") >1000 )) && unset uri_opts
@@ -794,6 +794,12 @@ function display_sockets_gui {
 		  "${YAD_ZDL[@]}"))
 	case $? in
 	    0)
+		# if [ "${res[1]}" == Avvia ]
+		# then
+		#     local socket_port="${res[0]}"
+		#     #/usr/local/bin/zdl -s "$socket_port" --no-input &
+		# fi
+
 		local socket_port="${res[0]}"
 
 		if [[ "$socket_port" =~ ^([0-9]+)$ ]] &&
@@ -825,7 +831,7 @@ function display_sockets_gui {
 			yad --image="$msg_img" \
 			    --text="$msg_server"
 		    } &			
-		else
+	        else
 		    yad --image=gtk-dialog-error \
 			--text="<b>Porta $socket_port non valida!</b>\nInserire una porta TCP valida (assicurati che sia libera):\nnumero naturale compreso fra 1024 e 65535"
 		    return 1
@@ -846,7 +852,7 @@ function display_multiprogress_gui {
 
     while : 
     do
-	0<&-
+	exec 0<&-
 	check_yad_multiprogress
 	get_data_progress
 	sleep 0.3
@@ -879,7 +885,7 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
-    0<&-
+    exec 0<&-
     tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
 	    --image="gtk-execute" \
