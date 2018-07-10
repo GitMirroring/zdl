@@ -638,27 +638,21 @@ function display_download_manager_opts {
     local text="$TEXT\n\n"
     
     {
-	while read -a res
-	do
-    		    echo ${res[0]} >"$path_tmp"/downloader
-    		    echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
-
-	    kill -9 $(cat "$path_tmp"/optsdl_yad-pid)
-	    
-	done < <(
-	    yad --title="Opzioni di download" \
-    		--text="$text" \
-    		--form \
-    		--separator=' ' \
-    		--center \
-    		--field="Downloader predefinito":CB "${downloaders#\!}"\
-    		--field="Downloads simultanei":NUM "${max_dl#\!}"\
-    		--field="Esegui!gtk-execute":FBTN "bash -c 'echo %1 %2'"  \
-		--button="Chiudi!gtk-close":1  \
-    		${YAD_ZDL[@]} &
-	    local pid=$!
-	    echo $pid >"$path_tmp"/optsdl_yad-pid
-	)
+	res=($(yad --title="Opzioni di download" \
+    		   --text="$text" \
+    		   --form \
+    		   --separator=' ' \
+    		   --center \
+    		   --field="Downloader predefinito":CB "${downloaders#\!}"\
+    		   --field="Downloads simultanei":NUM "${max_dl#\!}"\
+    		   --button="Esegui!gtk-execute":0 \
+		   --button="Chiudi!gtk-close":1  \
+    		   ${YAD_ZDL[@]}))
+	[ "$?" == 0 ] &&
+	    {
+    		echo ${res[0]} >"$path_tmp"/downloader
+    		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
+	    }
     } &
 }
 
