@@ -636,6 +636,8 @@ function display_download_manager_opts {
     local max_dl="$(cat "$path_tmp"/max-dl)!0..20"
   
     local text="$TEXT\n\n"
+    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
+    [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
     
     {
 	res=($(yad --title="Opzioni di download" \
@@ -645,7 +647,7 @@ function display_download_manager_opts {
     		   --center \
     		   --field="Downloader predefinito":CB "${downloaders#\!}"\
     		   --field="Downloads simultanei":NUM "${max_dl#\!}"\
-		   --field="Formato del file":CB "Non converire!mp3!flac"\
+		   --field="Formato del file":CB "${format}Non converire!mp3!flac"\
     		   --button="Salva!gtk-save":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
