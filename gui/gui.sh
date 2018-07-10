@@ -915,7 +915,7 @@ function display_sockets_gui {
 			    msg_img="gtk-ok"
 			fi
 		    else
-			msg_server="Socket già chiuso uso alla porta $socket_port"
+			msg_server="Socket già non disponibile alla porta $socket_port"
 			msg_img="gtk-dialog-error"
 		    fi
 		fi
