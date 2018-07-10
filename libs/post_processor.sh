@@ -144,6 +144,9 @@ function post_process {
 	fi
     done
 
+    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
+    local print_out=$(cat "$path_tmp"/print_out-post_processor 2>/dev/null)
+
     ## --mp3/--flac: conversione formato
     if [ -n "$format" ]
     then

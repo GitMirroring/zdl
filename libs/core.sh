@@ -423,7 +423,9 @@ function check_start_file {
 
 function pipe_files {
     local line
-    
+    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
+    local print_out=$(cat "$path_tmp"/print_out-post_processor 2>/dev/null)
+
     [ -z "$print_out" ] && [ -z "${pipe_out[*]}" ] && return
 
     if [ -f "$path_tmp"/pipe_files.txt ]

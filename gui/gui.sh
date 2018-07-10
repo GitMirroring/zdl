@@ -645,6 +645,7 @@ function display_download_manager_opts {
     		   --center \
     		   --field="Downloader predefinito":CB "${downloaders#\!}"\
     		   --field="Downloads simultanei":NUM "${max_dl#\!}"\
+		   --field="Formato del file":CB "Non converire!mp3!flac"\
     		   --button="Salva!gtk-save":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
@@ -652,6 +653,11 @@ function display_download_manager_opts {
 	    {
     		echo ${res[0]} >"$path_tmp"/downloader
     		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
+		if [[ "${res[2]}" =~ ^(flac|mp3)$ ]]
+		then
+		    echo "${res[2]}" > "$path_tmp"/format-post_processor
+		    echo "scaricati_da_zdl.txt" >"$path_tmp"/print_out-post_processor 2>/dev/null
+		fi
 	    }
     } &
 }

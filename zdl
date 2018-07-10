@@ -634,9 +634,9 @@ then
 		print_c 3 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non trovati"
 		exit
 	    fi
-	    format=${args[i]##*-}
+	    echo ${args[i]##*-} > "$path_tmp"/format-post_processor
 	    unset args[i]
-	    print_out="scaricati_da_zdl.txt"
+	    echo "scaricati_da_zdl.txt" >"$path_tmp"/print_out-post_processor 2>/dev/null
 	    unset args[i]
 	fi
     done
@@ -796,18 +796,6 @@ then
     done
 fi
 
-# if [[ "${args[*]}" =~ (--gui|-g) ]]
-# then
-#     for ((i=0; i<=$max_args; i++))
-#     do
-# 	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
-# 	then
-# 	    this_mode=gui
-# 	    unset args[i]
-# 	fi
-#     done
-# fi
-
 
 if ! check_instance_prog &&
 	! check_instance_daemon
@@ -828,7 +816,6 @@ start_mode_in_tty "$this_mode" "$this_tty"
 fclear
 header_z
 ##########
-
 
 
 if [ "${args[*]}" != "${args[*]//--reconnect}" ]
@@ -1025,7 +1012,7 @@ then
 	then
 	    cmd_test=$(awk '{print $1}' <<< ${args[i]#'--out='} | tr -d \")
 	    
-	    if command -v $cmd_test &>/dev/null
+	    if hash $cmd_test
 	    then
 		pipe_out_str="${args[i]#'--out='}"
 		pipe_out=( ${pipe_out_str#\"} )
@@ -1058,28 +1045,18 @@ then
 	then
 	    if [ "${args[i]}" == '--proxy' ]
 	    then
-		# update_proxy=true
-		# unset args[i]
-		# break
-
 		echo > "$path_tmp"/proxy
 		
 	    elif [ "${args[i]}" == '--proxy=t' ]
 	    then
-		# proxy_types[${#proxy_types[*]}]="Transparent"
-		# update_proxy=true
 		echo "Transparent" >> "$path_tmp"/proxy
 
 	    elif [ "${args[i]}" == '--proxy=a' ]
 	    then
-		# proxy_types[${#proxy_types[*]}]="Anonymous"
-		# update_proxy=true
 		echo "Anonymous" >> "$path_tmp"/proxy
 
 	    elif [ "${args[i]}" == '--proxy=e' ]
 	    then
-		# proxy_types[${#proxy_types[*]}]="Elite"
-		# update_proxy=true
 		echo "Elite" >> "$path_tmp"/proxy
 
 	    elif [ "${args[i]}" != "${args[i]%'='*}" ]
@@ -1090,10 +1067,8 @@ then
 		then
 		    echo "$proxy" > "$path_tmp"/proxy
 		    export http_proxy=$proxy
-		    # defined_proxy=$proxy
 		    print_c 1 "Proxy attivo: $http_proxy\n"
-		    # update_defined_proxy=true
-		    # unset update_proxy
+
 		else
 		    print_c 3 "${args[i]}: argomento non valido\n\n"
 		    usage
@@ -1360,13 +1335,13 @@ function main_loop {
 	   [ -z "$lite_mode" ]	
     then
     	start_file="$path_tmp/links_loop.txt"
-   	sleep 5
+   	sleep 2
 	post_process
 
     elif zero_dl
     then
 	start_file="$path_tmp/links_loop.txt"
-	sleep 5
+	sleep 2
 
     elif check_start_file &&
 	    ! get_exit
@@ -1446,8 +1421,6 @@ function main_loop {
 
 			continue
 		    }
-
-		echo > "$path_tmp"/zdl.tmp > "$path_tmp"/zdl2.tmp
 
 		## se ancora presenti redirezioni fantasma:
 		if [ -f "$path_tmp"/pid_redirects ]
