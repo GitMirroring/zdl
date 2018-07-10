@@ -645,7 +645,7 @@ function display_download_manager_opts {
     		   --center \
     		   --field="Downloader predefinito":CB "${downloaders#\!}"\
     		   --field="Downloads simultanei":NUM "${max_dl#\!}"\
-    		   --button="Esegui!gtk-execute":0 \
+    		   --button="Salva!gtk-save":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
 	[ "$?" == 0 ] &&
