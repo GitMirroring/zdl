@@ -24,32 +24,38 @@
 # zoninoz@inventati.org
 #
 
+### usate prima di run_gui:
+
 function get_download_path {
-    declare -n ref="$1"
+    local path_gui
     ICON="$path_usr"/webui/icon-32x32.png
+    local title="Directory di download"
+    local text="Seleziona la directory di destinazione dei download:"
+    local IMAGE2="$path_usr"/webui/zdl.png
     
-    if command -v yad &>/dev/null
+    if hash yad
     then
-	ref=$(yad --file-selection \
-		  --borders=5 \
-		  --directory \
-		  --center \
-		  --window-icon "$ICON" \
-		  --borders=5 \
-		  --selectable-labels \
-		  --width=700 \
-		  --height=500 \
-		  --button="Abbandona!gtk-no:1" \
-		  --button="Seleziona!gtk-yes:0" \
-		  2>/dev/null)
-	if [[ $? == 1 ]]
+	path_gui=$(yad --file-selection \
+		       --directory \
+		       --image="$IMAGE2" \
+		       --image-on-top \
+		       --text="$text" \
+		       --title="$title" \
+		       --center \
+		       --window-icon "$ICON" \
+		       --borders=5 \
+		       --width=800 \
+		       --height=600 \
+		       --button="Esci!gtk-close":1 \
+		       --button="Seleziona!gtk-yes":0)
+	if [ "$?" == 0 ]
 	then
-	    exit 1
-	else
-	    return 0
+	    echo "$path_gui"
 	fi
     fi
 }
+
+#### usate DA run_gui in poi:
 
 function add_links_file_gui {
     if [ -s "$start_file" ]
@@ -62,17 +68,7 @@ function add_links_file_gui {
     fi
 }
 
-function check_yad_multiprogress {
-    local num_link_bars_status
-    get_data_progress num_link_bars_status
-    if (( num_link_bars_status != num_link_bars ))
-    then
-	num_link_bars=$num_link_bars_status
-	kill_yad_multiprogress
-    fi
-}
-
-function get_data_progress {
+function get_data_multiprogress {
     unset url_out_gui \
 	  file_out_gui \
 	  percent_out_gui \
@@ -213,15 +209,16 @@ function get_data_progress {
     
     if [ -z "$ref" ]
     then
-	for i in $(seq 1 $n)
-	do
-	    echo "$i:#${text_out_gui[i]}"
-	    [ -n "${percent_out_gui[i]}" ] &&
-		echo "$i:${percent_out_gui[i]}"	
-	done
+    	for i in $(seq 1 $n)
+    	do
+    	    echo "$i:#${text_out_gui[i]}"
+    	    [ -n "${percent_out_gui[i]}" ] &&
+    		echo "$i:${percent_out_gui[i]}"	
+    	done
     fi
 }
 
+########################## CORE:
 
 function start_daemon_gui {
     local item arg
@@ -230,6 +227,7 @@ function start_daemon_gui {
     then
 	mkdir -p "$path_tmp"
 	date +%s >"$path_tmp"/.date_daemon
+
 	if [ -n "${ARGV[*]}" ]
 	then
 	    nohup /bin/bash zdl --silent "$PWD" "${ARGV[@]}" &>/dev/null &
@@ -285,6 +283,92 @@ function toggle_daemon_gui {
 	start_daemon_gui
     fi
 }
+
+
+
+##########################################
+
+function kill_pid_file {
+    local pid_file="$1"
+
+    if [ -s "$pid_file" ]
+    then
+	local pid=$(cat "$pid_file")
+	[ -z "$2" ] &&
+	    rm "$pid_file"
+	kill -9 $pid
+    fi
+}
+
+function kill_yad_multiprogress {
+    kill_pid_file "$yad_multiprogress_pid_file"
+}
+
+function new_yad_multiprogress {
+    kill_yad_multiprogress no-remove-pid-file
+    display_multiprogress_gui
+    kill_pid_file "$exit_file"
+    exit
+}
+
+function quit_gui {
+    #echo $GUI_ID > "$exit_file"
+    kill_yad_multiprogress
+    kill_pid_file "$exit_file"
+    exit
+}
+
+function check_yad_multiprogress {
+    local num_link_bars_status
+    get_data_multiprogress num_link_bars_status
+    if (( num_link_bars_status != num_link_bars ))
+    then
+	num_link_bars=$num_link_bars_status
+	new_yad_multiprogress
+    fi
+}
+
+###########################################
+
+function exe_button_result {
+    local yad_button_result_file="$1"
+    if [ -s "$yad_button_result_file" ]
+    then
+	cmd=( $(cat "$yad_button_result_file") )
+	rm "$yad_button_result_file"
+
+	"${cmd[@]}"
+    fi
+}
+
+function get_yad_multiprogress_args {
+    local i 
+    declare -a bars
+    
+    get_data_multiprogress num_link_bars
+    for ((i=1; i<=$num_link_bars; i++))
+    do
+	bars+=( "--bar=$i:NORM" )
+    done
+    
+    if [ -n "$1" ]
+    then
+	declare -n ref1="$1"
+	ref1="${bars[*]}"
+    fi
+    
+    if [ -n "$2" ]
+    then
+	declare -n ref2="$2"
+	ref2=$num_link_bars
+    fi
+    
+    [ -z "$ref1" ] && return 1 || return 0
+}
+
+
+#####################################################
+
 
 function display_link_error_gui {
     local msg="$1"
@@ -396,87 +480,11 @@ function print_links_txt {
     fi
 }
 
-function quit_gui {
-    local pid item
-    declare -a pids
-
-    ## utile se si vogliono uccidere altri processi di cui si dispone di un "pid_file":
-    ##
-    # for item in "$yad_multiprogress_pid_file"
-    # do
-    # 	if [ -s "$item" ]
-    # 	then
-    # 	    pids+=( $(cat "$item") )
-    # 	    rm "$item"
-    # 	fi
-    # done
-
-    # for pid in ${pids[@]}
-    # do
-    # 	kill -9 $pid 2>/dev/null
-    # done
-
-    ## più efficiente per uno:
-    pid=$(cat "$yad_multiprogress_pid_file")
-    rm "$yad_multiprogress_pid_file"
-    kill -9 $pid 2>/dev/null
-    echo $GUI_ID > "$exit_file"
-}
-
-function kill_yad_multiprogress {
-    local pid
-    
-    if [ -s "$yad_multiprogress_pid_file" ]
-    then
-	pid=$(cat "$yad_multiprogress_pid_file")
-	rm "$yad_multiprogress_pid_file"
-	kill -9 $pid &&
-	    return 0 ||
-		return 1
-    fi
-}
-
-function exe_button_result {
-    local yad_button_result_file="$1"
-    if [ -s "$yad_button_result_file" ]
-    then
-	cmd=( $(cat "$yad_button_result_file") )
-	rm "$yad_button_result_file"
-
-	"${cmd[@]}"
-    fi
-}
-
-function get_yad_multiprogress_args {
-    local i 
-    declare -a bars
-    
-    get_data_progress num_link_bars
-    for ((i=1; i<=$num_link_bars; i++))
-    do
-	bars+=( "--bar=$i:NORM" )
-    done
-    
-    if [ -n "$1" ]
-    then
-	declare -n ref1="$1"
-	ref1="${bars[*]}"
-    fi
-    
-    if [ -n "$2" ]
-    then
-	declare -n ref2="$2"
-	ref2=$num_link_bars
-    fi
-    
-    [ -z "$ref1" ] && return 1 || return 0
-}
-
 function load_download_manager_gui {
     local item length
     declare -a items
 
-    get_data_progress
+    get_data_multiprogress
 
     echo -e '\f'
     for ((i=1; i<="${#url_out_gui[@]}"; i++))
@@ -523,7 +531,9 @@ function display_download_manager_gui {
 		       --multiple \
 		       --title="Downloads" \
 		       --width=1200 --height=300 \
+		       --image-on-top \
 		       --text="$text" \
+		       --image="$IMAGE2" \
 		       --expand-column=3 \
 		       --hide-column=6 \
 		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID:NUM" \
@@ -532,9 +542,8 @@ function display_download_manager_gui {
 		       --button="Arresta":2  \
 		       --button="Arresta tutti:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
 		       --button="Elimina":0  \
-		       --button="Pulisci completati:bash -c \"echo 'eval no_complete=true; data_stdout' > '$yad_download_manager_result_file'\"" \
+		       --button="Pulisci completati:bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
 		       --button="Log downloads:bash -c \"echo 'display_download_manager_log' > '$yad_download_manager_result_file'\"" \
-		       --button="Altre opzioni:bash -c \"echo 'display_download_manager_opts' > '$yad_download_manager_result_file'\"" \
 		       --button="Chiudi!gtk-close":1  \
 		       --listen \
 		       --dclick-action="bash -c \"echo 'yad_download_manager_dclick %s' >'$yad_download_manager_result_file'\"" \
@@ -610,12 +619,13 @@ function yad_download_manager_dclick {
 		       "$path_tmp"/"${res[2]}_stdout.tmp"
 		    ;;
 	    esac
-	    kill -9 $(cat "$path_tmp"/dclick_yad-pid)
+	    kill_pid_file "$path_tmp"/dclick_yad-pid
 	    
 	done < <(
 	    yad --text "$text" \
     		     --title="Azione su un download" \
     		     --image="gtk-execute" \
+		     --center \
     		     --button="Arresta":"bash -c 'echo 0'"  \
     		     --button="Elimina":"bash -c 'echo 1'"  \
     		     --button="Chiudi!gtk-close":0  \
@@ -623,44 +633,6 @@ function yad_download_manager_dclick {
 	    local pid=$!
 	    echo $pid >"$path_tmp"/dclick_yad-pid
 	)
-    } &
-}
-
-function display_download_manager_opts {
-    declare -a dlers=( Aria2 Wget Axel )
-    local dler=$(cat "$path_tmp"/downloader)
-    dlers=( ${dlers[@]//$dler} )
-    local downloaders="${dler}!"
-    downloaders+=$(tr ' ' '!' <<< "${dlers[*]}")
-
-    local max_dl="$(cat "$path_tmp"/max-dl)!0..20"
-  
-    local text="$TEXT\n\n"
-    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
-    [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
-    
-    {
-	res=($(yad --title="Opzioni di download" \
-    		   --text="$text" \
-    		   --form \
-    		   --separator=' ' \
-    		   --center \
-    		   --field="Downloader predefinito":CB "${downloaders#\!}"\
-    		   --field="Downloads simultanei":NUM "${max_dl#\!}"\
-		   --field="Formato del file":CB "${format}Non converire!mp3!flac"\
-    		   --button="Salva!gtk-save":0 \
-		   --button="Chiudi!gtk-close":1  \
-    		   ${YAD_ZDL[@]}))
-	[ "$?" == 0 ] &&
-	    {
-    		echo ${res[0]} >"$path_tmp"/downloader
-    		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
-		if [[ "${res[2]}" =~ ^(flac|mp3)$ ]]
-		then
-		    echo "${res[2]}" > "$path_tmp"/format-post_processor
-		    echo "scaricati_da_zdl.txt" >"$path_tmp"/print_out-post_processor 2>/dev/null
-		fi
-	    }
     } &
 }
 
@@ -694,6 +666,7 @@ function display_file_gui {
 	    tail -f "$filename" |
 		yad --title="$title" \
 		    --image="gtk-execute" \
+		    --image="$IMAGE2" \
 		    --text="$text" \
 		    --text-info \
 		    --tail \
@@ -725,6 +698,7 @@ function display_link_manager_gui {
     local IFS_old="$IFS"
     IFS="€"
     local msg
+    local text="${TEXT}\n\n<b>Gestisci i link:</b>"
 
     {
 	declare -a res
@@ -734,6 +708,9 @@ function display_link_manager_gui {
 	    res=($(yad --form \
 		       --columns=1 \
 		       --title="Links" \
+		       --image="$IMAGE2" \
+		       --image-on-top \
+		       --text="$text" \
 		       --separator="€" \
 		       --field="Link:":CE \
 		       --field="File .torrent:":FL \
@@ -843,7 +820,8 @@ function display_sockets_gui {
 	    socket_ports+=( $port )
     done < "$path_server"/socket-ports
 
-    local text="${TEXT}\n\nAvvia e arresta connessioni web (socket TCP): indicare una porta TCP libera\n\n"    
+    local text="${TEXT}\n\nAvvia e arresta connessioni TCP:\nindicare una porta libera\n\n"
+    local title="Sockets"
     local msg_img msg_server
 
     local default_port=8080
@@ -852,7 +830,7 @@ function display_sockets_gui {
 	local port
 	for port in "${socket_ports[@]}"
 	do
-	    ((default_port==port)) &&
+	    ((default_port == port)) &&
 		((default_port++))
 	done
     fi
@@ -871,6 +849,8 @@ function display_sockets_gui {
 
     {
 	res=($(yad --form \
+		   --title="$title" \
+		   --image="$IMAGE2" \
 		   --text "$text" \
 		   --field="Porta socket:NUM" "$default_port!1024..65535" \
 		   --field="Comando:CB" "Avvia!Arresta" \
@@ -938,19 +918,60 @@ function display_sockets_gui {
     } &
 }
 
+function display_multiprogress_opts {
+    declare -a dlers=( Aria2 Wget Axel )
+    local dler=$(cat "$path_tmp"/downloader)
+    dlers=( ${dlers[@]//$dler} )
+    local downloaders="${dler}!"
+    downloaders+=$(tr ' ' '!' <<< "${dlers[*]}")
+
+    local max_dl="$(cat "$path_tmp"/max-dl)!0..20"
+  
+    local text="$TEXT\n\n"
+    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
+    [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
+    
+    {
+	res=($(yad --title="Opzioni di download" \
+    		   --text="$text" \
+    		   --form \
+    		   --separator=' ' \
+    		   --center \
+    		   --field="Downloader predefinito":CB "${downloaders#\!}"\
+    		   --field="Download simultanei":NUM "${max_dl#\!}"\
+		   --field="Formato del file":CB "${format}Non converire!mp3!flac"\
+    		   --button="Salva!gtk-save":0 \
+		   --button="Chiudi!gtk-close":1  \
+    		   ${YAD_ZDL[@]}))
+	[ "$?" == 0 ] &&
+	    {
+    		echo ${res[0]} >"$path_tmp"/downloader
+    		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
+		if [[ "${res[2]}" =~ ^(flac|mp3)$ ]]
+		then
+		    echo "${res[2]}" > "$path_tmp"/format-post_processor
+		    echo "scaricati_da_zdl.txt" >"$path_tmp"/print_out-post_processor 2>/dev/null
+
+		else
+		    echo > "$path_tmp"/format-post_processor
+		fi
+	    }
+    } &
+}
+
 function display_multiprogress_gui {
     local res i err_msg yad_bars
     get_yad_multiprogress_args yad_bars num_link_bars
 
-    rm -f "$yad_button_result_file"
+    rm -f "$yad_multiprogress_result_file"
 
     while : 
     do
 	check_yad_multiprogress
-	get_data_progress
+	get_data_multiprogress
 	sleep 0.3
 	    
-	exe_button_result "$yad_multiprogress_result_file" || break
+	exe_button_result "$yad_multiprogress_result_file"
 	    
     done 2>/dev/null |
 	yad --multi-progress \
@@ -963,6 +984,7 @@ function display_multiprogress_gui {
 	    --buttons-layout=center \
 	    --button="Links:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Downloads!browser-download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Opzioni:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
 	    --button="Console ZDL:bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Dis/Attiva ZDL core!gtk-execute:bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="ZDL sockets!gtk-execute:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
@@ -974,13 +996,12 @@ function display_multiprogress_gui {
     echo "$yad_multiprogress_pid" >"$yad_multiprogress_pid_file"
     
     wait $yad_multiprogress_pid
-    return 1
 }
 
 function display_console_gui {
     tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
-	    --image="gtk-execute" \
+	    --image="$IMAGE2" \
 	    --text="${TEXT}\n\nConsole dei processi di estrazione e donwload\n\n" \
 	    --text-info \
 	    --show-uri \
@@ -1051,7 +1072,7 @@ function run_gui {
     start_file="$path_tmp"/links_loop.txt
 
     IMAGE="$path_usr"/webui/zdl-64x64.png
-    IMAGE2="$path_usr"/webui/zdl-32x32.png
+    IMAGE2="$path_usr"/webui/zdl.png
     #IMAGE="browser-download"
     #ICON="$path_usr"/webui/favicon.png
     ICON="$path_usr"/webui/icon-32x32.png
@@ -1074,7 +1095,7 @@ function run_gui {
     
     YAD_ZDL=(
 	--window-icon="$ICON"
-	--borders=5
+	--borders=10
     )
     #	--selectable-labels
 
@@ -1089,14 +1110,57 @@ function run_gui {
 	sleep 0.1
     done
 
-    exit_file="$path_tmp"/exit_file.$GUI_ID
-    echo 0 > "$exit_file"
-    while :
-    do
+    exit_file="$path_tmp"/exit_file_gui.$GUI_ID
+    echo $$ > "$exit_file"
+    display_multiprogress_gui
+
+    #local pidd
+    # while :
+    # do
+    # 	display_multiprogress_gui
+    # 	# pidd=$!
+    # 	# while [ ! -s "$yad_multiprogress_pid_file" ]
+    # 	# do
+    # 	#     sleep 0.1
+    # 	# done
+	
+    # 	# while [ -s "$yad_multiprogress_pid_file" ] &&
+    # 	# 	  check_pid_file "$yad_multiprogress_pid_file"
+    # 	# do
+    # 	#     sleep 0.1
+    # 	# done
+    # 	# kill -9 $pidd	
+
+    # 	if [ "$(cat "$exit_file")" == $GUI_ID  ]
+    # 	then
+    # 	    rm "$exit_file"
+    # 	    break
+    # 	fi
+    # 	sleep 1
+
+    # done
+    # echo $$ >PID
+    #tail_recall
+}
+
+function tail_recall {
 	display_multiprogress_gui
-	[ $(cat "$exit_file") == $GUI_ID  ] && break
-	sleep 1
-    done &
+
+	if [ "$(cat "$exit_file")" == $GUI_ID  ]
+	then
+	    rm "$exit_file"
+	    exit
+	fi
+	tail_recall
+}
+
+function check_pid_file {
+    if [ -s "$1" ] && check_pid $(cat "$1")
+    then
+	return 0
+    else
+	return 1
+    fi
 }
 
 ####################################################

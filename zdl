@@ -280,10 +280,8 @@ then
 		cd $(cat /tmp/zigzagdownloader-dirbase) ||
 		    cd "$HOME"
 	    
-	    if [ ! -d "$path_gui" ]
-	    then
-		get_download_path path_gui
-	    fi
+	    path_gui=$(get_download_path)
+	    [ ! -d "$path_gui" ] && exit 1
 
 	    echo "$path_gui" >/tmp/zigzagdownloader-dirbase
 	    cd "$path_gui"
@@ -501,6 +499,7 @@ then
 	then 
 	## zdl --stream [URL] [FNAME] [FOLDER] [CFILE] [COOKIE] [REFERER]
 	## zdl --stream [URL] [FNAME] --noXterm
+	    unset args[i]
 	    if [ -z "$DISPLAY" ]
 	    then
 		export DISPLAY=":0"
@@ -689,7 +688,12 @@ export pid_prog=$$
 mkdir -p "$path_server"
 
 #set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
-echo "$(realpath "$PWD")" >>"$path_server"/paths.txt
+PWD_TO_SERVER_PATHS=$(realpath "$PWD")
+if ! grep -qP "^($PWD_TO_SERVER_PATHS)$" "$path_server"/paths.txt
+then
+    echo "$PWD_TO_SERVER_PATHS" >>"$path_server"/paths.txt
+fi
+###################
 
 if [[ "${args[*]}" =~ \-s ]]
 then
