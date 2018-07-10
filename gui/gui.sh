@@ -866,67 +866,66 @@ function display_sockets_gui {
     else
 	text+="<b>Socket non ancora avviati</b>\n"
     fi
-   
+
     {
 	res=($(yad --form \
 		   --text "$text" \
 		   --field="Porta socket:NUM" "$default_port!1024..65535" \
 		   --field="Comando:CB" "Avvia!Arresta" \
-		   --field="Esegui!gtk-ok!0":FBTN "bash -c 'echo ok %1 %2'" \
-		   --button="Chiudi!gtk-close":0 \
+		   --button="Esegui!gtk-ok":0 \
+		   --button="Chiudi!gtk-close":1 \
 		   --separator=' ' \
 		   "${YAD_ZDL[@]}"))
 
-	local socket_port="${res[1]}"
-	[ "${res[0]}" == ok ] &&
+	[ "$?" == 0 ] &&
 	    {
-		if [[ "$socket_port" =~ ^([0-9]+)$ ]] &&
-		       ((socket_port > 1024)) && ((socket_port < 65535))
+		local socket_port="${res[0]}"
+		if [ "${res[1]}" == Avvia ]
 		then
-		    if [ "${res[2]}" == Avvia ]
+		    
+		    if ! check_instance_server $socket_port &>/dev/null
 		    then
-			if ! check_instance_server $socket_port &>/dev/null
-			then
-	    		    unset start_socket
-	    		    if run_zdl_server $socket_port
-	    		    then
-				msg_server="Avviato nuovo socket alla porta $socket_port"
-				msg_img="gtk-ok"
-				
-			    elif ! check_port "$socket_port"
-			    then
-				msg_server="Socket già in uso alla porta $socket_port"
-				msg_img="gtk-dialog-error"
-				
-			    else
-				msg_server="Socket alla porta $socket_port fallito"
-				msg_img="gtk-dialog-error"
-			    fi
-			fi	    
+	    		unset start_socket
+	    		if run_zdl_server $socket_port
+	    		then
+			    msg_server="Avviato nuovo socket alla porta $socket_port"
+			    msg_img="gtk-ok"
+			fi
+			
+		    elif ! check_port "$socket_port"
+		    then
+			msg_server="Socket già in uso alla porta $socket_port"
+			msg_img="dialog-error"
+			
+		    elif [[ "$socket_port" =~ ^([0-9]+)$ ]] &&
+			     ((socket_port > 1024)) && ((socket_port < 65535))
+		    then
+			msg_server="<b>Porta $socket_port non valida!</b>\n\nInserire come porta TCP un numero naturale compreso fra 1024 e 65535"
+			msg_img="dialog-error"
 		    else
+			msg_server="Socket alla porta $socket_port fallito"
+			msg_img="dialog-error"
+		    fi	    
+		else
+		    if ! check_port $socket_port
+		    then
+			kill_server $socket_port
+			sleep 2
+			
 			if ! check_port $socket_port
 			then
-			    kill_server $socket_port
-			    sleep 2
-			    
-			    if ! check_port $socket_port
-			    then
-				msg_server="Arresto socket fallito alla porta $socket_port"
-				msg_img="gtk-dialog-error"
-			    else
-				msg_server="Arrestato socket alla porta $socket_port"
-				msg_img="gtk-ok"
-			    fi
-			else
-			    msg_server="Socket già chiuso uso alla porta $socket_port"
+			    msg_server="Arresto socket fallito alla porta $socket_port"
 			    msg_img="gtk-dialog-error"
+			else
+			    msg_server="Arrestato socket alla porta $socket_port"
+			    msg_img="gtk-ok"
 			fi
+		    else
+			msg_server="Socket già chiuso uso alla porta $socket_port"
+			msg_img="gtk-dialog-error"
 		    fi
-		else
-		    msg_server="<b>Porta $socket_port non valida!</b>\n\nInserire come porta TCP un numero naturale compreso fra 1024 e 65535"
-		    msg_img="dialog-error"
 		fi
-
+		
 		yad --image="$msg_img" \
 		    --center \
 		    --on-top \
