@@ -654,7 +654,7 @@ function yad_download_manager_dclick {
 		    play_gui "${res[2]}"
 		    ;;
 	    esac
-	    kill_pid_file "$path_tmp"/dclick_yad-pid
+	    kill_pid_file "$path_tmp"/dclick_yad-pid.$GUI_ID
 	    
 	done < <(
 	    yad --text "$text" \
@@ -668,7 +668,7 @@ function yad_download_manager_dclick {
     		     --button="Chiudi!gtk-close":0  \
     		     "$YAD_ZDL" &
 	    local pid=$!
-	    echo $pid >"$path_tmp"/dclick_yad-pid
+	    echo $pid >"$path_tmp"/dclick_yad-pid.$GUI_ID
 	)
     } &
 }
