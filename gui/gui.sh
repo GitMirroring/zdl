@@ -625,6 +625,8 @@ function play_gui {
 	yad --title="Attenzione" \
 	    --text="$msg_error" \
 	    --image="dialog-error" \
+	    --center \
+	    --on-top \
 	    --button="Chiudi":0 \
 	    "${YAD_ZDL[@]}" &	
     fi
@@ -659,6 +661,7 @@ function yad_download_manager_dclick {
     		     --title="Azione su un download" \
     		     --image="gtk-execute" \
 		     --center \
+		     --on-top \
 		     --button="Riproduci":"bash -c 'echo 3'"  \
     		     --button="Arresta":"bash -c 'echo 0'"  \
     		     --button="Elimina":"bash -c 'echo 1'"  \
@@ -886,6 +889,8 @@ function display_sockets_gui {
 		   --title="$title" \
 		   --image="$IMAGE2" \
 		   --text "$text" \
+		   --on-top \
+		   --center \
 		   --field="Porta socket:NUM" "$default_port!1024..65535" \
 		   --field="Comando:CB" "Avvia!Arresta" \
 		   --button="Esegui!gtk-ok":0 \
@@ -970,6 +975,7 @@ function display_multiprogress_opts {
     		   --text="$text" \
     		   --form \
     		   --separator=' ' \
+		   --on-top \
     		   --center \
     		   --field="Downloader predefinito":CB "${downloaders#\!}"\
     		   --field="Download simultanei":NUM "${max_dl#\!}"\
