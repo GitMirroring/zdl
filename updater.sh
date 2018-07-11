@@ -559,7 +559,9 @@ ESTENSIONI:
 	
 	try cp /usr/local/share/zdl/webui/zdl-web-ui.desktop "$HOME"/.local/share/applications/
 	try desktop-file-install "$HOME"/.local/share/applications/zdl-web-ui.desktop
-	
+
+	try cp /usr/local/share/zdl/gui/zdl-gui.desktop "$HOME"/.local/share/applications/
+	try desktop-file-install "$HOME"/.local/share/applications/zdl-gui.desktop
     fi
     
     check_default_downloader
