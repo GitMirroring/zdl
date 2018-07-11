@@ -304,7 +304,7 @@ function create_json {
 		set_line_in_file - "$path" "$server_paths" &
 	    fi
 
-	done < "$server_paths"
+	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
 	
@@ -330,7 +330,7 @@ function check_xfer_running {
 	    done
 	fi
 
-    done < "$server_paths"
+    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
     return 1
 }
@@ -1229,7 +1229,7 @@ if (data) {
 		data_stdout
 		unset no_complete
 		
-	    done < "$server_paths"
+	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
@@ -1350,7 +1350,7 @@ if (data) {
 			rm -f "$path_tmp"/.date_daemon
 			unset instance_pid
 		    } 
-	    done < "$server_paths"
+	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	    init_client
 	    ;;

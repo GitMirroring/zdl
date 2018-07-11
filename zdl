@@ -302,9 +302,9 @@ then
 	then
 	    unset args[i]
 
-	    ## non in background! altrimenti salta la gestione dei socket
-	    run_gui "${args[@]}" &>/dev/null
-	    exit
+	    run_gui "${args[@]}" &>/dev/null &
+	    disown
+	    exit 0
 	fi
     done
 fi
@@ -689,7 +689,7 @@ mkdir -p "$path_server"
 
 #set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
 PWD_TO_SERVER_PATHS=$(realpath "$PWD")
-if ! grep -qP "^($PWD_TO_SERVER_PATHS)$" "$path_server"/paths.txt
+if ! set_line_in_file in "$PWD_TO_SERVER_PATHS$" "$path_server"/paths.txt
 then
     echo "$PWD_TO_SERVER_PATHS" >>"$path_server"/paths.txt
 fi

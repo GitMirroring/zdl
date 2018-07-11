@@ -539,6 +539,7 @@ function display_download_manager_gui {
 		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID:NUM" \
 		       --separator=' ' \
 		       --button="Aggiorna:bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Riproduci":4 \
 		       --button="Arresta":2  \
 		       --button="Arresta tutti:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
 		       --button="Elimina":0  \
@@ -571,6 +572,9 @@ function display_download_manager_gui {
 			rm -f "${res[2]}" "${res[2]}.st" "${res[2]}.zdl" "${res[2]}.aria2" "$path_tmp"/"${res[2]}_stdout.tmp"
 		    fi
 		    ;;
+		4)
+		    play_gui "${res[2]}"
+		    ;;
 	    esac
 	done 
     } &
@@ -600,11 +604,37 @@ function display_download_manager_gui {
     done &
 }
 
+function play_gui {
+    local target="$1"
+    local msg_error
+    
+    if [ -z "$player" ] #&>/dev/null
+    then	
+	msg_error="Non è stato configurato alcun player per audio/video"
+	
+    elif [[ ! "$(file -b --mime-type "$target")" =~ (audio|video) ]]
+    then	
+	msg_error="Non è un file audio/video"
+	
+    else
+	nohup $player "$target" &>/dev/null &
+    fi
+
+    if [ -n "$msg_error" ]
+    then
+	yad --title="Attenzione" \
+	    --text="$msg_error" \
+	    --image="dialog-error" \
+	    --button="Chiudi":0 \
+	    "${YAD_ZDL[@]}" &	
+    fi
+}
+
 function yad_download_manager_dclick {
     declare -a res
     res=( "$@" )
 
-    local text="$TEXT\n\n<b>Link:</b>\n${res[0]}\n\nScegli cosa fare"
+    local text="$TEXT\n\n<b>Link:</b>\n${res[0]}\n\n<b>Scegli cosa fare:</b>"
     {
 	while read line
 	do
@@ -618,6 +648,9 @@ function yad_download_manager_dclick {
 		    rm -f "${res[2]}" "${res[2]}.st" "${res[2]}.zdl" "${res[2]}.aria2" \
 		       "$path_tmp"/"${res[2]}_stdout.tmp"
 		    ;;
+		3)
+		    play_gui "${res[2]}"
+		    ;;
 	    esac
 	    kill_pid_file "$path_tmp"/dclick_yad-pid
 	    
@@ -626,6 +659,7 @@ function yad_download_manager_dclick {
     		     --title="Azione su un download" \
     		     --image="gtk-execute" \
 		     --center \
+		     --button="Riproduci":"bash -c 'echo 3'"  \
     		     --button="Arresta":"bash -c 'echo 0'"  \
     		     --button="Elimina":"bash -c 'echo 1'"  \
     		     --button="Chiudi!gtk-close":0  \
@@ -1065,6 +1099,7 @@ function run_gui {
     
     ARGV=( "$@" )
 
+    . $HOME/.zdl/zdl.conf
     prog=zdl
     path_tmp=".${prog}_tmp"
     
@@ -1097,7 +1132,6 @@ function run_gui {
 	--window-icon="$ICON"
 	--borders=10
     )
-    #	--selectable-labels
 
     start_daemon_gui
 
@@ -1113,34 +1147,6 @@ function run_gui {
     exit_file="$path_tmp"/exit_file_gui.$GUI_ID
     echo $$ > "$exit_file"
     display_multiprogress_gui
-
-    #local pidd
-    # while :
-    # do
-    # 	display_multiprogress_gui
-    # 	# pidd=$!
-    # 	# while [ ! -s "$yad_multiprogress_pid_file" ]
-    # 	# do
-    # 	#     sleep 0.1
-    # 	# done
-	
-    # 	# while [ -s "$yad_multiprogress_pid_file" ] &&
-    # 	# 	  check_pid_file "$yad_multiprogress_pid_file"
-    # 	# do
-    # 	#     sleep 0.1
-    # 	# done
-    # 	# kill -9 $pidd	
-
-    # 	if [ "$(cat "$exit_file")" == $GUI_ID  ]
-    # 	then
-    # 	    rm "$exit_file"
-    # 	    break
-    # 	fi
-    # 	sleep 1
-
-    # done
-    # echo $$ >PID
-    #tail_recall
 }
 
 function tail_recall {
