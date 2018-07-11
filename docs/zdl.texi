@@ -381,7 +381,7 @@ Avvio senza interruzioni: salta l'eventuale aggiornamento automatico (che richie
 @c @end man
 @unnumberedsubsubsec Interfaccia grafica (GUI):
 @c @man{6}
-@c @ifman @unnumberedsubsec Socket e interfacce utente:
+@c @ifman @unnumberedsubsec Interfaccia grafica (GUI):
 @table @option
 @item -g, --gui
 Avvia l'interfaccia grafica nella directory corrente o in quella eventualmente inserita fra gli argomenti, attivando automaticamente zdl --daemon come "core", se ancora non è stato attivato zdl
