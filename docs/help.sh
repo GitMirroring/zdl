@@ -130,6 +130,24 @@ OPZIONI
 
        --no-complete           Cancella i file temporanei dei download completati
 
+       --no-stop               Avvio senza interruzioni: salta l'eventuale aggiornamento 
+                               automatico (che richiede l'immissione della password) o la
+                               richiesta di immettere nuovi link. L'input da tastiera
+                               è comunque disponibile
+
+
+Interfaccia grafica (GUI):
+  -g,  --gui                   Avvia l'interfaccia grafica nella directory corrente o 
+                               in quella eventualmente inserita fra gli argomenti, 
+                               attivando automaticamente zdl --daemon come \"core\", 
+                               se ancora non è stato attivato zdl
+
+       --path-gui              Prima di avviare zdl, apre una finestra per la selezione 
+                               della directory di destinazione, se non è indicata 
+                               fra gli argomenti del comando (utile se \"zdl --gui\" 
+                               è avviato da un'icona del desktop o da un'estensione 
+                               del browser web, come \"External Application Button\")
+
 
 Socket e interfacce utente:
   -s [porta], --socket[=porta]

@@ -41,7 +41,11 @@ l'URL dei file da scaricare da servizi di file hosting e video
 streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC,
 senza alcuna interazione via CHAT. Estende _Conkeror_,
 _XXXTerm/Xombrero_, _Firefox_ (attraverso l'estensione _Flashgot_) e
-_Microsoft Windows_ (tramite _Cygwin_).
+_Microsoft Windows_ (tramite _Cygwin_). Tramite l'estensione _External
+Application Button_, ZDL può essere integrato in _Firefox_,
+_Chrome/Chromium_ e _Opera_. Il programma dispone, inoltre, di un
+server per generare socket TCP, diverse interfacce web e API, per il
+controllo remoto e in rete, e di una interfaccia grafica.
 
 Perché questo programma
 ************************
@@ -49,14 +53,22 @@ Perché questo programma
 ZigzagDownLoader è un gestore di download estensibile, robusto ed
 interamente controllabile con un terminale o, attraverso socket, con
 un'interfaccia web adatta anche al formato di uno smartphone
-(_-socket_, _-web-ui_).  È nato come script specifico per la Bash e si
-è trasformato in un gestore per downloader come _Wget_, _Axel_ ed
-_Aria2_ (downloader predefinito), estendendosi a servizi di video
-streaming e file hosting e integrandosi con altre applicazioni. Oggi
-ZigzagDownLoader è anche un downloader per _IRC/XDCC_: l'intero
+(_-socket_, _-web-ui_). Può essere integrato ai più diffusi web browser
+(_Firefox_, _Chrome/Chromium_ e _Opera_) e al desktop, utilizzando
+l'estensione _External Application Button_ e una pratica interfaccia
+grafica (_-gui_ e _-path-gui_).  È nato come script specifico per la
+Bash e si è trasformato in un gestore per downloader come _Wget_,
+_Axel_ ed _Aria2_ (downloader predefinito), estendendosi a servizi di
+video streaming e file hosting e integrandosi con altre applicazioni.
+Oggi ZigzagDownLoader è anche un downloader per _IRC/XDCC_: l'intero
 processo di scaricamento e recupero è automatico e non richiede alcuna
 interazione via CHAT. Inoltre, grazie all'adozione di Aria2,
 ZigzagDownLoader gestisce anche i _TORRENT_.
+
+   ZigzagDownLoader è molte cose: un _server/client TCP_ utile per un
+_NAS_, un _comando per il terminale_, un _downloader/download manager_
+alternativo e _intelligente_ per il browser, un'_applicazione grafica_
+per il desktop... tutto questo contemporaneamente e altro ancora.
 
    Nonostante i suoi limiti strutturali, il linguaggio della _Bash_ si
 è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso
@@ -65,7 +77,8 @@ efficienza è stata raggiunta attraverso lo sviluppo di script
 _monolitici_ nel linguaggio di _Awk_ (_Gawk_). Il software include,
 inoltre, interpreti di altri linguaggi (attualmente: _node.js_ e _php_,
 necessari al trattamento dei link di alcuni servizi), fornendo un
-supporto per ulteriori estensioni e sviluppi.
+supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per
+certi versi, un esempio complesso di _programmazione poliglotta_.
 
 Almeno quattro direttrici di sviluppo
 -------------------------------------
@@ -316,6 +329,29 @@ Le opzioni brevi non seguite da valori possono essere contratte:
 
 `--no-complete'
      Cancella i file temporanei dei download completati
+
+`--no-stop'
+     Avvio senza interruzioni: salta l'eventuale aggiornamento
+     automatico (che richiede l'immissione della password) o la
+     richiesta di immettere nuovi link. L'input da tastiera è comunque
+     disponibile
+
+
+Interfaccia grafica (GUI):
+..........................
+
+`-g, --gui'
+     Avvia l'interfaccia grafica nella directory corrente o in quella
+     eventualmente inserita fra gli argomenti, attivando
+     automaticamente zdl -daemon come "core", se ancora non è stato
+     attivato zdl
+
+`--path-gui'
+     Prima di avviare zdl, apre una finestra per la selezione della
+     directory di destinazione, se non è indicata fra gli argomenti del
+     comando (utile se "zdl -gui" è avviato da un'icona del desktop o
+     da un'estensione del browser web, come "External Application
+     Button")
 
 
 Socket e interfacce utente:
@@ -1350,27 +1386,27 @@ _zdl-devel - Lista di sviluppo_:
 
 Tag Table:
 Node: Top1185
-Node: Il comando ZDL6602
-Node: Servizi streaming/hosting14007
-Node: Avviare ZDL17969
-Node: Arrestare ZDL20405
-Node: Controllare i download21510
-Node: Manuali d'uso25801
-Node: Modi26217
-Node: Readline29483
-Node: Editor31035
-Node: Omonimie32260
-Node: IRC/XDCC33795
-Node: Torrent35485
-Node: Filtri36369
-Node: Creare nuove estensioni36690
-Node: Software consigliati38452
-Node: Conkeror39853
-Node: zdl-xterm e XXXTerm/Xombrero40864
-Node: Installazione e aggiornamento42788
-Node: Tags45823
-Node: Copying48624
-Node: Contatti49674
+Node: Il comando ZDL7476
+Node: Servizi streaming/hosting15699
+Node: Avviare ZDL19661
+Node: Arrestare ZDL22097
+Node: Controllare i download23202
+Node: Manuali d'uso27493
+Node: Modi27909
+Node: Readline31175
+Node: Editor32727
+Node: Omonimie33952
+Node: IRC/XDCC35487
+Node: Torrent37177
+Node: Filtri38061
+Node: Creare nuove estensioni38382
+Node: Software consigliati40144
+Node: Conkeror41545
+Node: zdl-xterm e XXXTerm/Xombrero42556
+Node: Installazione e aggiornamento44480
+Node: Tags47515
+Node: Copying50316
+Node: Contatti51366
 
 End Tag Table
 
