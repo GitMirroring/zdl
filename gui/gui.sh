@@ -1001,9 +1001,9 @@ function display_multiprogress_gui {
 	    --image-on-top \
 	    --text="$TEXT" \
 	    --buttons-layout=center \
-	    --button="Links!gtk-network!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Links!gtk-connect!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Downloads!browser-download!Gestisci i download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Opzioni!!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
+	    --button="Opzioni!gtk-properties!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
 	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Dis/Attiva ZDL core!gtk-execute!Attiva o disattiva il gestore di download (ZDL core):bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="ZDL sockets!gtk-execute!Avvia o arresta i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
