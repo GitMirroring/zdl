@@ -749,12 +749,12 @@ function display_link_manager_gui {
 		       --image-on-top \
 		       --text="$text" \
 		       --separator="€" \
-		       --field="Link:":CE \
-		       --field="File .torrent:":FL \
+		       --field="Nuovo link:":CE \
+		       --field="Aggiungi file .torrent:":FL \
 		       --field="Cerca in www.XDCC.eu":CE \
-		       --field="XDCC server:":CE \
-		       --field="XDCC canale:":CE \
-		       --field="XDCC comando:":CE \
+		       --field="Aggiungi XDCC server:":CE \
+		       --field="Aggiungi XDCC canale:":CE \
+		       --field="Aggiungi XDCC comando:":CE \
 		       --button="Edita links":"bash -c \"echo edit_links_gui >'$yad_link_manager_result_file'\"" \
 		       --button="Leggi links.txt":"bash -c \"echo display_old_links_gui >'$yad_link_manager_result_file'\"" \
 		       --button="Esegui!gtk-execute":0  \
