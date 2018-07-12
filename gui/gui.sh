@@ -871,6 +871,7 @@ function display_sockets_gui {
 		   --text "$text" \
 		   --on-top \
 		   --center \
+		   --align=right \
 		   --field="Porta socket:NUM" "$default_port!1024..65535" \
 		   --field="Comando:CB" "Avvia!Arresta" \
 		   --button="Esegui!gtk-ok":0 \
@@ -957,6 +958,7 @@ function display_multiprogress_opts {
     		   --separator=' ' \
 		   --on-top \
     		   --center \
+		   --align=right \
     		   --field="Downloader predefinito":CB "${downloaders#\!}"\
     		   --field="Download simultanei":NUM "${max_dl#\!}"\
 		   --field="Formato del file":CB "${format}Non converire!mp3!flac"\
