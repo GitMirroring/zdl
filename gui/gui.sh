@@ -728,9 +728,10 @@ function display_link_manager_gui {
 		       --image-on-top \
 		       --text="$text" \
 		       --separator="€" \
+		       --align=right \
 		       --field="Nuovo link:":CE \
 		       --field="Aggiungi file .torrent:":FL \
-		       --field="Cerca in www.XDCC.eu":CE \
+		       --field="Cerca in www.XDCC.eu:":CE \
 		       --field="Aggiungi XDCC server:":CE \
 		       --field="Aggiungi XDCC canale:":CE \
 		       --field="Aggiungi XDCC comando:":CE \
