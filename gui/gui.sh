@@ -57,13 +57,13 @@ function get_download_path {
 
 #### usate DA run_gui in poi:
 
-function add_links_file_gui {
+function add_start_file_gui {
     if [ -s "$start_file" ]
     then
-	cp "$start_file" "$links_file_gui" &&
+	cp "$start_file" "$start_file_gui" &&
 	    return 0 || return 1
     else
-	rm -f "$links_file_gui" 
+	rm -f "$start_file_gui" 
 	return 1
     fi
 }
@@ -77,9 +77,9 @@ function get_data_multiprogress {
 	  pid_out_gui \
 	  text_out_gui
     
-    add_links_file_gui &>/dev/null
-    echo > "$links_file_gui_diff"
-    rm -f "$links_file_gui_complete"
+#    add_start_file_gui &>/dev/null
+    echo > "$start_file_gui_diff"
+    rm -f "$start_file_gui_complete"
 
     local item i link
     local url checked
@@ -128,61 +128,40 @@ function get_data_multiprogress {
 	    if [ "${percent_out[i]}" == 100 ]
 	    then
 		text_out_gui[$n]="$item   download completato"
-		grep -q "${url_out[i]}" "$links_file_gui_complete" 2>/dev/null ||
-		    set_line_in_file + "${url_out[i]}" "$links_file_gui_complete" &>/dev/null
+		grep -q "${url_out[i]}" "$start_file_gui_complete" 2>/dev/null ||
+		    set_line_in_file + "${url_out[i]}" "$start_file_gui_complete" &>/dev/null
 	    fi
 	    
 	    if url "${url_out_gui[$n]}" &>/dev/null &&
 		    [ -n "${text_out_gui[$n]}" ] &&
 		    [ -n "${percent_out_gui[$n]}" ]
 	    then
-		echo "${url_out[i]}" >> "$links_file_gui_diff"
+		echo "${url_out[i]}" >> "$start_file_gui_diff"
 		((n++))
 	    fi
 	done
 
-	if [ -s "$links_file_gui" ]
+	if [ -s "$start_file" ]
 	then
-	    for link in $(awk 'NR == FNR {file1[$0]++; next} !($0 in file1)' "$links_file_gui_diff" "$links_file_gui")
+	    while read link
 	    do
-		for url in "${url_out_gui[@]}"
-		do
-		    if [ "$url" == "${url_out_gui[$n]}" ]
-		    then
-			checked=true
-		    fi
-		done
-		if [ "$checked" != true ]		
-		then
-		    url_out_gui[$n]="$link"
-		    text_out_gui[$n]="${link%%'&'*}   attendi"
-		    percent_out_gui[$n]=0
-		    ((n++))
-		    unset checked
-		fi
-	    done
+		url_out_gui[$n]="$link"
+		text_out_gui[$n]="${link%%'&'*}   attendi"
+		percent_out_gui[$n]=0
+		((n++))
+	    done < <(awk 'NR == FNR {file1[$0]++; next} !($0 in file1)' "$start_file_gui_diff" "$start_file")
 	fi
 	
     else
-	if [ -s "$links_file_gui" ]
+	if [ -s "$start_file" ]
 	then
-	    for link in $(cat "$links_file_gui")
+	    while read link
 	    do
-		for url in "${url_out_gui[@]}"
-		do
-		    if [ "$url" == "$link" ]
-		    then
-			checked=true
-		    fi
-		done
-		if [ "$checked" != true ]
-		then
-		    url_out_gui[$n]="$link"
-		    text_out_gui[$n]="${link%%'&'*}   attendi"
-		    percent_out_gui[$n]=0
-		    ((n++))
-		fi
-	    done		 
+		url_out_gui[$n]="$link"
+		text_out_gui[$n]="${link%%'&'*}   attendi"
+		percent_out_gui[$n]=0
+		((n++))
+	    done < "$start_file"		 
 	fi
     fi
 
@@ -203,8 +182,6 @@ function get_data_multiprogress {
 	## togliere la barra di stato (attività ZDL)
 	## e assegnare il numero totale di barre dei soli link:
 	ref=$((n-1))
-	# echo "$ref =~ $((n-1)) "
-	# echo "${url_out_gui[*]}"
     fi
     
     if [ -z "$ref" ]
@@ -1102,7 +1079,7 @@ function run_gui {
 	_log 40
 	exit 1
     fi
-    
+    exec 0<&-
     ARGV=( "$@" )
 
     . $HOME/.zdl/zdl.conf
@@ -1122,9 +1099,9 @@ function run_gui {
     get_GUI_ID
     links_log="links.txt"
     downloads_log="zdl_log.txt"
-    links_file_gui="$path_tmp"/links_file_gui.$GUI_ID
-    links_file_gui_diff="$path_tmp"/links_file_gui_diff.$GUI_ID
-    links_file_gui_complete="$path_tmp"/links_file_gui_complete.$GUI_ID
+#    start_file_gui="$path_tmp"/start_file_gui.$GUI_ID
+    start_file_gui_diff="$path_tmp"/start_file_gui_diff.$GUI_ID
+    start_file_gui_complete="$path_tmp"/start_file_gui_complete.$GUI_ID
     yad_multiprogress_result_file="$path_tmp"/yad_multiprogress_result.$GUI_ID
     yad_multiprogress_pid_file="$path_tmp"/yad_multiprogress_pid.$GUI_ID
     yad_download_manager_pid_file="$path_tmp"/yad_download_manager_pid.$GUI_ID
