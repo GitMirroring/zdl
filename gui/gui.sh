@@ -486,6 +486,7 @@ function load_download_manager_gui {
 function display_download_manager_gui {
     exec 33<&-
     exec 44<&-
+    local waiting=15
     
     export PIPE_03=/tmp/yadpipe03.$GUI_ID
     test -e $PIPE_03 && rm -f $PIPE_03
@@ -515,17 +516,18 @@ function display_download_manager_gui {
 		       --hide-column=6 \
 		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID:NUM" \
 		       --separator=' ' \
-		       --button="Aggiorna:bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
-		       --button="Riproduci":4 \
-		       --button="Arresta":2  \
-		       --button="Arresta tutti:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
-		       --button="Elimina":0  \
-		       --button="Pulisci completati:bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
-		       --button="Log downloads:bash -c \"echo 'display_download_manager_log' > '$yad_download_manager_result_file'\"" \
+		       --button="!gtk-refresh!Aggiorna la tabella dei download (automatico ogni $waiting secondi):bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Play!gtk-media-play-ltr!Riproduci il file audio/video selezionato":4 \
+		       --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":2  \
+		       --button="Arresta tutti!gtk-stop!Arresta tutti i download. Se ZDL core è attivo, i download saranno riavviati:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
+		       --button="Elimina!gtk-delete!Arresta i download selezionati e cancella i file":0  \
+		       --button="Completati!gtk-refresh:bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Log!dialog-information!Leggi le info sui download in corso o già effettuati:bash -c \"echo 'display_download_manager_log' > '$yad_download_manager_result_file'\"" \
 		       --button="Chiudi!gtk-close":1  \
 		       --listen \
 		       --dclick-action="bash -c \"echo 'yad_download_manager_dclick %s' >'$yad_download_manager_result_file'\"" \
-		       "${YAD_ZDL[@]}" < $PIPE_03))
+		       "${YAD_ZDL[@]}" \
+		       --borders=0 < $PIPE_03))
 	    
 	    
 	    case $? in
@@ -574,7 +576,7 @@ function display_download_manager_gui {
     while :
     do
 	load_download_manager_gui >$PIPE_03
-	sleep 10
+	sleep $waiting
     	check_pid $pid || {
 	    break
 	}
@@ -639,9 +641,9 @@ function yad_download_manager_dclick {
     		     --image="gtk-execute" \
 		     --center \
 		     --on-top \
-		     --button="Riproduci":"bash -c 'echo 3'"  \
-    		     --button="Arresta":"bash -c 'echo 0'"  \
-    		     --button="Elimina":"bash -c 'echo 1'"  \
+		     --button="Riproduci!gtk-media-play-ltr!Riproduci il file audio/video selezionato":"bash -c 'echo 3'"  \
+    		     --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":"bash -c 'echo 0'"  \
+    		     --button="Elimina!gtk-delete!Arresta il processo di download selezionato e ancella il file":"bash -c 'echo 1'"  \
     		     --button="Chiudi!gtk-close":0  \
     		     "$YAD_ZDL" &
 	    local pid=$!
@@ -687,7 +689,7 @@ function display_file_gui {
 		    "${uri_opts[@]}" \
 		    --listen \
 		    --filename="$filename" \
-		    --button="Cancella il file!gtk-execute":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
+		    --button="Cancella il file!gtk-delete":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
 		    --button="Chiudi!gtk-close":0 \
 		    "${YAD_ZDL[@]}" \
 		    --width=800 --height=600
@@ -732,8 +734,8 @@ function display_link_manager_gui {
 		       --field="Aggiungi XDCC server:":CE \
 		       --field="Aggiungi XDCC canale:":CE \
 		       --field="Aggiungi XDCC comando:":CE \
-		       --button="Edita links":"bash -c \"echo edit_links_gui >'$yad_link_manager_result_file'\"" \
-		       --button="Leggi links.txt":"bash -c \"echo display_old_links_gui >'$yad_link_manager_result_file'\"" \
+		       --button="Edita links!gtk-edit!Modifica il file da cui ZDL core estrae i link da processare":"bash -c \"echo edit_links_gui >'$yad_link_manager_result_file'\"" \
+		       --button="Leggi links.txt!dialog-information!Leggi l'elenco dei link già immessi":"bash -c \"echo display_old_links_gui >'$yad_link_manager_result_file'\"" \
 		       --button="Esegui!gtk-execute":0  \
 		       --button="Chiudi!gtk-close":1  \
 		       "${YAD_ZDL[@]}"))
@@ -999,13 +1001,13 @@ function display_multiprogress_gui {
 	    --image-on-top \
 	    --text="$TEXT" \
 	    --buttons-layout=center \
-	    --button="Links:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Downloads!browser-download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Opzioni:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
-	    --button="Console ZDL:bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Dis/Attiva ZDL core!gtk-execute:bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="ZDL sockets!gtk-execute:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Esci!gtk-close:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Links!gtk-network!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Downloads!browser-download!Gestisci i download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Opzioni!!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
+	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Dis/Attiva ZDL core!gtk-execute!Attiva o disattiva il gestore di download (ZDL core):bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="ZDL sockets!gtk-execute!Avvia o arresta i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Esci!gtk-quit!Esci solo dalla GUI, lasciando attivi i downloader, il core o i sockets:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
 	    --title "Principale" \
     	    "${YAD_ZDL[@]}" &
 
@@ -1027,7 +1029,7 @@ function display_console_gui {
 	    --tail \
 	    --filename="$gui_log" \
 	    "${YAD_ZDL[@]}" \
-	    --button="Pulisci!gtk-execute":"bash -c \"echo -e '\f' >'$gui_log'\"" \
+	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 &
 }
@@ -1095,12 +1097,11 @@ function run_gui {
     #IMAGE="browser-download"
     #ICON="$path_usr"/webui/favicon.png
     ICON="$path_usr"/webui/icon-32x32.png
-    TEXT="  <b>ZigzagDownLoader</b>\n\n  <b>Directory:</b> $PWD"
+    TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
     
     get_GUI_ID
     links_log="links.txt"
     downloads_log="zdl_log.txt"
-#    start_file_gui="$path_tmp"/start_file_gui.$GUI_ID
     start_file_gui_diff="$path_tmp"/start_file_gui_diff.$GUI_ID
     start_file_gui_complete="$path_tmp"/start_file_gui_complete.$GUI_ID
     yad_multiprogress_result_file="$path_tmp"/yad_multiprogress_result.$GUI_ID
@@ -1114,7 +1115,7 @@ function run_gui {
     
     YAD_ZDL=(
 	--window-icon="$ICON"
-	--borders=10
+	--borders=5
     )
 
     start_daemon_gui
