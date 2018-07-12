@@ -1027,6 +1027,7 @@ function display_console_gui {
 	    --tail \
 	    --filename="$gui_log" \
 	    "${YAD_ZDL[@]}" \
+	    --button="Pulisci!gtk-execute":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 &
 }
