@@ -854,14 +854,14 @@ function display_sockets_gui {
     
     if [ -n "${socket_ports[*]}" ]
     then
-	text+="<b>Socket già attivi:</b>\n"
+	text+="<b>Socket già attivati:</b>\n"
 	for port in "${socket_ports[@]}"
 	do
 	    text+="$port\n"
 	done
 	text+="\n"
     else
-	text+="<b>Socket non ancora avviati</b>\n"
+	text+="<b>Nessun socket attivato</b>\n"
     fi
 
     {
@@ -872,8 +872,8 @@ function display_sockets_gui {
 		   --on-top \
 		   --center \
 		   --align=right \
-		   --field="Porta socket:NUM" "$default_port!1024..65535" \
-		   --field="Comando:CB" "Avvia!Arresta" \
+		   --field="Porta socket:":NUM "$default_port!1024..65535" \
+		   --field="Comando:":CB "Attiva!Disattiva" \
 		   --button="Esegui!gtk-ok":0 \
 		   --button="Chiudi!gtk-close":1 \
 		   --separator=' ' \
@@ -960,9 +960,9 @@ function display_multiprogress_opts {
     		   --center \
 		   --image="$IMAGE2" \
 		   --align=right \
-    		   --field="Downloader predefinito":CB "${downloaders#\!}"\
-    		   --field="Download simultanei":NUM "${max_dl#\!}"\
-		   --field="Formato del file":CB "${format}Non converire!mp3!flac"\
+    		   --field="Downloader predefinito:":CB "${downloaders#\!}"\
+    		   --field="Download simultanei:":NUM "${max_dl#\!}"\
+		   --field="Formato del file:":CB "${format}Non converire!mp3!flac"\
     		   --button="Salva!gtk-save":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
