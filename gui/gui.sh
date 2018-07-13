@@ -521,9 +521,9 @@ function display_download_manager_gui {
 		       --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":2  \
 		       --button="Arresta tutti!gtk-stop!Arresta tutti i download. Se ZDL core è attivo, i download saranno riavviati:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
 		       --button="Elimina!gtk-delete!Arresta i download selezionati e cancella i file":0  \
-		       --button="Completati!gtk-refresh:bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Completati!gtk-refresh!Togli i download completati dall'elenco:bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
 		       --button="Log!dialog-information!Leggi le info sui download in corso o già effettuati:bash -c \"echo 'display_download_manager_log' > '$yad_download_manager_result_file'\"" \
-		       --button="Chiudi!gtk-close":1  \
+		       --button="Chiudi!gtk-close!Chiudi questa finestra":1  \
 		       --listen \
 		       --dclick-action="bash -c \"echo 'yad_download_manager_dclick %s' >'$yad_download_manager_result_file'\"" \
 		       "${YAD_ZDL[@]}" \
