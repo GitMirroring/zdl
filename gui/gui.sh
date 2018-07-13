@@ -958,6 +958,7 @@ function display_multiprogress_opts {
     		   --separator=' ' \
 		   --on-top \
     		   --center \
+		   --image="$IMAGE2" \
 		   --align=right \
     		   --field="Downloader predefinito":CB "${downloaders#\!}"\
     		   --field="Download simultanei":NUM "${max_dl#\!}"\
