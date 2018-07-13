@@ -952,7 +952,7 @@ function display_multiprogress_opts {
     [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
     
     {
-	res=($(yad --title="Opzioni di download" \
+	res=($(yad --title="Opzioni" \
     		   --text="$text" \
     		   --form \
     		   --separator=' ' \
@@ -962,7 +962,7 @@ function display_multiprogress_opts {
 		   --align=right \
     		   --field="Downloader predefinito:":CB "${downloaders#\!}"\
     		   --field="Download simultanei:":NUM "${max_dl#\!}"\
-		   --field="Formato del file:":CB "${format}Non converire!mp3!flac"\
+		   --field="Formato del file:":CB "${format}Non convertire!mp3!flac"\
     		   --button="Salva!gtk-save":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
