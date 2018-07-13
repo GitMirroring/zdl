@@ -837,7 +837,7 @@ function display_sockets_gui {
 	    socket_ports+=( $port )
     done < "$path_server"/socket-ports
 
-    local text="${TEXT}\n\nAvvia e arresta connessioni TCP:\nindicare una porta libera\n\n"
+    local text="${TEXT}\n\nAttiva o disattiva connessioni TCP:\nindicare una porta libera\n\n"
     local title="Sockets"
     local msg_img msg_server
 
@@ -1010,7 +1010,7 @@ function display_multiprogress_gui {
 	    --button="Opzioni!gtk-properties!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
 	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Dis/Attiva ZDL core!gtk-execute!Attiva o disattiva il gestore di download (ZDL core):bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="ZDL sockets!gtk-execute!Avvia o arresta i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="ZDL sockets!gtk-execute!Attiva o disattiva i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Esci!gtk-quit!Esci solo dalla GUI, lasciando attivi i downloader, il core o i sockets:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
 	    --title "Principale" \
     	    "${YAD_ZDL[@]}" &
