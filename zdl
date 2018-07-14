@@ -90,11 +90,12 @@ function update_updater {
 		    then
 			while :
 			do
-			    pass=$(yad --class="GSu" \
-				       --title="Password SUDO" \
+			    pass=$(yad --title="Password SUDO" \
 				       --text="Digita la password utente (sudo):" \
 				       --image="dialog-password" \
-				       --entry --hide-text)
+				       --entry --hide-text \
+				       "${YAD_ZDL[@]}")
+			    
 			    [[ -z "$pass" ]] && exit 1
 			    
 			    echo "$pass" | sudo -S "ls" &>/dev/null
