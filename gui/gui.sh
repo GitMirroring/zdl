@@ -1079,6 +1079,9 @@ function check_instance_gui {
     return 1
 }
 
+function check_updates {
+    update_updater
+}
 
 function run_gui {
     if ! hash yad
@@ -1088,6 +1091,7 @@ function run_gui {
     fi
     exec 0<&-
     ARGV=( "$@" )
+    this_mode=gui
 
     . $HOME/.zdl/zdl.conf
     prog=zdl
@@ -1096,12 +1100,19 @@ function run_gui {
     path_usr="/usr/local/share/${prog}"
     start_file="$path_tmp"/links_loop.txt
 
-    IMAGE="$path_usr"/webui/zdl-64x64.png
-    IMAGE2="$path_usr"/webui/zdl.png
     #IMAGE="browser-download"
     #ICON="$path_usr"/webui/favicon.png
     ICON="$path_usr"/webui/icon-32x32.png
     TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
+    IMAGE="$path_usr"/webui/zdl-64x64.png
+    IMAGE2="$path_usr"/webui/zdl.png
+    YAD_ZDL=(
+	--window-icon="$ICON"
+	--borders=5
+    )
+
+    [ -f /tmp/zdl-skip-update-session ] ||
+	check_updates
     
     get_GUI_ID
     links_log="links.txt"
@@ -1117,11 +1128,6 @@ function run_gui {
     rm -f "$yad_button_result_file"
     rm -f "$path_tmp"/flag-start-links-gui
     
-    YAD_ZDL=(
-	--window-icon="$ICON"
-	--borders=5
-    )
-
     start_daemon_gui
 
     check_instance_gui &&
@@ -1173,4 +1179,5 @@ function main {
 }
 
 [ "$1" == start ] && main "$@"
+
 

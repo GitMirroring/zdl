@@ -46,12 +46,15 @@ source $path_usr/ui/ui.sh
 source $path_usr/gui/gui.sh
 
 function update_updater {
-    fclear
-    header_z
-
     ## "...-mirror..." è quello principale (veloce)
     URL_ROOT="http://download-mirror.savannah.gnu.org/releases/zdl/"
-    header_box "Aggiornamento automatico di $name_prog"
+
+    if [ "$this_mode" != gui ]
+    then
+	fclear
+	header_z
+	header_box "Aggiornamento automatico di $name_prog"
+    fi    
 
     [ ! -f $path_conf/version ] &&
 	echo "0" >"$path_conf/version"
@@ -64,18 +67,60 @@ function update_updater {
     [[ ! "$local_version" =~ ^(-1|[0-9]+)$ ]] &&
 	local_version='-1'
 
+    updater_log=$(tempfile)
+    
     if (( $local_version<$remote_version ))
     then
-	#### aggiornamento versione da URL_ROOT
-	echo "$remote_version" >"$path_conf"/version
+	if [ "$this_mode" == gui ]
+	then
+	    local res
+	    res=($(yad --title="Aggiornamento" \
+		       --image="$IMAGE2" \
+		       --text="$TEXT\n\nDisponibile un nuovo aggiornamento, scegli cosa fare:\n\n" \
+		       --form \
+		       --separator=' ' \
+		       --field="Non chiederlo più in questa sessione\n\n":CHK FALSE \
+		       --button="Rimanda":0 \
+		       --button="Aggiorna":1 \
+		       "${YAD_ZDL[@]}"))
+	    case "$?" in
+		1)
+		    sudo_check=$(sudo -H -S -- echo SUDO_OK 2>&1 &)
+		    if [[ $sudo_check != "SUDO_OK" ]]
+		    then
+			while :
+			do
+			    pass=$(yad --class="GSu" \
+				       --title="Password SUDO" \
+				       --text="Digita la password utente (sudo):" \
+				       --image="dialog-password" \
+				       --entry --hide-text)
+			    [[ -z "$pass" ]] && exit 1
+			    
+			    echo "$pass" | sudo -S "ls" &>/dev/null
 
+			    if [ "$?" == 0 ]
+			    then
+				break
+			    fi
+			done
+		    fi
+		    ;;
+		0)
+		    [ "${res[0]}" == TRUE ] &&
+			touch /tmp/zdl-skip-update-session
+		    return 1
+		    ;;
+	    esac	    
+	fi
+	
 	mkdir -p "$path_tmp"
 	cd "$path_tmp"
 
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
-	
+
 	print_c 1 "Download in corso: attendere..."
-	
+
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
 	#
@@ -85,17 +130,22 @@ function update_updater {
 	rm -f zdl-2.0.tar.gz.sig zdl-2.0.tar.gz
 	while [ ! -f zdl-2.0.tar.gz ]
 	do
-	    wget -q "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz 
+	    wget "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz 
 
 	    if [ ! -f zdl-2.0.tar.gz ]
 	    then
-		print_c 3 "Problemi di connessione: se non dovesse risolversi, chiudi il programma con <Control+c>"
+		if [ "$this_mode" != gui ]
+		then
+		    print_c 3 "Problemi di connessione: se non dovesse risolversi, chiudi il programma con <Control+c>" 
+		fi
 		sleep 1
 	    fi
 	done
 
 	package="zdl-2.0.tar.gz"
+
 	print_c 1 "Aggiornamento di $PROG con $package"
+
 	tar -xzf "$package" 2>/dev/null &&
 	    {		
 		mv "${package%.tar.gz}" $prog
@@ -109,7 +159,11 @@ function update_updater {
 	    } ||
 		{
 		    print_c 3 "Aggiornamento fallito: non è possibile aprire il pacchetto $package"
-		    pause
+		    if [ "$this_mode" != gui ]
+		    then
+			pause
+		    fi
+
 		    cd - &>/dev/null
 		}
 
@@ -119,7 +173,8 @@ function update_updater {
 }
 
 ## controllo dipendenze (da implementare)
-if [ -z "$nodejs" ]
+if [ -z "$nodejs" ] &&
+       [ "$this_mode" != gui ]
 then
     print_c 4 "${name_prog}:"
     print_c 3 "Manca una dipendenza (necessaria per alcune estensioni dei servizi): nodejs"
@@ -301,7 +356,7 @@ then
 	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
 	then
 	    unset args[i]
-
+	    
 	    run_gui "${args[@]}" &>/dev/null &
 	    disown
 	    exit 0

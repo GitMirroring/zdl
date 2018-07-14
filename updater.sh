@@ -93,6 +93,14 @@ function try {
     then	
 	if ! sudo "${cmdline[@]}" 2>/dev/null 
 	then
+	    if [ "$this_mode" == gui ]
+	    then
+		yad --title="Aggiornamento ZDL" \
+		    --text="È necessaria la password di utente root.\nRipeti l'aggiornamento del sistema utilizzando il terminale." \
+		    --image="dialog-error" \
+		    "${YAD_ZDL[@]}"
+		exit 1
+	    fi
 	    su -c "${cmdline[@]}" || (
 		print_c 3 "$failure: ${cmdline[@]}"
 		return 1
@@ -315,7 +323,7 @@ function update {
     else
 	print_c 1 "$op automatic${suffix} in $BIN"
     fi
-    
+
     [ "$?" != 0 ] && return
     cd ..
 
@@ -565,16 +573,27 @@ ESTENSIONI:
     fi
     
     check_default_downloader
+
+    #### aggiornamento versione da URL_ROOT
+    echo "$remote_version" >"$path_conf"/version
     
     print_c 1 "$op automatic${suffix} completat${suffix}"
 
     if [ -z "$installer_zdl" ]
     then
-	pause
+	if [ "$this_mode" == gui ]
+	then
+	    yad --title="Aggiornamento ZigzagDownLoader" \
+		--text="ZigzagDownLoader aggiornato con successo" \
+		--image="$IMAGE2" \
+		--button="Avvia ZDL":0 \
+		"${YAD_ZDL[@]}"
+
+	else
+	    pause
+	fi
 	cd $dir_dest
 	$prog "${args[@]}"
 	exit
     fi
 }
-
-
