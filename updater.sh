@@ -586,6 +586,8 @@ ESTENSIONI:
 	    yad --title="Aggiornamento ZigzagDownLoader" \
 		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
+		--center \
+		--on-top \	    
 		--button="Avvia ZDL":0 \
 		"${YAD_ZDL[@]}"
 	    args+=( -g )

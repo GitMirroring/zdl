@@ -94,6 +94,8 @@ function update_updater {
 				       --text="Digita la password utente (sudo):" \
 				       --image="dialog-password" \
 				       --entry --hide-text \
+				       --center \
+				       --on-top \
 				       "${YAD_ZDL[@]}")
 			    
 			    [[ -z "$pass" ]] && exit 1

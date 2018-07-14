@@ -516,7 +516,7 @@ function display_download_manager_gui {
 		       --hide-column=6 \
 		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID:NUM" \
 		       --separator=' ' \
-		       --button="!gtk-refresh!Aggiorna la tabella dei download (automatico ogni $waiting secondi):bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Aggiorna!gtk-refresh!Aggiorna la tabella dei download (automatico ogni $waiting secondi):bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
 		       --button="Play!gtk-media-play-ltr!Riproduci il file audio/video selezionato":4 \
 		       --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":2  \
 		       --button="Arresta tutti!gtk-stop!Arresta tutti i download. Se ZDL core è attivo, i download saranno riavviati:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
