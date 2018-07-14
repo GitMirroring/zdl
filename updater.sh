@@ -588,7 +588,7 @@ ESTENSIONI:
 		--image="$IMAGE2" \
 		--button="Avvia ZDL":0 \
 		"${YAD_ZDL[@]}"
-
+	    args+=( -g )
 	else
 	    pause
 	fi
