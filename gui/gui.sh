@@ -927,6 +927,12 @@ function display_sockets_gui {
 			msg_img="gtk-dialog-error"
 		    fi
 		fi
+
+		if [ -z "$msg_server" ]
+		then
+			msg_server="Qualcosa non ha funzionato"
+			msg_img="gtk-dialog-error"		    
+		fi
 		
 		yad --image="$msg_img" \
 		    --center \
