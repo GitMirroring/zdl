@@ -882,7 +882,7 @@ function display_sockets_gui {
 	[ "$?" == 0 ] &&
 	    {
 		local socket_port="${res[0]}"
-		if [ "${res[1]}" == Avvia ]
+		if [ "${res[1]}" == Attiva ]
 		then
 		    
 		    if ! check_instance_server $socket_port &>/dev/null
@@ -908,7 +908,8 @@ function display_sockets_gui {
 			msg_server="Socket alla porta $socket_port fallito"
 			msg_img="dialog-error"
 		    fi	    
-		else
+		elif [ "${res[1]}" == Disattiva ]
+		then
 		    if ! check_port $socket_port
 		    then
 			kill_server $socket_port
