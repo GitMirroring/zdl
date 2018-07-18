@@ -908,8 +908,7 @@ function display_sockets_gui {
 			msg_server="Socket alla porta $socket_port fallito"
 			msg_img="dialog-error"
 		    fi	    
-		elif [ "${res[1]}" == Disattiva ]
-		then
+		else
 		    if ! check_port $socket_port
 		    then
 			kill_server $socket_port
