@@ -145,7 +145,7 @@ function send_response {
 	fi
 	
 	send_response_header "$code"	    
-	cat "$file"
+	cat "$file" 
     fi
 	
     #echo
@@ -174,26 +174,26 @@ function fail_with {
 }
 
 function get_mime_server {
-    declare -n mime="$1"
-    mime=''
+    declare -n refmime="$1"
+    refmime=''
     
     case "$2" in
         *\.css)
-	    mime="text/css"
+	    refmime="text/css"
 	    ;;
 	*\.js)
-	    mime="text/javascript"
+	    refmime="text/javascript"
 	    ;;
 	*\.json)
-	    mime="application/json"
+	    refmime="application/json"
 	    #mime="text/html"
 	    ;;
 	*)
-	    mime=$(get_mime "${file}")
+	    refmime=$(get_mime "${file}")
 	    ;;
     esac
 
-    if [ -n "$mime" ]
+    if [ -n "$refmime" ]
     then
 	return 0
 
@@ -210,7 +210,7 @@ function serve_file {
 	if [[ "$http_method" =~ ^(GET|POST)$ ]]
 	then
 	    send_response_ok_exit "$file"
-
+	    
 	else
 	    cat "$file"
 	    exit
@@ -479,17 +479,17 @@ function create_status_json {
     local reconn
     
     [ -n "$1" ] &&
-	declare -n string_output="$1" ||
-	    string_output=string_output
+	declare -n ref_string_output="$1" ||
+	    ref_string_output=string_output
     
-    string_output="{"
+    ref_string_output="{"
 
     ## current path
-    string_output+="\"path\":\"$PWD\","
+    ref_string_output+="\"path\":\"$PWD\","
     
     ## run status    
     get_status_run status
-    string_output+="\"status\":\"$status\","
+    ref_string_output+="\"status\":\"$status\","
 
     ## downloader
     if [ ! -f "$path_tmp/downloader" ]
@@ -497,7 +497,7 @@ function create_status_json {
 	mkdir -p "$path_tmp"
 	get_item_conf 'downloader' >"$path_tmp/downloader"
     fi
-    string_output+="\"downloader\":\"$(cat "$path_tmp/downloader")\","
+    ref_string_output+="\"downloader\":\"$(cat "$path_tmp/downloader")\","
 
     ## max downloads
     if [ ! -f "$path_tmp/max-dl" ]
@@ -505,21 +505,21 @@ function create_status_json {
 	mkdir -p "$path_tmp"
 	get_item_conf 'max_dl' >"$path_tmp/max-dl"
     fi
-    string_output+="\"maxDownloads\":\"$(cat "$path_tmp/max-dl")\","
+    ref_string_output+="\"maxDownloads\":\"$(cat "$path_tmp/max-dl")\","
 
     ## reconnect
     [ -f "$path_tmp"/reconnect ] && reconn=enabled || reconn=disabled
-    string_output+="\"reconnect\":\"$reconn\","
+    ref_string_output+="\"reconnect\":\"$reconn\","
     
     ## run sockets
     get_status_sockets status
-    string_output+="\"sockets\":$status,"
+    ref_string_output+="\"sockets\":$status,"
 
     ## conf
     get_status_conf status
-    string_output+="\"conf\":$status"
+    ref_string_output+="\"conf\":$status"
 
-    string_output+="}"
+    ref_string_output+="}"
 }
 
 function send_ip {
@@ -1530,6 +1530,7 @@ function http_server {
     esac
     return 0
 }
+
 
 while read -a line 
 do

@@ -884,6 +884,11 @@ function display_sockets_gui {
 		local socket_port="${res[0]}"
 		if [ "${res[1]}" == Attiva ]
 		then
+		    local PWD_TO_SERVER_PATHS=$(realpath "$PWD")
+		    if ! set_line_in_file in "$PWD_TO_SERVER_PATHS$" "$path_server"/paths.txt
+		    then
+			echo "$PWD_TO_SERVER_PATHS" >>"$path_server"/paths.txt
+		    fi
 		    
 		    if ! check_instance_server $socket_port &>/dev/null
 		    then
@@ -1095,7 +1100,7 @@ function run_gui {
 	_log 40
 	exit 1
     fi
-    exec 0<&-
+
     ARGV=( "$@" )
     this_mode=gui
 
