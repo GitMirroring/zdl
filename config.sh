@@ -24,190 +24,6 @@
 # zoninoz@inventati.org
 #
 
-## news:
-TAG1='## NEW: ...ARIA2!'
-TAG2='## ARIA2: già chiesto'
-
-
-# chiavi di configurazione  --   valori predefiniti  --    descrizione per il config-manager
-key_conf[0]=downloader;          val_conf[0]=Aria2;        string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
-key_conf[1]=axel_parts;          val_conf[1]="32";         string_conf[1]="Numero di parti in download parallelo per Axel"
-key_conf[2]=aria2_connections;   val_conf[2]="16";         string_conf[2]="Numero di connessioni in parallelo per Aria2"
-key_conf[3]=max_dl;              val_conf[3]="1";          string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
-key_conf[4]=background;          val_conf[4]=black;        string_conf[4]="Colore sfondo (black|transparent)"
-key_conf[5]=language;            val_conf[5]=$LANG;        string_conf[5]="Lingua"
-key_conf[6]=reconnecter;         val_conf[6]="";           string_conf[6]="Script/comando/programma per riconnettere il modem/router"
-key_conf[7]=autoupdate;          val_conf[7]=enabled;      string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
-key_conf[8]=player;              val_conf[8]="";           string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
-key_conf[9]=editor;              val_conf[9]="nano";       string_conf[9]="Editor predefinito per modificare la lista dei link in coda"
-key_conf[10]=resume;             val_conf[10]="";          string_conf[10]="Recupero file omonimi come con opzione --resume (enabled|*)"
-key_conf[11]=zdl_mode;           val_conf[11]="stdout";    string_conf[11]="Modalità predefinita di avvio (lite|daemon|stdout)"
-key_conf[12]=tcp_port;           val_conf[12]="";          string_conf[12]="Porta TCP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
-key_conf[13]=udp_port;           val_conf[13]="";          string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
-key_conf[14]=socket_port;        val_conf[14]="8080";      string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
-key_conf[15]=browser;            val_conf[15]="firefox";   string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
-key_conf[16]=web_ui;             val_conf[16]="1";         string_conf[16]="Seleziona l'interfaccia web predefinita (1|2)"
-
-declare -A try_counter
-try_end_default=5
-try_end=$try_end_default
-
-declare -A _downloader
-_downloader['Axel']=axel
-_downloader['Aria2']=aria2c
-_downloader['Wget']=wget
-
-prog=zdl 
-name_prog="ZigzagDownLoader"
-PROG="ZDL"  #`echo $prog | tr a-z A-Z`
-path_tmp=".${prog}_tmp"
-mkdir -p "$path_tmp"
-
-path_server="$HOME"/.zdl/zdl.d
-#path_server=/tmp/zdl.d
-mkdir -p "$path_server"
-
-path_conf="$HOME/.${prog}"
-file_conf="$path_conf/$prog.conf"
-
-file_socket_account="$path_conf"/.socket-account
-
-source "$file_conf"
-[ -z "$background" ] && background=${val_conf[4]}
-
-declare -A list_proxy_url
-## elenco chiavi proxy_server: proxy_list, ip_adress
-proxy_server='ip_adress'
-list_proxy_url['ip_adress']="https://www.ip-adress.com/proxy_list/" ###"http://zoninoz.hol.es"  ### 
-list_proxy_url['proxy_list']="http://proxy-list.org/en/index.php"
-
-#user_agent="Mozilla/5.0 (X11; Linux x36_64; rv:10.0.7) Gecko/20100101 Firefox/10.0.7 Iceweasel/10.0.7"
-#user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"
-user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
-user_lang="$LANG"
-user_language="$LANGUAGE"
-prog_lang='en_US.UTF-8:en'
-
-newip_hosts=(
-    rockfile
-    uptobox
-    mediafire
-    easybytez
-    uload
-    glumbouploads
-    billionuploads
-)
-
-rtmp_links=(
-    zinwa\.
-    vidhappy\.
-    videopremium\.
-)
-
-wget_links=(
-    dailymotion\/cdn
-    dmcdn\.net
-    uploaded\.
-    easybytez\.
-    rapidgator\.
-    uploadable\.
-    nitroflare\.
-    rai\.tv
-    idowatch\.
-    dropbox\.
-    subyshare\.
-#    wstream\.
-)
-#    videomega\.
-
-##youtubedl_links=( rai\.tv )
-
-aria2_links=(
-    ^magnet\:
-    \.torrent$
-)
-
-dcc_xfer_links=(
-    ^irc\:
-)
-
-noresume_links=(
-    uploadable\.
-    rapidgator\.
-    uploaded\.
-)
-
-no_check_links=(
-    nowdownload\.
-    dropbox\.
-    pastebin\.
-    ^magnet\:
-    \.torrent$
-    ^irc\:
-    \.dfiles\.
-    \.m3u8
-)
-#no_check_links=( tusfiles\. nowdownload\. )
-
-no_check_ext=(
-    dropbox\.
-    pastebin\.
-    easybytez\.
-    'mega.(co|nz)'
-    ^magnet\:
-    \.torrent$
-    ^irc\:
-    \.dfiles\.
-    \.m3u8
-)
-
-captcha_services="(keeplinks)"
-
-## massima durata tentativi di connessione (Wget)
-max_waiting=40
-
-## durata attesa 
-sleeping_pause=3
-#[ -d /cygdrive ] && sleeping_pause=2
-
-path_axel=$(command -v axel 2>/dev/null)
-path_aria2=$(command -v aria2c 2>/dev/null)
-path_wget=$(command -v wget 2>/dev/null)
-path_rtmpdump=$(command -v rtmpdump 2>/dev/null)
-
-
-
-## NODEJS:
-
-if [ -d /cygdrive ] &&
-       ! command -v node &>/dev/null &&
-       [ -f "/usr/local/share/zdl/node.exe" ]
-then
-    chmod 777 /usr/local/share/zdl/node.exe
-    nodejs="/usr/local/share/zdl/node.exe"
-
-elif command -v nodejs &>/dev/null
-then
-    nodejs=nodejs
-
-elif command -v node &>/dev/null
-then
-    nodejs=node
-fi
-
-evaljs=$path_usr/libs/eval.js
-
-
-
-## FFMPEG:
-
-command -v avconv &>/dev/null && ffmpeg="avconv"
-command -v ffmpeg &>/dev/null && ffmpeg="ffmpeg"
-
-
-
-
-
 ############
 ## functions
 
@@ -508,4 +324,193 @@ function init {
     
     trap_sigint
 }
+
+####################################
+
+## news:
+TAG1='## NEW: ...ARIA2!'
+TAG2='## ARIA2: già chiesto'
+
+
+# chiavi di configurazione  --   valori predefiniti  --    descrizione per il config-manager
+key_conf[0]=downloader;          val_conf[0]=Aria2;        string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
+key_conf[1]=axel_parts;          val_conf[1]="32";         string_conf[1]="Numero di parti in download parallelo per Axel"
+key_conf[2]=aria2_connections;   val_conf[2]="16";         string_conf[2]="Numero di connessioni in parallelo per Aria2"
+key_conf[3]=max_dl;              val_conf[3]="1";          string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
+key_conf[4]=background;          val_conf[4]=black;        string_conf[4]="Colore sfondo (black|transparent)"
+key_conf[5]=language;            val_conf[5]=$LANG;        string_conf[5]="Lingua"
+key_conf[6]=reconnecter;         val_conf[6]="";           string_conf[6]="Script/comando/programma per riconnettere il modem/router"
+key_conf[7]=autoupdate;          val_conf[7]=enabled;      string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
+key_conf[8]=player;              val_conf[8]="";           string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
+key_conf[9]=editor;              val_conf[9]="nano";       string_conf[9]="Editor predefinito per modificare la lista dei link in coda"
+key_conf[10]=resume;             val_conf[10]="";          string_conf[10]="Recupero file omonimi come con opzione --resume (enabled|*)"
+key_conf[11]=zdl_mode;           val_conf[11]="stdout";    string_conf[11]="Modalità predefinita di avvio (lite|daemon|stdout)"
+key_conf[12]=tcp_port;           val_conf[12]="";          string_conf[12]="Porta TCP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
+key_conf[13]=udp_port;           val_conf[13]="";          string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
+key_conf[14]=socket_port;        val_conf[14]="8080";      string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
+key_conf[15]=browser;            val_conf[15]="firefox";   string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
+key_conf[16]=web_ui;             val_conf[16]="1";         string_conf[16]="Seleziona l'interfaccia web predefinita (1|2)"
+
+declare -A try_counter
+try_end_default=5
+try_end=$try_end_default
+
+declare -A _downloader
+_downloader['Axel']=axel
+_downloader['Aria2']=aria2c
+_downloader['Wget']=wget
+
+prog=zdl 
+name_prog="ZigzagDownLoader"
+PROG="ZDL"  #`echo $prog | tr a-z A-Z`
+path_tmp=".${prog}_tmp"
+mkdir -p "$path_tmp"
+
+path_server="$HOME"/.zdl/zdl.d
+#path_server=/tmp/zdl.d
+mkdir -p "$path_server"
+
+path_conf="$HOME/.${prog}"
+file_conf="$path_conf/$prog.conf"
+
+[ ! -s "$file_conf" ] &&
+    set_default_conf
+
+file_socket_account="$path_conf"/.socket-account
+
+source "$file_conf"
+[ -z "$background" ] && background=${val_conf[4]}
+
+declare -A list_proxy_url
+## elenco chiavi proxy_server: proxy_list, ip_adress
+proxy_server='ip_adress'
+list_proxy_url['ip_adress']="https://www.ip-adress.com/proxy_list/" ###"http://zoninoz.hol.es"  ### 
+list_proxy_url['proxy_list']="http://proxy-list.org/en/index.php"
+
+#user_agent="Mozilla/5.0 (X11; Linux x36_64; rv:10.0.7) Gecko/20100101 Firefox/10.0.7 Iceweasel/10.0.7"
+#user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"
+user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
+user_lang="$LANG"
+user_language="$LANGUAGE"
+prog_lang='en_US.UTF-8:en'
+
+newip_hosts=(
+    rockfile
+    uptobox
+    mediafire
+    easybytez
+    uload
+    glumbouploads
+    billionuploads
+)
+
+rtmp_links=(
+    zinwa\.
+    vidhappy\.
+    videopremium\.
+)
+
+wget_links=(
+    dailymotion\/cdn
+    dmcdn\.net
+    uploaded\.
+    easybytez\.
+    rapidgator\.
+    uploadable\.
+    nitroflare\.
+    rai\.tv
+    idowatch\.
+    dropbox\.
+    subyshare\.
+#    wstream\.
+)
+#    videomega\.
+
+##youtubedl_links=( rai\.tv )
+
+aria2_links=(
+    ^magnet\:
+    \.torrent$
+)
+
+dcc_xfer_links=(
+    ^irc\:
+)
+
+noresume_links=(
+    uploadable\.
+    rapidgator\.
+    uploaded\.
+)
+
+no_check_links=(
+    nowdownload\.
+    dropbox\.
+    pastebin\.
+    ^magnet\:
+    \.torrent$
+    ^irc\:
+    \.dfiles\.
+    \.m3u8
+)
+#no_check_links=( tusfiles\. nowdownload\. )
+
+no_check_ext=(
+    dropbox\.
+    pastebin\.
+    easybytez\.
+    'mega.(co|nz)'
+    ^magnet\:
+    \.torrent$
+    ^irc\:
+    \.dfiles\.
+    \.m3u8
+)
+
+captcha_services="(keeplinks)"
+
+## massima durata tentativi di connessione (Wget)
+max_waiting=40
+
+## durata attesa 
+sleeping_pause=3
+#[ -d /cygdrive ] && sleeping_pause=2
+
+path_axel=$(command -v axel 2>/dev/null)
+path_aria2=$(command -v aria2c 2>/dev/null)
+path_wget=$(command -v wget 2>/dev/null)
+path_rtmpdump=$(command -v rtmpdump 2>/dev/null)
+
+
+
+## NODEJS:
+
+if [ -d /cygdrive ] &&
+       ! command -v node &>/dev/null &&
+       [ -f "/usr/local/share/zdl/node.exe" ]
+then
+    chmod 777 /usr/local/share/zdl/node.exe
+    nodejs="/usr/local/share/zdl/node.exe"
+
+elif command -v nodejs &>/dev/null
+then
+    nodejs=nodejs
+
+elif command -v node &>/dev/null
+then
+    nodejs=node
+fi
+
+evaljs=$path_usr/libs/eval.js
+
+
+
+## FFMPEG:
+
+command -v avconv &>/dev/null && ffmpeg="avconv"
+command -v ffmpeg &>/dev/null && ffmpeg="ffmpeg"
+
+
+
+
 
