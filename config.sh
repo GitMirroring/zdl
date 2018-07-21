@@ -351,6 +351,14 @@ key_conf[14]=socket_port;        val_conf[14]="8080";      string_conf[14]="Port
 key_conf[15]=browser;            val_conf[15]="firefox";   string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
 key_conf[16]=web_ui;             val_conf[16]="1";         string_conf[16]="Seleziona l'interfaccia web predefinita (1|2)"
 
+declare -A label_conf
+function get_labels_conf {    
+    for ((i=0; i<${#key_conf[@]}; i++))
+    do
+	label_conf[${key_conf[i]}]="${string_conf[i]}"
+    done
+}
+
 declare -A try_counter
 try_end_default=5
 try_end=$try_end_default

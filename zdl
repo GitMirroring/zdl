@@ -118,6 +118,7 @@ function update_updater {
 			    fi
 			done
 		    fi
+		    
 		    this_mode=stdout
 		    that_mode=gui
 

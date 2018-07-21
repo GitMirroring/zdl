@@ -973,9 +973,10 @@ function display_multiprogress_opts {
     		   --field="Downloader predefinito:":CB "${downloaders#\!}"\
     		   --field="Download simultanei:":NUM "${max_dl#\!}"\
 		   --field="Formato del file:":CB "${format}Non convertire!mp3!flac"\
-		   --button="Aggiorna!gtk-save":2 \
-    		   --button="Salva!gtk-ok":0 \
-		   --button="Chiudi!gtk-close":1  \
+		   --button="Configura!dialog-information!Configurazione di ZDL":3 \
+		   --button="Aggiorna!gtk-save!Re/Installa l'ultimo aggiornamento disponibile di ZDL":2 \
+    		   --button="Salva!gtk-ok!Salva le opzioni della directory di download":0 \
+		   --button="Chiudi!gtk-close!Annulla l'operazione chiudendo la finestra":1  \
     		   ${YAD_ZDL[@]}))
 	case $? in
 	    0)
@@ -994,6 +995,9 @@ function display_multiprogress_opts {
 		force_update=true
 		check_updates #&		disown
 		exit 0
+		;;
+	    3)
+		display_configure_gui
 		;;
 	esac
     } &
@@ -1056,6 +1060,64 @@ function display_console_gui {
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 &
     ref=$!
+}
+
+function display_configure_gui {
+    local res i ret OIFS="$IFS"
+    IFS="€"
+    {
+	source "$file_conf"
+	res=($(yad --title="Configurazione" \
+		   --text="${TEXT}\n\nGestisci la configurazione di ZDL" \
+		   --form \
+		   --align=right \
+		   --separator='€' \
+		   --scroll \
+		   --height=600 --width=800 \
+		   --image="$IMAGE2" \
+		   --field="Downloader predefinito:":CB "${downloader}!Aria2!Axel!Wget" \
+		   --field="Numero parti di download per Axel:":NUM "$axel_parts!1..32" \
+		   --field="Numero parti di download per Aria2:":NUM "$aria2_connections!1..16" \
+		   --field="Max download simultanei:":NUM "$max_dl!0..20" \
+		   --field="Colore di sfondo nei terminali virtuali:":CB "$background!transparent!black" \
+		   --field="Lingua:":CB "$language" \
+		   --field="Comando per riconnettere il modem/router:":CE "$reconnecter" \
+		   --field="Aggiornamenti automatici:":CB "$autoupdate!enabled!disabled" \
+		   --field="Player per anteprima audio/video:":MFL "$player" \
+		   --field="Editor per la lista dei link:":MFL "$editor" \
+		   --field="Sovrascrittura file omonimi (--resume):":CB "${resume}!enabled!disabled" \
+		   --field="Modalità avvio":CB "${zdl_mode}!stdout!lite!daemon" \
+		   --field="Porta TCP torrent":NUM "$tcp_port!1024..65535" \
+		   --field="Porta UDP torrent":NUM "$udp_port!1024..65535" \
+		   --field="Porta TCP (--socket|--web-ui)":NUM "$socket_port!1024..65535" \
+		   --field="Browser web (--web-ui):":MFL "$browser" \
+		   --field="Interfaccia socket web (--socket|--web-ui)":CB "$web_ui!1!1_flat!2!2_lite" \
+		   --button="Backup configurazione!gtk-save":3 \
+		   --button="Salva!gtk-ok":2 \
+		   --button="Annulla!gtk-close":0 \
+		   "${YAD_ZDL[@]}"))
+	ret=$?
+	case $ret in
+	    2)
+		echo "${res[@]}" >OUT
+		for ((i=0; i<${#key_conf[@]}; i++))
+		do
+		    set_item_conf ${key_conf[i]} "${res[i]}"
+		done
+		;;
+	    3)
+		local ext=$(date +%F)
+		cp "$file_conf" "$file_conf".$ext
+		yad --title="Backup configurazione" \
+		    --text="$TEXT\n\n\n<b>Backup della configurazione in:</b>\n$file_conf.$ext" \
+		    --image="gtk-ok" \
+		    --button="Chiudi!gtk-ok":0 \
+		    --on-top --center \
+		    "${YAD_ZDL[@]}"
+		;;
+	esac
+	IFS="$OIFS"
+    } &	
 }
 
 function get_GUI_ID {
