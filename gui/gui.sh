@@ -1038,7 +1038,7 @@ function display_console_gui {
     tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
 	    --image="$IMAGE2" \
-	    --text="${TEXT}\n\nConsole dei processi di estrazione e donwload\n\n" \
+	    --text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
 	    --text-info \
 	    --show-uri \
 	    --uri-color=blue \
