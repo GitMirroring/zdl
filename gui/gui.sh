@@ -1033,6 +1033,8 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
+    declare -n ref="$1"
+    
     tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
 	    --image="$IMAGE2" \
@@ -1047,6 +1049,7 @@ function display_console_gui {
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 &
+    ref=$!
 }
 
 function get_GUI_ID {

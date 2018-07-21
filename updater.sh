@@ -588,12 +588,22 @@ ESTENSIONI:
 		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
 		--center \
-		"${YAD_ZDL[@]}"
+		"${YAD_ZDL[@]}" \
+		--button="Avvia ZDL!gtk-execute:0" \
+		--button="Esci da ZDL!gtk-quit:1" 
 
-	    cd $dir_dest
-	    run_gui "${args[@]}" &>/dev/null &
-	    disown
-	    exit 0
+	    case $? in
+		0)
+		    kill -9 $pid_console_gui
+		    cd $dir_dest
+		    run_gui "${args[@]}" &>/dev/null &
+		    disown
+		    exit 0
+		    ;;
+		1)
+		    exit 1
+		    ;;
+	    esac
 	    
 	else
 	    pause

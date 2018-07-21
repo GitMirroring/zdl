@@ -110,12 +110,14 @@ function update_updater {
 		    fi
 		    this_mode=stdout
 		    that_mode=gui
-		    # export PIPE_09=/tmp/yadpipe04.$GUI_ID
-		    # test -e $PIPE_09 && rm -f $PIPE_09
-		    # mkfifo $PIPE_09
-		    # exec 44<> $PIPE_09
+
 		    touch "$gui_log"
-#		    echo "$gui_log" > test-log.txt
+
+		    ## bug di gtk: il riquadro di log per il progress di yad
+		    ## non è al momento espandibile senza patch (per gtk o yad)
+		    ## finché il bug non sarà sanato da gtk oppure da yad,
+		    ## zdl userà la console GUI
+		    ##
 		    # tail -f "$gui_log" |
 		    # 	sed -r 's|^|#|' | tee -a test-log.txt |
 		    # 	yad --progress \
@@ -123,7 +125,7 @@ function update_updater {
 		    # 	    --enable-log \
 		    # 	    --log-expanded \
 		    # 	    "${YAD_ZDL[@]}" &
-		    display_console_gui
+		    display_console_gui pid_console_gui
 		    ;;
 		0)
 		    [ "${res[0]}" == TRUE ] &&
