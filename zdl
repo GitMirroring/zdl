@@ -116,11 +116,10 @@ function update_updater {
 		    # exec 44<> $PIPE_09
 		    touch "$gui_log"
 		    echo "$gui_log" > test-log.txt
-		    tail -f "$gui_log" </dev/null |
+		    tail -f "$gui_log" |
 			sed -r 's|^|#|' | tee -a test-log.txt |
 			yad --progress \
 			    --pulsate \
-			    --listen \
 			    --enable-log \
 			    --log-expanded \
 			    "${YAD_ZDL[@]}" &
