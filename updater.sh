@@ -589,7 +589,7 @@ ESTENSIONI:
 		--image="$IMAGE2" \
 		--center \
 		"${YAD_ZDL[@]}"
-
+	    echo $dir_dest > OUT_touch
 	    cd $dir_dest
 	    zdl -g "${args[@]}" >OUT_ERROR
 	    exit
