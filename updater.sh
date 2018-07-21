@@ -590,12 +590,14 @@ ESTENSIONI:
 		--on-top \
 		"${YAD_ZDL[@]}" \
 		--button="Esci da ZDL!gtk-quit:1" \
-		--button="Avvia ZDL!gtk-execute:0"
+		--button="Riavvia ZDL!gtk-execute:0"
 
 	    case $? in
 		0)
 		    kill -9 $pid_console_gui
 		    cd $dir_dest
+
+		    kill_yad_multiprogress
 		    run_gui "${args[@]}" &>/dev/null &
 		    disown
 		    exit 0

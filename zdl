@@ -69,21 +69,31 @@ function update_updater {
 
     updater_log=$(tempfile)
     
-    if ((local_version < remote_version))
+    if ((local_version < remote_version)) ||
+	   [ "$force_update" == true ]
     then
+
 	if [ "$this_mode" == gui ]
 	then
-	    local res
-	    res=($(yad --title="Aggiornamento" \
-		       --image="$IMAGE2" \
-		       --text="$TEXT\n\nDisponibile un nuovo aggiornamento, scegli cosa fare:\n\n" \
-		       --form \
-		       --separator=' ' \
+	    if [ "$force_update" != true ]
+	    then
+		local res
+		res=($(yad --title="Aggiornamento" \
+			   --image="$IMAGE2" \
+			   --text="$TEXT\n\nDisponibile un nuovo aggiornamento, scegli cosa fare:\n\n" \
+			   --form \
+			   --separator=' ' \
 		       --field="Non chiederlo più in questa sessione\n\n":CHK FALSE \
 		       --button="Rimanda":0 \
 		       --button="Aggiorna":1 \
 		       "${YAD_ZDL[@]}"))
-	    case "$?" in
+		ret=$?
+	    else
+		ret=1
+		unset force_update
+	    fi
+
+	    case "$ret" in
 		1)
 		    sudo_check=$(sudo -H -S -- echo SUDO_OK 2>&1 &)
 		    if [[ $sudo_check != "SUDO_OK" ]]

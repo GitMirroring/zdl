@@ -289,7 +289,6 @@ function new_yad_multiprogress {
 }
 
 function quit_gui {
-    #echo $GUI_ID > "$exit_file"
     kill_yad_multiprogress
     kill_pid_file "$exit_file"
     exit
@@ -974,11 +973,12 @@ function display_multiprogress_opts {
     		   --field="Downloader predefinito:":CB "${downloaders#\!}"\
     		   --field="Download simultanei:":NUM "${max_dl#\!}"\
 		   --field="Formato del file:":CB "${format}Non convertire!mp3!flac"\
+		   --button="Aggiorna\!!gtk-save":2 \
     		   --button="Salva!gtk-save":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
-	[ "$?" == 0 ] &&
-	    {
+	case $? in
+	    0)
     		echo ${res[0]} >"$path_tmp"/downloader
     		echo ${res[1]%[.,]*} >"$path_tmp"/max-dl
 		if [[ "${res[2]}" =~ ^(flac|mp3)$ ]]
@@ -989,7 +989,13 @@ function display_multiprogress_opts {
 		else
 		    echo > "$path_tmp"/format-post_processor
 		fi
-	    }
+		;;
+	    2)
+		force_update=true
+		check_updates #&		disown
+		exit 0
+		;;
+	esac
     } &
 }
 
