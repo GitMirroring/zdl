@@ -590,12 +590,15 @@ ESTENSIONI:
 		--center \
 		"${YAD_ZDL[@]}"
 
-	    args+=( -g )
+	    cd $dir_dest
+	    zdl -g "${args[@]}"
+	    
 	else
 	    pause
+	    cd $dir_dest
+	    $prog "${args[@]}"
+	    exit
 	fi
-	cd $dir_dest
-	$prog "${args[@]}"
-	exit
     fi
+	
 }
