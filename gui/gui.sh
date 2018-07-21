@@ -973,8 +973,8 @@ function display_multiprogress_opts {
     		   --field="Downloader predefinito:":CB "${downloaders#\!}"\
     		   --field="Download simultanei:":NUM "${max_dl#\!}"\
 		   --field="Formato del file:":CB "${format}Non convertire!mp3!flac"\
-		   --button="Aggiorna\!!gtk-save":2 \
-    		   --button="Salva!gtk-save":0 \
+		   --button="Aggiorna!gtk-save":2 \
+    		   --button="Salva!gtk-ok":0 \
 		   --button="Chiudi!gtk-close":1  \
     		   ${YAD_ZDL[@]}))
 	case $? in
