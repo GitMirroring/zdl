@@ -583,7 +583,7 @@ ESTENSIONI:
     then
 	if [ "$that_mode" == gui ]
 	then
-	    rm -f "$gui_log"
+	    #rm -f "$gui_log"
 	    yad --title="Aggiornamento ZigzagDownLoader" \
 		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
@@ -591,7 +591,7 @@ ESTENSIONI:
 		"${YAD_ZDL[@]}"
 
 	    cd $dir_dest
-	    zdl -g "${args[@]}"
+	    zdl -g "${args[@]}" >OUT_ERROR
 	    exit
 	    
 	else
