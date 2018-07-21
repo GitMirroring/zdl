@@ -149,7 +149,7 @@ function update_updater {
 	
 	while [ ! -f zdl-2.0.tar.gz ]
 	do
-	    wget "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz 
+	    wget "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz -o "${gui_log#*\/}"
 
 	    if [ ! -f zdl-2.0.tar.gz ]
 	    then
