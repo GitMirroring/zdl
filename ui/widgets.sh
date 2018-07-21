@@ -82,7 +82,7 @@ function print_filter {
     
     if [ -f "$log" ]
     then
-	echo -ne "$1$ads" >>  OUTtee.tmp
+	echo -e "$1$ads" >>  OUTtee.tmp
  	echo -ne "$1$ads" | tee "$filter"
 	sanitize_text <"$filter" >>"$log" 
 	
