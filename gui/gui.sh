@@ -1099,7 +1099,6 @@ function display_configure_gui {
 	ret=$?
 	case $ret in
 	    2)
-		echo "${res[@]}" >OUT
 		for ((i=0; i<${#key_conf[@]}; i++))
 		do
 		    set_item_conf ${key_conf[i]} "${res[i]}"
@@ -1113,6 +1112,7 @@ function display_configure_gui {
 		    --image="gtk-ok" \
 		    --button="Chiudi!gtk-ok":0 \
 		    --on-top --center \
+		    --borders=10 \
 		    "${YAD_ZDL[@]}"
 		;;
 	esac
