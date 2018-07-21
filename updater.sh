@@ -585,10 +585,10 @@ ESTENSIONI:
 	then
 	    rm -f "$gui_log"
 	    yad --title="Aggiornamento ZigzagDownLoader" \
-		--text="ZigzagDownLoader aggiornato con successo......" \
+		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
 		--center \
-		--on-top \	    
+		--on-top \
 		--button="Avvia ZDL!gtk-execute":0 \
 		"${YAD_ZDL[@]}"
 	    args+=( -g )
