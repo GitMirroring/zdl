@@ -123,6 +123,7 @@ function update_updater {
 		    # 	    --enable-log \
 		    # 	    --log-expanded \
 		    # 	    "${YAD_ZDL[@]}" &
+		    display_console_gui
 		    ;;
 		0)
 		    [ "${res[0]}" == TRUE ] &&
