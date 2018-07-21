@@ -71,9 +71,6 @@ function update_updater {
     
     if ((local_version < remote_version))
     then
-	mkdir -p "$path_tmp"
-	cd "$path_tmp"
-
 	if [ "$this_mode" == gui ]
 	then
 	    local res
@@ -136,18 +133,20 @@ function update_updater {
 	    esac	    
 	fi
 	
+	mkdir -p "$path_tmp"
+	cd "$path_tmp"
 
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 
 	print_c 1 "Download in corso: attendere..."
-
+	
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
 	#
 	#### dal mirror principale (veloce):
 
 	#wget "$URL_ROOT" -r -l 1 -A gz -np -nd -q
-
+	
 	while [ ! -f zdl-2.0.tar.gz ]
 	do
 	    wget "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz 

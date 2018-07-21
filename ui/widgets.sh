@@ -69,10 +69,21 @@ function print_case {
 
 function print_filter {
     local ads="$2"
+    local log filter
+
+    if [[ "$PWD" =~ "$path_tmp" ]]
+    then
+	filter=print_filter_output
+	log="${gui_log#*$path_tmp}"
+    else
+    	filter="$path_tmp"/print_filter_output
+	log="$gui_log"
+    fi
+    
     if [ -f "$gui_log" ]
     then
- 	echo -ne "$1$ads" | tee "$path_tmp"/print_filter_output
-	sanitize_text <"$path_tmp"/print_filter_output >>"$gui_log" 
+ 	echo -ne "$1$ads" | tee "$filter"
+	sanitize_text <"$filter" >>"$log" 
 	
     else
 	echo -ne "$1$ads" 
