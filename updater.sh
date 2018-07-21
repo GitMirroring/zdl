@@ -591,9 +591,9 @@ ESTENSIONI:
 		"${YAD_ZDL[@]}"
 
 	    cd $dir_dest
-	    zdl -g "${args[@]}" &
+	    run_gui "${args[@]}" &>/dev/null &
 	    disown
-	    exit
+	    exit 0
 	    
 	else
 	    pause
