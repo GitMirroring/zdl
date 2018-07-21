@@ -114,8 +114,9 @@ function update_updater {
 		    # test -e $PIPE_09 && rm -f $PIPE_09
 		    # mkfifo $PIPE_09
 		    # exec 44<> $PIPE_09
+		    touch "$gui_log"
 		    tail -f "$gui_log" </dev/null |
-			sed -r 's|^|#|' |
+			sed -r 's|^|#|' | tee -a test-log.txt |
 			yad --progress \
 			    --pulsate \
 			    --listen \
