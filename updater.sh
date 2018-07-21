@@ -589,7 +589,7 @@ ESTENSIONI:
 		--center \
 		--on-top \
 		"${YAD_ZDL[@]}" \
-		--button="Esci!gtk-quit:1" \
+		--button="Chiudi!gtk-close:1" \
 		--button="Riavvia ZDL!gtk-execute:0"
 
 	    case $? in
