@@ -583,6 +583,7 @@ ESTENSIONI:
     then
 	if [ "$that_mode" == gui ]
 	then
+	    rm -f "$gui_log"
 	    yad --title="Aggiornamento ZigzagDownLoader" \
 		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
