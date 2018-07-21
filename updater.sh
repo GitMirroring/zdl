@@ -592,6 +592,7 @@ ESTENSIONI:
 
 	    cd $dir_dest
 	    zdl -g "${args[@]}"
+	    exit
 	    
 	else
 	    pause

@@ -115,14 +115,14 @@ function update_updater {
 		    # mkfifo $PIPE_09
 		    # exec 44<> $PIPE_09
 		    touch "$gui_log"
-		    echo "$gui_log" > test-log.txt
-		    tail -f "$gui_log" |
-			sed -r 's|^|#|' | tee -a test-log.txt |
-			yad --progress \
-			    --pulsate \
-			    --enable-log \
-			    --log-expanded \
-			    "${YAD_ZDL[@]}" &
+#		    echo "$gui_log" > test-log.txt
+		    # tail -f "$gui_log" |
+		    # 	sed -r 's|^|#|' | tee -a test-log.txt |
+		    # 	yad --progress \
+		    # 	    --pulsate \
+		    # 	    --enable-log \
+		    # 	    --log-expanded \
+		    # 	    "${YAD_ZDL[@]}" &
 		    ;;
 		0)
 		    [ "${res[0]}" == TRUE ] &&
