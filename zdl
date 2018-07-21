@@ -138,7 +138,7 @@ function update_updater {
 
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 
-	print_c 1 "Download in corso: attendere..."
+	print_c 1 "Download in corso: attendere..." |tee OUTtee
 	
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
