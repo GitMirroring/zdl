@@ -80,15 +80,15 @@ function print_filter {
 	log="$gui_log"
     fi
     
-    if [ -f "$log" ]
-    then
-	echo -e "$1$ads" >>  OUTtee.tmp
+    # if [ -f "$log" ]
+    # then
+	echo -e "$log --- $1$ads" >>  OUTtee.tmp
  	echo -ne "$1$ads" | tee "$filter"
 	sanitize_text <"$filter" >>"$log" 
 	
-    else
-	echo -ne "$1$ads" 
-    fi
+    # else
+    # 	echo -ne "$1$ads" 
+    # fi
 }
 
 function print_c {
