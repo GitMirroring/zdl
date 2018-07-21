@@ -108,6 +108,20 @@ function update_updater {
 			    fi
 			done
 		    fi
+		    this_mode=stdout
+		    that_mode=gui
+		    # export PIPE_09=/tmp/yadpipe04.$GUI_ID
+		    # test -e $PIPE_09 && rm -f $PIPE_09
+		    # mkfifo $PIPE_09
+		    # exec 44<> $PIPE_09
+		    tail -f "$gui_log" </dev/null |
+			sed -r 's|^|#|' |
+			yad --progress \
+			    --pulsate \
+			    --listen \
+			    --enable-log \
+			    --log-expanded \
+			    "${YAD_ZDL[@]}" &
 		    ;;
 		0)
 		    [ "${res[0]}" == TRUE ] &&

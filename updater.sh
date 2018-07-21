@@ -93,7 +93,7 @@ function try {
     then	
 	if ! sudo "${cmdline[@]}" 2>/dev/null 
 	then
-	    if [ "$this_mode" == gui ]
+	    if [ "$that_mode" == gui ]
 	    then
 		yad --title="Aggiornamento ZDL" \
 		    --text="È necessaria la password di utente root.\nRipeti l'aggiornamento del sistema utilizzando il terminale." \
@@ -581,7 +581,7 @@ ESTENSIONI:
 
     if [ -z "$installer_zdl" ]
     then
-	if [ "$this_mode" == gui ]
+	if [ "$that_mode" == gui ]
 	then
 	    yad --title="Aggiornamento ZigzagDownLoader" \
 		--text="ZigzagDownLoader aggiornato con successo" \
