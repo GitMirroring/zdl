@@ -111,7 +111,7 @@ function update_updater {
 		    this_mode=stdout
 		    that_mode=gui
 
-		    touch "$gui_log"
+		    echo > "$gui_log"
 
 		    ## bug di gtk: il riquadro di log per il progress di yad
 		    ## non è al momento espandibile senza patch (per gtk o yad)

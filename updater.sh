@@ -587,6 +587,7 @@ ESTENSIONI:
 		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
 		--center \
+		--on-top \
 		"${YAD_ZDL[@]}" \
 		--button="Esci da ZDL!gtk-quit:1" \
 		--button="Avvia ZDL!gtk-execute:0"
