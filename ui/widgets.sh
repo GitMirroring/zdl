@@ -74,21 +74,20 @@ function print_filter {
     if [[ "$PWD" =~ "$path_tmp" ]]
     then
 	filter=print_filter_output
-	log="${gui_log#*$path_tmp}"
+	log="${gui_log#*\/}"
     else
     	filter="$path_tmp"/print_filter_output
 	log="$gui_log"
     fi
     
-    # if [ -f "$log" ]
-    # then
-	echo -e "$log --- $1$ads" >>  OUTtee.tmp
+    if [ -f "$log" ]
+    then
  	echo -ne "$1$ads" | tee "$filter"
 	sanitize_text <"$filter" >>"$log" 
 	
-    # else
-    # 	echo -ne "$1$ads" 
-    # fi
+    else
+	echo -ne "$1$ads" 
+    fi
 }
 
 function print_c {
