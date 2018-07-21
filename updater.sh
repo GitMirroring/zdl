@@ -583,14 +583,13 @@ ESTENSIONI:
     then
 	if [ "$that_mode" == gui ]
 	then
-	    #rm -f "$gui_log"
 	    yad --title="Aggiornamento ZigzagDownLoader" \
 		--text="ZigzagDownLoader aggiornato con successo" \
 		--image="$IMAGE2" \
 		--center \
 		"${YAD_ZDL[@]}" \
-		--button="Avvia ZDL!gtk-execute:0" \
-		--button="Esci da ZDL!gtk-quit:1" 
+		--button="Esci da ZDL!gtk-quit:1" \
+		--button="Avvia ZDL!gtk-execute:0"
 
 	    case $? in
 		0)
@@ -601,6 +600,7 @@ ESTENSIONI:
 		    exit 0
 		    ;;
 		1)
+		    kill -9 $pid_console_gui
 		    exit 1
 		    ;;
 	    esac
