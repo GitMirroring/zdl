@@ -80,7 +80,7 @@ function print_filter {
 	log="$gui_log"
     fi
     
-    if [ -f "$gui_log" ]
+    if [ -f "$log" ]
     then
  	echo -ne "$1$ads" | tee "$filter"
 	sanitize_text <"$filter" >>"$log" 
