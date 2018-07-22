@@ -315,6 +315,7 @@ function update {
 
     chmod +rx -R .
 
+    setterm --cursor on
     if ! try mv -f zdl zdl-xterm zdl-sockets $BIN
     then
 	print_c 3 "$op non riuscit${suffix}. Riprova un'altra volta"
@@ -322,6 +323,7 @@ function update {
     else
 	print_c 1 "$op automatic${suffix} in $BIN"
     fi
+    setterm --cursor off
 
     [ "$?" != 0 ] && return
     cd ..
