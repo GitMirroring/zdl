@@ -89,11 +89,11 @@ function update_zdl-conkeror {
 function try {
     cmdline=( "$@" )
     
-    if ! "${cmdline[@]}" 2>/dev/null 
+    if ! "${cmdline[@]}" #2>/dev/null 
     then	
-	if ! sudo "${cmdline[@]}" 2>/dev/null 
+	if ! sudo "${cmdline[@]}" #2>/dev/null 
 	then
-	    if [ "$that_mode" == gui ]
+	    if [ "$real_mode" == gui ]
 	    then
 		yad --title="Aggiornamento ZDL" \
 		    --text="È necessaria la password di utente root.\nRipeti l'aggiornamento del sistema utilizzando il terminale." \
