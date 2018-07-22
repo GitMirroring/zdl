@@ -107,6 +107,8 @@ function bold {
 
 
 ##############################################
+echo
+echo "======================================="
 echo "Installazione di ZigzagDownLoader (ZDL)"
 echo "======================================="
 echo
