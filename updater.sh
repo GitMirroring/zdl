@@ -605,7 +605,8 @@ ESTENSIONI:
 		    stop_daemon_gui
 		    kill_yad_multiprogress
 		    
-		    $prog -g "${args[@]}"
+		    $prog -g "${args[@]}" &
+		    disown
 		    exit
 		    ;;
 		1)
