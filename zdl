@@ -119,8 +119,8 @@ function update_updater {
 			done
 		    fi
 		    
-		    this_mode=stdout
-		    that_mode=gui
+		    #this_mode=stdout
+		    real_mode=gui
 
 		    echo > "$gui_log"
 

@@ -581,7 +581,7 @@ ESTENSIONI:
 
     if [ -z "$installer_zdl" ]
     then
-	if [ "$that_mode" == gui ]
+	if [ "$real_mode" == gui ]
 	then
 	    this_mode=gui
 	    yad --title="Aggiornamento ZigzagDownLoader" \
