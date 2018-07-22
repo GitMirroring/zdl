@@ -134,17 +134,19 @@ function update_updater {
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 
 	print_c 1 "Download in corso: attendere..."
-	
+
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
 	#
 	#### dal mirror principale (veloce):
 
 	#wget "$URL_ROOT" -r -l 1 -A gz -np -nd -q
+	URL_GIT="http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz"
+	URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
 	
 	while [ ! -f zdl-2.0.tar.gz ]
 	do
-	    wget "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz -o "${gui_log#*\/}"
+	    wget "$URL_GIT" -O zdl-2.0.tar.gz -o "${gui_log#*\/}"
 
 	    if [ ! -f zdl-2.0.tar.gz ]
 	    then
