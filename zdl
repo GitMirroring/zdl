@@ -389,7 +389,7 @@ then
 	then
 	    unset args[i]
 	    
-	    run_gui "${args[@]}" &>/dev/null &
+	    run_gui &>/dev/null &
 	    disown
 	    exit 0
 	fi

@@ -598,10 +598,15 @@ ESTENSIONI:
 		    kill -9 $pid_console_gui
 		    cd $dir_dest
 
+		    # kill_yad_multiprogress
+		    # run_gui "${args[@]}" &>/dev/null &
+		    # disown
+
+		    stop_daemon_gui
 		    kill_yad_multiprogress
-		    run_gui "${args[@]}" &>/dev/null &
-		    disown
-		    exit 0
+		    
+		    $prog "${args[@]}"
+		    exit
 		    ;;
 		1)
 		    kill -9 $pid_console_gui

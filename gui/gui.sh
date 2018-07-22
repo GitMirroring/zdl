@@ -205,19 +205,27 @@ function start_daemon_gui {
 	mkdir -p "$path_tmp"
 	date +%s >"$path_tmp"/.date_daemon
 
-	if [ -n "${ARGV[*]}" ]
+	if [ -n "${args[*]}" ]
 	then
-	    nohup /bin/bash zdl --silent "$PWD" "${ARGV[@]}" &>/dev/null &
-	    unset ARGV
+	    nohup /bin/bash zdl --silent "$PWD" "${args[@]}" &>/dev/null &
+	    for ((i=0; i<${#args[@]}; i+))
+	    do
+		url "${args[i]}" &&
+		    unset args[i]
+	    done
+	    
 	else
 	    nohup /bin/bash zdl --silent "$PWD" &>/dev/null &
 	fi
 
     else
-	for item in "${ARGV[@]}"
+	for ((i=0; i<${#args[@]}; i+))
 	do
-	    url "$item" &&
+	    if url "${args[i]}"
+	    then
 		set_link + "$item"
+		unset args[i]
+	    fi
 	done
     fi
     start_daemon_msg="<b>${name_prog}:</b>\n\nProgramma attivo in\n\t$PWD\n\n Puoi controllarlo con:\n\t$prog -i \"$PWD\"\n"
@@ -1172,7 +1180,6 @@ function run_gui {
 	exit 1
     fi
 
-    ARGV=( "$@" )
     this_mode=gui
 
     . $HOME/.zdl/zdl.conf
