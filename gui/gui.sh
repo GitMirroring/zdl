@@ -1081,7 +1081,7 @@ function display_configure_gui {
 		   --align=right \
 		   --separator='€' \
 		   --scroll \
-		   --height=600 --width=800 \
+		   --height=700 --width=800 \
 		   --image="$IMAGE2" \
 		   --field="Downloader predefinito:":CB "${downloader}!Aria2!Axel!Wget" \
 		   --field="Numero parti di download per Axel:":NUM "$axel_parts!1..32" \
