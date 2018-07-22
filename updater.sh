@@ -598,15 +598,12 @@ ESTENSIONI:
 		    kill -9 $pid_console_gui
 		    cd $dir_dest
 
-
 		    stop_daemon_gui
 		    kill_yad_multiprogress
 
 		    source "$path_usr"/source_all.sh
 		    run_gui &>/dev/null &
 		    disown
-
-#		    $prog -g "${args[@]}"
 
 		    exit
 		    ;;

@@ -1182,7 +1182,7 @@ function run_gui {
 
     this_mode=gui
 
-    . $HOME/.zdl/zdl.conf
+    source $HOME/.zdl/zdl.conf
     prog=zdl
     path_tmp=".${prog}_tmp"
     
