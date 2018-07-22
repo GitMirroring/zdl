@@ -65,11 +65,12 @@ function update_updater {
 			   --image="$IMAGE2" \
 			   --text="$TEXT\n\nDisponibile un nuovo aggiornamento, scegli cosa fare:\n\n" \
 			   --form \
+			   --center --on-top \
 			   --separator=' ' \
-		       --field="Non chiederlo più in questa sessione\n\n":CHK FALSE \
-		       --button="Rimanda":0 \
-		       --button="Aggiorna":1 \
-		       "${YAD_ZDL[@]}"))
+			   --field="Non chiederlo più in questa sessione\n\n":CHK FALSE \
+			   --button="Rimanda":0 \
+			   --button="Aggiorna":1 \
+			   "${YAD_ZDL[@]}"))
 		ret=$?
 	    else
 		ret=1
