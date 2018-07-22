@@ -208,7 +208,7 @@ function start_daemon_gui {
 	if [ -n "${args[*]}" ]
 	then
 	    nohup /bin/bash zdl --silent "$PWD" "${args[@]}" &>/dev/null &
-	    for ((i=0; i<${#args[@]}; i++))
+	    for ((i=0; i<=$max_args; i++))
 	    do
 		url "${args[i]}" &&
 		    unset args[i]
@@ -219,11 +219,11 @@ function start_daemon_gui {
 	fi
 
     else
-	for ((i=0; i<${#args[@]}; i++))
+	for ((i=0; i<=$max_args; i++))
 	do
 	    if url "${args[i]}"
 	    then
-		set_link + "$item"
+		set_link + "${args[i]}"
 		unset args[i]
 	    fi
 	done
