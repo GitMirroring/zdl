@@ -323,7 +323,6 @@ function update {
     else
 	print_c 1 "$op automatic${suffix} in $BIN"
     fi
-    setterm --cursor off
 
     [ "$?" != 0 ] && return
     cd ..
