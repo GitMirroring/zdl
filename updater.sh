@@ -285,19 +285,19 @@ function update {
 	op="Aggiornamento"
 	suffix="o"
     fi
-echo test0
+
     if [[ -z "$(grep 'shopt -s checkwinsize' $HOME/.bashrc)" ]]
     then
 	echo "shopt -s checkwinsize" >> ~/.bashrc 
     fi
-echo test1
+
     mkdir -p "$path_conf/extensions"
-echo test2
+
     if [ ! -f "$file_conf" ]
     then
 	echo "# ZigzagDownLoader configuration file" > "$file_conf"
     fi
-echo test3
+
     if [ -e /cygdrive ]
     then
 	win_home=$(cygpath -u "$HOMEPATH")
@@ -312,7 +312,7 @@ echo test3
 	
     fi
     # update_zdl-wise
-echo test4
+
     chmod +rx -R .
 
 echo test5
@@ -323,7 +323,7 @@ echo test5
     else
 	print_c 1 "$op automatic${suffix} in $BIN"
     fi
-echo test6
+
     [ "$?" != 0 ] && return
     cd ..
 
