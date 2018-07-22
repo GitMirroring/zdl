@@ -89,7 +89,7 @@ function update_zdl-conkeror {
 function try {
     cmdline=( "$@" )
     
-    if ! "${cmdline[@]}" #2>/dev/null 
+    if ! "${cmdline[@]}" 2>/dev/null 
     then	
 	if ! sudo "${cmdline[@]}" #2>/dev/null 
 	then
@@ -315,8 +315,7 @@ function update {
 
     chmod +rx -R .
 
-echo test5
-    if ! try mv zdl zdl-xterm zdl-sockets $BIN
+    if ! try mv -f zdl zdl-xterm zdl-sockets $BIN
     then
 	print_c 3 "$op non riuscit${suffix}. Riprova un'altra volta"
 	exit 1
