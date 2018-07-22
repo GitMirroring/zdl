@@ -167,7 +167,7 @@ fi
 rm -f zdl-2.0.tar.gz.sig zdl-2.0.tar.gz
 while [ ! -f zdl-2.0.tar.gz ]
 do
-    wget -q "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz 
+    wget "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz" -O zdl-2.0.tar.gz 
     
     if [ ! -f zdl-2.0.tar.gz ]
     then
