@@ -360,8 +360,6 @@ then
     done
 fi
 
-gui_log="$path_tmp"/gui-log.txt
-touch "$gui_log"
 
 if [[ "${args[*]}" =~ (--gui|-g) ]]
 then
@@ -370,7 +368,7 @@ then
 	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
 	then
 	    unset args[i]
-	    
+	    touch "$gui_log"	    
 	    run_gui &>/dev/null &
 	    disown
 	    exit 0
