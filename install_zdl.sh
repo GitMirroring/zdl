@@ -108,6 +108,8 @@ function bold {
 
 ##############################################
 echo "Installazione di ZigzagDownLoader (ZDL)"
+echo "======================================="
+echo
 ##############################################
 
 mkdir -p "$path_conf/src"
@@ -115,6 +117,7 @@ cd "$path_conf/src"
 rm *.tar.gz* $prog -rf
 
 echo "Download in corso: attendere..."
+echo
 
 if [ -e /cygdrive ]
 then
