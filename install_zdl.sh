@@ -200,6 +200,7 @@ chmod +rx -R .
 
 ## UPDATER ########
 background=black
+source libs/utils.sh
 source libs/core.sh
 source ui/widgets.sh
 source ui/ui.sh
