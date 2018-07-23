@@ -333,8 +333,9 @@ for ((i=0; i<"${#args[@]}"; i++))
 do
     if [ -d "${args[i]}" ]
     then
-	cd "${args[i]}" 
-	echo "${args[i]}" >/tmp/zigzagdownloader-dirbase
+	cd "${args[i]}"
+	mkdir -p "$HOME"/tmp
+	echo "${args[i]}" >"$HOME"/tmp/zigzagdownloader-dirbase
 	unset args[i]
 	break
     fi
@@ -347,14 +348,15 @@ then
     do
 	if [[ "${args[i]}" =~ ^(--path-gui)$ ]]
 	then
-	    test -s /tmp/zigzagdownloader-dirbase &&
-		cd $(cat /tmp/zigzagdownloader-dirbase) ||
+	    mkdir -p "$HOME"/tmp
+	    test -s "$HOME"/tmp/zigzagdownloader-dirbase &&
+		cd $(cat "$HOME"/tmp/zigzagdownloader-dirbase) ||
 		    cd "$HOME"
 	    
 	    path_gui=$(get_download_path)
 	    [ ! -d "$path_gui" ] && exit 1
 
-	    echo "$path_gui" >/tmp/zigzagdownloader-dirbase
+	    echo "$path_gui" >"$HOME"/tmp/zigzagdownloader-dirbase
 	    cd "$path_gui"
 
 	    unset args[i] path_gui
