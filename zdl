@@ -364,7 +364,7 @@ then
     done
 fi
 
-
+echo > "$gui_log"
 if [[ "${args[*]}" =~ (--gui|-g) ]]
 then
     for ((i=0; i<=$max_args; i++))
