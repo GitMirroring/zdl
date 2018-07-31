@@ -47,7 +47,7 @@ function get_download_path {
 		       --width=800 \
 		       --height=600 \
 		       --button="Esci!gtk-close":1 \
-		       --button="Seleziona!gtk-yes":0)
+		       --button="Seleziona!gtk-yes":0 2>/dev/null)
 	if [ "$?" == 0 ]
 	then
 	    echo "$path_gui"
@@ -365,7 +365,7 @@ function display_link_error_gui {
 	--image "dialog-error" \
 	--text="$msg" \
 	--button="gtk-ok:0" \
-	"${YAD_ARGS}"
+	"${YAD_ARGS}" 2>/dev/null
 }
 
 function edit_links_gui {
@@ -396,7 +396,7 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		  --width=800 \
 		  --button="Salva!gtk-ok:0" \
 		  --button="Annulla!gtk-no:1" \
-		  "${YAD_ZDL}")
+		  "${YAD_ZDL}" 2>/dev/null)
 	)
 	
 	case $? in
@@ -534,7 +534,7 @@ function display_download_manager_gui {
 		       --listen \
 		       --dclick-action="bash -c \"echo 'yad_download_manager_dclick %s' >'$yad_download_manager_result_file'\"" \
 		       "${YAD_ZDL[@]}" \
-		       --borders=0 < $PIPE_03))
+		       --borders=0 < $PIPE_03 2>/dev/null))
 	    
 	    
 	    case $? in
@@ -614,7 +614,7 @@ function play_gui {
 	    --center \
 	    --on-top \
 	    --button="Chiudi":0 \
-	    "${YAD_ZDL[@]}" &	
+	    "${YAD_ZDL[@]}" 2>/dev/null &	
     fi
 }
 
@@ -652,7 +652,7 @@ function yad_download_manager_dclick {
     		     --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":"bash -c 'echo 0'"  \
     		     --button="Elimina!gtk-delete!Arresta il processo di download selezionato e ancella il file":"bash -c 'echo 1'"  \
     		     --button="Chiudi!gtk-close":0  \
-    		     "$YAD_ZDL" &
+    		     "$YAD_ZDL" 2>/dev/null &
 	    local pid=$!
 	    echo $pid >"$path_tmp"/dclick_yad-pid.$GUI_ID
 	)
@@ -699,7 +699,7 @@ function display_file_gui {
 		    --button="Cancella il file!gtk-delete":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
 		    --button="Chiudi!gtk-close":0 \
 		    "${YAD_ZDL[@]}" \
-		    --width=800 --height=600
+		    --width=800 --height=600 2>/dev/null
 	    
 	else
 	    yad --title="Attenzione!" \
@@ -708,7 +708,7 @@ function display_file_gui {
 		--center \
 		--on-top \
 		--button="Chiudi!gtk-ok:0" \
-		"${YAD_ZDL[@]}"
+		"${YAD_ZDL[@]}" 2>/dev/null
 	fi
     } &
 }
@@ -746,7 +746,7 @@ function display_link_manager_gui {
 		       --button="Leggi links.txt!dialog-information!Leggi l'elenco dei link già immessi":"bash -c \"echo display_old_links_gui >'$yad_link_manager_result_file'\"" \
 		       --button="Esegui!gtk-execute":0  \
 		       --button="Chiudi!gtk-close":1  \
-		       "${YAD_ZDL[@]}"))
+		       "${YAD_ZDL[@]}" 2>/dev/null))
 
 	    case $? in
 		0)
@@ -807,7 +807,7 @@ function display_link_manager_gui {
 			    --image="dialog-error" \
 			    --text="<b>ZigzagDownLoader</b>\n
 Non hai inserito un campo del form necessario ad effettuare il download tramite XDCC: ripeti l'operazione" \
-			    "${YAD_ZDL[@]}" &
+			    "${YAD_ZDL[@]}" 2>/dev/null &
 		    fi
 		    print_links_txt
 		    ;;
@@ -884,7 +884,7 @@ function display_sockets_gui {
 		   --button="Esegui!gtk-ok":0 \
 		   --button="Chiudi!gtk-close":1 \
 		   --separator=' ' \
-		   "${YAD_ZDL[@]}"))
+		   "${YAD_ZDL[@]}" 2>/dev/null))
 
 	[ "$?" == 0 ] &&
 	    {
@@ -951,7 +951,7 @@ function display_sockets_gui {
 		    --on-top \
 		    "${YAD_ZDL[@]}" \
 		    --button="Chiudi":0 \
-		    --text="$msg_server" &
+		    --text="$msg_server" 2>/dev/null &
 	    }
     } &
 }
@@ -985,7 +985,7 @@ function display_multiprogress_opts {
 		   --button="Aggiorna!gtk-save!Re/Installa l'ultimo aggiornamento disponibile di ZDL":2 \
     		   --button="Salva!gtk-ok!Salva le opzioni della directory di download":0 \
 		   --button="Chiudi!gtk-close!Annulla l'operazione chiudendo la finestra":1  \
-    		   ${YAD_ZDL[@]}))
+    		   ${YAD_ZDL[@]} 2>/dev/null))
 	case $? in
 	    0)
     		echo ${res[0]} >"$path_tmp"/downloader
@@ -1042,7 +1042,7 @@ function display_multiprogress_gui {
 	    --button="ZDL sockets!gtk-execute!Attiva o disattiva i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Esci!gtk-quit!Esci solo dalla GUI, lasciando attivi i downloader, il core o i sockets:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
 	    --title "Principale" \
-    	    "${YAD_ZDL[@]}" &
+    	    "${YAD_ZDL[@]}" 2>/dev/null &
 
     yad_multiprogress_pid=$!
     echo "$yad_multiprogress_pid" >"$yad_multiprogress_pid_file"
@@ -1066,7 +1066,7 @@ function display_console_gui {
 	    "${YAD_ZDL[@]}" \
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
-	    --width=800 --height=600 &
+	    --width=800 --height=600 2>/dev/null &
     ref=$!
 }
 
@@ -1103,7 +1103,7 @@ function display_configure_gui {
 		   --button="Backup configurazione!gtk-save":3 \
 		   --button="Salva!gtk-ok":2 \
 		   --button="Annulla!gtk-close":0 \
-		   "${YAD_ZDL[@]}"))
+		   "${YAD_ZDL[@]}" 2>/dev/null))
 	ret=$?
 	case $ret in
 	    2)
@@ -1121,7 +1121,7 @@ function display_configure_gui {
 		    --button="Chiudi!gtk-ok":0 \
 		    --on-top --center \
 		    --borders=10 \
-		    "${YAD_ZDL[@]}"
+		    "${YAD_ZDL[@]}" 2>/dev/null
 		;;
 	esac
 	IFS="$OIFS"

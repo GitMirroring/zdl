@@ -372,7 +372,7 @@ prog=zdl
 name_prog="ZigzagDownLoader"
 PROG="ZDL"  #`echo $prog | tr a-z A-Z`
 path_tmp=".${prog}_tmp"
-mkdir -p "$path_tmp"
+#mkdir -p "$path_tmp"
 gui_log="$path_tmp"/gui-log.txt
 
 path_server="$HOME"/.zdl/zdl.d

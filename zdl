@@ -70,7 +70,7 @@ function update_updater {
 			   --field="Non chiederlo più in questa sessione":CHK FALSE \
 			   --button="Rimanda":0 \
 			   --button="Aggiorna":1 \
-			   "${YAD_ZDL[@]}"))
+			   "${YAD_ZDL[@]}" 2>/dev/null))
 		ret=$?
 	    else
 		ret=1
@@ -90,7 +90,7 @@ function update_updater {
 				       --entry --hide-text \
 				       --center \
 				       --on-top \
-				       "${YAD_ZDL[@]}")
+				       "${YAD_ZDL[@]}" 2>/dev/null)
 			    
 			    [[ -z "$pass" ]] && exit 1
 			    
@@ -188,15 +188,6 @@ function update_updater {
     fi
 }
 
-## controllo dipendenze (da implementare)
-if [ -z "$nodejs" ] &&
-       [ "$this_mode" != gui ]
-then
-    print_c 4 "${name_prog}:"
-    print_c 3 "Manca una dipendenza (necessaria per alcune estensioni dei servizi): nodejs"
-    pause
-fi
-
 args=( "$@" )
 
 tags=( $(ps ax |head -n1) )
@@ -248,6 +239,61 @@ then
 	fi
     done
 fi
+
+
+for ((i=0; i<"${#args[@]}"; i++)) 
+do
+    if [ -d "${args[i]}" ]
+    then
+	cd "${args[i]}"
+	mkdir -p "$HOME"/tmp
+	echo "${args[i]}" >"$HOME"/tmp/zigzagdownloader-dirbase
+	unset args[i]
+	break
+    fi
+done
+
+
+if [[ "${args[@]}" =~ (--path-gui) ]]
+then
+    for ((i=0; i<${#args[@]}; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--path-gui)$ ]]
+	then
+	    mkdir -p "$HOME"/tmp
+	    test -s "$HOME"/tmp/zigzagdownloader-dirbase &&
+		cd $(cat "$HOME"/tmp/zigzagdownloader-dirbase) ||
+		    cd "$HOME"
+	    
+	    path_gui=$(get_download_path)
+	    [ ! -d "$path_gui" ] && exit 1
+
+	    echo "$path_gui" >"$HOME"/tmp/zigzagdownloader-dirbase
+	    cd "$path_gui"
+
+	    unset args[i] path_gui
+	fi
+    done
+fi
+
+mkdir -p "$path_tmp"
+echo > "$gui_log"
+if [[ "${args[*]}" =~ (--gui|-g) ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
+	then
+	    unset args[i]
+	    touch "$gui_log"	    
+	    run_gui &>/dev/null &
+	    disown
+	    exit 0
+	fi
+    done
+fi
+
+
 
 ##############################
 if [[ "${args[*]}" =~ (--no-stop) ]]
@@ -327,59 +373,6 @@ then
 	fi
     done
 fi
-
-
-for ((i=0; i<"${#args[@]}"; i++)) 
-do
-    if [ -d "${args[i]}" ]
-    then
-	cd "${args[i]}"
-	mkdir -p "$HOME"/tmp
-	echo "${args[i]}" >"$HOME"/tmp/zigzagdownloader-dirbase
-	unset args[i]
-	break
-    fi
-done
-
-
-if [[ "${args[@]}" =~ (--path-gui) ]]
-then
-    for ((i=0; i<${#args[@]}; i++))
-    do
-	if [[ "${args[i]}" =~ ^(--path-gui)$ ]]
-	then
-	    mkdir -p "$HOME"/tmp
-	    test -s "$HOME"/tmp/zigzagdownloader-dirbase &&
-		cd $(cat "$HOME"/tmp/zigzagdownloader-dirbase) ||
-		    cd "$HOME"
-	    
-	    path_gui=$(get_download_path)
-	    [ ! -d "$path_gui" ] && exit 1
-
-	    echo "$path_gui" >"$HOME"/tmp/zigzagdownloader-dirbase
-	    cd "$path_gui"
-
-	    unset args[i] path_gui
-	fi
-    done
-fi
-
-echo > "$gui_log"
-if [[ "${args[*]}" =~ (--gui|-g) ]]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [[ "${args[i]}" =~ ^(--gui|-g)$ ]]
-	then
-	    unset args[i]
-	    touch "$gui_log"	    
-	    run_gui &>/dev/null &
-	    disown
-	    exit 0
-	fi
-    done
-fi
-
 
 
 if [ "${args[*]}" != "${args[*]//--web-ui}" ]

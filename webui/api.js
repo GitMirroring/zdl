@@ -18,137 +18,147 @@
 //  https://savannah.nongnu.org/projects/zdl
 //
 
-"use strict";
+/*jshint esversion: 6*/
 
-function ZDL(options) {
-    this.path = options.path;
-    this.file = options.file;
-
-    function serve(query) {
-        var promise = new Promise(function(resolve, reject) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", ZDL.file + query, true);
-            xhr.send();
-            xhr.onload = function() {
-                if (this.status === 200) {
-                    resolve(this.responseText);
-                } else {
-                    reject("Bad status");
-                }
-            };
-            xhr.onerror = function() {
-                reject("Server failure");
-            };
-        });
-        return promise;
+class ZDL {
+    constructor( path, file ) {
+        this.path = path;
+        this.file = file;
     }
 
-    this.initClient = function() {
-        return serve("?cmd=init-client&path=" + this.path);
-    };
+    request( query ) {
+        return new Promise( ( resolve, reject ) => {
 
-    this.getStatus = function(start) {
-        var query = "?cmd=get-status&path=" + this.path;
-        if (start) query += "&op=loop";
-        return serve(query);
-    };
+            var xhr = new XMLHttpRequest();
 
-    this.getData = function(start) {
-        var query = "?cmd=get-data";
-        if (start) query += "&op=force";
-        return serve(query);
-    };
+            xhr.open( "GET", `${this.file}?${query}`, true );
 
-    this.getFile = function(file) {
-        return serve("?cmd=get-file&path=" + this.path + "&file=" + file);
-    };
+            xhr.onload = () => {
+                if ( xhr.status === 200 ) {
+                    resolve( xhr.responseText );
+                } else {
+                    reject( `bad status (${xhr.status})` );
+                }
+            };
 
-    this.getFreeSpace = function() {
-        return serve("?cmd=get-free-space&path=" + this.path);
-    };
+            xhr.onerror = () => {
+                reject( "network unreachable" );
+            };
 
-    this.getHomePath = function() {
-        return serve("?cmd=get-desktop-path");
-    };
+            xhr.send();
+        } );
+    }
 
-    this.getIP = function() {
-        return serve("?cmd=get-ip");
-    };
+    initClient() {
+        return this.request( `cmd=init-client&path=${this.path}` );
+    }
 
-    this.addLink = function(link) {
-        return serve("?cmd=add-link&path=" + this.path + "&link=" + link);
-    };
+    getStatus( start ) {
+        var query = `cmd=get-status&path=${this.path}`;
+        if ( start ) query += "&op=loop";
+        return this.request( query );
+    }
 
-    this.addXdcc = function(link) {
-        return serve("?cmd=add-xdcc&path=" + this.path + "&host=" + link.host + "&chan=" + link.channel + "&ctcp=" + link.msg);
-    };
+    getData( start ) {
+        var query = "cmd=get-data";
+        if ( start ) query += "&op=force";
+        return this.request( query );
+    }
 
-    this.deleteFile = function(file) {
-        return serve("?cmd=del-file&path=" + this.path + "&file=" + file);
-    };
+    getFile( file ) {
+        return this.request( `cmd=get-file&path=${this.path}&file=${file}` );
+    }
 
-    this.cleanCompleted = function() {
-        return serve("?cmd=clean-complete&path=" + this.path);
-    };
+    getFreeSpace() {
+        return this.request( `cmd=get-free-space&path=${this.path}` );
+    }
 
-    this.play = function(file) {
-        return serve("?cmd=play-link&path=" + this.path + "&file=" + file);
-    };
+    getHomePath() {
+        return this.request( "cmd=get-desktop-path" );
+    }
 
-    this.setGlobal = function(key, value) {
-        return serve("?cmd=set-conf&key=" + key + "&value=" + value);
-    };
+    getIP() {
+        return this.request( "cmd=get-ip" );
+    }
 
-    this.setLocal = function(cmd, arg) {
-        return serve("?cmd=" + cmd + "&path=" + this.path + "&" + arg);
-    };
+    addLink( url ) {
+        return this.request( `cmd=add-link&path=${this.path}&link=${url}` );
+    }
 
-    this.startSocket = function(port) {
-        return serve("?cmd=run-server&port=" + port);
-    };
+    addTorrent( torrent ) {
+        return this.request( `cmd=add-link&path=${this.path}&link=${torrent}&type=torrent` );
+    }
 
-    this.killSocket = function(port) {
-        return serve("?cmd=kill-server&port=" + port);
-    };
+    addXdcc( xdcc ) {
+        return this.request( `cmd=add-xdcc&path=${this.path}&host=${xdcc.host}&chan=${xdcc.channel}&ctcp=${xdcc.msg}` );
+    }
 
-    this.run = function() {
-        return serve("?cmd=run-zdl&path=" + this.path);
-    };
+    deleteFile( file ) {
+        return this.request( `cmd=del-file&path=${this.path}&file=${file}` );
+    }
 
-    this.quit = function() {
-        return serve("?cmd=quit-zdl&path=" + this.path);
-    };
+    cleanCompleted() {
+        return this.request( `cmd=clean-complete&path=${this.path}` );
+    }
 
-    this.killServer = function(ports) {
-        var args = "";
-        ports.forEach(function(port) {
-            args += "&port=" + port;
-        });
-        return serve("?cmd=kill-server" + args);
-    };
+    play( file ) {
+        return this.request( `cmd=play-link&path=${this.path}&file=${file}` );
+    }
 
-    this.killAll = function() {
-        return serve("?cmd=kill-all");
-    };
+    command( cmd, params ) {
+        return this.request( `cmd=${cmd}&path=${this.path}&${params}` );
+    }
 
-    this.exitAll = function() {
+    setConf( key, value ) {
+        return this.request( `cmd=set-conf&key=${key}&value=${value}` );
+    }
+
+    createAccount(user, pwd) {
+        return this.request( `cmd=create-account&user=${user}&pass=${pwd}` );
+    }
+
+    resetAccount() {
+        this.request( "cmd=reset-account" );
+    }
+
+    startSocket( port ) {
+        return this.request( `cmd=run-server&port=${port}` );
+    }
+
+    killSocket( port ) {
+        return this.request( `cmd=kill-server&port=${port}` );
+    }
+
+    run() {
+        return this.request( `cmd=run-zdl&path=${this.path}` );
+    }
+
+    quit() {
+        return this.request( `cmd=quit-zdl&path=${this.path}` );
+    }
+
+    reset() {
+        this.request( `cmd=reset-requests&path=${this.path}` );
+    }
+
+    killServer( ports ) {
+        var params = "";
+        ports.forEach( ( port ) => {
+            params += `&port=${port}`;
+        } );
+        return this.request( `cmd=kill-server${params}` );
+    }
+
+    killAll() {
+        return this.request( "cmd=kill-all" );
+    }
+
+    exitAll() {
         var that = this;
-        return serve("?cmd=kill-all").then(function() {
-            serve("?cmd=get-sockets").then(function(res) {
-                that.killServer(JSON.parse(res));
-            });
-        });
-    };
-
-    this.reset = function() {
-        serve("?cmd=reset-requests&path=" + this.path);
-    };
-
-    this.resetAccount = function() {
-        serve("?cmd=reset-account");
-    };
+        return this.request( "cmd=kill-all" ).then( () => {
+            this.request( "cmd=get-sockets" ).then( ( res ) => {
+                that.killServer( JSON.parse( res ) );
+            } );
+        } );
+    }
 }
-
-window.onbeforeunload = function () {
-    ZDL.reset;
-};

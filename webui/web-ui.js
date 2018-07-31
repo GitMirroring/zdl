@@ -25,8 +25,9 @@ var ZDL = {
     "path": "",
     "pathDesktop": "",
     "visible": [],
-    "webUI": ["1","1_flat","2","2_lite"]
+    "webUI": ["1","2_lite"]
 };
+//    "webUI": ["1","1_flat","2","2_lite"]
 
 var toHtmlEntities = function (str) {
     return str.replace(/./gm, function (s) {
