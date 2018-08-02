@@ -594,16 +594,27 @@ function extension_openload {
     fi
 }
 
-function get_location { # 1=url 2=variable_to_new_url  
-    local location=$(curl -v                          \
-			  "$1"                        \
-			  -c "$path_tmp"/cookies.zdl  \
-			  2>&1                          |
-			 awk '/ocation:/{print $3}'     |
-			 head -n1)
-    
-    location=$(trim "$location") 
+function get_location { # 1=url 2=variable_to_new_url
+    local location
 
+    if [ "$3" == wget ]
+    then
+        wget --spider -S "$1" --load-cookies="$path_tmp/cookies.zdl" -o "$path_tmp"/get_location.txt
+	location=$(awk '/ocation:/{print $2}' "$path_tmp"/get_location.txt | tail -n1)
+	rm -f "$path_tmp"/get_location.txt
+    fi
+
+    if ! url "$location"
+    then
+	location=$(curl -v                          \
+    			"$1"                        \
+    			-c "$path_tmp"/cookies.zdl  \
+    			2>&1                          |
+    		       awk '/ocation:/{print $3}'     |
+    		       head -n1)
+    fi
+    location=$(trim "$location")
+    
     if [ -n "$2" ]
     then
 	declare -n ref="$2"
