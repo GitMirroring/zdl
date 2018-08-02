@@ -360,7 +360,8 @@ function replace_url_in {
 }
 
 function sanitize_url {
-    declare -n ref="$2"
+    [[ $2 ]] &&
+	declare -n ref="$2"
     data=$(anydownload "$1")
     
     data="${data%%'?'}"
