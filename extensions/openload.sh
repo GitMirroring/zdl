@@ -30,6 +30,13 @@
 
 if [[ "$url_in" =~ openload\. ]]
 then
-    extension_openload "$url_in"    
+    if [[ "$url_in" =~ \/stream\/ ]]
+    then
+	get_location "$url_in" url_in_file
+	file_in="${url_in_file##*\/}"
+	file_in="${file_in%\?*}"
+    else
+	extension_openload "$url_in"
+    fi
     end_extension
 fi
