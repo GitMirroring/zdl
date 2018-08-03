@@ -692,7 +692,7 @@ if (data) {
 	    if [ "${line[2]}" == 'loop' ]
 	    then
 		[ -s "$path_server"/pid_loop_status.$socket_port ] &&
-		    kill -9 $(cat "$path_server"/pid_loop_status.$socket_port 2>/dev/null)
+		    kill -9 $(cat "$path_server"/pid_loop_status.$socket_port 2>/dev/null) 2>/dev/null
 		
 		echo "$PWD" > "$path_server"/path.$socket_port
 		

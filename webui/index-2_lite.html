@@ -259,10 +259,10 @@
             Downloader: <span id="downloader"></span> Path: <span id="path"></span> Player: <span id="player"></span>
         </div>
         <div class="downloads" id="output"></div>
-        <div class="section">
+        <div class="section clickable">
             <div class="input-slot"><input type="text" placeholder="http(s)://host/path/params ..."><button id="add-url">URL</button></div>
             <div class="input-slot"><input type="text" placeholder="/path/to/file.torrent ..."><button id="add-torrent">Torrent</button></div>
-            <div class="input-slot"><input type="text" placeholder="irc-server/channel/bot/#slot ..."><button id="add-xdcc">XDCC</button></div>
+            <div class="input-slot"><input type="text" placeholder="irc-server/channel/bot/#pack ..."><button id="add-xdcc">XDCC</button></div>
             <div class="player">
                 <input type="text" placeholder="Player ..."><button id="set-player">Set</button>
                 <select class="select" id="selector">
@@ -297,6 +297,7 @@
             _log = document.getElementById("log"),
             _output = document.getElementById("output"),
             files = [],
+            queue = [],
             status;
 
         function zdlConsole(msg) {
@@ -328,6 +329,11 @@
             return pattern[type].test(str);
         }
 
+        function ready2play(file) {
+            var extensions = ["m4v", "avi", "mpg", "mp4", "webm", "mp3"];
+            return extensions.indexOf(file.split('.').pop()) > -1;
+        }
+
         function isJson(str) {
             try {
                 JSON.parse(str);
@@ -356,14 +362,15 @@
             });
         }
 
-        // Download data flow
+        // Downloads data flow
         function downloadsFlow() {
             var arg = arguments[0] || false;
             myZDL.getData(arg).then(function(res) {
                 if (isJson(res)) {
                     var obj = JSON.parse(res),
-                        fd, data = "";
+                        fd, data = "", index;
                     for (var key of obj) {
+                        console.log(key.link);
                         fd = "<span class='blue'>" + key.percent + "%</span><span class='grey'>" + (key.length / 1048576).toFixed(2) + "MB</span>";
                         if (parseInt(key.percent) < 100) {
                             if (status === "running") {
@@ -373,10 +380,15 @@
                             }
                         } else {
                             data += "<span class='off'>&#9642;</span>" + fd + key.file;
+                            index = queue.indexOf(key.link);
+                            if (key.saved && index > -1) {
+                                queue.splice(index, 1);
+                                zdlConsole("Successfully downloaded " + truncate(key.file, 60) + "\n");
+                            }
                         }
                         data += "<br>";
                         _output.innerHTML = data;
-                        if (files.indexOf(key.file) < 0) {
+                        if (files.indexOf(key.file) < 0 && ready2play(key.file)) {
                             files.push(key.file);
                             var option = document.createElement("option");
                             option.text = key.file;
@@ -390,51 +402,60 @@
             });
         }
 
-        // Handling click events of buttons
-        document.querySelector(".container").addEventListener("click", function(event) {
+        // Handling click events
+        document.querySelector(".clickable").addEventListener("click", function(event) {
             if (event.target.nodeName === "BUTTON") {
+                var elem, chunks, req;
+
                 switch (event.target.id) {
                     case "add-xdcc":
-                        var xdcc = event.target.previousElementSibling;
-                        if (validateInput(xdcc.value, "XDCC")) {
-                            _output.innerHTML += "<span class='led red'>&#9642;</span>starting download ... wait ...";
-                            var chunks = xdcc.value.trim().split("/"),
-                                req = {
-                                    host: chunks[0],
-                                    channel: encodeURIComponent(chunks[1]),
-                                    msg: encodeURIComponent(chunks[2] + " xdcc send " + chunks[3])
-                                };
-                                myZDL.addXdcc(req).then(function() {
-                                    zdlConsole("added XDCC: " + truncate(xdcc.value, 60) + "\n");
-                                    xdcc.value = "";
-                                    zdlLog();
-                                });
+                        elem = event.target.previousElementSibling;
+                        if (validateInput(elem.value, "XDCC")) {
+                            chunks = elem.value.trim().split("/");
+                            req = {
+                                host: chunks[0],
+                                channel: encodeURIComponent(chunks[1]),
+                                msg: encodeURIComponent(chunks[2] + " xdcc send " + chunks[3])
+                            };
+                            _output.innerHTML += "<span class='led red'>&#9642;</span>initializing download from " + req.host + " ... wait ...<br>";
+                            myZDL.addXdcc(req).then(function() {
+                                queue.push("irc://" + chunks[0] + "/" + chunks[1] + "/msg " + chunks[2] + " xdcc send " + chunks[3]);
+                                zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
+                                elem.value = "";
+                                zdlLog();
+                            });
                         } else {
-                           zdlConsole("xdcc request entered is malformed");
+                           zdlConsole("xdcc request entered is malformed\n");
                         }
                         break;
                     case "add-url":
-                        var url = event.target.previousElementSibling;
-                        if (validateInput(url.value, "URL")) {
-                            _output.innerHTML += "<span class='led red'>&#9642;</span>starting download ... wait ...";
-                            myZDL.addLink(url.value).then(function() {
-                                zdlConsole("added URL " + truncate(url.value, 60) + "\n");
-                                url.value = "";
+                        elem = event.target.previousElementSibling;
+                        if (validateInput(elem.value, "URL")) {
+                            chunks = elem.value.trim().split("/");
+                            _output.innerHTML += "<span class='led red'>&#9642;</span>initializing download from " + chunks[2] + " ... wait ...<br>";
+                            myZDL.addLink(elem.value).then(function() {
+                                queue.push(elem.value);
+                                zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
+                                elem.value = "";
+                                zdlLog();
                             });
                         } else {
-                            zdlConsole("URL entered is malformed");
+                            zdlConsole("URL entered is malformed\n");
                         }
                         break;
                     case "add-torrent":
-                        var torrent = event.target.previousElementSibling;
-                        if (validateInput(torrent.value, "torrent")) {
-                            myZDL.addLink(torrent.value).then(function() {
-                                _output.innerHTML += "<span class='led red'>&#9642;</span>starting download ... wait ...";
-                                zdlConsole("added torrent " + truncate(torrent.value, 60) + "\n");
-                                torrent.value = "";
+                        elem = event.target.previousElementSibling;
+                        if (validateInput(elem.value, "torrent")) {
+                            chunks = elem.value.trim().split("/");
+                            _output.innerHTML += "<span class='led red'>&#9642;</span>initializing download of " + chunks[chunks.length - 1] + " ... wait ...<br>";
+                            myZDL.addLink(elem.value).then(function() {
+                                queue.push(elem.value);
+                                zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
+                                elem.value = "";
+                                zdlLog();
                             });
                         } else {
-                            zdlConsole("file torrent path entered is malformed");
+                            zdlConsole("file torrent path entered is malformed\n");
                         }
                         break;
                     case "clean":
@@ -444,16 +465,16 @@
                         });
                         break;
                     case "set-player":
-                        var player = event.target.previousElementSibling;
-                        myZDL.setConf("player", player.value).then(function() {
-                            zdlConsole("added player: " + truncate(player.value, 60) + "\n");
-                            player.value = "";
+                        elem = event.target.previousElementSibling;
+                        myZDL.setConf("player", elem.value).then(function() {
+                            zdlConsole("added player: " + truncate(elem.value, 60) + "\n");
+                            elem.value = "";
                         });
                         break;
                     case "play":
-                        var file = event.target.previousElementSibling;
-                        myZDL.play(file.value).then(function() {
-                            zdlConsole("play file: " + truncate(file.value, 60) + "\n");
+                        elem = event.target.previousElementSibling;
+                        myZDL.play(elem.value).then(function() {
+                            zdlConsole("play file: " + truncate(elem.value, 60) + "\n");
                         });
                         break;
                     case "change-ui":
@@ -497,7 +518,7 @@
                         });
                         break;
                     default:
-                        return false;
+                        zdlConsole("Event target error.\n");
                 }
             }
         }, false);
