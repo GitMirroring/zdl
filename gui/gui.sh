@@ -536,7 +536,6 @@ function display_download_manager_gui {
 		       "${YAD_ZDL[@]}" \
 		       --borders=0 < $PIPE_03 2>/dev/null))
 	    
-	    
 	    case $? in
 		1)
 		    break

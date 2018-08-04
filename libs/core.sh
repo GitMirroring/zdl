@@ -396,7 +396,7 @@ function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizio
 	touch "${file_to_clean}-rewriting"
 
 	local lines=$(
-	    awk '!($0 in a){a[$0]; print}' < "$file_to_clean"
+	    awk '!($0 in a){a[$0]; print}' < "$file_to_clean" | awk '{gsub(" ","%20"); print}'
 	)
 	if [ -n "$lines" ]
 	then
