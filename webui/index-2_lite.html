@@ -24,7 +24,7 @@
 	`https://savannah.nongnu.org/projects/zdl'
       -->
 
-    <title>ZDL Lite Web Interface</title>
+    <title>ZDL Web Interface Lite</title>
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,600|Lobster" rel="stylesheet">
     <style>
@@ -151,7 +151,8 @@
             -webkit-appearance: none;
         }
 
-        .section .player select option { /* this won't work !! option elem cannot be styled */
+        .section .player select option {
+            /* this won't work !! option elem cannot be styled */
             background: #445 !important;
             color: #eee !important;
         }
@@ -232,11 +233,11 @@
             color: #f00;
         }
 
-        @media (max-width: 1380px) {
+        /* @media (max-width: 1380px) {
             button {
                 min-width: 80px;
             }
-        }
+        } */
 
         @media (max-width: 1025px) {
             .section {
@@ -274,6 +275,9 @@
                 <button id="change-ui">UI 1</button>
                 <button id="update-log">Log</button>
                 <button id="clean">Clean</button>
+                <button id="flush-queue">Flush queue</button>
+            </div>
+            <div class="commands">
                 <button id="restart">Start</button>
                 <button id="kill-all">Stop</button>
                 <button class="last" id="exit-all">Exit</button>
@@ -285,10 +289,12 @@
                 <textarea id="console"></textarea>
                 <div class="label">Log</div>
                 <textarea id="log"></textarea>
+                <div class="label">Queue</div>
+                <textarea id="queue"></textarea>
             </div>
         </div>
     </div>
-    <div class="footer">Zigzagdownloader</div>
+    <div class="footer">ZigzagDownLoader</div>
 
     <script src="api.js"></script>
 
@@ -296,6 +302,7 @@
         var _console = document.getElementById("console"),
             _log = document.getElementById("log"),
             _output = document.getElementById("output"),
+            _queue = document.getElementById("queue"),
             files = [],
             queue = [],
             status;
@@ -314,6 +321,18 @@
                 }
                 _log.scrollTop = _log.scrollHeight;
             });
+        }
+
+        function zdlQueue() {
+            if (queue.length > 0) {
+                var items = "";
+                for (item of queue) {
+                    items += item + "\n";
+                }
+                _queue.value = items;
+            } else {
+                _queue.value = "";
+            }
         }
 
         function truncate(str, len) {
@@ -343,8 +362,8 @@
             return true;
         }
 
-        // Status and settings data flow
-        function settingsFlow() {
+        // Status data flow
+        function statusFlow() {
             var arg = arguments[0] || false;
             myZDL.getStatus(arg).then(function(res) {
                 if (isJson(res)) {
@@ -356,7 +375,7 @@
                 }
                 if (!arg) zdlConsole("status updated\n");
                 zdlLog();
-                settingsFlow();
+                statusFlow();
             }).catch(function(e) {
                 zdlConsole("status error: " + e + "\n");
             });
@@ -368,9 +387,9 @@
             myZDL.getData(arg).then(function(res) {
                 if (isJson(res)) {
                     var obj = JSON.parse(res),
-                        fd, data = "", index;
+                        fd, data = "",
+                        index;
                     for (var key of obj) {
-                        console.log(key.link);
                         fd = "<span class='blue'>" + key.percent + "%</span><span class='grey'>" + (key.length / 1048576).toFixed(2) + "MB</span>";
                         if (parseInt(key.percent) < 100) {
                             if (status === "running") {
@@ -380,9 +399,10 @@
                             }
                         } else {
                             data += "<span class='off'>&#9642;</span>" + fd + key.file;
-                            index = queue.indexOf(key.link);
+                            index = queue.indexOf(decodeURIComponent(key.link));
                             if (key.saved && index > -1) {
                                 queue.splice(index, 1);
+                                zdlQueue();
                                 zdlConsole("Successfully downloaded " + truncate(key.file, 60) + "\n");
                             }
                         }
@@ -423,9 +443,10 @@
                                 zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
                                 elem.value = "";
                                 zdlLog();
+                                zdlQueue();
                             });
                         } else {
-                           zdlConsole("xdcc request entered is malformed\n");
+                            zdlConsole("xdcc request entered is malformed\n");
                         }
                         break;
                     case "add-url":
@@ -438,6 +459,7 @@
                                 zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
                                 elem.value = "";
                                 zdlLog();
+                                zdlQueue();
                             });
                         } else {
                             zdlConsole("URL entered is malformed\n");
@@ -453,6 +475,7 @@
                                 zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
                                 elem.value = "";
                                 zdlLog();
+                                zdlQueue();
                             });
                         } else {
                             zdlConsole("file torrent path entered is malformed\n");
@@ -492,6 +515,19 @@
                             zdlConsole("display content of zdl_log.txt\n");
                         }, 3000);
                         break;
+                    case "flush-queue":
+                        if (queue.length > 0) {
+                            zdlConsole("flush the queue\n");
+                            myZDL.command("set-links", "links=''").then(function() {
+                                myZDL.deleteFile("links.txt").then(function() {
+                                    queue = [];
+                                    zdlQueue();
+                                });
+                            });
+                        } else {
+                            zdlConsole("cannot flushing an empty queue\n");
+                        }
+                        break;
                     case "kill-all":
                         if (status === "running") {
                             myZDL.killAll().then(function() {
@@ -529,13 +565,24 @@
         // Initialize the client
         myZDL.initClient().then(function() {
             zdlConsole("flows initialized\n");
-            settingsFlow(true);
+            statusFlow(true);
             downloadsFlow(true);
+            myZDL.getFile(".zdl_tmp/links_loop.txt").then(function(res) {
+                if (res) {
+                    var items = res.trim().split("\n");
+                    for (i of items) {
+                        if (i) {
+                            queue.push(decodeURIComponent(i.replace(/<br>/ig, "")));
+                        }
+                    }
+                    zdlQueue();
+                }
+            });
         }).catch(function(e) {
             zdlConsole("initialization error: " + e + "\n");
         });
 
-        window.onbeforeunload = function () {
+        window.onbeforeunload = function() {
             myZDL.reset; // Is this event handler really needed?
         };
     </script>
