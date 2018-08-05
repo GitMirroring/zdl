@@ -29,12 +29,9 @@
 
 if [ "$url_in" != "${url_in//'youtube.com/watch'}" ]
 then
-    replace_url_in "$(urldecode "${url_in%%'&'*}")"
-    
-    html=$(curl -c "$path_tmp"/cookies.zdl \
-		-A "$user_agent" \
-		"$url_in")
-    
+    html=$(curl -v "$url_in")
+    replace_url_in "$(urldecode "${url_in%%'&'*}")"    
+
     if check_connection &&
 	    [ -z "$html" ]
     then
@@ -70,12 +67,25 @@ then
 
 	if ! url "$url_in_file"
 	then
-	    url_in_file=$(wget -t3 -T10 -qO- "http://zoninoz.altervista.org/api.php?uri=$url_in" -o /dev/null |tail -n1)
+	    url_in_file=$(wget -t3 -T10 \
+			       -qO- \
+			       "http://zoninoz.altervista.org/api.php?uri=$url_in" \
+			       -o /dev/null |
+				 tail -n1)
+	    
+	    wget --spider -S "$url_in_file" -o "$path_tmp"/videoType.yt
 
-	    videoType=$(wget --spider -S "$url_in_file" -o /dev/null 2>&1| grep 'Content-Type:')
-	    videoType="${videoType##*\/}"
+	    if [ -s "$path_tmp"/videoType.yt ]
+	    then
+		videoType=$(grep 'Content-Type:' "$path_tmp"/videoType.yt)
+		videoType="${videoType##*\/}"
+	    fi
 
-	    [ -n "$videoType" ] && file_in="$title.$videoType"
+	    if [ -n "$videoType" ]
+	    then
+		file_in="$title.$videoType"
+		rm -f "$path_tmp"/videoType.yt
+	    fi
 	fi
 
 	if [ "$downloader_in" == "Axel" ] &&
