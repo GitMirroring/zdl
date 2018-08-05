@@ -592,14 +592,16 @@ function display_download_manager_gui {
 function play_gui {
     local target="$1"
     local msg_error
+    [ -f "$target" ] &&
+	local mime_type=$(file -b --mime-type "$target")
     
     if [ -z "$player" ] #&>/dev/null
     then	
 	msg_error="Non è stato configurato alcun player per audio/video"
 	
-    elif [[ ! "$(file -b --mime-type "$target")" =~ (audio|video) ]]
+    elif [[ ! "$mime_type" =~ (audio|video) ]]
     then	
-	msg_error="Non è un file audio/video"
+	msg_error="$target non è un file audio/video.\n\nmime-type: $mime_type"
 	
     else
 	nohup $player "$target" &>/dev/null &
