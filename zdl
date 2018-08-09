@@ -915,7 +915,7 @@ then
 		irc[host]="${irc[host]#'irc://'}"
 		irc[host]="${irc[host]%%'/'*}"
 
-		irc[chan]="${irc[chan]##'#'}"
+		irc[chan]="${irc[chan]##*'#'}"
 
 		irc[msg]="${irc[msg]#'/msg'}"
 		irc[msg]="${irc[msg]#'/ctcp'}"

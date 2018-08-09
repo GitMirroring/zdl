@@ -645,15 +645,15 @@ function yad_download_manager_dclick {
 	    
 	done < <(
 	    yad --text "$text" \
-    		     --title="Azione su un download" \
-    		     --image="gtk-execute" \
-		     --center \
-		     --on-top \
-		     --button="Riproduci!gtk-media-play-ltr!Riproduci il file audio/video selezionato":"bash -c 'echo 3'"  \
-    		     --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":"bash -c 'echo 0'"  \
-    		     --button="Elimina!gtk-delete!Arresta il processo di download selezionato e ancella il file":"bash -c 'echo 1'"  \
-    		     --button="Chiudi!gtk-close":0  \
-    		     "$YAD_ZDL" 2>/dev/null &
+    		--title="Azione su un download" \
+    		--image="gtk-execute" \
+		--center \
+		--on-top \
+		--button="Riproduci!gtk-media-play-ltr!Riproduci il file audio/video selezionato":"bash -c 'echo 3'"  \
+    		--button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":"bash -c 'echo 0'"  \
+    		--button="Elimina!gtk-delete!Arresta il processo di download selezionato e ancella il file":"bash -c 'echo 1'"  \
+    		--button="Chiudi!gtk-close":0  \
+    		"$YAD_ZDL" 2>/dev/null &
 	    local pid=$!
 	    echo $pid >"$path_tmp"/dclick_yad-pid.$GUI_ID
 	)
@@ -790,7 +790,7 @@ function display_link_manager_gui {
 		
 			## cerca XDCC
 			irc[chan]="${res[4]}"
-			irc[chan]="${irc[chan]## '#'}"
+			irc[chan]="${irc[chan]##*\#}"
 			irc[chan]="${irc[chan]%% }"
 
 			## cerca XDCC
