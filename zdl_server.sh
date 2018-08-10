@@ -535,7 +535,7 @@ function send_ip {
 }
 
 function create_http_session {
-    printf "id=%s" $(create_hash "${*}$(date +%s)") #$((60*60*24))
+    printf "_ZDL=%s" $(create_hash "${*}$(date +%s)") #$((60*60*24))
 }
 
 function run_cmd {
@@ -1448,7 +1448,7 @@ function http_server {
 	    if [[ "${line[*]}" =~ 'Cookie' ]]		   
 	    then
 		id="$(clean_data "${line[*]}")"
-		id="${id#*id=}"
+		id="${id#*_ZDL=}"
 		id="${id%%; *}"
 		
 		grep "$id" "$path_server"/http-sessions &>/dev/null &&
