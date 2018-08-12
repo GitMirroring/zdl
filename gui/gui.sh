@@ -1052,6 +1052,11 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
+    if [ -n "$1" ]
+    then
+	ref="$1"
+    fi
+    
     tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
 	    --image="$IMAGE2" \
@@ -1066,6 +1071,10 @@ function display_console_gui {
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 2>/dev/null &
+    if [ -n "$1" ]
+    then
+	ref="$!"
+    fi    
 }
 
 function display_configure_gui {
