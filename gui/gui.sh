@@ -1075,7 +1075,11 @@ function display_console_gui {
     )
 	# |2>/dev/null &
     local pid=$!
-    
+    if [[ $? == 0 ]]
+    then
+	kill -9 $pid
+    fi
+	
     if [ -n "$1" ]
     then
 	ref="$pid"
