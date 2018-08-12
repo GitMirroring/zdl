@@ -1073,10 +1073,11 @@ function display_console_gui {
 		--button="Chiudi!gtk-ok:0" \
 		--width=800 --height=600 2>/dev/null
     } &
-
+    local pid=$!
+    
     if [ -n "$1" ]
     then
-	ref="$!"
+	ref="$pid"
     fi    
 }
 
