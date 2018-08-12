@@ -1054,7 +1054,7 @@ function display_multiprogress_gui {
 function display_console_gui {
     if [ -n "$1" ]
     then
-	ref="$1"
+	declare -n ref="$1"
     fi
     
     tail -f "$gui_log" </dev/null |
