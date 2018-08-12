@@ -1057,7 +1057,8 @@ function display_console_gui {
 	declare -n ref="$1"
     fi
 
-    tail -f "$gui_log" |
+    {
+	tail -f "$gui_log" |
 	yad --title="Console" \
 	    --image="$IMAGE2" \
 	    --text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
@@ -1070,7 +1071,8 @@ function display_console_gui {
 	    "${YAD_ZDL[@]}" \
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
-	    --width=800 --height=600 2>/dev/null &
+	    --width=800 --height=600 2>/dev/null
+    } &
     local pid=$!
     
     if [ -n "$1" ]
