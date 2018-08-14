@@ -1057,7 +1057,7 @@ function display_console_gui {
 	declare -n ref="$1"
     fi
 
-    tail -f "$gui_log" |
+    tail -f "$gui_log" </dev/null |
 	yad --title="Console" \
 	    --image="$IMAGE2" \
 	    --text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
