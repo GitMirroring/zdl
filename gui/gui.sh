@@ -1063,6 +1063,7 @@ function display_console_gui {
 	    --text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
 	    --text-info \
 	    --show-uri \
+	    --listen \
 	    --tail \
 	    --uri-color=blue \
 	    "${YAD_ZDL[@]}" \
