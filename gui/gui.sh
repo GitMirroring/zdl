@@ -1063,17 +1063,15 @@ function display_console_gui {
 	    --text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
 	    --text-info \
 	    --show-uri \
+	    --uri-color=blue \
 	    --listen \
 	    --tail \
-	    --uri-color=blue \
+	    --filename="$gui_log" \
 	    "${YAD_ZDL[@]}" \
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 &    
     local pid=$!
-	    # --listen \
-
-	    # --filename="$gui_log" \
 	
     if [ -n "$1" ]
     then
