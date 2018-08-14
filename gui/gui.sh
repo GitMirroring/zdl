@@ -1064,14 +1064,14 @@ function display_console_gui {
 	    --text-info \
 	    --show-uri \
 	    --uri-color=blue \
-	    --listen \
-	    --tail \
-	    --filename="$gui_log" \
 	    "${YAD_ZDL[@]}" \
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
 	    --width=800 --height=600 &    
     local pid=$!
+	    # --listen \
+	    # --tail \
+	    # --filename="$gui_log" \
 	
     if [ -n "$1" ]
     then
