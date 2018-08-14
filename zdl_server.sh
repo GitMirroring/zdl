@@ -1427,97 +1427,6 @@ function send_login {
 }
 
 
-# function http_server {
-#     local id
-    
-#     case $http_method in
-# 	GET)
-# 	    if [[ "${line[*]}" =~ 'Cookie' ]]		   
-# 	    then
-# 		id="$(clean_data "${line[*]}")"
-# 		id="${id#*_ZigzagDownLoader=}"
-# 		id="${id%%; *}"
-
-# 		grep "$id" "$path_server"/http-sessions &>/dev/null &&
-# 		    logged_on=true
-
-# 	    elif [[ "$(clean_data "${line[*]}")" =~ 'Accept-Language' ]]
-# 	    then
-# 		user_accept_language=true
-
-# 	    elif [[ "$(clean_data "${line[*]}")" =~ 'Connection' ]]
-# 	    then
-# 		connection_test=true
-
-# 	    elif [[ "$(clean_data "${line[*]}")" =~ 'Chrome' ]]
-# 	    then
-# 		user_agent=chromium
-# 	    fi
-
-# 	    if [ -n "$connection_test" ] &&
-# 		   [ -n "$user_accept_language" ]
-# 	    then
-# 		if [ "$user_agent" == chromium ]
-# 		then
-# 		    read new_line
-# 		    cooked_line=$(clean_data "$new_line" |cut -d' ' -f2)
-		    
-# 		    [ -n "$cooked_line" ] &&
-# 			grep "$cooked_line" "$path_server"/http-sessions &>/dev/null &&
-# 			logged_on=true
-# 		fi
-
-# 		if [ -z "$logged_on" ] &&
-# 		       [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
-# 		       [[ ! "$file_output" =~ login.*\.html\? ]]
-# 		then
-# 		    send_login
-# 		fi
-
-# 		if [ -n "$GET_DATA" ]
-# 		then
-# 		    run_data "$GET_DATA"
-# 		fi
-		
-# 		if [ -f "$file_output" ]
-# 		then
-# 		    [[ "$file_output" =~ "$server_data" ]] &&
-# 			create_json
-		    
-# 		    serve_file "$file_output"
-		    
-# 		else
-# 		    exit
-# 		fi
-# 	    fi
-# 	    ;;
-	
-# 	POST)
-# 	    [ "${line[0]}" == 'Content-Length:' ] &&
-# 		length=$(clean_data "${line[1]}")
-	    
-# 	    if [[ "$length" =~ ^[0-9]+$ ]] && ((length>0))
-# 	    then
-# 		## read -n 0
-# 		while read test_line
-# 		do
-# 		    [ -z "$(clean_data "$test_line")" ] &&
-# 			break
-# 		done
-# 		read -n $length POST_DATA
-
-# 		run_data "$POST_DATA"
-# 		serve_file "$file_output"
-# 	    fi
-# 	    ;;
-
-# 	*)
-# 	    return 1
-# 	    ;;
-#     esac
-#     return 0
-# }
-
 function check_session_cookie {
 	if [[ "$1" =~ .*(_ZigzagDownLoader=[a-z0-9]{128}).* ]]
 	then
@@ -1525,6 +1434,7 @@ function check_session_cookie {
 	fi
 	return 1
 }
+
 
 function http_server {
     local cookie
@@ -1611,7 +1521,7 @@ function http_server {
 }
 
 
-
+## MAIN:
 
 while read -a line 
 do
