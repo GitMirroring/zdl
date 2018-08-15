@@ -1308,8 +1308,8 @@ var init = function (path) {
     getPlaylist("playlist-list");
 };
 
-window.onbeforeunload = function () {
-    ajax({
-        query: "cmd=reset-requests&path=" + ZDL.path
-    });
-};
+// window.onbeforeunload = function () {
+//     ajax({
+//         query: "cmd=reset-requests&path=" + ZDL.path
+//     });
+// };
