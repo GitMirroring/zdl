@@ -552,9 +552,12 @@ function display_download_manager_gui {
 		0)
 		    if (( ${#res[@]}>0 ))
 		    then
-			set_link - "${res[0]}"
-			kill -9 "${res[5]}" &>/dev/null
-			rm -f "${res[2]}" "${res[2]}.st" "${res[2]}.zdl" "${res[2]}.aria2" "$path_tmp"/"${res[2]}_stdout.tmp"
+			for ((i=0; i<${#res[@]}; i=i+6))
+			do
+			    set_link - "${res[i]}"
+			    kill -9 "${res[i+5]}" &>/dev/null
+			    rm -f "${res[i+2]}" "${res[i+2]}.st" "${res[i+2]}.zdl" "${res[i+2]}.aria2" "$path_tmp"/"${res[i+2]}_stdout.tmp"
+			done
 		    fi
 		    ;;
 		4)
