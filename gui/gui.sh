@@ -224,6 +224,7 @@ function start_daemon_gui {
 	    if url "${args[i]}"
 	    then
 		set_link + "${args[i]}"
+		echo "${args[i]}" >> links.txt
 		unset args[i]
 	    fi
 	done
