@@ -524,12 +524,12 @@ _Video in streaming saltando il player del browser:_
      WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
-     Akvideo (HD), Clicknupload, Cyberlocker, Deltabit (HD), Dropbox,
-     Easybytez, Go4Up (multi-link), Jheberg (multi-link), Katfile,
-     Mediafire, Mega, MultiUp (multi-link), Nowdownload, Openload,
-     Ozofiles, Pastebin, Rockfile, Sockshare (HD), Subyshare,
-     TubeOffLine.com (tutti i servizi: Biqle), Tusfiles, Uload,
-     Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
+     Akvideo (HD), Clicknupload, Cyberlocker, Deltabit (HD),
+     dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg
+     (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
+     Nowdownload, Openload, Ozofiles, Pastebin, Rockfile, Sockshare
+     (HD), Subyshare, TubeOffLine.com (tutti i servizi: Biqle),
+     Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
 
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
@@ -1388,25 +1388,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL7476
 Node: Servizi streaming/hosting15699
-Node: Avviare ZDL19661
-Node: Arrestare ZDL22097
-Node: Controllare i download23202
-Node: Manuali d'uso27493
-Node: Modi27909
-Node: Readline31175
-Node: Editor32727
-Node: Omonimie33952
-Node: IRC/XDCC35487
-Node: Torrent37177
-Node: Filtri38061
-Node: Creare nuove estensioni38382
-Node: Software consigliati40144
-Node: Conkeror41545
-Node: zdl-xterm e XXXTerm/Xombrero42556
-Node: Installazione e aggiornamento44480
-Node: Tags47515
-Node: Copying50316
-Node: Contatti51366
+Node: Avviare ZDL19673
+Node: Arrestare ZDL22109
+Node: Controllare i download23214
+Node: Manuali d'uso27505
+Node: Modi27921
+Node: Readline31187
+Node: Editor32739
+Node: Omonimie33964
+Node: IRC/XDCC35499
+Node: Torrent37189
+Node: Filtri38073
+Node: Creare nuove estensioni38394
+Node: Software consigliati40156
+Node: Conkeror41557
+Node: zdl-xterm e XXXTerm/Xombrero42568
+Node: Installazione e aggiornamento44492
+Node: Tags47527
+Node: Copying50328
+Node: Contatti51378
 
 End Tag Table
 

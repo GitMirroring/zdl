@@ -1,4 +1,4 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Thu Jul 26 16:45:30 2018" "GNU" "User Commands"
+.TH "ZigzagDownLoader (ZDL)" "1" "Sun Aug 19 14:57:36 2018" "GNU" "User Commands"
 .SH NOME\	
 \fBzdl\fP - CLI download manager per \fIGNU/Linux\fP e \fIMicrosoft Windows + Cygwin\fP.\
 
@@ -6,11 +6,11 @@
 .SH SINTASSI	
 \fBzdl [\fP\fIOPZIONI\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB] \fP
 
-
-.SH DESCRIZIONE\	
-\fIZigzagDownLoader\fP gestisce gli scaricamenti di alcuni downloader come \fIAria2\fP, \fIAxel\fP, \fIWget\fP, \fIRTMPDump\fP o \fIcURL\fP\&. Inoltre, può estrarre l'URL dei file da scaricare da servizi di file hosting e video streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC, senza alcuna interazione via CHAT. Estende \fIConkeror\fP, \fIXXXTerm/Xombrero\fP, \fIFirefox\fP (attraverso l'estensione \fIFlashgot\fP) e \fIMicrosoft Windows\fP (tramite \fICygwin\fP). Tramite l'estensione \fIExternal Application Button\fP, ZDL può essere integrato in \fIFirefox\fP, \fIChrome/Chromium\fP e \fIOpera\fP. Il programma dispone, inoltre, di un server per generare socket TCP, diverse interfacce web e API, per il controllo remoto e in rete, e di una interfaccia grafica.
 \
-.SS Argomenti	
+.SH DESCRIZIONE	
+\fIZigzagDownLoader\fP gestisce gli scaricamenti di alcuni downloader come \fIAria2\fP, \fIAxel\fP, \fIWget\fP, \fIRTMPDump\fP o \fIcURL\fP\&. Inoltre, può estrarre l'URL dei file da scaricare da servizi di file hosting e video streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC, senza alcuna interazione via CHAT. Estende \fIConkeror\fP, \fIXXXTerm/Xombrero\fP, \fIFirefox\fP (attraverso l'estensione \fIFlashgot\fP) e \fIMicrosoft Windows\fP (tramite \fICygwin\fP). Tramite l'estensione \fIExternal Application Button\fP, ZDL può essere integrato in \fIFirefox\fP, \fIChrome/Chromium\fP e \fIOpera\fP. Il programma dispone, inoltre, di un server per generare socket TCP, diverse interfacce web e API, per il controllo remoto e in rete, e di una interfaccia grafica.
+
+.SS Argomenti\	
 L'ordine delle opzioni e degli altri argomenti non è importante:
 
 
@@ -207,8 +207,8 @@ Avvia il programma in modalità demone nella directory corrente o, eventualmente
 .RS -5
 
 
-\
-.SS IRC/XDCC:	
+
+.SS IRC/XDCC:\	
 
 .RS 5
 
@@ -242,8 +242,8 @@ Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare 
 
 
 
-
-.SS Torrent:\	
+\
+.SS Torrent:	
 
 .RS 5
 
@@ -264,8 +264,8 @@ Porte TCP e UDP aperte: verificare le impostazioni del router
 .RS -5
 
 
-
-.SS Filtri:\	
+\
+.SS Filtri:	
 
 .RS 5
 
@@ -359,8 +359,8 @@ usa Zile, un micro editor GNU in stile Emacs
 .RS -5
 
 
-\
-.SS Avvio con proxy:	
+
+.SS Avvio con proxy:\	
 
 .RS 5
 
@@ -421,8 +421,8 @@ Per scaricare lo stream incorporando ZDL in nuovi script, il modello generico de
 
 .RS -5
 
-\
-.SH PANORAMICA	
+
+.SH PANORAMICA\	
 
 .SS Servizi\	
 ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream video (da Youtube, Nowvideo, Dailymotion\&...) per mezzo di estensioni dei browser, ed i file condivisi attraverso i seguenti servizi di hosting e di streaming, direttamente dal link (bypassando il player delle pagine web):
@@ -441,7 +441,7 @@ Akvideo (HD), Auroravid/Novamov, Dailymotion, Deltabit (HD), Dplay (HD), Exashar
 .RS -5
 \fI\fP\fBFile hosting:\fP\fI\fP
 .RS 5
-Akvideo (HD), Clicknupload, Cyberlocker, Deltabit (HD), Dropbox, Easybytez, Go4Up (multi-link), Jheberg (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link), Nowdownload, Openload, Ozofiles, Pastebin, Rockfile, Sockshare (HD), Subyshare, TubeOffLine.com (tutti i servizi: Biqle), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD)
+Akvideo (HD), Clicknupload, Cyberlocker, Deltabit (HD), dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link), Nowdownload, Openload, Ozofiles, Pastebin, Rockfile, Sockshare (HD), Subyshare, TubeOffLine.com (tutti i servizi: Biqle), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD)
 
 
 .RS -5
@@ -467,8 +467,8 @@ Aria2 (anche torrent), Axel, cURL, RTMPDump, Wget, youtube-dl (comando per elenc
 .RS -5
 
 
-
-.SS Avvio\	
+\
+.SS Avvio	
 ZDL può essere avviato in diversi modi:
 
 
@@ -485,8 +485,9 @@ ZDL può essere avviato in diversi modi:
 .IP "\fI1.\fP" 3
 generando automaticamente la lista dei link per il download:
 
-.RS 0
-.IP "\fI1.\fP" 3ize @minus
+
+.RS 5
+
 .RS 0
 .IP "\fI-\fP" 2
 apri un terminale ed entra nella directory che dovrà contenere i file scaricati
@@ -601,8 +602,8 @@ attraverso la modalità interattiva \fBzdl -i\fP avviata nella directory gestita
 
 
 
-\
-.SS Software consigliati	
+
+.SS Software consigliati\	
 
 .RS 5
 
