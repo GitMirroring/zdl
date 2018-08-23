@@ -42,5 +42,3 @@ then
     replace_url_in "$url_qgs" ||
 	_log 12
 fi
-
-

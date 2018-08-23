@@ -38,5 +38,6 @@ then
     else
 	extension_openload "$url_in"
     fi
+
     end_extension
 fi

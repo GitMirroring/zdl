@@ -68,7 +68,8 @@ function get_fastshield {
     fi
 }
 
-if [ "$url_in" != "${url_in//vcrypt.}" ] #&&       [[ ! "$url_in" =~ vcrypt.+opencrypt ]]
+if [ "$url_in" != "${url_in//vcrypt.}" ] &&
+       [[ ! "$url_in" =~ fastshield ]] #&&       [[ ! "$url_in" =~ vcrypt.+opencrypt ]]
 then
     # if [[ "$url_in" =~ cryptopen ]]
     # then	    
@@ -137,7 +138,9 @@ then
 
 	if ! url "$url_vcrypt"
 	then
-	    url_vcrypt=$(curl -v "$url_in"  2>&1                 |
+	    url_vcrypt=$(curl -v "$url_in"                 \
+			      -c "$path_tmp"/cookies.zdl   \
+			      2>&1                               |
 			     grep 'ocation:'                     |
 			     awk '{print $3}'                    |
 			     sed -r 's|vcrypt\.pw|vcrypt.net|g'  |
@@ -177,14 +180,15 @@ then
 		fi
 	    fi
 	fi
-	
+		
 	if url "$url_vcrypt"
 	then
 	    if [[ "$url_vcrypt" =~ vcrypt ]]
 	    then
 		if ! get_fastshield "$url_vcrypt" url_vcrypt2
 		then
-		    url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go'    |
+		    url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go' \
+				       -b "$path_tmp"/cookies.zdl     |
 					 grep refresh                 |
 					 sed -r "s|.+url=([^']+)'.*|\1|g")
 		    
@@ -202,7 +206,7 @@ then
 		    if [[ "$url_vcrypt2" =~ vcrypt ]]
 		    then	    
 			get_fastshield "$url_vcrypt2" url_vcrypt2
-			echo "3: $url_vcrypt2"			
+	
 			if [[ "$url_vcrypt2" =~ http.*http ]]
 			then
 			    url_vcrypt2="http${url_vcrypt2##*http}"
@@ -260,6 +264,29 @@ then
 	    _log 2
 	fi
     fi
+
+
+elif [ "$url_in" != "${url_in//vcrypt.}" ]
+then
+    wget --keep-session-cookies \
+	 --save-cookies="$path_tmp"/cookies.zdl \
+	 --user-agent="$user_agent" \
+	 -o /dev/null \
+	 "$url_in" -SO /dev/null
+	 
+    wget --post-data="go=go" \
+	 --load-cookies="$path_tmp"/cookies.zdl \
+	 "$url_in" -SO /dev/null \
+	 -o "$path_tmp"/vcrypt_fastshield_redirect.txt
+
+    url_fastshield_location=$(grep ocation "$path_tmp"/vcrypt_fastshield_redirect.txt |
+				     tail -n1 |
+				     cut -d' ' -f2)
+    
+    url_fastshield_location=$(trim "$url_fastshield_location")
+
+    replace_url_in "$url_fastshield_location" ||
+	_log 2
 fi
 
 if [[ "$url_in" =~ vcrypt.+opencrypt ]]

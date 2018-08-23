@@ -32,5 +32,3 @@ then
     replace_url_in "$(get_location "$url_in")" ||
 	_log 12
 fi
-
-

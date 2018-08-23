@@ -1416,7 +1416,9 @@ function main_loop {
     then	
 	nline=1
 	while :
-	do	    
+	do	    	    
+	    unset break_loop
+	    
 	    if [ -s "$start_file" ]
 	    then
 		nlines=$(wc -l < "$start_file")		
@@ -1561,6 +1563,7 @@ function main_loop {
 			    break
 			fi
 		    done
+		    
 
 		## universal downloader
 		    if [ -z "$file_in" ] && ! url "$url_in_file"

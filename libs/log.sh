@@ -215,6 +215,6 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
 	echo -e "$msg" >> $file_log
 	# no_msg=true
 	# unset from_loop
-	[[ ! "$1" =~ ^(18|34)$ ]] && break_loop=true
+	[[ ! "$1" =~ ^(12|18|34)$ ]] && break_loop=true
     fi
 }
