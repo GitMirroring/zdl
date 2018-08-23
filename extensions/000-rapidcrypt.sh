@@ -37,6 +37,10 @@ then
 	    
 	else
 	    html=$(curl -s "$url_in")
+	    if [ -z "$html" ]
+	    then
+		html=$(wget -o /dev/null -qO- "$url_in")
+	    fi
 	fi
 
 	url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
