@@ -212,6 +212,8 @@ then
 			    url_vcrypt2="http${url_vcrypt2##*http}"
 			fi
 		    fi
+		else
+		    url_vcrypt2="$url_vcrypt"
 		fi
 	    else
 		url_vcrypt2="$url_vcrypt"
