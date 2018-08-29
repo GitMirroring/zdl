@@ -50,11 +50,11 @@ function get_fastshield {
 			   -H 'Connection: "keep-alive"'                                                   \
 	    		   -A "$user_agent" 2>&1)
 
-	ref=$(grep 'ocation:' <<< "$data_vcrypt" |
-	    	     head -n1|
-	    	     awk '{print $3}')
+	local ref0=$(grep 'ocation:' <<< "$data_vcrypt" |
+	    		    head -n1|
+	    		    awk '{print $3}')
 	
-	ref=$(trim "${ref}")
+	ref=$(trim "${ref0}")
 
 	url "$ref" &&
 	    (

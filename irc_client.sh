@@ -25,6 +25,8 @@
 #
 
 path_usr="/usr/local/share/zdl"
+path_tmp=".zdl_tmp"
+gui_log="$path_tmp"/gui-log.txt
 
 source $path_usr/libs/core.sh
 source $path_usr/libs/utils.sh
@@ -519,7 +521,6 @@ function irc_client {
 
 ################ main:
 PID=$$
-path_tmp=".zdl_tmp"
 
 set_mode "stdout"
 this_tty="$7"
@@ -562,3 +563,4 @@ irc_client ||
 	    kill -9 $(ps -o pid --no-headers --ppid $PID)
 	fi
     }
+
