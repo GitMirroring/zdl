@@ -1228,12 +1228,21 @@ function run_gui {
     yad_link_manager_pid_file="$path_tmp"/yad_link_manager_pid.$GUI_ID
     yad_link_manager_result_file="$path_tmp"/yad_link_manager_result_file.$GUI_ID
     rm -f "$yad_button_result_file"
-    rm -f "$path_tmp"/flag-start-links-gui
-    
+    rm -f "$path_tmp"/flag-start-links-gui   
+
     start_daemon_gui
 
-    check_instance_gui &&
+    if check_instance_gui
+    then
 	exit
+    else
+	ls "$path_tmp"/start_file_* "$path_tmp"/exit_file_* "$path_tmp"/yad_* |
+	    grep -vP "\\.$GUI_ID\$" |
+	    while read line
+	    do
+		rm -f "$line"
+	    done
+    fi
     
     while ! check_instance_prog &&
 	    ! check_instance_daemon
