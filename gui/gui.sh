@@ -475,6 +475,9 @@ function load_download_manager_gui {
     for ((i=1; i<="${#url_out_gui[@]}"; i++))
     do
 	length=$(length_to_human "${length_out_gui[i]}")
+
+	[ -z "$length" ] && length=0
+	
 	items=(
 	    "${url_out_gui[i]}"
 	    "${percent_out_gui[i]}"
@@ -557,7 +560,7 @@ function display_download_manager_gui {
 			do
 			    set_link - "${res[i]}"
 			    kill -9 "${res[i+5]}" &>/dev/null
-			    rm -f "${res[i+2]}" "${res[i+2]}.st" "${res[i+2]}.zdl" "${res[i+2]}.aria2" "$path_tmp"/"${res[i+2]}_stdout.tmp"
+			    rm -f "${res[i+2]}" "${res[i+2]}.st" "${res[i+2]}.zdl" "${res[i+2]}.aria2" "$path_tmp"/"${res[i+2]}_stdout.tmp" 
 			done
 		    fi
 		    ;;
@@ -577,6 +580,7 @@ function display_download_manager_gui {
     while :
     do
 	exe_button_result "$yad_download_manager_result_file" >$PIPE_03
+
     	check_pid $pid || {
 	    break
 	}
