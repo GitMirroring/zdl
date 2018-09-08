@@ -35,8 +35,7 @@ function get_fastshield {
     if [[ "$url_fastshield" =~ fastshield ]]
     then
 	url "$url_fastshield" &&
-	    print_c 4 "$url_fastshield" ||
-		_log 2
+	    print_c 4 "$url_fastshield"
 	
 	if check_cloudflare "$url_fastshield"
 	then
@@ -54,74 +53,21 @@ function get_fastshield {
 	    		    head -n1|
 	    		    awk '{print $3}')
 	
-	ref=$(trim "${ref0}")
+	ref0=$(trim "$ref0")
 
-	url "$ref" &&
+	url "$ref0" &&
 	    (
-		print_c 4 "$ref" 
+		print_c 4 "$ref0"
+		ref="$ref0"
 		return 0
 	    ) ||
-		(
-		    _log 2
-		    return 1
-		)
+		return 1
     fi
 }
 
 if [ "$url_in" != "${url_in//vcrypt.}" ] &&
        [[ ! "$url_in" =~ fastshield ]] #&&       [[ ! "$url_in" =~ vcrypt.+opencrypt ]]
 then
-    # if [[ "$url_in" =~ cryptopen ]]
-    # then	    
-    # 	html=$(curl "$url_in" -s)
-
-    # 	url_vcrypt2=$(grep iframe <<< "$html" |
-    # 			     sed -r 's|.+\"([^"]+)\"[^"]+$|\1|g')
-
-    # 	if ! url "$url_vcrypt2"
-    # 	then		
-    # 	    url_vcrypt2=$(grep Download <<< "$html" |
-    # 				 sed -r 's|.+href=\"([^"]+)\".+|\1|g' |head -n1)
-
-    # 	    if ! url "$url_vcrypt2"
-    # 	    then
-    # 		url_vcrypt2=$(phantomjs "$path_usr"/extensions/vcrypt-phantomjs.js "$url_in")
-    # 	    fi
-    # 	fi
-    # 	replace_url_in "$url_vcrypt2" ||
-    # 	    _log 2
-
-    # elif [[ "$url_in" =~ cryptop ]]
-    # then
-    # 	html=$(curl "$url_in" -s)
-    # 	url_vcrypt2=$(grep Download <<< "$html" |
-    # 			     head -n1)
-
-    # 	if [[ "$url_vcrypt2" =~ http ]]
-    # 	then
-    # 	    url_vcrypt2="${url_vcrypt2##*http}"
-    # 	    url_vcrypt2="http${url_vcrypt2%%\"*}"
-	    
-    # 	    replace_url_in "$url_vcrypt2" ||
-    # 		_log 2
-    # 	fi
-
-    # elif [[ "$url_in" =~ opencryptxx ]]
-    # then
-    # 	html=$(curl "$url_in" -s)
-    # 	url_vcrypt2=$(grep Download <<< "$html" |
-    # 			     head -n1)
-
-    # 	if [[ "$url_vcrypt2" =~ http ]]
-    # 	then
-    # 	    url_vcrypt2="${url_vcrypt2##*http}"
-    # 	    url_vcrypt2="http${url_vcrypt2%%\"*}"
-	    
-    # 	    replace_url_in "$url_vcrypt2" ||
-    # 		_log 2
-    # 	fi
-
-    # else    
     [[ "$url_in" =~ \.pw\/ ]] &&
 	replace_url_in "${url_in//.pw\//.net\/}"
 
@@ -180,7 +126,7 @@ then
 		fi
 	    fi
 	fi
-		
+
 	if url "$url_vcrypt"
 	then
 	    if [[ "$url_vcrypt" =~ vcrypt ]]
@@ -191,18 +137,31 @@ then
 				       -b "$path_tmp"/cookies.zdl     |
 					 grep refresh                 |
 					 sed -r "s|.+url=([^']+)'.*|\1|g")
-		    
+			
 		    url_vcrypt2=$(trim "${url_vcrypt2}")
-
+		    
 		    if ! url "$url_vcrypt2"
 		    then
 			url_vcrypt2=$(curl -v "$url_vcrypt" -d 'go=go' 2>&1 |
 					  grep 'ocation:'                   |
 					  awk '{print $3}')
 		    fi
-		    
+
 		    url_vcrypt2=$(trim "${url_vcrypt2}")
 
+		    if ! url "$url_vcrypt2"
+		    then
+			url_vcrypt2=$(wget -qO- "$url_vcrypt" \
+					   -o /dev/null \
+					   --post-data='go=go' \
+		     			   --load-cookies="$path_tmp"/cookies.zdl |
+					     grep Download |
+					     sed -r 's|[^"]+\"([^"]+)\".+|\1|')
+			     
+		    fi
+
+		    url_vcrypt2=$(trim "${url_vcrypt2}")
+		    
 		    if [[ "$url_vcrypt2" =~ vcrypt ]]
 		    then	    
 			get_fastshield "$url_vcrypt2" url_vcrypt2
@@ -212,8 +171,6 @@ then
 			    url_vcrypt2="http${url_vcrypt2##*http}"
 			fi
 		    fi
-		else
-		    url_vcrypt2="$url_vcrypt"
 		fi
 	    else
 		url_vcrypt2="$url_vcrypt"
