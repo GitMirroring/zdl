@@ -33,7 +33,7 @@ then
     id_4snip="${url_in##*\/}"
 
     url_4snip=$(curl -v -d "url=$id_4snip" "$url_action_4snip" 2>&1 |
-		    grep location |
+		    grep 'location:' |
 		    awk '{print $3}')
 
     url_4snip=$(trim "$url_4snip")
