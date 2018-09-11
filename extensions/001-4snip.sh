@@ -25,11 +25,23 @@
 #
 
 ## zdl-extension types: shortlinks
-## zdl-extension name: 4snip
+## zdl-extension name: 4snip.pw
 
-
-if [[ "$url_in" =~ 4snip\. ]]
+if [[ "$url_in" =~ 4snip\.pw ]]
 then
-    replace_url_in "${url_in#*'?url='}" || 
+    url_action_4snip="${url_in//\/out\//'/outlink/'}"
+    id_4snip="${url_in##*\/}"
+
+    url_4snip=$(curl -v -d "url=$id_4snip" "$url_action_4snip" 2>&1 |
+		    grep location |
+		    awk '{print $3}')
+
+    url_4snip=$(trim "$url_4snip")
+
+    if url "$url_4snip"
+    then
+	replace_url_in "$url_4snip"
+    else
 	_log 32
+    fi
 fi
