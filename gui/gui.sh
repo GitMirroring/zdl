@@ -466,7 +466,7 @@ function print_links_txt {
 }
 
 function load_download_manager_gui {
-    local item length
+    local item length pid dler file percent
     declare -a items
 
     get_data_multiprogress
@@ -475,16 +475,44 @@ function load_download_manager_gui {
     for ((i=1; i<="${#url_out_gui[@]}"; i++))
     do
 	length=$(length_to_human "${length_out_gui[i]}")
-
 	[ -z "$length" ] && length=0
+
+	if [[ "${pid_out_gui[i]}" =~ ^([0-9]+)$ ]] &&
+	       [ "${pid_out_gui[i]}" != 0 ]
+	then
+	    pid="${pid_out_gui[i]}"
+	else
+	    pid="-"
+	fi
+
+	if [ -n "${downloader_out_gui[i]}" ]
+	then
+	    dler="${downloader_out_gui[i]}"
+	else
+	    dler="-"
+	fi
+
+	if [ -n "${file_out_gui[i]}" ]
+	then
+	    file="${file_out_gui[i]}"
+	else
+	    file="-"
+	fi
+
+	if [[ "${percent_out_gui[i]}" =~ ^([0-9]+)$ ]]
+	then
+	    percent="${percent_out_gui[i]}"
+	else
+	    percent=0
+	fi
 	
 	items=(
 	    "${url_out_gui[i]}"
-	    "${percent_out_gui[i]}"
-	    "${file_out_gui[i]}"
+	    "$percent"
+	    "$file"
 	    "$length"
-	    "${downloader_out_gui[i]}"
-	    "${pid_out_gui[i]}"
+	    "$dler"
+	    "$pid"
 	)
 
     	for item in "${items[@]}"
@@ -525,7 +553,7 @@ function display_download_manager_gui {
 		       --image="$IMAGE2" \
 		       --expand-column=3 \
 		       --hide-column=6 \
-		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID:NUM" \
+		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID" \
 		       --separator=' ' \
 		       --button="Aggiorna!gtk-refresh!Aggiorna la tabella dei download (automatico ogni $waiting secondi):bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
 		       --button="Play!gtk-media-play-ltr!Riproduci il file audio/video selezionato":4 \
@@ -559,8 +587,12 @@ function display_download_manager_gui {
 			for ((i=0; i<${#res[@]}; i=i+6))
 			do
 			    set_link - "${res[i]}"
-			    kill -9 "${res[i+5]}" &>/dev/null
-			    rm -f "${res[i+2]}" "${res[i+2]}.st" "${res[i+2]}.zdl" "${res[i+2]}.aria2" "$path_tmp"/"${res[i+2]}_stdout.tmp" 
+
+			    [[ "${res[i+5]}" =~ ^([0-9]+)$ ]] &&
+			    	kill -9 "${res[i+5]}" &>/dev/null
+
+			    [ "${res[i+2]}" != '-' ] &&
+			    	rm -f "${res[i+2]}" "${res[i+2]}.st" "${res[i+2]}.zdl" "${res[i+2]}.aria2" "$path_tmp"/"${res[i+2]}_stdout.tmp"
 			done
 		    fi
 		    ;;
