@@ -23,28 +23,28 @@
 # zoninoz@inventati.org
 #
 
-function display_stumpish_complete (stumpish_list, K, line) {
-    cmd = "command -v stumpish"
+function display_stumpwm_complete (stumpwm_list, K, line) {
+    cmd = "command -v stumpwm"
     cmd | getline line
     close(cmd)
 
-    if (line ~ "stumpish") {
+    if (line ~ "stumpwm") {
 	for (K=0; K<length(percent_out); K++) {
 	    if (percent_out[K] == 100) {
-		if (exists(".zdl_tmp/stumpish_list.txt")) {
-		    cmd = "grep \"" file_out[K] "\" .zdl_tmp/stumpish_list.txt"
+		if (exists(".zdl_tmp/stumpwm_list.txt")) {
+		    cmd = "grep \"" file_out[K] "\" .zdl_tmp/stumpwm_list.txt"
 		    cmd | getline line
 		    close(cmd)
 		}
 		if (line != file_out[K]) {
-		    stumpish_list = stumpish_list "\n" file_out[K]
-		    print file_out[K] >> ".zdl_tmp/stumpish_list.txt"
+		    stumpwm_list = stumpwm_list "\n" file_out[K]
+		    print file_out[K] >> ".zdl_tmp/stumpwm_list.txt"
 		}
 	    }
 	}
 
-	if (stumpish_list != "") {
-	    cmd = "echo \"^B^4*File completati:^*\n" stumpish_list "\" | stumpish -e echo"
+	if (stumpwm_list != "") {
+	    cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*File completati:^*\n" stumpwm_list "'"
 	    cmd | getline line
 	    close(cmd)
 	}
@@ -743,6 +743,6 @@ END {
         printf("%s", json) >> json_file
     }
     
-    display_stumpish_complete()
+    display_stumpwm_complete()
     print code 
 }
