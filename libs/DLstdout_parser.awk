@@ -23,7 +23,33 @@
 # zoninoz@inventati.org
 #
 
+function display_stumpish_complete (stumpish_list, K, line) {
+    cmd = "command -v stumpish"
+    cmd | getline line
+    close(cmd)
 
+    if (line ~ "stumpish") {
+	for (K=0; K<length(percent_out); K++) {
+	    if (percent_out[K] == 100) {
+		if (exists(".zdl_tmp/stumpish_list.txt")) {
+		    cmd = "grep \"" file_out[K] "\" .zdl_tmp/stumpish_list.txt"
+		    cmd | getline line
+		    close(cmd)
+		}
+		if (line != file_out[K]) {
+		    stumpish_list = stumpish_list "\n" file_out[K]
+		    print file_out[K] >> ".zdl_tmp/stumpish_list.txt"
+		}
+	    }
+	}
+
+	if (stumpish_list != "") {
+	    cmd = "echo \"^B^4*File completati:^*\n" stumpish_list "\" | stumpish -e echo"
+	    cmd | getline line
+	    close(cmd)
+	}
+    }
+}
 
 function array_out (value, type) {
     code = code bash_array(type, i, value)
@@ -669,53 +695,54 @@ BEGIN {
 
 END {
     progress()
+    
+    if (json_flag == "true") {
+	for (I=0; I<length(file_out); I++) {
+	    if (json_flag == "true") {
+		json = json "{"
+		json = json "\"path\":\"" pwd "\","
+		json = json "\"link\":\"" url_out[I] "\","
+		json = json "\"file\":\"" file_out[I] "\","
 
-    for (I=0; I<length(file_out); I++) {
-    	if (json_flag == "true") {
-    	    json = json "{"
-	    json = json "\"path\":\"" pwd "\","
-    	    json = json "\"link\":\"" url_out[I] "\","
-    	    json = json "\"file\":\"" file_out[I] "\","
+		if (downloader_out[I] ~ /cURL|RTMPDump/) {
+		    json = json "\"playpath\":\"" playpath_out_[I] "\","
+		    json = json "\"streamer\":\"" streamer_out[I] "\","
+		}
+		else {
+		    json = json "\"url\":\"" url_out_file[I] "\","
+		}
+		json = json "\"downloader\":\"" downloader_out[I] "\","
+		json = json "\"percent\":\"" percent_out[I] "\","
+		json = json "\"eta\":\"" eta_out[I] "\","
+		json = json "\"length\":\"" length_out[I] "\","
+		json = json "\"saved\":\"" length_saved[I] "\","
+		json = json "\"pid\":\"" pid_out[I] "\","
+		json = json "\"pid_instance\":\"" pid_prog_out[I] "\","
+		json = json "\"speed\":\"" speed_out[I] "\","
+		json = json "\"speed_measure\":\"" speed_out_type[I] "\","
+		json = json "\"max_downloads\":\"" max_dl "\","
+		json = json "\"color\":\"" color_out[I] "\""
 
-	    if (downloader_out[I] ~ /cURL|RTMPDump/) {
-		json = json "\"playpath\":\"" playpath_out_[I] "\","
-		json = json "\"streamer\":\"" streamer_out[I] "\","
+		if (I<length(file_out)-1)
+		    json = json "},"
+		else
+		    json = json "}"
 	    }
-	    else {
-		json = json "\"url\":\"" url_out_file[I] "\","
-	    }
-    	    json = json "\"downloader\":\"" downloader_out[I] "\","
-    	    json = json "\"percent\":\"" percent_out[I] "\","
-    	    json = json "\"eta\":\"" eta_out[I] "\","
-    	    json = json "\"length\":\"" length_out[I] "\","
-    	    json = json "\"saved\":\"" length_saved[I] "\","
-    	    json = json "\"pid\":\"" pid_out[I] "\","
-    	    json = json "\"pid_instance\":\"" pid_prog_out[I] "\","
-    	    json = json "\"speed\":\"" speed_out[I] "\","
-    	    json = json "\"speed_measure\":\"" speed_out_type[I] "\","
-	    json = json "\"max_downloads\":\"" max_dl "\","
-	    json = json "\"color\":\"" color_out[I] "\""
-
-    	    if (I<length(file_out)-1)
-    		json = json "},"
-    	    else
-    		json = json "}"
-    	}
 	
 
-    	for (J=0; J<length(file_out); J++) {
-    	    ## cancella download di file con nome diverso per uno stesso link/url
-    	    if ((url_out[I] == url_out[J]) &&
-    		(file_out[I] != file_out[J]) &&
-    		(check_pid(pid_out[I]))) {
-    		system("rm -f .zdl_tmp/"file_out[J]"_stdout.tmp " file_out[J] " " file_out[J] ".st " file_out[J] ".aria2")
-    	    }
-    	}
-    }
+	    for (J=0; J<length(file_out); J++) {
+		## cancella download di file con nome diverso per uno stesso link/url
+		if ((url_out[I] == url_out[J]) &&
+		    (file_out[I] != file_out[J]) &&
+		    (check_pid(pid_out[I]))) {
+		    system("rm -f .zdl_tmp/"file_out[J]"_stdout.tmp " file_out[J] " " file_out[J] ".st " file_out[J] ".aria2")
+		}
+	    }
+	}
 
-    if (json_flag == "true") {
         printf("%s", json) >> json_file
     }
-
+    
+    display_stumpish_complete()
     print code 
 }

@@ -296,10 +296,8 @@ function init {
 
     get_conf
     (
-	exec 1>&-
-	exec 2>&-
-	nohup "$path_usr"/libs/update-tubeoffline.sh &>/dev/null
-    ) &
+	nohup "$path_usr"/libs/update-tubeoffline.sh &>/dev/null &
+    ) &>/dev/null
     this_tty=$(tty)
 
     if ! check_instance_prog &&
