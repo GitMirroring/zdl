@@ -463,6 +463,8 @@ ESTENSIONI:
 	deps['fuser']=psmisc
 	deps['openssl']=openssl
 	deps['curl']=curl
+	deps['notify-send']=libnotify-bin
+	deps['wmctrl']=wmctrl
 	## deps['tput']=ncurses-bin
 
 	for cmd in "${!deps[@]}"

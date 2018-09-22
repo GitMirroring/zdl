@@ -23,30 +23,48 @@
 # zoninoz@inventati.org
 #
 
-function display_stumpwm_complete (stumpwm_list, K, line) {
-    cmd = "command -v stumpwm"
-    cmd | getline line
+function display_notify_complete (notify_list, K, line, wmname) {
+    cmd = "wmctrl -m | grep Name | cut -d' ' -f2"
+    cmd | getline wmname
     close(cmd)
 
-    if (line ~ "stumpwm") {
+    if (wmname != "") {
 	for (K=0; K<length(percent_out); K++) {
 	    if (percent_out[K] == 100) {
-		if (exists(".zdl_tmp/stumpwm_list.txt")) {
-		    cmd = "grep \"" file_out[K] "\" .zdl_tmp/stumpwm_list.txt"
+		if (exists(".zdl_tmp/notify_list.txt")) {
+		    if (! exists(file_out[K])) {
+			cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
+			cmd | getline line
+			close(cmd)
+		    }
+		
+		    cmd = "grep \"" file_out[K] "\" .zdl_tmp/notify_list.txt"
 		    cmd | getline line
 		    close(cmd)
 		}
 		if (line != file_out[K]) {
-		    stumpwm_list = stumpwm_list "\n" file_out[K]
-		    print file_out[K] >> ".zdl_tmp/stumpwm_list.txt"
+		    notify_list = notify_list "\n" file_out[K]
+		    print file_out[K] >> ".zdl_tmp/notify_list.txt"
 		}
+	    }
+	    else {
+		cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
+		cmd | getline line
+		close(cmd)
 	    }
 	}
 
-	if (stumpwm_list != "") {
-	    cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*File completati:^*\n" stumpwm_list "'"
-	    cmd | getline line
-	    close(cmd)
+	if (notify_list != "") {
+	    if (wmname == "stumpwm") {
+		cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*File completati:^*\n" notify_list "'"
+		cmd | getline line
+		close(cmd)
+	    }
+	    else {
+		cmd = "notify-send 'File completati:' '" notify_list "'" 
+		cmd | getline line
+		close(cmd)
+	    }
 	}
     }
 }
@@ -743,6 +761,6 @@ END {
         printf("%s", json) >> json_file
     }
     
-    display_stumpwm_complete()
+    display_notify_complete()
     print code 
 }
