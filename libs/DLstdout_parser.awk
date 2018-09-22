@@ -187,7 +187,7 @@ function check_stdout () {
 		 ! length_saved[i] &&
 		 length_saved[i]>0 ) ||
 		progress_end[i]) {
-		system("rm -f .zdl_tmp/" file_out[i] "_stdout.* .zdl_tmp/notify_list.txt")
+		system("rm -f .zdl_tmp/" file_out[i] "_stdout.*")
 	    }
 	}
     }
@@ -591,6 +591,25 @@ function progress_out (chunk,           progress_line, line, cmd) {
     if (! speed_out_type[i]) speed_out_type[i] = "KB/s"
     if (! length_saved[i]) length_saved[i] = 0
     if (! percent_out[i]) percent_out[i] = 0
+
+    array_out(url_out[i], "url_out")
+    array_out(pid_out[i], "pid_out")
+    array_out(pid_out[i], "pid_alive")
+    array_out(downloader_out[i], "downloader_out")
+    array_out(pid_prog_out[i], "pid_prog_out")
+    array_out(file_out[i], "file_out")
+	    
+    if (downloader_out[i] ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg/) {
+	array_out(url_out_file[i], "url_out_file")
+    }
+    else if (downloader_out[i] ~ /RTMPDump|cURL/) {
+	array_out(streamer_out[i], "streamer_out")
+	array_out(playpath_out[i], "playpath_out")
+    }
+    if (downloader_out[i] ~ /Aria2|Axel/) { 	
+	array_out(axel_parts_out[i], "axel_parts_out")
+	array_out(aria2_parts_out[i], "aria2_parts_out") 
+    }
     
     array_out(speed_out[i], "speed_out")
     array_out(speed_out_type[i], "speed_out_type")
@@ -647,10 +666,10 @@ BEGIN {
 	} 
 	i++
 	pid_out[i] = $0
-	array_out(pid_out[i], "pid_out")
+
 
 	if (check_pid(pid_out[i])) {
-	    array_out(pid_out[i], "pid_alive")
+
 	    pid_alive[i] = pid_out[i]
 	}
     }
@@ -659,42 +678,38 @@ BEGIN {
 
     if (FNR == 2) {
 	url_out[i] = $0
-	array_out(url_out[i], "url_out")
+
     }
     if (FNR == 3) {
 	dler = $0
 	downloader_out[i] = dler
-	array_out(dler, "downloader_out")
+
     }
     if (FNR == 4) {
 	pid_prog_out[i] = $0
-	array_out(pid_prog_out[i], "pid_prog_out")
+
     }
     if (FNR == 5) {
 	file_out[i] = $0
-	array_out(file_out[i], "file_out")
+
 	if (dler ~ /Aria2|Axel/) yellow_progress()
     }
     if (FNR == 6) {
 	if (dler ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg/) {
 	    url_out_file[i] = $0
-	    array_out(url_out_file[i], "url_out_file")
 	}
 	else if (dler ~ /RTMPDump|cURL/) {
 	    streamer_out[i] = $0
-	    array_out(streamer_out[i], "streamer_out")
 	}
     }
     if (FNR == 7) {
 	if (dler ~ /RTMPDump|cURL/) {
 	    playpath_out[i] = $0
-	    array_out(playpath_out[i], "playpath_out")
+
 	}
 	else if (dler ~ /Aria2|Axel/) {
 	    axel_parts_out[i] = $0
 	    aria2_parts_out[i] = $0
-	    array_out(axel_parts_out[i], "axel_parts_out")
-	    array_out(aria2_parts_out[i], "aria2_parts_out") 
 	}
     }
     if (FNR == 8) start_time = $0
