@@ -117,17 +117,17 @@ function get_data_multiprogress {
 	    
 	    if check_pid "${pid_out_gui[$n]}" &>/dev/null
 	    then
-		text_out_gui[$n]="$item   ${percent_out[i]}\%   ${eta_out[i]}   ${speed_out_gui[n]}"
+		text_out_gui[$n]="${item:0:120}   ${percent_out[i]}\%   ${eta_out[i]}   ${speed_out_gui[n]}"
 	    fi	
 
 	    if [ -z "${text_out_gui[$n]}" ]
 	    then
-		text_out_gui[$n]="$item   attendi"
+		text_out_gui[$n]="${item:0:120}  attendi"
 	    fi
 	    
 	    if [ "${percent_out[i]}" == 100 ]
 	    then
-		text_out_gui[$n]="$item   download completato"
+		text_out_gui[$n]="${item:0:120}   download completato"
 		grep -q "${url_out[i]}" "$start_file_gui_complete" 2>/dev/null ||
 		    set_line_in_file + "${url_out[i]}" "$start_file_gui_complete" &>/dev/null
 	    fi
@@ -146,7 +146,7 @@ function get_data_multiprogress {
 	    while read link
 	    do
 		url_out_gui[$n]="$link"
-		text_out_gui[$n]="${link%%'&'*}   attendi"
+		text_out_gui[$n]="${link:0:120}   attendi"
 		percent_out_gui[$n]=0
 		((n++))
 	    done < <(awk 'NR == FNR {file1[$0]++; next} !($0 in file1)' "$start_file_gui_diff" "$start_file")
@@ -158,7 +158,7 @@ function get_data_multiprogress {
 	    while read link
 	    do
 		url_out_gui[$n]="$link"
-		text_out_gui[$n]="${link%%'&'*}   attendi"
+		text_out_gui[$n]="${link:0:120}   attendi"
 		percent_out_gui[$n]=0
 		((n++))
 	    done < "$start_file"		 
@@ -466,14 +466,15 @@ function print_links_txt {
 }
 
 function load_download_manager_gui {
-    local item length pid dler file percent
+    local item length pid dler file percent link
     declare -a items
 
-    get_data_multiprogress
+    get_data_multiprogress &>/dev/null
 
     echo -e '\f'
     for ((i=1; i<="${#url_out_gui[@]}"; i++))
     do
+	link="${url_out_gui[i]}"
 	length=$(length_to_human "${length_out_gui[i]}")
 	[ -z "$length" ] && length=0
 
@@ -507,7 +508,7 @@ function load_download_manager_gui {
 	fi
 	
 	items=(
-	    "${url_out_gui[i]}"
+	    "$link"
 	    "$percent"
 	    "$file"
 	    "$length"
@@ -662,7 +663,7 @@ function play_gui {
 function yad_download_manager_dclick {
     declare -a res
     res=( "$@" )
-
+    
     local text="$TEXT\n\n<b>Link:</b>\n${res[0]}\n\n<b>Scegli cosa fare:</b>"
     {
 	while read line
