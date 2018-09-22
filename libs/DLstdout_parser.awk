@@ -47,11 +47,11 @@ function display_notify_complete (notify_list, K, line, wmname) {
 		    print file_out[K] >> ".zdl_tmp/notify_list.txt"
 		}
 	    }
-	    else {
-		cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
-		cmd | getline line
-		close(cmd)
-	    }
+	    # else {
+	    # 	cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
+	    # 	cmd | getline line
+	    # 	close(cmd)
+	    # }
 	}
 
 	if (notify_list != "") {
