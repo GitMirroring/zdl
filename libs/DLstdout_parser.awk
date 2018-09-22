@@ -594,7 +594,9 @@ function progress_out (chunk,           progress_line, line, cmd) {
 
     array_out(url_out[i], "url_out")
     array_out(pid_out[i], "pid_out")
-    array_out(pid_out[i], "pid_alive")
+
+    if (pid_alive[i])
+	array_out(pid_alive[i], "pid_alive")
     array_out(downloader_out[i], "downloader_out")
     array_out(pid_prog_out[i], "pid_prog_out")
     array_out(file_out[i], "file_out")
@@ -606,6 +608,7 @@ function progress_out (chunk,           progress_line, line, cmd) {
 	array_out(streamer_out[i], "streamer_out")
 	array_out(playpath_out[i], "playpath_out")
     }
+
     if (downloader_out[i] ~ /Aria2|Axel/) { 	
 	array_out(axel_parts_out[i], "axel_parts_out")
 	array_out(aria2_parts_out[i], "aria2_parts_out") 
@@ -667,9 +670,7 @@ BEGIN {
 	i++
 	pid_out[i] = $0
 
-
 	if (check_pid(pid_out[i])) {
-
 	    pid_alive[i] = pid_out[i]
 	}
     }
@@ -683,15 +684,12 @@ BEGIN {
     if (FNR == 3) {
 	dler = $0
 	downloader_out[i] = dler
-
     }
     if (FNR == 4) {
 	pid_prog_out[i] = $0
-
     }
     if (FNR == 5) {
 	file_out[i] = $0
-
 	if (dler ~ /Aria2|Axel/) yellow_progress()
     }
     if (FNR == 6) {
@@ -705,7 +703,6 @@ BEGIN {
     if (FNR == 7) {
 	if (dler ~ /RTMPDump|cURL/) {
 	    playpath_out[i] = $0
-
 	}
 	else if (dler ~ /Aria2|Axel/) {
 	    axel_parts_out[i] = $0
