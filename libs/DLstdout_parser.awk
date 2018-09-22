@@ -187,7 +187,7 @@ function check_stdout () {
 		 ! length_saved[i] &&
 		 length_saved[i]>0 ) ||
 		progress_end[i]) {
-		system("rm -f .zdl_tmp/" file_out[i] "_stdout.*")
+		system("rm -f .zdl_tmp/" file_out[i] "_stdout.* .zdl_tmp/notify_list.txt")
 	    }
 	}
     }
