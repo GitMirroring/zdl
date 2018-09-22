@@ -33,12 +33,12 @@ function display_notify_complete (notify_list, K, line, wmname) {
 	    if (percent_out[K] == 100) {
 		if (exists(".zdl_tmp/notify_list.txt")) {
 		    if (! exists(file_out[K])) {
-			cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
-			cmd | getline line
-			close(cmd)
+		    	cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
+		    	cmd | getline line
+		    	close(cmd)
 		    }
 		
-		    cmd = "grep \"" file_out[K] "\" .zdl_tmp/notify_list.txt"
+		    cmd = "grep -s \"" file_out[K] "\" .zdl_tmp/notify_list.txt"
 		    cmd | getline line
 		    close(cmd)
 		}
