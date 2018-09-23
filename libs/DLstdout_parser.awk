@@ -80,12 +80,12 @@ function display_notify_complete (notify_list, K, line, wmname) {
 
 	if (notify_list != "") {
 	    if (wmname == "stumpwm") {
-		cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*ZDL - Download completati:^*\n" notify_list "'"
+		cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*ZDL - File completati:^*\n" notify_list "'"
 		cmd | getline line
 		close(cmd)
 	    }
 	    else {
-		cmd = "notify-send \"ZDL - Download completati:\" '" notify_list "'" 
+		cmd = "notify-send \"ZDL - File completati:\" '" notify_list "'" 
 		cmd | getline line
 		close(cmd)
 	    }
