@@ -23,6 +23,41 @@
 # zoninoz@inventati.org
 #
 
+function delete_notify_complete_inexistent (K, line) {
+    if (exists(".zdl_tmp/notify_list.txt")) {
+	while ("cat .zdl_tmp/notify_list.txt" | getline line) {
+	    delete_line = "true"
+	    for (K=0; K<length(percent_out); K++) {
+		if ((percent_out[K] == 100) && (line == file_out[K])) {
+		    delete_line = "false"
+		}
+	    }
+	    if (delete_line == "true") {
+		cmd = "sed -i -r 's|" line "||g' .zdl_tmp/notify_list.txt"
+		cmd | getline
+		close(cmd)
+		cmd = "sed -i '/^$/d' .zdl_tmp/notify_list.txt"
+		cmd | getline
+		close(cmd)
+	    }
+	}
+    }
+}
+
+function delete_tmp_complete_inexistent (K, line) {
+    for (K=0; K<length(percent_out); K++) {
+	if ((percent_out[K] == 100) && (! exists(file_out[K]))) {
+	    system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
+	    cmd = "sed -i -r 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
+	    cmd | getline
+	    close(cmd)
+	    cmd = "sed -i '/^$/d' .zdl_tmp/notify_list.txt"
+	    cmd | getline
+	    close(cmd)
+	}
+    }
+}
+
 function display_notify_complete (notify_list, K, line, wmname) {
     cmd = "wmctrl -m | grep Name | cut -d' ' -f2"
     cmd | getline wmname
@@ -32,12 +67,6 @@ function display_notify_complete (notify_list, K, line, wmname) {
 	for (K=0; K<length(percent_out); K++) {
 	    if (percent_out[K] == 100) {
 		if (exists(".zdl_tmp/notify_list.txt")) {
-		    # if (! exists(file_out[K])) {
-		    # 	cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
-		    # 	cmd | getline line
-		    # 	close(cmd)
-		    # }
-		
 		    cmd = "grep -s \"" file_out[K] "\" .zdl_tmp/notify_list.txt"
 		    cmd | getline line
 		    close(cmd)
@@ -47,11 +76,6 @@ function display_notify_complete (notify_list, K, line, wmname) {
 		    print file_out[K] >> ".zdl_tmp/notify_list.txt"
 		}
 	    }
-	    # else {
-	    # 	cmd = "sed -i 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
-	    # 	cmd | getline line
-	    # 	close(cmd)
-	    # }
 	}
 
 	if (notify_list != "") {
@@ -774,5 +798,8 @@ END {
     }
     
     display_notify_complete()
+    delete_tmp_complete_inexistent()
+    delete_notify_complete_inexistent()    
+
     print code 
 }
