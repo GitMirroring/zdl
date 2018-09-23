@@ -80,12 +80,12 @@ function display_notify_complete (notify_list, K, line, wmname) {
 
 	if (notify_list != "") {
 	    if (wmname == "stumpwm") {
-		cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*File completati:^*\n" notify_list "'"
+		cmd = "xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND 'echo ^B^4*ZDL - Download completati:^*\n" notify_list "'"
 		cmd | getline line
 		close(cmd)
 	    }
 	    else {
-		cmd = "notify-send 'File completati:' '" notify_list "'" 
+		cmd = "notify-send \"ZDL - Download completati:\" '" notify_list "'" 
 		cmd | getline line
 		close(cmd)
 	    }
@@ -212,6 +212,14 @@ function check_stdout () {
 		 length_saved[i]>0 ) ||
 		progress_end[i]) {
 		system("rm -f .zdl_tmp/" file_out[i] "_stdout.*")
+		if (exists(".zdl_tmp/notify_list.txt")) {
+		    cmd = "sed -i -r 's|" file_out[i] "||g' .zdl_tmp/notify_list.txt"
+		    cmd | getline
+		    close(cmd)
+		    cmd = "sed -i '/^$/d' .zdl_tmp/notify_list.txt"
+		    cmd | getline
+		    close(cmd)
+		}
 	    }
 	}
     }
