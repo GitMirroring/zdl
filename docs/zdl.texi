@@ -94,7 +94,7 @@
 @end html
 @end ifhtml
 * Creare nuove estensioni::@*Estensioni Bash di ZDL personalizzate e per nuovi servizi@*
-* Software consigliati::@*Programmi utili a ZDL@*
+* Software consigliati e dipendenze::@*Programmi utili a ZDL@*
 * Conkeror::@*Comando @command{zdl} per il browser@*
 * zdl-xterm e XXXTerm/Xombrero::@*Uno script per collegare ZDL ad altri programmi@*
 @end macro
@@ -918,7 +918,7 @@ L'applicazione dei filtri è possibile solo attraverso l'uso di opzioni da riga 
 
 @c --------
 
-@node Creare nuove estensioni,Software consigliati,Filtri,Top
+@node Creare nuove estensioni,Software consigliati e dipendenze,Filtri,Top
 @htmlstart
 
 @unnumbered Creare nuove estensioni
@@ -964,13 +964,13 @@ utilizzando le variabili e le funzioni disponibili in ZDL senza
 modificare il sorgente
 @htmlend
 
-@node Software consigliati,Conkeror,Creare nuove estensioni,Top
+@node Software consigliati e dipendenze,Conkeror,Creare nuove estensioni,Top
 @htmlstart
 
-@unnumbered Software consigliati
+@unnumbered Software consigliati e dipendenze
 
 @c @man{16}
-@c @ifman @unnumberedsubsec Software consigliati
+@c @ifman @unnumberedsubsec Software consigliati e dipendenze
 @table @emph
 @pindex aria2
 @item Aria2                            
@@ -1041,7 +1041,8 @@ Funzione @kbd{M-x zdl} autoinstallata
 @unnumberedsubsec Dipendenze: 
 @table @emph
 @item Nodejs
-Motore Javascript per l'acquisizione di informazioni dal web
+@item Panthomjs
+Motori Javascript per l'acquisizione di informazioni dal web
 
 @end table
 
@@ -1056,7 +1057,7 @@ Distribuzione per il porting di software di sistemi POSIX su Microsoft Windows
 
 @htmlend
 
-@node Conkeror,zdl-xterm e XXXTerm/Xombrero,Software consigliati,Top
+@node Conkeror,zdl-xterm e XXXTerm/Xombrero,Software consigliati e dipendenze,Top
 @htmlstart
 @unnumbered Conkeror: comando @command{zdl}
 ZDL implementa automaticamente il browser Conkeror con un nuovo comando. 

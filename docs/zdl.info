@@ -186,7 +186,7 @@ _Espandere ZDL_
 * Creare nuove estensioni::
 Estensioni Bash di ZDL personalizzate e per nuovi servizi
 
-* Software consigliati::
+* Software consigliati e dipendenze::
 Programmi utili a ZDL
 
 * Conkeror::
@@ -518,18 +518,18 @@ _Video in streaming saltando il player del browser:_
      Nowvideo, Openload, Portalevideo.unimi.it, Putstream, RaiPlay
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
      Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Thevideo,
-     TubeOffLine.com (tutti i servizi: Biqle), Tutti i video in
-     streaming di tipo .m3u8, VidABC, Vidce, Videowood, Vidhappy
-     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     WStream (HD), Youtube, Zinwa (RTMP) 
+     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
+     tipo .m3u8, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox,
+     Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), WStream (HD),
+     Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, Cyberlocker, Deltabit (HD),
      dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg
      (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
      Nowdownload, Openload, Ozofiles, Pastebin, Rockfile, Sockshare
-     (HD), Subyshare, TubeOffLine.com (tutti i servizi: Biqle),
-     Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
+     (HD), Subyshare, TubeOffLine.com (tutti i servizi), Tusfiles,
+     Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
 
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
@@ -1001,7 +1001,7 @@ filtri avanzati può essere utile l'uso di _espressioni regolari
 [REGEX]_.
 
 
-File: zdl.info,  Node: Creare nuove estensioni,  Next: Software consigliati,  Prev: Filtri,  Up: Top
+File: zdl.info,  Node: Creare nuove estensioni,  Next: Software consigliati e dipendenze,  Prev: Filtri,  Up: Top
 
 Creare nuove estensioni
 ***********************
@@ -1046,10 +1046,10 @@ utilizzando le variabili e le funzioni disponibili in ZDL senza
 modificare il sorgente
 
 
-File: zdl.info,  Node: Software consigliati,  Next: Conkeror,  Prev: Creare nuove estensioni,  Up: Top
+File: zdl.info,  Node: Software consigliati e dipendenze,  Next: Conkeror,  Prev: Creare nuove estensioni,  Up: Top
 
-Software consigliati
-********************
+Software consigliati e dipendenze
+*********************************
 
 _Aria2_
      Downloader con accelerazione e altro
@@ -1105,7 +1105,9 @@ Dipendenze:
 -----------
 
 _Nodejs_
-     Motore Javascript per l'acquisizione di informazioni dal web
+
+_Panthomjs_
+     Motori Javascript per l'acquisizione di informazioni dal web
 
 
 Dipendenze aggiuntive per Windows:
@@ -1117,7 +1119,7 @@ _Cygwin (x86 32-bit)_
 
 
 
-File: zdl.info,  Node: Conkeror,  Next: zdl-xterm e XXXTerm/Xombrero,  Prev: Software consigliati,  Up: Top
+File: zdl.info,  Node: Conkeror,  Next: zdl-xterm e XXXTerm/Xombrero,  Prev: Software consigliati e dipendenze,  Up: Top
 
 Conkeror: comando `zdl'
 ***********************
@@ -1310,22 +1312,38 @@ Indice dei programmi
  [index ]
 * Menu:
 
-* aria2:                                 Software consigliati. (line  6)
-* avconv:                                Software consigliati. (line 12)
-* axel:                                  Software consigliati. (line  9)
-* conkeror:                              Software consigliati. (line 52)
-* editor:                                Software consigliati. (line 31)
-* ffmpeg:                                Software consigliati. (line 12)
-* firefox:                               Software consigliati. (line 46)
-* flashgot:                              Software consigliati. (line 21)
-* icecat:                                Software consigliati. (line 46)
-* iceweasel:                             Software consigliati. (line 46)
-* pinfo:                                 Software consigliati. (line 27)
-* rtmpdump:                              Software consigliati. (line 15)
-* xombrero:                              Software consigliati. (line 49)
-* xterm:                                 Software consigliati. (line 18)
-* xxxterm:                               Software consigliati. (line 49)
-* youtube-dl:                            Software consigliati. (line 24)
+* aria2:                                 Software consigliati e dipendenze.
+                                                               (line  6)
+* avconv:                                Software consigliati e dipendenze.
+                                                               (line 12)
+* axel:                                  Software consigliati e dipendenze.
+                                                               (line  9)
+* conkeror:                              Software consigliati e dipendenze.
+                                                               (line 52)
+* editor:                                Software consigliati e dipendenze.
+                                                               (line 31)
+* ffmpeg:                                Software consigliati e dipendenze.
+                                                               (line 12)
+* firefox:                               Software consigliati e dipendenze.
+                                                               (line 46)
+* flashgot:                              Software consigliati e dipendenze.
+                                                               (line 21)
+* icecat:                                Software consigliati e dipendenze.
+                                                               (line 46)
+* iceweasel:                             Software consigliati e dipendenze.
+                                                               (line 46)
+* pinfo:                                 Software consigliati e dipendenze.
+                                                               (line 27)
+* rtmpdump:                              Software consigliati e dipendenze.
+                                                               (line 15)
+* xombrero:                              Software consigliati e dipendenze.
+                                                               (line 49)
+* xterm:                                 Software consigliati e dipendenze.
+                                                               (line 18)
+* xxxterm:                               Software consigliati e dipendenze.
+                                                               (line 49)
+* youtube-dl:                            Software consigliati e dipendenze.
+                                                               (line 24)
 
 
 File: zdl.info,  Node: Copying,  Next: Contatti,  Prev: Tags,  Up: Top
@@ -1386,27 +1404,27 @@ _zdl-devel - Lista di sviluppo_:
 
 Tag Table:
 Node: Top1185
-Node: Il comando ZDL7476
-Node: Servizi streaming/hosting15699
-Node: Avviare ZDL19676
-Node: Arrestare ZDL22112
-Node: Controllare i download23217
-Node: Manuali d'uso27508
-Node: Modi27924
-Node: Readline31190
-Node: Editor32742
-Node: Omonimie33967
-Node: IRC/XDCC35502
-Node: Torrent37192
-Node: Filtri38076
-Node: Creare nuove estensioni38397
-Node: Software consigliati40159
-Node: Conkeror41560
-Node: zdl-xterm e XXXTerm/Xombrero42571
-Node: Installazione e aggiornamento44495
-Node: Tags47530
-Node: Copying50331
-Node: Contatti51381
+Node: Il comando ZDL7489
+Node: Servizi streaming/hosting15712
+Node: Avviare ZDL19675
+Node: Arrestare ZDL22111
+Node: Controllare i download23216
+Node: Manuali d'uso27507
+Node: Modi27923
+Node: Readline31189
+Node: Editor32741
+Node: Omonimie33966
+Node: IRC/XDCC35501
+Node: Torrent37191
+Node: Filtri38075
+Node: Creare nuove estensioni38396
+Node: Software consigliati e dipendenze40171
+Node: Conkeror41624
+Node: zdl-xterm e XXXTerm/Xombrero42648
+Node: Installazione e aggiornamento44572
+Node: Tags47607
+Node: Copying51624
+Node: Contatti52674
 
 End Tag Table
 
