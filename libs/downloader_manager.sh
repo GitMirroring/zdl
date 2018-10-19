@@ -322,6 +322,7 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 		    --allow-overwrite=true              
 		    --follow-torrent=false 
 		    --human-readable=false
+		    --check-certificate=false
 		)
 	    fi
 
