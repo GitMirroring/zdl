@@ -34,7 +34,7 @@ then
 	if check_cloudflare "$url_in"
 	then
 	    get_by_cloudflare "$url_in" html
-	    
+
 	else
 	    html=$(curl -s "$url_in")
 	    if [ -z "$html" ]
@@ -51,7 +51,9 @@ then
 	    url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
 				    sed -r 's|.+href=([^>]+)>.+|\1|g')
 	fi
-	
+
+	url_rapidcrypt="${url_rapidcrypt%% onClick*}"
+
 	if url "$url_rapidcrypt"
 	then
 	    replace_url_in "$url_rapidcrypt"
