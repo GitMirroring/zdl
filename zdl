@@ -751,12 +751,12 @@ export pid_prog=$$
 
 mkdir -p "$path_server"
 
-#set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
-PWD_TO_SERVER_PATHS=$(realpath "$PWD")
-if ! set_line_in_file in "$PWD_TO_SERVER_PATHS$" "$path_server"/paths.txt
-then
-    echo "$PWD_TO_SERVER_PATHS" >>"$path_server"/paths.txt
-fi
+set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
+# PWD_TO_SERVER_PATHS=$(realpath "$PWD")
+# if ! set_line_in_file in "$PWD_TO_SERVER_PATHS$" "$path_server"/paths.txt
+# then
+#     echo "$PWD_TO_SERVER_PATHS" >>"$path_server"/paths.txt
+# fi
 ###################
 
 if [[ "${args[*]}" =~ \-s ]]
