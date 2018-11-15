@@ -374,6 +374,7 @@ function sanitize_url {
     data="${data//')'/%29}"
     data="${data//'['/%5B}"
     data="${data//']'/%5D}"
+    data="${data//'...'/%2E%2E%2E}"
 
     if [[ $2 ]]
     then

@@ -68,7 +68,7 @@ then
 	_log 3
 
     else
-	download_video=$(grep -P "download_video.+'o'" <<< "$html" | head -n1)
+	download_video=$(grep -P "download_video.+o" <<< "$html" | head -n1)
 
 	if [ -z "$download_video" ]
 	then
@@ -77,7 +77,7 @@ then
 	    url_in_timer=true
 	    
 	else
-	    msg_wstream="Verrà estratto anche il file di streaming con definizione migliore"
+#	    msg_wstream="Verrà estratto anche il file di streaming con definizione migliore"
 	    
 	    hash_wstream="${download_video%\'*}"
 	    hash_wstream="${hash_wstream##*\'}"
@@ -109,34 +109,34 @@ then
 			     -e "$url_in"                \
 			     -b "$path_tmp/cookies.zdl"  \
 			     "$url_get_data_wstream")
-		
+
 		if [[ "$html2" =~ (You can download files up) ]]
 		then
 		    break
 		fi
-		input_hidden "$html2"
+#		input_hidden "$html2"
 		
 		#echo "$html2" >OUT-$(date +%s)
 		
-		countdown- 6
+#		countdown- 6
 		
 		#echo "$post_data"
 		
-		if [ -n "$post_data" ] &&
-		       [ "$post_data" != '=' ]
-		then
-		    url_in_file=$(curl -s \
-				       -d "$post_data" \
-				       -H 'Upgrade-Insecure-Requests: "1"' \
-				       "${url_in}#")
+		# if [ -n "$post_data" ] &&
+		#        [ "$post_data" != '=' ]
+		# then
+		    # url_in_file=$(curl -s \
+		    # 		       -d "$post_data" \
+		    # 		       -H 'Upgrade-Insecure-Requests: "1"' \
+		    # 		       "${url_in}#")
 
-		else
-		    print_c 3 "Nessun post-data"
-		fi
+		# else
+		#     print_c 3 "Nessun post-data"
+		# fi
 
 		#grep 'Direct Download Link' -C5 <<< "$url_in_file"
-		
-		url_in_file=$(grep 'Direct Download Link' -B1 <<< "$url_in_file" |
+		#url_in_file=$(grep 'Direct Download Link' -B1 <<< "$url_in_file" |
+		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
 				     head -n1 |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
 		
