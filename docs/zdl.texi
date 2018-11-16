@@ -1153,12 +1153,17 @@ ZDL si installa automaticamente con uno script per la @emph{Bash}.
 @enumerate
 @item
 Scarica l'installatore (è uno script per la Bash):
-    @url{http://download-mirror.savannah.gnu.org/releases/zdl/install_zdl.sh}
+   @url{http://download-mirror.savannah.gnu.org/releases/zdl/install_zdl.sh}
 @item
 Attribuisci i diritti di esecuzione allo script:
    @command{chmod +x install_zdl.sh}
 @item
 esegui lo script: @command{./install_zdl.sh}
+@item
+   L'installazione è automatizzata e potrebbe chiederti di installare nuovi pacchetti
+   (dipendenze) scegliendo fra più opzioni: l'opzione consigliata è sempre la numero 1
+@item
+Se tutto è andato a buon fine, hai terminato l'installazione   
 @end enumerate
 
 

@@ -1212,6 +1212,12 @@ Installazione per GNU/Linux
 
   3. esegui lo script: `./install_zdl.sh'
 
+  4.    L'installazione è automatizzata e potrebbe chiederti di
+     installare nuovi pacchetti    (dipendenze) scegliendo fra più
+     opzioni: l'opzione consigliata è sempre la numero 1
+
+  5. Se tutto è andato a buon fine, hai terminato l'installazione
+
 Installazione per Microsoft Windows
 ===================================
 
@@ -1422,9 +1428,9 @@ Node: Software consigliati e dipendenze40171
 Node: Conkeror41624
 Node: zdl-xterm e XXXTerm/Xombrero42648
 Node: Installazione e aggiornamento44572
-Node: Tags47607
-Node: Copying51624
-Node: Contatti52674
+Node: Tags47867
+Node: Copying51884
+Node: Contatti52934
 
 End Tag Table
 
