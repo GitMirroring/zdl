@@ -1454,15 +1454,15 @@ function http_server {
 	    then
 		connection_test=true
 
-	    elif [[ "$(clean_data "${line[*]}")" =~ 'Chrome' ]]
+	    elif [[ "$(clean_data "${line[*]}")" =~ 'Firefox/'([1-5]{1}[0-9]{1}|60|61|62|ESR) ]]
 	    then
-		user_agent=chromium
+		user_agent=firefox-old
 	    fi
 
 	    if [ -n "$connection_test" ] &&
 		   [ -n "$user_accept_language" ]
 	    then
-		if [ "$user_agent" == chromium ]
+		if [ "$user_agent" != firefox-old ]
 		then
 		    read new_line
 		    cookie="$(clean_data "$new_line")"
