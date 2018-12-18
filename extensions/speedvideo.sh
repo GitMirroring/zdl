@@ -30,6 +30,9 @@
 
 if [[ "$url_in" =~ (speedvideo.) ]]
 then
+    url_https="${url_in//http\:/https:}"
+    replace_url_in "${url_https}"
+
     if [[ "$url_in" =~ embed ]]
     then
 	url_embed="${url_in//'embed-'}"
@@ -48,7 +51,7 @@ then
 	post_data+="&imhuman=Proceed to video"
     fi
 
-    html=$(wget -qO- "$url_in"                          \
+    html=$(wget -qO- "${url_in//http\:/https:}"         \
 		--user-agent="$user_agent"              \
 		--load-cookies="$path_tmp"/cookies.zdl  \
 		--post-data="$post_data"                \
