@@ -266,7 +266,7 @@ then
 		    cd "$HOME"
 	    
 	    path_gui=$(get_download_path)
-	    [ ! -d "$path_gui" ] && exit 1
+	    [ ! -d "$path_gui" ] && exit 
 
 	    echo "$path_gui" >"$HOME"/tmp/zigzagdownloader-dirbase
 	    cd "$path_gui"
