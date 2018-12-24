@@ -756,7 +756,7 @@ function display_file_gui {
 }
 
 function browse_xdcc_search {
-    x-www-browser "http://www.xdcc.eu/search.php?searchkey=$1" &
+    x-www-browser "${XDCC_EU_SEARCHKEY_URL}$1" &
 }
 
 function display_link_manager_gui {
@@ -815,7 +815,9 @@ function display_link_manager_gui {
 		    ## cerca XDCC
 		    if [ -n "${res[2]}" ]
 		    then
-			browse_xdcc_search "${res[2]}"
+#			set_link + "http://www.xdcc.eu/search.php?searchkey=${res[2]// /+}"
+			display_xdcc_eu_gui "${XDCC_EU_SEARCHKEY_URL}${res[2]// /+}"
+#			browse_xdcc_search "${res[2]}"
 		    fi
 
 		    ## campi XDCC
@@ -1329,3 +1331,64 @@ function main {
 [ "$1" == start ] && main "$@"
 
 
+function display_xdcc_eu_gui {
+    path_usr="/usr/local/share/zdl"
+    ICON="$path_usr"/webui/icon-32x32.png
+    TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
+    IMAGE="$path_usr"/webui/zdl-64x64.png
+    IMAGE2="$path_usr"/webui/zdl.png
+    YAD_ZDL=(
+	--window-icon="$ICON"
+	--borders=5
+    )
+
+    local pid=$(cat "$path_tmp"/xdcc_eu_lock 2>/dev/null)
+    local xdcc_eu_search="$1"
+
+    get_data_xdcc_eu "$xdcc_eu_search"
+
+    local IFS_old="$IFS"
+    IFS=' '
+
+    if ( [[ "$pid" =~ ^[0-9]+$ ]] && check_pid $pid ) ||
+	   (( "${#link_xdcc_eu[@]}" < 1))
+    then
+	return 1
+    fi
+    
+    for ((i=0; i<${#link_xdcc_eu}; i++))
+    do
+	data_xdcc_eu+=( FALSE "${file_xdcc_eu[i]}" "${length_xdcc_eu[i]}" "${link_xdcc_eu[i]}" )
+    done
+
+    {
+	declare -a res
+	res=($(yad --list --checklist --multiple \
+		   --separator=' ' \
+		   --title="Ricerca con xdcc.eu" \
+		   --text="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD\n\nSeleziona i link trovati da xdcc.eu:" \
+    		   --width=1200 --height=300 \
+    		   --image-on-top --image="$IMAGE2" \
+		   "${YAD_ZDL[@]}" \
+		   --column ":CHK" --column "File" --column "Grandezza" --column "Link" \
+		   "${data_xdcc_eu[@]}"))
+
+	if [ "$?" == 0 ]
+	then	    
+	    if (( ${#res[@]}>0 ))
+	    then
+		for ((i=3; i<${#res[@]}; i=i+4))
+		do
+		    set_link + "${res[i]}"
+		done
+	    fi
+	    set_link - "$xdcc_eu_search"
+	fi
+
+	sleep 5
+    } &
+    pid=$!
+    echo $pid > "$path_tmp"/xdcc_eu_lock
+
+    IFS="$IFS_old"
+}

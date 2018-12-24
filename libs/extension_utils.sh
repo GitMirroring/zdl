@@ -879,3 +879,41 @@ function check_tubeoffline {
 	return 0
     fi
 }
+
+function get_data_xdcc_eu {
+    unset link_xdcc_eu length_xdcc_eu file_xdcc_eu
+
+    html=$(curl -s "$1" |
+		  sed -r 's|<tr>|\n|g' |
+		  grep data-c)
+
+    while read line
+    do
+	unset data_s data_c data_p
+	data_s="${line##*data-s=\"}"
+	data_s="${data_s%%\"*}"
+
+	data_c="${line##*data-c=\"\#}"
+	data_c="${data_c%%\"*}"
+
+	data_p="${line##*data-p=\"}"
+	data_p="${data_p%%\"*}"
+
+	link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
+
+	line="${line##*delete.png}"
+
+	line="${line#*</td><td>}"
+	line="${line#*</td><td>}"
+	line="${line#*</td><td>}"
+	line="${line#*</td><td>}"
+	
+	length_xdcc_eu+=( "${line%%</td><td>*}" )
+	
+	line="${line#*</td><td>}"
+	line="${line%*</td>*}"
+	file_xdcc_eu+=( "$(sed -r 's|<[^>]*span[^>]*>||g' <<< "$line")" )
+	
+    done <<< "$html"
+    
+}

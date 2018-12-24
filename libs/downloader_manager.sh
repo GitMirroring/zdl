@@ -772,6 +772,11 @@ function check_in_file { 	## return --> no_download=1 / download=0
 	    return 0
 
 	fi
+
+    elif [ "$downloader_in" == DCC_Xfer ]
+    then
+	return 0
     fi
+
     return 1
 }

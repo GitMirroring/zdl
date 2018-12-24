@@ -328,7 +328,7 @@ function init {
 ## news:
 TAG1='## NEW: ...ARIA2!'
 TAG2='## ARIA2: già chiesto'
-
+XDCC_EU_SEARCHKEY_URL="http://www.xdcc.eu/search.php?searchkey="
 
 # chiavi di configurazione  --   valori predefiniti  --    descrizione per il config-manager
 key_conf[0]=downloader;          val_conf[0]=Aria2;        string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
