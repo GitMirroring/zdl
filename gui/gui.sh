@@ -366,7 +366,7 @@ function display_link_error_gui {
 	--image "dialog-error" \
 	--text="$msg" \
 	--button="gtk-ok:0" \
-	"${YAD_ARGS}" 2>/dev/null
+	"${YAD_ZDL[@]}" 2>/dev/null
 }
 
 function edit_links_gui {
@@ -397,7 +397,7 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		  --width=800 \
 		  --button="Salva!gtk-ok:0" \
 		  --button="Annulla!gtk-no:1" \
-		  "${YAD_ZDL}" 2>/dev/null)
+		  "${YAD_ZDL[@]}" 2>/dev/null)
 	)
 	
 	case $? in
@@ -694,7 +694,7 @@ function yad_download_manager_dclick {
     		--button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":"bash -c 'echo 0'"  \
     		--button="Elimina!gtk-delete!Arresta il processo di download selezionato e ancella il file":"bash -c 'echo 1'"  \
     		--button="Chiudi!gtk-close":0  \
-    		"$YAD_ZDL" 2>/dev/null &
+    		"${YAD_ZDL[@]}" 2>/dev/null &
 	    local pid=$!
 	    echo $pid >"$path_tmp"/dclick_yad-pid.$GUI_ID
 	)
@@ -1351,8 +1351,17 @@ function display_xdcc_eu_gui {
     IFS=' '
 
     if ( [[ "$pid" =~ ^[0-9]+$ ]] && check_pid $pid ) ||
-	   (( "${#link_xdcc_eu[@]}" < 1))
+	   [ -z "${link_xdcc_eu[0]}" ]
     then
+	local msg="<b>Non è stato trovato alcun link</b> corrispondente alle chiavi di ricerca"
+	yad --center \
+	    --title="Attenzione!" \
+	    --window-icon="$ICON" \
+	    --borders=5 \
+	    --image "dialog-error" \
+	    --text="$msg" \
+	    --button="gtk-ok:0" \
+	    "${YAD_ZDL[@]}" 2>/dev/null
 	return 1
     fi
     

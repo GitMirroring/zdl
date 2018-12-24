@@ -899,6 +899,11 @@ function get_data_xdcc_eu {
 	data_p="${line##*data-p=\"}"
 	data_p="${data_p%%\"*}"
 
+	if [ -z "$data_s" ] || [ -z "$data_c" ] || [ -z "$data_p" ] 
+	then
+	    return 1
+	fi
+
 	link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
 
 	line="${line##*delete.png}"
@@ -915,5 +920,6 @@ function get_data_xdcc_eu {
 	file_xdcc_eu+=( "$(sed -r 's|<[^>]*span[^>]*>||g' <<< "$line")" )
 	
     done <<< "$html"
-    
+
+    return 0    
 }
