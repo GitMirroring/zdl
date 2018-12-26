@@ -1365,7 +1365,8 @@ function display_xdcc_eu_gui {
 	    "${YAD_ZDL[@]}" 2>/dev/null
 	return 1
     fi
-    
+
+    declare -a data_xdcc_eu
     for ((i=0; i<${#link_xdcc_eu[@]}; i++))
     do
 	data_xdcc_eu+=( FALSE "${file_xdcc_eu[i]}" "${length_xdcc_eu[i]}" "${link_xdcc_eu[i]}" )
