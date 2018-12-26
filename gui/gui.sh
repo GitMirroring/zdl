@@ -1365,7 +1365,7 @@ function display_xdcc_eu_gui {
 	return 1
     fi
     
-    for ((i=0; i<${#link_xdcc_eu}; i++))
+    for ((i=0; i<${#link_xdcc_eu[@]}; i++))
     do
 	data_xdcc_eu+=( FALSE "${file_xdcc_eu[i]}" "${length_xdcc_eu[i]}" "${link_xdcc_eu[i]}" )
     done

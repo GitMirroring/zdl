@@ -42,13 +42,14 @@ page.open('https://openload.co/f/' + id + '/', function(status) {
     var stream_id = system.args[2];
     var info = page.evaluate(function(stream_id) {	
 	return {
-	    decoded_id: document.getElementById(stream_id).innerHTML, 
-	    title_file: document.querySelector('meta[name="og:title"],'
-					       + 'meta[name=description]').content
+	    decoded_id: document.getElementById(stream_id).innerHTML
 	};
+	// title_file: document.querySelector('meta[name="og:title"],'
+	// 				       + 'meta[name=description]').content
+
     }, stream_id);
     var url = 'https://openload.co/stream/' + info.decoded_id + '?mime=true';
-    console.log(url + separator + info.title_file);
+    console.log(url); // + separator + info.title_file);
     phantom.exit();
 });
 

@@ -584,7 +584,10 @@ function extension_openload {
 	openload_data=$(/usr/bin/phantomjs "$path_usr"/extensions/openload-phantomjs.js "$url_in" "$stream_id")
 
 	url_in_file=$(trim "$(head -n1 <<< "$openload_data")")
-	file_in=$(trim "$(tail -n1 <<< "$openload_data")")
+	#file_in=$(trim "$(tail -n1 <<< "$openload_data")")
+	file_in=$(grep 'og:title' <<< "$html" |
+		      head -n1 |
+		      sed -r 's|.+content=\"([^"]+)\".+|\1|g')
 
 	if [ -z "$file_in" ]
 	then
@@ -881,15 +884,18 @@ function check_tubeoffline {
 }
 
 function get_data_xdcc_eu {
-    unset link_xdcc_eu length_xdcc_eu file_xdcc_eu
-
+    link_xdcc_eu=()
+    length_xdcc_eu=()
+    file_xdcc_eu=()
+    local data_s data_c data_p filename length
+    
     html=$(curl -s "$1" |
 		  sed -r 's|<tr>|\n|g' |
 		  grep data-c)
 
     while read line
     do
-	unset data_s data_c data_p
+	unset data_s data_c data_p filename length
 	data_s="${line##*data-s=\"}"
 	data_s="${data_s%%\"*}"
 
@@ -899,25 +905,26 @@ function get_data_xdcc_eu {
 	data_p="${line##*data-p=\"}"
 	data_p="${data_p%%\"*}"
 
-	if [ -z "$data_s" ] || [ -z "$data_c" ] || [ -z "$data_p" ] 
-	then
-	    return 1
-	fi
-
-	link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
-
 	line="${line##*delete.png}"
 
 	line="${line#*</td><td>}"
 	line="${line#*</td><td>}"
 	line="${line#*</td><td>}"
 	line="${line#*</td><td>}"
-	
-	length_xdcc_eu+=( "${line%%</td><td>*}" )
+	length="${line%%</td><td>*}"
 	
 	line="${line#*</td><td>}"
 	line="${line%*</td>*}"
-	file_xdcc_eu+=( "$(sed -r 's|<[^>]*span[^>]*>||g' <<< "$line")" )
+	filename=$(sed -r 's|<[^>]*span[^>]*>||g' <<< "$line")
+
+	if [ -z "$data_s" ] || [ -z "$data_c" ] || [ -z "$data_p" ] || [ -z "$length" ] || [ -z "$filename" ] 
+	then
+	    return 1
+	fi
+
+	link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
+       	length_xdcc_eu+=( "$length" )
+	file_xdcc_eu+=( "$filename" )
 	
     done <<< "$html"
 
