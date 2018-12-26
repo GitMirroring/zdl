@@ -764,12 +764,11 @@ function display_link_manager_gui {
     IFS="€"
     local msg
     local text="${TEXT}\n\n<b>Gestisci i link:</b>"
-
+    
     {
-	declare -a res
+	declare -a res=()
 	while :
 	do
-
 	    res=($(yad --form \
 		       --columns=1 \
 		       --title="Links" \
@@ -860,6 +859,7 @@ Non hai inserito un campo del form necessario ad effettuare il download tramite 
 		    ;;
 	    esac
 	done
+	IFS="$IFS_old"
     } &
     local pid=$!
     while ! check_pid $pid
@@ -876,7 +876,7 @@ Non hai inserito un campo del form necessario ad effettuare il download tramite 
 	sleep 0.2
     done &
     
-    IFS=$IFS_old
+    IFS="$IFS_old"
 }
 
 function display_sockets_gui {
