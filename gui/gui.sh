@@ -816,7 +816,7 @@ function display_link_manager_gui {
 		    if [ -n "${res[2]}" ]
 		    then
 #			set_link + "http://www.xdcc.eu/search.php?searchkey=${res[2]// /+}"
-			display_xdcc_eu_gui "${XDCC_EU_SEARCHKEY_URL}${res[2]// /+}"
+			display_xdcc_eu_gui "${res[2]}"
 #			browse_xdcc_search "${res[2]}"
 		    fi
 
@@ -1343,9 +1343,10 @@ function display_xdcc_eu_gui {
     )
 
     local pid=$(cat "$path_tmp"/xdcc_eu_lock 2>/dev/null)
-    local xdcc_eu_search="$1"
-
-    get_data_xdcc_eu "$xdcc_eu_search"
+    local xdcc_eu_searchkey="$1"
+    local xdcc_eu_search_link="${XDCC_EU_SEARCHKEY_URL}${xdcc_eu_searchkey// /+}"
+    
+    get_data_xdcc_eu "$xdcc_eu_search_link"
 
     local IFS_old="$IFS"
     IFS=' '
@@ -1353,7 +1354,7 @@ function display_xdcc_eu_gui {
     if ( [[ "$pid" =~ ^[0-9]+$ ]] && check_pid $pid ) ||
 	   [ -z "${link_xdcc_eu[0]}" ]
     then
-	local msg="<b>Non è stato trovato alcun link</b> corrispondente alle chiavi di ricerca"
+	local msg="<b>Non è stato trovato alcun link</b> corrispondente alle seguenti chiavi di ricerca: $xdcc_eu_searchkey"
 	yad --center \
 	    --title="Attenzione!" \
 	    --window-icon="$ICON" \
@@ -1391,7 +1392,7 @@ function display_xdcc_eu_gui {
 		    set_link + "${res[i]}"
 		done
 	    fi
-	    set_link - "$xdcc_eu_search"
+	    set_link - "$xdcc_eu_search_link"
 	fi
 
 	sleep 5
