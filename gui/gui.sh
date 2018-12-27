@@ -761,14 +761,15 @@ function browse_xdcc_search {
 
 function display_link_manager_gui {
     local IFS_old="$IFS"
-    IFS="€"
+
     local msg
     local text="${TEXT}\n\n<b>Gestisci i link:</b>"
     
     {
-	declare -a res=()
+	declare -a res
 	while :
 	do
+	    IFS="€"
 	    res=($(yad --form \
 		       --columns=1 \
 		       --title="Links" \
@@ -844,6 +845,7 @@ function display_link_manager_gui {
 			
 			set_link + "$(sanitize_url "irc://${irc[host]}/${irc[chan]}/msg ${irc[msg]}" >>"$start_file")"
 			unset irc
+
 		    elif [[ -n "${res[3]}${res[4]}${res[5]}" ]]
 		    then
 			yad --title="Attenzione" \
