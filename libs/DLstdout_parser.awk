@@ -629,6 +629,9 @@ function progress_out (chunk,           progress_line, line, cmd) {
 
     if (pid_alive[i])
 	array_out(pid_alive[i], "pid_alive")
+    else
+	speed_out[i] = 0
+    
     array_out(downloader_out[i], "downloader_out")
     array_out(pid_prog_out[i], "pid_prog_out")
     array_out(file_out[i], "file_out")
