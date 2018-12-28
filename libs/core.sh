@@ -250,7 +250,7 @@ function set_line_in_file { 	#### usage:
 
 		    if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$item"
 		    then
-			display_xdcc_eu_gui "$item"
+			display_xdcc_eu_gui "${item##*=}"
 		    fi
 		    result=0
 
