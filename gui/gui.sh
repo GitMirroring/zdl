@@ -322,9 +322,26 @@ function exe_button_result {
 	cmd=( $(cat "$yad_button_result_file") )
 	rm "$yad_button_result_file"
 
-	"${cmd[@]}"
+	if [ "${cmd[0]}" == display_console_gui ] &&
+	       [ "${cmd[1]}" == pid_console ]
+	then
+	    ## da verificare:
+	    ## strano comportamento della shell bash, rimane vivo (non zombizzato) il processo tail -f della console,
+	    ## ma il seguente codice sembra farlo sparire
+	    {
+		"${cmd[@]}"
+		while check_pid "$pid_console"
+		do
+#		    echo "pid_console=$pid_console"
+		    sleep 2
+		done
+	    } &
+	else
+	    "${cmd[@]}"
+	fi
     fi
 }
+
 
 function get_yad_multiprogress_args {
     local i 
@@ -1083,7 +1100,7 @@ function display_multiprogress_gui {
 	    --button="Links!gtk-connect!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Downloads!browser-download!Gestisci i download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Opzioni!gtk-properties!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
-	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui pid_console >'$yad_multiprogress_result_file'\"" \
 	    --button="Dis/Attiva ZDL core!gtk-execute!Attiva o disattiva il gestore di download (ZDL core):bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="ZDL sockets!gtk-execute!Attiva o disattiva i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Esci!gtk-quit!Esci solo dalla GUI, lasciando attivi i downloader, il core o i sockets:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
@@ -1113,7 +1130,8 @@ function display_console_gui {
 	    "${YAD_ZDL[@]}" \
 	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
 	    --button="Chiudi!gtk-ok:0" \
-	    --width=800 --height=600 &    
+	    --width=800 --height=600 &
+
     local pid=$!
     # --listen \
     # --filename="$gui_log" \
