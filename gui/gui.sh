@@ -322,23 +322,21 @@ function exe_button_result {
 	cmd=( $(cat "$yad_button_result_file") )
 	rm "$yad_button_result_file"
 
-	if [ "${cmd[0]}" == display_console_gui ] &&
-	       [ "${cmd[1]}" == pid_console ]
-	then
-	    ## da verificare:
-	    ## strano comportamento della shell bash, rimane vivo (non zombizzato) il processo tail -f della console,
-	    ## ma il seguente codice sembra farlo sparire
-	    {
-		"${cmd[@]}"
-		while check_pid "$pid_console"
-		do
-#		    echo "pid_console=$pid_console"
-		    sleep 2
-		done
-	    } &
-	else
-	    "${cmd[@]}"
-	fi
+	# echo 	"cmd[]:${cmd[@]}" >>cmds.txt
+	"${cmd[@]}"
+
+	## testing
+	# if [ "${cmd[0]}" == display_console_gui ] &&
+	#        [ "${cmd[1]}" == pid_console ]
+	# then
+	#     {
+	# 	while check_pid "$pid_console"
+	# 	do
+	# 	    echo "pid_console=$pid_console" >>cmds.txt
+	# 	    sleep 2
+	# 	done
+	#     } &
+	# fi
     fi
 }
 
