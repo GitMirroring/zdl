@@ -597,7 +597,7 @@ ESTENSIONI:
 
 	    case $? in
 		0)
-		    kill $pid_console_gui
+		    kill -9 $pid_console_gui
 		    cd $dir_dest
 
 		    stop_daemon_gui
@@ -610,7 +610,7 @@ ESTENSIONI:
 		    exit
 		    ;;
 		1)
-		    kill $pid_console_gui
+		    kill -9 $pid_console_gui
 		    exit 1
 		    ;;
 	    esac
