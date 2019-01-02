@@ -1099,6 +1099,7 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
+    gui_log="$path_tmp"/gui-log.txt
     if [ -n "$1" ]
     then
 	declare -n ref="$1"
