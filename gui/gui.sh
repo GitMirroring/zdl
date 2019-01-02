@@ -323,21 +323,7 @@ function exe_button_result {
 	cmd=( $(cat "$yad_button_result_file") )
 	rm "$yad_button_result_file"
 
-	# echo 	"cmd[]:${cmd[@]}" >>cmds.txt
 	"${cmd[@]}"
-
-	## testing
-	# if [ "${cmd[0]}" == display_console_gui ] &&
-	#        [ "${cmd[1]}" == pid_console ]
-	# then
-	#     {
-	# 	while check_pid "$pid_console"
-	# 	do
-	# 	    echo "pid_console=$pid_console" >>cmds.txt
-	# 	    sleep 2
-	# 	done
-	#     } &
-	# fi
     fi
 }
 
@@ -1099,7 +1085,7 @@ function display_multiprogress_gui {
 	    --button="Links!gtk-connect!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Downloads!browser-download!Gestisci i download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Opzioni!gtk-properties!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
-	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui pid_console >'$yad_multiprogress_result_file'\"" \
+	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Dis/Attiva ZDL core!gtk-execute!Attiva o disattiva il gestore di download (ZDL core):bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="ZDL sockets!gtk-execute!Attiva o disattiva i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="Esci!gtk-quit!Esci solo dalla GUI, lasciando attivi i downloader, il core o i sockets:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
@@ -1113,32 +1099,33 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
-    if [ -n "$1" ]
-    then
-	declare -n ref="$1"
-    fi
+    exec 99<&-
+    
+    export PIPE_099=/tmp/yadpipe099.$GUI_ID
+    test -e $PIPE_099 && rm -f $PIPE_099
+    mkfifo $PIPE_099
+    exec 99<> $PIPE_099
 
-    tail -f "$gui_log" </dev/null |
-	yad --title="Console" \
-	    --image="$IMAGE2" \
-	    --text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
-	    --text-info \
-	    --show-uri \
-	    --uri-color=blue \
-	    --tail \
-	    "${YAD_ZDL[@]}" \
-	    --button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
-	    --button="Chiudi!gtk-ok:0" \
-	    --width=800 --height=600 &
-
-    local pid=$!
-    # --listen \
-    # --filename="$gui_log" \
+    {
+	cat < $PIPE_099 |
+	    yad --title="Console" \
+		--image="$IMAGE2" \
+		--text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
+		--text-info \
+		--show-uri \
+		--uri-color=blue \
+		--tail \
+		"${YAD_ZDL[@]}" \
+		--button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
+		--button="Chiudi!gtk-ok:0" \
+		--width=800 --height=600 &
 	
-    if [ -n "$1" ]
-    then
-	ref="$pid"
-    fi    
+	local pid=$!
+
+	tail -f "$gui_log" --pid=$pid </dev/null >>$PIPE_099
+	## OPZIONI AGGIUNTIVE:
+	# --listen --filename="$gui_log" \  
+    } &
 }
 
 function display_configure_gui {
