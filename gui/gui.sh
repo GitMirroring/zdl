@@ -1129,10 +1129,17 @@ function display_console_gui {
 
 	tail -f "$gui_log" --pid=$pid </dev/null >>$PIPE_099
 	## OPZIONI AGGIUNTIVE:
-	# --listen --filename="$gui_log" \
+	# --listen --filename="$gui_log"
+
+	echo "$pid" > "$gui_log".pid
 
     } &
-    local pid_c=$!
+    local pid_c
+    while ! check_pid_file "$gui_log".pid
+    do
+	pid_c=$(cat "$gui_log".pid 2>/dev/null)
+	sleep 0.1
+    done
     
     if [ -n "$1" ]
     then
