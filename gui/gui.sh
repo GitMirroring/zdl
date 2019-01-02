@@ -1131,11 +1131,13 @@ function display_console_gui {
 	## OPZIONI AGGIUNTIVE:
 	# --listen --filename="$gui_log" \
 
-	if [ -n "$1" ]
-	then
-	    ref="$pid"
-	fi    
     } &
+    local pid_c=$!
+    
+    if [ -n "$1" ]
+    then
+	ref="$pid_c"
+    fi    
 }
 
 function display_configure_gui {
