@@ -317,6 +317,7 @@ function check_yad_multiprogress {
 
 function exe_button_result {
     local yad_button_result_file="$1"
+    declare -a cmd
     if [ -s "$yad_button_result_file" ]
     then
 	cmd=( $(cat "$yad_button_result_file") )
