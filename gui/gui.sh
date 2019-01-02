@@ -1135,7 +1135,7 @@ function display_console_gui {
     } &
     #local pid_c=$!
 
-    local_pid_c
+    local pid_c
 
     while ! check_pid_file /tmp/display_console_gui_zdl.pid
     do
