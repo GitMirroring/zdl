@@ -1131,8 +1131,18 @@ function display_console_gui {
 	## OPZIONI AGGIUNTIVE:
 	# --listen --filename="$gui_log"
 
+	echo $pid > /tmp/display_console_gui_zdl.pid
     } &
-    local pid_c=$!
+    #local pid_c=$!
+
+    local_pid_c
+
+    while ! check_pid_file /tmp/display_console_gui_zdl.pid
+    do
+	sleep 0.1
+    done
+
+    pid_c=$(cat /tmp/display_console_gui_zdl.pid)
     
     if [ -n "$1" ]
     then
