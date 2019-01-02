@@ -75,8 +75,10 @@ then
 
 	if [ -z "$linkfile" ]
 	then
-	    linkfile=$(grep 'var linkfile ="' <<< "$html" |
-			      sed -r 's|.+\"([^"]+)\".+|\1|g')
+	    linkfile=$(grep 'var linkfileBackup"' -A10 <<< "$html" |
+			   tail -n1 |
+	     		   sed -r 's|.+\"([^"]+)\".+|\1|g')
+	    
 	fi
 
 	if grep 'label: "HD"' <<< "$html" >/dev/null
@@ -86,6 +88,7 @@ then
 	    linkfile="${linkfile#*\'}"
 	    linkfile="${linkfile%\'*}"
 	fi
+
 	get_location "$linkfile" url_in_file
 	
 	if ! url "$url_in_file" 
