@@ -75,7 +75,8 @@ then
 
 	if [ -z "$linkfile" ]
 	then
-	    linkfile=$(grep 'var linkfileBackup"' -A10 <<< "$html" |
+	    linkfile=$(grep 'var linkfileBackup' <<< "$html" |
+			   head -n10 |
 			   tail -n1 |
 	     		   sed -r 's|.+\"([^"]+)\".+|\1|g')
 	    
