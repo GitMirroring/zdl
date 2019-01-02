@@ -1126,12 +1126,10 @@ function display_console_gui {
 		--width=800 --height=600 &
 	
 	local pid=$!
-
+	echo $pid > /tmp/display_console_gui_zdl.pid
 	tail -f "$gui_log" --pid=$pid </dev/null >>$PIPE_099
 	## OPZIONI AGGIUNTIVE:
 	# --listen --filename="$gui_log"
-
-	echo $pid > /tmp/display_console_gui_zdl.pid
     } &
     #local pid_c=$!
 
