@@ -1099,8 +1099,6 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
-    [ -z "$gui_log" ] && gui_log=/tmp/gui-log.txt && touch "$gui_log" 
-
     if [ -n "$1" ]
     then
 	declare -n ref="$1"
@@ -1133,15 +1131,8 @@ function display_console_gui {
 	## OPZIONI AGGIUNTIVE:
 	# --listen --filename="$gui_log"
 
-	echo "$pid" > "$gui_log".pid
-
     } &
-    local pid_c
-    while ! check_pid_file "$gui_log".pid
-    do
-	pid_c=$(cat "$gui_log".pid 2>/dev/null)
-	sleep 0.1
-    done
+    local pid_c=$!
     
     if [ -n "$1" ]
     then
