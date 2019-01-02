@@ -1099,7 +1099,8 @@ function display_multiprogress_gui {
 }
 
 function display_console_gui {
-    gui_log="$path_tmp"/gui-log.txt
+    [ -z "$gui_log" ] && gui_log=/tmp/gui-log.txt && touch "$gui_log" 
+
     if [ -n "$1" ]
     then
 	declare -n ref="$1"
