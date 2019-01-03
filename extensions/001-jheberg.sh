@@ -36,53 +36,20 @@ then
     slug="${url_in%%\/}"
     slug="${slug##*\/}"
 
-    hosters=( "Mega" "UpToBox" "Openload" )
+    hosters=( "Free" "Mega" "UpToBox" "Openload" )
 
-    # wget --keep-session-cookies                  \
-    # 	 --save-cookies="$path_tmp/cookies.zdl"  \
-    # 	 --user-agent="$user_agent"              \
-    # 	 --referer="$MIRRORS"                    \
-    # 	 "$REDIRECT" -qO /dev/null
+    wget --keep-session-cookies                  \
+    	 --save-cookies="$path_tmp/cookies.zdl"  \
+    	 --user-agent="$user_agent"              \
+	 "$url_in" \
+    	 -qO /dev/null
 
-    #    headers_jheberg="Accept-Language: \"it,en-US;q=0.7,en;q=0.3\""
-    #headers_jheberg=
-    
-    cookies_jheberg=$(phantomjs "$path_usr"/extensions/jheberg.js "$url_in" | tail -n1)
-    # curl -v                           \
-    # 	 -A "$user_agent"             \
-    # 	 -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"' \
-    # 	 -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'  \
-    # 	 -H 'Accept-Encoding: "gzip, deflate"'  \
-    # 	 -H "DNT: \"1\"" \
-    # 	 -H "Connection: \"keep-alive\"" \
-    # 	 -H "Upgrade-Insecure-Requests: \"1\"" \
-    # 	 -c "$path_tmp/cookies.zdl"   \
-    # 	 "$url_in"  >out
-    
-    #################
-    # curl -v                           \
-    # 	 -H "User-Agent: \"$user_agent\""             \
-    # 	 -H "Accept: \"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\"" \
-    # 	 -H "Accept-Language: \"it,en-US;q=0.7,en;q=0.3\""   \
-    # 	 -H "Accept-Encoding: \"gzip, deflate\""             \
-    # 	 -H "Referer: \"$url_in\""                         \
-    # 	 -H "Cookie: \"$cookies_jheberg\""                 \
-    # 	 -H "DNT: \"1\""                                   \
-    # 	 -H "Connection: \"keep-alive\""                   \
-    # 	 -H "Upgrade-Insecure-Requests: \"1\""             \
-    # 	 "$MIRRORS" 2>&1 1>out
+    wget --load-cookies="$path_tmp/cookies.zdl"  \
+	 --keep-session-cookies                  \
+    	 --save-cookies="$path_tmp/cookies2.zdl"  \
+    	 --user-agent="$user_agent"              \
+    	 "$MIRRORS"  
 
-    # curl -v \
-    # 	 -H "User-Agent: \"$user_agent\""             \
-    # 	 -H "Accept: \"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\"" \
-    # 	 -H "Accept-Language: \"it,en-US;q=0.7,en;q=0.3\""   \
-    # 	 -H "Accept-Encoding: \"gzip, deflate\""             \
-    # 	 -H "Referer: \"$mirrors\""                         \
-    # 	 -H "Cookie: \"$cookies_jheberg\""                 \
-    # 	 -H "DNT: \"1\""                                   \
-    # 	 -H "Connection: \"keep-alive\""                   \
-    # 	 -H "Upgrade-Insecure-Requests: \"1\""             \
-    # 	 "$url_in" 2>&1 1>out2
 
     countdown- 5 
 
@@ -96,7 +63,7 @@ then
 		     --header='X-Requested-With: XMLHttpRequest'  \
 		     --post-data="slug=${slug}&hoster=${hoster}"  \
 		     "$GETLINK" -qO-)
-#echo "reurl: $reurl"
+
 	reurl="${reurl%\"*}"
 	reurl="${reurl##*\"}"
 

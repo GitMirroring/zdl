@@ -605,17 +605,14 @@ function extension_openload {
 function get_location { # 1=url 2=variable_to_new_url
     local location
 
-    # if [ "$3" == wget ]
-    # then
-
     wget --spider -S "$1" \
 	 --keep-session-cookies \
-	 --save-cookies="$path_tmp/cookies.zdl" \
+	 --load-cookies="$path_tmp/cookies.zdl" \
+	 --save-cookies="$path_tmp/cookies_location.zdl" \
 	 -o "$path_tmp"/get_location.txt
     location=$(awk '/ocation:/{print $2}' "$path_tmp"/get_location.txt | tail -n1)
     rm -f "$path_tmp"/get_location.txt
-
-    # fi
+    mv "$path_tmp/cookies_location.zdl" "$path_tmp/cookies.zdl"
 
     if ! url "$location"
     then

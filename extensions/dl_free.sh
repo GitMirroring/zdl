@@ -30,9 +30,15 @@
 
 if [[ "$url_in" =~ dl\.free\.fr ]]
 then
+    if [[ ! "$url_in" =~ getfile ]]
+    then
+	get_location "$url_in" url_dl_free_get_file
+	url "$url_dl_free_get_file" && replace_url_in "${url_dl_free_get_file//=\/?/=/}"
+    fi
+	
     file_in=$(curl -s "$url_in" |
-		     grep Fichier | tail -n1 |
-		     sed -r 's|.+\">([^<>]+)<\/span.+|\1|g')
+		  grep Fichier | tail -n1 |
+		  sed -r 's|.+\">([^<>]+)<\/span.+|\1|g')
     
     
     url_in_file=$(curl -c "$path_tmp"/cookies.zdl \
