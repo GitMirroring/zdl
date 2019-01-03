@@ -42,7 +42,7 @@ function update_updater {
     [ ! -f $path_conf/version ] &&
 	echo "0" >"$path_conf/version"
     
-    remote_version=$(curl "${URL_ROOT}version" -s)
+    remote_version=$(curl -s -m 20 "${URL_ROOT}version")
     [[ ! "$remote_version" =~ ^([0-9]+)$ ]] &&
 	remote_version=0
     
