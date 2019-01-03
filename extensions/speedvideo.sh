@@ -58,7 +58,7 @@ then
 		-o /dev/null)
 
     unset post_data    
-    
+
     if [[ "${htm}${html}" =~ 'File Not Found' ]] 
     then
 	_log 3
@@ -69,9 +69,9 @@ then
 	
     elif [ -n "$html" ]
     then
-	linkfile=$(grep 'file: base64_decode' <<< "$html"   |
-			  head -n1                          |
-			  sed -r 's|.+\"([^"]+)\".+|\1|g')
+	linkfile=$(grep 'base64_decode' <<< "$html"   |
+		       tail -n1                          |
+		       sed -r 's|.+\"([^"]+)\".+|\1|g')
 
 	if [ -z "$linkfile" ]
 	then

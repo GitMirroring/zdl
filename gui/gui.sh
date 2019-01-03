@@ -199,6 +199,15 @@ function get_data_multiprogress {
 
 function start_daemon_gui {
     local item arg
+
+    for ((i=0; i<${#args[@]}; i++))
+    do
+	if [[ "${args[i]}" =~ ^http ]]
+	then
+	    args[i]=$(sanitize_url "${args[i]}")
+	fi
+    done
+    
     if ! check_instance_prog &>/dev/null &&
 	    ! check_instance_daemon &>/dev/null
     then
