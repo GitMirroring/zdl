@@ -438,7 +438,7 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		    
 		    for link in "${links[@]}"
 		    do
-			link=$(sanitize_url "$link")
+			sanitize_url "$link" link
 			[ -n "$link" ] &&
 			    msg+=$(set_link + "$link")
 		    done
@@ -806,6 +806,11 @@ function display_link_manager_gui {
 		    ## URL http
 		    if [ -n "${res[0]}" ]
 		    then
+			if [[ "${res[0]}" =~ ^http ]]
+			then
+			    res[0]=$(sanitize_url "${res[0]}")
+			fi
+			
 			msg=$(set_link + "${res[0]}")
 			if [ -n "$msg" ]
 			then
