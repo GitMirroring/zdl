@@ -198,9 +198,9 @@ function get_data_multiprogress {
 ########################## CORE:
 
 function start_daemon_gui {
-    local item arg
+    local item arg msg
 
-    for ((i=0; i<${#args[@]}; i++))
+    for ((i=0; i<=$max_args; i++))
     do
 	if [[ "${args[i]}" =~ ^http ]]
 	then
@@ -232,8 +232,13 @@ function start_daemon_gui {
 	do
 	    if url "${args[i]}"
 	    then
-		set_link + "${args[i]}"
-		echo "${args[i]}" >> links.txt
+		msg=$(set_link + "${args[i]}")
+		if [ -n "$msg" ]
+		then
+		    display_link_error_gui "$msg"
+		else
+		    echo "${args[i]}" >> links.txt
+		fi
 		unset args[i]
 	    fi
 	done
