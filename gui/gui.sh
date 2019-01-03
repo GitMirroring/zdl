@@ -200,14 +200,6 @@ function get_data_multiprogress {
 function start_daemon_gui {
     local item arg msg
 
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [[ "${args[i]}" =~ ^http ]]
-	then
-	    args[i]=$(sanitize_url "${args[i]}")
-	fi
-    done
-    
     if ! check_instance_prog &>/dev/null &&
 	    ! check_instance_daemon &>/dev/null
     then
@@ -219,6 +211,10 @@ function start_daemon_gui {
 	    nohup /bin/bash zdl --silent "$PWD" "${args[@]}" &>/dev/null &
 	    for ((i=0; i<=$max_args; i++))
 	    do
+		if [[ "${args[i]}" =~ ^http ]]
+		then
+		    args[i]=$(sanitize_url "${args[i]}")
+		fi
 		url "${args[i]}" &&
 		    unset args[i]
 	    done
@@ -230,6 +226,11 @@ function start_daemon_gui {
     else
 	for ((i=0; i<=$max_args; i++))
 	do
+	    if [[ "${args[i]}" =~ ^http ]]
+	    then
+		args[i]=$(sanitize_url "${args[i]}")
+	    fi
+
 	    if url "${args[i]}"
 	    then
 		msg=$(set_link + "${args[i]}")
@@ -739,12 +740,20 @@ function display_file_gui {
 	--show-uri
 	--uri-color=blue 
     )
+
+    exec 88<&-
+    
+    export PIPE_088=/tmp/yadpipe088.$GUI_ID
+    test -e $PIPE_088 && rm -f $PIPE_088
+    mkfifo $PIPE_088
+    exec 88<> $PIPE_088
+
     {
 	if [ -f "$filename" ]
 	then
 	    (( $(wc -l <"$filename") >1000 )) && unset uri_opts
 	    
-	    tail -f "$filename" |
+	    cat < $PIPE_088 |
 		yad --title="$title" \
 		    --image="gtk-execute" \
 		    --image="$IMAGE2" \
@@ -757,7 +766,10 @@ function display_file_gui {
 		    --button="Cancella il file!gtk-delete":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
 		    --button="Chiudi!gtk-close":0 \
 		    "${YAD_ZDL[@]}" \
-		    --width=800 --height=600 2>/dev/null
+		    --width=800 --height=600 2>/dev/null &
+	    local pid=$!
+	    
+	    tail -f "$filename" --pid=$pid </dev/null >>$PIPE_088
 	    
 	else
 	    yad --title="Attenzione!" \
