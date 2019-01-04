@@ -109,7 +109,9 @@ then
 	
 	[ -n "$file_in" ] && url "$url_in_file" &&
 	    file_in="${file_in}.${url_in_file##*.}"
-	
+
+	downloader_in=Axel
+
 	end_extension
     fi
 fi
