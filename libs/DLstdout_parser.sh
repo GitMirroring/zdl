@@ -85,7 +85,7 @@ function data_stdout {
 	unset tmp_files
 
 	eval "$awk_data"
-	
+
 	[ -f "$path_tmp/awk2bash_commands" ] &&
 	    source "$path_tmp/awk2bash_commands"
 

@@ -267,7 +267,7 @@ function yellow_progress () {
     }
 }
 
-function progress_out (chunk,           progress_line, line, cmd) {
+function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     ## eta, %, speed, speed type, length-saved (length-out)
 
     if (dler == "Axel") {
@@ -289,7 +289,10 @@ function progress_out (chunk,           progress_line, line, cmd) {
 		split(progress_line, progress_elems, /[\ ]*[\%]*[K]*/)
 		percent_out[i] = progress_elems[2]
 		if (percent_out[i] == "]") percent_out[i] = 100
-		speed_out[i] = int(progress_elems[length(progress_elems)-1])
+		var_temp = progress_elems[length(progress_elems)-1]
+		sub(/\[/, "", var_temp)
+		sub(/\..+/, "", var_temp)
+		speed_out[i] = int(var_temp)
 		break
 	    }
 

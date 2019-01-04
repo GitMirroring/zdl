@@ -44,7 +44,7 @@ then
     if [[ ! "$url_in" =~ embed ]]
     then
 	htm=$(curl -A "$user_agent" \
-		   -c "$path_tmp"/cookies.zdl \
+		   -c "$path_tmp"/cookies0.zdl \
 		   "$url_in")
 
 	input_hidden "$htm"
@@ -53,7 +53,9 @@ then
 
     html=$(wget -qO- "${url_in//http\:/https:}"         \
 		--user-agent="$user_agent"              \
-		--load-cookies="$path_tmp"/cookies.zdl  \
+		--load-cookies="$path_tmp"/cookies0.zdl \
+		--keep-session-cookies                  \
+		--save-cookies="$path_tmp"/cookies.zdl  \
 		--post-data="$post_data"                \
 		-o /dev/null)
 
@@ -69,39 +71,35 @@ then
 	
     elif [ -n "$html" ]
     then
-	linkfile=$(grep 'base64_decode' <<< "$html"   |
-		       tail -n1                          |
-		       sed -r 's|.+\"([^"]+)\".+|\1|g')
-
-	if [ -z "$linkfile" ]
-	then
-	    linkfile=$(grep 'var linkfileBackup' <<< "$html" |
+	url_speedvideo=$(grep 'var url_speedvideoBackup' <<< "$html" |
 			   head -n10 |
 			   tail -n1 |
 	     		   sed -r 's|.+\"([^"]+)\".+|\1|g')
-	    
-	fi
-
+	
 	if grep 'label: "HD"' <<< "$html" >/dev/null
 	then
-	    linkfile=$(grep 'label: "HD"' -B 1 <<< "$html" |
+	    url_speedvideo=$(grep 'label: "HD"' -B 1 <<< "$html" |
 			      head -n1)
-	    linkfile="${linkfile#*\'}"
-	    linkfile="${linkfile%\'*}"
+	    url_speedvideo="${url_speedvideo#*\'}"
+	    url_speedvideo="${url_speedvideo%\'*}"
 	fi
 
-	get_location "$linkfile" url_in_file
+	get_location "$url_speedvideo" url_in_file
 	
 	if ! url "$url_in_file" 
-	then		
+	then
+	    linkfile=$(grep 'base64_decode' <<< "$html"   |
+			   tail -n1                          |
+			   sed -r 's|.+\"([^"]+)\".+|\1|g')
+
 	    var2=$(grep base64_decode <<< "$html" |
 			  sed -r 's|.+ ([^ ]+)\)\;$|\1|g' | head -n1)
 	    
 
 	    url_in_file=$(base64_decode "$linkfile"     \
 					$(grep "$var2" <<< "$html"                |
-				    		 head -n1                         |
-				    		 sed -r 's|.+ ([^ ]+)\;$|\1|g') )
+				    	      head -n1                         |
+				    	      sed -r 's|.+ ([^ ]+)\;$|\1|g') )
 
 	    url_in_file="${url_in_file#*'///'}"
 
@@ -111,7 +109,7 @@ then
 	
 	[ -n "$file_in" ] && url "$url_in_file" &&
 	    file_in="${file_in}.${url_in_file##*.}"
-
+	
 	end_extension
     fi
 fi
