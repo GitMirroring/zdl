@@ -51,7 +51,7 @@ then
     then
 	_log 17
 
-    elif [[ "$html" =~ (The file was deleted) ]]
+    elif [[ "$html" =~ (The file was deleted|File was deleted) ]]
     then
 	_log 3
 	
