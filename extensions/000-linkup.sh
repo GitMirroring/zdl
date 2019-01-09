@@ -31,4 +31,14 @@ if [[ "$url_in" =~ linkup\. ]]
 then
     replace_url_in "$(get_location "$url_in")" ||
 	_log 12
+
+    if [[ "$url_in" =~ linkup ]]
+    then
+	url_linkup=$(curl -s "$url_in" |
+			 grep -P 'iframe.+scrolling' |
+			 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
+	replace_url_in "$url_linkup"
+    else
+	_log 12
+    fi
 fi

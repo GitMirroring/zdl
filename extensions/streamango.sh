@@ -29,16 +29,27 @@
 
 if [[ "$url_in" =~ streamango ]]
 then
-    if command -v phantomjs &>/dev/null
+    if [[ "$url_in" =~ \/embed\/ ]]
     then
-	url_in_file=$(phantomjs "$path_usr"/extensions/streamango-phantomjs.js "$url_in" |
-			     tail -n1)
-
-	file_in="${url_in_file##*\/}"
-	
-    else
-	_log 35
+	url_in_streamango="${url_in//http\:/https:}"
+	url_in_streamango="${url_in_streamango//embed/f}"
+	replace_url_in "$url_in_streamango"
     fi
+    
+    # if command -v phantomjs &>/dev/null
+    # then
+    # 	url_in_file=$(phantomjs "$path_usr"/extensions/streamango-phantomjs.js "$url_in" |
+    # 			     tail -n1)
 
+    # 	file_in="${url_in_file##*\/}"
+	
+    # else
+    # 	_log 35
+    # fi
+
+    html=$(curl -s "$url_in")
+    file_in=$(get_title "$html")
+    url_in_file=$(youtube-dl --get-url "$url_in")
+    
     end_extension
 fi
