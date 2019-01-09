@@ -39,9 +39,13 @@ then
     link_parser "$url_in"
     action_url="${parser_proto}${parser_domain}/plays/${parser_path}"
 
-    url_in_file=$(curl -s -d "$post_data" "$action_url" 2>&1 |
-		      grep 'source: "' | sed -n 2p |
-		      sed -r 's|.+source: \"([^"]+)\".+|\1|g')
+    html=$(curl -d "$post_data" \
+		       -c "$path_tmp"/cookies.zdl \
+		       "$action_url")
+
+    url_in_file=$(unpack "$html")
+    url_in_file="${url_in_file#*\'}"
+    url_in_file="${url_in_file%%\'*}"
     
     file_in=$(grep 'video-page-head' <<< "$html" |
 	   sed -r 's|.+>(.+)<.+|\1|g')."${url_in_file##*.}"
