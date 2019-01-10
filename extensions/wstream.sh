@@ -50,12 +50,6 @@ if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
 then
     unset html html2 movie_definition post_data wstream_loops
     
-    # if [ -z "$(grep -v wstream "$path_tmp/links_loop.txt" &>/dev/null)" ]
-    # then
-    # 	print_c 1 "Cookies cancellati"
-    # 	rm -rf "$path_tmp/cookies.zdl"           
-    # fi
-
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
 		--user-agent="$user_agent"                       \
@@ -77,8 +71,6 @@ then
 	    url_in_timer=true
 	    
 	else
-#	    msg_wstream="Verrà estratto anche il file di streaming con definizione migliore"
-	    
 	    hash_wstream="${download_video%\'*}"
 	    hash_wstream="${hash_wstream##*\'}"
 
@@ -100,7 +92,7 @@ then
 		    ((wstream_loops < 2))
 	    do
 		((wstream_loops++))
-
+		print_c 4 "Ricerca file con definizione audio/video originale..."
 		url_get_data_wstream="https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}"
 		print_c 4 "$url_get_data_wstream"
 
@@ -114,33 +106,10 @@ then
 		then
 		    break
 		fi
-#		input_hidden "$html2"
-		
-		#echo "$html2" >OUT-$(date +%s)
-		
-#		countdown- 6
-		
-		#echo "$post_data"
-		
-		# if [ -n "$post_data" ] &&
-		#        [ "$post_data" != '=' ]
-		# then
-		    # url_in_file=$(curl -s \
-		    # 		       -d "$post_data" \
-		    # 		       -H 'Upgrade-Insecure-Requests: "1"' \
-		    # 		       "${url_in}#")
 
-		# else
-		#     print_c 3 "Nessun post-data"
-		# fi
-
-		#grep 'Direct Download Link' -C5 <<< "$url_in_file"
-		#url_in_file=$(grep 'Direct Download Link' -B1 <<< "$url_in_file" |
 		url_in_file=$(grep 'Direct Download Link' <<< "$html2" |
 				     head -n1 |
 				     sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
-		
-		
 	    done
 
 	    if ! url "$url_in_file" &&
@@ -192,14 +161,15 @@ then
 		   [ ! -f "$path_tmp"/url_in_wstreaming.txt ] ||
 		   ! grep -q "$url_in" "$path_tmp"/url_in_wstreaming.txt
 	    then
-		url_in_wstreaming=$(grep sources <<< "$html" |tail -n1)
-		url_in_wstreaming="${url_in_wstreaming#*\"}"
-		url_in_wstreaming="${url_in_wstreaming%%\"*}"
-		set_link + "$url_in_wstreaming"
-		echo "$url_in_wstreaming" >"$path_tmp"/filename_"$file_in".txt
-		echo "$url_in" >>"$path_tmp"/url_in_wstreaming.txt
+		print_c 4 "Ricerca file di streaming con definizione audio/video più alta..."
 
-		print_c 1 "${msg_wstream} --> $url_in_wstreaming"
+		unpacked=$(unpack "$(grep 'p,a,c,k,e' <<< "$html" |tail -n1)")
+		url_in_file=$(grep sources <<< "$unpacked" |tail -n1)
+		url_in_file="${url_in_file#*\"}"
+		url_in_file="${url_in_file%%\"*}"
+		
+		sanitize_file_in
+		file_in="${file_in#Watch_video_}"
 	    fi
 	fi
 
@@ -208,6 +178,9 @@ then
 		unset url_in_timer
     fi
 fi
+
+
+
 
 # if [[ "$url_in" =~ http[s]*://[w.]*wstream ]] 
 # then
@@ -225,6 +198,7 @@ fi
 # 		--keep-session-cookies                           \
 # 		--save-cookies="$path_tmp/cookies.zdl"           \
 # 		-qO- -o /dev/null)
+    
 
 #     if [[ "$html" =~ (File Not Found|File doesn\'t exits) ]]
 #     then
@@ -248,7 +222,7 @@ fi
 # 		['l']="Low"
 # 	    )
 
-# 	    for mode_stream in o #n l
+# 	    for mode_stream in o n l
 # 	    do
 # 		get_wstream_definition mode_stream_test
 
@@ -263,22 +237,22 @@ fi
 # 			((wstream_loops < 2))
 # 		do
 # 		    ((wstream_loops++))
-# echo		    "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}"
-# html2=$(curl -A "$user_agent" \
-# 	     -s \
-# 	     -c "$path_tmp/cookies.zdl"           \
-# 	     "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}")
 
+# 		    html2=$(curl -A "$user_agent" \
+# 				 -s \
+# 				 -c "$path_tmp/cookies.zdl"           \
+# 				 "https://wstream.video/dl?op=download_orig&id=${id_wstream}&mode=${mode_stream}&hash=${hash_wstream}")
+		    
 # 		    if [[ "$html2" =~ (You can download files up) ]]
 # 		    then
 # 			break
 # 		    fi
 # 		    input_hidden "$html2"
-# echo "$html" >OUT-$(date +%s)
-# 		    countdown- 6
-# echo		    "$post_data" 
-# if [ -n "$post_data" ] &&
-#        [ "$post_data" != '=' ]
+# #echo "$html" >OUT-$(date +%s)
+# #		    countdown- 6
+# 		    echo		    "post-data: $post_data" 
+# 		    if [ -n "$post_data" ] &&
+# 			   [ "$post_data" != '=' ]
 # 		    then
 # 		    	url_in_file=$(curl -s -d "$post_data" "$url_in")
 
@@ -289,6 +263,7 @@ fi
 # 		    url_in_file=$(grep 'Direct Download Link' -B1 <<< "$url_in_file" |
 # 					 head -n1 |
 # 					 sed -r 's|[^"]+\"([^"]+)\".+|\1|g')
+# 		    echo GREP:
 # grep 'Direct Download Link' -C5 <<< "$url_in_file" 
 # 		    #echo "url: $url_in_file"
 # 		    ! url "$url_in_file" &&
