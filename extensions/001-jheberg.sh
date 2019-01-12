@@ -50,7 +50,6 @@ then
     	 --user-agent="$user_agent"              \
     	 "$MIRRORS"  
 
-
     countdown- 5 
 
     for hoster in ${hosters[@]}
@@ -67,7 +66,9 @@ then
 	reurl="${reurl%\"*}"
 	reurl="${reurl##*\"}"
 
-	url "$reurl" && break
+	url "$reurl" &&
+	    [[ ! "$reurl" =~ utils.js ]] &&
+	    break
     done
 
     replace_url_in "$reurl" ||
