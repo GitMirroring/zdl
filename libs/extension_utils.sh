@@ -686,30 +686,46 @@ function check_cloudflare {
 function get_by_cloudflare {
     local url_in="$1"
     declare -n ref="$2"
+    local domain="${url_in#*\/\/}"
+    domain="${domain%%\/*}"
+	# -H "Host: $domain" \
+	# -H "Referer: $url_in" \
     
     curl                                                                                  \
-    	-A "$user_agent"                                                                  \
-    	-c "$path_tmp/cookies.zdl"                                                        \
-    	-D "$path_tmp/header.zdl"                                                         \
 	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+	-H 'Accept-Encoding: "gzip, deflate, br"'                                         \
     	-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-	-H 'Accept-Encoding: "gzip, deflate"'                                             \
-	-H 'DNT: "1"'                                                                     \
 	-H 'Connection: "keep-alive"'                                                     \
-    	"$url_in" > "$path_tmp"/cloudflare.html
+	-H "Host: $domain" \
+	-H "Referer: $url_in" \
+	-H "Upgrade-Insecure-Requests: 1"                                                 \
+	-A "$user_agent"                                                                  \
+    	 "$url_in" > "$path_tmp"/cloudflare.html
+
+    # curl                                                                                  \
+    # 	-A "$user_agent"                                                                  \
+    # 	-c "$path_tmp/cookies.zdl"                                                        \
+    # 	-D "$path_tmp/header.zdl"                                                         \
+    # 	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    # 	-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+    # 	-H 'Accept-Encoding: "gzip, deflate"'                                             \
+    # 	-H 'DNT: "1"'                                                                     \
+    # 	-H 'Connection: "keep-alive"'                                                     \
+    # 	"$url_in" > "$path_tmp"/cloudflare.html
 
     if ! command -v phantomjs &>/dev/null
     then
 	_log 35
 
     else
-	domain="${url_in#*\/\/}"
-	domain="${domain%%\/*}"
 	get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
 	
 	input_hidden "$path_tmp"/cloudflare.html
-
+	##echo "jschl: $jschl_answer"
 	get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
+
+	##echo "get: $get_data"
+
 	cookie_cloudflare=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
 
 	countdown- 6
@@ -768,25 +784,38 @@ function get_location_by_cloudflare {
     local url_in="$1"
     declare -n ref="$2"
     local location_chunk
+    domain="${url_in#*\/\/}"
+    domain="${domain%%\/*}"
     
     curl                                                                                  \
     	-A "$user_agent"                                                                  \
     	-c "$path_tmp/cookies.zdl"                                                        \
     	-D "$path_tmp/header.zdl"                                                         \
-	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
     	-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-	-H 'Accept-Encoding: "gzip, deflate"'                                             \
-	-H 'DNT: "1"'                                                                     \
-	-H 'Connection: "keep-alive"'                                                     \
+    	-H 'Accept-Encoding: "gzip, deflate"'                                             \
+    	-H 'DNT: "1"'                                                                     \
+    	-H 'Connection: "keep-alive"'                                                     \
     	"$url_in" > "$path_tmp"/cloudflare.html
+    # curl                                                                                  \
+    # 	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    # 	-H 'Accept-Encoding: "gzip, deflate"'                                             \
+    # 	-H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+    # 	-H 'Connection: "keep-alive"'                                                     \
+    # 	-H "Host: \"$domain\""                                                            \
+    # 	-H "Referer: \"$url_in\""                                                         \
+    # 	-H "Upgrade-Insecure-Requests: 1"                                                 \
+    # 	-A "$user_agent"                                                                  \
+    # 	-c "$path_tmp/cookies.zdl"                                                        \
+    # 	-D "$path_tmp/header.zdl"                                                         \
+    # 	-H 'DNT: "1"'                                                                     \
+    # 	"$url_in" > "$path_tmp"/cloudflare.html
 
     if ! command -v phantomjs &>/dev/null
     then
 	_log 35
 
     else
-	domain="${url_in#*\/\/}"
-	domain="${domain%%\/*}"
 	get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
 	
 	input_hidden "$path_tmp"/cloudflare.html

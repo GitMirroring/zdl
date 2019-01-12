@@ -71,6 +71,12 @@ then
     [[ "$url_in" =~ \.pw\/ ]] &&
 	replace_url_in "${url_in//.pw\//.net\/}"
 
+    html=$(curl -s "$url_in" -c "$path_tmp"/cookies.zdl)
+    if [[ "$html" =~ refresh.+URL=([^\"]+) ]]
+    then	
+	replace_url_in "${BASH_REMATCH[1]}"
+    fi
+    
     url_vcrypt=$(get_location "$url_in")
     url_vcrypt="http${url_vcrypt##*http}"
 
