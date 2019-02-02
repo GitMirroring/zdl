@@ -41,14 +41,15 @@ then
     wget --keep-session-cookies                  \
     	 --save-cookies="$path_tmp/cookies.zdl"  \
     	 --user-agent="$user_agent"              \
-	 "$url_in" \
+	 "$url_in"                               \
     	 -qO /dev/null
-
+    
     wget --load-cookies="$path_tmp/cookies.zdl"  \
 	 --keep-session-cookies                  \
-    	 --save-cookies="$path_tmp/cookies2.zdl"  \
+    	 --save-cookies="$path_tmp/cookies2.zdl" \
     	 --user-agent="$user_agent"              \
-    	 "$MIRRORS"  
+    	 "$MIRRORS"                              \
+	 -qO /dev/null
 
     countdown- 5 
 
