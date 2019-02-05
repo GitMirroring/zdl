@@ -16,14 +16,17 @@
 //
 //  For information or to collaborate on the project:
 //  https://savannah.nongnu.org/projects/zdl
-//
 
-/*jshint esversion: 6*/
+/* jshint esversion: 6 */
 
 class ZDL {
     constructor( path, file ) {
         this.path = path;
         this.file = file;
+    }
+
+    getPath() {
+        return this.path;
     }
 
     request( query ) {
@@ -37,7 +40,7 @@ class ZDL {
                 if ( xhr.status === 200 ) {
                     resolve( xhr.responseText );
                 } else {
-                    reject( `bad status (${xhr.status})` );
+                    reject( `bad response status (${xhr.status})` );
                 }
             };
 
@@ -73,12 +76,16 @@ class ZDL {
         return this.request( `cmd=get-free-space&path=${this.path}` );
     }
 
-    getHomePath() {
+    getDesktopPath() {
         return this.request( "cmd=get-desktop-path" );
     }
 
     getIP() {
         return this.request( "cmd=get-ip" );
+    }
+
+    getPlaylist() {
+        return this.request( "cmd=get-playlist" );
     }
 
     addLink( url ) {
@@ -93,8 +100,32 @@ class ZDL {
         return this.request( `cmd=add-xdcc&path=${this.path}&host=${xdcc.host}&chan=${xdcc.channel}&ctcp=${xdcc.msg}` );
     }
 
+    searchXdcc( term ) {
+        return this.request( `cmd=search-xdcc&term=${term}` );
+    }
+
+    addPlaylist( file ) {
+        return this.request( `cmd=add-playlist&file=${file}` );
+    }
+
+    stopLink( link ) {
+        return this.request( `cmd=stop-link&path=${this.path}&link=${link}` );
+    }
+
+    deleteLink( link ) {
+        return this.request( `cmd=del-link&path=${this.path}&link=${link}` );
+    }
+
     deleteFile( file ) {
         return this.request( `cmd=del-file&path=${this.path}&file=${file}` );
+    }
+
+    deletePlaylist( file ) {
+        return this.request( `cmd=del-playlist&file=${file}` );
+    }
+
+    browseFS( path, type ) {
+        return this.request( `cmd=browse-fs&path=${path}&type=${type}` );
     }
 
     cleanCompleted() {
@@ -105,12 +136,20 @@ class ZDL {
         return this.request( `cmd=play-link&path=${this.path}&file=${file}` );
     }
 
+    playPlaylist( file ) {
+        return this.request( `cmd=play-playlist&file=${file}` );
+    }
+
     command( cmd, params ) {
         return this.request( `cmd=${cmd}&path=${this.path}&${params}` );
     }
 
     setConf( key, value ) {
         return this.request( `cmd=set-conf&key=${key}&value=${value}` );
+    }
+
+    setDesktopPath( path ) {
+        return this.request( `cmd=set-desktop-path&path=${path}` );
     }
 
     createAccount(user, pwd) {
@@ -129,12 +168,22 @@ class ZDL {
         return this.request( `cmd=kill-server&port=${port}` );
     }
 
+    modemReconnect( str ) {
+        var query = `cmd=reconnect&path=${this.path}`;
+        if ( str ) query += `&loop=${str}`;
+        return this.request( query );
+    }
+
     run() {
         return this.request( `cmd=run-zdl&path=${this.path}` );
     }
 
     quit() {
         return this.request( `cmd=quit-zdl&path=${this.path}` );
+    }
+
+    kill() {
+        return this.request( `cmd=kill-zdl&path=${this.path}` );
     }
 
     reset() {

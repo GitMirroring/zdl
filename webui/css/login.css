@@ -1,0 +1,139 @@
+/* ZigzagDownLoader (ZDL)
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published
+by the Free Software Foundation; either version 3 of the License,
+or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see http://www.gnu.org/licenses/.
+
+Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+
+For information or to collaborate on the project:
+https://savannah.nongnu.org/projects/zdl */
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  background: #c1bdba;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.form {
+  background: rgba(19, 35, 47, 0.9);
+  padding: 40px;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}
+
+.content > div:first-child {
+  display: none;
+}
+
+h1 {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AsBFC04BvsOiwAAAQFJREFUSMfNlssRwyAMRIVHJaQQikhXPtOVi3Ah6YEcYmPHrJCU+MclM/IGDU/SAtHBK3x+0iuvo/1jtzgTEcVMRP1ziqZh/r5HvFvSjYHGAA75X7w7ugYMoxuU6mroQYICcTqvttp6BgRdS9OfWIM1R6mvJe4NPdccpb5e07DrecsxZp2yR39WDYysvTOBvUhibenUujZsZe2dibk2V3hRA7plPopGSLCpBxn6HWrabgroW+Yj5tt4kaUe0IvqvwRwtHL2mNOA5uNbn4Y5AdqH9X63exHa5yIvkpiqc+B8F3nvCbRP5UUSU8scoH1u/C4y3hPau8jg+21uP72LPPfEG/Rrpj/wAYiIAAAAAElFTkSuQmCC") no-repeat;
+  text-align: center;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 200;
+  margin: 0 0 50px;
+}
+
+label {
+  position: absolute;
+  -webkit-transform: translateY(-23px);
+  transform: translateY(-23px);
+  left: 2px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.25s ease;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  font-size: 14px;
+}
+
+label.highlight {
+  font-size: 15px;
+  color: #fff;
+}
+
+input {
+  font-size: 22px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  border: 1px solid #a0b3b0;
+  color: #fff;
+  border-radius: 0;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+input:focus {
+  outline: 0;
+  border-color: #41aff9;
+}
+
+input:invalid {
+  box-shadow: none;
+}
+
+.field-wrap {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.button {
+  width: 100%;
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 15px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: #406ba8;
+  color: #ccc;
+  display: block;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.button:hover,
+.button:focus {
+  background: #417cc9;
+  color: #fff;
+  cursor: pointer;
+}
+
+.button:active {
+  background: #406ba8;
+  transform: translateY(4px);
+}
+
+.button::-moz-focus-inner {
+  border: 0;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 16px;
+}

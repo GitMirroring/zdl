@@ -4,7 +4,7 @@
 <head>
     <!--
 	ZigzagDownLoader (ZDL)
-	
+
 	This program is free software: you can redistribute it and/or modify it
 	under the terms of the GNU General Public License as published
 	by the Free Software Foundation; either version 3 of the License,
@@ -13,16 +13,16 @@
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see http://www.gnu.org/licenses/.
-	
+
 	Copyright (C) 2011
 	Gianluca Zoni <<zoninoz@inventati.org>>
-	
+
 	For information or to collaborate on the project:
 	`https://savannah.nongnu.org/projects/zdl'
-	
+
 	Gianluca Zoni
 	`http://inventati.org/zoninoz'
 	<zoninoz@inventati.org>-->
@@ -31,70 +31,52 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.ico" />
-    <script src="web-ui.js"></script>
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            font-size: 14px;
-            background: #333;
-        }
-
-        .login-container {
-            width: 350px;
-            height: 250px;
-            background: #444;
-            position: relative;
-            margin: 8em auto;
-            border-radius: 2px;
-        }
-
-        .login-container form {
-            padding-top: 80px;
-        }
-
-        .login-container input {
-            font-family: inherit;
-            font-size: inherit;
-        }
-
-        .login-container input.login {
-            float: left;
-            border: 1px solid #343434;
-            height: calc(12px + 1em);
-            background: #bbb;
-            color: #000;
-            padding: 0 3px;
-        }
-
-        .login-container input[type='submit'] {
-            background: #1e90ff;
-            color: #000;
-            border: 1px solid #1e90ff;
-            padding: 0 .7em;
-            height: calc(16px + 1em);
-            cursor: pointer;
-        }
-
-        .login {
-            color: white;
-            margin: 0 auto;
-        }
-
-        .login td {
-            text-align: right;
-            font-weight: bold;
-        }
-
-        @media (max-width: 350px) {
-            .login-container {
-                width: 100%;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200,400,600" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
 </head>
 
-<body onload="checkAccount();">
-    <div id="login" class="login-container"></div>
+<body>
+    <div class="form">
+        <div class="content">
+            <div id="signup">
+                <div class="logo"><h1>ZDL Account</h1></div>
+                <form>
+                    <div class="field-wrap">
+                        <label>Username</label>
+                        <input id="user" type="text" name="user" required />
+                    </div>
+                    <div class="field-wrap">
+                        <label>Password</label>
+                        <input id="pass1" class="pwd" type="password" name="pass1" required />
+                    </div>
+                    <div class="field-wrap">
+                        <label>Repeat password</label>
+                        <input id="pass2" class="pwd" type="password" name="pass2" required />
+                    </div>
+                    <p class="error"></p>
+                    <button type="button" class="button">Create your account</button>
+                </form>
+            </div>
+
+            <div id="login">
+                <h1>ZDL Login</h1>
+                <form action="/" method="post">
+                    <input type="hidden" name="cmd" value="login">
+                    <div class="field-wrap">
+                        <label>Username</label>
+                        <input type="text" name="user" required />
+                    </div>
+                    <div class="field-wrap">
+                        <label>Password</label>
+                        <input type="password" name="pass" required />
+                    </div>
+                    <p class="error"></p>
+                    <button type="submit" class="button">Enter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="js/login.js"></script>
 </body>
 
 </html>

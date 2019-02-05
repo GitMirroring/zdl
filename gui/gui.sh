@@ -28,10 +28,10 @@
 
 function get_download_path {
     local path_gui
-    ICON="$path_usr"/webui/icon-32x32.png
+    ICON="$path_usr"/gui/icon-32x32.png
     local title="Directory di download"
     local text="Seleziona la directory di destinazione dei download:"
-    local IMAGE2="$path_usr"/webui/zdl.png
+    local IMAGE2="$path_usr"/gui/zdl.png
     
     if hash yad
     then
@@ -1299,11 +1299,11 @@ function run_gui {
     start_file="$path_tmp"/links_loop.txt
 
     #IMAGE="browser-download"
-    #ICON="$path_usr"/webui/favicon.png
-    ICON="$path_usr"/webui/icon-32x32.png
+    #ICON="$path_usr"/gui/favicon.png
+    ICON="$path_usr"/gui/icon-32x32.png
     TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
-    IMAGE="$path_usr"/webui/zdl-64x64.png
-    IMAGE2="$path_usr"/webui/zdl.png
+    IMAGE="$path_usr"/gui/zdl-64x64.png
+    IMAGE2="$path_usr"/gui/zdl.png
     YAD_ZDL=(
 	--window-icon="$ICON"
 	--borders=5
@@ -1390,10 +1390,10 @@ function main {
 
 function display_xdcc_eu_gui {
     path_usr="/usr/local/share/zdl"
-    ICON="$path_usr"/webui/icon-32x32.png
+    ICON="$path_usr"/gui/icon-32x32.png
     TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
-    IMAGE="$path_usr"/webui/zdl-64x64.png
-    IMAGE2="$path_usr"/webui/zdl.png
+    IMAGE="$path_usr"/gui/zdl-64x64.png
+    IMAGE2="$path_usr"/gui/zdl.png
     YAD_ZDL=(
 	--window-icon="$ICON"
 	--borders=5

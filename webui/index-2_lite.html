@@ -22,7 +22,7 @@
 
 	For information or to collaborate on the project:
 	`https://savannah.nongnu.org/projects/zdl'
-      -->
+    -->
 
     <title>ZDL Web Interface Lite</title>
     <meta charset="utf-8">
@@ -139,15 +139,15 @@
             background: #445;
             border: none;
             color: #eee;
-            flex: 1;
             height: 38px;
             margin-left: 6px;
             overflow: hidden;
             padding: 0 5px;
             text-overflow: ellipsis;
             white-space: nowrap;
-            appearance: none;
-            -moz-appearance: none;
+            width: 100%;
+                    appearance: none;
+               -moz-appearance: none;
             -webkit-appearance: none;
         }
 
@@ -233,12 +233,6 @@
             color: #f00;
         }
 
-        /* @media (max-width: 1380px) {
-            button {
-                min-width: 80px;
-            }
-        } */
-
         @media (max-width: 1025px) {
             .section {
                 display: block;
@@ -294,9 +288,9 @@
             </div>
         </div>
     </div>
-    <div class="footer">ZigzagDownLoader</div>
+    <div class="footer">Zigzagdownloader</div>
 
-    <script src="api.js"></script>
+    <script src="js/zdl.js"></script>
 
     <script>
         var _console = document.getElementById("console"),
@@ -315,7 +309,7 @@
         function zdlLog() {
             myZDL.getFile("zdl_log.txt").then(function(content) {
                 if (content) {
-                    _log.value = content.replace(/<br>/g, "\n");
+                    _log.value = decodeURIComponent(content.replace(/<br>/g, "\n"));
                 } else {
                     _log.value = "zdl_log.txt not found or empty";
                 }
@@ -387,8 +381,7 @@
             myZDL.getData(arg).then(function(res) {
                 if (isJson(res)) {
                     var obj = JSON.parse(res),
-                        fd, data = "",
-                        index;
+                        fd, data = "", index;
                     for (var key of obj) {
                         fd = "<span class='blue'>" + key.percent + "%</span><span class='grey'>" + (key.length / 1048576).toFixed(2) + "MB</span>";
                         if (parseInt(key.percent) < 100) {
@@ -446,7 +439,7 @@
                                 zdlQueue();
                             });
                         } else {
-                            zdlConsole("xdcc request entered is malformed\n");
+                           zdlConsole("xdcc request entered is malformed\n");
                         }
                         break;
                     case "add-url":
@@ -579,12 +572,8 @@
                 }
             });
         }).catch(function(e) {
-            zdlConsole("initialization error: " + e + "\n");
+            zdlConsole("error: " + e + "\n");
         });
-
-        window.onbeforeunload = function() {
-            myZDL.reset; // Is this event handler really needed?
-        };
     </script>
 </body>
 

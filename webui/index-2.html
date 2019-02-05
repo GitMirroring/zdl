@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <!--
 	ZigzagDownLoader (ZDL)
@@ -21,604 +22,458 @@
 
 	For information or to collaborate on the project:
 	`https://savannah.nongnu.org/projects/zdl'
-	-->
+    -->
 
-    <title>ZDL API web-ui test</title>
+    <title>ZDL Web Interface</title>
     <meta charset="utf-8">
-    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
-    <style>
-        body {font-family:"Droid Sans", sans-serif; font-size:14px; background:#eee;}
-        table {border:1px solid #aaa; table-layout:fixed;}
-        table table {border:none;}
-        td {padding:5px; vertical-align:top; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;}
-        input {background:#fff; margin:0; padding:4px; border:1px solid #ccc;}
-        button {background:#444; color:#fff; border:1px solid #333; min-width:110px; padding:3px;}
-        button:hover {background:#000;}
-        .main {width:100%;}
-        .header {height:20px; font-size:16px; font-weight:700; padding:0 5px;}
-        .divider {height:20px; font-weight:700; padding:15px 5px 0; clear:both;}
-        .buttons {width:120px;}
-        .buttons button {margin:2px 0; display:block;}
-        .label {background:#C6C682; text-align:right; min-width:210px;}
-        .value {background:#fff;}
-        .input {padding:0 5px;}
-        .server {width:450px;}
-        .server .label {min-width:140px!important;}
-        .downloads {font-size:90%; height:145px; background:#fff; color:#333;}
-        .downloads span {padding:0 2px 2px; background:#ddd; color:#000; text-align:center; display:inline-block;}
-        .size {min-width:75px; margin-bottom:2px;}
-        .perc {min-width:60px; margin:0 3px 2px 2px;}
-        .reddy {background:#f6d!important;}
-        .new-link button:last-child {margin-left:3px;}
-        .new-link input {width:calc(100% - 240px);}
-        .new-xdcc input {width:calc(100% - 125px);}
-        .select {background:transparent; width:calc(100% - 120px); padding:0 5px; border:1px solid #ccc; height:24px; -webkit-appearance:none; -moz-appearance:none; appearance:none;}
-        .file {width:calc(50% - 10px); margin-top:15px; margin-right:10px; float:left;}
-        .file-name {padding:0 5px 4px; font-weight:700;}
-        .file-content {height:200px; background:#000; color:#eee; padding:5px; overflow-y:auto;}
-    </style>
-    <script src="api.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link href="css/jquery-ui.min.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
 </head>
 
 <body>
-<div class="header">ZDL web UI Test</div>
-<table class="main">
-    <tr>
-        <td class="buttons">
-            <button id="start-zdl">Avvia ZDL</button>
-            <button id="quit-zdl">Chiudi ZDL</button>
-            <button id="exit-all">Chiudi tutto</button>
-            <button id="reset-account">Reset account</button>
-        </td>
-        <td class="server">
-            <table>
-                <tr>
-                    <td class="label">IP:</td>
-                    <td class="value" id="ip-address"></td>
-                </tr>
-                <tr>
-                    <td class="label">Status:</td>
-                    <td class="value" id="status"></td>
-                </tr>
-                <tr>
-                    <td class="label">Sockets:</td>
-                    <td class="value" id="sockets"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="text"><button id="new-socket">Nuovo socket</button></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="text"><button id="kill-socket">Termina socket</button></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button id="kill-all">Termina tutti i downloader</button></td>
-                </tr>
-            </table>
-        </td>
-        <td class="downloads" id="output"></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td class="new-link"><input type="text"><button id="add-link">Aggiungi link</button><button id="clean">Pulisci</button></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td class="new-xdcc"><input type="text" placeholder="Network/Channel/Bot/Slot"><button id="add-xdcc">Aggiungi xdcc</button></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td>
-            <select class="select" id="selector">
-                <option selected="selected" disabled>seleziona file ...</option>
-            </select>
-            <button id="play">Play</button>
-        </td>
-    </tr>
-</table>
+    <div class="header"><a class="logo" href="">ZDL webUI</a></div>
+    <div class="loader">Loading ...</div>
+    <div class="wrapper">
+        <div id="tabs">
+            <ul>
+                <li><a data-i18n="tab-1-name" href="#tabs-1">Downloads</a></li>
+                <li><a data-i18n="tab-2-name" href="#tabs-2">Manage downloads</a></li>
+                <li><a data-i18n="tab-3-name" href="#tabs-3">Search XDCC</a></li>
+                <li><a data-i18n="tab-4-name" href="#tabs-4">Playlist</a></li>
+                <li><a data-i18n="tab-5-name" href="#tabs-5">Manage server</a></li>
+                <li><a data-i18n="tab-6-name" href="#tabs-6">Configuration</a></li>
+                <li><a data-i18n="tab-7-name" href="#tabs-7">Console</a></li>
+                <li><a data-i18n="tab-8-name" href="#tabs-8">Info</a></li>
+                <li><a data-i18n="tab-9-name" href="#tabs-9">Close all</a></li>
+            </ul>
 
-<div class="divider">Configurazione del download nel path:</div>
+            <!-- TAB 1 - Downloads -->
+            <div id="tabs-1">
+                <div class="clearfix">
+                    <div class="float-left">
+                        <h4 data-i18n="tab-1-title">Downloads in progress</h4>
+                    </div>
+                    <div class="float-right"><button data-i18n="button-del-completed" id="clean-downloaded" class="button">Delete completed</button></div>
+                </div>
+                <div id="downloads"></div>
+            </div>
 
-<table class="path">
-    <tr>
-        <td class="label">Path:</td>
-        <td class="value" id="path"></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td class="label">Spazio libero:</td>
-        <td class="value" id="free-space"></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td class="label">Downloader:</td>
-        <td class="value" id="downloader"></td>
-        <td class="input"><input type="text"><button id="set-downloader">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Max download:</td>
-        <td class="value" id="maxDownloads"></td>
-        <td class="input"><input type="text"><button id="set-maxdownloads">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Riconnetti modem:</td>
-        <td class="value" id="reconnect"></td>
-        <td class="input"><input type="text"><button id="set-reconnect">Cambia</button></td>
-    </tr>
-</table>
+            <!-- TAB 2 - Manage downloads -->
+            <div id="tabs-2">
+                <h4 data-i18n="tab-2-title">Manage downloads inside path</h4>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-path" class="label">Path:</div>
+                    <input id="path" type="text" readonly>
+                    <button data-i18n="button-select" id="path-toggler" class="button" data-toggle="path-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="path-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="path-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="path-save" class="button">Save</button>
+                        <ul id="path-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-space" class="label">Free space:</div>
+                    <div id="free-space" class="value">...</div>
+                    <button data-i18n="button-update" id="free-space-update" class="button">Update</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-url" class="label">Add URL:</div>
+                    <input id="add-link" type="text" placeholder="http(s)://host/path/params">
+                    <button data-i18n="button-send" id="add-link-send" class="button">Send</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-queue" class="label">URLs editor (queue):</div>
+                    <button data-i18n="button-open" id="edit-links-toggler" class="button" data-toggle="links-editor">Open</button>
+                </div>
+                <div class="toggler">
+                    <div id="links-editor" class="editor ui-widget-content ui-corner-all">
+                        <textarea id="edit-links" class="links"></textarea>
+                        <button data-i18n="button-save" id="edit-links-save" class="button">Save</button>
+                        <button data-i18n="button-delete" id="edit-links-delete" class="button">Delete</button>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-xdcc" class="label">Add XDCC:</div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-xdcc-host" class="label alt">IRC host:</div>
+                    <input class="mid" id="irc-host" type="text" placeholder="irc-server.com">
+                    <button data-i18n="button-clean" id="irc-host-clean" class="button">Clean</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-xdcc-channel" class="label alt">Channel:</div>
+                    <input class="mid" id="irc-channel" type="text" placeholder="nomeCanale">
+                    <button data-i18n="button-clean" id="irc-channel-clean" class="button">Clean</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-xdcc-bot" class="label alt">Bot:</div>
+                    <input class="mid" id="irc-bot" type="text" placeholder="nomeBot">
+                    <button data-i18n="button-clean" id="irc-bot-clean" class="button">Clean</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-xdcc-slot" class="label alt">Slot #:</div>
+                    <input class="mid" id="irc-slot" type="text" placeholder="#54">
+                    <button data-i18n="button-clean" id="irc-slot-clean" class="button">Clean</button>
+                </div>
+                <div class="inline-group">
+                    <div class="label alt"></div>
+                    <button data-i18n="button-send-xdcc" id="xdcc-send" class="button">Send XDCC</button>
+                    <button data-i18n="button-clean-all" id="xdcc-clean" class="button">Clean all</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-torrent" class="label">Add torrent:</div>
+                    <button data-i18n="button-select" id="torrent-toggler" class="button" data-toggle="torrent-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="torrent-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="torrent-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="torrent-save" class="button">Save</button>
+                        <ul id="torrent-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-links-txt" class="label">Read links.txt:</div>
+                    <button data-i18n="button-open" id="links-txt-toggler" class="button" data-toggle="links-txt-read">Open</button>
+                </div>
+                <div class="toggler">
+                    <div id="links-txt-read" class="read ui-widget-content ui-corner-all">
+                        <textarea id="links-txt" class="links"></textarea>
+                        <button data-i18n="button-delete" id="links-txt-delete" class="button">Delete</button>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-max-downloads" class="label">Max parallel downloads:</div>
+                    <input id="max-downloads" class="spinner">
+                    <button data-i18n="button-change" id="max-downloads-change" class="button">Change</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-downloader" class="label">Downloader:</div>
+                    <select id="downloader" class="selectmenu">
+                    	<option>Aria2</option>
+                    	<option>Axel</option>
+                    	<option>Wget</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-reconnect" class="label">Modem/router reconnect:</div>
+                    <select id="reconnect" class="selectmenu">
+                    	<option data-i18n="option-never" value="disabled">Never</option>
+                    	<option data-i18n="option-every-url" value="enabled">Every new URL</option>
+                    </select>
+                    <button data-i18n="button-reconnect" id="reconnect-now" class="button">Reconnect now</button>
+                    <button data-i18n="button-ip" id="get-ip" class="button">IP address</button>
+                    <input id="ip-address" class="short" type="text">
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-2-label-status" class="label">Path status:</div>
+                    <button data-i18n="button-kill-zdl" id="zdl-quit" class="button">Terminate ZDL</button>
+                    <button data-i18n="button-kill-all" id="zdl-killall" class="button">Terminate ZDL and downloads</button>
+                    <button data-i18n="button-run-zdl" id="zdl-run" class="button hide">Run ZDL</button>
+                </div>
+            </div>
 
-<div class="divider">Configurazione generale:</div>
+            <!-- TAB 3 - XDCC search -->
+            <div id="tabs-3">
+                <h4 data-i18n="tab-3-title">XDCC search</h4>
+                <div class="inline-group">
+                    <div data-i18n="tab-3-label-search-on" class="label">Search on xdcc.eu:</div>
+                    <input class="mid" id="xdcc-search" type="text">
+                    <button data-i18n="button-search" id="xdcc-search-exec" class="button">Search</button>
+                    <div data-i18n="tab-3-label-max-results" class="label">Max results:</div>
+                    <input id="max-xdcc" class="spinner">
+                </div>
+                <table id="xdcc-eu" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Network</th>
+                            <th>Channel</th>
+                            <th>Bot</th>
+                            <th>Slot</th>
+                            <th>Gets</th>
+                            <th>Size</th>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
 
-<table class="config">
-    <tr>
-        <td class="label">Home path:</td>
-        <td class="value" id="home-path"></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td class="label">Interfaccia utente:</td>
-        <td class="value" id="web_ui"></td>
-        <td class="input"><input type="text"><button id="set-webui">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Downloader predefinito:</td>
-        <td class="value" id="conf_downloader"></td>
-        <td class="input"><input type="text"><button id="set-conf-downloader">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Connessioni Axel:</td>
-        <td class="value" id="axel_parts"></td>
-        <td class="input"><input type="text"><button id="set-axelparts">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Connessioni Aria2:</td>
-        <td class="value" id="aria2_connections"></td>
-        <td class="input"><input type="text"><button id="set-aria2parts">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Max download:</td>
-        <td class="value" id="max_dl"></td>
-        <td class="input"><input type="text"><button id="set-maxdl">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Sfondo terminale:</td>
-        <td class="value" id="background"></td>
-        <td class="input"><input type="text"><button id="set-background">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Lingua:</td>
-        <td class="value" id="language"></td>
-        <td class="input"><input type="text"><button id="set-language">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Comando riconnessione:</td>
-        <td class="value" id="reconnecter"></td>
-        <td class="input"><input type="text"><button id="set-reconnecter">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Aggiornamenti automatici:</td>
-        <td class="value" id="autoupdate"></td>
-        <td class="input"><input type="text"><button id="set-autoupdate">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Player video:</td>
-        <td class="value" id="player"></td>
-        <td class="input"><input type="text"><button id="set-player">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Editor:</td>
-        <td class="value" id="editor"></td>
-        <td class="input"><input type="text"><button id="set-editor">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Sovrascrivi download:</td>
-        <td class="value" id="resume"></td>
-        <td class="input"><input type="text"><button id="set-resume">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Modalità avvio:</td>
-        <td class="value" id="zdl_mode"></td>
-        <td class="input"><input type="text"><button id="set-zdlmode">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Porta TCP torrent:</td>
-        <td class="value" id="tcp_port"></td>
-        <td class="input"><input type="text"><button id="set-tcpport">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Porta UDP torrent:</td>
-        <td class="value" id="udp_port"></td>
-        <td class="input"><input type="text"><button id="set-udpport">Cambia</button></td>
-    </tr>
-    <tr>
-        <td class="label">Browser:</td>
-        <td class="value" id="browser"></td>
-        <td class="input"><input type="text"><button id="set-browser">Cambia</button></td>
-    </tr>
-</table>
+            <!-- TAB 4 - Playlist -->
+            <div id="tabs-4">
+                <h4 data-i18n="tab-4-title">Build a playlist</h4>
+                <div class="inline-group">
+                    <div data-i18n="tab-4-label-select" class="label">Select files:</div>
+                    <button data-i18n="button-select" id="playlist-toggler" class="button" data-toggle="playlist-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="playlist-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="playlist-path" class="path" type="text">
+                        <button data-i18n="button-add" id="playlist-save" class="button">Add</button>
+                        <ul id="playlist-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div id="playlist" class="playlist"></div>
+            </div>
 
-<div class="file-container">
-    <div class="file">
-        <div class="file-name">links.txt</div>
-        <div id="links" class="file-content"></div>
-        <div class="file-buttons">
-            <button id="del-links">Elimina</button>
-            <button id="read-links">Aggiorna</button>
+            <!-- TAB 5 - Manage server -->
+            <div id="tabs-5">
+                <h4 data-i18n="tab-5-title">Manage sockets</h4>
+                <div class="inline-group">
+                    <div data-i18n="tab-5-label-new-socket" class="label">New socket (port):</div>
+                    <input id="new-socket" class="spinner">
+                    <button data-i18n="button-start" id="new-socket-run" class="button">Start</button>
+                </div>
+                <div class="inline-group sockets-go">
+                    <div data-i18n="tab-5-label-go-socket" class="label">Go to socket:</div>
+                </div>
+                <div class="inline-group sockets-kill">
+                    <div data-i18n="tab-5-label-kill-socket" class="label">Terminate socket:</div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-5-label-kill-active-socket" class="label">Terminate active socket:</div>
+                    <button data-i18n="button-execute" id="socket-kill-this" class="button">Execute</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-5-label-kill-downloads" class="label">Terminate all downloads:</div>
+                    <button data-i18n="button-execute" id="downloads-killall" class="button">Execute</button>
+                </div>
+            </div>
+
+            <!-- TAB 6 - Configuration -->
+            <div id="tabs-6">
+                <h4 data-i18n="tab-6-title">Global configuration</h4>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-webui" class="label">User web UI:</div>
+                    <select id="conf-webui" class="selectmenu">
+                        <option value="2">Multilang</option>
+                        <option value="1">Default</option>
+                        <option value="2_lite">Lite</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-def-downloader" class="label">Default downloader:</div>
+                    <select id="conf-downloader" class="selectmenu">
+                    	<option>Aria2</option>
+                    	<option>Axel</option>
+                    	<option>Wget</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-axel-parts" class="label">Axel download parts:</div>
+                    <input id="conf-axel-parts" class="spinner">
+                    <button data-i18n="button-change" id="conf-axel-parts-change" class="button">Change</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-aria2-parts" class="label">Aria2 download parts:</div>
+                    <input id="conf-aria2-parts" class="spinner">
+                    <button data-i18n="button-change" id="conf-aria2-parts-change" class="button">Change</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-max-downloads" class="label">Max parallel downloads:</div>
+                    <input id="conf-max-downloads" class="spinner">
+                    <button data-i18n="button-change" id="conf-max-downloads-change" class="button">Cambia</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-xterm-bg" class="label">Virtual terminal BG:</div>
+                    <select id="conf-bg-terminal" class="selectmenu">
+                    	<option data-i18n="option-black" value="black">black</option>
+                    	<option data-i18n="option-transparent" value="transparent">transparent</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-language" class="label">Language:</div>
+                    <select id="conf-language" class="selectmenu">
+                    	<option data-i18n="option-italian" value="it">Italian</option>
+                        <option data-i18n="option-english" value="en">English</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-reconnection" class="label">Modem reconnection:</div>
+                    <input id="conf-reconnecter" type="text" readonly>
+                    <button data-i18n="button-select" id="conf-reconnecter-toggler" class="button" data-toggle="conf-reconnecter-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="conf-reconnecter-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="conf-reconnecter-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="conf-reconnecter-save" class="button">Save</button>
+                        <ul id="conf-reconnecter-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-update" class="label">Automatic update:</div>
+                    <select id="conf-auto-update" class="selectmenu">
+                    	<option data-i18n="option-enabled" value="enabled">enabled</option>
+                    	<option data-i18n="option-disabled" value="disabled">disabled</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-media-player" class="label">Default media player:</div>
+                    <input id="conf-player" type="text" readonly>
+                    <button data-i18n="button-select" id="conf-player-toggler" class="button" data-toggle="conf-player-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="conf-player-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="conf-player-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="conf-player-save" class="button">Save</button>
+                        <label data-i18n="radio-input-edit" for="player-editable">Edit</label><input type="checkbox" name="player-editable" id="player-editable" class="input-editable">
+                        <ul id="conf-player-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-text-editor" class="label">Default text editor:</div>
+                    <input id="conf-editor" type="text" readonly>
+                    <button data-i18n="button-select" id="conf-editor-toggler" class="button" data-toggle="conf-editor-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="conf-editor-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="conf-editor-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="conf-editor-save" class="button">Save</button>
+                        <label data-i18n="radio-input-edit" for="editor-editable">Edit</label><input type="checkbox" name="editor-editable" id="editor-editable" class="input-editable">
+                        <ul id="conf-editor-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-overwrite" class="label">Overwrite files:</div>
+                    <select id="conf-resume" class="selectmenu">
+                        <option data-i18n="option-disabled" value="disabled">disabled</option>
+                        <option data-i18n="option-enabled" value="enabled">enabled</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-start-mode" class="label">Start mode:</div>
+                    <select id="conf-start-mode" class="selectmenu">
+                    	<option>stdout</option>
+                    	<option>lite</option>
+                        <option>daemon</option>
+                    </select>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-torrent-tcp" class="label">Torrent TCP port:</div>
+                    <input id="conf-torrent-tcp" class="spinner">
+                    <button data-i18n="button-change" id="conf-torrent-tcp-change" class="button">Change</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-torrent-udp" class="label">Torrent UDP port:</div>
+                    <input id="conf-torrent-udp" class="spinner">
+                    <button data-i18n="button-change" id="conf-torrent-udp-change" class="button">Change</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-socket-tcp" class="label">Socket TCP port:</div>
+                    <input id="conf-socket-tcp" class="spinner">
+                    <button data-i18n="button-change" id="conf-socket-tcp-change" class="button">Change</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-browser" class="label">Default browser:</div>
+                    <input id="conf-browser" type="text" readonly>
+                    <button data-i18n="button-select" id="conf-browser-toggler" class="button" data-toggle="conf-browser-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="conf-browser-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="conf-browser-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="conf-browser-save" class="button">Save</button>
+                        <label data-i18n="radio-input-edit" for="browser-editable">Edit</label><input type="checkbox" name="browser-editable" id="browser-editable" class="input-editable">
+                        <ul id="conf-browser-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-account" class="label">Web UI account:</div>
+                    <button data-i18n="button-reset" id="account-reset" class="button">Reset account</button>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-webui-icon" class="label">Path ZDL icon:</div>
+                    <input id="conf-desktop" type="text" readonly>
+                    <button data-i18n="button-select" id="conf-desktop-toggler" class="button" data-toggle="conf-desktop-browse">Select</button>
+                </div>
+                <div class="toggler">
+                    <div id="conf-desktop-browse" class="browse ui-widget-content ui-corner-all">
+                        <input id="conf-desktop-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="conf-desktop-save" class="button">Save</button>
+                        <ul id="conf-desktop-tree" class="tree"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7 - Console -->
+            <div id="tabs-7">
+                <h4 data-i18n="tab-7-title">Logging events and errors</h4>
+                <ul class="console-opt">
+                    <li><label data-i18n="radio-only-errors" for="console-only-errors">Logs only errors</label><input type="checkbox" name="console-only-errors" id="console-only-errors"></li>
+                    <li><button data-i18n="button-open-log" id="console-zdl-log-toggler" class="button" data-toggler="zdl-log">Open ZDL log</button></li>
+                </ul>
+                <div class="toggler">
+                    <div id="zdl-log" class="log ui-widget-content ui-corner-all">loading ...</div>
+                </div>
+                <div id="console" class="console"></div>
+                <div class="centered">
+                    <button data-i18n="button-clean" id="console-clean" class="button">Clean</button>
+                </div>
+            </div>
+
+            <!-- TAB 8 - Info -->
+            <div id="tabs-8">
+                <h4 data-i18n="tab-8-title">ZigzagDownLoader (ZDL) documentation</h4>
+                <p data-i18n="tab-8-text1">The user manual is available in various forms, accessible from the terminal or from a web browser.</p>
+                <p data-i18n="tab-8-text2">Here you can consult:</p>
+                <ul class="info">
+                    <li><a data-i18n="tab-8-link-site" href="http://nongnu.org/zdl" target="_blank">Official site of ZigzagDownLoader</a></li>
+                    <li><a data-i18n="tab-8-link-diaspora" href="https://joindiaspora.com/tags/zdl" target="_blank">Updates in Diaspora*</a></li>
+                    <li><a data-i18n="tab-8-link-savannah" href="https://savannah.nongnu.org/projects/zdl" target="_blank">Development project on Savannah/GNU</a></li>
+                    <li><a data-i18n="tab-8-link-packages" href="http://download-mirror.savannah.gnu.org/releases/zdl/" target="_blank">ZDL packages released</a></li>
+                    <li><a data-i18n="tab-8-link-git" href="http://git.savannah.gnu.org/cgit/zdl.git" target="_blank">Git repository (source version check)</a></li>
+                    <li><a data-i18n="tab-8-link-report" href="https://savannah.nongnu.org/bugs/?func=additem&group=zdl" target="_blank">Send a message or report a bug</a></li>
+                </ul>
+            </div>
+
+            <!-- TAB 9 - Close all -->
+            <div id="tabs-9">
+                <h4 data-i18n="tab-9-title">Close all and exit</h4>
+                <p data-i18n="tab-9-text">Do you really want to terminate ZDL instances and downloads in all paths and close all sockets?</p>
+                <div class="centered">
+                    <button data-i18n="button-close-all" id="close-all" class="button">Close all</button><span class="onclose"></span>
+                </div>
+            </div>
         </div>
+        <div class="footer"><span class="fa fa-bolt"></span> ZigzagDownLoader</div>
     </div>
-    <div class="file">
-        <div class="file-name">zdl_log.txt</div>
-        <div id="log" class="file-content"></div>
-        <div class="file-buttons">
-            <button id="del-log">Elimina</button>
-            <button id="read-log">Aggiorna</button>
-        </div>
-    </div>
-</div>
 
-<div class="divider"></div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/zdl.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/handlers.js"></script>
+    <script src="js/i18n/jquery.i18n.js"></script>
+    <script src="js/i18n/jquery.i18n.messagestore.js"></script>
+    <script src="js/i18n/jquery.i18n.fallbacks.js"></script>
+    <script src="js/i18n/jquery.i18n.parser.js"></script>
+    <script src="js/i18n/jquery.i18n.emitter.js"></script>
+    <script src="js/i18n/jquery.i18n.language.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 
-<script>
-var files = [];
-
-function tryParse(str) {
-    try {
-        JSON.parse(str);
-    } catch(e) {
-        return false;
-    }
-    return true;
-}
-
-// API
-var options = {path: "__START_PATH__", file: "index.html"};
-var myZDL = new ZDL(options);
-
-function settingsFlow() {
-    var arg = arguments[0] || false;
-    myZDL.getStatus(arg).then(function(res) {
-        if (tryParse(res)) {
-            var obj = JSON.parse(res), node;
-            for (var key of Object.keys(obj)) {
-                if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
-                    for (var _key of Object.keys(obj[key])) {
-                        node = document.getElementById(_key);
-                        if (node && node.textContent !== obj[key][_key]) node.textContent = obj[key][_key];
-                    }
-                }
-                else {
-                    node = document.getElementById(key);
-                    if (node && node.textContent !== obj[key]) node.textContent = obj[key];
-                }
+    <script>
+        WebFont.load({
+            google: {
+                families: ["Lobster"],
+                text: "ZigzagDownLoader"
             }
-        }
-        //console.log("[ZDL] settings flow:", res.length);
-        settingsFlow();
-    }).catch(function(e) { console.log("[ZDL] settings flow: ", e); });
-}
+        });
 
-var output = document.getElementById("output"),
-    selector = document.getElementById("selector");
+        var myZDL = new ZDL("__START_PATH__", "index.html"),
+            fileList = [],
+            isDownloading = [],
+            logOnlyErrors = false,
+            zdlRunning = true,
+            actionPATH = myZDL.getPath();
 
-function downloadsFlow() {
-    var arg = arguments[0] || false;
-    myZDL.getData(arg).then(function(res) {
-        if (tryParse(res)) {
-            var obj = JSON.parse(res), data = "";
-            for (var key of obj) {
-                data += "<span class='size'>"+(key.length / 1048576).toFixed(2)+"MB</span>";
-                if (parseInt(key.percent) < 100) data += "<span class='perc reddy'>" + key.percent + "%</span>";
-                else data += "<span class='perc'>" + key.percent + "%</span>";
-                data += key.file + "<br>";
-                if (files.indexOf(key.file) < 0) {
-                    files.push(key.file);
-                    var option = document.createElement("option");
-                    option.text = key.file;
-                    selector.add(option);
-                }
-            }
-            output.innerHTML = data;
-        }
-        //console.log("[ZDL] downloads flow", res.length);
-        downloadsFlow();
-    }).catch(function(e) { console.log("[ZDL] downloads flow: ", e); });
-}
-
-myZDL.initClient().then(function() {
-    console.log("[ZDL] Flows initialized");
-    settingsFlow(true);
-    downloadsFlow(true);
-});
-
-myZDL.getIP().then(function(res) {
-    var ip = res.match(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/);
-    if (ip) document.getElementById("ip-address").textContent = ip;
-});
-
-myZDL.getHomePath().then(function(path) {
-    document.getElementById("home-path").textContent = path;
-});
-
-myZDL.getFreeSpace().then(function(space) {
-    document.getElementById("free-space").textContent = space;
-});
-
-myZDL.getFile("links.txt").then(function(content) {
-    document.getElementById("links").innerHTML = content;
-});
-
-myZDL.getFile("zdl_log.txt").then(function(content) {
-    document.getElementById("log").innerHTML = content;
-});
-
-document.querySelector(".main").addEventListener("click", function(event) {
-    if (event.target.nodeName === "BUTTON") {
-        switch (event.target.id) {
-            case "start-zdl":
-                myZDL.run().then(function() {
-                    console.log("[ZDL] start");
-                });
-                break;
-            case "quit-zdl":
-                myZDL.quit().then(function() {
-                    console.log("[ZDL] quit");
-                });
-                break;
-            case "exit-all":
-                myZDL.exitAll().then(function() {
-                    window.setTimeout(function() {
-                        window.location.href = window.location.pathname;
-                    }, 3000);
-                });
-                break;
-            case "reset-account":
-                myZDL.resetAccount().then(function() {
-                    window.setTimeout(function() {
-                        window.location.href = "login.html";
-                    }, 2000);
-                });
-                break;
-            case "new-socket":
-                var port = event.target.previousElementSibling;
-                myZDL.startSocket(port.value).then(function() {
-                    console.log("[ZDL] nuovo socket sulla porta " + port.value);
-                    port.value = "";
-                });
-                break;
-            case "kill-socket":
-                var port = event.target.previousElementSibling;
-                myZDL.killSocket(port.value).then(function() {
-                    window.setTimeout(function() {
-                        window.location.href = window.location.pathname;
-                    }, 3000);
-                    console.log("[ZDL] chiuso socket sulla porta " + port.value);
-                    port.value = "";
-                });
-                break;
-            case "kill-all":
-                myZDL.killAll().then(function() {
-                    console.log("[ZDL] terminati tutti i downloader");
-                });
-                break;
-            case "add-link":
-                output.innerHTML += "Preparazione del download ... attendere ...";
-                var link = event.target.previousElementSibling;
-                myZDL.addLink(link.value).then(function() {
-                    console.log("[ZDL] aggiunto link: " + link.value);
-                    myZDL.getFile("links.txt").then(function(content) {
-                        document.getElementById("links").innerHTML = content;
-                    });
-                    link.value = "";
-                });
-                break;
-            case "add-xdcc":
-                output.innerHTML += "Preparazione del download ... attendere ...";
-                var input = event.target.previousElementSibling;
-                var split = input.value.trim().split("/");
-                var link = {
-                    host: split[0],
-                    channel: encodeURIComponent(split[1]),
-                    msg: encodeURIComponent(split[2] + " xdcc send #" + split[3])};
-                myZDL.addXdcc(link).then(function() {
-                    console.log("[ZDL] aggiunto link xdcc: " + link.host + "/" + link.channel + "/" + decodeURIComponent(link.msg));
-                    myZDL.getFile("links.txt").then(function(content) {
-                        document.getElementById("links").innerHTML = content;
-                    });
-                    input.value = "";
-                });
-                break;
-            case "clean":
-                output.innerHTML = "";
-                myZDL.cleanCompleted().then(function() {
-                    console.log("[ZDL] cancellati dati download completati")
-                });
-                break;
-            case "play":
-                var file = event.target.previousElementSibling;
-                myZDL.play(file.value).then(function() {
-                    console.log("[ZDL] play file: " + file.value);
-                });
-                break;
-            default:
-                return false;
-        }
-    }
-}, false);
-
-document.querySelector(".path").addEventListener("click", function(event) {
-    if (event.target.nodeName === "BUTTON") {
-        var input = event.target.previousElementSibling;
-        switch (event.target.id) {
-            case "set-downloader":
-                myZDL.setLocal("set-downloader",  "downloader=" + input.value).then(function() {
-                    console.log("[ZDL] download con " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-maxdownloads":
-                myZDL.setLocal("set-max-downloads", "number=" + input.value).then(function() {
-                    console.log("[ZDL] max downloads: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-reconnect":
-                myZDL.setLocal("reconnect", "set=" + input.value).then(function() {
-                    input.value = "";
-                });
-                break;
-            default:
-                return false;
-        }
-    }
-}, false);
-
-document.querySelector(".config").addEventListener("click", function(event) {
-    if (event.target.nodeName === "BUTTON") {
-        var input = event.target.previousElementSibling;
-        switch (event.target.id) {
-            case "set-webui":
-                myZDL.setGlobal("web_ui", input.value).then(function() {
-                    console.log("[ZDL] interfaccia: " + input.value);
-                    input.value = "attendere ...";
-                    window.setTimeout(function() {
-                        window.location.href = window.location.pathname;
-                    }, 3000);
-                });
-                break;
-            case "set-conf-downloader":
-                myZDL.setGlobal("downloader", input.value).then(function() {
-                    console.log("[ZDL] downloader predefinito: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-axelparts":
-                myZDL.setGlobal("axel_parts", input.value).then(function() {
-                    console.log("[ZDL] parti Axel: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-aria2parts":
-                myZDL.setGlobal("aria2_connections". input.value).then(function() {
-                    console.log("[ZDL] connessioni Aria2 " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-maxdl":
-                myZDL.setGlobal("max_dl", input.value).then(function() {
-                    console.log("[ZDL] max downloads predefiniti: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-background":
-                myZDL.setGlobal("background", input.value).then(function() {
-                    console.log("[ZDL] background console: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-language":
-                myZDL.setGlobal("language", input.value).then(function() {
-                    console.log("[ZDL] lingua: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-reconnecter":
-                myZDL.setGlobal("reconnecter", input.value).then(function() {
-                    console.log("[ZDL] stringa riconnessione modem: '" + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-autoupdate":
-                myZDL.setGlobal("autoupdate", input.value).then(function() {
-                    console.log("[ZDL] autoupdate: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-player":
-                myZDL.setGlobal("player", input.value).then(function() {
-                    console.log("[ZDL] player: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-editor":
-                myZDL.setGlobal("editor", input.value).then(function() {
-                    console.log("[ZDL] editor: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-resume":
-                myZDL.setGlobal("resume", input.value).then(function() {
-                    console.log("[ZDL] resume: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-zdlmode":
-                myZDL.setGlobal("zdl_mode", input.value).then(function() {
-                    console.log("[ZDL] mode: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-tcpport":
-                myZDL.setGlobal("tcp_port", input.value).then(function() {
-                    console.log("[ZDL] porta torrent TCP: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-udpport":
-                myZDL.setGlobal("udp_port", input.value).then(function() {
-                    console.log("[ZDL] porta torrent UDP: " + input.value);
-                    input.value = "";
-                });
-                break;
-            case "set-browser":
-                myZDL.setGlobal("browser", input.value).then(function() {
-                    console.log("[ZDL] browser: " + input.value);
-                    input.value = "";
-                });
-                break;
-            default:
-                return false;
-        }
-    }
-}, false);
-
-document.querySelector(".file-container").addEventListener("click", function(event) {
-    if (event.target.nodeName === "BUTTON") {
-        switch (event.target.id) {
-            case "del-links":
-                myZDL.deleteFile("links.txt").then(function() {
-                    console.log("[ZDL] links.txt eliminato");
-                    document.getElementById("log").innerHTML= "links.txt eliminato";
-                });
-                break;
-            case "read-links":
-                myZDL.getFile("links.txt").then(function(content) {
-                    console.log("[ZDL] links.txt riletto");
-                    document.getElementById("links").innerHTML = content;
-                });
-                break;
-            case "del-log":
-                myZDL.deleteFile("zdl_log.txt").then(function() {
-                    console.log("[ZDL] zdl_log.txt eliminato");
-                    document.getElementById("log").innerHTML= "zdl_log.txt eliminato";
-                });
-                break;
-            case "read-log":
-                myZDL.getFile("zdl_log.txt").then(function(content) {
-                    console.log("[ZDL] zdl_log.txt riletto");
-                    document.getElementById("log").innerHTML = content;
-                });
-                break;
-            default:
-                return false;
-        }
-    }
-}, false);
-</script>
-
+        initClient();
+    </script>
 </body>
+
 </html>

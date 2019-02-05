@@ -1,0 +1,75 @@
+/* ZigzagDownLoader (ZDL)
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published
+by the Free Software Foundation; either version 3 of the License,
+or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see http://www.gnu.org/licenses/.
+
+Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+
+For information or to collaborate on the project:
+https://savannah.nongnu.org/projects/zdl */
+
+/* Labels */
+.inline-group .label {
+  background: #ccc;
+}
+
+/* Input and text bars */
+.inline-group .value,
+.inline-group input[type="text"],
+.playlist > .pl-item > .pl-file {
+  background: #d0edec;
+  color: #207a72;
+}
+
+/* Progressbar text */
+.ui-progressbar .label {
+  color: #3275ab;
+}
+
+/* Progressbar color */
+.ui-progressbar > .ui-widget-header {
+  background: #cfe4fc !important;
+}
+
+/* Progressbar background */
+.ui-progressbar.ui-widget-content {
+  background: #efefef !important;
+  border-color: #cfe4fc !important;
+}
+
+/* Progressbar info 100% */
+.progressbar .side-info {
+  background: #d0edec;
+  color: #207a72;
+  border: 1px solid #d0edec;
+}
+
+/* Progressbar info on download */
+.progressbar .downloading {
+  background: #ffe6cc !important;
+  border: 1px solid #ffe6cc !important;
+  color: #393a1d !important;
+}
+
+/* Progressbar info on unterminated */
+.progressbar .unterminated {
+  background: #ddd !important;
+  border: 1px solid #ddd !important;
+  color: #444 !important;
+}
+
+/* Progressbar info on abort */
+.progressbar .aborted {
+  background: #f1dcda !important;
+  border: 1px solid #f1dcda !important;
+  color: #c42b5e !important;
+}

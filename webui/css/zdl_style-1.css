@@ -1,26 +1,26 @@
-/*  ZigzagDownLoader (ZDL) 
+/*  ZigzagDownLoader (ZDL)
  *
- * This program is free software: you can redistribute it and/or modify it  
- * under the terms of the GNU General Public License as published  
- * by the Free Software Foundation; either version 3 of the License,  
- * or (at your option) any later version. 
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,  
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY  
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License  
- * along with this program. If not, see http://www.gnu.org/licenses/. 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
  *
- * For information or to collaborate on the project: 
- * https://savannah.nongnu.org/projects/zdl 
+ * For information or to collaborate on the project:
+ * https://savannah.nongnu.org/projects/zdl
  *
  */
 
-
-body, html {
+body,
+html {
     background: black;
     color: black;
     margin: 0;
@@ -29,10 +29,7 @@ body, html {
 
 p {
     text-align: left;
-    padding-top: .5em;
-    padding-bottom: .5em;
-    padding-left: .7em;
-    padding-right: .7em;
+    padding: 0.5em 0.7em;
     margin: 0;
 }
 
@@ -58,10 +55,7 @@ ol {
 
 dl {
     display: block;
-    margin-top: 0em;
-    margin-bottom: 0em;
-    margin-left: 3em;
-    margin-right: 0em;
+    margin: 0 0 3em;
 }
 
 dt {
@@ -82,7 +76,6 @@ h2 {
     text-align: left;
     color: #343434;
     margin-bottom: 1em;
-
 }
 
 
@@ -99,7 +92,7 @@ div {
 }
 
 .header {
-    background-image: url("zdl-64x64.png"); /* url("header-min.gif"); */    
+    background-image: url("../images/zdl-64x64.png");
     background-color: #343434;
     text-align: left;
     border: 0px;
@@ -126,7 +119,6 @@ div {
 }
 
 #progress-bar {
-    /* position: relative; */
     float: left;
     width: calc(100% - 190px - 1em);
     height: 30px;
@@ -145,27 +137,24 @@ div {
 
 #progress-label-file {
     position: absolute;
-    text-align: left; 
-    line-height: 30px; 
+    /* text-align: left; */
+    left: 5px;
+    line-height: 30px;
     color: white;
     z-index: 30;
-    /* hyphens: none; */
-    /* word-wrap: break-all; */
     height: 30px;
     width: calc(100% - 190px - 1em);
     overflow: hidden;
-    /* white-space: nowrap; */
     text-overflow: ellipsis;
     cursor: pointer;
 }
 
 #progress-label-status {
     float: left;
-    text-align: left; 
-    line-height: 30px; 
+    text-align: left;
+    line-height: 30px;
     color: white;
     z-index: 30;
-    /* word-wrap: break-word; */
     width: 190px;
     background-color: #343434;
     overflow: hidden;
@@ -176,6 +165,7 @@ div {
 .hidden {
     display: none;
 }
+
 .visible {
     display: block;
     cursor: pointer;
@@ -183,62 +173,51 @@ div {
     margin-bottom: 4px;
 }
 
-
 button,
 input[type=submit] {
-    -moz-box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3066db), color-stop(1, #335bab));
-    background:-moz-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:-webkit-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:-o-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:-ms-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:linear-gradient(to bottom, #3066db 5%, #335bab 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3066db', endColorstr='#335bab',GradientType=0);
-    background-color:#3066db;
-    border:1px solid #314179;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    /* font-family:Arial; */
-    /* font-size:13px; */
-    font-weight:bold;
-    /* padding:4px 12px; */
-    text-decoration:none;
-    /* height: 30px; */
-
-    /* padding: .5em .7em; */
-    /* margin: 0 0 0 0; */
-    /* box-sizing: border-box; */
-
-    padding: 0 .7em 0 .7em;
+    -moz-box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3066db), color-stop(1, #335bab));
+    background: -moz-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: -webkit-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: -o-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: -ms-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: linear-gradient(to bottom, #3066db 5%, #335bab 100%);
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#3066db', endColorstr='#335bab', GradientType=0);
+    background-color: #3066db;
+    border: 1px solid #314179;
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 0 0.7em;
     height: calc(16px + 1em);
     box-sizing: border-box;
-
 }
 
 button:hover {
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #335bab), color-stop(1, #3066db));
-    background:-moz-linear-gradient(top, #335bab 5%, #3066db 100%);
-    background:-webkit-linear-gradient(top, #335bab 5%, #3066db 100%);
-    background:-o-linear-gradient(top, #335bab 5%, #3066db 100%);
-    background:-ms-linear-gradient(top, #335bab 5%, #3066db 100%);
-    background:linear-gradient(to bottom, #335bab 5%, #3066db 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#335bab', endColorstr='#3066db',GradientType=0);
-    background-color:#335bab;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #335bab), color-stop(1, #3066db));
+    background: -moz-linear-gradient(top, #335bab 5%, #3066db 100%);
+    background: -webkit-linear-gradient(top, #335bab 5%, #3066db 100%);
+    background: -o-linear-gradient(top, #335bab 5%, #3066db 100%);
+    background: -ms-linear-gradient(top, #335bab 5%, #3066db 100%);
+    background: linear-gradient(to bottom, #335bab 5%, #3066db 100%);
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#335bab', endColorstr='#3066db', GradientType=0);
+    background-color: #335bab;
 }
 
 button:active {
-    position:relative;
-    top:1px;
+    position: relative;
+    top: 1px;
 }
 
 input[type=text] {
     float: left;
     border: 1px solid #343434;
     background-color: black;
-    color: #EEE;
+    color: #eee;
     height: calc(12px + 1em);
 }
 
@@ -246,14 +225,14 @@ input[type=password] {
     float: left;
     border: 1px solid #343434;
     background-color: black;
-    color: #EEE;
+    color: #eee;
     height: calc(12px + 1em);
 }
 
 input[type=number] {
     float: left;
     border: 1px solid #343434;
-    color: #EEE;
+    color: #eee;
     background-color: black;
     height: calc(12px + 1em);
 }
@@ -268,17 +247,17 @@ textarea {
     height: 300px;
     box-sizing: border-box;
     border: 1px solid #343434;
-    color: #EEE;
+    color: #eee;
     background-color: black;
 }
 
 
 .label-section {
     position: relative;
-    text-align: left; 
-    line-height: 30px; 
+    text-align: left;
+    line-height: 30px;
     color: white;
-    background-color: #3066db; /* #343434; */
+    background-color: #3066db;
     padding-left: 1em;
     padding-right: 1em;
     font-weight: bold;
@@ -289,20 +268,18 @@ textarea {
     float: left;
     color: #fff;
     background: #777;
-    font-size: .9em;
-    padding: .5em .7em;
-    margin-right: .5em
+    font-size: 0.9em;
+    padding: 0.5em 0.7em;
+    margin-right: 0.5em;
 }
 
 .info-data {
-    /* float: left; */
     background: #eee;
-    font-size: .9em;
-    padding: 0 .5em 0 .7em;
+    font-size: 0.9em;
+    padding: 0.5em 0.7em;
     border-bottom: 1px solid #fff;
     box-sizing: border-box;
     word-wrap: break-word;
-    /* justify-content: space-around; */
 }
 
 #editor-links {
@@ -310,7 +287,12 @@ textarea {
     width: 100%;
 }
 
-#links, #path, #config, #info, #server, #playlist {
+#links,
+#path,
+#config,
+#info,
+#server,
+#playlist {
     display: none;
     position: absolute;
     margin: 0;
@@ -328,32 +310,30 @@ textarea {
 }
 
 select {
-    -moz-box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    box-shadow:inset 0px 1px 0px 0px #7a8eb9;
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3066db), color-stop(1, #335bab));
-    background:-moz-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:-webkit-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:-o-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:-ms-linear-gradient(top, #3066db 5%, #335bab 100%);
-    background:linear-gradient(to bottom, #3066db 5%, #335bab 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3066db', endColorstr='#335bab',GradientType=0);
-    background-color:#3066db;
-    border:1px solid #314179;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    /* font-family:Arial; */
-    /* font-size:13px; */
-    font-weight:bold;
-    padding-right: .7em;
-    padding-left: .7em;
+    -moz-box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    box-shadow: inset 0px 1px 0px 0px #7a8eb9;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3066db), color-stop(1, #335bab));
+    background: -moz-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: -webkit-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: -o-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: -ms-linear-gradient(top, #3066db 5%, #335bab 100%);
+    background: linear-gradient(to bottom, #3066db 5%, #335bab 100%);
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#3066db', endColorstr='#335bab', GradientType=0);
+    background-color: #3066db;
+    border: 1px solid #314179;
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    padding-right: 0.7em;
+    padding-left: 0.7em;
     height: calc(16px + 1em);
-    text-decoration:none;
+    text-decoration: none;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 #browse a {
@@ -364,7 +344,7 @@ div.value,
 div.value-number {
     position: relative;
     float: left;
-    padding: .5em .7em; 
+    padding: 0.5em 0.7em;
     word-wrap: break-word;
 }
 
@@ -372,21 +352,20 @@ div.value-number {
     position: relative;
     float: left;
     background: #eee;
-    padding: .5em .7em 0em .7em;
-    margin: 0 0 1px 0;
+    padding: 0.5em 0.7em 0em;
+    margin: 0 0 1px;
     display: block;
     text-align: left;
     word-wrap: break-word;
     width: calc(100% - 1.4em);
 }
 
-
 .background-element {
     position: relative;
     float: left;
     background: #eee;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
+    padding: 0;
+    margin: 0;
     border-bottom: 1px solid #fff;
     display: block;
     width: 100%;
@@ -400,8 +379,7 @@ div.value-number {
     clear: left;
     color: #fff;
     background: #777;
-    /* font-size: .9em; */
-    padding: .5em .7em;
+    padding: 0.5em 0.7em;
     margin-right: 0;
     box-sizing: border-box;
 }
@@ -411,15 +389,11 @@ div.value-number {
     clear: left;
     color: black;
     background: #eee;
-    /* font-size: .9em; */
-    /* padding: .5em .7em; */
-    margin: .7em 0 .2em .7em;
+    margin: 0.7em 0 0.2em 0.7em;
 }
 
 .element {
     background: #eee;
-    /* font-size: .9em; */
-    /* padding: 0 .7em; */
     border-bottom: 1px solid #fff;
     word-wrap: break-word;
     width: 100%;
@@ -430,20 +404,19 @@ div.value-number {
     float: left;
     color: #fff;
     background: #777;
-    margin: -0.5em .7em 0 -0.7em;
-    padding: .5em .7em;
+    margin: -0.5em 0.7em 0 -0.7em;
+    padding: 0.5em 0.7em;
     box-sizing: border-box;
 }
 
 button.data {
     float: none;
-    /* margin: 0em .7em -0.5em .7em; */
 }
 
 div.value-data {
     position: relative;
     float: left;
-    padding: .5em .7em;
+    padding: 0.5em 0.7em;
     width: calc(100% - 1.4em);
     word-wrap: break-word;
 }
@@ -457,21 +430,19 @@ div.file-text {
     padding: 4px;
     border: 1px solid #343434;
     box-sizing: border-box;
-    color: #EEE;
+    color: #eee;
     background-color: black;
 }
 
-
-
-/* font-family: "Dejavu Sans"; */
 h1 {
-    font-family: "Arial";    
+    font-family: "Arial";
     font-size: 24px;
     font-style: normal;
     font-variant: normal;
     font-weight: 500;
     line-height: 26.4px;
 }
+
 h3 {
     font-family: "Arial";
     font-size: 14px;
@@ -481,16 +452,22 @@ h3 {
     line-height: 15.4px;
 }
 
-body, html, p, select, button, input {
+body,
+html,
+p,
+select,
+button,
+input {
     font-family: "Arial";
     font-size: 14px;
     font-style: normal;
     font-variant: normal;
     font-weight: 400;
-    /* line-height: 20px; */
 }
 
-button, select, input[type=submit] {
+button,
+select,
+input[type=submit] {
     font-weight: bold;
 }
 
@@ -531,14 +508,13 @@ td {
     font-weight: bold;
 }
 
-
 #xdcc-search {
     margin: 0;
     width: calc(100% - 23em);
 }
 
 .xdcc {
-    float:left;
+    float: left;
 }
 
 #input-link {
@@ -546,9 +522,6 @@ td {
     width: calc(100% - 13em);
 }
 
-/*
-menu responsive
-*/
 ul.sidenav {
     list-style-type: none;
     margin: 0;
@@ -567,10 +540,9 @@ ul.sidenav li.sidenav a {
     padding: 8px 16px;
     text-decoration: none;
 }
- 
+
 ul.sidenav li a.active {
     background-color: #3066db;
-    /* #4CAF50; */
     color: white;
     text-decoration: none;
 }
@@ -581,91 +553,91 @@ ul.sidenav li a:hover:not(.active) {
     text-decoration: none;
 }
 
-
 /* @media screen and (max-width: 1050px){ */
-    ul.sidenav {
-        width:100%;
-        height:auto;
-        position:relative;
-    }
-    ul.sidenav li a {
-        float: left;
-        padding: 15px;
-    }
-    div.content {margin-left:0;}
+
+ul.sidenav {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+ul.sidenav li a {
+    float: left;
+    padding: 15px;
+}
+
+div.content {
+    margin-left: 0;
+}
+
 /* } */
 
-@media screen and (max-width: 600px){
-    /* ul.sidenav li a { */
-    /*     text-align: center; */
-    /*     float: none; */
-    /* } */
-    #progress-bar, #progress-label-file {
-	width: 100%;
+@media screen and (max-width: 600px) {
+    #progress-bar,
+    #progress-label-file {
+        width: 100%;
     }
 
     #xdcc-search {
-	clear:both;
-	margin: 0 0 0 1em;	
-	width: calc(100% - 1em);
+        clear: both;
+        margin: 0 0 0 1em;
+        width: calc(100% - 1em);
     }
 
     #input-link {
-	clear:both;
-	margin: 0 0 0 1em;	
-	width: calc(100% - 1em);
+        clear: both;
+        margin: 0 0 0 1em;
+        width: calc(100% - 1em);
     }
 
     #xdcc {
-	padding: 0 1em 1em 0;
-	width: calc(100% - 1em);
-	margin: 0;
+        padding: 0 1em 1em 0;
+        width: calc(100% - 1em);
+        margin: 0;
     }
 
-    .xdcc-buttons, button {
-	float: right;
+    .xdcc-buttons,
+    button {
+        float: right;
     }
 
     #progress-label-status {
-	float: right;
+        float: right;
     }
 
-    .value, input[type=text], input[type=password] {
-	/* clear: left; */
-	clear:both;
-	margin: 0 0 0 0;
-	width: calc(100% - 1em);
+    .value,
+    input[type=text],
+    input[type=password] {
+        clear: both;
+        margin: 0;
+        width: calc(100% - 1em);
     }
 
-    .value-number, input[type=number] {
-	/* clear: left; */
-	clear: left;
-	margin: 0 0 0 0;
-	width: 6em;
+    .value-number,
+    input[type=number] {
+        clear: left;
+        margin: 0;
+        width: 6em;
     }
 
     .background-element {
-	padding-right: 1em;
-	padding-bottom: 1em;
-	width: calc(100% - 1em);
+        padding-right: 1em;
+        padding-bottom: 1em;
+        width: calc(100% - 1em);
     }
 }
 
-@media screen and (max-width: 360px){
+@media screen and (max-width: 360px) {
     ul.sidenav li a {
         text-align: center;
         float: none;
-	display:block;
-	/* width: calc(100% - 2em - 1px); */
-	/* height: 30px; */
-	/* padding: 15px calc(100% - 15px) 15px 15px; */
-	/* box-sizing: border-box; */
-	overflow: hidden;
+        display: block;
+        overflow: hidden;
     }
 }
 
 .path {
-    padding: .5em 0 .5em .7em;
+    padding: 0.5em 0 0.5em 0.7em;
     clear: left;
 }
 
@@ -696,7 +668,6 @@ ul.sidenav li a:hover:not(.active) {
     float: right;
 }
 
-
 .open {
     float: none;
     clear: both;
@@ -709,7 +680,7 @@ ul.sidenav li a:hover:not(.active) {
 .browse-buttons {
     float: left;
     clear: both;
-    margin-left: .7em;
+    margin-left: 0.7em;
 }
 
 .browse {
@@ -717,7 +688,7 @@ ul.sidenav li a:hover:not(.active) {
 }
 
 .path {
-    padding: .5em 0 .5em .7em;
+    padding: 0.5em 0 0.5em 0.7em;
     clear: left;
 }
 
@@ -733,7 +704,7 @@ ul.sidenav li a:hover:not(.active) {
 }
 
 .download-info .label-element {
-    margin-right: .7em;
+    margin-right: 0.7em;
 }
 
 .download-info span {
@@ -741,14 +712,14 @@ ul.sidenav li a:hover:not(.active) {
     line-height: 30px;
 }
 
-.btn > p {
+.btn>p {
     padding-top: 0;
 }
 
 .element-text {
     display: inline-block;
     background: #eee;
-    padding: .5em .7em; 
+    padding: 0.5em 0.7em;
     word-wrap: break-word;
     box-sizing: border-box;
     clear: none;
@@ -756,7 +727,7 @@ ul.sidenav li a:hover:not(.active) {
 
 .download-info .btn {
     float: none;
-    clear:none;
-    display:inline;
+    clear: none;
+    display: inline;
     box-sizing: border-box;
 }

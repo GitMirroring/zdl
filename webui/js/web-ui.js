@@ -25,9 +25,8 @@ var ZDL = {
     "path": "",
     "pathDesktop": "",
     "visible": [],
-    "webUI": ["1","2_lite"]
+    "webUI": ["1","2","2_lite"]
 };
-//    "webUI": ["1","1_flat","2","2_lite"]
 
 var toHtmlEntities = function (str) {
     return str.replace(/./gm, function (s) {
@@ -297,7 +296,7 @@ var singlePath = function (path) {
 		"<button class='btn' onclick='singlePath(ZDL.path).setMaxDownloads();'>Invia</button>" +
         "<button class='btn' onclick='singlePath(ZDL.path).setMaxDownloads('no-limits');'>Nessun limite</button>" +
         "<button class='btn' onclick='initClient(ZDL.path);'>Annulla</button>";
-        return document.getElementById("max-downloads").innerHTML = output;
+        document.getElementById("max-downloads").innerHTML = output;
     };
 
     that.getMaxDownloads = function (repeat, op) {
@@ -325,7 +324,7 @@ var singlePath = function (path) {
 		    str +
 		    "</textarea><div class='edit-links-buttons'>" +
                     "<button class='btn' onclick='singlePath(ZDL.path).setLinks();'>Salva</button>" +
-                    "<button class='btn' onclick='displayEditButton();'>Annulla</button></div>";
+                    "<button class='btn' onclick='displayEditButton();'>Chiudi</button></div>";
             }
         });
     };
@@ -533,6 +532,7 @@ var getConf = function (repeat, op) {
 };
 
 var setConf = function (spec, value) {
+    var callback = null;
     if (!value)
         value = document.getElementById("input-" + spec.key).value;
 
@@ -544,14 +544,14 @@ var setConf = function (spec, value) {
     }
 
     if (spec.key === 'web_ui' ) {
-	var callback = function () {
-	    reloadPage();
-	}
+	    callback = function () {
+	        reloadPage();
+	    }
     }
-    
+
     ajax({
         query: "cmd=set-conf&key=" + spec.key + "&value=" + value,
-	callback: callback
+	    callback: callback
     });
 };
 
@@ -844,7 +844,7 @@ var setPath = function (spec) {
     document.getElementById(spec.idSel).innerHTML = cleanPath(spec.path);
     document.getElementById(spec.idBrowser).innerHTML = "<button class='btn' id='button-browse-" + spec.idSel + "'>Sfoglia</button>" +
         "<button class='btn m-left' id='button-edit-" + spec.idSel + "'>Scrivi</button>";
-    
+
     document.getElementById(spec.idBrowser).style.clear = 'right';
     document.getElementById(spec.idSel).setAttribute("class", "value");
 
@@ -876,63 +876,60 @@ var displayConf = function (conf) {
         var spec = {
             "key": item,
             "value": cleanInput(conf[item])
+        },
+        options = {
+            "web_ui": ZDL.webUI,
+            "conf_downloader": ["Aria2", "Axel", "Wget"],
+            "background": ["transparent", "black"],
+            "language": ["it_IT.UTF-8"],
+            "resume": ["enabled", "disabled"],
+            "autoupdate": ["enabled", "disabled"],
+            "zdl_mode": ["stdout", "lite", "daemon"]
+        },
+        spinners = {
+            "axel_parts": {min:1, max:32},
+            "aria2_connections": {min:1, max:16},
+            "max_dl": {min:0, max:100},
+            "tcp_port": {min:1025, max:65535},
+            "udp_port": {min:1025, max:65535},
+            "socket_port": {min:1025, max:65535}
         };
 
         switch (item) {
             case "web_ui":
-                if (!spec.options)
-                    spec.options = ZDL.webUI;
             case "conf_downloader":
-                if (!spec.options)
-                    spec.options = ["Aria2", "Axel", "Wget"];
             case "background":
-                if (!spec.options)
-                    spec.options = ["transparent", "black"];
             case "language":
-                if (!spec.options)
-                    spec.options = ["it_IT.UTF-8"];
             case "resume":
             case "autoupdate":
-                if (!spec.options) {
-                    spec.options = ["enabled", "disabled"];
-                    if (spec.value !== "enabled")
-                        spec.value = "disabled";
-                }
             case "zdl_mode":
-                if (!spec.options)
-                    spec.options = ["stdout", "lite", "daemon"];
-
-                displayInputSelect(spec, "conf-" + spec.key, "setConf");
-                break;
-
+                if (!spec.options) {
+                    spec.options = options[item];
+                    if (item === "resume" || item === "autoupdate") {
+                        if (spec.value !== "enabled") spec.value = "disabled";
+                    }
+                    displayInputSelect(spec, "conf-" + spec.key, "setConf");
+                } else {
+                    console.log("not spec options");
+                }
+            break;
             case "axel_parts":
-                if (isNaN(spec.min) || isNaN(spec.max)) {
-                    spec.min = 1;
-                    spec.max = 32;
-                }
             case "aria2_connections":
-                if (isNaN(spec.min) || isNaN(spec.max)) {
-                    spec.min = 1;
-                    spec.max = 16;
-                }
             case "max_dl":
-                if (isNaN(spec.min) || isNaN(spec.max)) {
-                    spec.min = 0;
-                    spec.max = 100;
-                }
             case "tcp_port":
             case "udp_port":
             case "socket_port":
                 if (isNaN(spec.min) || isNaN(spec.max)) {
-                    spec.min = 1025;
-                    spec.max = 65535;
+                    spec.min = spinners[item].min;
+                    spec.max = spinners[item].max;
+                } else {
+                    console.log("not spec min / max");
                 }
 
                 var output = "<button class='btn' onclick='displayInputNumber(" + objectToString(spec) + ", \"conf-" + spec.key + "\");'>Cambia</button>";
 
                 document.getElementById("conf-" + spec.key).innerHTML = "<div class='value-number'>" + spec.value + "</div>" + output;
-                break;
-
+            break;
             case "reconnecter":
             case "player":
             case "editor":
@@ -978,7 +975,11 @@ var displayConf = function (conf) {
                     },
                     params: spec
                 });
-        };
+            break;
+            default:
+                return false;
+        }
+        //console.log(spec);
     });
 };
 
@@ -1002,7 +1003,7 @@ var displaySockets = function (sockets) {
 
             output_kill += "<button class='btn' onclick='killServer([" + port + "]);";
             if (parseInt(port) === parseInt(document.location.port))
-                output_kill += "setTimeout(reloadPage, 2000);"
+                output_kill += "setTimeout(reloadPage, 2000);";
 
             output_kill += "'>" + port + "</button>";
         }
@@ -1020,7 +1021,7 @@ var displayDownloader = function (dler) {
             selector += "<option selected>";
 
         } else {
-            selector += "<option>"
+            selector += "<option>";
         }
         selector += item + "</option>";
     });
@@ -1047,10 +1048,11 @@ var displayEditButton = function () {
 
 
 var displayLinkButtons = function (id) {
+    var host;
     if (document.location.hostname !== "localhost")
-        var host = " in " + document.location.hostname;
+        host = " in " + document.location.hostname;
     else
-        var host = "";
+        host = "";
 
     var output = "<button class='btn' id='stop-" + id + "'>Ferma</button>" +
             "<button class='btn' id='del-" + id + "'>Elimina</button>" +
@@ -1215,8 +1217,9 @@ var checkAccount = function () {
         url: "login.html",
         query: "cmd=check-account",
         callback: function (res) {
+            var output;
             if (cleanInput(res) === "exists") {
-                var output = "<form action='/' method='POST'>" +
+                output = "<form action='/' method='POST'>" +
                     "<input type='hidden' name='cmd' value='login'>" +
                     "<table class='login'>" +
                     "<tr><td>Utente:</td>" +
@@ -1226,7 +1229,7 @@ var checkAccount = function () {
                     "<tr><td></td><td><input type='submit' value='Login'></td></tr></table>" +
                     "</form>";
             } else {
-                var output = "<table class='login'>" +
+                output = "<table class='login'>" +
                     "<tr><td>Utente:</td>" +
                     "<td><input id='user' type='text' name='user' class='login'></td></tr>" +
                     "<tr><td>Password:</td>" +

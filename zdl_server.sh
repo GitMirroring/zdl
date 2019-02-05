@@ -1,24 +1,24 @@
-#!/bin/bash 
+#!/bin/bash
 #
 # ZigzagDownLoader (ZDL)
-# 
-# This program is free software: you can redistribute it and/or modify it 
-# under the terms of the GNU General Public License as published 
-# by the Free Software Foundation; either version 3 of the License, 
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published
+# by the Free Software Foundation; either version 3 of the License,
 # or (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful, 
-# but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 # or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License 
-# along with this program. If not, see http://www.gnu.org/licenses/. 
-# 
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see http://www.gnu.org/licenses/.
+#
 # Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
-# 
+#
 # For information or to collaborate on the project:
 # https://savannah.nongnu.org/projects/zdl
-# 
+#
 # Gianluca Zoni (author)
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
@@ -113,7 +113,7 @@ function add_response_header {
 
 function send_response_header {
     local header
-    
+
     send "HTTP/1.1 $1 ${HTTP_RESPONSE[$1]}"
 
     for header in "${RESPONSE_HEADERS[@]}"
@@ -136,18 +136,18 @@ function send_response {
 	add_response_header "Content-Type" "$mime"
 	add_response_header "Content-Length" "$(size_file "$file")"
 	[ -n "$HTTP_SESSION" ] &&
-	    add_response_header "Set-Cookie" "$HTTP_SESSION" 
+	    add_response_header "Set-Cookie" "$HTTP_SESSION"
 
 	if [ "$file" == "$path_server"/status.$socket_port ] &&
 	       grep RELOAD "$file" &>/dev/null
 	then
 	    get_status
 	fi
-	
-	send_response_header "$code"	    
-	cat "$file" 
+
+	send_response_header "$code"
+	cat "$file"
     fi
-	
+
     #echo
     # if ((${VERBOSE}))
     # then
@@ -156,7 +156,7 @@ function send_response {
     # 	transfer_stats=$(<"${tmp_stat_file}")
     # 	echo -en ">> Transferred: ${file}\n>> $(awk '/copied/{print}' <<< "${transfer_stats}")\n" >&2
     # 	rm "${tmp_stat_file}"
-	
+
     # else
     # 	## Use dd since it handles null bytes
     # 	dd 2>"${DUMP_DEV}" < "${file}"
@@ -176,7 +176,7 @@ function fail_with {
 function get_mime_server {
     declare -n refmime="$1"
     refmime=''
-    
+
     case "$2" in
         *\.css)
 	    refmime="text/css"
@@ -210,12 +210,12 @@ function serve_file {
 	if [[ "$http_method" =~ ^(GET|POST)$ ]]
 	then
 	    send_response_ok_exit "$file"
-	    
+
 	else
 	    cat "$file"
 	    exit
 	fi
-	
+
     else
 	return 1
     fi
@@ -229,7 +229,7 @@ function serve_static_string {
 function on_uri_match {
     local regex="$1"
     shift
-    [[ "${REQUEST_URI}" =~ $regex ]] && 
+    [[ "${REQUEST_URI}" =~ $regex ]] &&
         "$@" "${BASH_REMATCH[@]}"
 }
 
@@ -245,7 +245,7 @@ function clean_data {
 function get_file_output {
     declare -n result="$1"
     local file="$2"
-    
+
     if [[ "$file" =~ ^\/tmp\/zdl.d\/ ]] ||
 	   [[ "$file" =~ login.*\.html\?cmd ]]
     then
@@ -267,9 +267,9 @@ function get_file_output {
 	if [ -f "$template" ] &&
 	       grep '__START_PATH__' "$template" &>/dev/null
 	then
-	    sed -r "s|__START_PATH__|$PWD|g" "$template" >"$file"		
+	    sed -r "s|__START_PATH__|$PWD|g" "$template" >"$file"
 	fi
-	
+
 	result="$file"
     fi
 }
@@ -279,7 +279,7 @@ function create_json {
     rm -f "$server_data".$socket_port
 
     if [ -s "$server_paths" ]
-    then	
+    then
 	echo -ne '[' >"$server_data".$socket_port
 
 	while read path
@@ -287,7 +287,7 @@ function create_json {
 	    if [ -d "$path" ]
 	    then
 		cd "$path"
-	    
+
 		if [ -d "$path_tmp" ]
 		then
 		    if data_stdout &&
@@ -307,10 +307,10 @@ function create_json {
 	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
-	
+
 	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
 	    echo > "$server_data".$socket_port
-	
+
 	return 0
     fi
     return 1
@@ -318,7 +318,7 @@ function create_json {
 
 function check_xfer_running {
     local path
-    
+
     while read path
     do
 	if [ -s "$path"/"$path_tmp"/xfer-pids ]
@@ -342,17 +342,17 @@ function check_downloader_running {
 	    check_xfer_running
     then
 	return 0
-    else    
+    else
 	return 1
     fi
 }
 
 function send_json {
     local counter=0
-    
+
     [ "$1" == force ] &&
 	rm -f "$server_data".$socket_port.diff
-    
+
     while :
     do
 	if check_downloader_running ||
@@ -394,19 +394,19 @@ function send_json {
 function get_status {
     local path="$1"
     [ -z "$path" ] && path="$PWD"
-    
+
     if test -d "$path"
     then
 	cd "$path"
-	
+
 	if check_instance_prog ||
 		check_instance_daemon
 	then
-	    status="running" 
+	    status="running"
 	else
 	    status="not-running"
 	fi
-	
+
 	echo "$status" > "$path_server"/status.$socket_port
     fi
 }
@@ -419,7 +419,7 @@ function get_status_run {
 	if check_instance_prog &>/dev/null ||
 		check_instance_daemon &>/dev/null
 	then
-	    ref="running" 
+	    ref="running"
 	else
 	    ref="not-running"
 	fi
@@ -428,8 +428,8 @@ function get_status_run {
 
 function get_status_sockets {
     declare -n ref="$1"
-    
-    ref='['    
+
+    ref='['
     check_socket_ports "$1"
     ref="${ref%,}]"
 }
@@ -437,20 +437,20 @@ function get_status_sockets {
 function check_socket_ports {
     [ -n "$1" ] &&
 	declare -n ref="$1"
-       
+
     if [ -s "$path_server"/socket-ports ]
     then
 	while read port
 	do
-	    if check_port $port 
+	    if check_port $port
 	    then
 		set_line_in_file - "$port" "$path_server"/socket-ports
 
 	    elif [ -n "$1" ]
 	    then
 		ref+="\"$port\","
-	    fi    
-	    
+	    fi
+
 	done < "$path_server"/socket-ports
     fi
 }
@@ -469,7 +469,7 @@ function get_status_conf {
 	else
 	    key_json="$key"
 	fi
-	
+
 	ref+="\"$key_json\":\"$(get_item_conf $key)\","
     done
     ref="${ref%,}}"
@@ -477,17 +477,17 @@ function get_status_conf {
 
 function create_status_json {
     local reconn
-    
+
     [ -n "$1" ] &&
 	declare -n ref_string_output="$1" ||
 	    ref_string_output=string_output
-    
+
     ref_string_output="{"
 
     ## current path
     ref_string_output+="\"path\":\"$PWD\","
-    
-    ## run status    
+
+    ## run status
     get_status_run status
     ref_string_output+="\"status\":\"$status\","
 
@@ -510,7 +510,7 @@ function create_status_json {
     ## reconnect
     [ -f "$path_tmp"/reconnect ] && reconn=enabled || reconn=disabled
     ref_string_output+="\"reconnect\":\"$reconn\","
-    
+
     ## run sockets
     get_status_sockets status
     ref_string_output+="\"sockets\":$status,"
@@ -525,9 +525,9 @@ function create_status_json {
 function send_ip {
     file_output="$path_server"/myip.$socket_port
     get_ip real_ip proxy_ip
-    
+
     echo -e "Indirizzo IP attuale:\n$real_ip" > "$file_output"
-    
+
     if [ -n "$proxy_ip" ]
     then
 	echo -e "\n\nIndirizzo IP con proxy:\n$proxy_ip" >> "$file_output"
@@ -538,11 +538,65 @@ function create_http_session {
     printf "_ZigzagDownLoader=%s" $(create_hash "${*}$(date +%s)") #$((60*60*24))
 }
 
+function search_xdcc {
+    file_output="$path_server"/xdcc-search.$socket_port
+    url="http://www.xdcc.eu/search.php?searchkey=$1"
+    response=""
+
+    local server channel bot slot gets name length
+
+    html=$(curl -s $url |
+               sed -r 's|<tr>|\n|g' |
+               grep data-c)
+
+    while read row
+    do
+	unset server channel bot slot gets name length
+	server="${row##*data-s=\"}"
+	server="${server%%\"*}"
+
+	channel="${row##*data-c=\"\#}"
+	channel="${channel%%\"*}"
+
+	bot="${row##*data-p=\"}"
+	bot="${bot%%\"*}"
+	slot="${bot##*send }"
+	bot="${bot%% xdcc*}"
+
+	row="${row##*delete.png}"
+
+	row="${row#*</td><td>}"
+	row="${row#*</td><td>}"
+	row="${row#*</td><td>}"
+	gets="${row%%</td><td>*}"
+	row="${row#*</td><td>}"
+	length="${row%%</td><td>*}"
+
+	row="${row#*</td><td>}"
+	row="${row%*</td>*}"
+	name=$(sed -r 's|<[^>]*span[^>]*>||g' <<< "$row")
+
+	if [ -n "$server" ] && [ -n "$channel" ] && [ -n "$bot" ] && [ -n "$slot" ] && [ -n "$gets" ] && [ -n "$length" ] && [ -n "$name" ]
+	then
+            response+="{\"server\":\"${server}\",\"channel\":\"${channel}\",\"bot\":\"${bot}\",\"slot\":\"${slot}\",\"gets\":\"${gets}\",\"length\":\"${length}\",\"name\":\"${name}\"},"
+	fi
+
+    done <<< "$html"
+
+    if [ -n "$response" ];
+    then
+        response="[${response%,}]"
+        echo -n "$response" > "$file_output"
+    else
+        echo -n "failure" > "$file_output"
+    fi
+}
+
 function run_cmd {
     local line=( "$@" )
     local file link pid path
     unset file_output
-       
+
     case "${line[0]}" in
 	login)
 	    file_output="$path_server"/msg-login.$socket_port
@@ -553,14 +607,13 @@ function run_cmd {
 		if grep -P "^$(create_hash "$data")$" "$file_socket_account" &>/dev/null
 		then
 		    HTTP_SESSION=$(create_http_session "$data")
-		    
-		    ## add_response_header "Set-Cookie" "$HTTP_SESSION"		    
+
+		    ## add_response_header "Set-Cookie" "$HTTP_SESSION"
 		    echo "$HTTP_SESSION" >> "$path_server"/http-sessions
 
 		    get_file_output file_output 'index-1.html'
 		else
 		    echo -e "<html>\n<head><meta http-equiv=\"refresh\" content=\"0; url=login.html?op=retry\" /></head><body></body></html>" > "$file_output"
-
 		fi
 
 	    else
@@ -573,8 +626,7 @@ Seleziona l'opzione 2: Crea un account per i socket di ZDL." > "$file_output"
 	    ;;
 
 	check-account)
-	    file_output="$path_server"/msg-account.$socket_port
-	    
+            file_output="$path_server"/msg-account.$socket_port
 	    if [ -s "$file_socket_account" ]
 	    then
 		echo "exists" > "$file_output"
@@ -586,7 +638,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    ;;
 
 	create-account)
-	    create_socket_account $(clean_data "${line[1]}") $(clean_data "${line[2]}")
+            create_socket_account $(clean_data "${line[1]}") $(clean_data "${line[2]}")
 	    ;;
 
 	reset-account)
@@ -608,7 +660,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	    init_client "${line[1]}" $socket_port
 	    ;;
-	
+
     	get-data)
 	    send_json ${line[1]} || return
 	    ;;
@@ -625,14 +677,14 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    if [ -f "${line[1]}" ] &&
 		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
 	    then
-		$nodejs -e "var data = '$(cat "$file_output")'; 
+		$nodejs -e "var data = '$(cat "$file_output")';
 if (data) {
     var json = JSON.parse(data)
 } else {
     var json = [];
-} 
+}
 if(typeof json === 'object'){
-    json.push('${line[1]}'); 
+    json.push('${line[1]}');
     console.log(JSON.stringify(json))
 }" > "$file_output"
 
@@ -646,14 +698,14 @@ if(typeof json === 'object'){
 	    file_output="$path_server"/playlist
 	    touch "$file_output"
 
-	    $nodejs -e "var data = '$(cat "$file_output")'; 
+	    $nodejs -e "var data = '$(cat "$file_output")';
 if (data) {
-    var json = JSON.parse(data); 
+    var json = JSON.parse(data);
     if(typeof json === 'object'){
         for(var i=0; i<json.length; i++) {
             if (json[i] === '${line[1]}')
                 json.splice(i,1);
-        } 
+        }
         console.log(JSON.stringify(json))
     }
 }" > "$file_output"
@@ -661,15 +713,15 @@ if (data) {
 
 	play-playlist)
 	    file_output="$path_server"/msg-file.$socket_port
-	    
+
 	    if [ -f "${line[1]}" ]
 	    then
 		if [ -z "$player" ] #&>/dev/null
-		then	
+		then
 		    echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
 
 		elif [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio|video) ]]
-		then	
+		then
 		    echo -e "Non è un file audio/video" > "$file_output"
 
 		else
@@ -682,7 +734,7 @@ if (data) {
 	    fi
 	    ;;
 
-	get-status)	    
+	get-status)
 	    ## status.json
 	    file_output="$path_server"/status.$socket_port.json
 
@@ -693,31 +745,31 @@ if (data) {
 	    then
 		[ -s "$path_server"/pid_loop_status.$socket_port ] &&
 		    kill -9 $(cat "$path_server"/pid_loop_status.$socket_port 2>/dev/null) 2>/dev/null
-		
+
 		echo "$PWD" > "$path_server"/path.$socket_port
-		
+
 		unset line[2]
 		while ! check_port $socket_port
 		do
 		    [ -s "$path_server"/path.$socket_port ] &&
 			cd $(cat "$path_server"/path.$socket_port)
-		    
+
 		    create_status_json string_output
 		    current_timeout=$(date +%s)
-			
+
 		    if [ ! -s "$file_output" ] ||
-			   [ "$string_output" != "$(cat "$file_output")" ] ||
-			    (( (current_timeout - start_timeout) > 240 ))
+			   [ "$string_output" != "$(cat "$file_output")" ] ## ||
+		       (( (current_timeout - start_timeout) > 240 ))
 		    then
 			init_client "$PWD" "$socket_port"
 			start_timeout=$(date +%s)
 		    fi
 		    sleep 2
-		done &>/dev/null & 
+		done &>/dev/null &
 		pid_loop_status=$!
 		echo "$pid_loop_status" > "$path_server"/pid_loop_status.$socket_port
-		
-	    else		
+
+	    else
 		lock_fifo status.$socket_port path
 		if test -d "$path"
 		then
@@ -725,7 +777,7 @@ if (data) {
 		    cd "$path"
 		fi
 	    fi
-	    
+
 	    create_status_json string_output
 	    echo -n "$string_output" >$file_output
 	    ;;
@@ -747,7 +799,7 @@ if (data) {
 		    file_output="$path_server"/reconn.$socket_port
 		    echo "Non hai ancora configurato ZDL per la riconnessione automatica" > "$file_output"
 		fi
-		
+
 	    elif test "${line[2]}" == 'false'
 	    then
 		rm -f "$path_tmp"/reconnect
@@ -764,7 +816,7 @@ if (data) {
 		    file_output="$path_server"/reconn.$socket_port
 		    echo "Non hai ancora configurato ZDL per la riconnessione automatica" > "$file_output"
 		fi
-	    fi	    
+	    fi
 	    ;;
 
 	get-ip)
@@ -773,16 +825,16 @@ if (data) {
 
 	get-free-space)
 	    file_output="$path_server"/free-space.$socket_port
-	    
+
 	    if test -d "${line[1]}"
 	    then
 		cd "${line[1]}"
 	    fi
-	    
+
 	    df -h . |
 		awk '{if(match($4, /^[0-9]+/)) print $4}' > "$file_output"
 	    ;;
-	
+
 	add-xdcc)
 	    for ((i=1; i<${#line[@]}; i++))
 	    do
@@ -794,7 +846,7 @@ if (data) {
 		fi
 
 		link="$(urldecode "${line[i]}")"
-		
+
 		declare -A irc
 		case $i in
 		    2)
@@ -802,12 +854,12 @@ if (data) {
 			irc[host]="${irc[host]%%'/'*}"
 			err_msg="\nIRC host: ${link}"
 			;;
-		    
+
 		    3)
 			irc[chan]="${link##'#'}"
 			err_msg+="\nIRC channel: ${link}"
 			;;
-		    
+
 		    4)
 			irc[msg]="${link#'/msg'}"
 			irc[msg]="${irc[msg]#'/ctcp'}"
@@ -831,10 +883,18 @@ if (data) {
 	    fi
 	    ;;
 
+	search-xdcc)
+	    local searchkey="${line[*]//search\-xdcc}"
+	    searchkey="${searchkey# }"
+	    searchkey="${searchkey//\ /+}"
+
+	    search_xdcc "$searchkey"
+    	    ;;
+
 	add-link)
 	    ## PATH -> LINK
 	    unset list_err
-	    
+
 	    for ((i=1; i<${#line[@]}; i++))
 	    do
 		## path
@@ -843,10 +903,10 @@ if (data) {
 		    cd "${line[i]}"
 		    continue
 		fi
-		
+
 		## link
-		link=$(urldecode "${line[i]}") 
-		
+		link=$(urldecode "${line[i]}")
+
 		if url "$link" &&
 			! check_instance_prog &&
 			! check_instance_daemon
@@ -854,7 +914,7 @@ if (data) {
 		    mkdir -p "$path_tmp" &>/dev/null
 		    date +%s >"$path_tmp"/.date_daemon
 		    nohup /bin/bash zdl --silent "$PWD" &>/dev/null &
-		    
+
 		    while ! check_instance_daemon
 		    do
 			sleep 0.1
@@ -870,13 +930,16 @@ if (data) {
 		else
 		    list_err+="\n$link"
 		fi
-		
+
 	    done &>/dev/null
 
 	    if [ -n "$list_err" ]
 	    then
 	    	file_output="$path_server"/msg-file.$socket_port
 	    	echo -e "$list_err" > "$file_output"
+
+	    else
+		init_client
 	    fi
 	    ;;
 
@@ -892,7 +955,7 @@ if (data) {
 		fi
 
 		link="$(urldecode "${line[i]}")"
-		
+
 		if url "$link"
 		then
 		    unset json_flag
@@ -905,17 +968,19 @@ if (data) {
 			then
 			    set_link - "${url_out[j]}"
 
-			    kill -9 "${pid_out[j]}" &>/dev/null 
+			    kill -9 "${pid_out[j]}" &>/dev/null
 
 			    rm -f "${file_out[j]}"         \
 			       "${file_out[j]}".st         \
 			       "${file_out[j]}".aria2      \
 			       "${file_out[j]}".zdl        \
-			       "$path_tmp"/"${file_out[j]}_stdout.tmp"
+			       "$path_tmp"/"${file_out[j]}_stdout".*
 			fi
 		    done
 		fi
 	    done
+
+	    init_client
 	    ;;
 
 	stop-link)
@@ -930,7 +995,7 @@ if (data) {
 		fi
 
 		link="$(urldecode "${line[i]}")"
-		
+
 		if url "$link"
 		then
 		    unset json_flag
@@ -941,25 +1006,25 @@ if (data) {
 		    do
 			if [ "${url_out[j]}" == "$link" ]
 			then
-			    kill -9 "${pid_out[j]}" &>/dev/null 
+			    kill -9 "${pid_out[j]}" &>/dev/null
 			fi
 		    done
 		fi
-	    done 
+	    done
 	    ;;
 
 	play-link)
 	    file_output="$path_server"/msg-file.$socket_port
-	    
+
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
 
 	    if [ -z "$player" ] #&>/dev/null
-	    then	
+	    then
 		echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
 
 	    elif [[ ! "$(file -b --mime-type "${line[2]}")" =~ (audio|video) ]]
-	    then	
+	    then
 		echo -e "Non è un file audio/video" > "$file_output"
 
 	    else
@@ -986,7 +1051,7 @@ if (data) {
 		rm -f "${line[2]}"
 	    fi
 	    ;;
-	
+
 	get-links)
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
@@ -1004,33 +1069,36 @@ if (data) {
 	set-links)
 	    ## path:
 	    unset list_err
-	    
+
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
 
 	    ## links:
-	    date >> links.txt
-	    urldecode "${line[2]}" >> links.txt
-	    echo "" >> links.txt
-	    
+            if [ -n "${line[2]}" ]
+            then
+		date >> links.txt
+		urldecode "${line[2]}" >> links.txt
+		echo "" >> links.txt
+            fi
+
 	    echo -n > "$path_tmp"/links_loop.txt
 	    while read link
 	    do
 		url "$link" &&
 		    set_link + "$link" ||
 			list_err+="\n$link"
-	    
+
 	    done <<< "$(urldecode "${line[2]}")"
 
 	    [ ! -s "$path_tmp"/links_loop.txt ] && rm -f "$path_tmp"/links_loop.txt*
-	    
+
 	    if [ -n "$list_err" ]
 	    then
 	    	file_output="$path_server"/msg-file.$socket_port
 	    	echo -e "$list_err" > "$file_output"
 	    fi
 	    ;;
-	
+
 	get-downloader)
 	    ## [1]=PATH
 	    test -d "${line[1]}" &&
@@ -1043,11 +1111,11 @@ if (data) {
 		    lock_fifo downloader path
 		    [ -d "$path" ] &&
 			cd "$path"
-		    
+
 		else
-		    unset line[2] 	    
+		    unset line[2]
 		fi
-		
+
 	    else
 		mkdir -p "$path_tmp"
 		get_item_conf 'downloader' >"$path_tmp/downloader"
@@ -1079,9 +1147,9 @@ if (data) {
 		    lock_fifo max-downloads path
 		    [ -d "$path" ] &&
 			cd "$path"
-		    
+
 		else
-		    unset line[2] 	    
+		    unset line[2]
 		fi
 	    else
 		mkdir -p "$path_tmp"
@@ -1096,7 +1164,7 @@ if (data) {
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
 
-	    if [ -z "${line[2]}" ] || [[ "${line[2]}" =~ ^[0-9]+$ ]] 
+	    if [ -z "${line[2]}" ] || [[ "${line[2]}" =~ ^[0-9]+$ ]]
 	    then
 		echo "${line[2]}" >"$path_tmp/max-dl"
 		#unlock_fifo max-downloads "$PWD" &
@@ -1108,13 +1176,13 @@ if (data) {
 	get-status-run)
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
-	    
+
 	    get_status_run status ${line[2]}
-	    
-	    echo "$status" > "$path_server"/status.$socket_port	    
+
+	    echo "$status" > "$path_server"/status.$socket_port
 	    file_output="$path_server"/status.$socket_port
 	    ;;
-	
+
 	check-dir)
 	    file_output="$path_server"/check-dir.$socket_port
 	    if test -d "${line[1]}"
@@ -1126,7 +1194,7 @@ if (data) {
 	    fi
 	    ;;
 
-	get-desktop-path)	    
+	get-desktop-path)
 	    if test -s "$file_desktop"
 	    then
 		eval exec_line=( $(grep Exec "$file_desktop") )
@@ -1148,23 +1216,59 @@ if (data) {
 		    test -s "$file_desktop"
 	    then
 		sed -r "s|^Exec=.+$|Exec=zdl --web-ui \"${line[1]}\"|g" -i "$file_desktop"
-	    fi	    
+	    fi
 	    ;;
-	
-	browse-dirs)
+
+	browse-fs)
 	    file_output="$path_server"/browsing.$socket_port
-	    
+	    type="${line[2]}"
+
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
 
-	    string_output="<a href=\"javascript:browseDir({path:'$PWD/..',idSel:'${line[2]}',idBrowser:'${line[3]}',callback:'${line[4]}'});\"><img src=\"folder-blue.png\"> ..</a><br>"
+	    while read file
+	    do
+		real_path=$(realpath "$file")
+
+		if [ -d "$real_path" ]
+		then
+		    string_output+="[$file];"
+
+		elif [ "$type" == torrent ] &&
+			 [[ "$(file -b --mime-type "$real_path")" =~ bittorrent ]]
+		then
+		    string_output+="$file;"
+
+		elif [ "$type" == media ] &&
+			 [[ "$(file -b --mime-type "$real_path")" =~ (audio|video) ]]
+		then
+		    string_output+="$file;"
+
+		elif [ "$type" == executable ] &&
+			 [ -x "$real_path" ]
+		then
+		    string_output+="$file;"
+		fi
+
+	    done < <(ls -1 --group-directories-first)
+
+	    echo "$string_output" > "$file_output"
+	    ;;
+
+	browse-dirs)
+	    file_output="$path_server"/browsing.$socket_port
+
+	    test -d "${line[1]}" &&
+		cd "${line[1]}"
+
+	    string_output="<a href=\"javascript:browseDir({path:'$PWD/..',idSel:'${line[2]}',idBrowser:'${line[3]}',callback:'${line[4]}'});\"><img src=\"images/folder-blue.png\"> ..</a><br>"
 	    while read dir
 	    do
 		real_dir=$(realpath "$dir")
-		string_output+="<a href=\"javascript:browseDir({path:'${real_dir}',idSel:'${line[2]}',idBrowser:'${line[3]}',callback:'${line[4]}'});\"><img src=\"folder-blue.png\"> $dir</a><br>"
+		string_output+="<a href=\"javascript:browseDir({path:'${real_dir}',idSel:'${line[2]}',idBrowser:'${line[3]}',callback:'${line[4]}'});\"><img src=\"images/folder-blue.png\"> $dir</a><br>"
 	    done < <(ls -d1 */)
 
-	    echo "$string_output" > "$file_output"	    
+	    echo "$string_output" > "$file_output"
 	    ;;
 
 	browse)
@@ -1178,45 +1282,45 @@ if (data) {
 		cd "$path"
 
 	    JS="browseFile({id:'$id',path:'$PWD/..',type:'$type',key:'$key'});"
-	    string_output="<a href=\"javascript:${JS}\"><img src=\"folder-blue.png\"> ../</a><br>"
+	    string_output="<a href=\"javascript:${JS}\"><img src=\"images/folder-blue.png\"> ../</a><br>"
 
 	    while read file
 	    do
 		real_path=$(realpath "$file")
-		
+
 		if [ -d "$real_path" ]
 		then
-		    img="folder-blue.png"
+		    img="images/folder-blue.png"
 		    JS="browseFile({id:'$id',path:'$real_path',type:'$type',key:'$key'});"
-		    string_output+="<a href=\"javascript:${JS}\"><img src=\"folder-blue.png\"> $file</a><br>"
+		    string_output+="<a href=\"javascript:${JS}\"><img src=\"images/folder-blue.png\"> $file</a><br>"
 
 		elif [ "$type" == torrent ] &&
 			 [[ "$(file -b --mime-type "$real_path")" =~ ^application\/(octet-stream|x-bittorrent)$ ]]
-		then		    
-		    img='application-x-bittorrent.png'
+		then
+		    img='images/application-x-bittorrent.png'
 
 		    JS="if (confirm('Vuoi usare il file $file ?')) singlePath(ZDL.path).addLink('$id','$real_path');"
 		    string_output+="<a href=\"javascript:${JS}\"><img src=\"$img\"> $file</a><br>"
-		    
+
 		elif [ "$type" == media ] &&
 			 [[ "$(file -b --mime-type "$real_path")" =~ (audio|video) ]]
 		then
-		    img="${BASH_REMATCH[1]}"-x-generic.png
+		    img="images/${BASH_REMATCH[1]}"-x-generic.png
 
 		    JS="addPlaylist('$path/$file');"
 		    string_output+="<a href=\"javascript:${JS}\"><img src=\"$img\"> $file</a><br>"
 
 		elif [ "$type" == executable ] &&
 			 [ -x "$real_path" ]
-		then		    
-		    img='application-x-desktop.png'
+		then
+		    img='images/application-x-desktop.png'
 		    JS="if (confirm('Vuoi usare il file $file ?')) setConf({key:'$key'},'$real_path');"
 		    string_output+="<a href=\"javascript:${JS}\"><img src=\"$img\"> $file</a><br>"
-		fi   
+		fi
 
 	    done < <(ls -1 --group-directories-first)
 
-	    echo "$string_output" > "$file_output"	    
+	    echo "$string_output" > "$file_output"
 	    ;;
 
 	clean-complete)
@@ -1224,16 +1328,16 @@ if (data) {
 	    do
 		test -d "$path" &&
 		    cd "$path"
-		
+
 		no_complete=true
 		data_stdout
 		unset no_complete
-		
+
 	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
-	    
+
 	    init_client
 
 	    while read port
@@ -1247,7 +1351,7 @@ if (data) {
 		   check_port "${line[1]}"
 	    then
 		run_zdl_server "${line[1]}" &>/dev/null
-		
+
 	    else
 		echo "already-in-use" >"$path_server"/run-server.$socket_port
 		file_output="$path_server"/run-server.$socket_port
@@ -1259,7 +1363,7 @@ if (data) {
 	    get_status_sockets sockets
 	    echo "$sockets" > "$file_output"
 	    ;;
-	
+
 	run-zdl)
 	    for ((i=1; i<${#line[@]}; i++))
 	    do
@@ -1267,7 +1371,7 @@ if (data) {
 		test -d "${line[i]}" &&
 		    {
 			cd "${line[i]}"
-			
+
 			if ! check_instance_prog &>/dev/null &&
 				! check_instance_daemon &>/dev/null
 			then
@@ -1294,7 +1398,7 @@ if (data) {
 
 			    check_pid $pid &&
 				kill -9 $pid &>/dev/null
-			    
+
 			    rm -f "$path_tmp"/.date_daemon
 			    unset pid
 			fi
@@ -1323,7 +1427,7 @@ if (data) {
 			fi
 		    }
 	    done
-	    
+
 	    init_client
 	    ;;
 
@@ -1333,14 +1437,14 @@ if (data) {
 		kill_server "${line[i]}"
 	    done
 	    ;;
-	
+
 	kill-all)
 	    ## tutte le istanze di ZDL (in tutti i path) e i downloader
 	    while read path
 	    do
 		test -d "$path" &&
 		    cd "$path"
-		
+
 	    	kill_downloads
 
 		instance_pid=$(cat "$path_tmp"/.pid.zdl)
@@ -1349,15 +1453,15 @@ if (data) {
 			kill -9 "$instance_pid" &>/dev/null
 			rm -f "$path_tmp"/.date_daemon
 			unset instance_pid
-		    } 
+		    }
 	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	    init_client
 	    ;;
-	
+
 	get-conf)
 	    file_output="$path_server"/conf.$socket_port.json
-	    
+
 	    if [ "${line[1]}" != 'force' ]
 	    then
 		lock_fifo conf
@@ -1367,16 +1471,16 @@ if (data) {
 	    fi
 
 	    string_output='{'
-	    
+
 	    for item in ${key_conf[@]}
 	    do
 		string_output+="\"$item\":\"$(get_item_conf "$item")\","
 	    done
 	    string_output="${string_output%,}}"
-	    
+
 	    echo -n "$string_output" > "$file_output"
 	    ;;
-	
+
 	set-conf)
 	    set_item_conf "${line[1]}" "${line[2]}"
 	    init_client
@@ -1392,8 +1496,8 @@ if (data) {
 
     elif [ -z "$file_output" ]
     then
-       echo > "$path_server/empty"
-       file_output="$path_server/empty"
+	echo > "$path_server/empty"
+	file_output="$path_server/empty"
     fi
 }
 
@@ -1417,35 +1521,36 @@ function send_login {
     if [[ ! "$file_output" =~ login.html ]]
     then
 	file_output="$path_usr/webui"/login.html
-	
-	[ -z "$GET_DATA" ] && add_response_header "Location" "login.html"	
+
+	[ -z "$GET_DATA" ] && add_response_header "Location" "login.html" &&
+            add_response_header "Set-Cookie" _zdlstartuplanguage=$(get_item_conf 'language')
 
 	send_response 302 "$file_output"
-	
+
 	exit 0
     fi
 }
 
 
 function check_session_cookie {
-	if [[ "$1" =~ .*(_ZigzagDownLoader=[a-z0-9]{128}).* ]]
-	then
-	    grep "${BASH_REMATCH[1]}" "$path_server"/http-sessions &>/dev/null && return 0
-	fi
-	return 1
+    if [[ "$1" =~ .*(_ZigzagDownLoader=[a-z0-9]{128}).* ]]
+    then
+	grep "${BASH_REMATCH[1]}" "$path_server"/http-sessions &>/dev/null && return 0
+    fi
+    return 1
 }
 
 
 function http_server {
     local cookie
-    
+
     case $http_method in
 	GET)
-	    if [[ "${line[*]}" =~ 'Cookie' ]]
+            if [[ "${line[*]}" =~ 'Cookie' ]]
 	    then
 		cookie="$(clean_data "${line[*]}")"
 		check_session_cookie "$cookie" && logged_on=true
-		
+
 	    elif [[ "$(clean_data "${line[*]}")" =~ 'Accept-Language' ]]
 	    then
 		user_accept_language=true
@@ -1480,24 +1585,24 @@ function http_server {
 		then
 		    run_data "$GET_DATA"
 		fi
-		
+
 		if [ -f "$file_output" ]
 		then
 		    [[ "$file_output" =~ "$server_data" ]] &&
 			create_json
-		    
+
 		    serve_file "$file_output"
-		    
+
 		else
 		    exit
 		fi
 	    fi
 	    ;;
-	
+
 	POST)
 	    [ "${line[0]}" == 'Content-Length:' ] &&
 		length=$(clean_data "${line[1]}")
-	    
+
 	    if [[ "$length" =~ ^[0-9]+$ ]] && ((length>0))
 	    then
 		## read -n 0
@@ -1523,7 +1628,7 @@ function http_server {
 
 ## MAIN:
 
-while read -a line 
+while read -a line
 do
     recv "${line[*]}"
 
@@ -1532,15 +1637,15 @@ do
 	    unset GET_DATA file_output
 	    http_method=GET
 	    start_timeout=$(date +%s)
-	    
+
 	    get_file_output file_output "${line[1]}"
-	    
+
 	    if [[ "${line[1]}" =~ '?' ]]
 	    then
 	    	GET_DATA="$(clean_data "${line[1]#*\?}")"
 	    fi
 	    ;;
-	
+
 	POST)
 	    unset POST_DATA file_output
 	    http_method=POST
@@ -1554,4 +1659,3 @@ do
 	    ;;
     esac
 done
-
