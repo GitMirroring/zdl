@@ -110,7 +110,10 @@ then
 	[ -n "$file_in" ] && url "$url_in_file" &&
 	    file_in="${file_in}.${url_in_file##*.}"
 
-	downloader_in=Axel
+	#### da fare: gestione automatica del downloader più adatto (aria2 e wget, a volte, non funzionano, mentre axel funziona _quasi_ sempre:
+	#### quando non funziona, bisogna usare uno degli altri due), quindi
+	## 
+	## downloader_in=Axel
 
 	end_extension
     fi
