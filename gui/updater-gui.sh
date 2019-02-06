@@ -30,10 +30,10 @@ path_tmp=".${prog}_tmp"
 
 path_usr="/usr/local/share/${prog}"
 
-ICON="$path_usr"/webui/icon-32x32.png
+ICON="$path_usr"/gui/icon-32x32.png
 TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
-IMAGE="$path_usr"/webui/zdl-64x64.png
-IMAGE2="$path_usr"/webui/zdl.png
+IMAGE="$path_usr"/gui/zdl-64x64.png
+IMAGE2="$path_usr"/gui/zdl.png
 YAD_ZDL=(
     --window-icon="$ICON"
     --borders=5
