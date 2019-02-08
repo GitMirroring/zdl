@@ -336,7 +336,7 @@ key_conf[1]=axel_parts;          val_conf[1]="32";         string_conf[1]="Numer
 key_conf[2]=aria2_connections;   val_conf[2]="16";         string_conf[2]="Numero di connessioni in parallelo per Aria2"
 key_conf[3]=max_dl;              val_conf[3]="1";          string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
 key_conf[4]=background;          val_conf[4]=black;        string_conf[4]="Colore sfondo (black|transparent)"
-key_conf[5]=language;            val_conf[5]=$LANG;        string_conf[5]="Lingua"
+key_conf[5]=language;            val_conf[5]=${LANG::2};   string_conf[5]="Lingua"
 key_conf[6]=reconnecter;         val_conf[6]="";           string_conf[6]="Script/comando/programma per riconnettere il modem/router"
 key_conf[7]=autoupdate;          val_conf[7]=enabled;      string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
 key_conf[8]=player;              val_conf[8]="";           string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
@@ -387,6 +387,9 @@ file_socket_account="$path_conf"/.socket-account
 
 source "$file_conf"
 [ -z "$background" ] && background=${val_conf[4]}
+
+[ "${language::2}" != "$language" ] &&
+    set_item_conf language "${language::2}"
 
 declare -A list_proxy_url
 ## elenco chiavi proxy_server: proxy_list, ip_adress
