@@ -18,459 +18,459 @@ For information or to collaborate on the project:
 https://savannah.nongnu.org/projects/zdl */
 
 @font-face {
-    font-family: "FontAwesome";
-    font-style: normal;
-    font-weight: 900;
-    src: url("fonts/fontawesome/fa-solid-900.eot");
-    src: url("fonts/fontawesome/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("fonts/fontawesome/fa-solid-900.woff2") format("woff2"), url("fonts/fontawesome/fa-solid-900.woff") format("woff"), url("fonts/fontawesome/fa-solid-900.ttf") format("truetype"), url("fonts/fontawesome/fa-solid-900.svg#fontawesome") format("svg");
+  font-family: "FontAwesome";
+  font-style: normal;
+  font-weight: 900;
+  src: url("fonts/fontawesome/fa-solid-900.eot");
+  src: url("fonts/fontawesome/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("fonts/fontawesome/fa-solid-900.woff2") format("woff2"), url("fonts/fontawesome/fa-solid-900.woff") format("woff"), url("fonts/fontawesome/fa-solid-900.ttf") format("truetype"), url("fonts/fontawesome/fa-solid-900.svg#fontawesome") format("svg");
 }
 
 body {
-    background: #223;
-    color: #eee;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    font-weight: 400;
+  background: #223;
+  color: #eee;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .header {
-    padding: 15px 5px;
+  padding: 15px 5px;
 }
 
 .logo {
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AsBFC04BvsOiwAAAQFJREFUSMfNlssRwyAMRIVHJaQQikhXPtOVi3Ah6YEcYmPHrJCU+MclM/IGDU/SAtHBK3x+0iuvo/1jtzgTEcVMRP1ziqZh/r5HvFvSjYHGAA75X7w7ugYMoxuU6mroQYICcTqvttp6BgRdS9OfWIM1R6mvJe4NPdccpb5e07DrecsxZp2yR39WDYysvTOBvUhibenUujZsZe2dibk2V3hRA7plPopGSLCpBxn6HWrabgroW+Yj5tt4kaUe0IvqvwRwtHL2mNOA5uNbn4Y5AdqH9X63exHa5yIvkpiqc+B8F3nvCbRP5UUSU8scoH1u/C4y3hPau8jg+21uP72LPPfEG/Rrpj/wAYiIAAAAAElFTkSuQmCC') no-repeat;
-    color: #fff;
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    height: 32px;
-    line-height: 2em;
-    text-indent: 42px;
-    text-decoration: none;
-    width: 200px;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AsBFC04BvsOiwAAAQFJREFUSMfNlssRwyAMRIVHJaQQikhXPtOVi3Ah6YEcYmPHrJCU+MclM/IGDU/SAtHBK3x+0iuvo/1jtzgTEcVMRP1ziqZh/r5HvFvSjYHGAA75X7w7ugYMoxuU6mroQYICcTqvttp6BgRdS9OfWIM1R6mvJe4NPdccpb5e07DrecsxZp2yR39WDYysvTOBvUhibenUujZsZe2dibk2V3hRA7plPopGSLCpBxn6HWrabgroW+Yj5tt4kaUe0IvqvwRwtHL2mNOA5uNbn4Y5AdqH9X63exHa5yIvkpiqc+B8F3nvCbRP5UUSU8scoH1u/C4y3hPau8jg+21uP72LPPfEG/Rrpj/wAYiIAAAAAElFTkSuQmCC') no-repeat;
+  color: #fff;
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  height: 32px;
+  line-height: 2em;
+  text-indent: 42px;
+  text-decoration: none;
+  width: 200px;
 }
 
 .loader {
-    letter-spacing: 1px;
-    margin-top: 50px;
-    text-align: center;
+  letter-spacing: 1px;
+  margin-top: 50px;
+  text-align: center;
 }
 
 .wrapper {
-    position: relative;
-    width: 100%;
-    height: auto;
-    display: none;
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: none;
 }
 
 .downloads {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .progressbar {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
 .progressbar .side-bar {
-    float: left;
-    overflow: hidden;
-    width: 70%;
+  float: left;
+  overflow: hidden;
+  width: 70%;
 }
 
 .progressbar .side-info {
-    float: left;
-    height: 2em;
-    margin-left: 5px;
-    line-height: 2.1em;
-    width: 160px;
-    text-align: center;
-    padding: 0 5px;
-    overflow: hidden;
+  float: left;
+  height: 2em;
+  margin-left: 5px;
+  line-height: 2.1em;
+  width: 160px;
+  text-align: center;
+  padding: 0 5px;
+  overflow: hidden;
 }
 
 .progressbar .side-button {
-    float: left;
-    margin-left: 5px;
+  float: left;
+  margin-left: 5px;
 }
 
 .toggler {
-    width: 70%;
-    position: relative;
-    /* margin-bottom: 5px; */
+  width: 70%;
+  position: relative;
+  /* margin-bottom: 5px; */
 }
 
-.toggler>.info,
-.toggler>.log,
-.toggler>.editor,
-.toggler>.read,
-.toggler>.browse {
-    display: none;
+.toggler > .info,
+.toggler > .log,
+.toggler > .editor,
+.toggler > .read,
+.toggler > .browse {
+  display: none;
 }
 
-.toggler>.info {
-    padding: 0 0 10px 10px;
-    margin-bottom: 10px;
+.toggler > .info {
+  padding: 0 0 10px 10px;
+  margin-bottom: 10px;
 }
 
-.toggler>.info>.button {
-    margin-right: 5px;
+.toggler > .info > .button {
+  margin-right: 5px;
 }
 
-.toggler>.editor,
-.toggler>.read,
-.toggler>.browse {
-    background: #eee;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 90%;
+.toggler > .editor,
+.toggler > .read,
+.toggler > .browse {
+  background: #eee;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 90%;
 }
 
-.toggler>.browse>.path {
-    width: 80%;
-    padding: 5px 5px 6px;
-    background: #fff;
-    color: #207a72;
-    border: 1px solid #ddd;
-    display: inline-block;
+.toggler > .browse > .path {
+  width: 80%;
+  padding: 5px 5px 6px;
+  background: #fff;
+  color: #207a72;
+  border: 1px solid #ddd;
+  display: inline-block;
 }
 
-.toggler>.browse>.tree {
-    margin-left: 15px;
-    margin-bottom: 5px;
+.toggler > .browse > .tree {
+  margin-left: 15px;
+  margin-bottom: 5px;
 }
 
-.toggler>.browse>.tree>li {
-    padding-left: 25px;
-    position: relative;
+.toggler > .browse > .tree > li {
+  padding-left: 25px;
+  position: relative;
 }
 
-.toggler>.browse>.tree>li>a {
-    text-decoration: none;
+.toggler > .browse > .tree > li > a {
+  text-decoration: none;
 }
 
-.toggler>.browse>.tree>li>a:hover {
-    color: #207a72;
+.toggler > .browse > .tree > li > a:hover {
+  color: #207a72;
 }
 
-.toggler>.browse>.tree>li:before {
-    font-family: "FontAwesome";
-    display: block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+.toggler > .browse > .tree > li:before {
+  font-family: "FontAwesome";
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.toggler>.browse>.tree>li.folder:before {
-    font-size: 1.3em;
-    content: "\f07b";
-    top: 0;
-    left: 0;
-    color: #d38958;
+.toggler > .browse > .tree > li.folder:before {
+  font-size: 1.3em;
+  content: "\f07b";
+  top: 0;
+  left: 0;
+  color: #d38958;
 }
 
-.toggler>.browse>.tree>li.file:before {
-    font-size: 1em;
-    content: "\f15b";
-    top: 2px;
-    left: 5px;
-    color: #ccc;
+.toggler > .browse > .tree > li.file:before {
+  font-size: 1em;
+  content: "\f15b";
+  top: 2px;
+  left: 5px;
+  color: #ccc;
 }
 
-.toggler>.browse>.tree>li.media:before {
-    font-size: 1.1em;
-    content: "\f144";
-    top: 3px;
-    left: 3px;
-    color: #479e5a;
+.toggler > .browse > .tree > li.media:before {
+  font-size: 1.1em;
+  content: "\f144";
+  top: 3px;
+  left: 3px;
+  color: #479e5a;
 }
 
-.toggler>.browse>.tree>li.executable:before {
-    font-size: 1.1em;
-    content: "\f35a";
-    top: 2px;
-    left: 3px;
-    color: #c764b4;
+.toggler > .browse > .tree > li.executable:before {
+  font-size: 1.1em;
+  content: "\f35a";
+  top: 2px;
+  left: 3px;
+  color: #c764b4;
 }
 
-.toggler>.browse>.tree>li.torrent:before {
-    font-size: 1.1em;
-    content: "\f358";
-    top: 2px;
-    left: 3px;
-    color: #5892d3;
+.toggler > .browse > .tree > li.torrent:before {
+  font-size: 1.1em;
+  content: "\f358";
+  top: 2px;
+  left: 3px;
+  color: #5892d3;
 }
 
 .toggler .links {
-    background: #eee;
-    color: #333;
-    width: 100%;
-    height: 150px;
-    display: block;
-    border: none;
-    resize: none;
-    margin-bottom: 5px;
+  background: #eee;
+  color: #333;
+  width: 100%;
+  height: 150px;
+  display: block;
+  border: none;
+  resize: none;
+  margin-bottom: 5px;
 }
 
-.toggler>.log {
-    background: #000;
-    color: #ddd;
-    padding: 10px 10px 0;
-    height: 200px;
-    overflow-y: auto;
-    word-wrap: break-word;
+.toggler > .log {
+  background: #000;
+  color: #ddd;
+  padding: 10px 10px 0;
+  height: 200px;
+  overflow-y: auto;
+  word-wrap: break-word;
 }
 
-.toggler>.log:after {
-    content: "";
-    display: block;
-    height: 10px;
-    width: 100%;
+.toggler > .log:after {
+  content: "";
+  display: block;
+  height: 10px;
+  width: 100%;
 }
 
 .toggler ul {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 .toggler ul li {
-    padding: 2px 10px 2px 0;
-    word-wrap: break-word;
+  padding: 2px 10px 2px 0;
+  word-wrap: break-word;
 }
 
-.toggler ul li>span {
-    color: #207a72;
-    font-weight: bold;
+.toggler ul li > span {
+  color: #207a72;
+  font-weight: bold;
 }
 
 .inline-group {
-    overflow: hidden;
-    margin-bottom: 5px;
+  overflow: hidden;
+  margin-bottom: 5px;
 }
 
 .inline-group button:not(.hide),
 .inline-group input,
 .inline-group div {
-    display: inline-block;
+  display: inline-block;
 }
 
 .inline-group button.hide {
-    display: none;
+  display: none;
 }
 
 .inline-group .label,
 .inline-group .value,
 .inline-group input {
-    padding: 0.5em 0.6em;
-    vertical-align: middle;
+  padding: 0.5em 0.6em;
+  vertical-align: middle;
 }
 
 .inline-group .label {
-    width: 150px;
-    text-align: right;
+  width: 150px;
+  text-align: right;
 }
 
 .inline-group .label.alt {
-    background: #fff;
+  background: #fff;
 }
 
 .inline-group .value,
 .inline-group input[type="text"] {
-    border: 0;
+  border: 0;
 }
 
 .inline-group input[type="text"] {
-    width: 50%;
+  width: 50%;
 }
 
 .inline-group input[type="text"].mid {
-    width: 30%;
+  width: 30%;
 }
 
 .inline-group input[type="text"].short {
-    width: 120px;
-    text-align: center;
+  width: 120px;
+  text-align: center;
 }
 
 .playlist {
-    position: relative;
-    width: 100%;
-    margin-top: 10px;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  overflow: hidden;
 }
 
-.playlist>.pl-item {
-    margin-bottom: 5px;
-    overflow: hidden;
+.playlist > .pl-item {
+  margin-bottom: 5px;
+  overflow: hidden;
 }
 
-.playlist>.pl-item>.pl-file {
-    width: 80%;
-    padding: 6px 10px;
-    float: left;
-    overflow-x: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.playlist > .pl-item > .pl-file {
+  width: 80%;
+  padding: 6px 10px;
+  float: left;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.playlist>.pl-item>.pl-buttons {
-    float: left;
-    margin-left: 5px;
+.playlist > .pl-item > .pl-buttons {
+  float: left;
+  margin-left: 5px;
 }
 
-.playlist>.pl-item>.pl-buttons>.button:first-child {
-    margin-right: 5px;
+.playlist > .pl-item > .pl-buttons > .button:first-child {
+  margin-right: 5px;
 }
 
 .console {
-    border: none;
-    line-height: 18px;
-    padding: 5px;
-    resize: none;
-    width: 100%;
-    white-space: pre;
+  border: none;
+  line-height: 18px;
+  padding: 5px;
+  resize: none;
+  width: 100%;
+  white-space: pre;
 }
 
-.console>span {
-    display: block;
+.console > span {
+  display: block;
 }
 
-.console>.error {
-    color: red;
+.console > .error {
+  color: red;
 }
 
 ul.console-opt {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 ul.console-opt li {
-    display: inline-block;
+  display: inline-block;
 }
 
 ul.console-opt li:first-child {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-ul.info>li {
-    padding: 5px 0;
+ul.info > li {
+  padding: 5px 0;
 }
 
-ul.info>li>a {
-    color: #1f688c;
-    text-decoration: none;
+ul.info > li > a {
+  color: #1f688c;
+  text-decoration: none;
 }
 
-ul.info>li>a:hover {
-    text-decoration: underline;
+ul.info > li > a:hover {
+  text-decoration: underline;
 }
 
 .centered {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .align-right {
-    text-align: right;
+  text-align: right;
 }
 
 .float-left {
-    float: left;
+  float: left;
 }
 
 .float-right {
-    float: right;
+  float: right;
 }
 
 .onclose {
-    margin-left: 30px;
+  margin-left: 30px;
 }
 
 .clearfix::after {
-    content: "";
-    visibility: hidden;
-    display: block;
-    height: 0;
-    clear: both;
+  content: "";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
 }
 
 .footer {
-    color: #666;
-    font-family: "Lobster", cursive;
-    font-size: 18px;
-    padding: 10px 0;
-    text-align: center;
-    width: 100%;
+  color: #666;
+  font-family: "Lobster", cursive;
+  font-size: 18px;
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
 }
 
 /* FontAwesome 5 */
 
 .fa {
-    font-family: 'FontAwesome';
-    font-weight: 900;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    line-height: 1;
+  font-family: 'FontAwesome';
+  font-weight: 900;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
 }
 
 .fa-bolt:before {
-    content: "\f0e7";
+  content: "\f0e7";
 }
 
 /* jQuery UI  */
 
 .ui-spinner-input {
-    padding: 0;
-    margin: 0;
-    width: 4.5em;
+  padding: 0;
+  margin: 0;
+  width: 4.5em;
 }
 
 .ui-selectmenu-button {
-    width: 8em !important;
+  width: 8em !important;
 }
 
 .ui-progressbar {
-    position: relative;
-    margin-bottom: 5px;
+  position: relative;
+  margin-bottom: 5px;
 }
 
 .ui-progressbar .label {
-    position: absolute;
-    left: 5px;
-    top: 6px;
+  position: absolute;
+  left: 5px;
+  top: 6px;
 }
 
 /* DataTable */
 
 table.dataTable thead th {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 @media (max-width: 600px) {
-    .console {
-        white-space: pre-wrap;
-    }
+  .console {
+    white-space: pre-wrap;
+  }
 
-    .progressbar .side-bar {
-        float: none;
-        width: 100%;
-    }
+  .progressbar .side-bar {
+    float: none;
+    width: 100%;
+  }
 
-    .progressbar .side-bar .label {
-        width: 98%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+  .progressbar .side-bar .label {
+    width: 98%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-    .toggler {
-        width: 100%;
-    }
+  .toggler {
+    width: 100%;
+  }
 }
