@@ -881,7 +881,7 @@ var displayConf = function (conf) {
             "web_ui": ZDL.webUI,
             "conf_downloader": ["Aria2", "Axel", "Wget"],
             "background": ["transparent", "black"],
-            "language": ["it_IT.UTF-8"],
+            "language": ["it"],
             "resume": ["enabled", "disabled"],
             "autoupdate": ["enabled", "disabled"],
             "zdl_mode": ["stdout", "lite", "daemon"]
