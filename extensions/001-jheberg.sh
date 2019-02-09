@@ -72,6 +72,11 @@ then
 	    break
     done
 
-    replace_url_in "$reurl" ||
+    if [ "$file_in" == "utils.js" ]
+    then
 	_log 2
+    else
+	replace_url_in "$reurl" ||
+	    _log 2
+    fi
 fi
