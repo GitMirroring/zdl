@@ -72,11 +72,12 @@ then
 	    break
     done
 
-    if [ "$file_in" == "utils.js" ]
+    if [[ "$reurl" =~ jheberg\.net\/js\/utils\.js ]]
     then
 	_log 2
+
     else
 	replace_url_in "$reurl" ||
-	    _log 2
+	    _log 2    
     fi
 fi
