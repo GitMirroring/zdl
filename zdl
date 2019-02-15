@@ -1416,7 +1416,14 @@ function main_loop {
     then	
 	nline=1
 	while :
-	do	    	    
+	do
+	    if check_in_loop
+	    then
+		show_downloads
+		sleep 2
+		continue
+	    fi
+
 	    unset break_loop
 	    
 	    if [ -s "$start_file" ]
@@ -1424,7 +1431,6 @@ function main_loop {
 		nlines=$(wc -l < "$start_file")		
 		((nline > nlines)) && nline=1
 
-		url_in_old="$url_in"
 		url_in=$(sed -n ${nline}p < "$start_file")
 
 		if [ "$url_in_old" == "$url_in" ] &&
@@ -1433,12 +1439,13 @@ function main_loop {
 		    ((nline++))
 		    continue
 		fi
-
-		if ! url "${url_in}"
+		url_in_old="$url_in"
+		
+		if ! check_link "$url_in"
 		then
-		    _log 12 "$url_in"
+		    ((nline++))
 		    continue
-		fi			
+		fi
 		
 	    else
 		show_downloads
@@ -1465,8 +1472,7 @@ function main_loop {
 		downloader_in=$(cat "$path_tmp/downloader")
 	    fi
 
-	    if ! check_in_loop &&
-		    check_link "$url_in"
+	    if check_link "$url_in"
 	    then
 		axel_parts=$axel_parts_conf
 		url_in="${url_in## }"
@@ -1609,7 +1615,6 @@ function main_loop {
 		#### DOWNLOAD ####
 		if [ -z "$premium" ] &&                                                 
 		       check_in_file &&                                                         
-		       check_link "$url_in" &&
 		       check_freespace
 		then
 		    #

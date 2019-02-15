@@ -26,22 +26,30 @@
 
 urls_redir="italiafilms.tv/engine nowupload.net/nowdownload"
 
-for url_redir in $urls_redir; do
-    if [ "$url_in" != "${url_in//$url_redir}" ]; then
+for url_redir in $urls_redir
+do
+    if [ "$url_in" != "${url_in//$url_redir}" ]
+    then
 	export LANG="$prog_lang"
 	export LANGUAGE="$prog_lang"
-	new_url_in=`wget -O /dev/null -S "$url_in" 2>&1 |grep Location |sed -n 1p`
+	new_url_in=$(wget -O /dev/null \
+			  -S "$url_in" \
+			  -o /dev/null 2>&1 |
+			 grep Location |
+			 head -n1)
+	
 	export LANG="$user_lang"
 	export LANGUAGE="$user_language"
 	new_url_in="${new_url_in#*: }"
 	new_url_in="${new_url_in%% *}"
-	if [ "$new_url_in" == "${new_url_in//$url_redir}" ] && [ "$new_url_in" != "${new_url_in//'http://'}" ]; then
-	    set_link - "$url_in"
-	    url_in="$new_url_in"
-	    set_link + "$url_in"
+
+	if [ "$new_url_in" == "${new_url_in//$url_redir}" ] &&
+	       [ "$new_url_in" != "${new_url_in//'http://'}" ]
+	then
+	    replace_url_in "$new_url_in"
+	    
 	else
 	    _log 2
-	    unset url_in
 	fi
     fi
 done

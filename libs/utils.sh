@@ -390,6 +390,7 @@ function sanitize_file_in {
     file_in="${file_in## }"
     file_in="${file_in%% }"
     file_in="${file_in// /_}"
+    file_in="${file_in//\\}"
     file_in="${file_in//\*}"
     file_in="${file_in//+/_}"
     file_in="${file_in//\'/_}"
@@ -410,7 +411,7 @@ function sanitize_file_in {
     file_in="$(urldecode "$file_in")"
     file_in="${file_in//'%'}"
     file_in="${file_in//\|}"
-    file_in="${file_in//'`'}"
+    file_in="${file_in//\`}"
     file_in="${file_in//[<>]}"
     file_in="${file_in::180}"
     file_in=$(sed -r 's|^[^0-9a-zA-Z\[\]()]*([0-9a-zA-Z\[\]()]+)[^0-9a-zA-Z\[\]()]*$|\1|g' <<< "$file_in" 2>/dev/null)

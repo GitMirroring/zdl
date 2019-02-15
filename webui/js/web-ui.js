@@ -105,7 +105,10 @@ var ajax = function (spec) {
             window.location.replace("login.html");
         }
     };
-    req.send(spec.query);
+    req.onerror = function () {
+        console.log( "Request failed: " + spec.url);
+    };
+    req.send();
 };
 
 var getData = function () {

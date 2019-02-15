@@ -352,16 +352,30 @@ function del_link_timer {
 
 function check_link {
     local url_test="$1"
+    local i test_pid
 
     if url "$url_test" &&
-	   grep "^${url_test}$" "$path_tmp/links_loop.txt" &>/dev/null
+	   set_link in "${url_test}"
     then
-	return 0
+	if data_stdout
+	then
+	    for ((i=0; i<${#pid_out[@]}; i++))
+	    do
+		if [ "${url_out[i]}" == "$url_in" ] &&
+		       check_pid "${pid_out[i]}"
+		then
+		    test_pid=alive
+		fi
+	    done
 
-    else
-	((nline++))
-	return 1
+	    [ "$test_pid" == alive ] ||
+		return 0
+
+	else
+	    return 0
+	fi
     fi
+    return 1
 }
 
 function set_link {

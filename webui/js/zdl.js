@@ -45,7 +45,7 @@ class ZDL {
             };
 
             xhr.onerror = () => {
-                reject( "network unreachable" );
+                reject( "network request failed" );
             };
 
             xhr.send();
@@ -56,15 +56,15 @@ class ZDL {
         return this.request( `cmd=init-client&path=${this.path}` );
     }
 
-    getStatus( start ) {
+    getStatus( loop ) {
         var query = `cmd=get-status&path=${this.path}`;
-        if ( start ) query += "&op=loop";
+        if ( loop ) query += "&op=loop";
         return this.request( query );
     }
 
-    getData( start ) {
+    getData( force ) {
         var query = "cmd=get-data";
-        if ( start ) query += "&op=force";
+        if ( force ) query += "&op=force";
         return this.request( query );
     }
 
@@ -74,6 +74,10 @@ class ZDL {
 
     getFreeSpace() {
         return this.request( `cmd=get-free-space&path=${this.path}` );
+    }
+
+	getLinks() {
+        return this.request( `cmd=get-links&path=${this.path}` );
     }
 
     getDesktopPath() {

@@ -158,10 +158,12 @@ function consoleOption() {
 }
 
 function validateInput( str, type ) {
+    /* jshint ignore: start */
     var pattern = {
         "URL": /^(?:(irc|https?):\/\/)?[\w\.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(\/msg\s.+\sxdcc\ssend\s#\d+)?$/,
         "path": /^((\/([\w\.\-\(\)\]\[\?\\@\$\^#&=|:;, ])+)+)|([\w\-]+)$/
     };
+    /* jshint ignore: end */
     return pattern[ type ].test( str );
 }
 

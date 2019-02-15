@@ -497,8 +497,7 @@ ${BBlue} * ${Color_Off}│ ${BBlue}schermata principale${Color_Off}\n"
 		    done
 
 		    case "$input" in
-			r)
-			    
+			r)   
 			    for i in ${inputs[*]}
 			    do
 				kill_url "${url_out[$i]}" 'xfer-pids'

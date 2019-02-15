@@ -27,6 +27,7 @@ function UIbuttons( e ) {
                 $( ".progressbar" ).each( function() {
                     var fname = $( this ).find( ".label" ).text();
                     if ( isDownloading.indexOf( fname ) < 0 ) {
+                        $( this ).next( ".toggler" ).remove();
                         $( this ).remove();
                     }
                 } );
@@ -75,7 +76,9 @@ function UIbuttons( e ) {
                     $( "#tabs" ).tabs( "option", "active", 0 );
                 } );
             } else {
-                ZDLconsole( "send-link-incorrect", addLinkVal, true );
+                addLink.val( "" );
+				if ( !addLinkVal ) addLinkVal = " ";
+				ZDLconsole( "send-link-incorrect", addLinkVal, true );
             }
             break;
         case "edit-links-toggler":
@@ -83,7 +86,7 @@ function UIbuttons( e ) {
             $( "#links-editor" ).toggle( "blind", null, 500, function() {
                 if ( $( this ).is( ":visible" ) ) {
                     editLinksToggler.text( $.i18n( "button-close" ) );
-                    myZDL.command( "get-links" ).then( function( links ) {
+                    myZDL.getLinks().then( function( links ) {
                         if ( links && links.length > 10 ) {
                             $( "#edit-links" ).val( decodeURIComponent( links ).replace( /\n$/, "" ) );
                         } else {
@@ -113,7 +116,7 @@ function UIbuttons( e ) {
                     }
                 } );
                 if ( pass ) {
-                    myZDL.command( "set-links", "links=" + encodeURIComponent( links ) ).then( function() {
+                    myZDL.command( "set-links", "links=" + encodeURIComponent( editLinksVal ) ).then( function() {
                         ZDLconsole( "links-edit" );
                         $( "#edit-links-toggler" ).trigger( "click" );
                     } );
@@ -544,6 +547,7 @@ function UIbuttons( e ) {
             break;
         case "close-all":
             $( ".onclose" ).text( $.i18n( "close-all-shutdown" ) );
+            zdlRunning = false;
             myZDL.exitAll().then( function() {
                 window.setTimeout( function() {
                     window.location.href = window.location.pathname;
@@ -610,10 +614,19 @@ function UIbuttons( e ) {
                 } );
             } else if ( $( this ).hasClass( "dl-delete" ) ) {
                 var dlDeleteLink = $( this ).data( "link" ),
-                    thisToggler = $( this ).closest( ".toggler" );
+                    dlDeleteFile = $( this ).data( "file" ),
+                    thisToggler = $( this ).closest( ".toggler" ), index;
                 myZDL.deleteLink( encodeURIComponent( dlDeleteLink ) ).then( function() {
 					thisToggler.prev().remove();
 					thisToggler.remove();
+                    index = isDownloading.indexOf( dlDeleteLink );
+                    if ( index >= 0 ) {
+                        isDownloading.splice( index, 1 );
+                    }
+                    index = fileList.indexOf( dlDeleteFile );
+                    if ( index >= 0 ) {
+                        fileList.splice( index, 1 );
+                    }
                     ZDLconsole( "download-delete", dlDeleteLink );
                 } );
             } else if ( $( this ).hasClass( "pl-delete" ) ) {

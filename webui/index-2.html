@@ -30,6 +30,7 @@
     <link rel="icon" href="favicon.ico">
     <link href="css/jquery-ui.min.css" rel="stylesheet">
     <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/responsive.datatables.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
 </head>
@@ -188,7 +189,7 @@
                     <div data-i18n="tab-3-label-max-results" class="label">Max results:</div>
                     <input id="max-xdcc" class="spinner">
                 </div>
-                <table id="xdcc-eu" class="display" style="width:100%">
+                <table id="xdcc-eu" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
                             <th>Network</th>
@@ -198,7 +199,7 @@
                             <th>Gets</th>
                             <th>Size</th>
                             <th>Name</th>
-                            <th></th>
+                            <th>Send</th>
                         </tr>
                     </thead>
                 </table>
@@ -419,7 +420,7 @@
             <div id="tabs-8">
                 <h4 data-i18n="tab-8-title">ZigzagDownLoader (ZDL) documentation</h4>
                 <p data-i18n="tab-8-text1">The user manual is available in various forms, accessible from the terminal or from a web browser.</p>
-                <p data-i18n="tab-8-text2">Here you can consult:</p>
+                <p data-i18n="tab-8-text2">Some useful links:</p>
                 <ul class="info">
                     <li><a data-i18n="tab-8-link-site" href="http://nongnu.org/zdl" target="_blank">Official site of ZigzagDownLoader</a></li>
                     <li><a data-i18n="tab-8-link-diaspora" href="https://joindiaspora.com/tags/zdl" target="_blank">Updates in Diaspora*</a></li>
@@ -445,6 +446,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/datatables.min.js"></script>
+    <script src="js/datatables.responsive.min.js"></script>
     <script src="js/zdl.js"></script>
     <script src="js/main.js"></script>
     <script src="js/utils.js"></script>

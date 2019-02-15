@@ -84,21 +84,23 @@ function initClient() {
 }
 
 function statusInit() {
-    myZDL.getFreeSpace().then( function( space ) {
-        $( "#free-space" ).text( space );
-    } );
+	if ( zdlRunning ) {
+		myZDL.getFreeSpace().then( function( space ) {
+	        $( "#free-space" ).text( space );
+	    } );
 
-    myZDL.getDesktopPath().then( function( path ) {
-        $( "#conf-desktop" ).val( path );
-    } );
+	    myZDL.getDesktopPath().then( function( path ) {
+	        $( "#conf-desktop" ).val( path );
+	    } );
 
-    $( "#new-socket" ).val( parseInt( window.location.port ) + 1 );
+	    $( "#new-socket" ).val( parseInt( window.location.port ) + 1 );
 
-    myZDL.getPlaylist().then( function( data ) {
-        if ( isJson( data ) ) {
-            buildPlaylist( JSON.parse( data ) );
-        }
-    } );
+	    myZDL.getPlaylist().then( function( data ) {
+	        if ( isJson( data ) ) {
+	            buildPlaylist( JSON.parse( data ) );
+	        }
+	    } );
+	}
 }
 
 function statusFlow() {
@@ -106,32 +108,29 @@ function statusFlow() {
     myZDL.getStatus( arg ).then( function( res ) {
         if ( isJson( res ) ) {
             var obj = JSON.parse( res );
-
-			/* jshint ignore: start */
-            if ( !obj[ "conf" ].resume ) obj[ "conf" ].resume = "disabled";
-            if ( obj[ "conf" ].language === "it_IT.UTF-8" ) obj[ "conf" ].language = "it";
+            if ( !obj.conf.resume ) obj.conf.resume = "disabled";
+            if ( obj.conf.language === "it_IT.UTF-8" ) obj.conf.language = "it";
             $( "#path" ).val( obj.path );
             $( "#downloader" ).val( obj.downloader );
             $( "#max-downloads" ).val( obj.maxDownloads );
             $( "#max-xdcc" ).val( 50 );
             $( "#reconnect" ).val( obj.reconnect );
-            $( "#conf-downloader" ).val( obj[ "conf" ].conf_downloader );
-            $( "#conf-axel-parts" ).val( obj[ "conf" ].axel_parts );
-            $( "#conf-aria2-parts" ).val( obj[ "conf" ].aria2_connections );
-            $( "#conf-max-downloads" ).val( obj[ "conf" ].max_dl );
-            $( "#conf-bg-terminal" ).val( obj[ "conf" ].background );
-            $( "#conf-language" ).val( obj[ "conf" ].language );
-            $( "#conf-reconnecter" ).val( obj[ "conf" ].reconnecter );
-            $( "#conf-auto-update" ).val( obj[ "conf" ].autoupdate );
-            $( "#conf-player" ).val( obj[ "conf" ].player );
-            $( "#conf-editor" ).val( obj[ "conf" ].editor );
-            $( "#conf-resume" ).val( obj[ "conf" ].resume );
-            $( "#conf-start-mode" ).val( obj[ "conf" ].zdl_mode );
-            $( "#conf-torrent-tcp" ).val( obj[ "conf" ].tcp_port );
-            $( "#conf-torrent-udp" ).val( obj[ "conf" ].udp_port );
-            $( "#conf-socket-tcp" ).val( obj[ "conf" ].socket_port );
-            $( "#conf-browser" ).val( obj[ "conf" ].browser );
-			/* jshint ignore: end */
+            $( "#conf-downloader" ).val( obj.conf.conf_downloader );
+            $( "#conf-axel-parts" ).val( obj.conf.axel_parts );
+            $( "#conf-aria2-parts" ).val( obj.conf.aria2_connections );
+            $( "#conf-max-downloads" ).val( obj.conf.max_dl );
+            $( "#conf-bg-terminal" ).val( obj.conf.background );
+            $( "#conf-language" ).val( obj.conf.language );
+            $( "#conf-reconnecter" ).val( obj.conf.reconnecter );
+            $( "#conf-auto-update" ).val( obj.conf.autoupdate );
+            $( "#conf-player" ).val( obj.conf.player );
+            $( "#conf-editor" ).val( obj.conf.editor );
+            $( "#conf-resume" ).val( obj.conf.resume );
+            $( "#conf-start-mode" ).val( obj.conf.zdl_mode );
+            $( "#conf-torrent-tcp" ).val( obj.conf.tcp_port );
+            $( "#conf-torrent-udp" ).val( obj.conf.udp_port );
+            $( "#conf-socket-tcp" ).val( obj.conf.socket_port );
+            $( "#conf-browser" ).val( obj.conf.browser );
 
             $( ".selectmenu" ).selectmenu( "refresh" );
 
@@ -139,10 +138,13 @@ function statusFlow() {
 
             if ( arg ) showUI();
         }
-        if ( !arg && !logOnlyErrors ) ZDLconsole( "status-update" );
+        //if ( !arg && !logOnlyErrors ) ZDLconsole( "status-update" );
         statusFlow();
     } ).catch( function( e ) {
-        ZDLconsole( "status-flow-error", e, true );
+		if ( zdlRunning ) {
+			ZDLconsole( "status-flow-error", e );
+			statusFlow();
+		}
     } );
 }
 
@@ -203,7 +205,10 @@ function downloadFlow() {
         }
         downloadFlow();
     } ).catch( function( e ) {
-        ZDLconsole( "download-flow-error", e, true );
+		if ( zdlRunning ) {
+			ZDLconsole( "download-flow-error", e );
+			downloadFlow();
+		}
     } );
 }
 
@@ -211,7 +216,12 @@ function initTable() {
     return $( "#xdcc-eu" ).DataTable( {
         "order": [[ 4, "desc" ]],
 		"retrieve": true,
-		"paginate": false
+		"paginate": false,
+		"responsive": true,
+        "columnDefs": [
+            { "responsivePriority": 1, "targets": 0 },
+			{ "responsivePriority": 1, "targets": -3 },
+		]
     } );
 }
 

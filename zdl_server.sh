@@ -758,7 +758,7 @@ if (data) {
 		    current_timeout=$(date +%s)
 
 		    if [ ! -s "$file_output" ] ||
-			   [ "$string_output" != "$(cat "$file_output")" ] ## ||
+			   [ "$string_output" != "$(cat "$file_output")" ] ||
 		       (( (current_timeout - start_timeout) > 240 ))
 		    then
 			init_client "$PWD" "$socket_port"
