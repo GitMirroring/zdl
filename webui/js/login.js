@@ -40,7 +40,7 @@ function checkAccount() {
         }
     };
     xhr.onerror = () => {
-        console.log( "network unreachable" );
+        console.log( "network request failed" );
     };
 
     xhr.send();
@@ -57,7 +57,7 @@ function createAccount( user, pwd ) {
         }
     };
     xhr.onerror = () => {
-        console.log( "network unreachable" );
+        console.log( "network request failed" );
     };
 
     xhr.send( `cmd=create-account&user=${user}&pass=${pwd}` );

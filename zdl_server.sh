@@ -1523,7 +1523,7 @@ function send_login {
 	file_output="$path_usr/webui"/login.html
 
 	[ -z "$GET_DATA" ] && add_response_header "Location" "login.html" &&
-            add_response_header "Set-Cookie" _zdlstartuplanguage=$(get_item_conf 'language')
+            add_response_header "Set-Cookie" "_zdlstartuplanguage="$(get_item_conf 'language')
 
 	send_response 302 "$file_output"
 

@@ -184,10 +184,11 @@
 	"status-update": "Configuration status file updated",
 	"zdl-killall": "ZDL stopped and downloads inside path terminated",
 	"zdl-quit": "ZDL stopped",
-	"zdl-run": "ZDL restarted",
+	"zdl-run": "ZDL started",
 	"xdcc-search": "Serching for '$1' on xdcc.eu",
 	"xdcc-search-error": "Error parsing response in xdcc search: $1",
 	"xdcc-serching": "searching ...",
 	"xdcc-search-no-term": "enter one or more search terms!",
-	"xdcc-search-no-results": "no results"
+	"xdcc-search-no-results": "no results",
+	"wait": "wait..."
 }

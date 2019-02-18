@@ -52,6 +52,7 @@ function UIbuttons( e ) {
                 myZDL.initClient().then( function() {
                     actionPATH = newPathVal;
                     ZDLconsole( "new-path", newPathVal );
+                    $( "#path-toggler" ).trigger( "click" );
                 } ).catch( function( e ) {
                     ZDLconsole( "client-init-error", e, true );
                 } );
@@ -265,23 +266,20 @@ function UIbuttons( e ) {
             } );
             break;
         case "zdl-quit":
+            $( "#wait" ).removeClass( "hide" );
             myZDL.quit().then( function() {
-                $( "#zdl-quit, #zdl-killall, #zdl-run" ).toggleClass( "hide" );
-                zdlRunning = false;
                 ZDLconsole( "zdl-quit" );
             } );
             break;
         case "zdl-killall":
+            $( "#wait" ).removeClass( "hide" );
             myZDL.kill().then( function() {
-                $( "#zdl-quit, #zdl-killall, #zdl-run" ).toggleClass( "hide" );
-                zdlRunning = false;
                 ZDLconsole( "zdl-killall" );
             } );
             break;
         case "zdl-run":
+            $( "#wait" ).removeClass( "hide" );
             myZDL.run().then( function() {
-                $( "#zdl-quit, #zdl-killall, #zdl-run" ).toggleClass( "hide" );
-                zdlRunning = true;
                 ZDLconsole( "zdl-run" );
             } );
             break;

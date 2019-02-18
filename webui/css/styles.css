@@ -257,7 +257,8 @@ body {
   display: inline-block;
 }
 
-.inline-group button.hide {
+.inline-group button.hide,
+.inline-group span.hide {
   display: none;
 }
 

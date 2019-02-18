@@ -184,10 +184,11 @@
 	"status-flow-error": "Flusso di stato: $1. Riavviato",
 	"zdl-killall": "ZDL fermato e download nel path terminati",
 	"zdl-quit": "ZDL fermato",
-	"zdl-run": "ZDL riavviato",
+	"zdl-run": "ZDL avviato",
 	"xdcc-search": "Ricerca di '$1' su xdcc.eu",
 	"xdcc-search-error": "Errore di analisi della risposta nella ricerca xdcc: $1",
 	"xdcc-serching": "ricerca in corso ...",
 	"xdcc-search-no-term": "inserisci uno o più termini di ricerca!",
-	"xdcc-search-no-results": "nessun risultato"
+	"xdcc-search-no-results": "nessun risultato",
+	"wait": "attendi..."
 }

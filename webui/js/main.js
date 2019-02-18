@@ -107,7 +107,13 @@ function statusFlow() {
     var arg = arguments[ 0 ] || false;
     myZDL.getStatus( arg ).then( function( res ) {
         if ( isJson( res ) ) {
-            var obj = JSON.parse( res );
+            var obj = JSON.parse( res ), status;
+			obj.status === "running" ? status = true : status = false;
+			if ( status !== zdlRunning ) {
+				$( "#zdl-quit, #zdl-killall, #zdl-run" ).toggleClass( "hide" );
+				$( "#wait" ).addClass( "hide" );
+				zdlRunning = status;
+			}
             if ( !obj.conf.resume ) obj.conf.resume = "disabled";
             if ( obj.conf.language === "it_IT.UTF-8" ) obj.conf.language = "it";
             $( "#path" ).val( obj.path );
