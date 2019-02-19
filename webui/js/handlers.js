@@ -27,6 +27,10 @@ function UIbuttons( e ) {
                 $( ".progressbar" ).each( function() {
                     var fname = $( this ).find( ".label" ).text();
                     if ( isDownloading.indexOf( fname ) < 0 ) {
+                        var index = fileList.indexOf( fname );
+                        if ( index >= 0 ) {
+                            fileList.splice( index, 1 );
+                        }
                         $( this ).next( ".toggler" ).remove();
                         $( this ).remove();
                     }

@@ -34,7 +34,7 @@ function initClient() {
 			console.log( "Unable to get ZDL language. Set to default: EN" );
 		}
 	}
-	if ( language === "it_IT.UTF-8" ) language = "it";
+	//if ( language === "it_IT.UTF-8" ) language = "it";
 
 	$.i18n().load({
 		"it": "i18n/it.json",
