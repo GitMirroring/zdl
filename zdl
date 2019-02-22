@@ -1398,18 +1398,14 @@ fi
 function main_loop {
     local nline nlines loop_url_in url_in_old
     
-    if [ "$this_mode" == "daemon" ] &&
-	   [ ! -f "$start_file" ] &&
-	   [ -z "$lite_mode" ]	
+    if ( [ "$this_mode" == "daemon" ] &&
+	     [ ! -f "$start_file" ] &&
+	     [ -z "$lite_mode" ] ) ||
+	   zero_dl
     then
     	start_file="$path_tmp/links_loop.txt"
-   	sleep 2
 	post_process
-
-    elif zero_dl
-    then
-	start_file="$path_tmp/links_loop.txt"
-	sleep 2
+   	sleep 2
 
     elif check_start_file &&
 	    ! get_exit
@@ -1417,6 +1413,8 @@ function main_loop {
 	nline=1
 	while :
 	do
+	    post_process
+	    
 	    if check_in_loop
 	    then
 		show_downloads

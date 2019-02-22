@@ -138,6 +138,7 @@ function post_process {
 	    key=$(head -n1 "$path_tmp"/"$line".tmp)
 	    iv=$(tail -n1 "$path_tmp"/"$line".tmp)
 
+	    print_c 4 "Ricodifica di $line in ${line%.MEGAenc}"
 	    openssl enc -d -aes-128-ctr -K $key -iv $iv -in "$line" -out "${line%.MEGAenc}" &&
 		rm -f "${path_tmp}/${line}.tmp" "$line" &&
 		print_c 1 "Il file $line è stato decrittato come ${line%.MEGAenc}"
@@ -152,8 +153,6 @@ function post_process {
     then
 	command -v avconv &>/dev/null && convert2format="avconv"
 	command -v ffmpeg &>/dev/null && convert2format="ffmpeg"
-	print_header
-	header_box "Conversione in $format ($convert2format)"
 
 	data_stdout
 	if [ -n "$print_out" ] && [ -f "$path_tmp"/pipe_files.txt ]
@@ -162,7 +161,14 @@ function post_process {
 	    do
 		if ! grep -P '^$line$' $print_out &>/dev/null
 		then
-		    echo "$line" >> "$print_out"
+		    for ((i=0; i<${#pid_out[@]}; 0++))
+		    do
+			if [ "$line" == "${file_out[i]}" ] &&
+			       (( "${percent_out[i]}" == 100 ))
+			then
+			    echo "$line" >> "$print_out"
+			fi
+		    done
 		fi
 		
 	    done < "$path_tmp"/pipe_files.txt 
@@ -178,6 +184,8 @@ function post_process {
 		    
 		    if [[ "$mime" =~ (audio|video) ]]
 		    then
+			print_header
+			header_box "Conversione in $format ($convert2format)"
 			print_c 4 "Conversione del file: $line"
 			[ "$this_mode" == "lite" ] && convert_params="-report -loglevel quiet"
 
@@ -215,9 +223,6 @@ function post_process {
 	    done
 
 	    rm "$print_out"
-
-	else
-	    print_c 3 "Nessun file da covertire"
 	fi
     fi
 }
