@@ -27,7 +27,8 @@
 ## zdl-extension types: download
 ## zdl-extension name: Jheberg (multi-link)
 
-if [[ "$url_in" =~ 'jheberg.net' ]]
+## per l'estensione attuale, in prova, scorri la pagina
+if [[ "$url_in" =~ 'xxxxxxxxxjheberg.net' ]]
 then
     MIRRORS="${url_in//captcha/mirrors}"
     REDIRECT="${MIRRORS//mirrors/redirect}"
@@ -81,3 +82,58 @@ then
 	    _log 2    
     fi
 fi
+
+
+## estensione attuale
+if [[ "$url_in" =~ 'jheberg.net' ]]
+then
+    hosters=( "Free" "Mega" "UpToBox" "Openload" )
+    hoster_ids=( "109" "100" "88" "96" )
+
+    ## Di seguito: codice necessario per raggiungere la pagina web con l'elenco degli host
+    ## MA serve un interprete javascript come phantomjs e tanto codice in più per estrarre i nuovi link.
+    ## Gli hoster_ids, ricavati empiricamente, dei relativi hosters, ci permettono di evitare queste operazioni
+    ## troppo onerose e complesse, comunque da conservare per ulteriori sviluppi
+    ##
+    #
+    # curl -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' \
+    # 	 -H 'Accept-Encoding: gzip, deflate, br' \
+    # 	 -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3' \
+    # 	 -H 'Connection: keep-alive' \
+    # 	 -H 'Host: download.jheberg.net' \
+    # 	 -H 'Upgrade-Insecure-Requests: 1' \
+    # 	 -c "$path_tmp/cookies.zdl"  \
+    # 	 -A "$user_agent"              \
+    # 	 "$url_in" \
+    # 	 -so /dev/null 
+    #
+    # curl -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' \
+    # 	 -H 'Accept-Encoding: gzip, deflate, br' \
+    # 	 -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3' \
+    # 	 -H 'Connection: keep-alive' \
+    # 	 -H 'Cookie: tz=Europe/Rome' \
+    # 	 -H 'Host: download.jheberg.net' \
+    # 	 -H "Referer: $url_in" \
+    # 	 -H 'Upgrade-Insecure-Requests: 1' \
+    # 	 -A "$user_agent"              \
+    # 	 -c "$path_tmp/cookies2.zdl" \
+    # 	 "${url_in//\.net/.net\/go}" \
+    # 	 -v /dev/null
+
+    for id in ${hoster_ids[@]}
+    do
+	reurl=$(wget -S --user-agent="$user_agent"                   \
+		     --header='X-Requested-With: XMLHttpRequest'  \
+		     "${url_in//\.net/.net\/redirect}-$id" -qO- 2>&1)
+
+	reurl=$(grep 'X-Jheberg-Location:' <<< "$reurl")
+	reurl="${reurl#*X-Jheberg-Location: }"
+
+	url "$reurl" &&
+	    [[ ! "$reurl" =~ utils.js ]] &&
+	    break
+    done
+
+    replace_url_in "$reurl" ||
+	_log 2    
+fi    
