@@ -120,6 +120,7 @@ then
     # 	 "${url_in//\.net/.net\/go}" \
     # 	 -v /dev/null
 
+    index_hosters=0
     for id in ${hoster_ids[@]}
     do
 	reurl=$(wget -S --user-agent="$user_agent"                   \
@@ -129,9 +130,12 @@ then
 	reurl=$(grep 'X-Jheberg-Location:' <<< "$reurl")
 	reurl="${reurl#*X-Jheberg-Location: }"
 
-	url "$reurl" &&
-	    [[ ! "$reurl" =~ utils.js ]] &&
-	    break
+	print_c 4 "Verifica per ${hosters[$index_hosters]}..."
+	if url "$reurl"
+	then	   
+	    break	    
+	fi
+	((index_hosters++))
     done
 
     replace_url_in "$reurl" ||
