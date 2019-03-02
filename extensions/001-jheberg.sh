@@ -27,8 +27,7 @@
 ## zdl-extension types: download
 ## zdl-extension name: Jheberg (multi-link)
 
-## per l'estensione attuale, in prova, scorri la pagina
-if [[ "$url_in" =~ 'xxxxxxxxxjheberg.net' ]]
+if [[ "$url_in" =~ xxxxx'jheberg.net'.+captcha ]]
 then
     MIRRORS="${url_in//captcha/mirrors}"
     REDIRECT="${MIRRORS//mirrors/redirect}"
@@ -83,10 +82,15 @@ then
     fi
 fi
 
-
-## estensione attuale
 if [[ "$url_in" =~ 'jheberg.net' ]]
 then
+    if [[ "$url_in" =~ captcha ]]
+    then
+	replace_url_in https://download.jheberg.net"${url_in#*captcha}"
+    fi
+    url_jheberg="${url_in//\.net/.net\/redirect}"
+    url_jheberg="${url_jheberg%%\/}"
+
     hosters=( "Free" "Mega" "UpToBox" "Openload" )
     hoster_ids=( "109" "100" "88" "96" )
 
@@ -122,15 +126,15 @@ then
 
     index_hosters=0
     for id in ${hoster_ids[@]}
-    do
+    do	
 	reurl=$(wget -S --user-agent="$user_agent"                   \
 		     --header='X-Requested-With: XMLHttpRequest'  \
-		     "${url_in//\.net/.net\/redirect}-$id" -qO- 2>&1)
+		     "${url_jheberg}-$id" -qO- 2>&1)
 
 	reurl=$(grep 'X-Jheberg-Location:' <<< "$reurl")
 	reurl="${reurl#*X-Jheberg-Location: }"
 
-	print_c 4 "Verifica per ${hosters[$index_hosters]}..."
+	print_c 4 "Verifica per ${hosters[$index_hosters]}: ${url_jheberg}-$id"
 	if url "$reurl"
 	then	   
 	    break	    
