@@ -35,35 +35,53 @@ then
 		--save-cookies="$path_tmp"/cookies.zdl \
 		--user-agent="$user_agent" \
 		-o /dev/null)
+    chunks_filecrypt=$(grep openLink <<< "$html" |
+			   tail -n1 |
+			   sed -r "s|openLink\('|\n|g")
 
-    url_filecrypt=$(grep openLink <<< "$html" |
-			tail -n1)
-    url_filecrypt="${url_filecrypt%\'*}"
-    url_filecrypt="${url_filecrypt##*\'}"
+    codes_filecrypt=()
+    
+    for ((i=2; i<=$(wc -l <<< "${chunks_filecrypt[@]}"); i++))
+    do
+	codes_filecrypt+=( $(sed -n ${i}p <<< "$chunks_filecrypt" |
+			   sed -r "s|^([^']+)'.+|\1|") )
+    done
 
-    if [ -n "$url_filecrypt" ]
+    if (( "${#codes_filecrypt[@]}" >0 ))
     then
-	url_filecrypt="https://filecrypt.cc/Link/${url_filecrypt}.html"
+	for code_filecrypt in "${codes_filecrypt[@]}"
+	do
+    	    url_filecrypt="https://filecrypt.cc/Link/${code_filecrypt}.html"
 
-	html=$(wget -qO- \
-		    "$url_filecrypt" \
-		    --load-cookies="$path_tmp"/cookies.zdl \
-		    --keep-session-cookies \
-		    --save-cookies="$path_tmp"/cookies2.zdl \
-		    --user-agent="$user_agent" \
-		    -o /dev/null)	
+	    html=$(wget -qO- \
+			"$url_filecrypt" \
+			--load-cookies="$path_tmp"/cookies.zdl \
+			--keep-session-cookies \
+			--save-cookies="$path_tmp"/cookies2.zdl \
+			--user-agent="$user_agent" \
+			-o /dev/null)	
+	    
+	    url_filecrypt=$(grep iframe <<< "$html")
+	    url_filecrypt="${url_filecrypt%\"*}"
+	    url_filecrypt="${url_filecrypt##*\"}"
+	    
+	    get_location "$url_filecrypt" location_filecrypt
+	
+	    if url "$location_filecrypt"
+	    then
+		#replace_url_in "$location_filecrypt"
+		set_link + "$location_filecrypt"
+		print_c 4 "Redirezione: $location_filecrypt"
+		redir_filecrypt=true
+	    fi
+	done
 
-	url_filecrypt=$(grep iframe <<< "$html")
-	url_filecrypt="${url_filecrypt%\"*}"
-	url_filecrypt="${url_filecrypt##*\"}"
-
-	get_location "$url_filecrypt" location_filecrypt
-    fi
-
-    if url "$location_filecrypt"
-    then
-	replace_url_in "$location_filecrypt"
-
+	if [ "$redir_filecrypt" == true ]
+	then
+	    set_link - "$url_in"
+	    url_in="$location_filecrypt"
+	    print_c 4 "Nuovo link da processare: $url_in"
+	fi
     else
 	_log 36
     fi    
