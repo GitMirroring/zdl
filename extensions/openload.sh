@@ -30,14 +30,24 @@
 
 if [[ "$url_in" =~ openload\. ]]
 then
-    if [[ "$url_in" =~ \/stream\/ ]]
+    if command -v youtube-dl &>/dev/null
     then
-	get_location "$url_in" url_in_file
-	file_in="${url_in_file##*\/}"
-	file_in="${file_in%\?*}"
-    else
-	extension_openload "$url_in"
+	url_in_file=$(youtube-dl --get-url "$url_in")
+	file_in=$(youtube-dl --get-title "$url_in")
     fi
-
+    
+    if ! url "$url_in_file" ||
+	     [ -z "$file_in" ] 
+    then
+	if [[ "$url_in" =~ \/stream\/ ]]
+	then
+	    get_location "$url_in" url_in_file
+	    file_in="${url_in_file##*\/}"
+	    file_in="${file_in%\?*}"
+	else
+	    extension_openload "$url_in"
+	fi
+    fi
+    
     end_extension
 fi
