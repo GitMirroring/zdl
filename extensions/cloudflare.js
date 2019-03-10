@@ -39,6 +39,7 @@ page.onConsoleMessage = function (msg) {
 page.open(url_in, function(status) {
     page.evaluate(function() {
 	console.log(document.getElementById('jschl-answer').value);
+//	console.log(a);
     });
     
     phantom.exit();

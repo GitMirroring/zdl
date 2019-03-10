@@ -646,12 +646,32 @@ function get_location { # 1=url 2=variable_to_new_url
 function get_jschl_answer {
     local page="$1"
     local domain="$2"
-    
+
+    # cp "$page" "$page".0
+
     sed -r 's|setTimeout|//|g' -i "$page"
     sed -r 's|\}, 4000|//|g' -i "$page"
     sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
     sed -r 's|f.submit|//|g' -i "$page"
 
+    # sed -r "s|'; 121'||g" -i "$page"
+
+    # sed -r 's|b\(function|//|g' -i "$page"
+    # sed -r 's|\(function|//|g' -i "$page"
+    # sed -r 's|b = function|//|g' -i "$page"
+    # sed -r 's|\}\)\(\)|//|g' -i "$page"
+    # sed -r 's|\}\,\ false|//|g' -i "$page"
+
+    # sed -r 's|var\ a\ \=\ document|//|g' -i "$page"
+    # sed -r 's|var\ a\ \=\ function|//|g' -i "$page"
+    # sed -r 's|a\ \=\ document|//|g' -i "$page"
+    # sed -r 's|a.value|a|g' -i "$page"
+
+    # sed -r 's|<\/head>||g' -i "$page"
+    # sed -r 's|<body>||g' -i "$page"
+    # sed -r 's|<\/style>|</style></head><body>|g' -i "$page"
+    # sed -r 's|^[ ]+\;||g' -i "$page"
+    
     jschl_answer=$($(command -v phantomjs 2>/dev/null) "$path_usr"/extensions/cloudflare.js "$page")
 }
 
@@ -721,10 +741,10 @@ function get_by_cloudflare {
 	get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
 	
 	input_hidden "$path_tmp"/cloudflare.html
-	##echo "jschl: $jschl_answer"
+echo "jschl: $jschl_answer"
 	get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
 
-	##echo "get: $get_data"
+echo "get: $get_data"
 
 	cookie_cloudflare=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
 

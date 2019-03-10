@@ -621,7 +621,7 @@ function UIbuttons( e ) {
                 myZDL.deleteLink( encodeURIComponent( dlDeleteLink ) ).then( function() {
 					thisToggler.prev().remove();
 					thisToggler.remove();
-                    index = isDownloading.indexOf( dlDeleteLink );
+                    index = isDownloading.indexOf( dlDeleteFile );
                     if ( index >= 0 ) {
                         isDownloading.splice( index, 1 );
                     }

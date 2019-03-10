@@ -159,9 +159,10 @@ function downloadFlow() {
     myZDL.getData( arg ).then( function( res ) {
         if ( isJson( res ) ) {
             var obj = JSON.parse( res ),
-                index, len, dlstat, perc, status, statusParent, bginfo;
+                id, len, dlstat, perc, status, statusParent, bginfo;
             $.each( obj, function( index, value ) {
-                perc = parseInt( value.percent );
+				id = $.md5(value.link);
+				perc = parseInt( value.percent );
                 if ( perc < 100 ) {
                     if ( value.color === "yellow" ) {
 						bginfo = "unterminated";
@@ -177,30 +178,23 @@ function downloadFlow() {
                 }
                 len = formatFileLength( value.length );
                 if ( fileList.indexOf( value.file ) < 0 ) {
-                    index = fileList.length;
 					if ( bginfo ) bginfo = " " + bginfo;
-                    $( "<div class=\"progressbar\"><div class=\"side-bar\"><div id=\"bar-" + index + "\"><div class=\"label\">" + value.file + "</div></div></div><div class=\"side-info" + bginfo + "\"><span id=\"dl-status-" + index + "\"></span></div><div class=\"side-button\"><button data-i18n=\"button-info\" id=\"btn-info-" + index + "\" class=\"button open-info\" data-toggler=\"info-" + index + "\">Info</button></div></div><div class=\"toggler\"><div id=\"info-" + index + "\" class=\"info ui-widget-content ui-corner-all\"><ul><li><span>Downloader: </span>" + value.downloader + "</li><li><span>Link: </span>" + value.link + "</li><li><span>Path: </span>" + value.path + "</li><li><span>Length: </span>" + len + "</li><li><span>URL: </span>" + value.url + "</li></ul><button data-i18n=\"button-manage\" id=\"btn-manage-" + index + "\" class=\"button dl-manage\" data-path=\"" + value.path + "\">Manage</button><button data-i18n=\"button-play\" id=\"btn-play-" + index + "\" class=\"button dl-play\" data-file=\"" + value.path + "/" + value.file + "\">Play</button><button data-i18n=\"button-playlist\" id=\"btn-playlist-" + index + "\" class=\"button dl-playlist\" data-file=\"" + value.path + "/" + value.file + "\">Add to playlist</button><button data-i18n=\"button-stop\" id=\"btn-stop-" + index + "\" class=\"button dl-stop\" data-link=\"" + value.link + "\" data-file=\"" + value.file + "\">Stop</button><button data-i18n=\"button-delete\" id=\"btn-delete-" + index + "\" class=\"button dl-delete\" data-link=\"" + value.link + "\" data-file=\"" + value.file + "\">Delete</button></div></div>" ).appendTo( "#downloads" );
-                    $( "#dl-status-" + index ).text( dlstat );
+                    $( "<div class=\"progressbar\"><div class=\"side-bar\"><div id=\"bar-" + id + "\"><div class=\"label\">" + value.file + "</div></div></div><div class=\"side-info" + bginfo + "\"><span id=\"dl-status-" + id + "\"></span></div><div class=\"side-button\"><button data-i18n=\"button-info\" class=\"button open-info\" data-toggler=\"info-" + id + "\">Info</button></div></div><div class=\"toggler\"><div id=\"info-" + id + "\" class=\"info ui-widget-content ui-corner-all\"><ul><li><span>Downloader: </span>" + value.downloader + "</li><li><span>Link: </span>" + value.link + "</li><li><span>Path: </span>" + value.path + "</li><li><span>Length: </span>" + len + "</li><li><span>URL: </span>" + value.url + "</li></ul><button data-i18n=\"button-manage\" class=\"button dl-manage\" data-path=\"" + value.path + "\">Manage</button><button data-i18n=\"button-play\" class=\"button dl-play\" data-file=\"" + value.path + "/" + value.file + "\">Play</button><button data-i18n=\"button-playlist\" class=\"button dl-playlist\" data-file=\"" + value.path + "/" + value.file + "\">Add to playlist</button><button data-i18n=\"button-stop\" class=\"button dl-stop\" data-link=\"" + value.link + "\" data-file=\"" + value.file + "\">Stop</button><button data-i18n=\"button-delete\" class=\"button dl-delete\" data-link=\"" + value.link + "\" data-file=\"" + value.file + "\">Delete</button></div></div>" ).appendTo( "#downloads" );
+                    $( "#dl-status-" + id ).text( dlstat );
                     $( ".button" ).button();
-                    if ( perc === 0 ) {
-                        $( "#bar-" + index ).progressbar( {
-                            value: false
-                        } );
-                    } else {
-                        $( "#bar-" + index ).progressbar( {
-                            value: perc
-                        } );
-                    }
+					if ( perc === 0) perc = false;
+					$( "#bar-" + id ).progressbar( {
+                        value: perc
+                    } );
                     fileList.push( value.file );
                 } else {
-                    index = fileList.indexOf( value.file );
-					status = $( "#dl-status-" + index );
+					status = $( "#dl-status-" + id );
 					statusParent = status.parent();
 					if ( !statusParent.hasClass( bginfo ) ) {
 						statusParent.removeClass().addClass( "side-info " + bginfo );
 					}
-                    $( "#bar-" + index ).progressbar( "value", perc );
-                    status.text( dlstat );
+					$( "#bar-" + id ).progressbar( "value", perc );
+	                status.text( dlstat );
                     if ( isDownloaded( value.file, perc ) ) {
                         ZDLconsole( "file-downloaded", value.file );
                         statusParent.removeClass( "downloading" );
