@@ -579,17 +579,18 @@ then
 		test_dir_4=$(cygpath -u "$test_dir_4")
 	    fi 
 
-	    if [ ! -d "$test_dir_3" ]
+	    if [ -d "$test_dir_3" ]
 	    then
+		directory="$test_dir_3"
+		unset file_in
+		
+	    else
 		file_in="$test_dir_3"
 		if [ "$test_dir_4" != "--noXterm" ] &&
 		       [ -d "$test_dir_4" ]
 		then
 		    directory="$test_dir_4"
 		fi
-	    else
-		directory="$test_dir_3"
-		unset file_in
 	    fi
 
 	    if [ "$file_in" != "${file_in//'/'/}" ]
