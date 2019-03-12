@@ -58,6 +58,10 @@ function get_download_path {
 	    else
 		echo "$path_gui"
 	    fi
+	    return 0
+
+	else
+	    return 1
 	fi
     fi
 }

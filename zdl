@@ -627,7 +627,7 @@ then
 	    
 	    if [ ! -d "$directory" ]
 	    then
-		get_download_path directory
+		get_download_path directory || exit
 	    fi
 
 	    echo "$directory" >/tmp/zigzagdownloader-dirbase
