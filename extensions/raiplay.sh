@@ -31,6 +31,7 @@
 if [[ "$url_in" =~ raiplay ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
+    echo "$html" >TEST
 
     raiplay_subtitle=$(grep vodJson <<< "$html")
     raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
@@ -57,22 +58,50 @@ then
 	file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
     fi
     file_in="${file_in#Film\: }"
-    
+
     url_raiplay=$(grep data-video-url <<< "$html" |
 		 sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
 
-    url "$url_raiplay" &&
-	url_raiplay=$(get_location "$url_raiplay") ||
-	    url_raiplay=$(grep contentUrl <<< "$html" |
-				 sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
+    if url "$url_raiplay"
+    then
+	url_raiplay_location=$(get_location "$url_raiplay")
+	if url "$url_raiplay_location"
+	then
+	    url_raiplay="$url_raiplay_location"
 
-    url_in_file=$(wget -qO- "$url_raiplay" \
-		       --user-agent="$user_agent" \
-		       --save-cookies="$path_tmp/cookies.zdl" \
-		       -o /dev/null)
+	elif [ -n "$ffmpeg" ]
+	then
+	    url_raiplay_mpd=$(curl "$url_raiplay")
+	    url_raiplay_mpd="${url_raiplay_mpd//\(/%28}"
+	    url_raiplay_mpd="${url_raiplay_mpd//\)/%29}"
 
-    url_in_file=$(tail -n1 <<< "$url_in_file")
+	    if url "$url_raiplay_mpd" &&
+		    [[ "$url_raiplay_mpd" =~ (\.mpd\?) ]] &&		    
+		    "$ffmpeg" 2>&1 | grep libxml2 &>/dev/null
+	    then
+		url_in_file="$url_raiplay_mpd"
+	    else
+		_log 41
+	    fi
 
+	else
+	    _log 42
+	fi
+    else
+	url_raiplay=$(grep contentUrl <<< "$html" |
+			  sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
+    fi
+
+    if ! url "$url_in_file"
+    then
+	url_in_file=$(wget -qO- "$url_raiplay" \
+			   --user-agent="$user_agent" \
+			   --save-cookies="$path_tmp/cookies.zdl" \
+			   -o /dev/null)
+	
+	url_in_file=$(tail -n1 <<< "$url_in_file")
+    fi
+    
     downwait_extra=20
 fi
 									   

@@ -205,6 +205,14 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
 	40)
 	    msg="Impossibile avviare la GUI: è necessario installare yad"
 	    ;;
+	41)
+	    msg="$url_in --> FFMpeg/AvConv non è configurato per libxml2" 
+	    set_link - "$url_in"
+	    ;;
+	42)
+	    msg="$url_in --> FFMpeg/AvConv non è installato" 
+	    set_link - "$url_in"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]
