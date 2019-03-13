@@ -32,7 +32,7 @@ function post_mpd_genlink {
     ## for post_mpd function
     ##
     
-    if [[ "$url_in_file" =~ \.mpd\?*.* ]]
+    if [[ "$url_in_file" =~ (\.mpd\?*.*|\.mpd$) ]]
     then
     	url_mpd="$url_in_file"
     else
@@ -59,13 +59,13 @@ function post_mpd_genlink {
 
 
 
-if [[ "$url_in" =~ \.mpd\?*.* ]] ||
-       [[ "$url_in_file" =~ \.mpd\?*.* ]]
+if [[ "$url_in" =~ (\.mpd\?*.*|\.mpd$) ]] ||
+       [[ "$url_in_file" =~ (\.mpd\?*.*|\.mpd$) ]]
 then
     downloader_in=FFMpeg
 
     [ -z "$url_in_file" ] &&
-	[[ "$url_in" =~ \.mpd\?*.* ]] &&
+	[[ "$url_in" =~ (\.mpd\?*.*|\.mpd$) ]] &&
 	url_in_file="$url_in"
     
     [ -z "$file_in" ] &&

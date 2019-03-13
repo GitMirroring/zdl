@@ -75,11 +75,15 @@ then
 	    url_raiplay_mpd="${url_raiplay_mpd//\(/%28}"
 	    url_raiplay_mpd="${url_raiplay_mpd//\)/%29}"
 
-	    if url "$url_raiplay_mpd" &&
-		    [[ "$url_raiplay_mpd" =~ (\.mpd\?) ]] &&		    
-		    "$ffmpeg" 2>&1 | grep libxml2 &>/dev/null
+	    url "$url_raiplay_mpd" &&
+		print_c 4 "URL estratto: $url_raiplay_mpd"
+
+	    if url "$url_raiplay_mpd" && 
+		    [[ "$url_raiplay_mpd" =~ (\.mpd) ]] &&
+		    $ffmpeg -buildconf | grep libxml2 &>/dev/null
 	    then
 		url_in_file="$url_raiplay_mpd"
+
 	    else
 		_log 41
 	    fi
