@@ -31,7 +31,6 @@
 if [[ "$url_in" =~ raiplay ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
-    echo "$html" >TEST
 
     raiplay_subtitle=$(grep vodJson <<< "$html")
     raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
