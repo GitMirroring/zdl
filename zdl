@@ -265,7 +265,7 @@ then
 		cd $(cat "$HOME"/tmp/zigzagdownloader-dirbase) ||
 		    cd "$HOME"
 	    
-	    get_download_path path_gui || exit
+	    path_gui=$(get_download_path)
 	    [ ! -d "$path_gui" ] && exit 
 
 	    echo "$path_gui" >"$HOME"/tmp/zigzagdownloader-dirbase

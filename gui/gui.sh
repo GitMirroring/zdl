@@ -27,7 +27,6 @@
 ### usate prima di run_gui:
 
 function get_download_path {
-    declare -n ref="$1"
     local path_gui
     ICON="$path_usr"/gui/icon-32x32.png
     local title="Directory di download"
@@ -53,6 +52,7 @@ function get_download_path {
 	then
 	    if [ -n "$1" ]
 	    then
+		declare -n ref="$1"
 		ref="$path_gui"
 
 	    else
