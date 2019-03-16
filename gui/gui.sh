@@ -1450,20 +1450,18 @@ function display_xdcc_eu_gui {
     		   --image-on-top --image="$IMAGE2" \
 		   "${YAD_ZDL[@]}" \
 		   --column ":CHK" --column "File" --column "Grandezza" --column "Link" \
-		   "${data_xdcc_eu[@]}"))
+		   "${data_xdcc_eu[@]}" 2>/dev/null))
 
-	if [ "$?" == 0 ]
+	if [ "$?" == 0 ] &&
+	       (( ${#res[@]}>0 ))
 	then	    
-	    if (( ${#res[@]}>0 ))
-	    then
-		for ((i=3; i<${#res[@]}; i=i+4))
-		do
-		    set_link + "${res[i]}"
-		done
-	    fi
-	    set_link - "$xdcc_eu_search_link"
+	    for ((i=3; i<${#res[@]}; i=i+4))
+	    do
+		set_link + "${res[i]}"
+	    done
 	fi
-
+	set_link - "$xdcc_eu_search_link"
+	
 	sleep 5
     } &
     pid=$!

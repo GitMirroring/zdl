@@ -29,7 +29,7 @@
 
 if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$url_in"
 then
-    display_xdcc_eu_gui "${url_in#*=}" &>/dev/null
+    display_xdcc_eu_gui "${url_in#*=}"
     break_loop=true
 fi
 									   
