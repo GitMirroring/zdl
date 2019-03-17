@@ -46,8 +46,8 @@ then
 
     unset post_data    
 
-    if [ -n "$html" ]
-    then
+    while [ -n "$html" ]
+    do
 	file_in=$(grep 'dfilename' <<< "$html" |
 		      sed -r 's|.+>([^<]+)<.+|\1|g')
 
@@ -56,7 +56,21 @@ then
 	url_in_file="${url_in_file%\"*}"
 	url_in_file="${url_in_file##*\"}"
 
+	if url "$url_in_file" &&
+		[ -n "$file_in" ]
+	then
+	    break
 
-	end_extension
-    fi
+	else
+	    input_hidden "$html"
+
+	    code_ddl=$(pseudo_captcha "$html")
+	    post_data="${post_data%\&*}&code=${code_ddl}"
+
+	    html=$(curl "$url_in" \
+			-A "$user_agent" \
+			-d "$post_data") 
+	fi
+    done
+    end_extension
 fi
