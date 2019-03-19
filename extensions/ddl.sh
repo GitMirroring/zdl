@@ -51,10 +51,10 @@ then
 	file_in=$(grep 'dfilename' <<< "$html" |
 		      sed -r 's|.+>([^<]+)<.+|\1|g')
 
-	
 	url_in_file=$(grep 'Click here to download' <<< "$html")
 	url_in_file="${url_in_file%\"*}"
 	url_in_file="${url_in_file##*\"}"
+	url_in_file="${url_in_file// /%20}"
 
 	if url "$url_in_file" &&
 		[ -n "$file_in" ]
@@ -65,11 +65,14 @@ then
 	    input_hidden "$html"
 
 	    code_ddl=$(pseudo_captcha "$html")
+	    print_c 4 "Pseudo-captcha: $code_ddl"
+	    
 	    post_data="${post_data%\&*}&code=${code_ddl}"
 
 	    html=$(curl "$url_in" \
+			-b "$path_tmp"/cookies.zdl  \
 			-A "$user_agent" \
-			-d "$post_data") 
+			-d "$post_data")
 	fi
     done
     end_extension
