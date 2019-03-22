@@ -47,5 +47,6 @@ then
 		      grep HREF |
 		      sed -r 's|.+\"([^"]+)\".+|\1|g')
     
+    [[ "$file_in" =~ (Fichier inexistant) ]] && _log 3
     end_extension
 fi
