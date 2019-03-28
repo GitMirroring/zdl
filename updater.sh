@@ -526,6 +526,7 @@ ESTENSIONI:
 	deps['yad']=yad
 	deps['notify-send']=libnotify-bin
 	deps['wmctrl']=wmctrl
+	deps['youtube-dl']=youtube-dl
 	## deps['tput']=ncurses-bin
 	## deps['ffmpeg']=ffmpeg
 
