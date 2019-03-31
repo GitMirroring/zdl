@@ -751,15 +751,36 @@ fi
 
 export pid_prog=$$
 
-mkdir -p "$path_server"
+function add_path4server {
+    mkdir -p "$path_server"
 
-set_line_in_file + "$(realpath "$PWD")" "$path_server"/paths.txt
-# PWD_TO_SERVER_PATHS=$(realpath "$PWD")
-# if ! set_line_in_file in "$PWD_TO_SERVER_PATHS$" "$path_server"/paths.txt
-# then
-#     echo "$PWD_TO_SERVER_PATHS" >>"$path_server"/paths.txt
-# fi
-###################
+    ##clean
+    if [ -s "$path_server"/paths.txt ]
+    then
+	rm -f "$path_server"/paths.txt.new
+	while read line
+	do
+	    [ -d "$line" ] && echo "$line" >>"$path_server"/paths.txt.new
+	done < <(awk '!($0 in a){a[$0]; print}' "$path_server"/paths.txt)
+
+	if [ -s "$path_server"/paths.txt.new ]
+	then
+	    mv "$path_server"/paths.txt.new "$path_server"/paths.txt
+
+	else
+	    rm -f "$path_server"/paths.txt.new
+	    echo >"$path_server"/paths.txt
+	fi
+    fi
+
+    ##add
+    if ! grep -qP "^$1$" "$path_server"/paths.txt
+    then
+        echo "$1" >>"$path_server"/paths.txt
+    fi
+}
+
+add_path4server "$(realpath "$PWD")"
 
 if [[ "${args[*]}" =~ \-s ]]
 then
