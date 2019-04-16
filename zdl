@@ -303,10 +303,10 @@ then
 	if [[ "${args[i]}" =~ ^(--no-stop)$ ]]
 	then
 	    unset args[i]
+	    no_stop=true
+	    unset autoupdate
 	fi
     done
-    no_stop=true
-    unset autoupdate
 fi    
 ###############################
 

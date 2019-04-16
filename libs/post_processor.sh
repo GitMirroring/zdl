@@ -133,7 +133,7 @@ function post_process {
     for line in *.MEGAenc
     do
 	if [ -f "${path_tmp}/${line}.tmp" ] &&
-	       [ ! -f "${line}.st" ]
+	       [ ! -f "${line}.st" ] && [ ! -f "${line}.aria2" ]
 	then
 	    key=$(head -n1 "$path_tmp"/"$line".tmp)
 	    iv=$(tail -n1 "$path_tmp"/"$line".tmp)
@@ -155,7 +155,7 @@ function post_process {
 	command -v ffmpeg &>/dev/null && convert2format="ffmpeg"
 
 	data_stdout
-	if [ -n "$print_out" ] && [ -f "$path_tmp"/pipe_files.txt ]
+	if [ -n "$print_out" ] && [ -s "$path_tmp"/pipe_files.txt ]
 	then
 	    while read line
 	    do
@@ -178,7 +178,8 @@ function post_process {
 	then	    
 	    for line in $(cat "$print_out")
 	    do
-		if [ -f "$line" ]
+		if [ -f "$line" ] &&
+		       [ ! -f "${line}.st" ] && [ ! -f "${line}.aria2" ]
 		then
 		    mime="$(file -b --mime-type "$line")"
 		    
