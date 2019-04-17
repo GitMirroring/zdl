@@ -29,6 +29,8 @@
 
 if [ "$url_in" != "${url_in//filecrypt.cc}" ]
 then
+    unset redir_filecrypt location_filecrypt
+
     html=$(wget -qO- \
 		"$url_in" \
 		--keep-session-cookies \
@@ -69,17 +71,18 @@ then
 	
 	    if url "$location_filecrypt"
 	    then
-		#replace_url_in "$location_filecrypt"
 		set_link + "$location_filecrypt"
 		print_c 4 "Redirezione: $location_filecrypt"
-		redir_filecrypt=true
+		
+		url "$redir_filecrypt" || redir_filecrypt="$location_filecrypt"
 	    fi
 	done
 
-	if [ "$redir_filecrypt" == true ]
+	if url "$redir_filecrypt"
 	then
 	    set_link - "$url_in"
-	    url_in="$location_filecrypt"
+	    url_in="$redir_filecrypt"
+	    print_links_txt
 	    print_c 4 "Nuovo link da processare: $url_in"
 	fi
     else

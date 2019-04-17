@@ -1461,7 +1461,7 @@ function display_xdcc_eu_gui {
 	    done
 	fi
 	set_link - "$xdcc_eu_search_link"
-	
+	print_links_txt
 	sleep 5
     } &
     pid=$!
