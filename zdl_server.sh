@@ -297,11 +297,11 @@ function create_json {
 		    fi
 
 		else
-		    set_line_in_file - "$path" "$server_paths" #&
+		    set_line_in_file - "$path" "$server_paths"
 		fi
 
 	    else
-		set_line_in_file - "$path" "$server_paths" #&
+		set_line_in_file - "$path" "$server_paths"
 	    fi
 
 	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
@@ -1455,7 +1455,7 @@ if (data) {
 			unset instance_pid
 		    }
 	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
-	    rm -f "$server_paths"
+	    ## rm -f "$server_paths"
 	    init_client
 	    ;;
 
