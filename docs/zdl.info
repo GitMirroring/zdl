@@ -513,16 +513,16 @@ player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
      Akvideo (HD), Auroravid/Novamov, Dailymotion, Deltabit (HD), Dplay
-     (HD), Exashare, Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano,
-     La7 (HD), Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla),
-     NeverWasRadio, Nowvideo, Openload, Portalevideo.unimi.it,
-     Putstream, RaiPlay (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com
-     (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango,
-     Streamin, Thevideo, TubeOffLine.com (tutti i servizi), Tutti i
-     video in streaming di tipo .m3u8, Tutti i video in streaming di
-     tipo .mpd, Verystream, VidABC, Vidce, Videowood, Vidhappy (RTMP),
-     Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), WStream (HD),
-     Youtube, Zinwa (RTMP) 
+     (HD), Exashare, Fastvideo, Flashx.tv, Flix555, IDoWatch,
+     IlFattoQuotidiano, La7 (HD), Metacafe, Movshare/Wholecloud,
+     Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Openload,
+     Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
+     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
+     Speedvideo (HD), Streamango, Streamin, Thevideo, TubeOffLine.com
+     (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti
+     i video in streaming di tipo .mpd, Verystream, VidABC, Vidce,
+     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
+     (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, Cyberlocker, ddl.to, Deltabit (HD),
@@ -530,7 +530,7 @@ _File hosting:_
      (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
      Nowdownload, Openload, Ozofiles, Pastebin, Rockfile, Sockshare
      (HD), Subyshare, TubeOffLine.com (tutti i servizi), Tusfiles,
-     Uload, Uploadshub, Uppit, Uptobox, Verystream, Vidoza, WStream (HD) 
+     Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
 
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
@@ -1414,25 +1414,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
 Node: Servizi streaming/hosting15712
-Node: Avviare ZDL19839
-Node: Arrestare ZDL22275
-Node: Controllare i download23380
-Node: Manuali d'uso27671
-Node: Modi28087
-Node: Readline31353
-Node: Editor32905
-Node: Omonimie34130
-Node: IRC/XDCC35665
-Node: Torrent37355
-Node: Filtri38239
-Node: Creare nuove estensioni38560
-Node: Software consigliati e dipendenze40335
-Node: Conkeror41788
-Node: zdl-xterm e XXXTerm/Xombrero42812
-Node: Installazione e aggiornamento44736
-Node: Tags48031
-Node: Copying52048
-Node: Contatti53098
+Node: Avviare ZDL19836
+Node: Arrestare ZDL22272
+Node: Controllare i download23377
+Node: Manuali d'uso27668
+Node: Modi28084
+Node: Readline31350
+Node: Editor32902
+Node: Omonimie34127
+Node: IRC/XDCC35662
+Node: Torrent37352
+Node: Filtri38236
+Node: Creare nuove estensioni38557
+Node: Software consigliati e dipendenze40332
+Node: Conkeror41785
+Node: zdl-xterm e XXXTerm/Xombrero42809
+Node: Installazione e aggiornamento44733
+Node: Tags48028
+Node: Copying52045
+Node: Contatti53095
 
 End Tag Table
 

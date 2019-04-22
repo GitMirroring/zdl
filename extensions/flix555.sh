@@ -25,26 +25,31 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Verystream
+## zdl-extension name: Flix555
 
 
-if [[ "$url_in" =~ verystream\. ]]
+if [[ "$url_in" =~ flix555\. ]]
 then
-    html=$(curl -s "$url_in")
+    html=$(curl -s \
+		-A "$user_agent" \
+		-c "$path_tmp"/cookies.zdl \
+		"$url_in")
 
-    videolink_token=$(grep '"videolink"' <<< "$html")
-    videolink_token="${videolink_token#*>}"
-    videolink_token="${videolink_token%<*}"
+    input_hidden "$html"
+    post_data="${post_data}&imhuman=Proceed to video"
 
-    #### per recuperare la chiave di questo sistema:
-    ##
-    ## grep 'o^_^o' <<< "$html" >"$path_tmp"/aaencoded.js
-    ## sed -r 's|<[^>]+>||g' -i "$path_tmp"/aaencoded.js
-    ## php_aadecode "$path_tmp"/aaencoded.js #--> $proto $domain /gettoken/ $videolink_token
+    countdown- 8
+    html=$(curl -s \
+		-b "$path_tmp"/cookies.zdl \
+		-A "$user_agent" \
+		-d "${post_data}" \
+		"$url_in")
 
-    link_parser "$url_in"
-    url_in_file="${parser_proto}${parser_domain}/gettoken/${videolink_token}"
-    file_in=$(get_title "$html")
+    input_hidden "$html"
+
+    url_in_file=$(unpack "$html")
+    url_in_file="${url_in_file#*file:\"}"
+    url_in_file="${url_in_file%%\"*}"
     
     end_extension
 fi
