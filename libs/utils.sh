@@ -365,6 +365,7 @@ function sanitize_url {
     data=$(anydownload "$1")
     
     data="${data%%'?'}"
+    data="${data%%'+'}"
     data="${data## }"
     data="${data%% }"
     data="${data%'#20%'}"
