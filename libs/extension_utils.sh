@@ -561,6 +561,27 @@ function extension_mega {
 	    echo -e "$key\n$iv" > "$path_tmp"/"$file_in".tmp
 
 	    axel_parts=1
+
+	    rm -f "$path_tmp"/mega.log
+	    wget -SO /dev/null -o "$path_tmp"/mega.log "$url_in_file" &
+	    local pid=$!
+	    
+	    # (( $(wc -l < "$path_tmp"/mega.log) <5 ))
+	    while [ ! -s "$path_tmp"/mega.log ] ||
+		      ! grep -q 'Content-Length' "$path_tmp"/mega.log
+	    do
+		sleep 0.1
+	    done
+	    kill $pid 2>/dev/null
+
+	    if grep -q 'Bandwidth Limit Exceeded' "$path_tmp"/mega.log
+	    then
+		print_c 3 "Superato il limite di banda imposto dal server:"
+		print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+		# touch "$path_tmp"/proxy
+		# check_ip
+		set_temp_proxy
+	    fi
 	fi
     fi
 }
