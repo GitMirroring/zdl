@@ -75,5 +75,13 @@ then
 			-d "$post_data")
 	fi
     done
+
+    check_wget || {
+	print_c 3 "Superato il limite di banda imposto dal server:"
+	print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+
+	set_temp_proxy
+    }
+		
     end_extension
 fi
