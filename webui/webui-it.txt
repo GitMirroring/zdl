@@ -1,0 +1,184 @@
+WEBUI INFO
+==========
+Brevi informazioni sull'utilizzo della web UI.
+
+## DOWNLOAD
+
+[ Cancella completati ]
+Cancellare le barre di progresso di tutti i download completati.
+
+[ Info > Gestisci ]
+Apri la webui nel path dove è stato scaricato il file.
+
+[ Info > Riproduci ]
+Riproduci il file scaricato (se audio/video).
+
+[ Info > Agiungi alla playlist ]
+Aggiungi il file scaricato alla playlist (se audio/video).
+
+[ Info > Ferma ]
+Ferma il download. Dopo alcuni secondi il download riparte automaticamente dall'inizio.
+
+[ Info > Cancella ]
+Elimina il file scaricato.
+
+
+## GESTISCI
+
+[ Agisci nel path ]
+Seleziona il path di lavoro.
+
+[ Spazio libero ]
+Visualizza lo spazio libero nel path di lavoro.
+
+[ Aggiungi link ]
+Aggiungi il link del file da scaricare. Il link verrà elaborato per avviare il download.
+
+[ Edita link (coda) ]
+Edita, aggiungi o elimina link nella coda (uno per riga).
+
+[ Aggiungi XDCC ]
+Aggiungi un comando xdcc per scaricare da server irc. Il comando verrà elaborato per avviare il download.
+
+[ Agiungi torrent ]
+Seleziona e aggiungi un file torrent da scaricare. Il torrent verrà elaborato per avviare il download.
+
+[ Leggi links.txt ]
+Leggi o cancella il file links.txt (la lista di tutti il link aggiunti).
+
+[ Max download paralleli ]
+Imposta il numero massimo di download paralleli nel path di lavoro.
+
+[ Downloader ]
+Imposta il downloader da utilizzare nel path di lavoro.
+
+[ Reconnessione modem ]
+Riconnetti il modem/router. Per fare questo devi aggiungere il comando di riconnessione in Configurazione/Riconnessione modem. Da quì puoi anche visualizzare il tuo indirizzo IP.
+
+[ Path status ]
+Avvia o ferma il core di ZDL. Puoi anche terminare tutti i download attivi nel path di lavoro.
+
+
+## CERCA
+
+[ Cerca ]
+Cerca file su server irc via xdcc.eu utilizzando uno o più termini di ricerca . Puoi selezionare il numero massimo di risultati.
+
+[ Filtra ]
+Rifinisci la ricerca filtrando i risultati con un termine.
+
+[ Invia ]
+Aggiungi il comando xdcc per scaricare il file. Il comando verrà elaborato per avviare il download.
+
+
+## PLAYLIST
+
+[ Seleziona ]
+Seleziona e aggiungi un file alla playlist.
+
+[ Riproduci tutti gli mp3 ]
+Riproduci tutti gli mp3 presenti nella playlist. Questa caratteristica può essere usata solo configurando VLC come media player in Configurazione/Media player.
+
+[ Riproduci ]
+Rirpoduci il file audio/video.
+
+[ Rimuovi ]
+Rimuovi il file dalla playlist.
+
+[ mp3 ]
+Estrai la traccia audio (mp3) dal video. Questa caratteristica può essere usata solo configurando VLC come media player in Configurazione/Media player.
+
+
+## SOCKET
+
+[ Nuovo socket ]
+Avvia un nuovo socket sulla porta selezionata.
+
+[ Vai al socket ]
+Apri la webui sui socket avviati.
+
+[ Termina socket ]
+Termina un socket.
+
+[ Termina socket attivo ]
+Termina il socket corrente.
+
+[ Termina tutti i download ]
+Termina tutti i download attivi.
+
+
+## CONFIGURAZIONE
+
+[ Web UI utente ]
+Imposta e cambia webui.
+
+[ Lingua ]
+Imposta e cambia la lingua.
+
+[ Downloader predefinito ]
+Imposta il downloader predefinito.
+
+[ Connessioni Axel ]
+Imposta il numero di connessioni per il downloader Axel.
+
+[ Connessioni Aria2 ]
+Imposta il numero massimo di connessioni per il downloader Aria2.
+
+[ Max download paralleli ]
+Imposta il numero massimo di download paralleli.
+
+[ Sfondo xterm ]
+Imposta il colore di sfondo per xterm.
+
+[ Media player predefinito ]
+Inserisci o seleziona l'applicazione per i file audio/video.
+
+[ Text editor predefinito ]
+Inserisci o seleziona l'applicazione per i file testo.
+
+[ Browser predefinito ]
+Inserisci o seleziona l'applicazione per accedere alla webui.
+
+[ Aggiorna automatico ]
+Abilita o disabilita gli aggiornamenti automatici di ZDL.
+
+[ Sovrascrittura file ]
+Abilita o disabilita la sovrascrittura dei file (riprendere o no un download).
+
+[ Modalità avvio ]
+Imposta come avviare ZDL.
+
+[ Path nel lanciatore ]
+Imposta il path in cui verrà avviato ZDL utlizzando il lanciatore nel menu.
+
+[ Porta TCP torrent ]
+Imposta la porta TCP predefinita per scricare i torrent.
+
+[ Porta UDP torrent ]
+Imposta la porta UDP predefinita per scricare i torrent.
+
+[ Porta TCP socket ]
+Imporat la porta predefinita per i socket.
+
+[ Riconnessione modem ]
+Seleziona il comando per riavviare il modem/router.
+
+[ Account Web UI ]
+Resetta l'account webui.
+
+
+## CONSOLE
+
+[ Registra solo gli errori ]
+Registra solo gli errori nella console.
+
+[ Leggi zdl_log.txt ]
+Leggi o cancella zdl_log.txt (file contenente alcune informazioni sui download non riusciti).
+
+[ Pulisci ]
+Rimuovi tutti gli eventi registrati nella console.
+
+## ESCI
+
+[ Esci ]
+Chiudi tutto e ferma il server.

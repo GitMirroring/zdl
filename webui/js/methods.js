@@ -1,0 +1,1041 @@
+/** @format */
+
+//  ZigzagDownLoader (ZDL)
+//
+//  This program is free software: you can redistribute it and/or modify it
+//  under the terms of the GNU General Public License as published
+//  by the Free Software Foundation; either version 3 of the License,
+//  or (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+//  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program. If not, see http://www.gnu.org/licenses/.
+//
+//  Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+//
+//  For information or to collaborate on the project:
+//  https://savannah.nongnu.org/projects/zdl
+
+/* jshint esversion: 7 */
+
+/**
+ *	DOWNLOADS :: Tab 1
+ */
+var downloads = {
+    // Delete progressbar and Info of completed download
+    clean: function () {
+        myZDL.cleanCompleted().then( function () {
+            $( ".progressbar" ).each( function () {
+                if ( $( this ).find( ".ui-progressbar" ).attr( "aria-valuenow" ) === "100" ) {
+                    var file = $( this ).find( ".label" ).text();
+                    client.remove( "list", file );
+                    $( this ).next( ".toggle" ).remove();
+                    $( this ).remove();
+                }
+            } );
+            utils.log( "downloads-completed-cleaned" );
+        } );
+    },
+
+    // Toggle view of download Info
+    toggleInfo: function ( elem ) {
+        $( "#" + elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
+            if ( $( this ).is( ":visible" ) ) {
+                elem.button( "option", "label", $.i18n( "button-close" ) );
+            } else {
+                elem.button( "option", "label", $.i18n( "button-info" ) );
+            }
+        } );
+    },
+
+    // Manage download acting in the right path
+    manage: function ( elem ) {
+        var path = elem.data( "path" );
+        if ( path !== myZDL.path ) {
+            myZDL = new ZDL( path, "index.html" );
+            myZDL.initClient().then( function () {
+                utils.log( "client-init", path );
+                utils.switchToTab( 1 );
+            } ).catch( function ( e ) {
+                utils.log( "client-init-error", e, true );
+            } );
+        }
+    },
+
+    // Add file downloaded to the playlist
+    toPlaylist: function ( elem ) {
+        var file = elem.data( "file" );
+        myZDL.playlistAdd( file ).then( function ( res ) {
+            var response = res.trim();
+            if ( response === "Non è un file audio/video" ) {
+                utils.log( "playlist-file-incorrect", file, true );
+            } else if ( response === "Errore durante l'analisi del json della playlist" ) {
+                utils.log( "playlist-json-corrupted", null, true );
+            } else {
+                utils.addToPlaylist( file );
+                utils.log( "playlist-file-added", file );
+                utils.switchToTab( 3 );
+            }
+        } );
+    },
+
+    // Stop download
+    stop: function ( elem ) {
+        var link = elem.data( "link" );
+        myZDL.stopLink( encodeURIComponent( link ) ).then( function () {
+            utils.log( "download-stopped", link );
+        } );
+    },
+
+    // Delete download progress bar and info
+    delete: function ( elem ) {
+        var link = elem.data( "link" ),
+            toggle = elem.closest( ".toggle" ),
+            file = elem.data( "file" );
+        myZDL.deleteLink( encodeURIComponent( link ) ).then( function () {
+            toggle.prev().remove();
+            toggle.remove();
+            if ( client.exist( "active", file ) ) {
+                client.remove( "active", file );
+            }
+            client.remove( "list", file );
+            utils.log( "download-deleted", file );
+        } );
+    }
+};
+
+/**
+ *	MANAGE :: Tab 2
+ */
+var manage = {
+    // Change the webui action path
+    changePath: function ( elem ) {
+        var path = elem.prev().val();
+        if ( utils.validateInput( path, "path" ) ) {
+            myZDL = new ZDL( path, "index.html" );
+            myZDL.initClient().then( function () {
+                utils.log( "client-init-new", path );
+                $( "#path-toggle" ).trigger( "click" );
+            } ).catch( function ( e ) {
+                utils.log( "client-init-error", e, true );
+            } );
+        } else {
+            utils.log( "path-incorrect", path, true );
+        }
+    },
+
+    // Get and display free space in the path
+    updateSpace: function ( elem ) {
+        myZDL.getFreeSpace().then( function ( res ) {
+            elem.prev().text( res );
+            utils.log( "free-space-updated", res );
+        } );
+    },
+
+    // Send a new link
+    addLink: function ( elem ) {
+        var input = elem.prev(),
+            link = input.val();
+        if ( link ) {
+            if ( utils.validateInput( link, "URL" ) ) {
+                myZDL.addLink( link ).then( function () {
+                    input.val( "" );
+                    utils.log( "link-added", link );
+                    utils.switchToTab( 0 );
+                } );
+            } else {
+                input.val( "" );
+                utils.log( "link-incorrect", link, true );
+            }
+        }
+    },
+
+    // Toggle view of links in the queue
+    toggleLinks: function ( elem ) {
+        $( "#" +elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
+            if ( $( this ).is( ":visible" ) ) {
+                elem.button( "option", "label", $.i18n( "button-close" ) );
+                var txtarea = $( this ).children( "textarea" );
+                myZDL.getLinks().then( function ( links ) {
+                    if ( links && links.length > 10 ) {
+                        txtarea.val( decodeURIComponent( links ).replace( /\n$/, "" ) );
+                    } else {
+                        txtarea.val( "" );
+                    }
+                } );
+            } else {
+                elem.button( "option", "label", $.i18n( "button-open" ) );
+            }
+        } );
+    },
+
+    // Edit and save links in the queue
+    saveLinks: function ( elem ) {
+        var links = elem.prev().val();
+        if ( links ) {
+            var splitted = links.split( "\n" ),
+                pattern,
+                pass = true;
+            $.each( splitted, function ( index, link ) {
+                if ( /^https?:\/\//i.test( link ) ) {
+                    pattern = "URL";
+                } else {
+                    pattern = "irc";
+                }
+                if ( !utils.validateInput( link, "URL" ) ) {
+                    utils.log( "links-edited-incorrect", link, true );
+                    pass = false;
+                }
+            } );
+            if ( pass ) {
+                myZDL.command( "set-links", "links=" + encodeURIComponent( links ) ).then( function () {
+                    utils.log( "links-edited" );
+                    $( "#edit-links-toggle" ).trigger( "click" );
+                } );
+            }
+        }
+    },
+
+    // Delete links from the queue
+    deleteLinks: function ( elem ) {
+        var links = elem.parent().children( ":first" ).val();
+        if ( links ) {
+            myZDL.command( "set-links", "links=" ).then( function () {
+                utils.log( "links-deleted" );
+            } );
+            $( "#edit-links-toggle" ).trigger( "click" );
+        }
+    },
+
+    // Send an xdcc command
+    addXdcc: function () {
+        var host = $( "#irc-host" ).val(),
+            chan = $( "#irc-channel" ).val(),
+            bot = $( "#irc-bot" ).val(),
+            slot = $( "#irc-slot" ).val(),
+            msg = "/msg " + bot + " xdcc send " + slot,
+            xdcc = "irc://" + host + "/" + chan + msg;
+        if ( utils.validateInput( xdcc, "URL" ) ) {
+            var req = {
+                host: host,
+                channel: encodeURIComponent( chan ),
+                msg: encodeURIComponent( msg )
+            };
+            myZDL.addXdcc( req ).then( function ( res ) {
+                var response = res.trim();
+                if ( response ) {
+                    utils.log( "xdcc-exist", xdcc, true );
+                } else {
+                    utils.log( "xdcc-added", xdcc );
+                }
+                $( "#xdcc-clean-all" ).trigger( "click" );
+            } );
+        } else {
+            utils.log( "xdcc-incorrect", xdcc, true );
+        }
+    },
+
+    // Clean xdcc inputs
+    cleanXdcc: function ( elem ) {
+        if ( elem.hasClass( "clean-all" ) ) {
+            $( ".xdcc" ).val( "" );
+        } else {
+            elem.prev().val( "" );
+        }
+    },
+
+    // Send a torrent
+    addTorrent: function ( elem ) {
+        var input = elem.prev(),
+            torrent = input.val();
+        if ( torrent ) {
+            if ( utils.validateInput( torrent, "path" ) ) {
+                myZDL.addTorrent( torrent ).then( function () {
+                    input.val( "" );
+                    utils.log( "torrent-added", torrent );
+                    $( "#add-torrent-toggle" ).trigger( "click" );
+                } );
+            } else {
+                input.val( "" );
+                utils.log( "path-incorrect", torrent, true );
+            }
+        }
+    },
+
+    // Set the max number of parallel downloads in the path
+    maxDownload: function ( elem ) {
+        var value = elem.prev().children().text();
+        myZDL.command( "set-max-downloads", "number=" + value ).then( function () {
+            utils.log( "set-local-max-dl", value );
+            utils.success( elem.next() );
+        } );
+    },
+
+    // Set the downloader to use in the path
+    downloader: function ( val ) {
+        myZDL.command( "set-downloader", "downloader=" + val ).then( function () {
+            utils.log( "set-local-downloader", val );
+        } );
+    },
+
+    // Set options for the modem reconnection
+    reconnectionOption: function ( val ) {
+        var option = "false";
+        if ( val !== "disabled" ) {
+            option = "true";
+        }
+        myZDL.command( "reconnect", "set=" + option ).then( function ( res ) {
+            var response = res.trim();
+            if ( response ) {
+                if ( response === "Non hai ancora configurato ZDL per la riconnessione automatica" ) {
+                    utils.log( "reconnecter-not-configured", null, true );
+                } else {
+                    utils.log( response, null, true );
+                }
+                $( "#reconnect" ).val( "disabled" );
+                $( ".selectmenu" ).selectmenu( "refresh" );
+            } else {
+                utils.log( "set-modem-reconnection", val );
+            }
+        } );
+    },
+
+    // Reconnect modem
+    reconnectModem: function () {
+        myZDL.modemReconnect().then( function ( res ) {
+            var response = res.trim();
+            if ( response ) {
+                if ( response === "Non hai ancora configurato ZDL per la riconnessione automatica" ) {
+                    utils.log( "modem-reconnection-failure", null, true );
+                } else {
+                    utils.log( response, null, true );
+                }
+            } else {
+                utils.log( "modem-reconnected" );
+            }
+        } );
+    },
+
+    // Get and display the IP address
+    getIP: function ( elem ) {
+        myZDL.getIP().then( function ( res ) {
+            var match = res.match( /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/ );
+            if ( match ) {
+                elem.next().val( match[ 0 ] );
+                utils.log( "get-IP", match[ 0 ] );
+            } else {
+                elem.next().val( "---" );
+                utils.log( "get-IP-failure", null, true );
+            }
+        } );
+    },
+
+    // Quit ZDL
+    quitZDL: function ( elem ) {
+        elem.siblings( ":last" ).removeClass( "hidden" );
+        myZDL.quit().then( function () {
+            utils.log( "zdl-stopped" );
+        } );
+    },
+
+    // Quit ZDL and kill all downloads
+    killallZDL: function ( elem ) {
+        elem.siblings( ":last" ).removeClass( "hidden" );
+        myZDL.kill().then( function () {
+            utils.log( "zdl-killed" );
+        } );
+    },
+
+    // Run ZDL
+    runZDL: function ( elem ) {
+        elem.next().removeClass( "hidden" );
+        myZDL.run().then( function () {
+            utils.log( "zdl-started" );
+        } );
+    }
+};
+
+/**
+ *	XDCC search :: Tab 3
+ */
+var xdcc = {
+    // Search xdcc on xdcc.eu
+    search: function ( elem ) {
+        var input = elem.prev(),
+            term = input.val(),
+            table = client.table();
+        table.clear().draw();
+        if ( term ) {
+            myZDL.searchXdcc( term ).then( function ( res ) {
+                if ( res !== "failure" ) {
+                    var max = $( "#max-xdcc" ).val();
+                    try {
+                        var obj = JSON.parse( res ),
+                            send = $.i18n( "button-send" );
+                        $.each( obj, function ( i, o ) {
+                            table.row.add( [
+                                o.server,
+                                o.channel,
+                                o.bot,
+                                o.slot,
+                                o.gets,
+                                o.length,
+                                o.name,
+                                "<button data-i18n='button-send' class='button xdcc-search-send'>" + send + "</button>"
+                            ] ).draw( false );
+                            if ( i === max - 1 ) {
+                                return false;
+                            }
+                        } );
+                    } catch ( error ) {
+                        utils.log( "xdcc-search-error", error, true );
+                    }
+                    $( ".xdcc-search-send" ).button();
+                    input.val( "" );
+                } else {
+                    input.val( $.i18n( "xdcc-search-no-results" ) );
+                }
+            } );
+            utils.log( "xdcc-search", term );
+            input.val( $.i18n( "xdcc-serching" ) );
+        } else {
+            input.val( $.i18n( "xdcc-search-no-term" ) );
+        }
+    },
+
+    // Send found xdcc from the search table
+    add: function ( elem ) {
+        var tr = elem.closest( "tr" );
+        var xdccreq = {
+            host: tr.children().eq( 0 ).text(),
+            channel: encodeURIComponent( tr.children().eq( 1 ).text() ),
+            msg: encodeURIComponent( "/msg " + tr.children().eq( 2 ).text() + " xdcc send " + tr.children().eq( 3 ).text() )
+        };
+        elem.button( "option", {
+            label: "",
+            disabled: true,
+            icon: "ui-icon-check",
+            classes: {
+                "ui-button": "ui-corner-all ui-link-sent"
+            }
+        } );
+        myZDL.addXdcc( xdccreq ).then( function ( res ) {
+            var response = res.trim();
+            if ( response ) {
+                utils.log( "xdcc-exist", response, true );
+            } else {
+                utils.log( "xdcc-added", "irc://" + xdccreq.host + "/" + decodeURIComponent( xdccreq.channel ) + decodeURIComponent( xdccreq.msg ) );
+            }
+        } );
+    }
+};
+
+/**
+ *	PLAYLIST :: Tab 4
+ */
+var playlist = {
+    // Play all mp3 in the playlist
+    play: function () {
+        var files = $( "#playlist .mp3" ),
+            list = "";
+        if ( files ) {
+            $.each( files, function () {
+                list += $( this ).data( "file" ) + " ";
+            } );
+            if ( list ) {
+                list = list.slice( 0, -1 );
+                myZDL.playPlaylist( list ).then( function ( res ) {
+                    var response = res.trim();
+                    if ( /^\d+$/.test( response ) ) {
+                        utils.log( "play-playlist", response );
+                        if ( files.length > parseInt( response ) ) {
+                            utils.log( "play-playlist-mp3-not-played", files.length - parseInt( response ), true );
+                        }
+                    } else {
+                        if ( response === "Nessun file mp3 trovato" ) {
+                            utils.log( "play-playlist-mp3-not-found", null, true );
+                        } else if ( response === "Il player non è VLC" ) {
+                            utils.log( "play-playlist-require-vlc", null, true );
+                        } else {
+                            utils.log( "player-not-configured", null, true );
+                        }
+                    }
+                } );
+            } else {
+                utils.log( "play-playlist-no-mp3", null, true );
+            }
+        } else {
+            utils.log( "play-playlist-empty" );
+        }
+    },
+
+    // Add file to the playlist
+    add: function ( elem ) {
+        var file = elem.prev().val();
+        if ( utils.validateInput( file, "path" ) ) {
+            myZDL.playlistAdd( file ).then( function ( res ) {
+                var response = res.trim();
+                if ( response === "Non è un file audio/video" ) {
+                    utils.log( "playlist-file-incorrect", file, true );
+                } else if ( response === "Errore durante l'analisi del json della playlist" ) {
+                    utils.log( "playlist-json-corrupted", null, true );
+                } else {
+                    utils.addToPlaylist( file );
+                    utils.log( "playlist-file-added", file );
+                    utils.success( elem.next() );
+                }
+            } );
+        } else {
+            utils.log( "playlist-path-incorrect", file, true );
+        }
+    },
+
+    // Remove file from playlist
+    remove: function ( elem ) {
+        var file = elem.data( "file" );
+        myZDL.playlistDelete( file ).then( function ( res ) {
+            $( "#playlist" ).empty();
+            if ( utils.parseJson( res ) ) {
+                utils.buildPlaylist( JSON.parse( res ) );
+                utils.log( "playlist-file-removed", file );
+            } else {
+                utils.log( "playlist-json-corrupted", null, true );
+            }
+        } );
+    },
+
+    // Extract audio from video
+    extractMp3: function ( elem ) {
+        var file = elem.data( "file" );
+        elem.button( "disable" );
+        myZDL.extractMp3( file ).then( function ( res ) {
+            var response = res.trim();
+            if ( response === "success" ) {
+                utils.log( "playlist-video-to-mp3", file );
+                elem.remove();
+                var mp3 = file.substr(0, file.lastIndexOf(".")) + ".mp3";
+                myZDL.playlistAdd( mp3 ).then( function ( res ) {
+                    response = res.trim();
+                    if ( response === "Non è un file audio/video" ) {
+                        utils.log( "playlist-file-incorrect", mp3, true );
+                    } else {
+                        utils.addToPlaylist( mp3 );
+                        utils.log( "playlist-file-added", mp3 );
+                    }
+                } );
+            } else {
+                if ( response === "Il player non è VLC" ) {
+                    utils.log( "playlist-video-to-mp3-require-vlc", null, true );
+                } else if ( response === "Player non trovato" ) {
+                    utils.log( "player-not-found", null, true );
+                } else if ( response === "Video da cui estrarre l'audio non trovato" ) {
+                    utils.log( "playlist-video-to-mp3-not-found", file, true );
+                } else {
+                    utils.log( "player-not-configured", null, true );
+                }
+                elem.button( "enable" );
+            }
+        } );
+    }
+};
+
+/**
+ *	SOCKETS :: Tab 5
+ */
+var sockets = {
+    // Start a new socket
+    new: function ( elem ) {
+        var port = elem.prev().children( ".spinner" ).spinner( "value" );
+        myZDL.startSocket( port ).then( function ( res ) {
+            var response = res.trim();
+            if ( response === "already-in-use" ) {
+                utils.log( "socket-port-unavailable", port, true );
+            } else {
+                utils.log( "socket-started", port );
+            }
+        } );
+    },
+
+    // Open webui to a new server port or kill running socket
+    manage: function ( elem ) {
+        var port = elem.text();
+        if ( elem.parent().hasClass( "sockets-go" ) ) {
+            utils.log( "webui-new-port", port );
+            window.open( document.location.protocol + "//" + document.location.hostname + ":" + port );
+        } else {
+            myZDL.killSocket( port ).then( function () {
+                utils.log( "socket-killed", port );
+                if ( port === document.location.port ) {
+                    window.setTimeout( function () {
+                        window.location.href = window.location.pathname;
+                    }, 2000 );
+                }
+            } );
+        }
+    },
+
+    // Kill active socket
+    kill: function () {
+        var port = document.location.port;
+        myZDL.killSocket( port ).then( function () {
+            window.setTimeout( function () {
+                window.location.href = window.location.pathname;
+            }, 2000 );
+        } );
+    },
+
+    // Kill all downloads
+    killDownloads: function () {
+        myZDL.killAll().then( function () {
+            utils.log( "downloads-terminated" );
+        } );
+    }
+};
+
+/*
+ *	CONFIGURATION :: Tab 6
+ */
+var config = {
+    // Set and change the webUI
+    webui: function ( val ) {
+        myZDL.setConf( "web_ui", val ).then( function () {
+            window.setTimeout( function () {
+                window.location.href = window.location.pathname;
+            }, 2000 );
+        } );
+    },
+
+    // Set and change the webUI language
+    language: function ( val ) {
+        myZDL.setConf( "language", val ).then( function () {
+            $.i18n().locale = val;
+            $( "body" ).i18n();
+            utils.localizeRadioLabels();
+            client.tableInit( val );
+            client.set( "locale", val );
+            localStorage.setItem( "ZDLlanguage", val );
+            utils.log( "set-language", val.toUpperCase() );
+        } );
+    },
+
+    // Set default downloader
+    downloader: function ( val ) {
+        myZDL.setConf( "downloader", val ).then( function () {
+            utils.log( "set-downloader", val );
+        } );
+    },
+
+    // Set the background color of virtual terminal
+    xtermBackground: function ( val ) {
+        myZDL.setConf( "background", val ).then( function () {
+            utils.log( "set-terminal-bg", val );
+        } );
+    },
+
+    // Set path in the command of ZDL launcher
+    pathLauncher: function ( elem ) {
+        var path = elem.prev().val();
+        if ( utils.validateInput( path, "path" ) ) {
+            myZDL.setDesktopPath( path ).then( function () {
+                utils.log( "set-path-launcher", path );
+                $( "#launcher-toggle" ).trigger( "click" ).prev().val( path );
+            } );
+        } else {
+            utils.log( "path-incorrect", path, true );
+        }
+    },
+
+    // Set automatic update
+    autoUpdate: function ( val ) {
+        myZDL.setConf( "autoupdate", val ).then( function () {
+            utils.log( "set-auto-update", $.i18n( "option-" + val ) );
+        } );
+    },
+
+    // Set files overwriting
+    resume: function ( val ) {
+        myZDL.setConf( "resume", val ).then( function () {
+            utils.log( "set-file-overwrite", $.i18n( "option-" + val ) );
+        } );
+    },
+
+    // Set start mode
+    startMode: function ( val ) {
+        myZDL.setConf( "zdl_mode", val ).then( function () {
+            utils.log( "set-zdl-start-mode", val );
+        } );
+    },
+
+    // Reset webui account
+    resetAccount: function () {
+        myZDL.reset().then( function () {
+            window.location.href = "login.html";
+        } );
+    }
+};
+
+/**
+ *	CONSOLE :: Tab 7
+ */
+var zdlconsole = {
+    // Clean all console entries
+    clean: function ( elem ) {
+        elem.parent().prev().text( "" );
+        utils.log( "console-cleaned" );
+    }
+};
+
+/**
+ *	INFO :: Tab 8
+ */
+var info = {
+    toggleWebuiInfo: function ( elem ) {
+        $( "#" + elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
+            if ( $( this ).is( ":visible" ) ) {
+                elem.button( "option", "label", $.i18n( "button-close" ) );
+                var txtarea = $( this ).children( "textarea" ),
+                    lang = client.get( "locale" ),
+                    read = $.get( "webui-" + lang + ".txt" );
+                read.done( function( res ) {
+                    $("#webui-info").val(res);
+                } )
+                .fail( function () {
+                    utils.log( "webui-info-error" );
+                } );
+            } else {
+                elem.button( "option", "label", $.i18n( "button-open" ) );
+            }
+        } );
+    }
+};
+
+/**
+ *	EXIT :: Tab 9
+ */
+var exit = {
+    // Terminate all and shutdown the server
+    shutdown: function ( elem ) {
+        elem.button( "option", {
+            classes: {
+                "ui-button": "ui-corner-all ui-state-exiting"
+            },
+            disabled: true
+        } );
+        myZDL.exitAll().then( function () {
+            var count = 5,
+                countdown = setInterval( function () {
+                    elem.button( "option", "label", count );
+                    count = count - 1;
+                    if ( count < 0 ) {
+                        clearInterval( countdown );
+                        window.location.href = window.location.pathname;
+                    }
+                }, 500 );
+        } );
+    }
+};
+
+/**
+ *	COMMON :: Methods for multiple elements
+ */
+var common = {
+    /*
+     *	Set numeric configuration values from spinners/sliders
+     *	Tab: 6
+     *  Sliders: Axel parts, Aria2 connections, Max parallel download
+     *	Spinners: torrent TCP/UDP port, socket TCP port
+     */
+    setNumericValue: function ( elem ) {
+        var supplier = elem.prev().children(),
+            value = supplier.val() || supplier.text();
+        if ( value && !isNaN( value ) ) {
+            var key = elem.data( "key" ),
+                msg = "set-" + key.replace( "_", "-" );
+            myZDL.setConf( key, value ).then( function () {
+                utils.log( msg, value );
+                utils.success( elem.next() );
+            } );
+        }
+    },
+
+    /*
+     *	Set applications
+     *	Tab: 6
+     *	App: player, editor, browser, reconnecter
+     */
+    setApplication: function ( elem ) {
+        var input = elem.prev(),
+            filepath = input.val();
+        if ( filepath ) {
+            if ( utils.validateInput( filepath, "path" ) ) {
+                var key = elem.data( "key" ),
+                    toggle = key + "-toggle";
+                myZDL.setConf( key, filepath ).then( function () {
+                    input.val( "" );
+                    utils.log( "set-" + key, filepath );
+                    $( "#" + toggle ).trigger( "click" );
+                } );
+            } else {
+                utils.log( "path-incorrect", filepath, true );
+            }
+        }
+    },
+
+    /*
+     *	Toggle view of directory tree
+     *	Tab: 2, 4, 6
+     *	Views: action path, torrent, playlist, player, editor, browser, launcher, reconnecter
+     */
+    browseFsToggle: function ( elem ) {
+        var toggle = elem.data( "toggle" );
+        $( "#" + toggle ).toggle( "blind", null, 500, function () {
+            if ( $( this ).is( ":visible" ) ) {
+                elem.button( "option", "label", $.i18n( "button-close" ) );
+                var path = function () {
+                        return toggle === "path-launcher-browse" ?
+                            elem.prev().val() :
+                            myZDL.path;
+                    },
+                    id = toggle.slice( 0, -7 ),
+                    type = elem.data( "type" );
+                utils.browseFs( path(), id, type );
+            } else {
+                elem.button( "option", "label", $.i18n( "button-select" ) );
+            }
+        } );
+    },
+
+    /*
+     *  Toggle view of txt files
+     *  Tab: 2, 7
+     *  Files: links.txt, zdl_log.txt
+     */
+    readFileToggle: function ( elem ) {
+        var toggle = elem.data( "toggle" );
+        $( "#" + toggle ).toggle( "blind", null, 500, function () {
+            if ( $( this ).is( ":visible" ) ) {
+                elem.button( "option", "label", $.i18n( "button-close" ) );
+                var txtarea = $( this ).children( "textarea" ),
+                    file = elem.data( "file" );
+                myZDL.getFile( file ).then( function ( res ) {
+                    if ( res ) {
+                        txtarea.val( res.replace( /(<br>)/gi, "" ) ).animate( {
+                            scrollTop: txtarea.prop( "scrollHeight" ) - txtarea.height()
+                        }, 1000 );
+                    } else {
+                        txtarea.val( $.i18n( "file-not-found" ) );
+                    }
+                    txtarea.scrollTop = txtarea.scrollHeight;
+                } );
+            } else {
+                elem.button( "option", "label", $.i18n( "button-open" ) );
+            }
+        } );
+    },
+
+    /*
+     *  Delete text files
+     *  Tab: 2, 7
+     *  Files: links.txt, zdl_log.txt
+     */
+    deleteFile: function ( elem ) {
+        var txtarea = elem.prev(),
+            content = txtarea.val();
+        if ( content && content !== $.i18n( "file-not-found" ) ) {
+            var file = elem.data( "file" );
+            toggle = elem.data( "trigger" );
+            myZDL.deleteFile( file ).then( function () {
+                txtarea.val( "" );
+                utils.log( "file-deleted", file );
+                $( "#" + toggle ).trigger( "click" );
+            } );
+        }
+    },
+
+    /*
+     *  Play files
+     *  Tab: 1, 4
+     *  Files: audio/video
+     */
+    playFile: function ( elem ) {
+        var file = elem.data( "file" );
+        myZDL.playMedia( file ).then( function ( res ) {
+            var response = res.trim();
+            if ( response === "running" ) {
+                utils.log( "play-file", file );
+            } else {
+                if ( response === "Player non trovato" ) {
+                    utils.log( "player-not-found", null, true );
+                } else if ( response === "Non è un file audio/video" ) {
+                    utils.log( "play-file-incorrect", file, true );
+                } else if ( response === "File non trovato" ) {
+                    utils.log( "play-file-not-found", file, true );
+                } else {
+                    utils.log( "player-not-configured", null, true );
+                }
+            }
+        } );
+    }
+};
+
+/**
+ *	UTILS
+ */
+var utils = {
+    /* Logging events and errors to the Console tab */
+    log: function ( key, param, error = false ) {
+        if ( client.get( "log" ) === "all" || error ) {
+            var to2 = function ( i ) {
+                    if ( i < 10 ) {
+                        return "0" + i;
+                    }
+                    return i;
+                },
+                date = new Date(),
+                time = to2( date.getHours() ) + ":" + to2( date.getMinutes() ) + ":" + to2( date.getSeconds() ),
+                type = "event",
+                msg;
+
+            if ( param ) {
+                msg = $.i18n( key, param );
+            } else {
+                msg = $.i18n( key );
+            }
+
+            if ( error ) {
+                type = "error";
+                utils.switchToTab( 6 );
+            }
+
+            $( "#console" ).append( "<span class='" + type + "'>" + time + " > " + msg.trim() + "</span>" );
+        }
+    },
+
+    /* Validate json */
+    parseJson: function ( str ) {
+        try {
+            JSON.parse( str );
+        } catch ( e ) {
+            return false;
+        }
+        return true;
+    },
+
+    /* Browse file and directory tree of the path */
+    browseFs: function ( path, id, type ) {
+        if ( type === "folders" ) {
+            $( "#" + id + "-path" ).val( path );
+        }
+        myZDL.browseFS( path, type ).then( function ( res ) {
+            if ( res ) {
+                var items = res.replace( /;?\n?$/, "" ).split( ";" ),
+                    parent = path.substring( 0, path.lastIndexOf( "/" ) ),
+                    fix = function ( p ) {
+                        return p.replace( /\s/g, "%20" );
+                    },
+                    tree,
+                    node = "";
+                if ( !parent ) {
+                    parent = "/";
+                }
+                tree = $( "#" + id + "-tree" ).empty();
+                if ( path !== "/" ) {
+                    node += "<li class='folder'><a href=javascript:utils.browseFs('" + fix( parent ) + "','" + id + "','" + type + "');>..</a></li>";
+                } else {
+                    path = "";
+                }
+                $.each( items, function ( index, item ) {
+                    if ( item ) {
+                        if ( type === "folders" || /^\[.+\]$/.test( item ) ) {
+                            item = item.slice( 1, -1 );
+                            node += "<li class='folder'><a href=javascript:utils.browseFs('" + fix( path + "/" + item ) + "','" + id + "','" + type + "');>" + item + "</a></li>";
+                        } else {
+                            node += "<li class='" + type + "'><a href=javascript:utils.selectFile('" + fix( path + "/" + item ) + "','" + id + "');>" + item + "</a></li>";
+                        }
+                    }
+                } );
+                tree.append( node );
+            }
+        } );
+    },
+
+    /* Show file selected */
+    selectFile: function ( path, id ) {
+        $( "#" + id + "-path" ).val( path );
+    },
+
+    /* Build the playlist */
+    buildPlaylist: function ( data ) {
+        var playlist = $( "#playlist" ),
+            node = "",
+            filename,
+            mp3Attr,
+            mp3Button;
+        $.each( data, function ( index, file ) {
+            mp3Attr = "'";
+            mp3Button = "";
+            filename = file.replace( /^.*(\/)/, "" );
+            if ( /.mp3$/.test( filename ) ) {
+                mp3Attr = " mp3' data-file='" + file + "'";
+            } else {
+                if ( !data.includes( file.slice( 0, -3 ) + "mp3" ) ) {
+                    mp3Button = "<button data-i18n='button-mp3' class='button to-mp3' data-file='" + file + "'>mp3</button>";
+                }
+            }
+            node += "<div class='pl-item'><div class='pl-file" + mp3Attr + ">" + filename + "</div><div class='pl-buttons'><button data-i18n='button-play' class='button play-file' data-file='" + file + "'>Play</button><button data-i18n='button-remove' class='button pl-remove' data-file='" + file + "'>Delete</button>" + mp3Button + "</div></div>";
+        } );
+        playlist.prepend( node );
+        $( "#playlist > .pl-item > .pl-buttons > .button" ).button().i18n();
+    },
+
+    /* Append new item to the playlist */
+    addToPlaylist: function ( file ) {
+        var playlist = $( "#playlist" ),
+            node,
+            filename = file.replace( /^.*(\/)/, "" ),
+            mp3Attr = "'",
+            mp3Button = "";
+        if ( /.mp3$/.test( filename ) ) {
+            mp3Attr = " mp3' data-file='" + file + "'";
+        } else {
+            var list = $( ".pl-file" ).text();
+            if ( !list.includes( filename.slice( 0, -3 ) + "mp3" ) ) {
+                mp3Button = "<button data-i18n='button-mp3' class='button to-mp3' data-file='" + file + "'>extract mp3</button>";
+            }
+        }
+        node = "<div class='pl-item'><div class='pl-file" + mp3Attr + ">" + filename + "</div><div class='pl-buttons'><button data-i18n='button-play' class='button play-file' data-file='" + file + "'>Play</button><button data-i18n='button-remove' class='button pl-remove' data-file='" + file + "'>Delete</button>" + mp3Button + "</div></div>";
+        playlist.prepend( node );
+        $( "#playlist > .pl-item:first-child > .pl-buttons > .button" ).button().i18n();
+    },
+
+    /* Display OK to inform that command was successful */
+    success: function ( elem ) {
+        elem.removeClass( "hidden" );
+        window.setTimeout( function () {
+            elem.addClass( "hidden" );
+        }, 1000 );
+    },
+
+    /* Localize JQueryUI radio labels */
+    localizeRadioLabels: function () {
+        $( "#console-only-errors" ).checkboxradio( "option", "label", $.i18n( "radio-log-label" ) );
+        $( ".input-editable" ).checkboxradio( "option", "label", $.i18n( "radio-edit-label" ) );
+    },
+
+    /* Change tab */
+    switchToTab: function ( num ) {
+        $( "#tabs" ).tabs( "option", "active", num );
+    },
+
+    /* Validate url and path */
+    validateInput: function ( str, type ) {
+        var pattern = {
+            URL: /^(?:(irc|https?):\/\/)?[\w\.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(\/msg\s.+\sxdcc\ssend\s#\d+)?$/,
+            path: /^((\/([\w\.\-\(\)\]\[\?\\@\$\^#&=|:;, ])+)+)|([\w\-]+)$/
+        };
+        return pattern[ type ].test( str );
+    }
+};

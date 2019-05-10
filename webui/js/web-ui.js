@@ -1101,14 +1101,15 @@ var addPlaylist = function (file) {
         ajax({
             query: "cmd=add-playlist&file=" + file,
             callback: function (data) {
-                //displayPlaylistButton("playlist-browse");
-                if (cleanInput(data) === "Non è un file audio/video") {
-                    alert(data);
-                    getPlaylist("playlist-list");
-                } else {
-                    // data = [...]
-                    displayPlaylist("playlist-list", data);
-                }
+                //     //displayPlaylistButton("playlist-browse");
+                // if (cleanInput(data) === "Non è un file audio/video") {
+                //     alert(data);
+                //     getPlaylist("playlist-list");
+                // } else {
+                //     // data = [...]
+                //     displayPlaylist("playlist-list", data);
+                // }
+                displayPlaylist("playlist-list", data);
             }
         });
     }
@@ -1127,7 +1128,7 @@ var delPlaylist = function (file) {
 
 var playMedia = function (media) {
     ajax({
-        query: "cmd=play-playlist&file=" + media,
+        query: "cmd=play-media&file=" + media,
         callback: function (res) {
             if (cleanInput(res) !== "running")
                 alert(res);
@@ -1141,7 +1142,9 @@ var getPlaylist = function (id) {
     ajax({
         query: "cmd=get-playlist",
         callback: function (data) {
-            displayPlaylist(id, data);
+            if (data.trim()) {
+                displayPlaylist(id, data);
+            }
         }
     });
 };
@@ -1158,6 +1161,7 @@ var displayPlaylist = function (id, data) {
         });
 
     } else {
+        alert(data);
         output = "";
     }
 

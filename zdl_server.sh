@@ -54,23 +54,6 @@ template_index="$path_webui/index-${web_ui}.html"
 
 json_flag=true
 
-## node.js:
-if [ -d /cygdrive ] &&
-       ! command -v node &>/dev/null &&
-       [ -f "/usr/local/share/zdl/node.exe" ]
-then
-    chmod 777 /usr/local/share/zdl/node.exe
-    nodejs="/usr/local/share/zdl/node.exe"
-
-elif command -v nodejs &>/dev/null
-then
-    nodejs=nodejs
-
-elif command -v node &>/dev/null
-then
-    nodejs=node
-fi
-
 
 #### HTTP:
 declare -i DEBUG=0
@@ -297,11 +280,11 @@ function create_json {
 		    fi
 
 		else
-		    set_line_in_file - "$path" "$server_paths"
+		    set_line_in_file - "$path" "$server_paths" &
 		fi
 
 	    else
-		set_line_in_file - "$path" "$server_paths"
+		set_line_in_file - "$path" "$server_paths" &
 	    fi
 
 	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
@@ -592,6 +575,22 @@ function search_xdcc {
     fi
 }
 
+function check-playlist {
+	list="$1"
+	check=0
+
+	if [ ! -z $list ] && [ $list != "[]" ]
+	then
+		if [[ ! $list =~ ^\[\".*\"\]$ ]] ||
+		   [[ $list =~ [A-Za-z0-9](,|\"\") ]] ||
+		   [[ $list =~ ,[\/A-Za-z0-9] ]]
+		then
+			check=1
+		fi
+	fi
+	echo $check
+}
+
 function run_cmd {
     local line=( "$@" )
     local file link pid path
@@ -667,51 +666,102 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	get-playlist)
 	    file_output="$path_server"/playlist
-	    touch "$file_output"
+        list=$(< "$file_output")
+
+        if [ $(check-playlist "$list") == 0 ]
+        then
+            touch "$file_output"
+        else
+            echo > "$file_output"
+            file_output=playlist-error
+            echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
+        fi
 	    ;;
 
 	add-playlist)
-	    file_output="$path_server"/playlist
-	    touch "$file_output"
+        file_output="$path_server"/playlist
+        touch "$file_output"
 
-	    if [ -f "${line[1]}" ] &&
-		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
-	    then
-		$nodejs -e "var data = '$(cat "$file_output")';
-if (data) {
-    var json = JSON.parse(data)
-} else {
-    var json = [];
-}
-if(typeof json === 'object'){
-    json.push('${line[1]}');
-    console.log(JSON.stringify(json))
-}" > "$file_output"
-
-	    else
-		file_output="$path_server"/playlist-error
-		echo -e "Non è un file audio/video" > "$file_output"
-	    fi
+        if [ -f "${line[1]}" ] &&
+           [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
+        then
+            list=$(< "$file_output")
+            if [ $(check-playlist "$list") == 0 ]
+    		then
+                if [ -z "$list" ] || [ $list == "[]" ]
+                then
+                    list="[\"${line[1]}\"]"
+                else
+                    list=${list//]/,\"${line[1]}\"]}
+                fi
+                echo -e "$list" > "$file_output"
+            else
+    			echo > "$file_output"
+    			file_output=playlist-error
+    			echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
+    		fi
+        else
+            file_output=playlist-error
+            echo -e "Non è un file audio/video" > "$file_output"
+        fi
 	    ;;
 
 	del-playlist)
-	    file_output="$path_server"/playlist
-	    touch "$file_output"
+        file_output="$path_server"/playlist
+        touch "$file_output"
+        list=$(< "$file_output")
 
-	    $nodejs -e "var data = '$(cat "$file_output")';
-if (data) {
-    var json = JSON.parse(data);
-    if(typeof json === 'object'){
-        for(var i=0; i<json.length; i++) {
-            if (json[i] === '${line[1]}')
-                json.splice(i,1);
-        }
-        console.log(JSON.stringify(json))
-    }
-}" > "$file_output"
+        if [ $(check-playlist "$list") == 0 ]
+    	then
+    		list=${list//\"${line[1]}\"/}
+    		list=${list//,/}
+    		list=${list//\"\"/\",\"}
+    		echo -e "$list" > "$file_output"
+    	else
+    		echo > "$file_output"
+    		file_output=playlist-error
+    		echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
+    	fi
 	    ;;
 
-	play-playlist)
+    play-playlist)
+        file_output="$path_server"/playlist-file.$socket_port
+
+        list=(${line[1]})
+        playlist="#EXTM3U"
+        id=0
+
+        if [ -z "$player" ]
+        then
+            echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
+        else
+            if [[ "${player##*/}" == "vlc" ]]
+            then
+                for item in "${list[@]}"
+                do
+                    if [[ -e "$item" ]]
+                    then
+                        id=$[id + 1]
+                        title=${item##*/}
+                        title=${title%.*}
+                        playlist="$playlist\n#EXTINF:$id,$title\n$item"
+                    fi
+                done
+                if (( id > 0 ))
+                then
+                    echo -e "$playlist" > "$path_tmp/playlist.m3u"
+                    nohup $player "$path_tmp/playlist.m3u" &>/dev/null &
+                    echo -e "$id" > "$file_output"
+                else
+                    echo -e "Nessun file mp3 trovato" > "$file_output"
+                fi
+            else
+                echo -e "Il player non è VLC" > "$file_output"
+            fi
+        fi
+        ;;
+
+	play-media)
 	    file_output="$path_server"/msg-file.$socket_port
 
 	    if [ -f "${line[1]}" ]
@@ -723,16 +773,47 @@ if (data) {
 		elif [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio|video) ]]
 		then
 		    echo -e "Non è un file audio/video" > "$file_output"
-
 		else
-		    nohup $player "${line[1]}" &>/dev/null &
-		    echo -e "running" > "$file_output"
-		fi
-
-	    else
-		echo -e "Non è un file audio/video" > "$file_output"
+            if command -v $player &>/dev/null
+            then
+                nohup $player "${line[1]}" &>/dev/null &
+                echo -e "running" > "$file_output"
+            else
+                echo -e "Player non trovato" > "$file_output"
+            fi
+        fi
+        else
+		echo -e "File non trovato" > "$file_output"
 	    fi
 	    ;;
+
+    extract-mp3)
+        file_output="$path_server"/mp3-file.$socket_port
+        video=${line[1]}
+        if [ -z "$player" ]
+        then
+            echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
+        else
+            if [[ "${player##*/}" == "vlc" ]]
+            then
+                if command -v $player &>/dev/null
+                then
+                    if [ -f "$video" ]
+                    then
+                        mp3="${video%.*}.mp3"
+                        nohup $player --no-loop --no-sout-all --sout "#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:std{access=file,mux=raw,dst=${mp3}" ${video} vlc://quit &>/dev/null
+                        echo -e "success" > "$file_output"
+                    else
+                        echo -e "Video da cui estrarre l'audio non trovato" > "$file_output"
+                    fi
+                else
+                    echo -e "Player non trovato" > "$file_output"
+                fi
+            else
+                echo -e "Il player non è VLC" > "$file_output"
+            fi
+        fi
+        ;;
 
 	get-status)
 	    ## status.json
@@ -1455,7 +1536,7 @@ if (data) {
 			unset instance_pid
 		    }
 	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
-	    ## rm -f "$server_paths"
+
 	    init_client
 	    ;;
 

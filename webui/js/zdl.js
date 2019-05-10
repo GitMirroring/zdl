@@ -19,14 +19,14 @@
 
 /* jshint esversion: 6 */
 
+/**
+ * ZDL class
+ * Send requests to zdl server
+ */
 class ZDL {
     constructor( path, file ) {
         this.path = path;
         this.file = file;
-    }
-
-    getPath() {
-        return this.path;
     }
 
     request( query ) {
@@ -108,10 +108,6 @@ class ZDL {
         return this.request( `cmd=search-xdcc&term=${term}` );
     }
 
-    addPlaylist( file ) {
-        return this.request( `cmd=add-playlist&file=${file}` );
-    }
-
     stopLink( link ) {
         return this.request( `cmd=stop-link&path=${this.path}&link=${link}` );
     }
@@ -124,8 +120,24 @@ class ZDL {
         return this.request( `cmd=del-file&path=${this.path}&file=${file}` );
     }
 
-    deletePlaylist( file ) {
+    playlistAdd( file ) {
+        return this.request( `cmd=add-playlist&file=${file}` );
+    }
+
+    playlistDelete( file ) {
         return this.request( `cmd=del-playlist&file=${file}` );
+    }
+
+    playPlaylist( list ) {
+        return this.request( `cmd=play-playlist&files=${list}` );
+    }
+
+    playMedia( file ) {
+        return this.request( `cmd=play-media&file=${file}` );
+    }
+
+    extractMp3( video ) {
+        return this.request( `cmd=extract-mp3&video=${video}` );
     }
 
     browseFS( path, type ) {
@@ -134,14 +146,6 @@ class ZDL {
 
     cleanCompleted() {
         return this.request( `cmd=clean-complete&path=${this.path}` );
-    }
-
-    play( file ) {
-        return this.request( `cmd=play-link&path=${this.path}&file=${file}` );
-    }
-
-    playPlaylist( file ) {
-        return this.request( `cmd=play-playlist&file=${file}` );
     }
 
     command( cmd, params ) {

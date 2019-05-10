@@ -22,12 +22,37 @@ https://savannah.nongnu.org/projects/zdl */
   background: #ccc;
 }
 
+/* Labels light */
+.inline-group .label.alt {
+  background: #f1f1f1;
+}
+
 /* Input and text bars */
 .inline-group .value,
-.inline-group input[type="text"],
+.inline-group input {
+  background: #f1f1f1;
+  color: #222;
+}
+
+/* Spinners background */
+.inline-group .spinner {
+  background: #fff !important;
+}
+
+/* Select menu text */
+.inline-group .ui-selectmenu-text {
+  color: #222;
+}
+
+/* Playlist */
 .playlist > .pl-item > .pl-file {
-  background: #d0edec;
-  color: #207a72;
+  background: #cfe4fc;
+  color: #3275ab;
+}
+
+/* Playlist mp3 */
+.playlist > .pl-item > .mp3 {
+  background: #c9d3fb !important;
 }
 
 /* Progressbar text */
@@ -38,36 +63,37 @@ https://savannah.nongnu.org/projects/zdl */
 /* Progressbar color */
 .ui-progressbar > .ui-widget-header {
   background: #cfe4fc !important;
+  border-color: #cfe4fc !important;
 }
 
 /* Progressbar background */
 .ui-progressbar.ui-widget-content {
-  background: #efefef !important;
-  border-color: #cfe4fc !important;
+  background: #f1f8ff !important;
+  border-color: #e7f2fd !important;
 }
 
-/* Progressbar info 100% */
-.progressbar .side-info {
+/* Progressbar status 100% */
+.progressbar .side-status {
   background: #d0edec;
   color: #207a72;
   border: 1px solid #d0edec;
 }
 
-/* Progressbar info on download */
+/* Progressbar status on download */
 .progressbar .downloading {
   background: #ffe6cc !important;
   border: 1px solid #ffe6cc !important;
   color: #393a1d !important;
 }
 
-/* Progressbar info on unterminated */
+/* Progressbar status on unterminated */
 .progressbar .unterminated {
   background: #ddd !important;
   border: 1px solid #ddd !important;
   color: #444 !important;
 }
 
-/* Progressbar info on abort */
+/* Progressbar status on abort */
 .progressbar .aborted {
   background: #f1dcda !important;
   border: 1px solid #f1dcda !important;

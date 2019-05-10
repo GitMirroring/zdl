@@ -1,34 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <!--
 	ZigzagDownLoader (ZDL)
-
-	This program is free software: you can redistribute it and/or modify it
-	under the terms of the GNU General Public License as published
-	by the Free Software Foundation; either version 3 of the License,
-	or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see http://www.gnu.org/licenses/.
-
-	Copyright (C) 2011
-	Gianluca Zoni <<zoninoz@inventati.org>>
-
-	For information or to collaborate on the project:
-	`https://savannah.nongnu.org/projects/zdl'
-
-    WebUI Multilang developed by arlogn <<claudio@bastardi.net>>
-    You can add your language by translating the location strings from one of the json files
-    in the /i18n folder, saving the file name with your two letters country code and requesting
-    it to be included in the package.
+	Copyright (C) 2011 Gianluca Zoni <zoninoz@inventati.org>
+    Licensed under the GNU General Public License <https://www.gnu.org/licenses/gpl.html>
     -->
-
     <title>ZDL Web Interface</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +18,7 @@
 </head>
 
 <body>
-    <div class="header"><a class="logo" href="">ZDL webUI</a></div>
+    <div class="header"><a class="logo" href="">ZDL web UI</a></div>
     <div class="loader">Loading ...</div>
     <div class="wrapper">
         <div id="tabs">
@@ -63,24 +40,26 @@
                     <div class="float-left">
                         <h4 data-i18n="tab-1-title">Downloads in progress</h4>
                     </div>
-                    <div class="float-right"><button data-i18n="button-del-completed" id="clean-downloaded" class="button">Delete completed</button></div>
+                    <div class="float-right">
+                        <button data-i18n="button-clean-completed" id="downloads-clean" class="button">Clean completed</button>
+                    </div>
                 </div>
                 <div id="downloads"></div>
             </div>
 
-            <!-- TAB 2 - Manage downloads -->
+            <!-- TAB 2 - Manage -->
             <div id="tabs-2">
                 <h4 data-i18n="tab-2-title">Manage downloads inside path</h4>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-path" class="label">Path:</div>
-                    <input id="path" type="text" readonly>
-                    <button data-i18n="button-select" id="path-toggler" class="button" data-toggle="path-browse">Select</button>
+                    <input id="action-path" type="text" readonly>
+                    <button data-i18n="button-select" id="action-path-toggle" class="button" data-type="folders" data-toggle="action-path-browse">Select</button>
                 </div>
-                <div class="toggler">
-                    <div id="path-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="path-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="path-save" class="button">Save</button>
-                        <ul id="path-tree" class="tree"></ul>
+                <div class="toggle">
+                    <div id="action-path-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="action-path-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="action-path-save" class="button">Save</button>
+                        <ul id="action-path-tree" class="tree"></ul>
                     </div>
                 </div>
                 <div class="inline-group">
@@ -94,12 +73,12 @@
                     <button data-i18n="button-send" id="add-link-send" class="button">Send</button>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-2-label-queue" class="label">URLs editor (queue):</div>
-                    <button data-i18n="button-open" id="edit-links-toggler" class="button" data-toggle="links-editor">Open</button>
+                    <div data-i18n="tab-2-label-queue" class="label">Links edit (queue):</div>
+                    <button data-i18n="button-open" id="edit-links-toggle" class="button" data-toggle="edit-links-edit">Open</button>
                 </div>
-                <div class="toggler">
-                    <div id="links-editor" class="editor ui-widget-content ui-corner-all">
-                        <textarea id="edit-links" class="links"></textarea>
+                <div class="toggle">
+                    <div id="edit-links-edit" class="content read ui-widget-content ui-corner-all">
+                        <textarea id="edit-links"></textarea>
                         <button data-i18n="button-save" id="edit-links-save" class="button">Save</button>
                         <button data-i18n="button-delete" id="edit-links-delete" class="button">Delete</button>
                     </div>
@@ -109,103 +88,106 @@
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-xdcc-host" class="label alt">IRC host:</div>
-                    <input class="mid" id="irc-host" type="text" placeholder="irc-server.com">
+                    <input id="irc-host" class="mid xdcc" type="text" placeholder="irc-server.tld">
                     <button data-i18n="button-clean" id="irc-host-clean" class="button">Clean</button>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-xdcc-channel" class="label alt">Channel:</div>
-                    <input class="mid" id="irc-channel" type="text" placeholder="nomeCanale">
+                    <input id="irc-channel" class="mid xdcc" type="text" placeholder="nomeCanale">
                     <button data-i18n="button-clean" id="irc-channel-clean" class="button">Clean</button>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-xdcc-bot" class="label alt">Bot:</div>
-                    <input class="mid" id="irc-bot" type="text" placeholder="nomeBot">
+                    <input id="irc-bot" class="mid xdcc" type="text" placeholder="nomeBot">
                     <button data-i18n="button-clean" id="irc-bot-clean" class="button">Clean</button>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-xdcc-slot" class="label alt">Slot #:</div>
-                    <input class="mid" id="irc-slot" type="text" placeholder="#54">
+                    <input id="irc-slot" class="mid xdcc" type="text" placeholder="#54">
                     <button data-i18n="button-clean" id="irc-slot-clean" class="button">Clean</button>
                 </div>
                 <div class="inline-group">
-                    <div class="label alt"></div>
+                    <div class="label clean"></div>
                     <button data-i18n="button-send-xdcc" id="xdcc-send" class="button">Send XDCC</button>
-                    <button data-i18n="button-clean-all" id="xdcc-clean" class="button">Clean all</button>
+                    <button data-i18n="button-clean-all" id="xdcc-clean-all" class="button clean-all">Clean all</button>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-torrent" class="label">Add torrent:</div>
-                    <button data-i18n="button-select" id="torrent-toggler" class="button" data-toggle="torrent-browse">Select</button>
+                    <button data-i18n="button-select" id="add-torrent-toggle" class="button" data-type="torrent" data-toggle="add-torrent-browse">Select</button>
                 </div>
-                <div class="toggler">
-                    <div id="torrent-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="torrent-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="torrent-save" class="button">Save</button>
-                        <ul id="torrent-tree" class="tree"></ul>
+                <div class="toggle">
+                    <div id="add-torrent-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="add-torrent-path" class="path" type="text" readonly>
+                        <button data-i18n="button-send" id="add-torrent-send" class="button">Send</button>
+                        <ul id="add-torrent-tree" class="tree"></ul>
                     </div>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-2-label-links-txt" class="label">Read links.txt:</div>
-                    <button data-i18n="button-open" id="links-txt-toggler" class="button" data-toggle="links-txt-read">Open</button>
+                    <div data-i18n="tab-2-label-links-file" class="label">Read links.txt:</div>
+                    <button data-i18n="button-open" id="links-file-toggle" class="button" data-file="links.txt" data-toggle="links-file-read">Open</button>
                 </div>
-                <div class="toggler">
-                    <div id="links-txt-read" class="read ui-widget-content ui-corner-all">
-                        <textarea id="links-txt" class="links"></textarea>
-                        <button data-i18n="button-delete" id="links-txt-delete" class="button">Delete</button>
+                <div class="toggle">
+                    <div id="links-file-read" class="content read ui-widget-content ui-corner-all">
+                        <textarea id="links-file" readonly></textarea>
+                        <button data-i18n="button-delete" data-file="links.txt" data-trigger="links-file-toggle" id="links-file-delete" class="button">Delete</button>
                     </div>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-max-downloads" class="label">Max parallel downloads:</div>
-                    <input id="max-downloads" class="spinner">
-                    <button data-i18n="button-change" id="max-downloads-change" class="button">Change</button>
+                    <div id="local-max-downloads" class="slider">
+                        <div class="custom-handle ui-slider-handle"></div>
+                    </div>
+                    <button data-i18n="button-save" id="local-max-downloads-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-downloader" class="label">Downloader:</div>
-                    <select id="downloader" class="selectmenu">
-                    	<option>Aria2</option>
-                    	<option>Axel</option>
-                    	<option>Wget</option>
+                    <select id="local-downloader" class="selectmenu">
+                        <option>Aria2</option>
+                        <option>Axel</option>
+                        <option>Wget</option>
                     </select>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-2-label-reconnect" class="label">Modem/router reconnect:</div>
+                    <div data-i18n="tab-2-label-reconnect" class="label">Modem reconnect:</div>
                     <select id="reconnect" class="selectmenu">
-                    	<option data-i18n="option-never" value="disabled">Never</option>
-                    	<option data-i18n="option-every-url" value="enabled">Every new URL</option>
+                        <option data-i18n="option-never" value="disabled">Never</option>
+                        <option data-i18n="option-every-url" value="enabled">Every new URL</option>
                     </select>
-                    <button data-i18n="button-reconnect" id="reconnect-now" class="button">Reconnect now</button>
+                    <button data-i18n="button-reconnect" id="reconnect-modem" class="button">Reconnect now</button>
                     <button data-i18n="button-ip" id="get-ip" class="button">IP address</button>
-                    <input id="ip-address" class="short" type="text">
+                    <input id="ip-address" class="short" type="text" readonly>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-2-label-status" class="label">Path status:</div>
                     <button data-i18n="button-kill-zdl" id="zdl-quit" class="button">Terminate ZDL</button>
                     <button data-i18n="button-kill-all" id="zdl-killall" class="button">Terminate ZDL and downloads</button>
-                    <button data-i18n="button-run-zdl" id="zdl-run" class="button hide">Run ZDL</button>
-                    <span data-i18n="wait" id="wait" class="hide">wait...</span>
+                    <button data-i18n="button-run-zdl" id="zdl-run" class="button hidden">Run ZDL</button>
+                    <span data-i18n="wait" id="wait" class="hidden">wait...</span>
                 </div>
             </div>
 
-            <!-- TAB 3 - XDCC search -->
+            <!-- TAB 3 - Search -->
             <div id="tabs-3">
-                <h4 data-i18n="tab-3-title">XDCC search</h4>
+                <h4 data-i18n="tab-3-title">Search</h4>
                 <div class="inline-group">
-                    <div data-i18n="tab-3-label-search-on" class="label">Search on xdcc.eu:</div>
-                    <input class="mid" id="xdcc-search" type="text">
+                    <div data-i18n="tab-3-label-search-on" class="label">Xdcc search:</div>
+                    <input id="xdcc-search" class="mid" type="text" placeholder="...">
                     <button data-i18n="button-search" id="xdcc-search-exec" class="button">Search</button>
                     <div data-i18n="tab-3-label-max-results" class="label">Max results:</div>
-                    <input id="max-xdcc" class="spinner">
+                    <input id="max-xdcc" class="spinner" readonly>
                 </div>
                 <table id="xdcc-eu" class="display nowrap" style="width:100%">
                     <thead>
                         <tr>
                             <th>Network</th>
-                            <th>Channel</th>
+                            <th data-i18n="xdcc-th-channel">Channel</th>
                             <th>Bot</th>
                             <th>Slot</th>
-                            <th>Gets</th>
-                            <th>Size</th>
-                            <th>Name</th>
-                            <th>Send</th>
+                            <th data-i18n="xdcc-th-gets">Gets</th>
+                            <th data-i18n="xdcc-th-size">Size</th>
+                            <th data-i18n="xdcc-th-name">Name</th>
+                            <th data-i18n="xdcc-th-send">Send</th>
                         </tr>
                     </thead>
                 </table>
@@ -215,26 +197,29 @@
             <div id="tabs-4">
                 <h4 data-i18n="tab-4-title">Build a playlist</h4>
                 <div class="inline-group">
-                    <div data-i18n="tab-4-label-select" class="label">Select files:</div>
-                    <button data-i18n="button-select" id="playlist-toggler" class="button" data-toggle="playlist-browse">Select</button>
+                    <div data-i18n="tab-4-label-select" class="label">Add files:</div>
+                    <button data-i18n="button-select" id="playlist-toggle" class="button" data-type="media" data-toggle="playlist-browse">Select</button>
+                    <div data-i18n="tab-4-label-all-mp3" class="label">Play all mp3:</div>
+                    <button data-i18n="button-play" id="playlist-play" class="button">Play all files</button>
                 </div>
-                <div class="toggler">
-                    <div id="playlist-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="playlist-path" class="path" type="text">
+                <div class="toggle">
+                    <div id="playlist-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="playlist-path" class="path" type="text" readonly>
                         <button data-i18n="button-add" id="playlist-save" class="button">Add</button>
+                        <span class="hidden">ok</span>
                         <ul id="playlist-tree" class="tree"></ul>
                     </div>
                 </div>
                 <div id="playlist" class="playlist"></div>
             </div>
 
-            <!-- TAB 5 - Manage server -->
+            <!-- TAB 5 - Sockets -->
             <div id="tabs-5">
-                <h4 data-i18n="tab-5-title">Manage sockets</h4>
+                <h4 data-i18n="tab-5-title">Sockets</h4>
                 <div class="inline-group">
                     <div data-i18n="tab-5-label-new-socket" class="label">New socket (port):</div>
-                    <input id="new-socket" class="spinner">
-                    <button data-i18n="button-start" id="new-socket-run" class="button">Start</button>
+                    <input id="new-socket" class="spinner" readonly>
+                    <button data-i18n="button-start" id="new-socket-start" class="button">Create</button>
                 </div>
                 <div class="inline-group sockets-go">
                     <div data-i18n="tab-5-label-go-socket" class="label">Go to socket:</div>
@@ -257,164 +242,184 @@
                 <h4 data-i18n="tab-6-title">Global configuration</h4>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-webui" class="label">User web UI:</div>
-                    <select id="conf-webui" class="selectmenu">
+                    <select id="webui" class="selectmenu">
                         <option value="2">Multilang</option>
                         <option value="1">Default</option>
                         <option value="2_lite">Lite</option>
                     </select>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-def-downloader" class="label">Default downloader:</div>
-                    <select id="conf-downloader" class="selectmenu">
-                    	<option>Aria2</option>
-                    	<option>Axel</option>
-                    	<option>Wget</option>
-                    </select>
-                </div>
-                <div class="inline-group">
-                    <div data-i18n="tab-6-label-axel-parts" class="label">Axel download parts:</div>
-                    <input id="conf-axel-parts" class="spinner">
-                    <button data-i18n="button-change" id="conf-axel-parts-change" class="button">Change</button>
-                </div>
-                <div class="inline-group">
-                    <div data-i18n="tab-6-label-aria2-parts" class="label">Aria2 download parts:</div>
-                    <input id="conf-aria2-parts" class="spinner">
-                    <button data-i18n="button-change" id="conf-aria2-parts-change" class="button">Change</button>
-                </div>
-                <div class="inline-group">
-                    <div data-i18n="tab-6-label-max-downloads" class="label">Max parallel downloads:</div>
-                    <input id="conf-max-downloads" class="spinner">
-                    <button data-i18n="button-change" id="conf-max-downloads-change" class="button">Cambia</button>
-                </div>
-                <div class="inline-group">
-                    <div data-i18n="tab-6-label-xterm-bg" class="label">Virtual terminal BG:</div>
-                    <select id="conf-bg-terminal" class="selectmenu">
-                    	<option data-i18n="option-black" value="black">black</option>
-                    	<option data-i18n="option-transparent" value="transparent">transparent</option>
-                    </select>
-                </div>
-                <div class="inline-group">
                     <div data-i18n="tab-6-label-language" class="label">Language:</div>
-                    <select id="conf-language" class="selectmenu">
-                    	<option data-i18n="option-italian" value="it">Italian</option>
+                    <select id="language" class="selectmenu">
+                        <option data-i18n="option-italian" value="it">Italian</option>
                         <option data-i18n="option-english" value="en">English</option>
                     </select>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-reconnection" class="label">Modem reconnection:</div>
-                    <input id="conf-reconnecter" type="text" readonly>
-                    <button data-i18n="button-select" id="conf-reconnecter-toggler" class="button" data-toggle="conf-reconnecter-browse">Select</button>
-                </div>
-                <div class="toggler">
-                    <div id="conf-reconnecter-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="conf-reconnecter-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="conf-reconnecter-save" class="button">Save</button>
-                        <ul id="conf-reconnecter-tree" class="tree"></ul>
-                    </div>
+                    <div data-i18n="tab-6-label-def-downloader" class="label">Default downloader:</div>
+                    <select id="downloader" class="selectmenu">
+                        <option>Aria2</option>
+                        <option>Axel</option>
+                        <option>Wget</option>
+                    </select>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-update" class="label">Automatic update:</div>
-                    <select id="conf-auto-update" class="selectmenu">
-                    	<option data-i18n="option-enabled" value="enabled">enabled</option>
-                    	<option data-i18n="option-disabled" value="disabled">disabled</option>
+                    <div data-i18n="tab-6-label-axel-parts" class="label">Axel download parts:</div>
+                    <div id="axel-parts" class="slider">
+                        <div class="custom-handle ui-slider-handle"></div>
+                    </div>
+                    <button data-i18n="button-save" data-key="axel_parts" id="axel-parts-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-aria2-conns" class="label">Aria2 connections:</div>
+                    <div id="aria2-connections" class="slider">
+                        <div class="custom-handle ui-slider-handle"></div>
+                    </div>
+                    <button data-i18n="button-save" data-key="aria2_connections" id="aria2-connections-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-max-downloads" class="label">Max parallel downloads:</div>
+                    <div id="max-downloads" class="slider">
+                        <div class="custom-handle ui-slider-handle"></div>
+                    </div>
+                    <button data-i18n="button-save" data-key="max_dl" id="max-downloads-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-xterm-bg" class="label">Virtual terminal background:</div>
+                    <select id="bg-terminal" class="selectmenu">
+                        <option data-i18n="option-black" value="black">black</option>
+                        <option data-i18n="option-transparent" value="transparent">transparent</option>
                     </select>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-media-player" class="label">Default media player:</div>
-                    <input id="conf-player" type="text" readonly>
-                    <button data-i18n="button-select" id="conf-player-toggler" class="button" data-toggle="conf-player-browse">Select</button>
+                    <input id="player" type="text" readonly>
+                    <button data-i18n="button-select" id="player-toggle" class="button" data-type="executable" data-toggle="player-browse">Select</button>
                 </div>
-                <div class="toggler">
-                    <div id="conf-player-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="conf-player-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="conf-player-save" class="button">Save</button>
-                        <label data-i18n="radio-input-edit" for="player-editable">Edit</label><input type="checkbox" name="player-editable" id="player-editable" class="input-editable">
-                        <ul id="conf-player-tree" class="tree"></ul>
+                <div class="toggle">
+                    <div id="player-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="player-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" data-key="player" id="player-save" class="button">Save</button>
+                        <label data-i18n="radio-edit-label" for="player-editable">Edit</label>
+                        <input type="checkbox" name="player-editable" id="player-editable" class="input-editable">
+                        <ul id="player-tree" class="tree"></ul>
                     </div>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-text-editor" class="label">Default text editor:</div>
-                    <input id="conf-editor" type="text" readonly>
-                    <button data-i18n="button-select" id="conf-editor-toggler" class="button" data-toggle="conf-editor-browse">Select</button>
+                    <input id="editor" type="text" readonly>
+                    <button data-i18n="button-select" id="editor-toggle" class="button" data-type="executable" data-toggle="editor-browse">Select</button>
                 </div>
-                <div class="toggler">
-                    <div id="conf-editor-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="conf-editor-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="conf-editor-save" class="button">Save</button>
-                        <label data-i18n="radio-input-edit" for="editor-editable">Edit</label><input type="checkbox" name="editor-editable" id="editor-editable" class="input-editable">
-                        <ul id="conf-editor-tree" class="tree"></ul>
+                <div class="toggle">
+                    <div id="editor-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="editor-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" data-key="editor" id="editor-save" class="button">Save</button>
+                        <label data-i18n="radio-edit-label" for="editor-editable">Edit</label>
+                        <input type="checkbox" name="editor-editable" id="editor-editable" class="input-editable">
+                        <ul id="editor-tree" class="tree"></ul>
                     </div>
                 </div>
                 <div class="inline-group">
+                    <div data-i18n="tab-6-label-browser" class="label">Default browser:</div>
+                    <input id="browser" type="text" readonly>
+                    <button data-i18n="button-select" id="browser-toggle" class="button" data-type="executable" data-toggle="browser-browse">Select</button>
+                </div>
+                <div class="toggle">
+                    <div id="browser-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="browser-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" data-key="browser" id="browser-save" class="button">Save</button>
+                        <label data-i18n="radio-edit-label" for="browser-editable">Edit</label>
+                        <input type="checkbox" name="browser-editable" id="browser-editable" class="input-editable">
+                        <ul id="browser-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
+                    <div data-i18n="tab-6-label-update" class="label">Automatic update:</div>
+                    <select id="auto-update" class="selectmenu">
+                        <option data-i18n="option-enabled" value="enabled">enabled</option>
+                        <option data-i18n="option-disabled" value="disabled">disabled</option>
+                    </select>
+                </div>
+                <div class="inline-group">
                     <div data-i18n="tab-6-label-overwrite" class="label">Overwrite files:</div>
-                    <select id="conf-resume" class="selectmenu">
+                    <select id="resume" class="selectmenu">
                         <option data-i18n="option-disabled" value="disabled">disabled</option>
                         <option data-i18n="option-enabled" value="enabled">enabled</option>
                     </select>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-start-mode" class="label">Start mode:</div>
-                    <select id="conf-start-mode" class="selectmenu">
-                    	<option>stdout</option>
-                    	<option>lite</option>
+                    <select id="start-mode" class="selectmenu">
+                        <option>stdout</option>
+                        <option>lite</option>
                         <option>daemon</option>
                     </select>
                 </div>
                 <div class="inline-group">
+                    <div data-i18n="tab-6-label-launcher" class="label">Path in launcher:</div>
+                    <input id="path-launcher" type="text" readonly>
+                    <button data-i18n="button-select" id="launcher-toggle" class="button" data-type="folders" data-toggle="path-launcher-browse">Select</button>
+                </div>
+                <div class="toggle">
+                    <div id="path-launcher-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="path-launcher-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" id="launcher-save" class="button">Save</button>
+                        <ul id="path-launcher-tree" class="tree"></ul>
+                    </div>
+                </div>
+                <div class="inline-group">
                     <div data-i18n="tab-6-label-torrent-tcp" class="label">Torrent TCP port:</div>
-                    <input id="conf-torrent-tcp" class="spinner">
-                    <button data-i18n="button-change" id="conf-torrent-tcp-change" class="button">Change</button>
+                    <input id="torrent-tcp" class="spinner" readonly>
+                    <button data-i18n="button-save" data-key="tcp_port" id="torrent-tcp-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-torrent-udp" class="label">Torrent UDP port:</div>
-                    <input id="conf-torrent-udp" class="spinner">
-                    <button data-i18n="button-change" id="conf-torrent-udp-change" class="button">Change</button>
+                    <input id="torrent-udp" class="spinner" readonly>
+                    <button data-i18n="button-save" data-key="udp_port" id="torrent-udp-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-socket-tcp" class="label">Socket TCP port:</div>
-                    <input id="conf-socket-tcp" class="spinner">
-                    <button data-i18n="button-change" id="conf-socket-tcp-change" class="button">Change</button>
+                    <input id="socket-tcp" class="spinner" readonly>
+                    <button data-i18n="button-save" data-key="socket_port" id="socket-tcp-save" class="button">Save</button>
+                    <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-browser" class="label">Default browser:</div>
-                    <input id="conf-browser" type="text" readonly>
-                    <button data-i18n="button-select" id="conf-browser-toggler" class="button" data-toggle="conf-browser-browse">Select</button>
+                    <div data-i18n="tab-6-label-reconnection" class="label">Modem reconnection:</div>
+                    <input id="reconnecter" type="text" readonly>
+                    <button data-i18n="button-select" id="reconnecter-toggle" class="button" data-type="executable" data-toggle="reconnecter-browse">Select</button>
                 </div>
-                <div class="toggler">
-                    <div id="conf-browser-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="conf-browser-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="conf-browser-save" class="button">Save</button>
-                        <label data-i18n="radio-input-edit" for="browser-editable">Edit</label><input type="checkbox" name="browser-editable" id="browser-editable" class="input-editable">
-                        <ul id="conf-browser-tree" class="tree"></ul>
+                <div class="toggle">
+                    <div id="reconnecter-browse" class="content browse ui-widget-content ui-corner-all">
+                        <input id="reconnecter-path" class="path" type="text" readonly>
+                        <button data-i18n="button-save" data-key="reconnecter" id="reconnecter-save" class="button">Save</button>
+                        <ul id="reconnecter-tree" class="tree"></ul>
                     </div>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-account" class="label">Web UI account:</div>
                     <button data-i18n="button-reset" id="account-reset" class="button">Reset account</button>
                 </div>
-                <div class="inline-group">
-                    <div data-i18n="tab-6-label-webui-icon" class="label">Path ZDL icon:</div>
-                    <input id="conf-desktop" type="text" readonly>
-                    <button data-i18n="button-select" id="conf-desktop-toggler" class="button" data-toggle="conf-desktop-browse">Select</button>
-                </div>
-                <div class="toggler">
-                    <div id="conf-desktop-browse" class="browse ui-widget-content ui-corner-all">
-                        <input id="conf-desktop-path" class="path" type="text" readonly>
-                        <button data-i18n="button-save" id="conf-desktop-save" class="button">Save</button>
-                        <ul id="conf-desktop-tree" class="tree"></ul>
-                    </div>
-                </div>
             </div>
 
             <!-- TAB 7 - Console -->
             <div id="tabs-7">
-                <h4 data-i18n="tab-7-title">Logging events and errors</h4>
-                <ul class="console-opt">
-                    <li><label data-i18n="radio-only-errors" for="console-only-errors">Logs only errors</label><input type="checkbox" name="console-only-errors" id="console-only-errors"></li>
-                    <li><button data-i18n="button-open-log" id="console-zdl-log-toggler" class="button" data-toggler="zdl-log">Open ZDL log</button></li>
-                </ul>
-                <div class="toggler">
-                    <div id="zdl-log" class="log ui-widget-content ui-corner-all">loading ...</div>
+                <h4 data-i18n="tab-7-title">Recording of events and errors</h4>
+                <div class="inline-group">
+                    <label data-i18n="radio-log-label" for="console-only-errors">Records only errors</label>
+                    <input type="checkbox" name="console-only-errors" id="console-only-errors">
+                    <div class="label">Read zdl_log.txt:</div>
+                    <button data-i18n="button-open" id="zdl-log-toggle" class="button" data-file="zdl_log.txt" data-toggle="zdl-log-read">Open</button>
+                </div>
+                <div class="toggle">
+                    <div id="zdl-log-read" class="content read dark ui-widget-content ui-corner-all">
+                        <textarea id="zdl-log" readonly></textarea>
+                        <button data-i18n="button-delete" data-file="zdl_log.txt" data-trigger="zdl-log-toggle" id="zdl-log-delete" class="button">Delete</button>
+                    </div>
                 </div>
                 <div id="console" class="console"></div>
                 <div class="centered">
@@ -435,14 +440,32 @@
                     <li><a data-i18n="tab-8-link-git" href="http://git.savannah.gnu.org/cgit/zdl.git" target="_blank">Git repository (source version check)</a></li>
                     <li><a data-i18n="tab-8-link-report" href="https://savannah.nongnu.org/bugs/?func=additem&group=zdl" target="_blank">Send a message or report a bug</a></li>
                 </ul>
+                <div class="local-info">
+                    <strong>Localization:</strong>
+                    <span>Do you want to localize the web UI with your language?</span>
+                    <span>Look for <em>en.json</em> and <em>en.lang</em> in /usr/local/share/zdl/webui/i18n/.</span>
+                    <span>Translate the strings and send them to us.</span>
+                </div>
+                <div class="inline-group top-margin">
+                    <div class="label info alt"><span class="ui-icon ui-icon-document"></span> Web UI info:</div>
+                    <button data-i18n="button-open" id="webui-info-toggle" class="button" data-toggle="webui-info-read">Open</button>
+                </div>
+                <div class="toggle">
+                    <div id="webui-info-read" class="content read ui-widget-content ui-corner-all">
+                        <textarea id="webui-info" readonly></textarea>
+                    </div>
+                </div>
+                <p class="centered">
+                    <a href="https://www.gnu.org/licenses/gpl.html" target="_blank"><img src="images/gplv3.png" alt="GPL version 3"></a>
+                </p>
             </div>
 
-            <!-- TAB 9 - Close all -->
+            <!-- TAB 9 - Exit -->
             <div id="tabs-9">
-                <h4 data-i18n="tab-9-title">Close all and exit</h4>
-                <p data-i18n="tab-9-text">Do you really want to terminate ZDL instances and downloads in all paths and close all sockets?</p>
+                <h4 data-i18n="tab-9-title">Exit</h4>
+                <p data-i18n="tab-9-text">Do you really want to close all and shutdown the server?</p>
                 <div class="centered">
-                    <button data-i18n="button-close-all" id="close-all" class="button">Close all</button><span class="onclose"></span>
+                    <button data-i18n="button-exit" id="exit" class="button">Close</button>
                 </div>
             </div>
         </div>
@@ -455,9 +478,9 @@
     <script src="js/datatables.responsive.min.js"></script>
     <script src="js/jquery.md5.min.js"></script>
     <script src="js/zdl.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/handlers.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/eventhandlers.js"></script>
+    <script src="js/methods.js"></script>
     <script src="js/i18n/jquery.i18n.js"></script>
     <script src="js/i18n/jquery.i18n.messagestore.js"></script>
     <script src="js/i18n/jquery.i18n.fallbacks.js"></script>
@@ -467,21 +490,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 
     <script>
-        WebFont.load({
+        WebFont.load( {
             google: {
-                families: ["Lobster"],
+                families: [ "Lobster" ],
                 text: "ZigzagDownLoader"
             }
-        });
+        } );
 
-        var myZDL = new ZDL("__START_PATH__", "index.html"),
-            fileList = [],
-            isDownloading = [],
-            logOnlyErrors = false,
-            zdlRunning = true,
-            actionPATH = myZDL.getPath();
+        var myZDL = new ZDL( "__START_PATH__", "index.html" );
 
-        initClient();
+        client.init();
     </script>
 </body>
 

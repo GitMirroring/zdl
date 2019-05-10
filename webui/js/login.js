@@ -1,3 +1,5 @@
+/** @format */
+
 //  ZigzagDownLoader (ZDL)
 //
 //  This program is free software: you can redistribute it and/or modify it
@@ -19,10 +21,12 @@
 
 /* jshint esversion: 6 */
 
+/* Clean the xhr response */
 function clean( str ) {
     return str.replace( /(\r?\n|\r)/gm, "" );
 }
 
+/* Ckeck if an account exist */
 function checkAccount() {
     var xhr = new XMLHttpRequest();
     xhr.open( "GET", "login.html?cmd=check-account", true );
@@ -46,6 +50,7 @@ function checkAccount() {
     xhr.send();
 }
 
+/* Create a new account */
 function createAccount( user, pwd ) {
     var xhr = new XMLHttpRequest();
     xhr.open( "POST", "login.html", true );
@@ -63,8 +68,11 @@ function createAccount( user, pwd ) {
     xhr.send( `cmd=create-account&user=${user}&pass=${pwd}` );
 }
 
+/* Dispaly the form to signup/signin */
 function displayForm( name ) {
-    var forms = [ "login", "signup" ],
+    var forms = [
+            "login", "signup"
+        ],
         idx = 1 - forms.indexOf( name ),
         view = document.getElementById( name ),
         hide = document.getElementById( forms[ idx ] );
@@ -82,11 +90,9 @@ if ( url.searchParams.get( "op" ) === "retry" ) {
     document.querySelector( "#login .error" ).textContent = "Login errato: riprova";
 } else {
     checkAccount();
-}
-
-[ "blur", "focus" ].forEach( function( e ) {
+} [ "blur", "focus" ].forEach( function ( e ) {
     for ( var input of inputs ) {
-        input.addEventListener( e, function( event ) {
+        input.addEventListener( e, function ( event ) {
             var label = this.previousElementSibling;
             if ( event.type === "focus" ) {
                 label.classList.add( "highlight" );
@@ -97,7 +103,8 @@ if ( url.searchParams.get( "op" ) === "retry" ) {
     }
 } );
 
-document.querySelector( "#signup button" ).addEventListener( "click", function( e ) {
+/* Add an event listener to the signup button */
+document.querySelector( "#signup button" ).addEventListener( "click", function ( e ) {
     var pwds = document.querySelectorAll( ".pwd" );
     if ( pwds[ 0 ].value !== pwds[ 1 ].value ) {
         document.querySelector( "#signup .error" ).textContent = "Le password non combaciano: controlla";
