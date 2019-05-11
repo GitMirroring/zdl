@@ -25,11 +25,18 @@
 #
 
 ## zdl-extension types: streaming download
-## zdl-extension name: Openload
+## zdl-extension name: Openload(s)
 
 
-if [[ "$url_in" =~ openload\. ]]
+if [[ "$url_in" =~ openload[s]*\. ]]
 then
+    if [[ "$url_in" =~ ^(.+)/([0-9]{3})$ ]]
+    then
+	new_link_openload="${BASH_REMATCH[1]}"
+	url "$new_link_openload" &&
+	    replace_url_in "$new_link_openload"
+    fi
+    
     if command -v youtube-dl &>/dev/null
     then
 	url_in_file=$(youtube-dl --get-url "$url_in")

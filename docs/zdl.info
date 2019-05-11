@@ -516,7 +516,7 @@ _Video in streaming saltando il player del browser:_
      Deltabit (HD), Dplay (HD), Exashare, Fastvideo, Flashx.tv,
      Flix555, IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe,
      Movshare/Wholecloud, Neodrive (ex Cloudzilla), NeverWasRadio,
-     Nowvideo, Openload, Portalevideo.unimi.it, Putstream, RaiPlay
+     Nowvideo, Openload(s), Portalevideo.unimi.it, Putstream, RaiPlay
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
      Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Thevideo,
      TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
@@ -528,7 +528,7 @@ _File hosting:_
      Akvideo (HD), Clicknupload, Cyberlocker, ddl.to, Deltabit (HD),
      dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg
      (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
-     Nowdownload, Openload, Ozofiles, Pastebin, Rockfile, Sockshare
+     Nowdownload, Openload(s), Ozofiles, Pastebin, Rockfile, Sockshare
      (HD), Subyshare, TubeOffLine.com (tutti i servizi), Tusfiles,
      Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
 
@@ -1414,25 +1414,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
 Node: Servizi streaming/hosting15712
-Node: Avviare ZDL19864
-Node: Arrestare ZDL22300
-Node: Controllare i download23405
-Node: Manuali d'uso27696
-Node: Modi28112
-Node: Readline31378
-Node: Editor32930
-Node: Omonimie34155
-Node: IRC/XDCC35690
-Node: Torrent37380
-Node: Filtri38264
-Node: Creare nuove estensioni38585
-Node: Software consigliati e dipendenze40360
-Node: Conkeror41813
-Node: zdl-xterm e XXXTerm/Xombrero42837
-Node: Installazione e aggiornamento44761
-Node: Tags48056
-Node: Copying52073
-Node: Contatti53123
+Node: Avviare ZDL19870
+Node: Arrestare ZDL22306
+Node: Controllare i download23411
+Node: Manuali d'uso27702
+Node: Modi28118
+Node: Readline31384
+Node: Editor32936
+Node: Omonimie34161
+Node: IRC/XDCC35696
+Node: Torrent37386
+Node: Filtri38270
+Node: Creare nuove estensioni38591
+Node: Software consigliati e dipendenze40366
+Node: Conkeror41819
+Node: zdl-xterm e XXXTerm/Xombrero42843
+Node: Installazione e aggiornamento44767
+Node: Tags48062
+Node: Copying52079
+Node: Contatti53129
 
 End Tag Table
 
