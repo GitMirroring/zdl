@@ -260,17 +260,17 @@ function get_file_output {
 function create_json {
     local path
     rm -f "$server_data".$socket_port
-
+    
     if [ -s "$server_paths" ]
     then
 	echo -ne '[' >"$server_data".$socket_port
-
+	
 	while read path
 	do
 	    if [ -d "$path" ]
 	    then
 		cd "$path"
-
+		
 		if [ -d "$path_tmp" ]
 		then
 		    if data_stdout &&
@@ -278,7 +278,7 @@ function create_json {
 		    then
 			echo -en "," >>"$server_data".$socket_port
 		    fi
-
+		    
 		else
 		    set_line_in_file - "$path" "$server_paths" &
 		fi
@@ -460,7 +460,7 @@ function get_status_conf {
 
 function create_status_json {
     local reconn
-
+    
     [ -n "$1" ] &&
 	declare -n ref_string_output="$1" ||
 	    ref_string_output=string_output
@@ -576,19 +576,19 @@ function search_xdcc {
 }
 
 function check-playlist {
-	list="$1"
-	check=0
+    list="$1"
+    check=0
 
-	if [ ! -z $list ] && [ $list != "[]" ]
+    if [ ! -z $list ] && [ $list != "[]" ]
+    then
+	if [[ ! $list =~ ^\[\".*\"\]$ ]] ||
+	       [[ $list =~ [A-Za-z0-9](,|\"\") ]] ||
+	       [[ $list =~ ,[\/A-Za-z0-9] ]]
 	then
-		if [[ ! $list =~ ^\[\".*\"\]$ ]] ||
-		   [[ $list =~ [A-Za-z0-9](,|\"\") ]] ||
-		   [[ $list =~ ,[\/A-Za-z0-9] ]]
-		then
-			check=1
-		fi
+	    check=1
 	fi
-	echo $check
+    fi
+    echo $check
 }
 
 function run_cmd {
@@ -666,100 +666,100 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	get-playlist)
 	    file_output="$path_server"/playlist
-        list=$(< "$file_output")
-
-        if [ $(check-playlist "$list") == 0 ]
-        then
-            touch "$file_output"
-        else
-            echo > "$file_output"
-            file_output=playlist-error
-            echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
-        fi
-	    ;;
-
-	add-playlist)
-        file_output="$path_server"/playlist
-        touch "$file_output"
-
-        if [ -f "${line[1]}" ] &&
-           [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
-        then
             list=$(< "$file_output")
+	    
             if [ $(check-playlist "$list") == 0 ]
-    		then
-                if [ -z "$list" ] || [ $list == "[]" ]
-                then
-                    list="[\"${line[1]}\"]"
-                else
-                    list=${list//]/,\"${line[1]}\"]}
-                fi
-                echo -e "$list" > "$file_output"
+            then
+		touch "$file_output"
             else
-    			echo > "$file_output"
-    			file_output=playlist-error
-    			echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
-    		fi
-        else
-            file_output=playlist-error
-            echo -e "Non è un file audio/video" > "$file_output"
-        fi
+		echo > "$file_output"
+		file_output=playlist-error
+		echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
+            fi
 	    ;;
-
+	
+	add-playlist)
+            file_output="$path_server"/playlist
+            touch "$file_output"
+	    
+            if [ -f "${line[1]}" ] &&
+		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
+            then
+		list=$(< "$file_output")
+		if [ $(check-playlist "$list") == 0 ]
+    		then
+                    if [ -z "$list" ] || [ $list == "[]" ]
+                    then
+			list="[\"${line[1]}\"]"
+                    else
+			list="${list//]/,\"${line[1]}\"]}"
+		    fi
+                    echo -e "$list" > "$file_output"
+		else
+    		    echo > "$file_output"
+    		    file_output=playlist-error
+    		    echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
+    		fi
+            else
+		file_output=playlist-error
+		echo -e "Non è un file audio/video" > "$file_output"
+            fi
+	    ;;
+	
 	del-playlist)
-        file_output="$path_server"/playlist
-        touch "$file_output"
-        list=$(< "$file_output")
-
-        if [ $(check-playlist "$list") == 0 ]
-    	then
+            file_output="$path_server"/playlist
+            touch "$file_output"
+            list=$(< "$file_output")
+	    
+            if [ $(check-playlist "$list") == 0 ]
+    	    then
     		list=${list//\"${line[1]}\"/}
     		list=${list//,/}
     		list=${list//\"\"/\",\"}
     		echo -e "$list" > "$file_output"
-    	else
+    	    else
     		echo > "$file_output"
     		file_output=playlist-error
     		echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
-    	fi
+    	    fi
 	    ;;
+	
+	play-playlist)
+            file_output="$path_server"/playlist-file.$socket_port
 
-    play-playlist)
-        file_output="$path_server"/playlist-file.$socket_port
+            list=(${line[1]})
+            playlist="#EXTM3U"
+            id=0
 
-        list=(${line[1]})
-        playlist="#EXTM3U"
-        id=0
-
-        if [ -z "$player" ]
-        then
-            echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
-        else
-            if [[ "${player##*/}" == "vlc" ]]
+            if [ -z "$player" ]
             then
-                for item in "${list[@]}"
-                do
-                    if [[ -e "$item" ]]
-                    then
-                        id=$[id + 1]
-                        title=${item##*/}
-                        title=${title%.*}
-                        playlist="$playlist\n#EXTINF:$id,$title\n$item"
-                    fi
-                done
-                if (( id > 0 ))
-                then
-                    echo -e "$playlist" > "$path_tmp/playlist.m3u"
-                    nohup $player "$path_tmp/playlist.m3u" &>/dev/null &
-                    echo -e "$id" > "$file_output"
-                else
-                    echo -e "Nessun file mp3 trovato" > "$file_output"
-                fi
+		echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
             else
-                echo -e "Il player non è VLC" > "$file_output"
+		if [[ "${player##*/}" == "vlc" ]]
+		then
+                    for item in "${list[@]}"
+                    do
+			if [[ -e "$item" ]]
+			then
+                            id=$[id + 1]
+                            title=${item##*/}
+                            title=${title%.*}
+                            playlist="$playlist\n#EXTINF:$id,$title\n$item"
+			fi
+                    done
+                    if (( id > 0 ))
+                    then
+			echo -e "$playlist" > "$path_tmp/playlist.m3u"
+			nohup $player "$path_tmp/playlist.m3u" &>/dev/null &
+			echo -e "$id" > "$file_output"
+                    else
+			echo -e "Nessun file mp3 trovato" > "$file_output"
+                    fi
+		else
+                    echo -e "Il player non è VLC" > "$file_output"
+		fi
             fi
-        fi
-        ;;
+            ;;
 
 	play-media)
 	    file_output="$path_server"/msg-file.$socket_port
@@ -774,46 +774,46 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		then
 		    echo -e "Non è un file audio/video" > "$file_output"
 		else
-            if command -v $player &>/dev/null
-            then
-                nohup $player "${line[1]}" &>/dev/null &
-                echo -e "running" > "$file_output"
+		    if command -v $player &>/dev/null
+		    then
+			nohup $player "${line[1]}" &>/dev/null &
+			echo -e "running" > "$file_output"
+		    else
+			echo -e "Player non trovato" > "$file_output"
+		    fi
+		fi
             else
-                echo -e "Player non trovato" > "$file_output"
-            fi
-        fi
-        else
 		echo -e "File non trovato" > "$file_output"
 	    fi
 	    ;;
 
-    extract-mp3)
-        file_output="$path_server"/mp3-file.$socket_port
-        video=${line[1]}
-        if [ -z "$player" ]
-        then
-            echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
-        else
-            if [[ "${player##*/}" == "vlc" ]]
+	extract-mp3)
+            file_output="$path_server"/mp3-file.$socket_port
+            video=${line[1]}
+            if [ -z "$player" ]
             then
-                if command -v $player &>/dev/null
-                then
-                    if [ -f "$video" ]
-                    then
-                        mp3="${video%.*}.mp3"
-                        nohup $player --no-loop --no-sout-all --sout "#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:std{access=file,mux=raw,dst=${mp3}" ${video} vlc://quit &>/dev/null
-                        echo -e "success" > "$file_output"
-                    else
-                        echo -e "Video da cui estrarre l'audio non trovato" > "$file_output"
-                    fi
-                else
-                    echo -e "Player non trovato" > "$file_output"
-                fi
+		echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
             else
-                echo -e "Il player non è VLC" > "$file_output"
+		if [[ "${player##*/}" == "vlc" ]]
+		then
+                    if command -v $player &>/dev/null
+                    then
+			if [ -f "$video" ]
+			then
+                            mp3="${video%.*}.mp3"
+                            nohup $player --no-loop --no-sout-all --sout "#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:std{access=file,mux=raw,dst=${mp3}" ${video} vlc://quit &>/dev/null
+                            echo -e "success" > "$file_output"
+			else
+                            echo -e "Video da cui estrarre l'audio non trovato" > "$file_output"
+			fi
+                    else
+			echo -e "Player non trovato" > "$file_output"
+                    fi
+		else
+                    echo -e "Il player non è VLC" > "$file_output"
+		fi
             fi
-        fi
-        ;;
+            ;;
 
 	get-status)
 	    ## status.json
@@ -840,7 +840,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 		    if [ ! -s "$file_output" ] ||
 			   [ "$string_output" != "$(cat "$file_output")" ] ||
-		       (( (current_timeout - start_timeout) > 240 ))
+			   (( (current_timeout - start_timeout) > 240 ))
 		    then
 			init_client "$PWD" "$socket_port"
 			start_timeout=$(date +%s)
@@ -1736,7 +1736,7 @@ do
 
 	*)
 	    http_server || exit 1 ## client non-web sono disabilitati, per ora. In seguito:
-	                          ## run_cmd "${line[@]}"
+	    ## run_cmd "${line[@]}"
 	    ;;
     esac
 done
