@@ -30,12 +30,12 @@
 
 if [[ "$url_in" =~ openload[s]*\. ]]
 then
-    if [[ "$url_in" =~ ^(.+)/([0-9]{3})$ ]]
-    then
-	new_link_openload="${BASH_REMATCH[1]}"
-	url "$new_link_openload" &&
-	    replace_url_in "$new_link_openload"
-    fi
+    # if [[ "$url_in" =~ ^(.+)/([0-9]{3})$ ]]
+    # then
+    # 	new_link_openload="${BASH_REMATCH[1]}"
+    # 	url "$new_link_openload" &&
+    # 	    replace_url_in "$new_link_openload"
+    # fi
     
     if command -v youtube-dl &>/dev/null
     then
