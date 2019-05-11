@@ -32,19 +32,19 @@ Seleziona il path di lavoro.
 Visualizza lo spazio libero nel path di lavoro.
 
 [ Aggiungi link ]
-Aggiungi il link del file da scaricare. Il link verrà elaborato per avviare il download.
+Aggiungi il link del file da scaricare (il link verrà elaborato per avviare il download).
 
 [ Edita link (coda) ]
 Edita, aggiungi o elimina link nella coda (uno per riga).
 
 [ Aggiungi XDCC ]
-Aggiungi un comando xdcc per scaricare da server irc. Il comando verrà elaborato per avviare il download.
+Aggiungi un comando xdcc per scaricare da server irc (il comando verrà elaborato per avviare il download).
 
 [ Agiungi torrent ]
-Seleziona e aggiungi un file torrent da scaricare. Il torrent verrà elaborato per avviare il download.
+Seleziona e aggiungi un file torrent da scaricare (il torrent verrà elaborato per avviare il download).
 
 [ Leggi links.txt ]
-Leggi o cancella il file links.txt (la lista di tutti il link aggiunti).
+Leggi o cancella il file links.txt (la lista di tutti i link processati).
 
 [ Max download paralleli ]
 Imposta il numero massimo di download paralleli nel path di lavoro.
@@ -68,7 +68,7 @@ Cerca file su server irc via xdcc.eu utilizzando uno o più termini di ricerca .
 Rifinisci la ricerca filtrando i risultati con un termine.
 
 [ Invia ]
-Aggiungi il comando xdcc per scaricare il file. Il comando verrà elaborato per avviare il download.
+Aggiungi il comando xdcc per scaricare il file (il comando verrà elaborato per avviare il download).
 
 
 ## PLAYLIST
@@ -177,6 +177,7 @@ Leggi o cancella zdl_log.txt (file contenente alcune informazioni sui download n
 
 [ Pulisci ]
 Rimuovi tutti gli eventi registrati nella console.
+
 
 ## ESCI
 

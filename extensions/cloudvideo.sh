@@ -23,39 +23,21 @@
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
 #
-
+## ZDL add-on
 ## zdl-extension types: streaming
-## zdl-extension name: Flix555
+## zdl-extension name: Cloudvideo (HD)
 
 
-if [[ "$url_in" =~ flix555\. ]]
+if [[ "$url_in" =~ cloudvideo\. ]]
 then
-    html=$(curl -s \
-		-A "$user_agent" \
-		-c "$path_tmp"/cookies.zdl \
-		"$url_in")
+    html=$(curl -s "$url_in" \
+		-c "$path_tmp"/cookies.zdl)
 
-    input_hidden "$html"
-    post_data="${post_data}&imhuman=Proceed to video"
+    file_in=$(get_title "$html")
+    file_in="${file_in#Watch\ }"
 
-    countdown- 8
-    html=$(curl -s \
-		-b "$path_tmp"/cookies.zdl \
-		-A "$user_agent" \
-		-d "${post_data}" \
-		"$url_in")
-
-    input_hidden "$html"
-
-    if [[ "$html" =~ (Video is processing now) ]]
-    then
-	_log 17
-	
-    else
-	url_in_file=$(unpack "$html")
-	url_in_file="${url_in_file#*file:\"}"
-	url_in_file="${url_in_file%%\"*}"
-    fi
+    url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
+    downwait_extra=20
     
     end_extension
 fi

@@ -81,6 +81,7 @@
                         <textarea id="edit-links"></textarea>
                         <button data-i18n="button-save" id="edit-links-save" class="button">Save</button>
                         <button data-i18n="button-delete" id="edit-links-delete" class="button">Delete</button>
+                        <div data-i18n="[html]edit-links-delete-alert" class="delete-alert"><strong>Warning!</strong> The Delete button deletes the entire queue. You loses the ability to resume a download if it will be interrupted.</div>
                     </div>
                 </div>
                 <div class="inline-group">
@@ -133,7 +134,7 @@
                     </div>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-2-label-max-downloads" class="label">Max parallel downloads:</div>
+                    <div data-i18n="tab-2-label-max-downloads" class="label slider-label">Max parallel downloads:</div>
                     <div id="local-max-downloads" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
@@ -247,6 +248,7 @@
                         <option value="1">Default</option>
                         <option value="2_lite">Lite</option>
                     </select>
+                    <span data-i18n="wait" id="refresh" class="hidden">wait...</span>
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-6-label-language" class="label">Language:</div>
@@ -264,15 +266,15 @@
                     </select>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-axel-parts" class="label">Axel download parts:</div>
+                    <div data-i18n="tab-6-label-axel-conns" class="label slider-label">Axel connections:</div>
                     <div id="axel-parts" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
-                    <button data-i18n="button-save" data-key="axel_parts" id="axel-parts-save" class="button">Save</button>
+                    <button data-i18n="button-save" data-key="axel_parts" id="axel-connections-save" class="button">Save</button>
                     <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-aria2-conns" class="label">Aria2 connections:</div>
+                    <div data-i18n="tab-6-label-aria2-conns" class="label slider-label">Aria2 connections:</div>
                     <div id="aria2-connections" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
@@ -280,7 +282,7 @@
                     <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
-                    <div data-i18n="tab-6-label-max-downloads" class="label">Max parallel downloads:</div>
+                    <div data-i18n="tab-6-label-max-downloads" class="label slider-label">Max parallel downloads:</div>
                     <div id="max-downloads" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>

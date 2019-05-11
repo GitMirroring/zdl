@@ -512,17 +512,17 @@ servizi di hosting e di streaming, direttamente dal link (bypassando il
 player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
-     Akvideo (HD), Auroravid/Novamov, Dailymotion, Deltabit (HD), Dplay
-     (HD), Exashare, Fastvideo, Flashx.tv, Flix555, IDoWatch,
-     IlFattoQuotidiano, La7 (HD), Metacafe, Movshare/Wholecloud,
-     Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Openload,
-     Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
-     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
-     Speedvideo (HD), Streamango, Streamin, Thevideo, TubeOffLine.com
-     (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti
-     i video in streaming di tipo .mpd, Verystream, VidABC, Vidce,
-     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
-     (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     Akvideo (HD), Auroravid/Novamov, Cloudvideo (HD), Dailymotion,
+     Deltabit (HD), Dplay (HD), Exashare, Fastvideo, Flashx.tv,
+     Flix555, IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe,
+     Movshare/Wholecloud, Neodrive (ex Cloudzilla), NeverWasRadio,
+     Nowvideo, Openload, Portalevideo.unimi.it, Putstream, RaiPlay
+     (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Thevideo,
+     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
+     tipo .m3u8, Tutti i video in streaming di tipo .mpd, Verystream,
+     VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto,
+     Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, Cyberlocker, ddl.to, Deltabit (HD),
@@ -1414,25 +1414,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
 Node: Servizi streaming/hosting15712
-Node: Avviare ZDL19847
-Node: Arrestare ZDL22283
-Node: Controllare i download23388
-Node: Manuali d'uso27679
-Node: Modi28095
-Node: Readline31361
-Node: Editor32913
-Node: Omonimie34138
-Node: IRC/XDCC35673
-Node: Torrent37363
-Node: Filtri38247
-Node: Creare nuove estensioni38568
-Node: Software consigliati e dipendenze40343
-Node: Conkeror41796
-Node: zdl-xterm e XXXTerm/Xombrero42820
-Node: Installazione e aggiornamento44744
-Node: Tags48039
-Node: Copying52056
-Node: Contatti53106
+Node: Avviare ZDL19864
+Node: Arrestare ZDL22300
+Node: Controllare i download23405
+Node: Manuali d'uso27696
+Node: Modi28112
+Node: Readline31378
+Node: Editor32930
+Node: Omonimie34155
+Node: IRC/XDCC35690
+Node: Torrent37380
+Node: Filtri38264
+Node: Creare nuove estensioni38585
+Node: Software consigliati e dipendenze40360
+Node: Conkeror41813
+Node: zdl-xterm e XXXTerm/Xombrero42837
+Node: Installazione e aggiornamento44761
+Node: Tags48056
+Node: Copying52073
+Node: Contatti53123
 
 End Tag Table
 

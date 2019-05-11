@@ -422,6 +422,14 @@ function sanitize_file_in {
 	    [[ ! "$url_in_file" =~ \.m3u8 ]]
     then
 	ext=$(set_ext "$file_in")
+
+	if [ -z "$ext" ] &&
+	       url "$url_in_file" &&
+	       [[ "$url_in_file" =~ (\.flv|\.mp4|\.mp3|\.mkv|\.avi)$ ]]
+	then
+	    ext=${BASH_REMATCH[1]}
+	fi
+	
 	file_in="${file_in%$ext}$ext"
     fi
 }

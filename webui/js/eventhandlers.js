@@ -57,7 +57,7 @@ function buttonHandler( e ) {
             "new-socket-start": sockets.new,
             "socket-kill-this": sockets.kill,
             "downloads-killall": sockets.killDownloads,
-            "axel-parts-save": common.setNumericValue,
+            "axel-connections-save": common.setNumericValue,
             "aria2-connections-save": common.setNumericValue,
             "max-downloads-save": common.setNumericValue,
             "player-toggle": common.browseFsToggle,

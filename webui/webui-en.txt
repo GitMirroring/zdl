@@ -32,19 +32,19 @@ Select the path to working on.
 Display the available space in the action path.
 
 [ Add link ]
-Add the link of file to download. The link will be processed to start the download.
+Add the link of file to download (the link will be processed to start the download).
 
 [ Edit links (queue) ]
 Edit, add or delete links in the queue (one per line).
 
 [ Add XDCC ]
-Add an xdcc command to download from an irc server. The command will be processed to start the download.
+Add an xdcc command to download from an irc server (the command will be processed to start the download).
 
 [ Add torrent ]
-Select and add a file torrent to download. The torrent will be processed to start the download.
+Select and add a file torrent to download (the torrent will be processed to start the download).
 
 [ Read links.txt ]
-Read or delete the file links.txt (the list of all links added).
+Read or delete the file links.txt (the list of all links processed).
 
 [ Max parallel downloads ]
 Set the max number of parallel download in the action path.
@@ -68,7 +68,7 @@ Search for a file containing specific term(s) on irc servers (via xdcc.eu). You 
 Refine the found items by filtering with a term.
 
 [ Send ]
-Add the xdcc command to download the file. The command will be processed to start the download.
+Add the xdcc command to download the file (the command will be processed to start the download).
 
 
 ## PLAYLIST
@@ -177,6 +177,7 @@ Read or delete zdl_log.txt (a file containing some information about downloads f
 
 [ Clean ]
 Remove all recorded events in the console.
+
 
 ## EXIT
 

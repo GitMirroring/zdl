@@ -601,6 +601,7 @@ var sockets = {
 var config = {
     // Set and change the webUI
     webui: function ( val ) {
+        $( "#refresh" ).removeClass( "hidden" );
         myZDL.setConf( "web_ui", val ).then( function () {
             window.setTimeout( function () {
                 window.location.href = window.location.pathname;

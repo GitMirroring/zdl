@@ -166,13 +166,16 @@ then
 		unpacked=$(unpack "$(grep 'p,a,c,k,e' <<< "$html" |tail -n1)")
 		url_in_file=$(grep sources <<< "$unpacked" |tail -n1)
 		url_in_file="${url_in_file#*\"}"
-		url_in_file="${url_in_file%%\"*}"
-		
-		sanitize_file_in
-		file_in="${file_in#Watch_video_}"
+		url_in_file="${url_in_file%%\"*}"		
 	    fi
 	fi
 
+	if [ -n "$file_in" ]
+	then
+	    sanitize_file_in
+	    file_in="${file_in#Watch_video_}"
+	fi
+	
 	[ -z "$url_in_timer" ] &&
 	    end_extension ||
 		unset url_in_timer

@@ -123,7 +123,7 @@ body {
 }
 
 .toggle textarea {
-  background: initial;
+  background: #eee;
   width: 100%;
   height: 150px;
   display: block;
@@ -226,6 +226,11 @@ body {
 .toggle ul li > span {
   color: #444;
   font-weight: bold;
+}
+
+.toggle .delete-alert {
+  display: block;
+  padding: 10px;
 }
 
 .inline-group {
@@ -489,6 +494,10 @@ table.dataTable tr td {
     white-space: pre-wrap;
   }
 
+  .progressbar {
+    margin-bottom: 15px;
+  }
+
   .progressbar .side-bar {
     float: none;
     width: 100%;
@@ -501,7 +510,64 @@ table.dataTable tr td {
     white-space: nowrap;
   }
 
+  .progressbar .side-status {
+    margin-left: 0;
+  }
+
   .toggle {
     width: 100%;
+  }
+
+  .toggle input {
+    margin-bottom: 2px;
+    width: 95% !important;
+  }
+
+  .inline-group {
+    margin-bottom: 20px;
+  }
+
+  .inline-group .label {
+    text-align: center;
+  }
+
+  .inline-group .slider-label {
+    margin-bottom: 20px !important;
+  }
+
+  .inline-group button:not(.hidden),
+  .inline-group input,
+  .inline-group div:not(.custom-handle) {
+    display: block;
+    margin-bottom: 2px;
+    width: 100% !important;
+  }
+
+  .inline-group span {
+    margin-bottom: 2px;
+  }
+
+  #local-max-downloads-save,
+  #max-downloads-save,
+  #axel-connections-save,
+  #aria2-connections-save {
+    margin-top: 20px;
+  }
+
+  #tabs-7 label {
+    margin-bottom: 2px;
+  }
+
+  .playlist .pl-item {
+    margin-bottom: 15px;
+  }
+
+  .playlist .pl-file {
+    width: 100% !important;
+    margin-bottom: 2px;
+  }
+
+  .playlist .pl-buttons {
+    margin-left: 0 !important;
   }
 }
