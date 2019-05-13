@@ -77,7 +77,11 @@ Add the xdcc command to download the file (the command will be processed to star
 Select and add a file to the playlist.
 
 [ Play all mp3 ]
-Play all mp3 in the playlist. This feature can only be used by setting VLC as default media player in Configuration/Media player.
+Play all mp3 in the playlist. This feature can only be used by setting cvlc, mpv o mplayer as default media player in Configuration/Media player.
+Commands:
+spacebar - Toggles pause/play
+return - Next track
+ctrl+c - Escape/Quit
 
 [ Play ]
 Play the audio/video file.
@@ -86,7 +90,7 @@ Play the audio/video file.
 Remove file from playlist.
 
 [ mp3 ]
-Extract audio (mp3) from video. This feature can only be used by setting VLC as default media player in Configuration/Media player.
+Extract audio (mp3) from video.
 
 
 ## SOCKETS

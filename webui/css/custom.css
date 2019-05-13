@@ -99,3 +99,12 @@ https://savannah.nongnu.org/projects/zdl */
   border: 1px solid #f1dcda !important;
   color: #c42b5e !important;
 }
+
+/* Custom tooltip red background */
+.tooltip-custom-red {
+  background: #d00;
+  color: #fff;
+  border: 1px solid #d00 !important;
+  border-radius: 5px !important;
+  box-shadow: 0 0 5px 2px #aaa;
+}

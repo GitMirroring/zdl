@@ -199,7 +199,7 @@ var manage = {
         }
     },
 
-    // Delete links from the queue
+    // Delete the queue
     deleteLinks: function ( elem ) {
         var links = elem.parent().children( ":first" ).val();
         if ( links ) {
@@ -457,8 +457,8 @@ var playlist = {
                     } else {
                         if ( response === "Nessun file mp3 trovato" ) {
                             utils.log( "play-playlist-mp3-not-found", null, true );
-                        } else if ( response === "Il player non è VLC" ) {
-                            utils.log( "play-playlist-require-vlc", null, true );
+                        } else if ( response === "Il player non è utilizzabile" ) {
+                            utils.log( "play-playlist-player-unfit", null, true );
                         } else {
                             utils.log( "player-not-configured", null, true );
                         }
@@ -527,14 +527,10 @@ var playlist = {
                     }
                 } );
             } else {
-                if ( response === "Il player non è VLC" ) {
-                    utils.log( "playlist-video-to-mp3-require-vlc", null, true );
-                } else if ( response === "Player non trovato" ) {
-                    utils.log( "player-not-found", null, true );
-                } else if ( response === "Video da cui estrarre l'audio non trovato" ) {
-                    utils.log( "playlist-video-to-mp3-not-found", file, true );
+                if ( response === "ffmpeg non trovato" ) {
+                    utils.log( "playlist-video-ffmpeg-not-found", null, true );
                 } else {
-                    utils.log( "player-not-configured", null, true );
+                    utils.log( "playlist-video-to-mp3-not-found", file, true );
                 }
                 elem.button( "enable" );
             }
@@ -614,7 +610,7 @@ var config = {
         myZDL.setConf( "language", val ).then( function () {
             $.i18n().locale = val;
             $( "body" ).i18n();
-            utils.localizeRadioLabels();
+            utils.localizeHard();
             client.tableInit( val );
             client.set( "locale", val );
             localStorage.setItem( "ZDLlanguage", val );
@@ -1020,10 +1016,12 @@ var utils = {
         }, 1000 );
     },
 
-    /* Localize JQueryUI radio labels */
-    localizeRadioLabels: function () {
+    /* Localize complex */
+    localizeHard: function () {
         $( "#console-only-errors" ).checkboxradio( "option", "label", $.i18n( "radio-log-label" ) );
         $( ".input-editable" ).checkboxradio( "option", "label", $.i18n( "radio-edit-label" ) );
+        $( "#edit-links-delete" ).attr( "title", $.i18n( "delete-queue-tooltip" ) );
+        $( ".dl-delete" ).attr( "title", $.i18n( "delete-download-tooltip" ) );
     },
 
     /* Change tab */

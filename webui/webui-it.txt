@@ -77,7 +77,11 @@ Aggiungi il comando xdcc per scaricare il file (il comando verrà elaborato per 
 Seleziona e aggiungi un file alla playlist.
 
 [ Riproduci tutti gli mp3 ]
-Riproduci tutti gli mp3 presenti nella playlist. Questa caratteristica può essere usata solo configurando VLC come media player in Configurazione/Media player.
+Riproduci tutti gli mp3 presenti nella playlist. Questa caratteristica può essere usata solo configurando cvlc, mpv o mplayer come media player in Configurazione/Media player.
+Comandi:
+spacebar - Toggles pausa/play
+return - Traccia successiva
+ctrl+c - Esci/Chiudi
 
 [ Riproduci ]
 Rirpoduci il file audio/video.
@@ -86,7 +90,7 @@ Rirpoduci il file audio/video.
 Rimuovi il file dalla playlist.
 
 [ mp3 ]
-Estrai la traccia audio (mp3) dal video. Questa caratteristica può essere usata solo configurando VLC come media player in Configurazione/Media player.
+Estrai la traccia audio (mp3) dal video.
 
 
 ## SOCKET

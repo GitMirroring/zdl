@@ -228,11 +228,6 @@ body {
   font-weight: bold;
 }
 
-.toggle .delete-alert {
-  display: block;
-  padding: 10px;
-}
-
 .inline-group {
   overflow: hidden;
   margin-bottom: 5px;

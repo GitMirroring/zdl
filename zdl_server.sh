@@ -260,17 +260,17 @@ function get_file_output {
 function create_json {
     local path
     rm -f "$server_data".$socket_port
-    
+
     if [ -s "$server_paths" ]
     then
 	echo -ne '[' >"$server_data".$socket_port
-	
+
 	while read path
 	do
 	    if [ -d "$path" ]
 	    then
 		cd "$path"
-		
+
 		if [ -d "$path_tmp" ]
 		then
 		    if data_stdout &&
@@ -278,7 +278,7 @@ function create_json {
 		    then
 			echo -en "," >>"$server_data".$socket_port
 		    fi
-		    
+
 		else
 		    set_line_in_file - "$path" "$server_paths" &
 		fi
@@ -460,7 +460,7 @@ function get_status_conf {
 
 function create_status_json {
     local reconn
-    
+
     [ -n "$1" ] &&
 	declare -n ref_string_output="$1" ||
 	    ref_string_output=string_output
@@ -667,7 +667,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	get-playlist)
 	    file_output="$path_server"/playlist
             list=$(< "$file_output")
-	    
+
             if [ $(check-playlist "$list") == 0 ]
             then
 		touch "$file_output"
@@ -677,11 +677,11 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
             fi
 	    ;;
-	
+
 	add-playlist)
             file_output="$path_server"/playlist
             touch "$file_output"
-	    
+
             if [ -f "${line[1]}" ] &&
 		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
             then
@@ -694,24 +694,24 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
                     else
 			list="${list//]/,\"${line[1]}\"]}"
 		    fi
-                    echo -e "$list" > "$file_output"
+		    echo -e "$list" > "$file_output"
 		else
     		    echo > "$file_output"
     		    file_output=playlist-error
     		    echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
-    		fi
-            else
+		fi
+	    else
 		file_output=playlist-error
 		echo -e "Non è un file audio/video" > "$file_output"
-            fi
+	    fi
 	    ;;
-	
+
 	del-playlist)
-            file_output="$path_server"/playlist
-            touch "$file_output"
-            list=$(< "$file_output")
-	    
-            if [ $(check-playlist "$list") == 0 ]
+	    file_output="$path_server"/playlist
+	    touch "$file_output"
+	    list=$(< "$file_output")
+
+	    if [ $(check-playlist "$list") == 0 ]
     	    then
     		list=${list//\"${line[1]}\"/}
     		list=${list//,/}
@@ -723,43 +723,48 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
     		echo -e "Errore durante l'analisi del json della playlist" > "$file_output"
     	    fi
 	    ;;
-	
+
 	play-playlist)
-            file_output="$path_server"/playlist-file.$socket_port
+	    file_output="$path_server"/playlist-file.$socket_port
 
-            list=(${line[1]})
-            playlist="#EXTM3U"
-            id=0
+	    list=(${line[1]})
+	    playlist="#EXTM3U"
+	    opt="-playlist"
+	    id=0
 
-            if [ -z "$player" ]
-            then
+	    if [ -z "$player" ]
+	    then
 		echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
-            else
-		if [[ "${player##*/}" == "vlc" ]]
+	    else
+		if [[ "${player##*/}" == "cvlc" || "${player##*/}" == "mpv" || "${player##*/}" == "mplayer" ]]
 		then
-                    for item in "${list[@]}"
-                    do
+		    for item in "${list[@]}"
+		    do
 			if [[ -e "$item" ]]
 			then
-                            id=$[id + 1]
-                            title=${item##*/}
-                            title=${title%.*}
-                            playlist="$playlist\n#EXTINF:$id,$title\n$item"
+			    id=$[id + 1]
+			    title=${item##*/}
+			    title=${title%.*}
+			    playlist="$playlist\n#EXTINF:$id,$title\n$item"
 			fi
-                    done
-                    if (( id > 0 ))
-                    then
+		    done
+		    if (( id > 0 ))
+		    then
 			echo -e "$playlist" > "$path_tmp/playlist.m3u"
-			nohup $player "$path_tmp/playlist.m3u" &>/dev/null &
+			if [[ "${player##*/}" == "cvlc" ]]
+			then
+			    opt="--global-key-play-pause Space --global-key-next Enter"
+			fi
+			xterm -e $player $opt "$path_tmp/playlist.m3u"
 			echo -e "$id" > "$file_output"
-                    else
+		    else
 			echo -e "Nessun file mp3 trovato" > "$file_output"
-                    fi
+		    fi
 		else
-                    echo -e "Il player non è VLC" > "$file_output"
+		    echo -e "Il player non è utilizzabile" > "$file_output"
 		fi
-            fi
-            ;;
+	    fi
+	    ;;
 
 	play-media)
 	    file_output="$path_server"/msg-file.$socket_port
@@ -782,38 +787,28 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			echo -e "Player non trovato" > "$file_output"
 		    fi
 		fi
-            else
+	    else
 		echo -e "File non trovato" > "$file_output"
 	    fi
 	    ;;
 
 	extract-mp3)
-            file_output="$path_server"/mp3-file.$socket_port
-            video=${line[1]}
-            if [ -z "$player" ]
-            then
-		echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
-            else
-		if [[ "${player##*/}" == "vlc" ]]
+	    file_output="$path_server"/mp3-file.$socket_port
+	    video=${line[1]}
+	    if command -v ffmpeg &>/dev/null
+	    then
+		if [ -f "$video" ]
 		then
-                    if command -v $player &>/dev/null
-                    then
-			if [ -f "$video" ]
-			then
-                            mp3="${video%.*}.mp3"
-                            nohup $player --no-loop --no-sout-all --sout "#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:std{access=file,mux=raw,dst=${mp3}" ${video} vlc://quit &>/dev/null
-                            echo -e "success" > "$file_output"
-			else
-                            echo -e "Video da cui estrarre l'audio non trovato" > "$file_output"
-			fi
-                    else
-			echo -e "Player non trovato" > "$file_output"
-                    fi
+		    mp3="${video%.*}.mp3"
+		    nohup ffmpeg -i ${video} -vn -acodec mp3 ${mp3} &>/dev/null
+		    echo -e "success" > "$file_output"
 		else
-                    echo -e "Il player non è VLC" > "$file_output"
+		    echo -e "Video da cui estrarre l'audio non trovato" > "$file_output"
 		fi
-            fi
-            ;;
+	    else
+		echo -e "ffmpeg non trovato" > "$file_output"
+	    fi
+	    ;;
 
 	get-status)
 	    ## status.json
@@ -1155,12 +1150,12 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		cd "${line[1]}"
 
 	    ## links:
-            if [ -n "${line[2]}" ]
-            then
+	    if [ -n "${line[2]}" ]
+	    then
 		date >> links.txt
 		urldecode "${line[2]}" >> links.txt
 		echo "" >> links.txt
-            fi
+	    fi
 
 	    echo -n > "$path_tmp"/links_loop.txt
 	    while read link
