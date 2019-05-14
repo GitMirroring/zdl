@@ -73,6 +73,9 @@ declare -a RESPONSE_HEADERS=(
     "Expires: $DATE"
     "Server: ZigzagDownLoader"
 )
+
+get_conf
+
 ##########
 
 
