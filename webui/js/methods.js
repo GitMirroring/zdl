@@ -72,7 +72,7 @@ var downloads = {
             var response = res.trim();
             if ( response === "Non è un file audio/video" ) {
                 utils.log( "playlist-file-incorrect", filePath, true );
-            } else if ( response === "Errore durante l'analisi del json della playlist" ) {
+            } else if ( response === "Errore durante l'analisi del json della playlist" ) { // <--------------ERR
                 utils.log( "playlist-json-corrupted", null, true );
             } else {
                 utils.addToPlaylist( filePath );

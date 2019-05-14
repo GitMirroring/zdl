@@ -575,20 +575,18 @@ function search_xdcc {
     fi
 }
 
-function check-playlist {
+function check_playlist {
     list="$1"
-    check=0
 
-    if [ ! -z $list ] && [ $list != "[]" ]
+    if [ -n "$list" ] && [ "$list" != "[]" ]
     then
-	if [[ ! $list =~ ^\[\".*\"\]$ ]] ||
-	       [[ $list =~ [A-Za-z0-9](,|\"\") ]] ||
-	       [[ $list =~ ,[\/A-Za-z0-9] ]]
+	if [[ ! "$list" =~ ^\[\".*\"\]$ ]]
+	   #|| [[ "$list" =~ [A-Za-z0-9](,|\"\") ]] || [[ "$list" =~ ,[\/A-Za-z0-9] ]] ## <-- commentato perché i nomi di file possono contenere virgole!
 	then
-	    check=1
+	    return 1
 	fi
     fi
-    echo $check
+    return 0
 }
 
 function run_cmd {
@@ -668,9 +666,10 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    file_output="$path_server"/playlist
             list=$(< "$file_output")
 
-            if [ $(check-playlist "$list") == 0 ]
+            if check_playlist "$list"
             then
 		touch "$file_output"
+		
             else
 		echo > "$file_output"
 		file_output=playlist-error
@@ -686,15 +685,18 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
             then
 		list=$(< "$file_output")
-		if [ $(check-playlist "$list") == 0 ]
+
+		if check_playlist "$list"
     		then
                     if [ -z "$list" ] || [ $list == "[]" ]
                     then
 			list="[\"${line[1]}\"]"
-                    else
+
+		    else
 			list="${list//]/,\"${line[1]}\"]}"
 		    fi
 		    echo -e "$list" > "$file_output"
+		    
 		else
     		    echo > "$file_output"
     		    file_output=playlist-error
@@ -711,12 +713,13 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    touch "$file_output"
 	    list=$(< "$file_output")
 
-	    if [ $(check-playlist "$list") == 0 ]
+	    if check_playlist "$list"
     	    then
-    		list=${list//\"${line[1]}\"/}
-    		list=${list//,/}
-    		list=${list//\"\"/\",\"}
+    		list="${list//\"${line[1]}\"/}"
+    		list="${list//,/}"
+    		list="${list//\"\"/\",\"}"
     		echo -e "$list" > "$file_output"
+		
     	    else
     		echo > "$file_output"
     		file_output=playlist-error
@@ -735,8 +738,10 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    if [ -z "$player" ]
 	    then
 	    	echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
+
 	    else
 		player_name="${player##*/}"
+
 		if [[ "$player_name" =~ ^(cvlc|mpv|mplayer|mplayer2)$ ]]
 		then
 		    for item in "${list[@]}"
@@ -749,6 +754,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			    playlist="$playlist\n#EXTINF:$id,$title\n$item"
 			fi
 		    done
+
 		    if (( id > 0 ))
 		    then
 			echo -e "$playlist" > "$path_tmp/playlist.m3u"
@@ -761,6 +767,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    else
 			echo -e "Nessun file audio trovato" > "$file_output"
 		    fi
+
 		else
 		    for item in "${list[@]}"
 		    do
@@ -783,14 +790,17 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		if [ -z "$player" ]
 		then
 		    echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
+
 		elif [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio|video) ]]
 		then
 		    echo -e "Non è un file audio/video" > "$file_output"
+
 		else
 		    if command -v $player &>/dev/null
 		    then
 			xterm -e $player "${line[1]}"
 			echo -e "running" > "$file_output"
+
 		    else
 			echo -e "Player non trovato" > "$file_output"
 		    fi
