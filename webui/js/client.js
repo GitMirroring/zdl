@@ -28,7 +28,8 @@ var client = ( function () {
         running: true,
         log: "all",
         table: {},
-        locale: "en"
+        locale: "en",
+        audio: "mp3"
     };
 
     /* Display some initial info */
@@ -128,6 +129,11 @@ var client = ( function () {
         }
     }
 
+    /* Toggle audio format */
+    function audioFormat() {
+        data.audio = $( this ).val();
+    }
+
     /* Configuration settings (polling) */
     function statusFlow() {
         var arg = arguments[ 0 ] || false;
@@ -225,7 +231,7 @@ var client = ( function () {
                                 "ui-tooltip": "tooltip-custom-red"
                             }
                         } );
-                        //$( "#info-" + id + " > .button" ).button().i18n();
+                        $( "#info-" + id + " > .button" ).button().i18n();
                         if ( perc === 0 ) {
                             perc = false;
                         }
@@ -342,6 +348,8 @@ var client = ( function () {
             } );
             $( "#console-only-errors" ).prop( "checked", false ).checkboxradio().change( loggingToggle );
             $( ".input-editable" ).prop( "checked", false ).checkboxradio().change( editableToggle );
+            $( ".radio-audio" ).prop( "checked", false ).checkboxradio().change( audioFormat );
+            $( "#radio-mp3" ).prop( "checked", true ).checkboxradio( "refresh" );
             $( "#tabs" ).on( "click", ".button", buttonHandler );
 
             $( "#edit-links-delete" ).attr( "title", $.i18n( "delete-queue-tooltip" ) ).tooltip( {

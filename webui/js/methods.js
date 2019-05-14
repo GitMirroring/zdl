@@ -30,8 +30,8 @@ var downloads = {
         myZDL.cleanCompleted().then( function () {
             $( ".progressbar" ).each( function () {
                 if ( $( this ).find( ".ui-progressbar" ).attr( "aria-valuenow" ) === "100" ) {
-                    var file = $( this ).find( ".label" ).text();
-                    client.remove( "list", file );
+                    var fileName = $( this ).find( ".label" ).text();
+                    client.remove( "list", fileName );
                     $( this ).next( ".toggle" ).remove();
                     $( this ).remove();
                 }
@@ -67,16 +67,16 @@ var downloads = {
 
     // Add file downloaded to the playlist
     toPlaylist: function ( elem ) {
-        var file = elem.data( "file" );
-        myZDL.playlistAdd( file ).then( function ( res ) {
+        var filePath = elem.data( "file" );
+        myZDL.playlistAdd( filePath ).then( function ( res ) {
             var response = res.trim();
             if ( response === "Non è un file audio/video" ) {
-                utils.log( "playlist-file-incorrect", file, true );
+                utils.log( "playlist-file-incorrect", filePath, true );
             } else if ( response === "Errore durante l'analisi del json della playlist" ) {
                 utils.log( "playlist-json-corrupted", null, true );
             } else {
-                utils.addToPlaylist( file );
-                utils.log( "playlist-file-added", file );
+                utils.addToPlaylist( filePath );
+                utils.log( "playlist-file-added", filePath );
                 utils.switchToTab( 3 );
             }
         } );
@@ -94,15 +94,15 @@ var downloads = {
     delete: function ( elem ) {
         var link = elem.data( "link" ),
             toggle = elem.closest( ".toggle" ),
-            file = elem.data( "file" );
+            fileName = elem.data( "file" );
         myZDL.deleteLink( encodeURIComponent( link ) ).then( function () {
             toggle.prev().remove();
             toggle.remove();
-            if ( client.exist( "active", file ) ) {
-                client.remove( "active", file );
+            if ( client.exist( "active", fileName ) ) {
+                client.remove( "active", fileName );
             }
-            client.remove( "list", file );
-            utils.log( "download-deleted", file );
+            client.remove( "list", fileName );
+            utils.log( "download-deleted", fileName );
         } );
     }
 };
@@ -158,12 +158,12 @@ var manage = {
         $( "#" +elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
             if ( $( this ).is( ":visible" ) ) {
                 elem.button( "option", "label", $.i18n( "button-close" ) );
-                var txtarea = $( this ).children( "textarea" );
+                var textArea = $( this ).children( "textarea" );
                 myZDL.getLinks().then( function ( links ) {
                     if ( links && links.length > 10 ) {
-                        txtarea.val( decodeURIComponent( links ).replace( /\n$/, "" ) );
+                        textArea.val( decodeURIComponent( links ).replace( /\n$/, "" ) );
                     } else {
-                        txtarea.val( "" );
+                        textArea.val( "" );
                     }
                 } );
             } else {
@@ -437,9 +437,9 @@ var xdcc = {
  *	PLAYLIST :: Tab 4
  */
 var playlist = {
-    // Play all mp3 in the playlist
+    // Play all audio in the playlist
     play: function () {
-        var files = $( "#playlist .mp3" ),
+        var files = $( "#playlist .audio" ),
             list = "";
         if ( files ) {
             $.each( files, function () {
@@ -452,11 +452,11 @@ var playlist = {
                     if ( /^\d+$/.test( response ) ) {
                         utils.log( "play-playlist", response );
                         if ( files.length > parseInt( response ) ) {
-                            utils.log( "play-playlist-mp3-not-played", files.length - parseInt( response ), true );
+                            utils.log( "play-playlist-audio-not-played", files.length - parseInt( response ), true );
                         }
                     } else {
-                        if ( response === "Nessun file mp3 trovato" ) {
-                            utils.log( "play-playlist-mp3-not-found", null, true );
+                        if ( response === "Nessun file audio trovato" ) {
+                            utils.log( "play-playlist-audio-not-found", null, true );
                         } else if ( response === "Il player non è utilizzabile" ) {
                             utils.log( "play-playlist-player-unfit", null, true );
                         } else {
@@ -465,7 +465,7 @@ var playlist = {
                     }
                 } );
             } else {
-                utils.log( "play-playlist-no-mp3", null, true );
+                utils.log( "play-playlist-no-audio", null, true );
             }
         } else {
             utils.log( "play-playlist-empty" );
@@ -474,33 +474,33 @@ var playlist = {
 
     // Add file to the playlist
     add: function ( elem ) {
-        var file = elem.prev().val();
-        if ( utils.validateInput( file, "path" ) ) {
-            myZDL.playlistAdd( file ).then( function ( res ) {
+        var filePath = elem.prev().val();
+        if ( utils.validateInput( filePath, "path" ) ) {
+            myZDL.playlistAdd( filePath ).then( function ( res ) {
                 var response = res.trim();
                 if ( response === "Non è un file audio/video" ) {
-                    utils.log( "playlist-file-incorrect", file, true );
+                    utils.log( "playlist-file-incorrect", filePath, true );
                 } else if ( response === "Errore durante l'analisi del json della playlist" ) {
                     utils.log( "playlist-json-corrupted", null, true );
                 } else {
-                    utils.addToPlaylist( file );
-                    utils.log( "playlist-file-added", file );
+                    utils.addToPlaylist( filePath );
+                    utils.log( "playlist-file-added", filePath );
                     utils.success( elem.next() );
                 }
             } );
         } else {
-            utils.log( "playlist-path-incorrect", file, true );
+            utils.log( "playlist-path-incorrect", filePath, true );
         }
     },
 
     // Remove file from playlist
     remove: function ( elem ) {
-        var file = elem.data( "file" );
-        myZDL.playlistDelete( file ).then( function ( res ) {
+        var filePath = elem.data( "file" );
+        myZDL.playlistDelete( filePath ).then( function ( res ) {
             $( "#playlist" ).empty();
             if ( utils.parseJson( res ) ) {
                 utils.buildPlaylist( JSON.parse( res ) );
-                utils.log( "playlist-file-removed", file );
+                utils.log( "playlist-file-removed", filePath );
             } else {
                 utils.log( "playlist-json-corrupted", null, true );
             }
@@ -508,31 +508,40 @@ var playlist = {
     },
 
     // Extract audio from video
-    extractMp3: function ( elem ) {
-        var file = elem.data( "file" );
-        elem.button( "disable" );
-        myZDL.extractMp3( file ).then( function ( res ) {
+    extractAudio: function ( elem ) {
+        var filePath = elem.data( "file" ),
+            format = client.get( "audio" );
+        //elem.button( "disable" );
+        elem.button({
+            label: $.i18n( "wait" ),
+            disabled: true
+        });
+        myZDL.extractAudio( filePath, format ).then( function ( res ) {
             var response = res.trim();
             if ( response === "success" ) {
-                utils.log( "playlist-video-to-mp3", file );
+                utils.log( "playlist-video-to-audio", filePath );
                 elem.remove();
-                var mp3 = file.substr(0, file.lastIndexOf(".")) + ".mp3";
-                myZDL.playlistAdd( mp3 ).then( function ( res ) {
+                var audio = filePath.substr( 0, filePath.lastIndexOf( "." ) ) + "." + format;
+                myZDL.playlistAdd( audio ).then( function ( res ) {
                     response = res.trim();
                     if ( response === "Non è un file audio/video" ) {
-                        utils.log( "playlist-file-incorrect", mp3, true );
+                        utils.log( "playlist-file-incorrect", audio, true );
                     } else {
-                        utils.addToPlaylist( mp3 );
-                        utils.log( "playlist-file-added", mp3 );
+                        utils.addToPlaylist( audio );
+                        utils.log( "playlist-file-added", audio );
                     }
                 } );
             } else {
                 if ( response === "ffmpeg non trovato" ) {
                     utils.log( "playlist-video-ffmpeg-not-found", null, true );
                 } else {
-                    utils.log( "playlist-video-to-mp3-not-found", file, true );
+                    utils.log( "playlist-video-to-audio-not-found", filePath, true );
                 }
-                elem.button( "enable" );
+                //elem.button( "enable" );
+                elem.button({
+                    label: "Audio",
+                    disabled: false
+                });
             }
         } );
     }
@@ -689,15 +698,16 @@ var zdlconsole = {
  *	INFO :: Tab 8
  */
 var info = {
+    // Toggle info on webui
     toggleWebuiInfo: function ( elem ) {
         $( "#" + elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
             if ( $( this ).is( ":visible" ) ) {
                 elem.button( "option", "label", $.i18n( "button-close" ) );
-                var txtarea = $( this ).children( "textarea" ),
+                var textArea = $( this ).children( "textarea" ),
                     lang = client.get( "locale" ),
                     read = $.get( "webui-" + lang + ".txt" );
                 read.done( function( res ) {
-                    $("#webui-info").val(res);
+                    textArea.val(res);
                 } )
                 .fail( function () {
                     utils.log( "webui-info-error" );
@@ -815,17 +825,17 @@ var common = {
         $( "#" + toggle ).toggle( "blind", null, 500, function () {
             if ( $( this ).is( ":visible" ) ) {
                 elem.button( "option", "label", $.i18n( "button-close" ) );
-                var txtarea = $( this ).children( "textarea" ),
-                    file = elem.data( "file" );
-                myZDL.getFile( file ).then( function ( res ) {
+                var textArea = $( this ).children( "textarea" ),
+                    fileName = elem.data( "file" );
+                myZDL.getFile( fileName ).then( function ( res ) {
                     if ( res ) {
-                        txtarea.val( res.replace( /(<br>)/gi, "" ) ).animate( {
-                            scrollTop: txtarea.prop( "scrollHeight" ) - txtarea.height()
+                        textArea.val( res.replace( /(<br>)/gi, "" ) ).animate( {
+                            scrollTop: textArea.prop( "scrollHeight" ) - textArea.height()
                         }, 1000 );
                     } else {
-                        txtarea.val( $.i18n( "file-not-found" ) );
+                        textArea.val( $.i18n( "file-not-found" ) );
                     }
-                    txtarea.scrollTop = txtarea.scrollHeight;
+                    textArea.scrollTop = textArea.scrollHeight;
                 } );
             } else {
                 elem.button( "option", "label", $.i18n( "button-open" ) );
@@ -839,14 +849,14 @@ var common = {
      *  Files: links.txt, zdl_log.txt
      */
     deleteFile: function ( elem ) {
-        var txtarea = elem.prev(),
-            content = txtarea.val();
+        var textArea = elem.prev(),
+            content = textArea.val();
         if ( content && content !== $.i18n( "file-not-found" ) ) {
-            var file = elem.data( "file" );
+            var fileName = elem.data( "file" );
             toggle = elem.data( "trigger" );
-            myZDL.deleteFile( file ).then( function () {
-                txtarea.val( "" );
-                utils.log( "file-deleted", file );
+            myZDL.deleteFile( fileName ).then( function () {
+                textArea.val( "" );
+                utils.log( "file-deleted", fileName );
                 $( "#" + toggle ).trigger( "click" );
             } );
         }
@@ -858,18 +868,18 @@ var common = {
      *  Files: audio/video
      */
     playFile: function ( elem ) {
-        var file = elem.data( "file" );
-        myZDL.playMedia( file ).then( function ( res ) {
+        var filePath = elem.data( "file" );
+        myZDL.playMedia( filePath ).then( function ( res ) {
             var response = res.trim();
             if ( response === "running" ) {
-                utils.log( "play-file", file );
+                utils.log( "play-file", filePath );
             } else {
                 if ( response === "Player non trovato" ) {
                     utils.log( "player-not-found", null, true );
                 } else if ( response === "Non è un file audio/video" ) {
-                    utils.log( "play-file-incorrect", file, true );
+                    utils.log( "play-file-incorrect", filePath, true );
                 } else if ( response === "File non trovato" ) {
-                    utils.log( "play-file-not-found", file, true );
+                    utils.log( "play-file-not-found", filePath, true );
                 } else {
                     utils.log( "player-not-configured", null, true );
                 }
@@ -968,42 +978,45 @@ var utils = {
     buildPlaylist: function ( data ) {
         var playlist = $( "#playlist" ),
             node = "",
-            filename,
-            mp3Attr,
-            mp3Button;
-        $.each( data, function ( index, file ) {
-            mp3Attr = "'";
-            mp3Button = "";
-            filename = file.replace( /^.*(\/)/, "" );
-            if ( /.mp3$/.test( filename ) ) {
-                mp3Attr = " mp3' data-file='" + file + "'";
+            fileName,
+            fileAudio,
+            audioAttr,
+            audioButton;
+        $.each( data, function ( index, filePath ) {
+            audioAttr = "'";
+            audioButton = "";
+            fileName = filePath.replace( /^.*(\/)/, "" );
+            if ( /(.mp3|.flac)$/.test( fileName ) ) {
+                audioAttr = " audio' data-file='" + filePath + "'";
             } else {
-                if ( !data.includes( file.slice( 0, -3 ) + "mp3" ) ) {
-                    mp3Button = "<button data-i18n='button-mp3' class='button to-mp3' data-file='" + file + "'>mp3</button>";
+                fileAudio = filePath.substr( 0, filePath.lastIndexOf( "." ) );
+                if ( !data.includes( fileAudio + ".mp3" ) && !data.includes( fileAudio + ".flac" ) ) {
+                    audioButton = "<button data-i18n='button-audio' class='button to-audio' data-file='" + filePath + "'>Audio</button>";
                 }
             }
-            node += "<div class='pl-item'><div class='pl-file" + mp3Attr + ">" + filename + "</div><div class='pl-buttons'><button data-i18n='button-play' class='button play-file' data-file='" + file + "'>Play</button><button data-i18n='button-remove' class='button pl-remove' data-file='" + file + "'>Delete</button>" + mp3Button + "</div></div>";
+            node += "<div class='pl-item'><div class='pl-file" + audioAttr + ">" + fileName + "</div><div class='pl-buttons'><button data-i18n='button-play' class='button play-file' data-file='" + filePath + "'>Play</button><button data-i18n='button-remove' class='button pl-remove' data-file='" + filePath + "'>Delete</button>" + audioButton + "</div></div>";
         } );
         playlist.prepend( node );
         $( "#playlist > .pl-item > .pl-buttons > .button" ).button().i18n();
     },
 
     /* Append new item to the playlist */
-    addToPlaylist: function ( file ) {
+    addToPlaylist: function ( filePath ) {
         var playlist = $( "#playlist" ),
             node,
-            filename = file.replace( /^.*(\/)/, "" ),
-            mp3Attr = "'",
-            mp3Button = "";
-        if ( /.mp3$/.test( filename ) ) {
-            mp3Attr = " mp3' data-file='" + file + "'";
+            fileName = filePath.replace( /^.*(\/)/, "" ),
+            audioAttr = "'",
+            audioButton = "";
+        if ( /(.mp3|.flac)$/.test( fileName ) ) {
+            audioAttr = " audio' data-file='" + filePath + "'";
         } else {
-            var list = $( ".pl-file" ).text();
-            if ( !list.includes( filename.slice( 0, -3 ) + "mp3" ) ) {
-                mp3Button = "<button data-i18n='button-mp3' class='button to-mp3' data-file='" + file + "'>extract mp3</button>";
+            var list = $( ".pl-file" ).text(),
+                fileAudio = filePath.substr( 0, filePath.lastIndexOf( "." ) );
+            if ( !list.includes( fileAudio + ".mp3" ) && !list.includes( fileAudio + ".flac" ) ) {
+                audioButton = "<button data-i18n='button-audio' class='button to-audio' data-file='" + filePath + "'>Audio</button>";
             }
         }
-        node = "<div class='pl-item'><div class='pl-file" + mp3Attr + ">" + filename + "</div><div class='pl-buttons'><button data-i18n='button-play' class='button play-file' data-file='" + file + "'>Play</button><button data-i18n='button-remove' class='button pl-remove' data-file='" + file + "'>Delete</button>" + mp3Button + "</div></div>";
+        node = "<div class='pl-item'><div class='pl-file" + audioAttr + ">" + fileName + "</div><div class='pl-buttons'><button data-i18n='button-play' class='button play-file' data-file='" + filePath + "'>Play</button><button data-i18n='button-remove' class='button pl-remove' data-file='" + filePath + "'>Delete</button>" + audioButton + "</div></div>";
         playlist.prepend( node );
         $( "#playlist > .pl-item:first-child > .pl-buttons > .button" ).button().i18n();
     },
@@ -1016,7 +1029,7 @@ var utils = {
         }, 1000 );
     },
 
-    /* Localize complex */
+    /* Localize difficult parts */
     localizeHard: function () {
         $( "#console-only-errors" ).checkboxradio( "option", "label", $.i18n( "radio-log-label" ) );
         $( ".input-editable" ).checkboxradio( "option", "label", $.i18n( "radio-edit-label" ) );

@@ -98,7 +98,7 @@ function handleByClasses( target ) {
             "dl-stop": downloads.stop,
             "dl-delete": downloads.delete,
             "pl-remove": playlist.remove,
-            "to-mp3": playlist.extractMp3,
+            "to-audio": playlist.extractAudio,
             "xdcc-search-send": xdcc.add,
             "socket": sockets.manage
         },

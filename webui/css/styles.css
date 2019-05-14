@@ -148,6 +148,8 @@ body {
 .toggle > .browse > .tree {
   margin-left: 15px;
   margin-bottom: 5px;
+  height: 170px;
+  overflow-y: auto;
 }
 
 .toggle > .browse > .tree > li {
@@ -297,6 +299,13 @@ body {
   text-align: center;
   line-height: 1.8em;
   outline: 0;
+}
+
+.inline-group .choose-audio {
+  width: 150px;
+  display: inline-block;
+  text-align: center;
+  margin-left: 30px;
 }
 
 .playlist {
@@ -466,6 +475,10 @@ ul.info > li > a:hover {
   top: 6px;
 }
 
+.ui-checkboxradio-checked > .ui-checkboxradio-icon {
+  box-shadow: none !important;
+}
+
 /* DataTable */
 
 /* table.dataTable {
@@ -516,6 +529,10 @@ table.dataTable tr td {
   .toggle input {
     margin-bottom: 2px;
     width: 95% !important;
+  }
+
+  .toggle > .browse > .tree {
+    height: 100px;
   }
 
   .inline-group {

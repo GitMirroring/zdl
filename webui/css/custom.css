@@ -50,8 +50,8 @@ https://savannah.nongnu.org/projects/zdl */
   color: #3275ab;
 }
 
-/* Playlist mp3 */
-.playlist > .pl-item > .mp3 {
+/* Playlist audio files */
+.playlist > .pl-item > .audio {
   background: #c9d3fb !important;
 }
 

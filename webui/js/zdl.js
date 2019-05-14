@@ -136,8 +136,8 @@ class ZDL {
         return this.request( `cmd=play-media&file=${file}` );
     }
 
-    extractMp3( video ) {
-        return this.request( `cmd=extract-mp3&video=${video}` );
+    extractAudio( video, format ) {
+        return this.request( `cmd=extract-audio&video=${video}&format=${format}` );
     }
 
     browseFS( path, type ) {

@@ -199,8 +199,15 @@
                 <div class="inline-group">
                     <div data-i18n="tab-4-label-select" class="label">Add files:</div>
                     <button data-i18n="button-select" id="playlist-toggle" class="button" data-type="media" data-toggle="playlist-browse">Select</button>
-                    <div data-i18n="tab-4-label-all-mp3" class="label">Play all mp3:</div>
-                    <button data-i18n="button-play" id="playlist-play" class="button">Play all files</button>
+                    <div data-i18n="tab-4-label-play-all" class="label">Play all audio files:</div>
+                    <button data-i18n="button-play" id="playlist-play" class="button">Play</button>
+                    <fieldset class="choose-audio">
+                        <legend data-i18n="tab-4-audio-format">Choose audio format: </legend>
+                        <label for="radio-mp3">mp3</label>
+                        <input class="radio-audio" type="radio" name="radioaudio" id="radio-mp3" value="mp3">
+                        <label for="radio-flac">flac</label>
+                        <input class="radio-audio" type="radio" name="radioaudio" id="radio-flac" value="flac">
+                    </fieldset>
                 </div>
                 <div class="toggle">
                     <div id="playlist-browse" class="content browse ui-widget-content ui-corner-all">
