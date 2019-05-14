@@ -74,8 +74,6 @@ declare -a RESPONSE_HEADERS=(
     "Server: ZigzagDownLoader"
 )
 
-get_conf
-
 ##########
 
 
