@@ -195,6 +195,29 @@ function get_conf {
 	set_item_conf editor ''
     fi
 
+    ## player
+    if [ -z "$player" ]
+    then
+	if command -v mimeopen &>/dev/null
+	then
+	    player=$(mimeopen -a NULL.mp4 <<< '' 2>/dev/null |
+			 grep '1)'                           |
+			 cut -d' ' -f2)
+	fi
+	
+	if [ -z "$player" ]
+	then
+	    for cmd_player in cvlc mpv mplayer smplayer mplayer2 
+	    do
+		if command -v "$cmd_player" &>/dev/null
+		then
+		    player="$cmd_player"
+		    break
+		fi
+	    done
+	fi	    
+    fi
+    
     ## socket
     if [ -z "$socket_port" ]
     then
