@@ -245,11 +245,11 @@ var client = ( function () {
                         if ( !statusParent.hasClass( statusClass ) ) {
                             statusParent.removeClass().addClass( "side-status " + statusClass );
                         }
-                        if ( statusClass === "aborted" ) {
-                            status.text( $.i18n( "restarting" ) );
-                        } else {
+                        // if ( statusClass === "aborted" ) {
+                        //     status.text( $.i18n( "restarting" ) );
+                        // } else {
                             status.text( statusVal );
-                        }
+                        // }
                         $( "#bar-" + id ).progressbar( "value", perc );
                         if ( downloadCompleted( value.file, perc ) ) {
                             utils.log( "file-downloaded", value.file );
