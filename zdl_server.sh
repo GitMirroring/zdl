@@ -54,7 +54,6 @@ template_index="$path_webui/index-${web_ui}.html"
 
 json_flag=true
 
-
 #### HTTP:
 declare -i DEBUG=0
 declare -i VERBOSE=0
@@ -1545,6 +1544,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    ;;
 
 	get-conf)
+	    get_conf
 	    file_output="$path_server"/conf.$socket_port.json
 
 	    if [ "${line[1]}" != 'force' ]
@@ -1712,8 +1712,6 @@ function http_server {
 
 
 ## MAIN:
-init
-
 while read -a line
 do
     recv "${line[*]}"
