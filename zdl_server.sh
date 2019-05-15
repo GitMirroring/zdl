@@ -728,6 +728,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    ;;
 
 	play-playlist)
+	    get_conf
 	    file_output="$path_server"/playlist-file.$socket_port
 
 	    list=(${line[1]})
