@@ -750,9 +750,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			if [[ -e "$item" ]]
 			then
 			    id=$[id + 1]
-			    title=${item##*/}
-			    title=${title%.*}
-			    playlist="$playlist\n#EXTINF:$id,$title\n$item"
+			    title="${item##*/}"
+			    title="${title%.*}"
+			    playlist="$playlist\n#EXTINF:$id,${title//,}\n$item"
 			fi
 		    done
 

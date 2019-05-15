@@ -215,7 +215,7 @@ function get_conf {
 		    break
 		fi
 	    done
-	fi	    
+	fi    
     fi
     
     ## socket
