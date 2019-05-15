@@ -743,7 +743,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    else
 		player_name="${player##*/}"
 
-		if [[ "$player_name" =~ ^(cvlc|mpv|mplayer|mplayer2)$ ]]
+		if [[ "$player_name" =~ ^(vlc|cvlc|mpv|mplayer|mplayer2)$ ]]
 		then
 		    for item in "${list[@]}"
 		    do
@@ -759,20 +759,26 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    if (( id > 0 ))
 		    then
 			echo -e "$playlist" > "$path_tmp/playlist.m3u"
-			if [[ $player_name == "cvlc" ]]
+			if [[ "$player_name" =~ [c]*vlc ]]
 			then
 			    opt="--global-key-play-pause Space --global-key-next Enter"
 			fi
-			xterm -e $player $opt "$path_tmp/playlist.m3u"
+
+			if [[ "$player_name" =~ ^(vlc|smplayer)$ ]]
+			then
+			    $player $opt "$path_tmp/playlist.m3u"
+
+			else
+			    xterm -e $player $opt "$path_tmp/playlist.m3u"
+			fi			
 			echo -e "$id" > "$file_output"
+
 		    else
 			echo -e "Nessun file audio trovato" > "$file_output"
 		    fi
 
-		fi
-
-		if [ -n "$player" ] &&
-		       [[ "$player" =~ ^([^\ ]+) ]]
+		elif [ -n "$player" ] &&
+			 [[ "$player" =~ ^([^\ ]+) ]]
 		then
 		    if ! command -v "${BASH_REMATCH[1]}" &>/dev/null
 		    then
