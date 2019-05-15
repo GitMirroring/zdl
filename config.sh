@@ -207,7 +207,7 @@ function get_conf {
 	
 	if [ -z "$player" ]
 	then
-	    for cmd_player in cvlc mpv mplayer smplayer mplayer2 
+	    for cmd_player in vlc cvlc mpv mplayer smplayer mplayer2 
 	    do
 		if command -v "$cmd_player" &>/dev/null
 		then
