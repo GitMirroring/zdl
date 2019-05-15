@@ -187,7 +187,7 @@ function get_conf {
     else
 	echo "$max_dl" > "$path_tmp/max-dl"
     fi
-	
+    
     ## editor
     if ! command -v "$(trim "${editor%% *}")" &>/dev/null
     then
@@ -215,7 +215,7 @@ function get_conf {
 		    break
 		fi
 	    done
-	fi    
+	fi
     fi
     
     ## socket
@@ -274,7 +274,7 @@ function check_default_downloader {
 	    sed -r "s|$TAG1||g" -i "$file_conf"
 	    
 	elif [ "$(get_item_conf downloader)" != "Aria2" ] &&
-		! grep "$TAG2" "$file_conf" &>/dev/null 
+		 ! grep "$TAG2" "$file_conf" &>/dev/null 
 	then
 	    unset def
 	    while [[ ! "$def" =~ ^(sì|no)$ ]]
@@ -456,7 +456,7 @@ wget_links=(
     idowatch\.
     dropbox\.
     subyshare\.
-#    wstream\.
+    #    wstream\.
 )
 #    videomega\.
 
