@@ -768,16 +768,26 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			echo -e "Nessun file audio trovato" > "$file_output"
 		    fi
 
-		else
-		    for item in "${list[@]}"
-		    do
-			if [[ -e "$item" ]]
-			then
-			    id=$[id + 1]
-			fi
-			xterm -e $player "$item"
-		    done
-		    echo -e "$id" > "$file_output"
+		fi
+
+		if [ -n "$player" ] &&
+		       [[ "$player" =~ ^([^\ ]+) ]]
+		then
+		    if ! command -v "${BASH_REMATCH[1]}" &>/dev/null
+		    then
+			echo -e "Il player non è utilizzabile" > "$file_output"
+			
+		    else
+			for item in "${list[@]}"
+			do
+			    if [[ -e "$item" ]]
+			    then
+				id=$[id + 1]
+			    fi
+			    xterm -e $player "$item"
+			done
+			echo -e "$id" > "$file_output"
+		    fi
 		fi
 	    fi
 	    ;;
