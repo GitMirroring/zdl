@@ -200,14 +200,35 @@ function get_conf {
     then
 	if command -v mimeopen &>/dev/null
 	then
-	    player=$(mimeopen -a NULL.mp4 <<< '' 2>/dev/null |
-			 grep '1)'                           |
-			 cut -d' ' -f2)
+	    local mime_app=$(mimeopen -a NULL.mp4 <<< '' 2>/dev/null |
+				 grep '1)' |
+				 tr -d '\t')
+
+	    local player_name=$(sed -r 's|[^\)]+\)[\ ]*(.+)\(.+|\1|g' <<< "$mime_app")
+	    player_name="${player_name%% }"
+	    player_name="${player_name%% }" ## <-- perché è necessario due volte?
+	    
+	    local player_filename="${mime_app##*\(}"
+	    player_filename="${player_filename%*\)*}"
+
+	    local mime_app_desktop=$(locate "$player_filename".desktop | head -n1)
+    
+	    if [ -s "$mime_app_desktop" ] &&
+		   grep -qP "^Name=$player_name" "$mime_app_desktop" &&
+		   [[ "$(cat "$mime_app_desktop")" =~ ^Exec=(.+) ]]
+	    then
+		player="${BASH_REMATCH[1]}"
+
+	    elif [ -n "$player_name" ] &&
+		     command -v "$player_name" &>/dev/null
+	    then
+		player="$player_name"
+	    fi
 	fi
-	
+
 	if [ -z "$player" ]
 	then
-	    for cmd_player in vlc cvlc mpv mplayer smplayer mplayer2 
+	    for cmd_player in vlc mpv smplayer dragon mplayer mplayer2 cvlc
 	    do
 		if command -v "$cmd_player" &>/dev/null
 		then

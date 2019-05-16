@@ -220,9 +220,10 @@ var client = ( function () {
                         if ( statusClass ) {
                             statusClass = " " + statusClass;
                         }
-                        $( "<div class='progressbar'><div class='side-bar'><div id='bar-" + id + "'><div class='label'>" + value.file + "</div></div></div><div class='side-status" + statusClass + "'><span id='dl-status-" + id + "'></span></div><div class='side-button'><button data-i18n='button-info' class='button open-info' data-toggle='info-" + id + "'>Info</button></div></div><div class='toggle'><div id='info-" + id + "' class='content info ui-widget-content ui-corner-all'><ul><li><span>Downloader: </span>" + value.downloader + "</li><li><span>Link: </span>" + value.link + "</li><li><span>Path: </span>" + value.path + "</li><li><span>Length: </span>" + len + "</li><li><span>URL: </span>" + value.url + "</li></ul><button data-i18n='button-manage' class='button dl-manage' data-path='" + value.path + "'>Manage</button><button data-i18n='button-play' class='button play-file' data-file='" + value.path + "/" + value.file + "'>Play</button><button data-i18n='button-playlist' class='button dl-playlist' data-file='" + value.path + "/" + value.file + "'>Add to playlist</button><button data-i18n='button-stop' class='button dl-stop' data-link='" + value.link + "' data-file='" + value.file + "'>Stop</button><button data-i18n='button-delete' class='button dl-delete' data-link='" + value.link + "' data-file='" + value.file + "' title='" + $.i18n("delete-download-tooltip") + "'>Delete</button></div></div>" ).prependTo( "#downloads" );
+                        $( "<div class='progressbar'><div class='side-bar'><div id='bar-" + id + "'><div class='label'>" + value.file + "</div></div></div><div class='side-status" + statusClass + "'><span id='dl-status-" + id + "'></span></div><div class='side-button'><button data-i18n='button-info' class='button open-info' data-toggle='info-" + id + "'>Info</button></div></div><div class='toggle'><div id='info-" + id + "' class='content info ui-widget-content ui-corner-all'><ul><li><span>Downloader: </span>" + value.downloader + "</li><li><span>Link: </span>" + value.link + "</li><li><span>Path: </span>" + value.path + "</li><li><span>Length: </span><span class='dl-size'>" + len + "</span></li><li><span>URL: </span>" + value.url + "</li></ul><button data-i18n='button-manage' class='button dl-manage' data-path='" + value.path + "'>Manage</button><button data-i18n='button-play' class='button play-file' data-file='" + value.path + "/" + value.file + "'>Play</button><button data-i18n='button-playlist' class='button dl-playlist' data-file='" + value.path + "/" + value.file + "'>Add to playlist</button><button data-i18n='button-stop' class='button dl-stop' data-link='" + value.link + "' data-file='" + value.file + "'>Stop</button><button data-i18n='button-delete' class='button dl-delete' data-link='" + value.link + "' data-file='" + value.file + "' title='" + $.i18n("delete-download-tooltip") + "'>Delete</button></div></div>" ).prependTo( "#downloads" );
                         $( "#dl-status-" + id ).text( statusVal );
-                        $( ".progressbar:first-child > .side-button > .button, #info-" + id + " > .button" ).button().tooltip( {
+                        $( ".progressbar:first-child > .side-button > .button" ).button();
+                        $( "#info-" + id + " > .button" ).button().i18n().tooltip( {
                             position: {
                                 my: "left bottom",
                                 at: "right top-5",
@@ -231,7 +232,6 @@ var client = ( function () {
                                 "ui-tooltip": "tooltip-custom-red"
                             }
                         } );
-                        $( "#info-" + id + " > .button" ).button().i18n();
                         if ( perc === 0 ) {
                             perc = false;
                         }
@@ -245,13 +245,10 @@ var client = ( function () {
                         if ( !statusParent.hasClass( statusClass ) ) {
                             statusParent.removeClass().addClass( "side-status " + statusClass );
                         }
-                        // if ( statusClass === "aborted" ) {
-                        //     status.text( $.i18n( "restarting" ) );
-                        // } else {
-                            status.text( statusVal );
-                        // }
+                        status.text( statusVal );
                         $( "#bar-" + id ).progressbar( "value", perc );
                         if ( downloadCompleted( value.file, perc ) ) {
+                            $( "#info-" + id + " .dl-size").text( len );
                             utils.log( "file-downloaded", value.file );
                         }
                     }

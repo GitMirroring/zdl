@@ -225,7 +225,7 @@ body {
   word-wrap: break-word;
 }
 
-.toggle ul li > span {
+.toggle ul li > span:not(.dl-size) {
   color: #444;
   font-weight: bold;
 }
@@ -477,6 +477,10 @@ ul.info > li > a:hover {
 
 .ui-checkboxradio-checked > .ui-checkboxradio-icon {
   box-shadow: none !important;
+}
+
+.ui-checkboxradio-checked > .ui-icon {
+  border-color: #09f !important;
 }
 
 /* DataTable */

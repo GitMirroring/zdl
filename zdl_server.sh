@@ -578,10 +578,12 @@ function search_xdcc {
 function check_playlist {
     list="$1"
 
-    if [ -n "$list" ] && [ "$list" != "[]" ]
+    if [ ! -z $list ] && [ $list != "[]" ]
     then
-	if [[ ! "$list" =~ ^\[\".*\"\]$ ]]
-	   #|| [[ "$list" =~ [A-Za-z0-9](,|\"\") ]] || [[ "$list" =~ ,[\/A-Za-z0-9] ]] ## <-- commentato perché i nomi di file possono contenere virgole!
+	list=$(echo "${list}" | sed 's/\("\),\+\([^"]\)/\1\2/g' | sed 's/\([^"]\),\+/\1/g')
+	if [[ ! $list =~ ^\[\".*\"\]$ ]] ||
+	       [[ $list =~ [A-Za-z0-9](,|\"\") ]] ||
+	       [[ $list =~ ,[\/A-Za-z0-9] ]]
 	then
 	    return 1
 	fi
@@ -669,7 +671,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
             if check_playlist "$list"
             then
 		touch "$file_output"
-		
+
             else
 		echo > "$file_output"
 		file_output=playlist-error
@@ -696,7 +698,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			list="${list//]/,\"${line[1]}\"]}"
 		    fi
 		    echo -e "$list" > "$file_output"
-		    
+
 		else
     		    echo > "$file_output"
     		    file_output=playlist-error
@@ -719,7 +721,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
     		list="${list//,/}"
     		list="${list//\"\"/\",\"}"
     		echo -e "$list" > "$file_output"
-		
+
     	    else
     		echo > "$file_output"
     		file_output=playlist-error
@@ -770,7 +772,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 			else
 			    xterm -e $player $opt "$path_tmp/playlist.m3u"
-			fi			
+			fi
 			echo -e "$id" > "$file_output"
 
 		    else
@@ -783,16 +785,25 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    if ! command -v "${BASH_REMATCH[1]}" &>/dev/null
 		    then
 			echo -e "Il player non è utilizzabile" > "$file_output"
-			
+
 		    else
+			items=()
 			for item in "${list[@]}"
 			do
 			    if [[ -e "$item" ]]
 			    then
+				items+=("$item")
 				id=$[id + 1]
 			    fi
-			    xterm -e $player "$item"
 			done
+
+			if [[ "$player" =~ xterm ]]
+			then
+			    $player "${items[@]}"
+			else
+			    xterm -e $player "${items[@]}"
+			fi
+			items=()
 			echo -e "$id" > "$file_output"
 		    fi
 		fi
@@ -800,6 +811,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    ;;
 
 	play-media)
+	    get_conf
 	    file_output="$path_server"/msg-file.$socket_port
 
 	    if [ -f "${line[1]}" ]
@@ -1309,7 +1321,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	get-desktop-path)
 	    if test -s "$file_desktop"
 	    then
-		eval exec_line=( $(grep Exec "$file_desktop") )
+		#eval exec_line=( $(grep Exec "$file_desktop") )
+		eval exec_line=$(grep Exec "$file_desktop")
 
 		for path in "${exec_line[@]}"
 		do
