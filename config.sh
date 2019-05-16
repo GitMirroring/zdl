@@ -217,7 +217,7 @@ function get_conf {
 		   grep -qP "^Name=$player_name" "$mime_app_desktop" &&
 		   [[ "$(cat "$mime_app_desktop")" =~ ^Exec=(.+) ]]
 	    then
-		player="${BASH_REMATCH[1]}"
+		player="${BASH_REMATCH[1]%%\ *}"
 
 	    elif [ -n "$player_name" ] &&
 		     command -v "$player_name" &>/dev/null
