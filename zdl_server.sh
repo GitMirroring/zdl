@@ -764,7 +764,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    then
 			echo -e "$playlist" > "$path_tmp/playlist.m3u"
 
-			if [[ "$player_filename" =~ [c]*vlc ]]
+			if [[ "$player_filename" =~ ^[c]*vlc ]]
 			then
 			    opts+=(
 				--global-key-play-pause
@@ -774,9 +774,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			    ) 
 			fi
 
-			if [[ "$player_filename" =~ mpv ]]
+			if [[ "$player_filename" =~ ^mpv ]]
 			then
-			    opt+=(
+			    opts+=(
 				--player-operation-mode=pseudo-gui
 				--
 			    )
@@ -794,7 +794,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    else
 			echo -e "Nessun file audio trovato" > "$file_output"
 		    fi
-
+		    
 		elif [ -n "$player" ] &&
 			 [[ "$player" =~ ^([^\ ]+) ]]
 		then
