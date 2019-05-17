@@ -781,7 +781,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 				--
 			    )
 			fi
-			
+
 			if [[ "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
 			then
 			    $player "${opts[@]}" "$path_tmp/playlist.m3u"
@@ -806,7 +806,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			items=()
 			for item in "${list[@]}"
 			do
-			    if [[ -e "$item" ]]
+			    if [[ -f "$item" ]]
 			    then
 				items+=("$item")
 				id=$[id + 1]
