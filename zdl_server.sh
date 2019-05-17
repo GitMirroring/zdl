@@ -743,9 +743,11 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    	echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
 
 	    else
-		player_name="${player##*/}"
+		local player_filename="${player##*/}"
 
-		if [[ "$player_name" =~ ^(vlc|cvlc|mpv|mplayer|mplayer2)$ ]]
+		opts=()
+		
+		if [[ "$player_filename" =~ ^(vlc|cvlc|mpv|mplayer|mplayer2)$ ]]
 		then
 		    for item in "${list[@]}"
 		    do
@@ -761,17 +763,31 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    if (( id > 0 ))
 		    then
 			echo -e "$playlist" > "$path_tmp/playlist.m3u"
-			if [[ "$player_name" =~ [c]*vlc ]]
+
+			if [[ "$player_filename" =~ [c]*vlc ]]
 			then
-			    opt="--global-key-play-pause Space --global-key-next Enter"
+			    opts+=(
+				--global-key-play-pause
+				Space
+				--global-key-next
+				Enter
+			    ) 
 			fi
 
-			if [[ "$player_name" =~ ^(vlc|smplayer)$ ]]
+			if [[ "$player_filename" =~ mpv ]]
 			then
-			    $player $opt "$path_tmp/playlist.m3u"
+			    opt+=(
+				--player-operation-mode=pseudo-gui
+				--
+			    )
+			fi
+			
+			if [[ "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
+			then
+			    $player "${opts[@]}" "$path_tmp/playlist.m3u"
 
 			else
-			    xterm -e $player $opt "$path_tmp/playlist.m3u"
+			    xterm -e $player "${opts[@]}" "$path_tmp/playlist.m3u"
 			fi
 			echo -e "$id" > "$file_output"
 
@@ -803,6 +819,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			else
 			    xterm -e $player "${items[@]}"
 			fi
+
 			items=()
 			echo -e "$id" > "$file_output"
 		    fi
