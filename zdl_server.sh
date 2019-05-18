@@ -745,8 +745,6 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    else
 		local player_filename="${player##*/}"
 
-		opts=()
-		
 		if [[ "$player_filename" =~ ^(vlc|cvlc|mpv|mplayer|mplayer2)$ ]]
 		then
 		    for item in "${list[@]}"
@@ -766,7 +764,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 			if [[ "$player_filename" =~ ^[c]*vlc ]]
 			then
-			    opts+=(
+			    opts=(
 				--global-key-play-pause
 				Space
 				--global-key-next
@@ -776,7 +774,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 			if [[ "$player_filename" =~ ^mpv ]]
 			then
-			    opts+=(
+			    opts=(
 				--player-operation-mode=pseudo-gui
 				--
 			    )

@@ -604,8 +604,13 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
         }
 	else if (time_out[i] && duration_out[i]) {
 	    percent_out[i] = int(time_out[i] * 100 / duration_out[i])
-	    length_out[i] = 100 * int(length_saved[i]) / int(percent_out[i])
-
+	    if (int(percent_out[i])) {
+		length_out[i] = 100 * int(length_saved[i]) / int(percent_out[i])
+	    }
+	    else {
+		length_out[i] = "unspecified"
+	    }
+	    
 	    if (int(speed_out[i]) != 0 && int(speed_out[i]) > 0) {
 		eta_out[i] = int(((length_out[i] / 1024) * (100 - percent_out[i]) / 100) / int(speed_out[i]))
 		eta_out[i] = seconds_to_human(eta_out[i])

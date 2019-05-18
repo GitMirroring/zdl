@@ -250,6 +250,8 @@ var client = ( function () {
                         if ( downloadCompleted( value.file, perc ) ) {
                             $( "#info-" + id + " .dl-size").text( len );
                             utils.log( "file-downloaded", value.file );
+			} else { // <-----------------------------------[modifica funzionante di zoninoz: verificare]
+			    $( "#info-" + id + " .dl-size").text( len );
                         }
                     }
                 } );
