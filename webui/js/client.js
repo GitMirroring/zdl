@@ -247,11 +247,10 @@ var client = ( function () {
                         }
                         status.text( statusVal );
                         $( "#bar-" + id ).progressbar( "value", perc );
+			$( "#info-" + id + " .dl-size").text( len ); // <---[zoninoz: verificare]
                         if ( downloadCompleted( value.file, perc ) ) {
-                            $( "#info-" + id + " .dl-size").text( len );
+                            // $( "#info-" + id + " .dl-size").text( len ); // <---[zoninoz: verificare]
                             utils.log( "file-downloaded", value.file );
-			} else { // <-----------------------------------[modifica funzionante di zoninoz: verificare]
-			    $( "#info-" + id + " .dl-size").text( len );
                         }
                     }
                 } );
