@@ -52,7 +52,8 @@ class ZDL {
         } );
     }
 
-    initClient() {
+    initClient( path ) {
+        if ( path ) this.path = path;
         return this.request( `cmd=init-client&path=${this.path}` );
     }
 
@@ -112,8 +113,8 @@ class ZDL {
         return this.request( `cmd=stop-link&path=${this.path}&link=${link}` );
     }
 
-    deleteLink( link ) {
-        return this.request( `cmd=del-link&path=${this.path}&link=${link}` );
+    deleteLink( link, path ) {
+        return this.request( `cmd=del-link&path=${path}&link=${link}` );
     }
 
     deleteFile( file ) {

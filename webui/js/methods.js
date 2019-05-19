@@ -55,8 +55,7 @@ var downloads = {
     manage: function ( elem ) {
         var path = elem.data( "path" );
         if ( path !== myZDL.path ) {
-            myZDL = new ZDL( path, "index.html" );
-            myZDL.initClient().then( function () {
+            myZDL.initClient( path ).then( function () {
                 utils.log( "client-init", path );
                 utils.switchToTab( 1 );
             } ).catch( function ( e ) {
@@ -92,10 +91,11 @@ var downloads = {
 
     // Delete download progress bar and info
     delete: function ( elem ) {
-        var link = elem.data( "link" ),
-            toggle = elem.closest( ".toggle" ),
-            fileName = elem.data( "file" );
-        myZDL.deleteLink( encodeURIComponent( link ) ).then( function () {
+        var path = elem.data( "path" ),
+            link = elem.data( "link" ),
+            fileName = elem.data( "file" ),
+            toggle = elem.closest( ".toggle" );
+        myZDL.deleteLink( encodeURIComponent( link ), path ).then( function () {
             toggle.prev().remove();
             toggle.remove();
             if ( client.exist( "active", fileName ) ) {
@@ -115,10 +115,9 @@ var manage = {
     changePath: function ( elem ) {
         var path = elem.prev().val();
         if ( utils.validateInput( path, "path" ) ) {
-            myZDL = new ZDL( path, "index.html" );
-            myZDL.initClient().then( function () {
+            myZDL.initClient( path ).then( function () {
                 utils.log( "client-init-new", path );
-                $( "#path-toggle" ).trigger( "click" );
+                $( "#action-path-toggle" ).trigger( "click" );
             } ).catch( function ( e ) {
                 utils.log( "client-init-error", e, true );
             } );
@@ -442,11 +441,15 @@ var playlist = {
         var files = $( "#playlist .audio" ),
             list = "";
         if ( files ) {
+	    var sep = "€€€"; // <--------------------------------------[zoninoz, prosegue qua sotto:]
             $.each( files, function () {
-                list += $( this ).data( "file" ) + " ";
+		if ( list === "")
+                    list += $( this ).data( "file" );
+		else
+		    list += sep + $( this ).data( "file" );
             } );
             if ( list ) {
-                list = list.slice( 0, -1 );
+                //list = list.slice( 0, -1 ); // <---------------------[zoninoz]
                 myZDL.playPlaylist( list ).then( function ( res ) {
                     var response = res.trim();
                     if ( /^\d+$/.test( response ) ) {
@@ -457,8 +460,8 @@ var playlist = {
                     } else {
                         if ( response === "Nessun file audio trovato" ) {
                             utils.log( "play-playlist-audio-not-found", null, true );
-                        } else if ( response === "Il player non è utilizzabile" ) {
-                            utils.log( "play-playlist-player-unfit", null, true );
+                        } else if ( response === "Player non trovato" ) {
+                            utils.log( "player-not-found", null, true );
                         } else {
                             utils.log( "player-not-configured", null, true );
                         }

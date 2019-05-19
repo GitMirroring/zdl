@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[it]=Interfaccia web per ZDL
 Comment=Web UI for ZDL
-Exec=zdl --web-ui %U
+Exec=zdl --web-ui "/media/claudio/storage/TEST/ZDL"
 GenericName[it]=ZigzagDownLoader web-ui
 GenericName=ZigzagDownLoader web-ui
 Icon=/usr/local/share/zdl/webui/images/zdl.png

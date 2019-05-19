@@ -576,18 +576,19 @@ function search_xdcc {
 }
 
 function check_playlist {
-    list="$1"
-
-    if [ ! -z $list ] && [ $list != "[]" ]
+    local list="$1"
+    
+    if [ -n "$list" ] && [ "$list" != "[]" ]
     then
 	list=$(echo "${list}" | sed 's/\("\),\+\([^"]\)/\1\2/g' | sed 's/\([^"]\),\+/\1/g')
-	if [[ ! $list =~ ^\[\".*\"\]$ ]] ||
-	       [[ $list =~ [A-Za-z0-9](,|\"\") ]] ||
-	       [[ $list =~ ,[\/A-Za-z0-9] ]]
+
+	if [[ ! "$list" =~ ^\[\".*\"\]$ ]] ||
+	       [[ "$list" =~ [A-Za-z0-9](,|\"\") ]] ||
+	       [[ "$list" =~ ,[\/A-Za-z0-9] ]]
 	then
 	    return 1
 	fi
-    fi
+    fi    
     return 0
 }
 
@@ -669,7 +670,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
             list=$(< "$file_output")
 
             if check_playlist "$list"
-            then
+            then		
 		touch "$file_output"
 
             else
@@ -687,10 +688,10 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
             then
 		list=$(< "$file_output")
-
+		
 		if check_playlist "$list"
     		then
-                    if [ -z "$list" ] || [ $list == "[]" ]
+                    if [ -z "$list" ] || [ "$list" == "[]" ]
                     then
 			list="[\"${line[1]}\"]"
 
@@ -733,11 +734,18 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    get_conf
 	    file_output="$path_server"/playlist-file.$socket_port
 
-	    list=(${line[1]})
-	    playlist="#EXTM3U"
-	    opt="-playlist"
-	    id=0
+	    #local item
+	    declare -a list
+	    while read item
+	    do
+		[ -f "$item" ] &&
+		    list+=( "$item" )
+	    done < <(sed -r 's|€€€|\n|g' <<< "${line[1]}")
 
+	    #unset item
+	    declare -a opts=()
+	    local id=0
+	    
 	    if [ -z "$player" ]
 	    then
 	    	echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
@@ -747,6 +755,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 		if [[ "$player_filename" =~ ^(vlc|cvlc|mpv|mplayer|mplayer2)$ ]]
 		then
+		    local playlist="#EXTM3U"
+		    local title
+		    
 		    for item in "${list[@]}"
 		    do
 			if [[ -e "$item" ]]
@@ -754,7 +765,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			    id=$[id + 1]
 			    title="${item##*/}"
 			    title="${title%.*}"
-			    playlist="$playlist\n#EXTINF:$id,${title//,}\n$item"
+			    playlist+="\n#EXTINF:$id,${title//,}\n$item"
 			fi
 		    done
 
@@ -776,16 +787,27 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			then
 			    opts=(
 				--player-operation-mode=pseudo-gui
-				--
+				--playlist
 			    )
 			fi
 
-			if [[ "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
+			if [[ "$player_filename" =~ ^mplayer ]]
 			then
-			    $player "${opts[@]}" "$path_tmp/playlist.m3u"
+			    opts=(
+				-playlist
+			    )
+			fi
 
+			if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
+			then
+			    term="xterm -e"
+			fi
+
+			if [ -n "${opts[*]}" ]
+			then
+			    $term $player "${opts[@]}" "$path_tmp/playlist.m3u"
 			else
-			    xterm -e $player "${opts[@]}" "$path_tmp/playlist.m3u"
+			    $term $player "$path_tmp/playlist.m3u"
 			fi
 			echo -e "$id" > "$file_output"
 
@@ -798,7 +820,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		then
 		    if ! command -v "${BASH_REMATCH[1]}" &>/dev/null
 		    then
-			echo -e "Il player non è utilizzabile" > "$file_output"
+			echo -e "Player non trovato" > "$file_output"
 
 		    else
 			items=()
@@ -840,13 +862,37 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    echo -e "Non è un file audio/video" > "$file_output"
 
 		else
+		    local player_filename="${player##*/}"
+		    declare -a opts=()
+
+		    if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
+		    then
+			term="xterm -e"
+		    fi
+		    
+		    if [[ "$(file -b --mime-type "${line[1]}")" =~ audio ]]
+		    then
+			case "$player_filename" in
+			    mpv)
+				opts+=(
+				    --player-operation-mode=pseudo-gui
+				)
+				;; ## altri casi?
+			esac
+		    fi
+
 		    if command -v $player &>/dev/null
 		    then
-			xterm -e $player "${line[1]}"
-			echo -e "running" > "$file_output"
+			if [ -n "${opts[*]}" ]
+			then
+			    $term $player "${opts[@]}" "${line[1]}"
+			else
+			    $term $player "${line[1]}"
+			fi
+		     	echo -e "running" > "$file_output"
 
-		    else
-			echo -e "Player non trovato" > "$file_output"
+		     else
+		     	echo -e "Player non trovato" > "$file_output"
 		    fi
 		fi
 	    else
