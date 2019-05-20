@@ -786,7 +786,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			if [[ "$player_filename" =~ ^mpv ]]
 			then
 			    opts=(
-				--player-operation-mode=pseudo-gui
+				--profile=pseudo-gui
 				--playlist
 			    )
 			fi
@@ -870,16 +870,13 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			term="xterm -e"
 		    fi
 		    
-		    # if [[ "$(file -b --mime-type "${line[1]}")" =~ audio ]]
-		    # then
-			case "$player_filename" in
-			    mpv)
-				opts+=(
-				    --player-operation-mode=pseudo-gui
-				)
-				;; ## altri casi?
-			esac
-#		    fi
+		    case "$player_filename" in
+			mpv)
+			    opts+=(
+				--profile=pseudo-gui
+			    )
+			    ;; ## altri casi?
+		    esac
 
 		    if command -v $player &>/dev/null
 		    then
