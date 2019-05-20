@@ -880,6 +880,12 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 				--profile=pseudo-gui
 			    )
 			    ;; ## altri casi?
+			mplayer)
+			    [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] &&
+				opts+=(
+				    -iconic
+				)
+			    ;;
 		    esac
 
 		    if command -v $player &>/dev/null
