@@ -19,85 +19,88 @@ https://savannah.nongnu.org/projects/zdl */
 
 /* Labels */
 .inline-group .label {
-  background: #ccc;
+  background: #383D43;
 }
 
 /* Labels light */
 .inline-group .label.alt {
-  background: #f1f1f1;
+  background: #3F4757;
 }
 
 /* Input and text bars */
 .inline-group .value,
 .inline-group input {
-  background: #f1f1f1;
-  color: #222;
+  background: #555;
+  color: #ccc;
 }
 
 /* Spinners background */
-.inline-group .spinner {
+/* .inline-group .spinner {
   background: #fff !important;
-}
+} */
 
 /* Select menu text */
 .inline-group .ui-selectmenu-text {
-  color: #222;
+  color: #bbb;
 }
 
 /* Playlist */
 .playlist > .pl-item > .pl-file {
-  background: #cfe4fc;
-  color: #3275ab;
+  background: #383d43;
+  color: #7faae2;
 }
 
 /* Playlist audio files */
 .playlist > .pl-item > .audio {
-  background: #c9d3fb !important;
+  background: #3f4757 !important;
+  color: #99c2ff !important;
 }
 
 /* Progressbar text */
 .ui-progressbar .label {
-  color: #3275ab;
+  color: #aaa;
 }
 
 /* Progressbar color */
 .ui-progressbar > .ui-widget-header {
-  background: #cfe4fc !important;
-  border-color: #cfe4fc !important;
+  background: #444 !important;
+  border-color: #444 !important;
 }
 
 /* Progressbar background */
 .ui-progressbar.ui-widget-content {
-  background: #f1f8ff !important;
-  border-color: #e7f2fd !important;
+  background: #111 !important;
+  border-color: #444 !important;
+  border-radius: 0;
+  height: 28px;
 }
 
 /* Progressbar status 100% */
 .progressbar .side-status {
-  background: #d0edec;
-  color: #207a72;
-  border: 1px solid #d0edec;
+  background: #007fff;
+  border: 1px solid #007fff;
+  color: #eee;
 }
 
 /* Progressbar status on download */
 .progressbar .downloading {
-  background: #ffe6cc !important;
-  border: 1px solid #ffe6cc !important;
-  color: #393a1d !important;
+  background: #cc0 !important;
+  border: 1px solid #cc0 !important;
+  color: #333 !important;
 }
 
 /* Progressbar status on unterminated */
 .progressbar .unterminated {
-  background: #ddd !important;
-  border: 1px solid #ddd !important;
-  color: #444 !important;
+  background: #888 !important;
+  border: 1px solid #888 !important;
+  color: #333 !important;
 }
 
 /* Progressbar status on abort */
 .progressbar .aborted {
-  background: #f1dcda !important;
-  border: 1px solid #f1dcda !important;
-  color: #c42b5e !important;
+  background: #f00 !important;
+  border: 1px solid #f00 !important;
+  color: #eee !important;
 }
 
 /* Custom tooltip red background */
@@ -106,5 +109,5 @@ https://savannah.nongnu.org/projects/zdl */
   color: #fff;
   border: 1px solid #d00 !important;
   border-radius: 5px !important;
-  box-shadow: 0 0 5px 2px #aaa;
+  box-shadow: 0 0 5px 2px #555;
 }

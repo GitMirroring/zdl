@@ -805,7 +805,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			if [[ "$player_filename" =~ ^mpv ]]
 			then
 			    opts=(
-				--profile=pseudo-gui
+				#--profile=pseudo-gui
 				--playlist
 			    )
 			fi
@@ -817,7 +817,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			    )
 			fi
 
-			if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
+			if [[ ! "$player_filename" =~ ^(vlc|smplayer)$ ]]
 			then
 			    term="xterm -e"
 			fi
