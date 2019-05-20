@@ -770,7 +770,7 @@ END {
     progress()
     
     if (json_flag == "true") {
-	for (I=0; I<length(file_out); I++) {
+	for (I=0; I<length(url_out); I++) {
 	    if (json_flag == "true") {
 		json = json "{"
 		json = json "\"path\":\"" pwd "\","

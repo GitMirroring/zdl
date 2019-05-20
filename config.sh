@@ -535,8 +535,7 @@ path_axel=$(command -v axel 2>/dev/null)
 path_aria2=$(command -v aria2c 2>/dev/null)
 path_wget=$(command -v wget 2>/dev/null)
 path_rtmpdump=$(command -v rtmpdump 2>/dev/null)
-
-
+path_ffmpeg=$(command -v ffmpeg 2>/dev/null || command -v avconv 2>/dev/null)
 
 ## NODEJS:
 

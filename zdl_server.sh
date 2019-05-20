@@ -53,6 +53,7 @@ server_index="$path_server/index-${web_ui}.html"
 template_index="$path_webui/index-${web_ui}.html"
 
 json_flag=true
+touch "$server_data".$socket_port
 
 #### HTTP:
 declare -i DEBUG=0
@@ -290,7 +291,6 @@ function create_json {
 	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
 	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
-
 	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
 	    echo > "$server_data".$socket_port
 
@@ -321,7 +321,7 @@ function check_xfer_running {
 function check_downloader_running {
     ## if grep -P "(aria2c|wget|axel|rtmpdump)" /proc/[0-9]*/cmdline &>/dev/null ||
     ##	    check_xfer_running
-    if fuser $path_axel $path_aria2 $path_wget $path_rtmpdump -s ||
+    if fuser $path_ffmpeg $path_axel $path_aria2 $path_wget $path_rtmpdump -s ||
 	    check_xfer_running
     then
 	return 0
