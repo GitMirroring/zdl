@@ -54,6 +54,7 @@ template_index="$path_webui/index-${web_ui}.html"
 
 json_flag=true
 touch "$server_data".$socket_port
+touch "$path_server"/playlist
 
 #### HTTP:
 declare -i DEBUG=0
@@ -575,6 +576,22 @@ function search_xdcc {
     fi
 }
 
+function clean_playlist {
+    local line playlist="["
+
+    while read line
+    do
+    	if [ -f "$line" ]
+    	then
+    	    playlist+="\"$line\","
+    	fi
+    done < <(node -e "$(cat "$path_server"/playlist).forEach(function(f){console.log(f)})")
+
+    playlist="${playlist%,}]"
+    
+    echo -e "$playlist" > "$path_server"/playlist
+}    
+
 function check_playlist {
     local list="$1"
     
@@ -667,6 +684,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	get-playlist)
 	    file_output="$path_server"/playlist
+	    clean_playlist
             list=$(< "$file_output")
 
             if check_playlist "$list"
@@ -682,8 +700,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	add-playlist)
             file_output="$path_server"/playlist
-            touch "$file_output"
-
+	    clean_playlist
+	    
             if [ -f "${line[1]}" ] &&
 		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
             then
@@ -868,7 +886,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    declare -a opts=()
 
 		    if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv|dragon|cvlc)$ ]] ||
-			   ( [ "$player_filename" == cvlc ] &&
+			   ( [[ "$player_filename" =~ ^(cvlc|mpv)$ ]] &&
 				 [[ "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] )
 		    then
 			term="xterm -e"
@@ -876,15 +894,14 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    
 		    case "$player_filename" in
 			mpv)
-			    opts+=(
-				--profile=pseudo-gui
-			    )
-			    ;; ## altri casi?
-			mplayer)
 			    [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] &&
 				opts+=(
-				    -iconic
+				    --profile=pseudo-gui
 				)
+			    ;;
+			mplayer)
+			    [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] &&
+				term="${term//-e/-iconic -e}"
 			    ;;
 		    esac
 
