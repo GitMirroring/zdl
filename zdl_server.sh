@@ -1406,8 +1406,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	get-desktop-path)
 	    if test -s "$file_desktop"
 	    then
-		#eval exec_line=( $(grep Exec "$file_desktop") )
-		eval exec_line=$(grep Exec "$file_desktop")
+		eval exec_line=( $(grep Exec "$file_desktop") )
 
 		for path in "${exec_line[@]}"
 		do
