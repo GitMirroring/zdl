@@ -441,15 +441,11 @@ var playlist = {
         var files = $( "#playlist .audio" ),
             list = "";
         if ( files ) {
-	    var sep = "€€€"; // <--------------------------------------[zoninoz, prosegue qua sotto:]
             $.each( files, function () {
-		if ( list === "")
-                    list += $( this ).data( "file" );
-		else
-		    list += sep + $( this ).data( "file" );
+                list += $( this ).data( "file" ) + "€€€";
             } );
             if ( list ) {
-                //list = list.slice( 0, -1 ); // <---------------------[zoninoz]
+                list = list.slice( 0, -3 );
                 myZDL.playPlaylist( list ).then( function ( res ) {
                     var response = res.trim();
                     if ( /^\d+$/.test( response ) ) {
