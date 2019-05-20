@@ -870,8 +870,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			term="xterm -e"
 		    fi
 		    
-		    if [[ "$(file -b --mime-type "${line[1]}")" =~ audio ]]
-		    then
+		    # if [[ "$(file -b --mime-type "${line[1]}")" =~ audio ]]
+		    # then
 			case "$player_filename" in
 			    mpv)
 				opts+=(
@@ -879,7 +879,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 				)
 				;; ## altri casi?
 			esac
-		    fi
+#		    fi
 
 		    if command -v $player &>/dev/null
 		    then
