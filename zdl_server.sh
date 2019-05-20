@@ -733,7 +733,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	play-playlist)
 	    get_conf
 	    file_output="$path_server"/playlist-file.$socket_port
-
+	    local term
+	    
 	    #local item
 	    declare -a list
 	    while read item
@@ -850,7 +851,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	play-media)
 	    get_conf
 	    file_output="$path_server"/msg-file.$socket_port
-
+	    local term
+	    
 	    if [ -f "${line[1]}" ]
 	    then
 		if [ -z "$player" ]
@@ -865,7 +867,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    local player_filename="${player##*/}"
 		    declare -a opts=()
 
-		    if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
+		    if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv|dragon|cvlc)$ ]] ||
+			   ( [ "$player_filename" == cvlc ] &&
+				 [[ "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] )
 		    then
 			term="xterm -e"
 		    fi
