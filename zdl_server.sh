@@ -805,7 +805,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			if [[ "$player_filename" =~ ^mpv ]]
 			then
 			    opts=(
-				#--profile=pseudo-gui
+				--geometry=800x50
+				--profile=pseudo-gui
+				--script-opts="osc-visibility=always,osc-vidscale=no,osc-boxalpha=0"
 				--playlist
 			    )
 			fi
@@ -817,7 +819,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			    )
 			fi
 
-			if [[ ! "$player_filename" =~ ^(vlc|smplayer)$ ]]
+			if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv)$ ]]
 			then
 			    term="xterm -e"
 			fi
@@ -886,7 +888,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    declare -a opts=()
 
 		    if [[ ! "$player_filename" =~ ^(vlc|smplayer|mpv|dragon|cvlc)$ ]] ||
-			   ( [[ "$player_filename" =~ ^(cvlc|mpv)$ ]] &&
+			   ( [[ "$player_filename" =~ ^(cvlc)$ ]] &&
 				 [[ "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] )
 		    then
 			term="xterm -e"
@@ -894,9 +896,15 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    
 		    case "$player_filename" in
 			mpv)
-			    [[ ! "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] &&
+			    opts+=(
+				--profile=pseudo-gui
+			    )
+			    
+			    [[ "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] &&
 				opts+=(
+				    --geometry=800x50
 				    --profile=pseudo-gui
+				    --script-opts="osc-visibility=always,osc-vidscale=no,osc-boxalpha=0"
 				)
 			    ;;
 			mplayer)
