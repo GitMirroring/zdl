@@ -154,7 +154,9 @@ function spinnersSetRange( id, spinner ) {
         "torrent-udp": [
             1025, 65535
         ],
-        "socket-tcp": [ 8080, 65535 ]
+        "socket-tcp": [
+            8080, 65535
+        ]
     };
 
     if ( obj.hasOwnProperty( id ) && typeof obj[ id ] === "object" ) {
@@ -179,7 +181,9 @@ function slidersSetRange( id, slider ) {
         "aria2-connections": [
             1, 32
         ],
-        "max-downloads": [ 1, 50 ]
+        "max-downloads": [
+            1, 50
+        ]
     };
 
     if ( obj.hasOwnProperty( id ) && typeof obj[ id ] === "object" ) {

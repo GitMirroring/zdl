@@ -358,7 +358,7 @@ var manage = {
 };
 
 /**
- *	XDCC search :: Tab 3
+ *	SEARCH :: Tab 3
  */
 var xdcc = {
     // Search xdcc on xdcc.eu
@@ -510,11 +510,10 @@ var playlist = {
     extractAudio: function ( elem ) {
         var filePath = elem.data( "file" ),
             format = client.get( "audio" );
-        //elem.button( "disable" );
-        elem.button({
+        elem.button( {
             label: $.i18n( "wait" ),
             disabled: true
-        });
+        } );
         myZDL.extractAudio( filePath, format ).then( function ( res ) {
             var response = res.trim();
             if ( response === "success" ) {
@@ -536,11 +535,10 @@ var playlist = {
                 } else {
                     utils.log( "playlist-video-to-audio-not-found", filePath, true );
                 }
-                //elem.button( "enable" );
-                elem.button({
+                elem.button( {
                     label: "Audio",
                     disabled: false
-                });
+                } );
             }
         } );
     }
@@ -706,7 +704,7 @@ var info = {
                     lang = client.get( "locale" ),
                     read = $.get( "webui-" + lang + ".txt" );
                 read.done( function( res ) {
-                    textArea.val(res);
+                    textArea.val( res );
                 } )
                 .fail( function () {
                     utils.log( "webui-info-error" );
@@ -851,8 +849,8 @@ var common = {
         var textArea = elem.prev(),
             content = textArea.val();
         if ( content && content !== $.i18n( "file-not-found" ) ) {
-            var fileName = elem.data( "file" );
-            toggle = elem.data( "trigger" );
+            var fileName = elem.data( "file" ),
+                toggle = elem.data( "trigger" );
             myZDL.deleteFile( fileName ).then( function () {
                 textArea.val( "" );
                 utils.log( "file-deleted", fileName );

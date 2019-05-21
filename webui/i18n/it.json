@@ -64,6 +64,7 @@
     "tab-6-label-launcher": "Path nel lanciatore:",
     "tab-7-name": "Console",
     "tab-7-title": "Registrazione eventi ed errori",
+    "tab-7-label-log-file": "Leggi zdl_log.txt:",
     "tab-8-name": "Info",
     "tab-8-title": "Documentazione di ZigzagDownLoader (ZDL)",
     "tab-8-text": "Il manuale d'uso è disponibile in diverse forme, accessibili dal terminale o da un browser web.",
