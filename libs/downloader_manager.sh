@@ -519,11 +519,27 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 	    ## URL-FILE.M3U8
 	    rm -f "$path_tmp/${file_in}_stdout.tmp"
 
-	    nohup $ffmpeg -loglevel info -i "$url_in_file" -c copy "${file_in//\:/-}" -y 2>&1 | 
-		stdbuf -i0 -o0 -e0 tr '\r' '\n' |
-	    	stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
-	    pid_in=$!
-	    
+	    if [ "$livestream_m3u8" == "$url_in_file" ]
+	    then
+		local livestream_time
+		get_livestream_duration_time "$url_in" livestream_time
+
+		nohup $ffmpeg -loglevel info \
+		      -i "$url_in_file" \
+		      -c copy \
+		      -t "$livestream_time" \
+		      "${file_in//\:/-}" \
+		      -y 2>&1 | 
+		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
+		pid_in=$!
+		
+	    else
+		nohup $ffmpeg -loglevel info -i "$url_in_file" -c copy "${file_in//\:/-}" -y 2>&1 | 
+		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
+		pid_in=$!
+	    fi
 	    echo -e "$pid_in
 $url_in
 FFMpeg

@@ -272,7 +272,6 @@ function readline_links {
 	[ -n "$link" ] &&
 	    set_link + "$link"
 	unset break_loop
-
     done
 }
 

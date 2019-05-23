@@ -30,82 +30,107 @@
 
 if [[ "$url_in" =~ raiplay ]]
 then
-    html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
-
-    raiplay_subtitle=$(grep vodJson <<< "$html")
-    raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
-    raiplay_subtitle="${raiplay_subtitle%%';</script>'*}"
-
-    #### non sicuro: serve una sandbox
-    ## file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
-
-    json_name="${raiplay_subtitle##*\"name\":\"}"
-    json_name=$(trim "${json_name%%\"*}")
-    json_subtitle="${raiplay_subtitle##*\"subtitle\":\"}"
-    json_subtitle=$(trim "${json_subtitle%%\"*}")
-
-    if [ -n "$json_name" ]
+    if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
-	file_in="$json_name"
+	#### problemi vari con youtube-dl
+	# raiplay_data_livestream=$(youtube-dl --get-url --get-filename "$url_in")
+	# url_in_file=$(head -n1 <<< "${raiplay_data_livestream}")
+	# file_in=$(tail -n1 <<< "${raiplay_data_livestream}")
 
-	if [ -n "$json_subtitle" ]
-	then
-	   file_in="$file_in - $json_subtitle"
-	fi
+	## estrazione funzionante:
+	html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)
+	url_raiplay=$(grep data-video-url <<< "$html" |
+			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
 	
-    else
-	file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
-    fi
-    file_in="${file_in#Film\: }"
+	url_in_file=$(get_location "$url_raiplay")
 
-    url_raiplay=$(grep data-video-url <<< "$html" |
-		 sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
+	get_livestream_start_time "$url_in" rai_start_time
+	get_livestream_duration_time "$url_in" rai_duration_time
 
-    if url "$url_raiplay"
-    then
-	url_raiplay_location=$(get_location "$url_raiplay")
-	if url "$url_raiplay_location"
+	file_in=$(get_title "$html")_$(date +%Y-%m-%d)_dalle_${rai_start_time//\:/-}_per_${rai_duration_time//\:/-}
+
+	print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
+	livestream_m3u8="$url_in_file"
+	
+    else       
+	html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
+
+	raiplay_subtitle=$(grep vodJson <<< "$html")
+	raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
+	raiplay_subtitle="${raiplay_subtitle%%';</script>'*}"
+
+	#### non sicuro: serve una sandbox
+	## file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
+
+	json_name="${raiplay_subtitle##*\"name\":\"}"
+	json_name=$(trim "${json_name%%\"*}")
+	json_subtitle="${raiplay_subtitle##*\"subtitle\":\"}"
+	json_subtitle=$(trim "${json_subtitle%%\"*}")
+
+	if [ -n "$json_name" ]
 	then
-	    url_raiplay="$url_raiplay_location"
+	    file_in="$json_name"
 
-	elif [ -n "$ffmpeg" ]
-	then
-	    url_raiplay_mpd=$(curl "$url_raiplay")
-	    url_raiplay_mpd="${url_raiplay_mpd//\(/%28}"
-	    url_raiplay_mpd="${url_raiplay_mpd//\)/%29}"
-
-	    url "$url_raiplay_mpd" &&
-		print_c 4 "URL estratto: $url_raiplay_mpd"
-
-	    if url "$url_raiplay_mpd" && 
-		    [[ "$url_raiplay_mpd" =~ (\.mpd) ]] &&
-		    $ffmpeg -buildconf | grep libxml2 &>/dev/null
+	    if [ -n "$json_subtitle" ]
 	    then
-		url_in_file="$url_raiplay_mpd"
+		file_in="$file_in - $json_subtitle"
+	    fi
+	    
+	else
+	    file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
+	fi
+	file_in="${file_in#Film\: }"
+
+	url_raiplay=$(grep data-video-url <<< "$html" |
+			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
+
+	if url "$url_raiplay"
+	then
+	    url_raiplay_location=$(get_location "$url_raiplay")
+	    if url "$url_raiplay_location"
+	    then
+		url_raiplay="$url_raiplay_location"
+
+	    elif [ -n "$ffmpeg" ]
+	    then
+		url_raiplay_mpd=$(curl "$url_raiplay")
+		url_raiplay_mpd="${url_raiplay_mpd//\(/%28}"
+		url_raiplay_mpd="${url_raiplay_mpd//\)/%29}"
+
+		url "$url_raiplay_mpd" &&
+		    print_c 4 "URL estratto: $url_raiplay_mpd"
+
+		if url "$url_raiplay_mpd" && 
+			[[ "$url_raiplay_mpd" =~ (\.mpd) ]] &&
+			$ffmpeg -buildconf | grep libxml2 &>/dev/null
+		then
+		    url_in_file="$url_raiplay_mpd"
+
+		else
+		    _log 41
+		fi
 
 	    else
-		_log 41
+		_log 42
 	    fi
-
 	else
-	    _log 42
+	    url_raiplay=$(grep contentUrl <<< "$html" |
+			      sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
 	fi
-    else
-	url_raiplay=$(grep contentUrl <<< "$html" |
-			  sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
+	if ! url "$url_in_file"
+	then
+    	    url_in_file=$(wget -qO- "$url_raiplay" \
+    			       --user-agent="$user_agent" \
+    			       --save-cookies="$path_tmp/cookies.zdl" \
+    			       -o /dev/null)
+	    
+    	    url_in_file=$(tail -n1 <<< "$url_in_file")
+	fi	
     fi
-
-    if ! url "$url_in_file"
-    then
-	url_in_file=$(wget -qO- "$url_raiplay" \
-			   --user-agent="$user_agent" \
-			   --save-cookies="$path_tmp/cookies.zdl" \
-			   -o /dev/null)
-	
-	url_in_file=$(tail -n1 <<< "$url_in_file")
-    fi
-    
+        
     downwait_extra=20
+
+    end_extension
 fi
 									   
 

@@ -643,6 +643,23 @@ function seconds_to_human {
     fi
 }
 
+function human_to_seconds {
+    local hours="${1##0}" \
+	  minutes="${2##0}" \
+	  seconds="${3##0}"
+	  
+    if [[ "$1" =~ ^([0-9]+)$ &&
+	      "$2" =~ ^([0-9]+)$ &&
+	      "$3" =~ ^([0-9.]+)$ ]]
+    then
+	echo $(( seconds + (minutes * 60) + (hours * 360) ))
+	return 0
+	
+    else
+	return 1
+    fi
+}
+
 function sanitize_text {
     if [[ $1 ]]
     then

@@ -1256,7 +1256,6 @@ do
     fi
 done
 
-
 if [ -n "${args[*]}" ]
 then
     COOKIE="$path_tmp/flashgot_cfile.zdl"
@@ -1375,15 +1374,11 @@ then
     then
 	if [ "$this_mode" != "daemon" ]
 	then
-	    # read -t 0
-	    # bindings
-	    # read -t 0
 	    binding=true
 	    standard_box
 
 	    bindings
 	    readline_links
- 	    #stty -echo
 
 	    post_readline=true
 	    
@@ -1493,7 +1488,10 @@ function main_loop {
 		downloader_in=$(cat "$path_tmp/downloader")
 	    fi
 
-	    if check_link "$url_in"
+	    ##check_linksloop_livestream
+	    
+	    if check_link_livestream "$url_in" &&
+		    check_link "$url_in"
 	    then
 		axel_parts=$axel_parts_conf
 		url_in="${url_in## }"
@@ -1705,6 +1703,8 @@ then
     done 
 
 else
+    check_linksloop_livestream
+    
     if [ "$lite_mode" == true ] ||
 	   [ "$this_mode" == lite ]
     then
@@ -1716,7 +1716,7 @@ else
     rm -f "$path_tmp/stop-binding"     
 
     echo "$COLUMNS" > "$path_tmp"/columns
-    {
+    {	
 	main_loop 2>/dev/null &
 	loops_pid=$!
     } 2>/dev/null

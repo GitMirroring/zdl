@@ -1001,3 +1001,293 @@ function get_data_xdcc_eu {
 
     return 0    
 }
+
+function check_livestream {
+    local link="$1"
+    if [[ "$link" =~ (raiplay.+\/dirette\/) ]]
+    then
+	return 0
+    else
+	return 1
+    fi
+}
+
+function run_livestream_timer {
+    local link="$1"                                                \
+	  start_time="$2"                                          \
+	  duration_time                                            \
+	  stop_time_in_sec                                         \
+	  now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))       \
+	  start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
+    
+    if url "$link" &&
+	    [[ "$start_time" =~ ([0-9]+\:[0-9]+\:[0-9.]+) ]]
+    then
+	{
+	    local ppid=$$
+	    while (( start_time_in_sec > now_in_sec ))
+	    do
+		sleep 1
+		now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
+
+		check_pid $ppid || exit
+		
+	    done
+	    
+	    if (( start_time_in_sec <= now_in_sec ))
+	    then
+		set_line_in_file + "$link" "$path_tmp"/livestream_start.txt
+		
+		get_livestream_duration_time "$link" duration_time
+
+		stop_time_in_sec=$(( start_time_in_sec + $(human_to_seconds ${duration_time//\:/ }) ))
+		now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
+
+		while (( stop_time_in_sec > now_in_sec ))
+		do
+		    sleep 1
+		    now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
+
+		    check_pid $ppid || exit
+		done
+		
+		if (( stop_time_in_sec > now_in_sec ))
+		then
+		    set_line_in_file - "$link" "$path_tmp"/livestream_start.txt
+
+		    local livestream_time
+		    while read line
+		    do
+			if [[ ! "$line" =~ ^"$link "[0-9]+\: ]]
+			then
+			    livestream_time+="$line\n"
+			fi
+		    done < "$path_tmp"/livestream_time.txt
+		    echo "$livestream" > "$path_tmp"/livestream_time.txt
+		fi
+	    fi
+	} &
+    else
+	return 1
+    fi
+    return 0
+}
+
+function set_livestream_time {
+    local link="$1" \
+	  start_time="$2" \
+	  duration_time="$3"
+    echo "$link $start_time $duration_time" >>"$path_tmp"/livestream_time.txt
+}
+
+function get_livestream_duration_time {
+    local link="$1"
+    declare -n ref="$2"
+    declare -a line
+    
+    [ -s "$path_tmp"/livestream_time.txt ] &&
+	line=( $(grep -P "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt) )
+    
+    if [[ "${line[2]}" =~ ([0-9]+\:[0-9]+\:[0-9.]+) ]]
+    then
+	ref="${line[2]}"
+	return 0
+    else
+	return 1
+    fi
+}
+
+function get_livestream_start_time {
+    local link="$1"
+    declare -n ref="$2"
+    declare -a line
+    
+    [ -s "$path_tmp"/livestream_time.txt ] &&
+	line=( $(grep -P "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt) )
+
+    if [[ "${line[1]}" =~ ([0-9]+\:[0-9]+\:[0-9.]+) ]]
+    then
+	ref="${line[1]}"
+	return 0
+    else
+	return 1
+    fi
+}
+
+function check_link_livestream {
+    local link="$1"
+    local max_dl=$(cat "$path_tmp"/max-dl)
+    local counter=0
+    local line
+    
+    if [ ! -s "$path_tmp"/livestream_start.txt ]
+    then
+	if [ ! -s "$path_tmp"/livestream_time.txt ]
+	then
+	    return 0
+
+	elif grep -qP "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt
+	then
+	    return 1
+	else
+	    return 0
+	fi
+	
+    else
+	if data_stdout
+	then
+	    while read line
+	    do
+		url "$line" && ((counter++))
+		
+		for ((i=0; i<${#url_out[@]}; i++))
+		do
+		    if [ "$line" == "${url_out[i]}" ] &&
+			   check_pid "${pid_out[i]}"
+		    then
+			((counter--))
+		    fi
+		done
+	    done < <(cat "$path_tmp"/livestream_start.txt)
+
+ 	    echo $(( max_dl + counter )) > "$path_tmp"/max-dl
+
+	    if ((counter)) && (
+		   ! grep -qP "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt ||
+		       ! grep -qP "^${link}$" "$path_tmp"/livestream_start.txt
+	       )
+	    then
+		return 1
+	    else
+		return 0
+	    fi
+	else
+	    while read line
+	    do
+		url "$line" && ((counter++))
+	    done < <(cat "$path_tmp"/livestream_start.txt)
+	    
+ 	    echo $(( max_dl + counter )) > "$path_tmp"/max-dl
+	    return 0
+	fi    
+    fi
+}
+
+function input_time {
+    local val var max
+    unset h m s
+    
+    for var in h m s
+    do
+	while [[ ! "$val" =~ ^([0-9]+)$ ]]
+	do
+	    case $var in
+		h) print_c 2 "Ore:";;
+		m) print_c 2 "Minuti:";;
+		s) print_c 2 "Secondi:";;
+	    esac
+
+	    read -e $var
+	    eval val="\$$var"
+
+	    if [[ "$val" =~ ^([0]+)$ ]]
+	    then
+		val=0
+
+	    elif [[ "$val" =~ [1-9]+ ]]
+	    then
+		val=${val##0}
+	    fi
+
+	    case $var in
+		h) max=24 ;;
+		m|s) max=60 ;;
+	    esac
+
+	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
+	    then
+		print_c 3 "Digitare un numero intero fra 0 e $max\n"
+		unset val
+	    else
+		val=$(printf "%.2d" "$val" 2>/dev/null)
+		[[ ! "$val" =~ ^([0-9]{2})$ ]] && unset val || echo
+	    fi
+	done
+	eval $var=$val
+	unset val
+    done
+}
+
+function display_set_livestream {
+    local link="$1" \
+	  h m s opt \
+	  start_time 
+
+    if [ "$post_readline" == true ] &&
+	   [ "$from_editor" != true ]
+    then
+	stty -echo
+
+    else
+	cursor on
+	binding=true
+	bindings
+    fi
+
+    echo
+    header_box "Inserimento link di una diretta (livestream)"
+    print_c 4 "Link: $link"
+    print_c 0 "È necessario indicare l'orario di inizio registrazione e la sua durata\n"
+
+    print_c 4 "Orario di inizio registrazione:"
+    print_c 2 "Vuoi registrare subito? [sì|*]"
+    
+    read -e opt
+
+    if [ "$opt" == 'sì' ]
+    then
+	h=$(date +%H)
+	m=$(date +%M)
+	s=$(date +%S)
+	echo
+    else
+	input_time
+    fi
+    start_time="$h:$m:$s"
+    
+    print_c 4 "Durata registrazione:"
+    input_time
+    duration_time="$h:$m:$s"
+
+    set_livestream_time "$link" "$start_time" "$duration_time"
+    run_livestream_timer "$link" "$start_time"
+    
+    cursor off
+}
+
+function check_linksloop_livestream {
+    if [ -s "$path_tmp"/links_loop.txt ]
+    then
+	declare -a list=( $(cat "$path_tmp"/links_loop.txt) )
+	local line start_time
+	
+	for line in "${list[@]}"
+	do
+	    if check_livestream "$line"
+	    then
+		if [ ! -s "$path_tmp"/livestream_time.txt ] ||
+			( [ -s "$path_tmp"/livestream_time.txt ] &&
+			      ! grep -qP "^$line\ [0-9]+\:" "$path_tmp"/livestream_time.txt )
+		then
+		    display_set_livestream "$line"
+
+		elif [ -s "$path_tmp"/livestream_time.txt ] &&
+			 grep -qP "^$line\ [0-9]+\:" "$path_tmp"/livestream_time.txt 
+		then
+		    get_livestream_start_time "$line" start_time
+		    run_livestream_timer "$line" "$start_time"
+		fi
+	    fi
+	done
+    fi
+}

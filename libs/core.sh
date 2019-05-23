@@ -871,6 +871,8 @@ function redirect_links {
 	    header_dl "Downloading in $PWD"
 	print_c 1 "La gestione dei download è inoltrata a un'altra istanza attiva di $name_prog (pid: $that_pid), nel seguente terminale: $that_tty\n"
     fi
+
+    check_linksloop_livestream
     
     [ -n "$xterm_stop" ] && xterm_stop
 
