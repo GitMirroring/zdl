@@ -321,7 +321,16 @@ function check_link {
     local i ret=0
     local max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
 
-    [ -z "$max_dl" ] && return 0
+    if [ -z "$max_dl" ]
+    then
+	if check_livestream_link_time "$link" &&
+		! check_livestream_link_start "$link"
+	then
+	    return 1
+	else
+	    return 0
+	fi
+    fi
     
     if url "$link" &&
 	   set_link in "$link"
@@ -341,11 +350,16 @@ function check_link {
 		then
 		    ret=1
 		fi
-	    done
+	    done	
 	fi
     else
 	ret=1
     fi
+
+    check_livestream_link_time "$link" &&
+	! check_livestream_link_start "$link" &&
+	ret=1
+
     return $ret
 }
 
