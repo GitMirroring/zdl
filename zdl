@@ -1432,6 +1432,7 @@ function main_loop {
 	while :
 	do
 	    post_process
+	    clean_livestream
 	    
 	    if check_in_loop
 	    then

@@ -1114,19 +1114,72 @@ function get_livestream_start_time {
     fi
 }
 
+function check_livestream_link_time {
+    grep -qP "^$1\ [0-9]+\:" "$path_tmp"/livestream_time.txt &&
+	return 0 ||
+	    return 1
+}
+
+function check_livestream_link_start {
+    grep -qP "^${1}$" "$path_tmp"/livestream_start.txt
+}
+
+function clean_livestream {
+    local line
+    declare -a lines
+    
+    [ ! -s "$path_tmp"/links_loop.txt ] &&
+	rm -f "$path_tmp"/livestream_time.txt
+    
+    if [ -s "$path_tmp"/livestream_time.txt ]
+    then
+	while read -a lines
+	do
+	    set_link in "${lines[0]}" ||
+		sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
+
+	done < "$path_tmp"/livestream_time.txt
+
+	line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
+	if [ -n "$line" ]
+	then
+	    echo "$line" >"$path_tmp"/livestream_time.txt
+	else
+	    rm -f "$path_tmp"/livestream_time.txt
+	fi
+    fi
+
+    [ ! -s "$path_tmp"/livestream_time.txt ] &&
+	rm -f "$path_tmp"/livestream_start.txt
+
+    if [ -s "$path_tmp"/links_loop.txt ] &&
+	   [ -s "$path_tmp"/livestream_start.txt ]
+    then
+	while read line
+	do
+	    grep -q "$line" "$path_tmp"/links_loop.txt ||
+		sed -e "s|$line||g" -i "$path_tmp"/livestream_start.txt
+	    
+	done < "$path_tmp"/livestream_start.txt
+	
+	clean_file "$path_tmp"/livestream_start.txt
+    fi
+}
+
 function check_link_livestream {
     local link="$1"
     local max_dl=$(cat "$path_tmp"/max-dl)
     local counter=0
     local line
-    
+
+       
     if [ ! -s "$path_tmp"/livestream_start.txt ]
     then
 	if [ ! -s "$path_tmp"/livestream_time.txt ]
 	then
 	    return 0
 
-	elif grep -qP "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt
+	elif check_livestream_link_time "$link"
 	then
 	    return 1
 	else
@@ -1153,8 +1206,8 @@ function check_link_livestream {
  	    echo $(( max_dl + counter )) > "$path_tmp"/max-dl
 
 	    if ((counter)) && (
-		   ! grep -qP "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt ||
-		       ! grep -qP "^${link}$" "$path_tmp"/livestream_start.txt
+		   ! check_livestream_link_time "$link" ||
+		       ! check_livestream_link_start "$link"
 	       )
 	    then
 		return 1
@@ -1170,6 +1223,34 @@ function check_link_livestream {
  	    echo $(( max_dl + counter )) > "$path_tmp"/max-dl
 	    return 0
 	fi    
+    fi
+}
+
+
+function check_linksloop_livestream {
+    if [ -s "$path_tmp"/links_loop.txt ]
+    then
+	declare -a list=( $(cat "$path_tmp"/links_loop.txt) )
+	local line start_time
+	
+	for line in "${list[@]}"
+	do
+	    if check_livestream "$line"
+	    then
+		if [ ! -s "$path_tmp"/livestream_time.txt ] ||
+			( [ -s "$path_tmp"/livestream_time.txt ] &&
+			      ! check_livestream_link_time "$line" )
+		then
+		    display_set_livestream "$line"
+
+		elif [ -s "$path_tmp"/livestream_time.txt ] &&
+			 check_livestream_link_time "$line"  
+		then
+		    get_livestream_start_time "$line" start_time
+		    run_livestream_timer "$line" "$start_time"
+		fi
+	    fi
+	done
     fi
 }
 
@@ -1263,31 +1344,4 @@ function display_set_livestream {
     run_livestream_timer "$link" "$start_time"
     
     cursor off
-}
-
-function check_linksloop_livestream {
-    if [ -s "$path_tmp"/links_loop.txt ]
-    then
-	declare -a list=( $(cat "$path_tmp"/links_loop.txt) )
-	local line start_time
-	
-	for line in "${list[@]}"
-	do
-	    if check_livestream "$line"
-	    then
-		if [ ! -s "$path_tmp"/livestream_time.txt ] ||
-			( [ -s "$path_tmp"/livestream_time.txt ] &&
-			      ! grep -qP "^$line\ [0-9]+\:" "$path_tmp"/livestream_time.txt )
-		then
-		    display_set_livestream "$line"
-
-		elif [ -s "$path_tmp"/livestream_time.txt ] &&
-			 grep -qP "^$line\ [0-9]+\:" "$path_tmp"/livestream_time.txt 
-		then
-		    get_livestream_start_time "$line" start_time
-		    run_livestream_timer "$line" "$start_time"
-		fi
-	    fi
-	done
-    fi
 }

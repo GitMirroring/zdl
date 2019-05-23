@@ -584,17 +584,31 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		break
 	}
 
-	cmd = "cat .zdl_tmp/"file_out[i]"_stdout.tmp"
-	while (cmd | getline line) {
-	    if (line ~ /Duration/) {
-		match(line, /Duration:\s*([^,]+)/, matched)
-		duration_out[i] = int( get_ffmpeg_seconds(matched[1]) )
-		break
+	duration_out[i] = 0
+	if (exists(".zdl_tmp/livestream_time.txt")) {
+	    cmd = "cat .zdl_tmp/livestream_time.txt"
+	    while (cmd | getline line) {
+		if (line ~ url_out[i]) {
+		    match(line, /\:[0-9]{2}\s{1}([0-9:]+)$/, matched)
+		    duration_out[i] = int( get_ffmpeg_seconds(matched[1]) )
+		    break
+		}
 	    }
+	    close(cmd)
 	}
-
+	if (! duration_out[i]) {
+	    cmd = "cat .zdl_tmp/"file_out[i]"_stdout.tmp"
+	    while (cmd | getline line) {
+		if (line ~ /Duration/) {
+		    match(line, /Duration:\s*([^,]+)/, matched)
+		    duration_out[i] = int( get_ffmpeg_seconds(matched[1]))
+		    break
+		}
+	    }
+	    close(cmd)
+	}
 	length_saved[i] = size_file(file_out[i])
-
+	
 	if (progress_end[i]) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
@@ -676,7 +690,7 @@ function get_ffmpeg_seconds (time,         h, m, s) {
     m = int(time_elems[2])
     s = int(time_elems[3])
 
-    return int(s + (m * 60) + (h * 60 * 60))
+    return int(s + (m * 60) + (h * 360))
 }
 
 function progress () {
