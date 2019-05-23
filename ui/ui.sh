@@ -738,13 +738,13 @@ function input_time {
 	    fi
 
 	    case $var in
-		h) max=24 ;;
+		h) max=23 ;;
 		m|s) max=60 ;;
 	    esac
 
 	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
 	    then
-		print_c 3 "Digitare un numero intero fra 0 e $max\n"
+		print_c 3 "Digitare un numero intero nell'intervallo da 0 a $max (compresi)\n"
 		unset val
 	    else
 		val=$(printf "%.2d" "$val" 2>/dev/null)
