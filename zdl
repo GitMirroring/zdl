@@ -23,7 +23,7 @@
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
 #
-
+set -p
 path_usr="/usr/local/share/zdl"
 
 source "$path_usr"/source_all.sh
@@ -651,7 +651,7 @@ then
 		if check_instance_prog
 		then
 		    set_link + "$url_in"
-		    xterm_stop=true
+		    xterm_stop_checked=true
 		    links="$url_in"
 		    redirect_links
 		else
@@ -682,7 +682,7 @@ then
 	if [ "${args[i]}" == "--stop" ]
 	then 
 	    unset args[i]
-	    xterm_stop=true
+	    xterm_stop_checked=true
 	fi
     done
 fi
@@ -733,7 +733,7 @@ then
 		print_c 1 "Avviato in modalità demone in $PWD\n"
 		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n"
 
-		[ -n "$xterm_stop" ] && xterm_stop
+		[ -n "$xterm_stop_checked" ] && xterm_stop
 		exit 0
 
 	    else
@@ -1433,16 +1433,16 @@ function main_loop {
 	do
 	    post_process
 	    clean_livestream
+	    show_downloads
 	    
 	    if check_in_loop
 	    then
-		show_downloads
 		sleep 2
 		continue
 	    fi
 
 	    unset break_loop
-	    
+
 	    if [ -s "$start_file" ]
 	    then
 		nlines=$(wc -l < "$start_file")		
@@ -1457,13 +1457,13 @@ function main_loop {
 		    continue
 		fi
 		url_in_old="$url_in"
-		
+
 		if ! check_link "$url_in"
 		then
+		    sleep 2
 		    ((nline++))
 		    continue
 		fi
-		
 	    else
 		show_downloads
 		break
@@ -1489,10 +1489,7 @@ function main_loop {
 		downloader_in=$(cat "$path_tmp/downloader")
 	    fi
 
-	    ##check_linksloop_livestream
-	    
-	    if check_link_livestream "$url_in" &&
-		    check_link "$url_in"
+	    if check_link "$url_in"
 	    then
 		axel_parts=$axel_parts_conf
 		url_in="${url_in## }"
@@ -1600,7 +1597,6 @@ function main_loop {
 		    fi
 		    url_in_file="${url_in%% }"
 		    url_in_file="${url_in_file## }"
-		    
 		fi
 
 		sanitize_file_in
@@ -1815,7 +1811,7 @@ then
 fi
 
 
-if [ "$xterm_stop" == "true" ]
+if [ "$xterm_stop_checked" == "true" ]
 then
     xterm_stop
 fi

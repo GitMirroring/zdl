@@ -295,88 +295,6 @@ function set_line_in_file { 	#### usage:
     return $result
 }
 
-links_timer="$path_tmp/links_timer.txt"
-## link ip timeout
-
-function check_link_timer {
-    local link="$1"
-    local this_ip that_ip now timeout line
-
-    [ ! -s "$links_timer" ] && return 0
-    line=$(grep "$link" "$links_timer" |tail -n1)
-
-    if [ -z "$line" ]
-    then
-	return 0
-
-    else
-	get_ip this_ip
-	read that_ip timeout < <(awk '{print $2" "$3}' <<< "$line")
-	now=$(date +%s)
-
-	if [ "$this_ip" != "$that_ip" ] ||
-	       ((now >= timeout))
-	then
-	    del_link_timer "$link"
-	    return 0
-	else
-	    print_c 3 "$url_in -> Link in pausa: mancano $(seconds_to_human $((timeout - now)) )"
-	    return 1
-	fi
-    fi
-}
-
-function set_link_timer {
-    if ! url "$1" ||
-	    [[ "$2" =~ ^[^0-9]+$ ]]
-    then
-	return 1
-    fi
-    
-    local link="$1"
-    local timeout=$(($(date +%s) + $2))
-    local ip
-    get_ip ip
-    
-    del_link_timer "$link"
-
-    echo "$link $ip $timeout" >>"$links_timer"
-    _log 33 "$2"
-}
-
-function del_link_timer {
-    local link="$1"
-    sed -r "s|^$link\s+.+||g" -i "$links_timer"
-    [ ! -s "$links_timer" ] && rm -f "$links_timer"
-}
-
-function check_link {
-    local url_test="$1"
-    local i test_pid
-
-    if url "$url_test" &&
-	   set_link in "${url_test}"
-    then
-	if data_stdout
-	then
-	    for ((i=0; i<${#pid_out[@]}; i++))
-	    do
-		if [ "${url_out[i]}" == "$url_in" ] &&
-		       check_pid "${pid_out[i]}"
-		then
-		    test_pid=alive
-		fi
-	    done
-
-	    [ "$test_pid" == alive ] ||
-		return 0
-
-	else
-	    return 0
-	fi
-    fi
-    return 1
-}
 
 function set_link {
     local op="$1"
@@ -397,6 +315,245 @@ function set_link {
 		return 1
     fi
 }
+
+function check_link {
+    local link="$1"
+    local i ret=0
+    local max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
+
+    [ -z "$max_dl" ] && return 0
+    
+    if url "$link" &&
+	   set_link in "$link"
+    then
+	if data_stdout
+	then
+	    if (( "${#pid_alive[*]}" < "$max_dl" )) || check_livestream_link_start "$link"
+	    then
+		ret=0
+	    else
+		ret=1
+	    fi
+
+	    for ((i=0; i<${#pid_out[@]}; i++))
+	    do
+		if ( [ "$link" == "${url_out[i]}" ] && check_pid "${pid_out[i]}" )		       
+		then
+		    ret=1
+		fi
+	    done
+	fi
+    else
+	ret=1
+    fi
+    return $ret
+}
+
+function check_in_loop {
+    local line i \
+	  max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null) \
+	  ret=1
+
+    if data_stdout
+    then
+	for ((i=0; i<${#url_out[i]}; i++))
+	do
+	    check_livestream_link_start "${url_out[i]}" &&
+		! check_pid "${pid_out[i]}" &&
+		ret=1	    
+	done
+
+	if [ -z "$max_dl" ] ||
+	       (( "${#pid_alive[*]}" < "$max_dl" )) ||
+	       [ -s "$path_tmp"/livestream_start.txt ]
+	then	    	    
+	    ret=1 ## rompe il loop (esce dall'attesa) => procede con un altro download
+	else
+	    ret=0 ## rimane nel loop (in attesa)
+	fi
+    fi
+    return $ret
+}
+
+function check_in_file { 	## return --> no_download=1 / download=0
+    sanitize_file_in
+    url_in_bis="${url_in::100}"
+    file_in_bis="${file_in}__BIS__${url_in_bis//\//_}.${file_in##*.}"
+    if [ -n "$exceeded" ]
+    then
+	_log 4
+	break_loop=true
+	no_newip=true
+	unset exceeded
+	return 1
+
+    elif [ -n "$not_available" ]
+    then
+	[ -n "$url_in_file" ] && _log 3
+	no_newip=true
+	unset not_available
+	return 1
+
+    elif [ "$url_in_file" != "${url_in_file//{\"err\"/}" ]
+    then
+	_log 2
+	unset no_newip
+	return 1
+
+    elif [ -z "$url_in_file" ] ||                               
+	( [ -z "$file_in" ] && [[ "$downloader_in" =~ (Aria2|Axel) ]] )
+    then
+	_log 2
+	unset no_newip
+    fi
+
+    if [ -n "$file_in" ]
+    then
+	length_saved_in=0
+		    
+	no_newip=true
+	if data_stdout
+	then
+	    if [ -z "$file_in" ]
+	    then
+		return 1
+	    fi
+	fi
+
+	if [ -f "$file_in" ]
+	then
+	    ## `--bis` abilitato di default
+	    [ "$resume" != "enabled" ] && bis=true
+	    if [ "$bis" == true ]
+	    then
+		homonymy_treating=( resume_dl rewrite_dl bis_dl )
+	    else
+		homonymy_treating=( resume_dl rewrite_dl )
+	    fi
+	    
+	    for i in ${homonymy_treating[*]}
+	    do
+		if [ "$downloader_in" == "Wget" ]
+		then
+		    case "$i" in
+			resume_dl|rewrite_dl) 
+			    if [ -n "$length_in" ] &&                     
+				   (( $length_in > $length_saved_in )) &&      
+				   ( [ -z "$bis" ] || [ "$no_bis" == true ] )
+			    then
+				rm -f "$file_in" "${file_in}.st" "${file_in}.aria2" #"${file_in}.zdl"  
+	 			unset no_newip
+	 			[ -n "$url_in_file" ] && return 0
+			    fi
+			    ;;
+		    esac
+
+		elif [ "$downloader_in" == "RTMPDump" ]
+		then
+		    case "$i" in
+			resume_dl|rewrite_dl) 
+			    [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&                                       
+				test_completed=$(grep 'Download complete' < "$path_tmp/${file_in}_stdout.tmp")
+
+			    if [ -f "${file_in}" ] &&                        
+				   [ -z "$test_completed" ] &&                  
+				   ( [ -z "$bis" ] || [ "$no_bis" == true ] )
+			    then 
+				unset no_newip
+				[ -n "$url_in_file" ] && return 0
+			    fi
+			    ;;
+		    esac
+
+		elif [ "$downloader_in" == "FFMpeg" ]
+		then
+		    case "$i" in
+			resume_dl|rewrite_dl) 
+			    [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&                                       
+				test_completed=$(grep 'muxing' < "$path_tmp/${file_in}_stdout.tmp")
+
+			    if [ -f "${file_in}" ] &&                        
+				   [ -z "$test_completed" ] &&                  
+				   ( [ -z "$bis" ] || [ "$no_bis" == true ] )
+			    then 
+				unset no_newip
+				[ -n "$url_in_file" ] && return 0
+			    fi
+			    ;;
+		    esac
+
+		elif [[ "$downloader_in" =~ (Aria2|Axel) ]]
+		then
+		    [ "$downloader_in" == Axel ] && rm -f "${file_in}" "${file_in}.aria2"
+		    [ "$downloader_in" == Aria2 ] && rm -f "${file_in}.st"
+		    
+		    case "$i" in
+			resume_dl) 
+			    if ( [ -f "${file_in}.st" ] || [ -f "${file_in}.aria2" ] ) &&
+				   ( [ -z "$bis" ] || [ "$no_bis" == true ] )
+			    then                     
+				unset no_newip
+				[ -n "$url_in_file" ] && return 0
+			    fi
+			    ;;
+			rewrite_dl)
+			    if ( [ -z "$bis" ] || [ "$no_bis" == true ] ) &&
+				   [ -n "$length_in" ] && (( $length_in > $length_saved_in ))
+			    then
+				rm -f "$file_in" "${file_in}.st" "${file_in}.aria2" 
+	 			unset no_newip
+	 			[ -n "$url_in_file" ] && return 0
+			    fi
+			    ;;
+		    esac
+		fi
+		## case bis_dl
+	        if [ "$i" == bis_dl ] && [ -z "$no_bis" ]
+		then
+		    file_in="$file_in_bis"
+
+		    if [ ! -f "$file_in_bis" ]
+		    then
+			return 0
+
+		    elif [ -f "$file_in_bis" ] ||
+			     ( [ "${downloader_out[$i]}" == "RTMPDump" ] &&
+				   [ -n "$test_completed" ] )
+		    then
+			set_link - "$url_in"
+
+		    fi
+		fi
+	    done
+	    
+	    ## ignore link
+	    if [[ "$length_saved_in" =~ ^[0-9]+$ ]] && (( "$length_saved_in" > 0 ))
+	    then
+		_log 1
+
+	    elif [[ "$length_saved_in" =~ ^[0-9]+$ ]] && (( "$length_saved_in" == 0 ))
+	    then
+		rm -f "$file_in" "$file_in".st 
+
+	    fi
+	    break_loop=true
+	    no_newip=true
+
+	elif [ -n "$url_in_file" ] ||
+		 ( [ -n "$playpath" ] && [ -n "$streamer" ] )
+	then
+	    return 0
+
+	fi
+
+    elif [ "$downloader_in" == DCC_Xfer ]
+    then
+	return 0
+    fi
+
+    return 1
+}
+
 
 
 function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizioni
@@ -501,16 +658,17 @@ function pid_list_for_prog {
     fi
 }
 
-
+## note:
+#
 # function children_pids {
 #     local children
 #     children=$(ps -o pid --no-headers --ppid $$1)
-
+#
 #     if [ -n "$children" ]
 #     then
 # 	printf "%s" "$children"
 # 	return 0
-
+#
 #     else
 # 	return 1
 #     fi
@@ -750,47 +908,6 @@ function zero_dl {
     fi
 }
 
-function input_xdcc {
-    declare -A out_msg=(
-	[host]="Indirizzo dell'host irc (il protocollo 'irc://' non è necessario):"
-	[chan]="Canale (il cancelletto '#' non è necessario):"
-	[msg]="Messaggio privato (il comando '/msg' non è necessario):"
-    )
-    
-    header_box "Acquisizione dati mancanti per XDCC (inserisci 'quit' per annullare)"
-    for index in host chan msg
-    do
-	while [ -z "${irc[$index]}" ]
-	do
-	    print_c 2 "${out_msg[$index]}"
-
-	    cursor on
-	    read -e irc[$index]
-	    cursor off
-	    
-	    irc[$index]=$(head -n1 <<< "${irc[$index]}")
-	    echo 
-	    
-	    if [ "$index" == host ]
-	    then
-		test_chan="${irc[$index]#'irc://'}"
-		if [[ "${test_chan}" =~ ^.+\/([^/]+) ]] &&
-		       [ -z "${irc[chan]}" ]
-		then
-		    irc[chan]=${BASH_REMATCH[1]}
-		fi
-	    fi
-	    
-	    if [ "${irc[$index]}" == quit ]
-	    then
-		unset irc
-		return 1
-	    fi
-	done
-    done
-    return 0
-}
-
 function redirect {
     url_input="$1"
     sleeping 1
@@ -875,10 +992,10 @@ function redirect_links {
 
     check_linksloop_livestream
     
-    [ -n "$xterm_stop" ] && xterm_stop
+    [ -n "$xterm_stop_checked" ] && xterm_stop
 
     cursor on
-    exit 1
+    exit
 }
 
 
@@ -1168,4 +1285,59 @@ function kill_ffmpeg {
     then
 	kill $(cat "$path_tmp"/ffmpeg-pids) &>/dev/null
     fi
+}
+
+links_timer="$path_tmp/links_timer.txt"
+## link ip timeout
+
+function check_link_timer {
+    local link="$1"
+    local this_ip that_ip now timeout line
+
+    [ ! -s "$links_timer" ] && return 0
+    line=$(grep "$link" "$links_timer" |tail -n1)
+
+    if [ -z "$line" ]
+    then
+	return 0
+
+    else
+	get_ip this_ip
+	read that_ip timeout < <(awk '{print $2" "$3}' <<< "$line")
+	now=$(date +%s)
+
+	if [ "$this_ip" != "$that_ip" ] ||
+	       ((now >= timeout))
+	then
+	    del_link_timer "$link"
+	    return 0
+	else
+	    print_c 3 "$url_in -> Link in pausa: mancano $(seconds_to_human $((timeout - now)) )"
+	    return 1
+	fi
+    fi
+}
+
+function set_link_timer {
+    if ! url "$1" ||
+	    [[ "$2" =~ ^[^0-9]+$ ]]
+    then
+	return 1
+    fi
+    
+    local link="$1"
+    local timeout=$(($(date +%s) + $2))
+    local ip
+    get_ip ip
+    
+    del_link_timer "$link"
+
+    echo "$link $ip $timeout" >>"$links_timer"
+    _log 33 "$2"
+}
+
+function del_link_timer {
+    local link="$1"
+    sed -r "s|^$link\s+.+||g" -i "$links_timer"
+    [ ! -s "$links_timer" ] && rm -f "$links_timer"
 }

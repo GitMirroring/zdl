@@ -669,3 +669,136 @@ function input_text {
     stty $sttyset
     cursor off
 }
+
+function input_xdcc {
+    declare -A out_msg=(
+	[host]="Indirizzo dell'host irc (il protocollo 'irc://' non è necessario):"
+	[chan]="Canale (il cancelletto '#' non è necessario):"
+	[msg]="Messaggio privato (il comando '/msg' non è necessario):"
+    )
+    
+    header_box "Acquisizione dati mancanti per XDCC (inserisci 'quit' per annullare)"
+    for index in host chan msg
+    do
+	while [ -z "${irc[$index]}" ]
+	do
+	    print_c 2 "${out_msg[$index]}"
+
+	    cursor on
+	    read -e irc[$index]
+	    cursor off
+	    
+	    irc[$index]=$(head -n1 <<< "${irc[$index]}")
+	    echo 
+	    
+	    if [ "$index" == host ]
+	    then
+		test_chan="${irc[$index]#'irc://'}"
+		if [[ "${test_chan}" =~ ^.+\/([^/]+) ]] &&
+		       [ -z "${irc[chan]}" ]
+		then
+		    irc[chan]=${BASH_REMATCH[1]}
+		fi
+	    fi
+	    
+	    if [ "${irc[$index]}" == quit ]
+	    then
+		unset irc
+		return 1
+	    fi
+	done
+    done
+    return 0
+}
+
+function input_time {
+    local val var max
+    unset h m s
+    
+    for var in h m s
+    do
+	while [[ ! "$val" =~ ^([0-9]+)$ ]]
+	do
+	    case $var in
+		h) print_c 2 "Ore:";;
+		m) print_c 2 "Minuti:";;
+		s) print_c 2 "Secondi:";;
+	    esac
+
+	    read -e $var
+	    eval val="\$$var"
+
+	    if [[ "$val" =~ ^([0]+)$ ]]
+	    then
+		val=0
+
+	    elif [[ "$val" =~ [1-9]+ ]]
+	    then
+		val=${val##0}
+	    fi
+
+	    case $var in
+		h) max=24 ;;
+		m|s) max=60 ;;
+	    esac
+
+	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
+	    then
+		print_c 3 "Digitare un numero intero fra 0 e $max\n"
+		unset val
+	    else
+		val=$(printf "%.2d" "$val" 2>/dev/null)
+		[[ ! "$val" =~ ^([0-9]{2})$ ]] && unset val || echo
+	    fi
+	done
+	eval $var=$val
+	unset val
+    done
+}
+
+function display_set_livestream {
+    local link="$1" \
+	  h m s opt \
+	  start_time 
+
+    if [ "$post_readline" == true ] &&
+	   [ "$from_editor" != true ]
+    then
+	stty -echo
+
+    else
+	cursor on
+	binding=true
+	bindings
+    fi
+
+    echo
+    header_box "Inserimento link di una diretta (livestream)"
+    print_c 4 "Link: $link"
+    print_c 0 "È necessario indicare l'orario di inizio registrazione e la sua durata\n"
+
+    print_c 4 "Orario di inizio registrazione:"
+    print_c 2 "Vuoi registrare subito? [sì|*]"
+    
+    read -e opt
+
+    if [ "$opt" == 'sì' ]
+    then
+	h=$(date +%H)
+	m=$(date +%M)
+	s=$(date +%S)
+	echo
+    else
+	input_time
+    fi
+    start_time="$h:$m:$s"
+    
+    print_c 4 "Durata registrazione:"
+    input_time
+    duration_time="$h:$m:$s"
+
+    set_livestream_time "$link" "$start_time" "$duration_time"
+    run_livestream_timer "$link" "$start_time"
+    
+    cursor off
+}

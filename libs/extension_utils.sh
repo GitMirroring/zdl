@@ -1115,13 +1115,37 @@ function get_livestream_start_time {
 }
 
 function check_livestream_link_time {
-    grep -qP "^$1\ [0-9]+\:" "$path_tmp"/livestream_time.txt &&
-	return 0 ||
-	    return 1
+    local link="$1"
+    
+    if [ -s "$path_tmp"/livestream_time.txt ] &&
+	   grep -qP "^${link}\ [0-9]+\:" "$path_tmp"/livestream_time.txt
+    then
+	return 0
+    else
+	return 1
+    fi
 }
 
 function check_livestream_link_start {
-    grep -qP "^${1}$" "$path_tmp"/livestream_start.txt
+    local link="$1"
+    
+    if [ -s "$path_tmp"/livestream_start.txt ] &&
+	   grep -qP "^${link}$" "$path_tmp"/livestream_start.txt
+    then
+	return 0
+    else
+	return 1
+    fi
+}
+
+function get_livestream_links_start {
+    if [ -s "$path_tmp"/livestream_start.txt ]
+    then
+	cat "$path_tmp"/livestream_start.txt
+	return 0
+    else
+	return 1
+    fi
 }
 
 function clean_livestream {
@@ -1166,66 +1190,6 @@ function clean_livestream {
     fi
 }
 
-function check_link_livestream {
-    local link="$1"
-    local max_dl=$(cat "$path_tmp"/max-dl)
-    local counter=0
-    local line
-
-       
-    if [ ! -s "$path_tmp"/livestream_start.txt ]
-    then
-	if [ ! -s "$path_tmp"/livestream_time.txt ]
-	then
-	    return 0
-
-	elif check_livestream_link_time "$link"
-	then
-	    return 1
-	else
-	    return 0
-	fi
-	
-    else
-	if data_stdout
-	then
-	    while read line
-	    do
-		url "$line" && ((counter++))
-		
-		for ((i=0; i<${#url_out[@]}; i++))
-		do
-		    if [ "$line" == "${url_out[i]}" ] &&
-			   check_pid "${pid_out[i]}"
-		    then
-			((counter--))
-		    fi
-		done
-	    done < <(cat "$path_tmp"/livestream_start.txt)
-
- 	    echo $(( max_dl + counter )) > "$path_tmp"/max-dl
-
-	    if ((counter)) && (
-		   ! check_livestream_link_time "$link" ||
-		       ! check_livestream_link_start "$link"
-	       )
-	    then
-		return 1
-	    else
-		return 0
-	    fi
-	else
-	    while read line
-	    do
-		url "$line" && ((counter++))
-	    done < <(cat "$path_tmp"/livestream_start.txt)
-	    
- 	    echo $(( max_dl + counter )) > "$path_tmp"/max-dl
-	    return 0
-	fi    
-    fi
-}
-
 
 function check_linksloop_livestream {
     if [ -s "$path_tmp"/links_loop.txt ]
@@ -1252,96 +1216,4 @@ function check_linksloop_livestream {
 	    fi
 	done
     fi
-}
-
-function input_time {
-    local val var max
-    unset h m s
-    
-    for var in h m s
-    do
-	while [[ ! "$val" =~ ^([0-9]+)$ ]]
-	do
-	    case $var in
-		h) print_c 2 "Ore:";;
-		m) print_c 2 "Minuti:";;
-		s) print_c 2 "Secondi:";;
-	    esac
-
-	    read -e $var
-	    eval val="\$$var"
-
-	    if [[ "$val" =~ ^([0]+)$ ]]
-	    then
-		val=0
-
-	    elif [[ "$val" =~ [1-9]+ ]]
-	    then
-		val=${val##0}
-	    fi
-
-	    case $var in
-		h) max=24 ;;
-		m|s) max=60 ;;
-	    esac
-
-	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
-	    then
-		print_c 3 "Digitare un numero intero fra 0 e $max\n"
-		unset val
-	    else
-		val=$(printf "%.2d" "$val" 2>/dev/null)
-		[[ ! "$val" =~ ^([0-9]{2})$ ]] && unset val || echo
-	    fi
-	done
-	eval $var=$val
-	unset val
-    done
-}
-
-function display_set_livestream {
-    local link="$1" \
-	  h m s opt \
-	  start_time 
-
-    if [ "$post_readline" == true ] &&
-	   [ "$from_editor" != true ]
-    then
-	stty -echo
-
-    else
-	cursor on
-	binding=true
-	bindings
-    fi
-
-    echo
-    header_box "Inserimento link di una diretta (livestream)"
-    print_c 4 "Link: $link"
-    print_c 0 "È necessario indicare l'orario di inizio registrazione e la sua durata\n"
-
-    print_c 4 "Orario di inizio registrazione:"
-    print_c 2 "Vuoi registrare subito? [sì|*]"
-    
-    read -e opt
-
-    if [ "$opt" == 'sì' ]
-    then
-	h=$(date +%H)
-	m=$(date +%M)
-	s=$(date +%S)
-	echo
-    else
-	input_time
-    fi
-    start_time="$h:$m:$s"
-    
-    print_c 4 "Durata registrazione:"
-    input_time
-    duration_time="$h:$m:$s"
-
-    set_livestream_time "$link" "$start_time" "$duration_time"
-    run_livestream_timer "$link" "$start_time"
-    
-    cursor off
 }
