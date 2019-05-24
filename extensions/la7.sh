@@ -35,9 +35,19 @@ then
     file_in="${file_in#*\"}"
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"
-    url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
-    url_in_file=$(curl -s "$url_in_file" | tail -n1)
+    if [[ "$file_in" =~ Diretta ]]
+    then
+	file_in+=__$(date +%Y-%m-%d)_$(date +%H-%M-%S)
+    fi
+    
+    url_in_file=$(grep -oP "[^']+\.m3u8[^']+" <<< "$html")
 
+    if ! url "$url_in_file"
+    then
+	url_in_file=$(grep -oP '[^"]+\.m3u8[^"]+' <<< "$html")
+	url_in_file=$(curl -s "$url_in_file" | tail -n1)
+    fi
+    
     end_extension
 fi
 									   
