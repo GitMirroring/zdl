@@ -1004,7 +1004,7 @@ function get_data_xdcc_eu {
 
 function check_livestream {
     local link="$1"
-    if [[ "$link" =~ (raiplay.+\/dirette\/) ]]
+    if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv) ]]
     then
 	return 0
     else

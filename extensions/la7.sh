@@ -35,10 +35,6 @@ then
     file_in="${file_in#*\"}"
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"
-    if [[ "$file_in" =~ Diretta ]]
-    then
-	file_in+=__$(date +%Y-%m-%d)_$(date +%H-%M-%S)
-    fi
     
     url_in_file=$(grep -oP "[^']+\.m3u8[^']+" <<< "$html")
 
@@ -46,6 +42,16 @@ then
     then
 	url_in_file=$(grep -oP '[^"]+\.m3u8[^"]+' <<< "$html")
 	url_in_file=$(curl -s "$url_in_file" | tail -n1)
+    fi
+
+    if [[ "$file_in" =~ Diretta ]]
+    then
+	get_livestream_start_time "$url_in" la7_start_time
+	get_livestream_duration_time "$url_in" la7_duration_time
+	file_in+=_$(date +%Y-%m-%d)_dalle_${la7_start_time//\:/-}_per_${la7_duration_time//\:/-}
+	
+	print_c 4 "Diretta La7 dalle $la7_start_time per la durata di $la7_duration_time"
+	livestream_m3u8="$url_in_file"
     fi
     
     end_extension
