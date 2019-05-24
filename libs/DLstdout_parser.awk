@@ -574,6 +574,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    }
 
 	    if (chunk[y] ~ /time=/) {
+		progress_line = chunk[y]
+				
 		if (!time_out[i]) {
 		    match(progress_line, /time=\s*([^\ ]+)\s*/, matched)
 		    time_out[i] = int( get_ffmpeg_seconds(matched[1]) )
