@@ -357,7 +357,7 @@ file testuale in cui sono registrati i nomi dei file
 @end table
 
 @item --live
-Permette di selezionare canali per il download della diretta di alcune televisioni in \"live stream\"
+Permette di selezionare canali per il download della diretta di alcune televisioni in "live stream''
 
 @item --mp3
 @itemx --flac

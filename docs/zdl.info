@@ -312,7 +312,7 @@ Le opzioni brevi non seguite da valori possono essere contratte:
 
 `--live'
      Permette di selezionare canali per il download della diretta di
-     alcune televisioni in \"live stream\"
+     alcune televisioni in "live stream"
 
 `--mp3'
 `--flac'
@@ -1417,26 +1417,26 @@ _zdl-devel - Lista di sviluppo_:
 Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
-Node: Servizi streaming/hosting15834
-Node: Avviare ZDL19992
-Node: Arrestare ZDL22428
-Node: Controllare i download23533
-Node: Manuali d'uso27824
-Node: Modi28240
-Node: Readline31506
-Node: Editor33058
-Node: Omonimie34283
-Node: IRC/XDCC35818
-Node: Torrent37508
-Node: Filtri38392
-Node: Creare nuove estensioni38713
-Node: Software consigliati e dipendenze40488
-Node: Conkeror41941
-Node: zdl-xterm e XXXTerm/Xombrero42965
-Node: Installazione e aggiornamento44889
-Node: Tags48184
-Node: Copying52201
-Node: Contatti53251
+Node: Servizi streaming/hosting15832
+Node: Avviare ZDL19990
+Node: Arrestare ZDL22426
+Node: Controllare i download23531
+Node: Manuali d'uso27822
+Node: Modi28238
+Node: Readline31504
+Node: Editor33056
+Node: Omonimie34281
+Node: IRC/XDCC35816
+Node: Torrent37506
+Node: Filtri38390
+Node: Creare nuove estensioni38711
+Node: Software consigliati e dipendenze40486
+Node: Conkeror41939
+Node: zdl-xterm e XXXTerm/Xombrero42963
+Node: Installazione e aggiornamento44887
+Node: Tags48182
+Node: Copying52199
+Node: Contatti53249
 
 End Tag Table
 
