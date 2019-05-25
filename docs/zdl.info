@@ -310,6 +310,10 @@ Le opzioni brevi non seguite da valori possono essere contratte:
     _file_
           file testuale in cui sono registrati i nomi dei file
 
+`--live'
+     Permette di selezionare canali per il download della diretta di
+     alcune televisioni in \"live stream\"
+
 `--mp3'
 `--flac'
      Convertono i file (anche da video in audio) in MP3 oppure in FLAC:
@@ -1413,26 +1417,26 @@ _zdl-devel - Lista di sviluppo_:
 Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
-Node: Servizi streaming/hosting15712
-Node: Avviare ZDL19870
-Node: Arrestare ZDL22306
-Node: Controllare i download23411
-Node: Manuali d'uso27702
-Node: Modi28118
-Node: Readline31384
-Node: Editor32936
-Node: Omonimie34161
-Node: IRC/XDCC35696
-Node: Torrent37386
-Node: Filtri38270
-Node: Creare nuove estensioni38591
-Node: Software consigliati e dipendenze40366
-Node: Conkeror41819
-Node: zdl-xterm e XXXTerm/Xombrero42843
-Node: Installazione e aggiornamento44767
-Node: Tags48062
-Node: Copying52079
-Node: Contatti53129
+Node: Servizi streaming/hosting15834
+Node: Avviare ZDL19992
+Node: Arrestare ZDL22428
+Node: Controllare i download23533
+Node: Manuali d'uso27824
+Node: Modi28240
+Node: Readline31506
+Node: Editor33058
+Node: Omonimie34283
+Node: IRC/XDCC35818
+Node: Torrent37508
+Node: Filtri38392
+Node: Creare nuove estensioni38713
+Node: Software consigliati e dipendenze40488
+Node: Conkeror41941
+Node: zdl-xterm e XXXTerm/Xombrero42965
+Node: Installazione e aggiornamento44889
+Node: Tags48184
+Node: Copying52201
+Node: Contatti53251
 
 End Tag Table
 

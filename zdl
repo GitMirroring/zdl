@@ -375,6 +375,19 @@ then
 fi
 
 
+if [ "${args[*]}" != "${args[*]//--live}" ]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [ "${args[i]}" == '--live' ]
+	then
+	    live_streaming=true
+	    unset args[i]
+	fi
+    done
+fi
+
+
 if [ "${args[*]}" != "${args[*]//--web-ui}" ]
 then
     for ((i=0; i<=$max_args; i++))
@@ -1374,16 +1387,23 @@ then
     then
 	if [ "$this_mode" != "daemon" ]
 	then
-	    binding=true
+	    [ "$live_streaming" != true ] &&
+		binding=true
 	    standard_box
-
 	    bindings
-	    readline_links
-
-	    post_readline=true
 	    
-	    bind -x "\"\ex\":\"\"" 2>/dev/null
-	    bind -x "\"\C-x\":\"\"" 2>/dev/null
+	    if [ "$live_streaming" == true ]
+	    then
+		display_set_livestream
+		
+	    else		
+		readline_links
+		
+		post_readline=true
+		
+		bind -x "\"\ex\":\"\"" 2>/dev/null
+		bind -x "\"\C-x\":\"\"" 2>/dev/null
+	    fi
 	fi
     fi
     

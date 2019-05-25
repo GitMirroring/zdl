@@ -356,6 +356,9 @@ programma che può "aprire" il file scaricato
 file testuale in cui sono registrati i nomi dei file
 @end table
 
+@item --live
+Permette di selezionare canali per il download della diretta di alcune televisioni in \"live stream\"
+
 @item --mp3
 @itemx --flac
 Convertono i file (anche da video in audio) in @acronym{MP3} oppure in @acronym{FLAC}: dipendono da @emph{FFMpeg/AVConv}

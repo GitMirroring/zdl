@@ -214,6 +214,13 @@ function standard_box {
 	header_box "Readline: immetti URL e link dei servizi"
 	echo -e ""
 
+    elif [ -z "$1" ] &&
+	   [ -n "$live_streaming" ]
+    then
+	echo -e "${BBlue}       │${Color_Off}"
+	header_box "Live stream: seleziona il canale della diretta"
+	echo -e ""
+
     elif [ "$1" == help ] &&
 	   [ -z "$binding" ]
     then
@@ -253,10 +260,10 @@ function readline_links {
     local link    
     ## binding = {  true -> while immissione URL
     ##             unset -> break immissione URL                    }
-    binding=true    
 
     [ "$this_mode" != lite ] &&
 	msg_end_input="Immissione URL terminata: avvio download"
+
     ## bind -x "\"\C-l\":\"\"" 2>/dev/null
     bind -x "\"\C-x\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
     bind -x "\"\ex\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
@@ -273,6 +280,7 @@ function readline_links {
 	    set_link + "$link"
 	unset break_loop
     done
+    
 }
 
 
@@ -758,22 +766,41 @@ function input_time {
 
 function display_set_livestream {
     local link="$1" \
-	  h m s opt \
+	  i h m s opt \
 	  start_time 
 
     if [ "$post_readline" == true ] &&
-	   [ "$from_editor" != true ]
+     	   [ "$from_editor" != true ]
     then
-	stty -echo
-
+     	stty -echo
+	
     else
 	cursor on
-	binding=true
-	bindings
     fi
+    
+    if ! url "$link"
+    then
+	print_c 4 "Canali disponibili (scegli il numero corrispondente):"
+	for ((i=0; i<${#live_streaming_chan[@]}; i++))
+	do
+	    printf "${BYellow}%3d  ${BCyan}%-20s ${Color_Off}%s\n" $i "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
+	done
 
-    echo
-    header_box "Inserimento link di una diretta (livestream)"
+	while [[ ! "$opt" =~ ^([0-9]+)$ ]] ||
+		  ((opt > (i -1 )))
+	do
+	    print_c 2 "\nSeleziona il canale da cui scaricare la diretta (0-$[i-1]):"
+	    read -e opt
+	done
+	url "${live_streaming_url[opt]}" &&
+		set_link + "${live_streaming_url[opt]}"
+
+	print_c 0 ''
+	link="${live_streaming_url[opt]}"
+	unset opt i
+    fi
+    
+    header_box "Live stream: programma il download della diretta"
     print_c 4 "Link: $link"
     print_c 0 "È necessario indicare l'orario di inizio registrazione e la sua durata\n"
 

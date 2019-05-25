@@ -114,6 +114,9 @@ OPZIONI
                                  FILE: file testuale in cui sono registrati 
                                        i nomi dei file
 
+       --live                  Permette di selezionare canali per il download
+                               della diretta di alcune televisioni in \"live stream\"
+
        --mp3                   Convertono i file (anche da video in audio) 
        --flac                  in MP3 oppure in FLAC: dipende da FFMpeg/AVConv
                                 
