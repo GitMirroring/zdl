@@ -798,11 +798,121 @@ function browse_xdcc_search {
     x-www-browser "${XDCC_EU_SEARCHKEY_URL}$1" &
 }
 
+function get_livestream_list {
+    local livestream_list
+    
+    for chan in "${live_streaming_chan[@]}"
+    do
+	[ -n "$livestream_list" ] && livestream_list+='!'
+	livestream_list+="$chan"
+    done
+    echo "$livestream_list"
+}
+
+function display_livestream_gui {
+    local chan="$1" link="$2"
+    local h=$(date +%H)
+    local m=$(date +%M)
+    local s=$(date +%S)
+    
+    local text="Programmazione della diretta da <b>$chan</b> ($link):\n"
+    local IFS_old="$IFS"
+
+    {
+	IFS="€"
+	declare -a res
+	## in verticale su 2 colonne e 3 righe:
+	#
+	# yad --title="Links LIVE stream" \
+	#     --image="$IMAGE2" \
+	#     --image-on-top \
+	#     --text="$text" \
+	#     --separator="€" \
+	#     --form \
+	#     --columns=2 \
+	#     --align=left \
+	#     --field="<b>Orario di inizio</b> (attuale: $h:$m:$s)":LBL \
+	#     --field="Ore:":NUM \
+	#     --field="Minuti:":NUM \
+	#     --field="Secondi:":NUM \
+	#     --field="<b>Durata</b>":LBL \
+	#     --field="Ore:":NUM \
+	#     --field="Minuti:":NUM \
+	#     --field="Secondi:":NUM \
+	#     '' $h'!0..23' $m'!0..59' $s'!0..59' '' '!0..23' '!0..59' '!0..59' 
+
+	## in orizzontale su 3 colonne e 2 righe:
+	res=($(yad --title="Links LIVE stream" \
+		   --image="$IMAGE2" \
+		   --image-on-top \
+		   --text="$text" \
+		   --separator="€" \
+		   --form \
+		   --columns=3 \
+		   --align=center \
+		   --field=" ":LBL \
+		   --field="Ore:":NUM \
+		   --field="":LBL \
+		   --field=" ":LBL \
+		   --field="Ore:":NUM \
+		   --field="<b>Orario di inizio</b> (attuale: $h:$m:$s)":LBL \
+		   --field="Minuti:":NUM \
+		   --field="":LBL \
+		   --field="<b>Durata</b>":LBL \
+		   --field="Minuti:":NUM \
+		   --field=" ":LBL \
+		   --field="Secondi:":NUM \
+		   --field="":LBL \
+		   --field=" ":LBL \
+		   --field="Secondi:":NUM \
+		   '' $h'!0..23' '' '' '!0..23' '' $m'!0..59' '' '' '!0..59' '' $s'!0..59' '' '' '!0..59' \
+		   "${YAD_ZDL[@]}" 2>/dev/null))
+
+	if [ "$?" == 0 ]
+	then
+	    
+	    local start_h=$(printf "%.2d" "${res[1]}")
+	    local start_m=$(printf "%.2d" "${res[6]}")
+	    local start_s=$(printf "%.2d" "${res[11]}")
+
+	    local duration_h=$(printf "%.2d" "${res[4]}")
+	    local duration_m=$(printf "%.2d" "${res[9]}")
+	    local duration_s=$(printf "%.2d" "${res[14]}")
+	    
+	    local start_time="$start_h:$start_m:$start_s"
+	    local duration_time="$duration_h:$duration_m:$duration_s"
+
+	    local now_in_sec=$(human_to_seconds $h $m $s)       
+	    local start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
+	    
+	    if ((start_time_in_sec<now_in_sec))
+	    then
+		yad --title "Orario di inizio..." \
+		    --image dialog-question \
+		    --text "L'orario di inizio è inferiore a quello attuale: è di domani?" \
+		    --button=gtk-yes:0 \
+		    --button=gtk-no:1 \
+		    "${YAD_ZDL[@]}" 2>/dev/null &&
+		    start_time+=':tomorrow'
+	    fi	    
+	    
+	    set_livestream_time "$link" "$start_time" "$duration_time"
+	    run_livestream_timer "$link" "$start_time"
+	fi
+	IFS="$IFS_old"
+    } &
+    local pid=$!
+    IFS="$IFS_old"
+}
+
 function display_link_manager_gui {
     local IFS_old="$IFS"
 
     local msg
     local text="${TEXT}\n\n<b>Gestisci i link:</b>"
+    
+    ## è strano, ma non funziona per riferimento:
+    local livestream_list=$(get_livestream_list)
     
     {
 	declare -a res
@@ -817,7 +927,8 @@ function display_link_manager_gui {
 		       --text="$text" \
 		       --separator="€" \
 		       --align=right \
-		       --field="Nuovo link:":CE \
+		       --field="Nuovo link:":CE ''\
+		       --field="Diretta LIVE:":CB "^!$livestream_list" \
 		       --field="Aggiungi file .torrent:":FL \
 		       --field="Cerca in www.XDCC.eu:":CE \
 		       --field="Aggiungi XDCC server:":CE \
@@ -846,42 +957,55 @@ function display_link_manager_gui {
 			fi
 		    fi
 
-		    ## torrent
-		    if [ -f "${res[1]}" ] &&
-			 [[ "$(file -b --mime-type "${res[1]}")" =~ ^application\/(octet-stream|x-bittorrent)$ ]]
+		    ## livestream
+		    if [ -n "${res[1]}" ]
 		    then
-			local ftorrent="${res[1]}"
+			for ((i=0; i<${#live_streaming_chan[@]}; i++))
+			do
+			    if [ "${live_streaming_chan[i]}" == "${res[1]}" ]
+			    then
+				if display_livestream_gui "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
+				then
+				    set_link + "${live_streaming_url[i]}"
+				fi
+			    fi
+			done
+		    fi
+		    		    
+		    ## torrent
+		    if [ -f "${res[2]}" ] &&
+			 [[ "$(file -b --mime-type "${res[2]}")" =~ ^application\/(octet-stream|x-bittorrent)$ ]]
+		    then
+			local ftorrent="${res[2]}"
 			[ "${ftorrent}" == "${ftorrent%.torrent}" ] &&
 			    mv "${ftorrent}" "${ftorrent}.torrent"
 			set_link + "${ftorrent%.torrent}.torrent"
 		    fi
 
 		    ## cerca XDCC
-		    if [ -n "${res[2]}" ]
+		    if [ -n "${res[3]}" ]
 		    then
-#			set_link + "http://www.xdcc.eu/search.php?searchkey=${res[2]// /+}"
-			display_xdcc_eu_gui "${res[2]}"
-#			browse_xdcc_search "${res[2]}"
+			display_xdcc_eu_gui "${res[3]}"
 		    fi
 
 		    ## campi XDCC
-		    if [[ -n "${res[3]}" && -n "${res[4]}" && -n "${res[5]}" ]]
+		    if [[ -n "${res[4]}" && -n "${res[5]}" && -n "${res[6]}" ]]
 		    then
 			declare -A irc
 			## server XDCC
-			irc[host]="${res[3]}"
+			irc[host]="${res[4]}"
 			irc[host]="${irc[host]## }"
 			irc[host]="${irc[host]#'irc://'}"
 			irc[host]="${irc[host]%%'/'*}"
 			irc[host]="${irc[host]%% }"
 		
 			## cerca XDCC
-			irc[chan]="${res[4]}"
+			irc[chan]="${res[5]}"
 			irc[chan]="${irc[chan]##*\#}"
 			irc[chan]="${irc[chan]%% }"
 
 			## cerca XDCC
-			irc[msg]="${res[5]}"
+			irc[msg]="${res[6]}"
 			irc[msg]="${irc[msg]## }"
 			irc[msg]="${irc[msg]#'/msg'}"
 			irc[msg]="${irc[msg]#'/ctcp'}"
@@ -890,7 +1014,7 @@ function display_link_manager_gui {
 			set_link + "$(sanitize_url "irc://${irc[host]}/${irc[chan]}/msg ${irc[msg]}" >>"$start_file")"
 			unset irc
 
-		    elif [[ -n "${res[3]}${res[4]}${res[5]}" ]]
+		    elif [[ -n "${res[4]}${res[5]}${res[6]}" ]]
 		    then
 			yad --title="Attenzione" \
 			    --image="dialog-error" \

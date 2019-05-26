@@ -1017,8 +1017,18 @@ function run_livestream_timer {
 	  start_time="$2"                                          \
 	  duration_time                                            \
 	  stop_time_in_sec                                         \
-	  now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))       \
-	  start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
+	  start_time_in_sec                                        \
+	  now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
+
+    if [ "$start_time" != "${start_time//tomorrow}" ]
+    then
+	start_time="${start_time//\:tomorrow}"
+	start_time_in_sec=$(human_to_seconds ${start_time//\:/ })	
+	start_time_in_sec=$((start_time_in_sec + 86400))
+
+    else
+	start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
+    fi
     
     if url "$link" &&
 	    [[ "$start_time" =~ ([0-9]+\:[0-9]+\:[0-9.]+) ]]

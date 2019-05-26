@@ -47,6 +47,8 @@ then
     if [[ "$file_in" =~ Diretta ]]
     then
 	get_livestream_start_time "$url_in" la7_start_time
+	la7_start_time="${la7_start_time//\:tomorrow}"
+	
 	get_livestream_duration_time "$url_in" la7_duration_time
 	file_in+=_$(date +%Y-%m-%d)_dalle_${la7_start_time//\:/-}_per_${la7_duration_time//\:/-}
 	

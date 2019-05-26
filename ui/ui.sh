@@ -747,7 +747,7 @@ function input_time {
 
 	    case $var in
 		h) max=23 ;;
-		m|s) max=60 ;;
+		m|s) max=59 ;;
 	    esac
 
 	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
@@ -814,8 +814,10 @@ function display_set_livestream {
 	h=$(date +%H)
 	m=$(date +%M)
 	s=$(date +%S)
+	start_time_now="$h $m $s"
 	echo
     else
+	start_time_now=$(date +%H\ %M\ %S)
 	input_time
     fi
     start_time="$h:$m:$s"
@@ -823,6 +825,18 @@ function display_set_livestream {
     print_c 4 "Durata registrazione:"
     input_time
     duration_time="$h:$m:$s"
+
+    local now_in_sec=$(human_to_seconds $start_time_now)       
+    local start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
+
+    if ((start_time_in_sec<now_in_sec))
+    then
+	print_c 2 "L'orario di inizio è inferiore a quello attuale: è di domani? [*|no]"
+	read -e opt
+
+	[ "$opt" == no ] ||
+	    start_time+=':tomorrow'
+    fi
 
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
