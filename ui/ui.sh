@@ -792,6 +792,40 @@ function display_set_livestream {
 	    print_c 2 "\nSeleziona il canale da cui scaricare la diretta (0-$[i-1]):"
 	    read -e opt
 	done
+
+	if check_livestream_link_time "${live_streaming_url[opt]}"
+	then
+	    print_c 3 "Esiste già una programmazione per questo canale:"
+	    print_c 0 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n"
+	    print_c 2 "Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
+	    read -e opt
+
+	    if [ "$opt" == "sì" ]
+	    then
+		unset opt
+		if data_stdout
+		then
+		    for ((i=0; i<${#pid_out[@]}; i++))
+		    do
+			if [ "${live_streaming_url[opt]}" == "${url_out[i]}" ] &&
+			       check_pid "${pid_out[i]}"
+			then
+			    kill -9 "${pid_out[i]}"
+			fi
+			
+			if [ "${live_streaming_url[opt]}" == "${url_out[i]}" ] &&
+			       [ -f "${file_out[i]}" ]
+			then
+			    rm -f "${file_out[i]}" "$path_tmp"/"${file_out[i]}"_stdout.*
+			fi
+		    done	
+		fi
+	    else
+		print_c 1 "Operazione annullata: è mantenuta la programmazione precedente"
+		return 1
+	    fi
+	fi
+	
 	url "${live_streaming_url[opt]}" &&
 		set_link + "${live_streaming_url[opt]}"
 
