@@ -918,6 +918,8 @@ function display_livestream_gui {
     } &
     local pid=$!
     echo $pid > "$path_tmp"/livestream_gui_pid
+
+    wait $pid
 }
 
 function display_link_manager_gui {
