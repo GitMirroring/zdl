@@ -1182,7 +1182,7 @@ function clean_livestream {
 	    
 	    clean_file "$path_tmp"/livestream_start.txt
 	fi
-    } &
+    } &>/dev/null &
     local pid=$!
     echo $pid > "$path_tmp"/clean_livestream_pid
 }
