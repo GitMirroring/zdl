@@ -36,14 +36,13 @@ then
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"
     
-    url_in_file=$(grep -oP "[^']+\.m3u8[^']+" <<< "$html")
+    url_in_file=$(grep -oP "[^']+\.m3u8[^']*" <<< "$html")
 
     if ! url "$url_in_file"
     then
-	url_in_file=$(grep -oP '[^"]+\.m3u8[^"]+' <<< "$html")
-	url_in_file=$(curl -s "$url_in_file" | tail -n1)
+	url_in_file=$(grep -oP '[^"]+\.m3u8[^"]*' <<< "$html")
     fi
-
+    
     if [[ "$file_in" =~ Diretta ]]
     then
 	get_livestream_start_time "$url_in" la7_start_time
@@ -54,6 +53,10 @@ then
 	
 	print_c 4 "Diretta La7 dalle $la7_start_time per la durata di $la7_duration_time"
 	livestream_m3u8="$url_in_file"
+
+    elif [ -n "$file_in" ]
+    then
+	file_in+=_scaricato_il_$(date +%Y-%m-%d)_alle_$(date +%H-%M-%S)
     fi
     
     end_extension
