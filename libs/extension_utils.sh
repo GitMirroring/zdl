@@ -1060,8 +1060,8 @@ function set_livestream_time {
     local link="$1" \
 	  start_time="$2" \
 	  duration_time="$3"
-
-    sed -r "s|$link\ .+||g" -i "$path_tmp"/livestream_time.txt
+    [ -s "$path_tmp"/livestream_time.txt ] &&
+	sed -r "s|$link\ .+||g" -i "$path_tmp"/livestream_time.txt
     set_line_in_file + "$link $start_time $duration_time" "$path_tmp"/livestream_time.txt
 }
 
