@@ -821,7 +821,7 @@ function check_livestream_gui {
 function display_livestream_gui {
     if check_livestream_gui
     then
-	return 1
+	return
     fi
     local chan="$1" link="$2"
     local h=$(date +%H)
@@ -911,7 +911,7 @@ function display_livestream_gui {
 		    "${YAD_ZDL[@]}" 2>/dev/null &&
 		    start_time+=':tomorrow'
 	    fi	    
-
+	    set_link + "$link"
 	    set_livestream_time "$link" "$start_time" "$duration_time"
 	    run_livestream_timer "$link" "$start_time"
 	fi
@@ -1022,10 +1022,7 @@ puoi cancellare quella precedente e crearne una nuova oppure lasciare quella pre
 				    fi
 				fi
 
-				if display_livestream_gui "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
-				then
-				    set_link + "${live_streaming_url[i]}"
-				fi
+				display_livestream_gui "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
 				break
 			    fi
 			done
