@@ -876,11 +876,15 @@ function display_livestream_gui {
 		   --field="":LBL \
 		   --field=" ":LBL \
 		   --field="Secondi:":NUM \
-		   '' $h'!0..23' '' '' '!0..23' '' $m'!0..59' '' '' '!0..59' '' $s'!0..59' '' '' '!0..59' \
+		   '' $h'!0..23' '' '' 0'!0..23' '' $m'!0..59' '' '' 0'!0..59' '' $s'!0..59' '' '' 0'!0..59' \
 		   "${YAD_ZDL[@]}" 2>/dev/null))
 
 	if [ "$?" == 0 ]
 	then
+	    local now_h=$(printf "%.2d" $h)
+	    local now_m=$(printf "%.2d" $m)
+	    local now_s=$(printf "%.2d" $s)
+
 	    local start_h=$(printf "%.2d" "${res[0]}")
 	    local start_m=$(printf "%.2d" "${res[2]}")
 	    local start_s=$(printf "%.2d" "${res[4]}")
@@ -891,15 +895,17 @@ function display_livestream_gui {
 	    
 	    local start_time="$start_h:$start_m:$start_s"
 	    local duration_time="$duration_h:$duration_m:$duration_s"
-
-	    local now_in_sec=$(human_to_seconds $h $m $s)       
+	    
+	    local now_in_sec=$(human_to_seconds $now_h $now_m $now_s)       
 	    local start_time_in_sec=$(human_to_seconds $start_h $start_m $start_s)
+	    
+	    text="L'orario di inizio è inferiore a quello attuale: è di domani?\nSe non lo è, ZDL procederà non appena possibile"
 
 	    if ((start_time_in_sec<now_in_sec))
 	    then
-		yad --title "Orario di inizio..." \
+		yad --title "Orario di inizio" \
 		    --image dialog-question \
-		    --text "L'orario di inizio è inferiore a quello attuale: è di domani?" \
+		    --text "$text" \
 		    --button=gtk-yes:0 \
 		    --button=gtk-no:1 \
 		    "${YAD_ZDL[@]}" 2>/dev/null &&
@@ -948,8 +954,10 @@ function display_link_manager_gui {
 		       --button="Esegui!gtk-execute":0  \
 		       --button="Chiudi!gtk-close":1  \
 		       "${YAD_ZDL[@]}" 2>/dev/null))
-
-	    case $? in
+	    ret=$?
+	    IFS="$IFS_old"
+	    
+	    case $ret in
 		0)
 		    ## URL http
 		    if [ -n "${res[0]}" ]
@@ -973,10 +981,50 @@ function display_link_manager_gui {
 			do
 			    if [ "${live_streaming_chan[i]}" == "${res[1]}" ]
 			    then
+				if check_livestream_link_time "${live_streaming_url[i]}"
+				then
+				    # print_c 3 "Esiste già una programmazione per questo canale:"
+				    # print_c 0 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n"
+				    # print_c 2 "Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
+				    # read -e opt
+				    text="<b>Esiste già una programmazione per questo canale:</b>
+puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n
+<b>Vuoi creare una nuova programmazione, cancellando quella precedente?</b>"
+
+				    if yad --title "Già esistente" \
+					   --image dialog-question \
+					   --text "$text" \
+					   --button=gtk-yes:0 \
+					   --button=gtk-no:1 \
+					   "${YAD_ZDL[@]}" #2>/dev/null
+				    then
+					if data_stdout
+					then
+					    for ((j=0; j<${#pid_out[@]}; j++))
+					    do
+						if [ "${live_streaming_url[i]}" == "${url_out[j]}" ] &&
+						       check_pid "${pid_out[j]}"
+						then
+						    kill -9 "${pid_out[j]}"
+						fi
+						
+						if [ "${live_streaming_url[i]}" == "${url_out[j]}" ] &&
+						       [ -f "${file_out[j]}" ]
+						then
+						    rm -f "${file_out[j]}" "$path_tmp"/"${file_out[j]}"_stdout.*
+						fi
+					    done					    
+					fi
+				    else					
+					break
+				    fi
+				fi
+
 				if display_livestream_gui "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
 				then
 				    set_link + "${live_streaming_url[i]}"
 				fi
+				break
 			    fi
 			done
 		    fi
