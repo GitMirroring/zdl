@@ -1039,42 +1039,15 @@ function run_livestream_timer {
 	    do
 		sleep 1
 		now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
-
+		
 		check_pid $ppid || exit
 		
 	    done
-	    
-	    if (( start_time_in_sec <= now_in_sec ))
+
+	    if (( start_time_in_sec <= now_in_sec )) &&
+		   check_livestream_link_time "$link"
 	    then
 		set_line_in_file + "$link" "$path_tmp"/livestream_start.txt
-		
-		get_livestream_duration_time "$link" duration_time
-
-		stop_time_in_sec=$(( start_time_in_sec + $(human_to_seconds ${duration_time//\:/ }) ))
-		now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
-
-		while (( stop_time_in_sec > now_in_sec ))
-		do
-		    sleep 1
-		    now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
-
-		    check_pid $ppid || exit
-		done
-		
-		if (( stop_time_in_sec > now_in_sec ))
-		then
-		    set_line_in_file - "$link" "$path_tmp"/livestream_start.txt
-
-		    local livestream_time
-		    while read line
-		    do
-			if [[ ! "$line" =~ ^"$link "[0-9]+\: ]]
-			then
-			    livestream_time+="$line\n"
-			fi
-		    done < "$path_tmp"/livestream_time.txt
-		    echo "$livestream" > "$path_tmp"/livestream_time.txt
-		fi
 	    fi
 	} &
     else
@@ -1097,8 +1070,8 @@ function get_livestream_duration_time {
     
     [ -s "$path_tmp"/livestream_time.txt ] &&
 	line=( $(grep -P "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt) )
-    
-    if [[ "${line[2]}" =~ ([0-9]+\:[0-9]+\:[0-9.]+) ]]
+
+    if [[ "${line[2]}" =~ ([0-9]+\:[0-9]+\:[0-9]+) ]]
     then
 	ref="${line[2]}"
 	return 0
@@ -1161,51 +1134,62 @@ function get_livestream_links_start {
 function clean_livestream {
     local line
     declare -a lines
-    
-    [ ! -s "$path_tmp"/links_loop.txt ] &&
-	rm -f "$path_tmp"/livestream_time.txt
-    
-    if [ -s "$path_tmp"/livestream_time.txt ]
+
+    if [ -s "$path_tmp"/clean_livestream_pid ]
     then
-	while read -a lines
-	do
-	    set_link in "${lines[0]}" ||
-		sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
+	check_pid $(cat "$path_tmp"/clean_livestream_pid) &&
+	    return
+    fi
 
-	done < "$path_tmp"/livestream_time.txt
-
-	line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
-	if [ -n "$line" ]
-	then
-	    echo "$line" >"$path_tmp"/livestream_time.txt
-	else
+    {
+	[ ! -s "$path_tmp"/links_loop.txt ] &&
 	    rm -f "$path_tmp"/livestream_time.txt
-	fi
-    fi
-
-    [ ! -s "$path_tmp"/livestream_time.txt ] &&
-	rm -f "$path_tmp"/livestream_start.txt
-
-    if [ -s "$path_tmp"/links_loop.txt ] &&
-	   [ -s "$path_tmp"/livestream_start.txt ]
-    then
-	while read line
-	do
-	    grep -q "$line" "$path_tmp"/links_loop.txt ||
-		sed -e "s|$line||g" -i "$path_tmp"/livestream_start.txt
-	    
-	done < "$path_tmp"/livestream_start.txt
 	
-	clean_file "$path_tmp"/livestream_start.txt
-    fi
-}
+	if [ -s "$path_tmp"/livestream_time.txt ]
+	then
+	    while read -a lines
+	    do
+		set_link in "${lines[0]}" ||
+		    sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
 
+	    done < "$path_tmp"/livestream_time.txt
+	    
+	    [ -e "$path_tmp"/livestream_time.txt ] &&
+		line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
+
+	    if [ -n "$line" ]
+	    then
+		echo "$line" >"$path_tmp"/livestream_time.txt
+	    else
+		rm -f "$path_tmp"/livestream_time.txt
+	    fi
+	fi
+
+	[ ! -s "$path_tmp"/livestream_time.txt ] &&
+	    rm -f "$path_tmp"/livestream_start.txt
+
+	if [ -s "$path_tmp"/links_loop.txt ] &&
+	       [ -s "$path_tmp"/livestream_start.txt ]
+	then
+	    while read line
+	    do
+		grep -q "$line" "$path_tmp"/links_loop.txt ||
+		    sed -e "s|$line||g" -i "$path_tmp"/livestream_start.txt
+		
+	    done < "$path_tmp"/livestream_start.txt
+	    
+	    clean_file "$path_tmp"/livestream_start.txt
+	fi
+    } &
+    local pid=$!
+    echo $pid > "$path_tmp"/clean_livestream_pid
+}
 
 function check_linksloop_livestream {
     if [ -s "$path_tmp"/links_loop.txt ]
     then
 	declare -a list=( $(cat "$path_tmp"/links_loop.txt) )
-	local line start_time
+	local line start_time i gui_alive
 	
 	for line in "${list[@]}"
 	do
@@ -1214,9 +1198,37 @@ function check_linksloop_livestream {
 		if [ ! -s "$path_tmp"/livestream_time.txt ] ||
 			( [ -s "$path_tmp"/livestream_time.txt ] &&
 			      ! check_livestream_link_time "$line" )
-		then
-		    display_set_livestream "$line"
+		then		    
+		    for i in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
+		    do
+			check_pid $(cat "$i") && gui_alive=true && break
+		    done
+		    
+		    if [ -n "$gui_alive" ]
+		    then
+			for ((i=0; i<${#live_streaming_url[@]}; i++))
+			do
+			    if [ "$line" == "${live_streaming_url[i]}" ]
+			    then
+				ICON="$path_usr"/gui/icon-32x32.png
+				TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
+				IMAGE="$path_usr"/gui/zdl-64x64.png
+				IMAGE2="$path_usr"/gui/zdl.png
+				YAD_ZDL=(
+				    --window-icon="$ICON"
+				    --borders=5
+				)
 
+				display_livestream_gui "${live_streaming_chan[i]}" "$line"
+				break
+			    fi
+			done
+			
+		    elif [ "$this_mode" != daemon ]
+		    then
+			display_set_livestream "$line"
+		    fi
+		    
 		elif [ -s "$path_tmp"/livestream_time.txt ] &&
 			 check_livestream_link_time "$line"  
 		then

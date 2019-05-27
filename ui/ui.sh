@@ -775,9 +775,9 @@ function display_set_livestream {
      	stty -echo
 	
     else
-	cursor on
+    	cursor on
     fi
-    
+
     if ! url "$link"
     then
 	print_c 4 "Canali disponibili (scegli il numero corrispondente):"

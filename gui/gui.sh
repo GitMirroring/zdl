@@ -809,17 +809,28 @@ function get_livestream_list {
     echo "$livestream_list"
 }
 
+function check_livestream_gui {
+    if [ -s "$path_tmp"/livestream_gui_pid ]
+    then
+	check_pid $(cat "$path_tmp"/livestream_gui_pid) &&
+	    return 0		
+    fi
+    return 1
+}
+
 function display_livestream_gui {
+    if check_livestream_gui
+    then
+	return 1
+    fi
     local chan="$1" link="$2"
     local h=$(date +%H)
     local m=$(date +%M)
     local s=$(date +%S)
     
     local text="Programmazione della diretta da <b>$chan</b> ($link):\n"
-    local IFS_old="$IFS"
 
     {
-	IFS="€"
 	declare -a res
 	## in verticale su 2 colonne e 3 righe:
 	#
@@ -846,8 +857,8 @@ function display_livestream_gui {
 		   --image="$IMAGE2" \
 		   --image-on-top \
 		   --text="$text" \
-		   --separator="€" \
 		   --form \
+		   --separator=' ' \
 		   --columns=3 \
 		   --align=center \
 		   --field=" ":LBL \
@@ -870,21 +881,20 @@ function display_livestream_gui {
 
 	if [ "$?" == 0 ]
 	then
-	    
-	    local start_h=$(printf "%.2d" "${res[1]}")
-	    local start_m=$(printf "%.2d" "${res[6]}")
-	    local start_s=$(printf "%.2d" "${res[11]}")
+	    local start_h=$(printf "%.2d" "${res[0]}")
+	    local start_m=$(printf "%.2d" "${res[2]}")
+	    local start_s=$(printf "%.2d" "${res[4]}")
 
-	    local duration_h=$(printf "%.2d" "${res[4]}")
-	    local duration_m=$(printf "%.2d" "${res[9]}")
-	    local duration_s=$(printf "%.2d" "${res[14]}")
+	    local duration_h=$(printf "%.2d" "${res[1]}")
+	    local duration_m=$(printf "%.2d" "${res[3]}")
+	    local duration_s=$(printf "%.2d" "${res[5]}")
 	    
 	    local start_time="$start_h:$start_m:$start_s"
 	    local duration_time="$duration_h:$duration_m:$duration_s"
 
 	    local now_in_sec=$(human_to_seconds $h $m $s)       
-	    local start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
-	    
+	    local start_time_in_sec=$(human_to_seconds $start_h $start_m $start_s)
+
 	    if ((start_time_in_sec<now_in_sec))
 	    then
 		yad --title "Orario di inizio..." \
@@ -895,14 +905,13 @@ function display_livestream_gui {
 		    "${YAD_ZDL[@]}" 2>/dev/null &&
 		    start_time+=':tomorrow'
 	    fi	    
-	    
+
 	    set_livestream_time "$link" "$start_time" "$duration_time"
 	    run_livestream_timer "$link" "$start_time"
 	fi
-	IFS="$IFS_old"
     } &
     local pid=$!
-    IFS="$IFS_old"
+    echo $pid > "$path_tmp"/livestream_gui_pid
 }
 
 function display_link_manager_gui {

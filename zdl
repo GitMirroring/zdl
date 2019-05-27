@@ -524,7 +524,7 @@ then
 	    unset args[i]
 	    this_mode="daemon"
 	    ## this_tty= importato da zdl --daemon
-	    sleeping_pause=3
+	    sleeping_pause=0
 
 	    if [ "$(urldecode ${args[i+1]})" == "$PWD" ]
 	    then
@@ -1453,6 +1453,15 @@ function main_loop {
 	do
 	    post_process
 	    clean_livestream
+
+	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
+	    do
+		check_pid $(cat "$gui_instance") && gui_alive=true && break
+	    done
+	    
+	    [ -n "$gui_alive" ] &&
+		check_linksloop_livestream
+
 	    show_downloads
 	    
 	    if check_in_loop
@@ -1719,7 +1728,7 @@ then
 	main_loop &>/dev/null || break
     done 
 
-else
+else    
     check_linksloop_livestream
     
     if [ "$lite_mode" == true ] ||

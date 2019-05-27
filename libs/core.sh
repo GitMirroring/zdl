@@ -307,12 +307,21 @@ function set_link {
 	return 1
 
     else
-	[ "$op" == "+" ] &&
+	if [ "$op" == "+" ]
+	then
 	    url_test="${url_test%'#20\x'}"
-
-	set_line_in_file "$op" "$url_test" "$path_tmp/links_loop.txt" &&
-	    return 0 ||
-		return 1
+	    clean_livestream
+	    check_linksloop_livestream
+	fi
+	
+	if set_line_in_file "$op" "$url_test" "$path_tmp/links_loop.txt"
+	then
+	    clean_livestream
+	    return 0
+	else
+	    clean_livestream
+	    return 1
+	fi
     fi
 }
 
@@ -1004,6 +1013,7 @@ function redirect_links {
 	print_c 1 "La gestione dei download è inoltrata a un'altra istanza attiva di $name_prog (pid: $that_pid), nel seguente terminale: $that_tty\n"
     fi
 
+    bindings
     check_linksloop_livestream
     
     [ -n "$xterm_stop_checked" ] && xterm_stop
