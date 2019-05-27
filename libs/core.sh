@@ -358,6 +358,14 @@ function check_link {
 		if ( [ "$link" == "${url_out[i]}" ] && check_pid "${pid_out[i]}" )		       
 		then
 		    ret=1
+
+		elif [ "$link" == "${url_out[i]}" ] &&
+			 ! check_pid "${pid_out[i]}" &&
+			 [ "${downloader_out[i]}" == FFMpeg ] &&
+			 [ -f "${file_out[i]}" ]
+		then
+		    rm -f "${file_out[i]}" "$path_tmp"/"${file_out[i]}"_stdout.*
+		    ret=0
 		fi
 	    done	
 	fi
