@@ -793,6 +793,9 @@ function display_set_livestream {
 	    read -e opt
 	done
 
+	url "${live_streaming_url[opt]}" &&
+		set_link + "${live_streaming_url[opt]}"
+
 	if check_livestream_link_time "${live_streaming_url[opt]}"
 	then
 	    print_c 3 "Esiste già una programmazione per questo canale:"
@@ -826,9 +829,6 @@ function display_set_livestream {
 	    fi
 	fi
 	
-	url "${live_streaming_url[opt]}" &&
-		set_link + "${live_streaming_url[opt]}"
-
 	print_c 0 ''
 	link="${live_streaming_url[opt]}"
 	unset opt i
