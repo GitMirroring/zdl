@@ -28,6 +28,7 @@
 function usage {
     streaming="$(fold -w 80 -s $path_usr/streaming.txt)"
     hosting="$(fold -w 80 -s $path_usr/hosting.txt)"
+    livestream="$(fold -w 80 -s $path_usr/livestream.txt)"
     generated="$(fold -w 80 -s $path_usr/generated.txt)"
     shortlinks="$(fold -w 80 -s $path_usr/shortlinks.txt)"
     programs="$(fold -w 80 -s $path_usr/programs.txt)"
@@ -263,6 +264,9 @@ $streaming
 
 ______ File hosting:
 $hosting
+
+______ Live stream:
+$livestream
 
 ______ Link generati dal web (anche dopo captcha):
 $generated
