@@ -40,15 +40,8 @@ then
     url_in_file=$(nodejs -e "var json = $dplayJSON; console.log(json.data.attributes.streaming.hls.url)")
     __in_file=$(curl -s "$url_in_file" |tail -n1)
 
-    #echo -e "$url_in_file\n$__in_file"
-    
     if grep -q URI <<< "$__in_file"
     then
-	# __in_file="${__in_file%\"}"
-	# __in_file="${__in_file##*\"}"
-	# url_in_file="${url_in_file%\?*}"
-	# url_in_file="${url_in_file%\/*}/${__in_file}"
-	# curl -A Firefox -v "$url_in_file" -o OUT
 	unset url_in_file file_in
 	_log 32
 	
@@ -59,6 +52,21 @@ then
     file_in="${url_in%\/*}"
     file_in="${file_in##*\/}"
 
+    if ! url "$url_in_file"
+    then
+	dplay_data=$(youtube-dl --get-url \
+				--get-file \
+				--cookies "$path_tmp"/cookies.zdl \
+				"$url_in" \
+				2>/dev/null)
+	
+	file_in=$(tail -n1 <<< "$dplay_data")
+	url_in_file=$(head -n1 <<< "$dplay_data")
+
+	## problema permessi, usiamo `youtube-dl --hls-prefer-ffmpeg`:
+	youtubedl_m3u8="$url_in"
+    fi
+    
     end_extension
 fi
 									   

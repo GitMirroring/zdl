@@ -497,6 +497,11 @@ function grep_urls {
     if [ -f "$1" ] &&
 	   [ "$(file -b --mime-type "$1")" == 'text/plain' ]
     then
+	if [[ "$1" =~ (.+\.m3u8)$ ]]
+	then
+	    return 0
+	fi
+	
 	input=$(cat "$1")
 
     else
@@ -652,7 +657,7 @@ function human_to_seconds {
 	      "$2" =~ ^([0-9]+)$ &&
 	      "$3" =~ ^([0-9.]+)$ ]]
     then
-	echo $(( seconds + (minutes * 60) + (hours * 360) ))
+	echo $(( seconds + (minutes * 60) + (hours * 3600) ))
 	return 0
 	
     else

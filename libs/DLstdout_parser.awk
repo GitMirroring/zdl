@@ -46,7 +46,7 @@ function delete_notify_complete_inexistent (K, line) {
 
 function delete_tmp_complete_inexistent (K, line) {
     for (K=0; K<length(percent_out); K++) {
-	if ((percent_out[K] == 100) && (! exists(file_out[K]))) {
+	if ((percent_out[K] == 100) && (! exists(file_out[K]) && (! exists(file_out[K] ".part")))) {
 	    system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
 	    cmd = "sed -i -r 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
 	    cmd | getline
@@ -591,7 +591,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    cmd = "cat .zdl_tmp/livestream_time.txt"
 	    while (cmd | getline line) {
 		if (line ~ url_out[i]) {
-		    match(line, /\:[0-9]{2}\s{1}([0-9:]+)$/, matched)
+		    match(line, /\:[0-9]{2}\s{1}([0-9:.]+)$/, matched)
 		    duration_out[i] = int( get_ffmpeg_seconds(matched[1]) )
 		    break
 		}
@@ -610,6 +610,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    close(cmd)
 	}
 	length_saved[i] = size_file(file_out[i])
+	if (!lengh_saved[i])
+	    length_saved[i] = size_file(file_out[i] ".part")
 	
 	if (progress_end[i]) {
 	    if (! no_check)
@@ -692,7 +694,7 @@ function get_ffmpeg_seconds (time,         h, m, s) {
     m = int(time_elems[2])
     s = int(time_elems[3])
 
-    return int(s + (m * 60) + (h * 360))
+    return int(s + (m * 60) + (h * 3600))
 }
 
 function progress () {

@@ -528,14 +528,26 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		      -i "$url_in_file" \
 		      -c copy \
 		      -t "$livestream_time" \
-		      "${file_in//\:/-}" \
+		      "${file_in}" \
 		      -y 2>&1 | 
+		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
+		pid_in=$!
+
+	    elif [ "$youtubedl_m3u8" == "$url_in" ]
+	    then
+		# --external-downloader $ffmpeg \
+		# --external-downloader-args "-loglevel info" \
+		nohup youtube-dl \
+		      -f best \
+		      --hls-prefer-ffmpeg \
+		      "$url_in" -o "$file_in" 2>&1 | 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
 		pid_in=$!
 		
 	    else
-		nohup $ffmpeg -loglevel info -i "$url_in_file" -c copy "${file_in//\:/-}" -y 2>&1 | 
+		nohup $ffmpeg -loglevel info -i "$url_in_file" -c copy "${file_in}" -y 2>&1 | 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
 		pid_in=$!
