@@ -396,13 +396,6 @@ ESTENSIONI:
 	done
     fi
 
-    unset livestream
-    for liveitem in "${live_streaming_chan[@]}"
-    do
-	livestream+="${liveitem}, "
-    done
-    echo "${livestream%, }" > $SHARE/livestream.txt
-
     if [ -e /cygdrive ]
     then
 	## DIPENDENZE

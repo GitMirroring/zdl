@@ -568,6 +568,10 @@ __STREAMING__
 @cindex file hosting
 @item @b{File hosting:}
 __DOWNLOAD__
+@cindex streaming
+@cindex live
+@item @b{Live stream:}
+__LIVESTREAM__
 @cindex generated
 @cindex captcha
 @item @b{Link generati dal web (anche dopo captcha):}

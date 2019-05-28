@@ -536,6 +536,11 @@ _File hosting:_
      (HD), Subyshare, TubeOffLine.com (tutti i servizi), Tusfiles,
      Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
 
+_Live stream:_
+     La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
+     Rai Sport+ HD, Rai Play Sport 2, Rai Movie, Rai Premium, Rai Yoyo,
+     Rai Gulp, Rai Storia 
+
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
      ed altri servizi 
@@ -1300,18 +1305,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 31)
+                                                               (line 36)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
                                                                (line 23)
 * file hosting:                          Servizi streaming/hosting.
                                                                (line 23)
 * generated:                             Servizi streaming/hosting.
+                                                               (line 36)
+* live:                                  Servizi streaming/hosting.
                                                                (line 31)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 35)
+                                                               (line 40)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1418,25 +1425,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
 Node: Servizi streaming/hosting15832
-Node: Avviare ZDL19990
-Node: Arrestare ZDL22426
-Node: Controllare i download23531
-Node: Manuali d'uso27822
-Node: Modi28238
-Node: Readline31504
-Node: Editor33056
-Node: Omonimie34281
-Node: IRC/XDCC35816
-Node: Torrent37506
-Node: Filtri38390
-Node: Creare nuove estensioni38711
-Node: Software consigliati e dipendenze40486
-Node: Conkeror41939
-Node: zdl-xterm e XXXTerm/Xombrero42963
-Node: Installazione e aggiornamento44887
-Node: Tags48182
-Node: Copying52199
-Node: Contatti53249
+Node: Avviare ZDL20175
+Node: Arrestare ZDL22611
+Node: Controllare i download23716
+Node: Manuali d'uso28007
+Node: Modi28423
+Node: Readline31689
+Node: Editor33241
+Node: Omonimie34466
+Node: IRC/XDCC36001
+Node: Torrent37691
+Node: Filtri38575
+Node: Creare nuove estensioni38896
+Node: Software consigliati e dipendenze40671
+Node: Conkeror42124
+Node: zdl-xterm e XXXTerm/Xombrero43148
+Node: Installazione e aggiornamento45072
+Node: Tags48367
+Node: Copying52525
+Node: Contatti53575
 
 End Tag Table
 
