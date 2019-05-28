@@ -831,7 +831,7 @@ function display_set_livestream {
 	
 	print_c 0 ''
 	link="${live_streaming_url[opt]}"
-	unset opt i
+	unset opt i live_streaming
     fi
     
     header_box "Live stream: programma il download della diretta"
