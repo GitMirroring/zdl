@@ -61,6 +61,7 @@ then
 				2>/dev/null)
 	
 	file_in=$(tail -n1 <<< "$dplay_data")
+	file_in="${file_in%.mp4}"
 	url_in_file=$(head -n1 <<< "$dplay_data")
 
 	## problema permessi, usiamo `youtube-dl --hls-prefer-ffmpeg`:
