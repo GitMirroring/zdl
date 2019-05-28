@@ -801,11 +801,9 @@ function display_set_livestream {
 	    print_c 2 "\nSeleziona il canale da cui scaricare la diretta (0-$[i-1]):"
 	    read -e opt
 	done
-
-	url "${live_streaming_url[opt]}" &&
-		set_link + "${live_streaming_url[opt]}"
-
+	    
 	link="${live_streaming_url[opt]}"
+	set_link + "$link"
 
 	if check_livestream_link_time "$link"
 	then
@@ -838,8 +836,7 @@ function display_set_livestream {
 		return 1
 	    fi
 	fi
-	
-	print_c 0 ''
+
 	unset opt i live_streaming
     fi
     
@@ -884,5 +881,6 @@ function display_set_livestream {
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
 
+    print_c 1 "\nIl download da $link si avvierà intorno alle $start_time per la durata di $duration_time\n"
     cursor off
 }
