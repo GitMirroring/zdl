@@ -310,17 +310,17 @@ function set_link {
 	if [ "$op" == "+" ]
 	then
 	    link="${link%'#20\x'}"
-	    clean_livestream &>/dev/null
+	    clean_livestream 
 	    check_linksloop_livestream 
 	    check_livestream_twice "$link"
 	fi
 	
 	if set_line_in_file "$op" "$link" "$path_tmp/links_loop.txt"
 	then
-	    clean_livestream &>/dev/null
+	    clean_livestream 
 	    return 0
 	else
-	    clean_livestream &>/dev/null
+	    clean_livestream 
 	    return 1
 	fi
     fi

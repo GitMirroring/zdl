@@ -23,7 +23,7 @@
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
 #
-set -p
+
 path_usr="/usr/local/share/zdl"
 
 source "$path_usr"/source_all.sh

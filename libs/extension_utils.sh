@@ -1049,7 +1049,7 @@ function run_livestream_timer {
 	    then
 		set_line_in_file + "$link" "$path_tmp"/livestream_start.txt
 	    fi
-	} &
+	} & disown
     else
 	return 1
     fi
@@ -1182,7 +1182,7 @@ function clean_livestream {
 	    
 	    clean_file "$path_tmp"/livestream_start.txt
 	fi
-    } &>/dev/null &
+    } & disown
     local pid=$!
     echo $pid > "$path_tmp"/clean_livestream_pid
     wait $pid
