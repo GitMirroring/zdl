@@ -394,7 +394,14 @@ ESTENSIONI:
 		try ln -s "$extension" $SHARE/extensions/"${extension##*\/}"
 	    fi
 	done
-    fi    
+    fi
+
+    unset livestream
+    for liveitem in "${live_streaming_chan[@]}"
+    do
+	livestream+="${liveitem}, "
+    done
+    echo "${livestream%, }" > $SHARE/livestream.txt
 
     if [ -e /cygdrive ]
     then

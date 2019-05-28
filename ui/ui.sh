@@ -173,6 +173,9 @@ function services_box {
     print_C 4 "\nFile hosting:"
     cat $path_usr/hosting.txt 2>/dev/null
 
+    print_C 4 "\nLive stream:"
+    cat $path_usr/livestream.txt 2>/dev/null
+
     print_C 4 "\nLink generati dal web (anche dopo captcha):"
     echo -e "$(cat $path_usr/generated.txt 2>/dev/null) ed altri servizi"
     
