@@ -621,7 +621,12 @@ function display_download_manager_gui {
 			    	kill -9 "${res[i+5]}" &>/dev/null
 
 			    [ "${res[i+2]}" != '-' ] &&
-			    	rm -f "${res[i+2]}" "${res[i+2]}.st" "${res[i+2]}.zdl" "${res[i+2]}.aria2" "$path_tmp"/"${res[i+2]}_stdout.tmp"
+			    	rm -f "${res[i+2]}" \
+				   "${res[i+2]}.st" \
+				   "${res[i+2]}.zdl" \
+				   "${res[i+2]}.aria2" \
+				   "$path_tmp"/"${res[i+2]}_stdout.tmp" \
+				   "$path_tmp"/"${res[i+2]}.MEGAenc_stdout.tmp"
 			done
 		    fi
 		    ;;
@@ -703,8 +708,12 @@ function yad_download_manager_dclick {
 		1)
 		    set_link - "${res[0]}"
 		    kill -9 "${res[5]}" &>/dev/null
-		    rm -f "${res[2]}" "${res[2]}.st" "${res[2]}.zdl" "${res[2]}.aria2" \
-		       "$path_tmp"/"${res[2]}_stdout.tmp"
+		    rm -f "${res[2]}" \
+		       "${res[2]}.st" \
+		       "${res[2]}.zdl" \
+		       "${res[2]}.aria2" \
+		       "$path_tmp"/"${res[2]}_stdout.tmp" \
+		       "$path_tmp"/"${res[2]}.MEGAenc_stdout.tmp"
 		    ;;
 		3)
 		    play_gui "${res[2]}"
@@ -1014,7 +1023,7 @@ puoi cancellare quella precedente e crearne una nuova oppure lasciare quella pre
 						if [ "${live_streaming_url[i]}" == "${url_out[j]}" ] &&
 						       [ -f "${file_out[j]}" ]
 						then
-						    rm -f "${file_out[j]}" "$path_tmp"/"${file_out[j]}"_stdout.*
+						    rm -f "${file_out[j]}" "$path_tmp"/"${file_out[j]}"_stdout.* "$path_tmp"/"${file_out[j]}".MEGAenc_stdout.* 
 						fi
 					    done					    
 					fi

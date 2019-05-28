@@ -1191,7 +1191,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			       "${file_out[j]}".st         \
 			       "${file_out[j]}".aria2      \
 			       "${file_out[j]}".zdl        \
-			       "$path_tmp"/"${file_out[j]}_stdout".*
+			       "$path_tmp"/"${file_out[j]}_stdout".*  \
+			       "$path_tmp"/"${file_out[j]}.MEGAenc_stdout".*
 			fi
 		    done
 		fi
