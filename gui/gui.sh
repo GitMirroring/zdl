@@ -828,7 +828,7 @@ function display_livestream_gui {
     local m=$(date +%M)
     local s=$(date +%S)
     
-    local text="Programmazione della diretta da <b>$chan</b> ($link):\n"
+    local text="${TEXT}\n\nProgrammazione della diretta da <b>$chan</b> ($link):\n"
 
     {
 	declare -a res

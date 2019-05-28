@@ -776,6 +776,7 @@ function display_set_livestream {
      	   [ "$from_editor" != true ]
     then
      	stty -echo
+	unset post_readline
 	
     else
     	cursor on
@@ -877,4 +878,6 @@ function display_set_livestream {
 
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
+
+    cursor off
 }
