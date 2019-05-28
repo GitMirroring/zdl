@@ -910,7 +910,8 @@ function display_livestream_gui {
 		    --button=gtk-no:1 \
 		    "${YAD_ZDL[@]}" 2>/dev/null &&
 		    start_time+=':tomorrow'
-	    fi	    
+	    fi
+	    
 	    set_link + "$link"
 	    set_livestream_time "$link" "$start_time" "$duration_time"
 	    run_livestream_timer "$link" "$start_time"

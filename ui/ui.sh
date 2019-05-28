@@ -262,7 +262,7 @@ function readline_links {
     ##             unset -> break immissione URL                    }
 
     [ "$this_mode" != lite ] &&
-	msg_end_input="Immissione URL terminata: avvio download"
+	msg_end_input="Immissione URL terminata: avvio download\n"
 
     ## bind -x "\"\C-l\":\"\"" 2>/dev/null
     bind -x "\"\C-x\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
@@ -796,7 +796,9 @@ function display_set_livestream {
 	url "${live_streaming_url[opt]}" &&
 		set_link + "${live_streaming_url[opt]}"
 
-	if check_livestream_link_time "${live_streaming_url[opt]}"
+	link="${live_streaming_url[opt]}"
+
+	if check_livestream_link_time "$link"
 	then
 	    print_c 3 "Esiste già una programmazione per questo canale:"
 	    print_c 0 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n"
@@ -805,18 +807,17 @@ function display_set_livestream {
 
 	    if [ "$opt" == "sì" ]
 	    then
-		unset opt
 		if data_stdout
 		then
 		    for ((i=0; i<${#pid_out[@]}; i++))
 		    do
-			if [ "${live_streaming_url[opt]}" == "${url_out[i]}" ] &&
+			if [ "$link" == "${url_out[i]}" ] &&
 			       check_pid "${pid_out[i]}"
 			then
 			    kill -9 "${pid_out[i]}"
 			fi
 			
-			if [ "${live_streaming_url[opt]}" == "${url_out[i]}" ] &&
+			if [ "$link" == "${url_out[i]}" ] &&
 			       [ -f "${file_out[i]}" ]
 			then
 			    rm -f "${file_out[i]}" "$path_tmp"/"${file_out[i]}"_stdout.*
@@ -830,7 +831,6 @@ function display_set_livestream {
 	fi
 	
 	print_c 0 ''
-	link="${live_streaming_url[opt]}"
 	unset opt i live_streaming
     fi
     
@@ -874,6 +874,4 @@ function display_set_livestream {
 
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
-    
-    cursor off
 }

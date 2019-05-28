@@ -298,28 +298,29 @@ function set_line_in_file { 	#### usage:
 
 function set_link {
     local op="$1"
-    local url_test="$2"
+    local link="$2"
     
     if [ "$op" == "+" ] &&
-	   ! url "$url_test"
+	   ! url "$link"
     then
-	_log 12 "$url_test"
+	_log 12 "$link"
 	return 1
 
     else
 	if [ "$op" == "+" ]
 	then
-	    url_test="${url_test%'#20\x'}"
-	    clean_livestream
-	    check_linksloop_livestream
+	    link="${link%'#20\x'}"
+	    clean_livestream &>/dev/null
+	    check_linksloop_livestream 
+	    check_livestream_twice "$link"
 	fi
 	
-	if set_line_in_file "$op" "$url_test" "$path_tmp/links_loop.txt"
+	if set_line_in_file "$op" "$link" "$path_tmp/links_loop.txt"
 	then
-	    clean_livestream
+	    clean_livestream &>/dev/null
 	    return 0
 	else
-	    clean_livestream
+	    clean_livestream &>/dev/null
 	    return 1
 	fi
     fi
@@ -369,6 +370,7 @@ function check_link {
 		fi
 	    done	
 	fi
+	
     else
 	ret=1
     fi

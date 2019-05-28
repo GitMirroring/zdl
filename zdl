@@ -1315,6 +1315,7 @@ then
 			links="${links}\n${args[i]}"
 		    fi
 		    start_file="$path_tmp/links_loop.txt"
+
 		    set_link + "${args[i]}"
 		fi
 	    else

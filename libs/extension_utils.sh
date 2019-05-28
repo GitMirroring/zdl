@@ -1185,6 +1185,7 @@ function clean_livestream {
     } &>/dev/null &
     local pid=$!
     echo $pid > "$path_tmp"/clean_livestream_pid
+    wait $pid
 }
 
 function check_linksloop_livestream {
@@ -1242,3 +1243,23 @@ function check_linksloop_livestream {
 	done
     fi
 }
+
+function check_livestream_twice {
+    local link="$1" x
+
+    if check_livestream "$link" &&
+	    data_stdout
+    then
+	for ((x=0; x<${#pid_out[@]}; x++))
+	do
+	    if [ "$link" == "${url_out[x]}" ] &&
+		   ! check_pid "${pid_out[x]}" &&
+		   [ "${percent_out[x]}" == 100 ]
+	    then
+		rm -f "${file_out[x]}" "$path_tmp"/"${file_out[x]}"_stdout.*
+		break
+	    fi
+	done
+    fi
+}
+
