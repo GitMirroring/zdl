@@ -28,7 +28,7 @@
 function usage {
     streaming="$(fold -w 80 -s $path_usr/streaming.txt)"
     hosting="$(fold -w 80 -s $path_usr/hosting.txt)"
-    livestream=$(cat $path_usr/livestream.txt)
+    livestream="$(fold -w 80 -s $path_usr/livestream.txt)"
     generated="$(fold -w 80 -s $path_usr/generated.txt)"
     shortlinks="$(fold -w 80 -s $path_usr/shortlinks.txt)"
     programs="$(fold -w 80 -s $path_usr/programs.txt)"
