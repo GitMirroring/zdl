@@ -34,7 +34,6 @@ live_streaming_chan=(
     "Rai News 24"
     "Rai Sport"
     "Rai Sport+ HD"
-    "Rai Play Sport 2"
     "Rai Movie"
     "Rai Premium"
     "Rai Yoyo"
@@ -52,7 +51,6 @@ live_streaming_url=(
     https://www.raiplay.it/dirette/rainews24
     https://www.raiplay.it/dirette/raisport
     https://www.raiplay.it/dirette/raisportpiuhd
-    https://www.raiplay.it/dirette/raiplaysport2
     https://www.raiplay.it/dirette/raimovie
     https://www.raiplay.it/dirette/raipremium
     https://www.raiplay.it/dirette/raiyoyo

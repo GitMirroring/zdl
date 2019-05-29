@@ -31,7 +31,7 @@
 if [[ "$url_in" =~ la7\.it ]]
 then
     html=$(curl -s "$url_in")
-    file_in=$(grep 'title :' <<< "$html")
+    file_in=$(grep -P 'title\s*:' <<< "$html")
     file_in="${file_in#*\"}"
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"

@@ -25,7 +25,7 @@ var ZDL = {
     "path": "",
     "pathDesktop": "",
     "visible": [],
-    "webUI": ["1","2","3","2_lite"]
+    "webUI": ["1","2","3","lite"]
 };
 
 var toHtmlEntities = function (str) {
