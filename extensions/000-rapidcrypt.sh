@@ -52,12 +52,22 @@ then
 				    sed -r 's|.+href=([^>]+)>.+|\1|g')
 	fi
 
+	if ! url "$url_rapidcrypt"
+	then
+	    url_rapidcrypt=$(grep -P "Click [Tt]{1}o [Cc]{1}ontinue" <<< "$html" |
+				    sed -r "s|.+href='([^']+)'.+|\1|g")
+	fi
+
 	url_rapidcrypt="${url_rapidcrypt%% onClick*}"
 
-	if url "$url_rapidcrypt"
+	if url "$url_rapidcrypt" &&
+		[[ "$url_rapidcrypt" != "$url_in" ]]
 	then
 	    replace_url_in "$url_rapidcrypt"
 	    break
+
+	else
+	    _log 2
 	fi
     done
 fi
