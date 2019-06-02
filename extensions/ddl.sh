@@ -37,7 +37,8 @@ then
 	html=$(wget -qO- --user-agent="$user_agent"          \
 		    --keep-session-cookies                   \
 		    --save-cookies="$path_tmp"/cookies0.zdl  \
-		    "$url_in")
+		    "$url_in"                                \
+	    	    -o /dev/null)
     
     input_hidden "$html"
 
@@ -78,6 +79,13 @@ then
 			-b "$path_tmp"/cookies.zdl  \
 			-A "$user_agent" \
 			-d "$post_data")
+
+	    [ -z "$html" ] &&
+		html=$(wget -qO- --user-agent="$user_agent"          \
+			    --load-cookies="$path_tmp"/cookies.zdl   \
+			    --post-data="$post_data"                 \
+			    "$url_in"                                \
+	    		    -o /dev/null)
 	fi
     done
 
