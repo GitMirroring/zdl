@@ -33,7 +33,12 @@ then
     html=$(curl -A "$user_agent" \
 		-c "$path_tmp"/cookies0.zdl \
 		"$url_in")
-
+    [ -z "$html" ] &&
+	html=$(wget -qO- --user-agent="$user_agent"          \
+		    --keep-session-cookies                   \
+		    --save-cookies="$path_tmp"/cookies0.zdl  \
+		    "$url_in")
+    
     input_hidden "$html"
 
     html=$(wget -qO- "$url_in"                          \
