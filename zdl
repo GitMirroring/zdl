@@ -1453,7 +1453,7 @@ function main_loop {
 	while :
 	do
 	    post_process
-	    clean_livestream
+	    # clean_livestream
 
 	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
 	    do

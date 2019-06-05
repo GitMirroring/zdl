@@ -45,13 +45,22 @@ then
 	url_in_file=$(get_location "$url_raiplay")
 
 	get_livestream_start_time "$url_in" rai_start_time
+
 	get_livestream_duration_time "$url_in" rai_duration_time
 	rai_start_time="${rai_start_time//\:tomorrow}"
 	
 	file_in=$(get_title "$html")_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}
 
 	print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
-	livestream_m3u8="$url_in_file"
+
+	if [ -n "$rai_start_time" ]
+	then
+	    livestream_m3u8="$url_in_file"
+	else
+	    [ -n "$gui_alive" ] &&
+		check_linksloop_livestream ||
+		    _log 2
+	fi
 	
     else       
 	html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
