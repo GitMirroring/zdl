@@ -511,7 +511,7 @@ ESTENSIONI:
 	deps['pinfo']=pinfo
 	deps['aria2c']=aria2
 	deps['axel']=axel
-	deps['nodejs']=nodejs
+	deps['node']=nodejs
 	deps['php']=php-cli
 	deps['cmp']=diffutils
 	deps['socat']=socat
@@ -538,10 +538,13 @@ ESTENSIONI:
 
 	for cmd in "${!deps[@]}"
 	do
-	    if ! command -v $cmd  &>/dev/null 
+	    if ! command -v $cmd  &>/dev/null
 	    then
-		print_c 1 "Installazione di ${deps[$cmd]}"
-		install_dep ${deps[$cmd]}
+		if [ "$cmd" != node ] || ( [ "$cmd" == node ] && ! command -v nodejs &>/dev/null )
+		then
+		    print_c 1 "Installazione di ${deps[$cmd]}"
+		    install_dep ${deps[$cmd]}
+		fi
 	    fi
 	done
 
