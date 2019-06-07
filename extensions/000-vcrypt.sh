@@ -95,7 +95,7 @@ then
 
     if url "$vcrypt_relink"
     then
-	if [[ "$vcrypt_relink" =~ \/banned\/ ]]
+	if [[ "$vcrypt_relink" =~ \/banned ]]
 	then
 	    _log 39
 	else
