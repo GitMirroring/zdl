@@ -65,7 +65,7 @@ function get_fastshield {
     fi
 }
 
-if [[ "$url_in" =~ vcrypt\..+\/wss\/ ]]
+if [[ "$url_in" =~ vcrypt\..+\/(wss|shield)\/ ]]
 then
     html=$(curl -s \
 		-A "$user_agent" \
@@ -93,9 +93,16 @@ then
     vcrypt_relink=$(grep Location "$path_tmp"/vcrypt-location.txt |
 			awk '{print $2}' | tail -n1)
 
-    url "$vcrypt_relink" &&
-	replace_url_in "$vcrypt_relink" ||
-	    _log 2    
+    if url "$vcrypt_relink"
+    then
+	if [[ "$vcrypt_relink" =~ \/banned\/ ]]
+	then
+	    _log 39
+	else
+	    replace_url_in "$vcrypt_relink" ||
+		_log 2
+	fi
+    fi
 fi
 
 
