@@ -57,10 +57,35 @@ then
 		--save-cookies="$path_tmp/cookies.zdl"           \
 		-qO- -o /dev/null)
 
+    # if [ -z "$html" ] && check_cloudflare "$url_in"
+    # then
+    # 	get_by_cloudflare "$url_in" wstream_new_url
+    # 	#	echo "wstream_new_url: $wstream_new_url"
+    # 	url "$wstream_new_url" ||
+    # 	    _log 2
+    # fi
+    
     if [[ "$html" =~ (File Not Found|File doesn\'t exits) ]]
     then
 	_log 3
 
+    elif [ -z "$html" ] && check_cloudflare "$url_in"
+    then
+	_log 17
+	
+    elif grep -qP 'class="buttonDownload"' <<< "$html" #[[ "$html" =~ (Video is processing now) ]]
+    then
+	wstream_new_url=$(grep -P 'class=\"buttonDownload\"' <<< "$html" |
+			      sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+	
+	html2=$(wget -t1 -T$max_waiting                               \
+		     "$wstream_new_url"                               \
+		     --user-agent="$user_agent"                       \
+		     --load-cookies="$path_tmp/cookies.zdl"           \
+		     -qO- -o /dev/null)
+
+	grep http "$html"
+	
     else
 	download_video=$(grep -P "download_video.+o" <<< "$html" | head -n1)
 
@@ -175,10 +200,16 @@ then
 	    sanitize_file_in
 	    file_in="${file_in#Watch_video_}"
 	fi
-	
-	[ -z "$url_in_timer" ] &&
-	    end_extension ||
-		unset url_in_timer
+
+	if [ -z "$url_in_file" ] || [ "$url_in" == "$url_in_file" ]
+	then
+	    _log 2
+
+	else
+	    [ -z "$url_in_timer" ] &&
+		end_extension ||
+		    unset url_in_timer
+	fi
     fi
 fi
 
