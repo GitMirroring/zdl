@@ -672,31 +672,32 @@ function get_jschl_answer {
     local page="$1"
     local domain="$2"
 
-    # cp "$page" "$page".0
-
     sed -r 's|setTimeout|//|g' -i "$page"
     sed -r 's|\}, 4000|//|g' -i "$page"
-    sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
-    sed -r 's|f.submit|//|g' -i "$page"
+
+    sed -r 's|b\(function|//|g' -i "$page"
+    sed -r 's|\ \(function|//|g' -i "$page"
+    sed -r 's|b = function|//|g' -i "$page"
+
+    sed -r 's|\}\)\(\)|//|g' -i "$page"
+    sed -r 's|\}\,\ false|//|g' -i "$page"
+
+    sed -r 's|var\ a\ \=\ document|//|g' -i "$page"
+    sed -r 's|var\ a\ \=\ function|//|g' -i "$page"
+
+    # sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
+    # sed -r 's|f.submit|//|g' -i "$page"
 
     # sed -r "s|'; 121'||g" -i "$page"
 
-    # sed -r 's|b\(function|//|g' -i "$page"
-    # sed -r 's|\(function|//|g' -i "$page"
-    # sed -r 's|b = function|//|g' -i "$page"
-    # sed -r 's|\}\)\(\)|//|g' -i "$page"
-    # sed -r 's|\}\,\ false|//|g' -i "$page"
-
-    # sed -r 's|var\ a\ \=\ document|//|g' -i "$page"
-    # sed -r 's|var\ a\ \=\ function|//|g' -i "$page"
     # sed -r 's|a\ \=\ document|//|g' -i "$page"
     # sed -r 's|a.value|a|g' -i "$page"
-
+    
     # sed -r 's|<\/head>||g' -i "$page"
     # sed -r 's|<body>||g' -i "$page"
     # sed -r 's|<\/style>|</style></head><body>|g' -i "$page"
     # sed -r 's|^[ ]+\;||g' -i "$page"
-    
+
     jschl_answer=$($(command -v phantomjs 2>/dev/null) "$path_usr"/extensions/cloudflare.js "$page")
 }
 

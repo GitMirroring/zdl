@@ -558,7 +558,7 @@ then
 fi
 
 evaljs=$path_usr/libs/eval.js
-
+export OPENSSL_CONF=/etc/ssl/
 
 
 ## FFMPEG:

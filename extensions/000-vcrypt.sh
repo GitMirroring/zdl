@@ -65,6 +65,40 @@ function get_fastshield {
     fi
 }
 
+if [[ "$url_in" =~ vcrypt\..+\/wss\/ ]]
+then
+    html=$(curl -s \
+		-A "$user_agent" \
+		-c "$path_tmp"/cookies.zdl \
+		"$url_in")
+
+    if [[ "$html" =~ refresh.+URL=([^\"]+) ]]
+    then	
+        vcrypt_relink="${BASH_REMATCH[1]}"
+    fi
+
+    if [[ "$html" =~ "document.cookie =  '"([^\']+) ]]
+    then	
+        vcrypt_cookie="${BASH_REMATCH[1]}"
+	vcrypt_cookie="__cfduid=$(grep __cfduid "$path_tmp"/cookies.zdl |cut -f7); ${vcrypt_cookie%%\;*}"
+    fi
+    
+    wget -SO /dev/null \
+	 --user-agent="$user_agent" \
+	 --header="Cookie: \"$vcrypt_cookie\"" \
+	 --header='TE: Trailers' \
+	 --header="Ugrade-Insecure-Requests: 1" \
+	 "$vcrypt_relink" -o "$path_tmp"/vcrypt-location.txt
+    
+    vcrypt_relink=$(grep Location "$path_tmp"/vcrypt-location.txt |
+			awk '{print $2}' | tail -n1)
+
+    url "$vcrypt_relink" &&
+	replace_url_in "$vcrypt_relink" ||
+	    _log 2    
+fi
+
+
 if [ "$url_in" != "${url_in//vcrypt.}" ] &&
        [[ ! "$url_in" =~ fastshield ]] #&&       [[ ! "$url_in" =~ vcrypt.+opencrypt ]]
 then
