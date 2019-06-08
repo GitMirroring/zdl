@@ -65,6 +65,38 @@ function get_fastshield {
     fi
 }
 
+if [[ "$url_in" =~ vcrypt\..+\/(fws)\/ ]]
+then
+    html=$(curl -s \
+    		-A "$user_agent" \
+    		-c "$path_tmp"/cookies.zdl \
+    		"$url_in")
+
+    while read line
+    do
+	unset vcrypt_link
+	if [[ "$line" =~ 'href="'([^\"]+)\" ]]
+	then
+    	    vcrypt_link="${BASH_REMATCH[1]}"
+	fi
+	if url "$vcrypt_link"
+	then
+	    print_c 4 "Reindirizzamento: $vcrypt_link"
+	    set_link + "$vcrypt_link"
+	fi
+	
+    done< <(grep '<title>' <<< "$html" | sed -r 's|<tr>|\n|g')
+
+    if url "$vcrypt_link"
+    then
+	set_link - "$url_in"
+	replace_url_in "$vcrypt_link"
+
+    else
+	_log 2
+    fi
+fi    
+
 if [[ "$url_in" =~ vcrypt\..+\/(wss|shield)\/ ]]
 then
     html=$(curl -s \
