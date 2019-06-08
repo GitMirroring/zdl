@@ -35,7 +35,7 @@ then
     print_c 4 "Reindirizzamento: $url_in -> $wstream_link"
 
     html=$(curl -s -c "$path_tmp"/cookies.zdl "$wstream_link")
-    countdown- 4
+    ## countdown- 5
 
     file_in=$(get_title "$html" |head -n1)
     file_in="${file_in#Download Free}"
@@ -43,10 +43,14 @@ then
     wstream_req=$(grep -oP 'downloadlink.php?[^"]+' <<< "$html")
     if [ -n "$wstream_req" ]
     then
-	url_in_file=$(curl -s https://download.wstream.video/"$wstream_req" |
+	for proto in http https
+	do
+	    url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req" |
 			  grep "class='buttonDownload")
-	url_in_file="${url_in_file#*href=\'}"
-	url_in_file="${url_in_file%%\'*}"
+	    url_in_file="${url_in_file#*href=\'}"
+	    url_in_file="${url_in_file%%\'*}"
+	    url "$url_in_file" && break
+	done
     fi
 
     check_wget || {
