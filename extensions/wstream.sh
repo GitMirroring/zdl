@@ -28,38 +28,49 @@
 ## zdl-extension types: streaming download
 ## zdl-extension name: WStream (HD)
 
-if [[ "$url_in" =~ http[s]*://[w.]*wstream ]] 
+if [[ "$url_in" =~ wstream\. ]] 
 then
-    wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
-    wstream_link="${wstream_link//\/video\//\/}"
-    print_c 4 "Reindirizzamento: $url_in -> $wstream_link"
-
-    html=$(curl -s -c "$path_tmp"/cookies.zdl "$wstream_link")
-    ## countdown- 5
-
-    file_in=$(get_title "$html" |head -n1)
-    file_in="${file_in#Download Free}"
-    
-    wstream_req=$(grep -oP 'downloadlink.php?[^"]+' <<< "$html")
-    if [ -n "$wstream_req" ]
+    if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
     then
-	for proto in http https
-	do
-	    url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req" |
-			  grep "class='buttonDownload")
-	    url_in_file="${url_in_file#*href=\'}"
-	    url_in_file="${url_in_file%%\'*}"
-	    url "$url_in_file" && break
-	done
-    fi
-
-    check_wget || {
-	print_c 3 "Superato il limite di banda imposto dal server:"
-	print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+	wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
+	wstream_link="${wstream_link//\/video\//\/}"
 	
-	set_temp_proxy
-    }
-    
+    elif [[ "$url_in" =~ download\.wstream ]]
+    then
+	wstream_link="$url_in"
+    fi
+    wstream_link="http${wstream_link#https}"
+	
+    if url "$wstream_link"
+    then
+	print_c 4 "Reindirizzamento: $url_in -> $wstream_link"
+
+	html=$(curl -s -c "$path_tmp"/cookies.zdl "$wstream_link")
+	## countdown- 5
+
+	file_in=$(get_title "$html" |head -n1)
+	file_in="${file_in#Download Free}"
+	
+	wstream_req=$(grep -oP 'downloadlink.php?[^"]+' <<< "$html")
+	if [ -n "$wstream_req" ]
+	then
+	    for proto in http https
+	    do
+		url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req" |
+				  grep "class='buttonDownload")
+		url_in_file="${url_in_file#*href=\'}"
+		url_in_file="${url_in_file%%\'*}"
+		url "$url_in_file" && break
+	    done
+	fi
+
+	check_wget || {
+	    print_c 3 "Superato il limite di banda imposto dal server:"
+	    print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+	    
+	    set_temp_proxy
+	}
+    fi
     end_extension
 fi
 

@@ -100,7 +100,7 @@ then
     fi
 fi    
 
-if [[ "$url_in" =~ vcrypt\..+\/(wss|shield)\/ ]]
+if [[ "$url_in" =~ vcrypt\..+\/(wss|wsd|shield)\/ ]]
 then
     html=$(curl -s \
 		-A "$user_agent" \

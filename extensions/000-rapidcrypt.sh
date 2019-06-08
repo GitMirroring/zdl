@@ -29,45 +29,56 @@
 
 if [ "$url_in" != "${url_in//rapidcrypt.net}" ]
 then
-    for i in 0 1
-    do
-	if check_cloudflare "$url_in"
-	then
-	    get_by_cloudflare "$url_in" html
-
-	else
-	    html=$(curl -s "$url_in")
-	    if [ -z "$html" ]
+    if [[ "$url_in" =~ \/wstm\/ ]]
+    then
+	html=$(wget -qO- "$url_in")
+	rapidcrypt_link=$(grep 'Download file' <<< "$html" |
+			      sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+	url "$rapidcrypt_link" &&
+	    replace_url_in "$rapidcrypt_link" ||
+		_log 2
+	
+    else
+	for i in 0 1
+	do
+	    if check_cloudflare "$url_in"
 	    then
-		html=$(wget -o /dev/null -qO- "$url_in")
+		get_by_cloudflare "$url_in" html
+
+	    else
+		html=$(curl -s "$url_in")
+		if [ -z "$html" ]
+		then
+		    html=$(wget -o /dev/null -qO- "$url_in")
+		fi
 	    fi
-	fi
 
-	url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
-				sed -r 's|.+href=\"([^"]+)\".+|\1|g')
-
-	if ! url "$url_rapidcrypt"
-	then
 	    url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
-				    sed -r 's|.+href=([^>]+)>.+|\1|g')
-	fi
+				 sed -r 's|.+href=\"([^"]+)\".+|\1|g')
 
-	if ! url "$url_rapidcrypt"
-	then
-	    url_rapidcrypt=$(grep -P "Click [Tt]{1}o [Cc]{1}ontinue" <<< "$html" |
-				    sed -r "s|.+href='([^']+)'.+|\1|g")
-	fi
+	    if ! url "$url_rapidcrypt"
+	    then
+		url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html" |
+				     sed -r 's|.+href=([^>]+)>.+|\1|g')
+	    fi
 
-	url_rapidcrypt="${url_rapidcrypt%% onClick*}"
+	    if ! url "$url_rapidcrypt"
+	    then
+		url_rapidcrypt=$(grep -P "Click [Tt]{1}o [Cc]{1}ontinue" <<< "$html" |
+				     sed -r "s|.+href='([^']+)'.+|\1|g")
+	    fi
 
-	if url "$url_rapidcrypt" &&
-		[[ "$url_rapidcrypt" != "$url_in" ]]
-	then
-	    replace_url_in "$url_rapidcrypt"
-	    break
+	    url_rapidcrypt="${url_rapidcrypt%% onClick*}"
 
-	else
-	    _log 2
-	fi
-    done
+	    if url "$url_rapidcrypt" &&
+		    [[ "$url_rapidcrypt" != "$url_in" ]]
+	    then
+		replace_url_in "$url_rapidcrypt"
+		break
+
+	    else
+		_log 2
+	    fi
+	done
+    fi
 fi
