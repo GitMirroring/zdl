@@ -34,18 +34,24 @@ then
     then
 	wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
 	wstream_link="${wstream_link//\/video\//\/}"
+	wstream_link="http${wstream_link#https}"
 	
     elif [[ "$url_in" =~ download\.wstream ]]
     then
 	wstream_link="$url_in"
     fi
-    wstream_link="http${wstream_link#https}"
 	
     if url "$wstream_link"
     then
-	print_c 4 "Reindirizzamento: $url_in -> $wstream_link"
-
-	html=$(curl -s -c "$path_tmp"/cookies.zdl "$wstream_link")
+	[ "$url_in" == "$wstream_link" ] ||
+	    print_c 4 "Reindirizzamento: $url_in -> $wstream_link"
+	html=$(wget -qO- \
+		    -o /dev/null \
+		    --keep-session-cookies \
+		    --save-cookies="$path_tmp"/cookies.zdl \
+		    "$wstream_link")
+	
+	##### per ora è solo client, quindi è commentato:
 	## countdown- 5
 
 	file_in=$(get_title "$html" |head -n1)
@@ -56,6 +62,7 @@ then
 	then
 	    for proto in http https
 	    do
+		print_c 4 "Reindirizzamento: $wstream_link -> $proto://download.wstream.video/$wstream_req"
 		url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req")
 
 		if [[ "$url_in_file" =~ (Server problem.. please contact our support) ]]
