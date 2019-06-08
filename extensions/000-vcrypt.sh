@@ -93,7 +93,10 @@ then
 	replace_url_in "$vcrypt_link"
 
     else
-	_log 2
+	get_location "$url_in" vcrypt_location
+	[[ "$vcrypt_location" =~ \/banned ]] &&
+	    _log 39 ||
+		_log 2
     fi
 fi    
 
