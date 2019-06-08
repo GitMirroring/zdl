@@ -56,11 +56,19 @@ then
 	then
 	    for proto in http https
 	    do
-		url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req" |
-				  grep "class='buttonDownload")
-		url_in_file="${url_in_file#*href=\'}"
-		url_in_file="${url_in_file%%\'*}"
-		url "$url_in_file" && break
+		url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req")
+
+		if [[ "$url_in_file" =~ (Server problem.. please contact our support) ]]
+		then
+		    _log 3
+		    break
+
+		else
+		    url_in_file=$(grep "class='buttonDownload" <<< "$url_in_file")
+		    url_in_file="${url_in_file#*href=\'}"
+		    url_in_file="${url_in_file%%\'*}"
+		    url "$url_in_file" && break
+		fi
 	    done
 	fi
 
