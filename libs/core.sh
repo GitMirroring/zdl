@@ -411,14 +411,16 @@ function check_in_loop {
 	    check_livestream_link_start "${url_out[i]}" &&
 		! check_pid "${pid_out[i]}" &&
 		ret=1
-	    set_link in "${url_out[i]}" &&
-		[[ "${percent_out[i]}" =~ ^([0-9.]+)$ ]] &&
-		((${percent_out[i]}<100)) || 
-		    rm -rf "${file_out[i]}" \
-		       "${file_out[i]}".st \
-		       "${file_out[i]}".aria2 \
-		       "${file_out[i]}".MEGAenc \
-		       "$path_tmp"/"${file_out[i]}"_stdout.*		
+	    if ! set_link in "${url_out[i]}" &&
+		    [[ "${percent_out[i]}" =~ ^([0-9.]+)$ ]] &&
+		    ((${percent_out[i]}<100))
+	    then
+		rm -rf "${file_out[i]}" \
+		   "${file_out[i]}".st \
+		   "${file_out[i]}".aria2 \
+		   "${file_out[i]}".MEGAenc \
+		   "$path_tmp"/"${file_out[i]}"_stdout.*
+	    fi
 	done
 
 	if [ -z "$max_dl" ] ||
