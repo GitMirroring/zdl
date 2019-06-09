@@ -325,6 +325,7 @@ function set_link {
 		do
 		    if [ "${url_out[i]}" == "$link" ]
 		    then
+			check_pid "${pid_out[i]}" && kill -9 "${pid_out[i]}" &>/dev/null
 			rm -rf "${file_out[i]}" \
 			   "${file_out[i]}".st \
 			   "${file_out[i]}".aria2 \
@@ -415,6 +416,7 @@ function check_in_loop {
 		    [[ "${percent_out[i]}" =~ ^([0-9.]+)$ ]] &&
 		    ((${percent_out[i]}<100))
 	    then
+		check_pid "${pid_out[i]}" && kill -9 "${pid_out[i]}" &>/dev/null
 		rm -rf "${file_out[i]}" \
 		   "${file_out[i]}".st \
 		   "${file_out[i]}".aria2 \
