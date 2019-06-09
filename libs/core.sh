@@ -299,6 +299,7 @@ function set_line_in_file { 	#### usage:
 function set_link {
     local op="$1"
     local link="$2"
+    local i
     
     if [ "$op" == "+" ] &&
 	   ! url "$link"
@@ -317,6 +318,22 @@ function set_link {
 	
 	if set_line_in_file "$op" "$link" "$path_tmp/links_loop.txt"
 	then
+	    if [ "$op" == '-' ] &&
+		   data_stdout
+	    then
+		for ((i=0; i<${#file_out[@]}; i++))
+		do
+		    if [ "${url_out[i]}" == "$link" ]
+		    then
+			rm -rf "${file_out[i]}" \
+			   "${file_out[i]}".st \
+			   "${file_out[i]}".aria2 \
+			   "${file_out[i]}".MEGAenc \
+			   "$path_tmp"/"${file_out[i]}"_stdout.*
+			break
+		    fi
+		done
+	    fi
 	    clean_livestream 
 	    return 0
 	else
@@ -393,7 +410,15 @@ function check_in_loop {
 	do
 	    check_livestream_link_start "${url_out[i]}" &&
 		! check_pid "${pid_out[i]}" &&
-		ret=1	    
+		ret=1
+	    set_link in "${url_out[i]}" &&
+		[[ "${percent_out[i]}" =~ ^([0-9.]+)$ ]] &&
+		((${percent_out[i]}<100)) || 
+		    rm -rf "${file_out[i]}" \
+		       "${file_out[i]}".st \
+		       "${file_out[i]}".aria2 \
+		       "${file_out[i]}".MEGAenc \
+		       "$path_tmp"/"${file_out[i]}"_stdout.*		
 	done
 
 	if [ -z "$max_dl" ] ||

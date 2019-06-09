@@ -80,6 +80,8 @@ then
 	fi
 
 	check_wget || {
+	    # echo "Elite" >> "$path_tmp"/proxy
+	    # echo "Anonymous" >> "$path_tmp"/proxy
 	    print_c 3 "Superato il limite di banda imposto dal server:"
 	    print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
 	    
