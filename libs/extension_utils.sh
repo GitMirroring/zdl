@@ -685,8 +685,8 @@ function get_jschl_answer {
     sed -r 's|var\ a\ \=\ document|//|g' -i "$page"
     sed -r 's|var\ a\ \=\ function|//|g' -i "$page"
 
-    # sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
-    # sed -r 's|f.submit|//|g' -i "$page"
+    sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
+    sed -r 's|f.submit|//|g' -i "$page"
 
     # sed -r "s|'; 121'||g" -i "$page"
 
@@ -736,6 +736,9 @@ function get_by_cloudflare {
     domain="${domain%%\/*}"
 	# -H "Host: $domain" \
 	# -H "Referer: $url_in" \
+
+    ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in")
+    return
     
     curl                                                                                  \
 	-H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
@@ -767,10 +770,8 @@ function get_by_cloudflare {
 	get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
 	
 	input_hidden "$path_tmp"/cloudflare.html
-echo "jschl: $jschl_answer"
-	get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
 
-echo "get: $get_data"
+	get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
 
 	cookie_cloudflare=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
 
@@ -832,6 +833,13 @@ function get_location_by_cloudflare {
     local location_chunk
     domain="${url_in#*\/\/}"
     domain="${domain%%\/*}"
+
+    ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" |
+	      grep '__LOCATION__:' |
+	      tail -n1 |
+	      awk '{print $2}'
+       )
+    return
     
     curl                                                                                  \
     	-A "$user_agent"                                                                  \

@@ -31,30 +31,30 @@ if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
     rm -f "$path_tmp"/cookies*.zdl "$path_tmp"/headers*.zdl 
     domain_rockfile="rockfile.co"
-#    replace_url_in "${url_in//https/http}"
 
     if check_cloudflare "$url_in"
     then
-	get_by_cloudflare "$url_in" html
-
-    else
-	html=$(curl -s "$url_in")
-
+	get_location_by_cloudflare "$url_in" rockfile_location
+	if url "$rockfile_location"
+	then
+	    replace_url_in "$rockfile_location"
+	fi
     fi
+    html=$(curl -s "$url_in")
 
     if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
     then
 	_log 3
-
+	
     elif [ -n "$html" ]
     then
 	input_hidden "$html"
 
 	method_free=$(grep -P 'method_.*free.+freeDownload' <<< "$html" |
-			     sed -r 's|.+(method_.*free)\".+|\1|g' |
-			     tr -d '\r')
-
-	post_data="${post_data##*document.write\(\&}&${method_free}=Regular Download"
+			  sed -r 's|.+(method_.*free)\".+|\1|g' |
+			  tr -d '\r')
+	
+	post_data="${post_data##*document.write\(\&}&${method_free}=Free Download"
 
 	html=$(curl -v                                                                              \
 		    -A "$user_agent"                                                                \
@@ -111,6 +111,7 @@ then
 
 		unset post_data
 		input_hidden "$html"
+
 		post_data="${post_data##*'(&'}&code=$code"
 		post_data="${post_data//'&down_script=1'}"
 
@@ -123,9 +124,9 @@ then
 
 		elif [ -n "$code" ]
 		then
-		    timer=$(grep countdown_str <<< "$html" |
+		    timer=$(grep -P 'Wait <span.+span> Seconds' <<< "$html" |
 				   sed -r 's|.+>([0-9]+)<.+|\1|g')
-		    
+
 		    countdown- $timer
 		    sleeping 2
 		    
