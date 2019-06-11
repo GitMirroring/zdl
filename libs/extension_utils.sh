@@ -676,10 +676,10 @@ function get_jschl_answer {
     sed -r 's|\}, 4000|//|g' -i "$page"
 
     sed -r 's|b\(function|//|g' -i "$page"
-    sed -r 's|\ \(function|//|g' -i "$page"
+    ##sed -r 's|\ \(function|//|g' -i "$page"
     sed -r 's|b = function|//|g' -i "$page"
 
-    sed -r 's|\}\)\(\)|//|g' -i "$page"
+    ##sed -r 's|\}\)\(\)|//|g' -i "$page"
     sed -r 's|\}\,\ false|//|g' -i "$page"
 
     sed -r 's|var\ a\ \=\ document|//|g' -i "$page"
