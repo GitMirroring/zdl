@@ -214,8 +214,9 @@ function scrape_url {
 	if [ -n "$html" ]
 	then
 	    html=$(tr "\t\r\n'" '   "' <<< "$html"                        | 
-			  grep -i -o '<a[^>]\+href[ ]*=[ \t]*"[^"]\+"'    | 
-			  sed -e 's/^.*"\([^"]\+\)".*$/\1/g' 2>/dev/null)
+	     	       grep -Po 'href[\ ]*=[\ ]*[^<>\ #]+'    |
+		       grep -Pv "href[\ ]*=[\ ]*[\"\']*\/" |
+		       sed -r "s|href=[\"\']*([^\"]+)[\"\']*.*$|\1|g" 2>/dev/null)
 	else
 	    return 1
 	fi
@@ -240,6 +241,7 @@ function scrape_url {
 	done <<< "$html" 
 
 	print_c 1 "Estrazione URL dalla pagina web $url_page completata"
+	read
     fi
 }
 
