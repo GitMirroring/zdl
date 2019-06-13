@@ -401,7 +401,7 @@ function check_link {
 }
 
 function check_in_loop {
-    local line i \
+    local line i j \
 	  max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null) \
 	  ret=1
 
@@ -422,6 +422,23 @@ function check_in_loop {
 		   "${file_out[i]}".aria2 \
 		   "${file_out[i]}".MEGAenc \
 		   "$path_tmp"/"${file_out[i]}"_stdout.*
+	    fi
+
+	    if ! check_livestream "${url_out[i]}" &&
+		    ! check_pid "${pid_out[i]}"
+	    then
+		for ((j=0; j<${#url_out[@]}; j++))
+		do
+		    if check_pid "${pid_out[j]}" &&
+			    [ "${url_out[j]}" == "${url_out[i]}" ]
+		    then
+			rm -rf "${file_out[i]}" \
+			   "${file_out[i]}".st \
+			   "${file_out[i]}".aria2 \
+			   "${file_out[i]}".MEGAenc \
+			   "$path_tmp"/"${file_out[i]}"_stdout.*
+		    fi			
+		done
 	    fi
 	done
 

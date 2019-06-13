@@ -27,7 +27,6 @@
 ## zdl-extension types: shortlinks
 ## zdl-extension name: vcrypt
 
-
 function get_fastshield {
     declare -n ref="$2"
     local url_fastshield="$1"
@@ -98,7 +97,8 @@ then
 	    _log 39 ||
 		_log 2
     fi
-fi    
+fi
+
 
 if [[ "$url_in" =~ vcrypt\..+\/(wss|wsd|shield)\/ ]]
 then

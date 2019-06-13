@@ -31,11 +31,11 @@ if [ "$url_in" != "${url_in//rapidcrypt.net}" ]
 then
     if [[ "$url_in" =~ \/wstm\/ ]]
     then
-	html=$(wget -qO- "$url_in")
-	rapidcrypt_link=$(grep 'Download file' <<< "$html" |
-			      sed -r 's|.+href=\"([^"]+)\".+|\1|g')
-	url "$rapidcrypt_link" &&
-	    replace_url_in "$rapidcrypt_link" ||
+	rapidcrypt_relink=$(curl -s "$url_in" |
+				awk '/Download File/{match($0,/href="([^"]+)"/,matched); print matched[1]}')
+	
+	url "$rapidcrypt_relink" &&
+	    replace_url_in "$rapidcrypt_relink" ||
 		_log 2
 	
     else
