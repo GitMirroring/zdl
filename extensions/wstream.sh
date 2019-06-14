@@ -34,13 +34,13 @@ then
     then
 	wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
 	wstream_link="${wstream_link//\/video\//\/}"
-	wstream_link="http${wstream_link#https}"
+	wstream_link="${wstream_link//https/http}"
 	
     elif [[ "$url_in" =~ download\.wstream ]]
     then
 	wstream_link="$url_in"
     fi
-	
+
     if url "$wstream_link"
     then
 	[ "$url_in" == "$wstream_link" ] ||
@@ -50,7 +50,7 @@ then
 		    --keep-session-cookies \
 		    --save-cookies="$path_tmp"/cookies.zdl \
 		    "$wstream_link")
-	
+
 	##### per ora è solo client, quindi è commentato:
 	## countdown- 5
 
