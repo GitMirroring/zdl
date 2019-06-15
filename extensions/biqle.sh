@@ -28,6 +28,6 @@
 if [[ "$url_in" =~ biqle ]]
 then
     #biqle_data=$(/usr/bin/phantomjs "$path_usr"/extensions/biqle-phantomjs.js "$url_in")
-    biqle_url="${url_in//biqle.ru\/watch\//vk.com\/video}"
+    biqle_url="${url_in//biqle.[^\.]*\/watch\//vk.com\/video}"
     url "$biqle_url" && replace_url_in "$biqle_url" || _log 2
 fi
