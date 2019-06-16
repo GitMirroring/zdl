@@ -241,7 +241,7 @@ function scrape_url {
 	done <<< "$html" 
 
 	print_c 1 "Estrazione URL dalla pagina web $url_page completata"
-	read
+	countdown- 3
     fi
 }
 
