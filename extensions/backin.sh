@@ -25,12 +25,18 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Biqle (HD)
+## zdl-extension name: Backin
 
 
-if [[ "$url_in" =~ biqle ]]
+if [[ "$url_in" =~ backin ]]
 then
-    #biqle_data=$(/usr/bin/phantomjs "$path_usr"/extensions/biqle-phantomjs.js "$url_in")
-    biqle_url="${url_in//biqle.[^\.]*\/watch\//vk.com\/video}"
-    url "$biqle_url" && replace_url_in "$biqle_url" || _log 2
+    link_parser "$url_in"
+    backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
+    html=$(wget -o /dev/null -qO- "$backin_url")
+    file_in=$(get_title "$html")
+    url_in_file=$(unpack "$html")
+    url_in_file="${url_in_file#*file\:\"}"
+    url_in_file="${url_in_file%%\"*}"
+
+    end_extension
 fi
