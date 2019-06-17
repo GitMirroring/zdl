@@ -312,7 +312,7 @@ function set_link {
 	then
 	    link="${link%'#20\x'}"
 	    clean_livestream 
-	    check_linksloop_livestream 
+	    #check_linksloop_livestream 
 	    check_livestream_twice "$link"
 	fi
 	
@@ -335,10 +335,8 @@ function set_link {
 		    fi
 		done
 	    fi
-	    clean_livestream 
 	    return 0
 	else
-	    clean_livestream 
 	    return 1
 	fi
     fi

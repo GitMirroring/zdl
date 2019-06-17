@@ -51,15 +51,14 @@ then
 	
 	file_in=$(get_title "$html")_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}
 
-	print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
-
-	if [ -n "$rai_start_time" ]
+	if [ -n "$rai_duration_time" ]
 	then
+	    print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
 	    livestream_m3u8="$url_in_file"
 	else
 	    [ -n "$gui_alive" ] &&
 		check_linksloop_livestream ||
-		    _log 2
+		    _log 43
 	fi
 	
     else       

@@ -1089,6 +1089,12 @@ function get_livestream_duration_time {
     fi
 }
 
+function remove_livestream_link_start {
+    local link="$1"
+    [ -s "$path_tmp"/livestream_start.txt ] &&
+	sed -r "s|^$link$||g" -i "$path_tmp"/livestream_start.txt
+}
+
 function get_livestream_start_time {
     local link="$1"
     declare -n ref="$2"
@@ -1144,13 +1150,21 @@ function clean_livestream {
     local line
     declare -a lines
 
-    if [ -s "$path_tmp"/clean_livestream_pid ]
+    if [ -f "$path_tmp/rewriting" ]
     then
-	check_pid $(cat "$path_tmp"/clean_livestream_pid) &&
-	    return
+	while [ -f "$path_tmp/rewriting" ]
+	do
+	    sleeping 0.1
+	done
     fi
 
-    {
+    # if [ -s "$path_tmp"/clean_livestream_pid ]
+    # then
+    # 	check_pid $(cat "$path_tmp"/clean_livestream_pid) &&
+    # 	    return
+    # fi
+
+    # {
 	[ ! -s "$path_tmp"/links_loop.txt ] &&
 	    rm -f "$path_tmp"/livestream_time.txt
 	
@@ -1189,10 +1203,10 @@ function clean_livestream {
 	    
 	    clean_file "$path_tmp"/livestream_start.txt
 	fi
-    } & disown
-    local pid=$!
-    echo $pid > "$path_tmp"/clean_livestream_pid
-    wait $pid
+    # } & disown
+    # local pid=$!
+    # echo $pid > "$path_tmp"/clean_livestream_pid
+    # wait $pid
 }
 
 function check_linksloop_livestream {
@@ -1260,10 +1274,11 @@ function check_livestream_twice {
 	for ((x=0; x<${#pid_out[@]}; x++))
 	do
 	    if [ "$link" == "${url_out[x]}" ] &&
-		   ! check_pid "${pid_out[x]}" &&
-		   [ "${percent_out[x]}" == 100 ]
+		   ! check_pid "${pid_out[x]}"
 	    then
-		rm -f "${file_out[x]}" "$path_tmp"/"${file_out[x]}"_stdout.*
+		[ "${percent_out[x]}" != 100 ] &&
+		    rm -f "${file_out[x]}" 
+		rm -f "$path_tmp"/"${file_out[x]}"_stdout.*
 		break
 	    fi
 	done

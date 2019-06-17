@@ -1453,8 +1453,9 @@ function main_loop {
 	while :
 	do
 	    post_process
-	    # clean_livestream
-
+	    clean_livestream
+	    display_livestreams
+	    
 	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
 	    do
 		check_pid $(cat "$gui_instance") && gui_alive=true && break

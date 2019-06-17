@@ -814,6 +814,8 @@ function display_set_livestream {
 
 	    if [ "$opt" == "sì" ]
 	    then
+		remove_livestream_link_start "$link"
+		
 		if data_stdout
 		then
 		    for ((i=0; i<${#pid_out[@]}; i++))
@@ -883,4 +885,19 @@ function display_set_livestream {
 
     print_c 1 "\nIl download da $link si avvierà intorno alle $start_time per la durata di $duration_time\n"
     cursor off
+}
+
+function display_livestreams {
+    local line
+    if [ -s "$path_tmp"/livestream_time.txt ]
+    then
+	print_c 4 "Live Stream programmati (link, orario inizio, durata):"
+	while read line
+	do
+	    print_c 4 "$line"
+	done < "$path_tmp"/livestream_time.txt
+	print_c 0 ""
+    else
+	print_c 4 "Nessun Live Stream in programma"
+    fi
 }

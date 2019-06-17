@@ -213,6 +213,10 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
 	    msg="$url_in --> FFMpeg/AvConv non è installato" 
 	    set_link - "$url_in"
 	    ;;
+	43)
+	    msg="$url_in --> Durata del Live Stream non registrata: ripetere la programmazione (il link è cancellato dalla coda)" 
+	    set_link - "$url_in"
+	    ;;
     esac
     
     ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]
