@@ -1233,7 +1233,7 @@ function check_linksloop_livestream {
 			for ((i=0; i<${#live_streaming_url[@]}; i++))
 			do
 			    if [ "$line" == "${live_streaming_url[i]}" ] &&
-				   ! display_livestream_link_time "$line"
+				   ! check_livestream_link_time "$line"
 			    then
 				ICON="$path_usr"/gui/icon-32x32.png
 				TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
