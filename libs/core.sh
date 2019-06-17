@@ -372,17 +372,11 @@ function check_link {
 
 	    for ((i=0; i<${#pid_out[@]}; i++))
 	    do
+		check_livestream_twice "$link"
+		
 		if ( [ "$link" == "${url_out[i]}" ] && check_pid "${pid_out[i]}" )		       
 		then
 		    ret=1
-
-		elif [ "$link" == "${url_out[i]}" ] &&
-			 ! check_pid "${pid_out[i]}" &&
-			 [ "${downloader_out[i]}" == FFMpeg ] &&
-			 [ -f "${file_out[i]}" ]
-		then
-		    rm -f "${file_out[i]}" "$path_tmp"/"${file_out[i]}"_stdout.*
-		    ret=0
 		fi
 	    done	
 	fi
@@ -406,10 +400,11 @@ function check_in_loop {
     if data_stdout
     then
 	for ((i=0; i<${#url_out[i]}; i++))
-	do
+	do	    
 	    check_livestream_link_start "${url_out[i]}" &&
 		! check_pid "${pid_out[i]}" &&
 		ret=1
+
 	    if ! set_link in "${url_out[i]}" &&
 		    [[ "${percent_out[i]}" =~ ^([0-9.]+)$ ]] &&
 		    ((${percent_out[i]}<100))

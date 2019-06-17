@@ -233,7 +233,7 @@ function make_progress (size_bar, progress_bar, progress) {
 	} else {
 	    diff_bar_color = BYellow
 	    bar_color = On_Yellow
-	    info = sprintf("%-5s%-9s", percent_out[i] "%", "attendi               " Color_Off)	
+	    info = sprintf("%-5s%-9s", percent_out[i] "%", "attendi               " Color_Off)
 	}		    
     }
 

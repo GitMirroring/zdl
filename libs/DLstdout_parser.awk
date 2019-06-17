@@ -574,7 +574,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		if (!speed_out[i]) {
 		    match(progress_line, /bitrate=\s*(.+)kbits/, bitrate)
 		    match(progress_line, /speed=\s*(.+)x/, speed)
-		    speed_out[i] = int( (int(bitrate[1]) / 8) * int(speed[1]) )
+		    speed_out[i] = int( (bitrate[1] / 8) * speed[1] )
 		    speed_out_type[i] = "KB/s"
 		}
 	    }
@@ -627,9 +627,9 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    percent_out[i] = 100
         }
 	else if (time_out[i] && duration_out[i]) {
-	    percent_out[i] = int(time_out[i] * 100 / duration_out[i])
-	    if (int(percent_out[i])) {
-		length_out[i] = 100 * int(length_saved[i]) / int(percent_out[i])
+	    percent_out[i] = time_out[i] * 100 / duration_out[i]
+	    if (percent_out[i]) {
+		length_out[i] = int(100 * length_saved[i] / percent_out[i])
 	    }
 	    else {
 		length_out[i] = "unspecified"
