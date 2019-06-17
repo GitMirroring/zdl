@@ -897,7 +897,7 @@ function display_livestreams {
 	    print_c 4 "$line"
 	done < "$path_tmp"/livestream_time.txt
 	print_c 0 ""
-    else
-	print_c 4 "Nessun Live Stream in programma"
+    # else
+    # 	print_c 4 "Nessun Live Stream in programma"
     fi
 }
