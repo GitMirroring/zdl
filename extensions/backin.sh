@@ -30,13 +30,18 @@
 
 if [[ "$url_in" =~ backin ]]
 then
+    wget -SO OUT "$url_in" -o OUT.log
     link_parser "$url_in"
     backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
-    html=$(wget -o /dev/null -qO- "$backin_url")
-    file_in=$(get_title "$html")
-    url_in_file=$(unpack "$html")
-    url_in_file="${url_in_file#*file\:\"}"
-    url_in_file="${url_in_file%%\"*}"
 
+    if url "$backin_url"
+    then
+	print_c 4 "Redirezione: $backin_url"
+	html=$(wget -o /dev/null -qO- "$backin_url")
+	file_in=$(get_title "$html")
+	url_in_file=$(unpack "$html")
+	url_in_file="${url_in_file#*file\:\"}"
+	url_in_file="${url_in_file%%\"*}"
+    fi
     end_extension
 fi

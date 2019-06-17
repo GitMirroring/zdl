@@ -67,11 +67,17 @@ then
 	    
 	    url_in_new=$(sanitize_url "${url_in_new}")
 
+	    if ! url "$url_in_new"
+	    then
+	    	url_in_new=$(grep 'Clicca per proseguire' <<< "$html")
+		url_in_new="${url_in_new#*\"}"
+		url_in_new="${url_in_new%%\"*}"
+	    fi
+	    
 	    if url "$url_in_new"
 	    then
 		replace_url_in "$url_in_new" ||
 		    _log 2
-
 	    else
 		_log 3
 	    fi

@@ -56,8 +56,16 @@ then
 
 	file_in=$(get_title "$html" |head -n1)
 	file_in="${file_in#Download Free}"
-	
-	wstream_req=$(grep -oP 'downloadlink.php?[^"]+' <<< "$html")
+
+	#### 
+	# for wstream_exp in downloadlink dwn
+	# do
+	#     wstream_req=$(grep -oP "$wstream_exp.php?[^\"]+" <<< "$html")
+	#     [ -n "$wstream_req" ] && break
+	# done
+	## sostituisce il codice commentato sopra:
+	wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/')
+
 	if [ -n "$wstream_req" ]
 	then
 	    for proto in http https
