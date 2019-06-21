@@ -286,7 +286,8 @@ textarea {
     position: relative;
     width: 100%;
 }
-
+ 
+#console,
 #links,
 #path,
 #config,

@@ -28,6 +28,7 @@
         <li><a id="playlist-menu" onclick="changeSection('playlist');">Playlist</a></li>
         <li><a id="server-menu" onclick="changeSection('server');">Gestisci il server</a></li>
         <li><a id="config-menu" onclick="changeSection('config');">Configurazione</a></li>
+	<li><a id="console-menu" onclick="changeSection('console');">Console</a></li>
         <li><a id="info-menu" onclick="changeSection('info');">Info</a></li>
         <li><a id="killall-menu" onclick="exitAll();">Chiudi tutto</a></li>
     </ul>
@@ -51,6 +52,10 @@
                     <div id="path-sel" class="value"></div>
                     <div id="path-browser"></div>
                 </div>
+                <div class="background-element" style="text-align: left;">
+		  <div class="label-element">Seleziona il path fra quelli attivi:</div>
+		  <div id="active-paths-manager" class="active-paths"></div>
+		</div>
 
                 <div id="run-path" class="visible">
                     <div class="background-element" style="text-align: left">
@@ -273,6 +278,27 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- sezione CONSOLE -->
+    <div id="console">
+        <div class="section">
+            <div class="label-section">Console</div>
+            <div class="content">
+                <div class="background-element" style="text-align: left;">
+		    <div class="label-element">Seleziona il path fra quelli attivi:</div>
+		    <div id="active-paths-console" class="active-paths"></div>
+		</div>
+		<div class="background-element" style="text-align: left;">
+                    <div class="label-element">Console in:</div>
+                    <div id="path-sel-console" class="value"></div>
+		</div>
+                <div class="background-element" style="text-align: left;">
+		  <div class="label-element">Output della console:</div>
+		  <pre><div id="console-output" class="file-text"></div></pre>
+		</div>
+            </div>
+	</div>
     </div>
 
     <!-- sezione INFO & SEARCH -->

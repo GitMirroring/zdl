@@ -123,6 +123,22 @@ var getData = function () {
         return false;
 };
 
+// da integrare con getStatus()
+var getPaths = function () {
+    var content = "";
+    ajax({
+        query: "cmd=get-paths",
+        callback: function (res) {
+	    var item = "";
+	    JSON.parse(res).forEach(function(item) {
+		content += item + "<br>";
+	    });
+	    document.getElementById("console-output").innerHTML = content;
+	    //getPaths();
+	}
+    });
+};
+
 
 var showInfoLink = function (spec) {
     document.getElementById(spec.id).setAttribute("class", "download-info visible");
@@ -426,7 +442,7 @@ var singlePath = function (path) {
 
 
 var changeSection = function (section) {
-    ["path", "config", "info", "server", "playlist", "links"].forEach(function (item) {
+    ["path", "config", "info", "server", "playlist", "links", "console"].forEach(function (item) {
         if (item === section) {
             document.getElementById(item).style.display = "block";
             document.getElementById(item + "-menu").setAttribute("class", "active");
@@ -448,6 +464,8 @@ var sectionPath = function (path) {
 };
 
 var initClient = function (path) {
+    ZDL.path = path;
+    document.getElementById("path-sel").innerHTML = path;
     displayTorrentButton("path-torrent");
     displayPlaylistButton("playlist-browse");
 
@@ -576,6 +594,7 @@ var getStatus = function (repeat, op) {
                 displayReconnecter(data.reconnect, "path-reconnecter");
                 displayConf(data.conf);
                 displaySockets(data.sockets);
+		displayPaths(data.paths);
             }
 
             singlePath(ZDL.path).getFreeSpace();
@@ -585,6 +604,39 @@ var getStatus = function (repeat, op) {
         }
     });
 };
+
+var displayPaths = function (paths) {
+    if (paths[0]) {
+	var spec = {
+            "value": "",
+            "options": paths
+	};
+	spec.key = "active-path-manager";
+	displayInputSelect(spec, "active-paths-manager", "changePath");
+	spec.key = "active-path-console";
+	displayInputSelect(spec, "active-paths-console", "displayConsole");
+    }
+}
+
+var changePath = function(spec){
+    var path = document.getElementById("input-" + spec.key);
+    sectionPath(path.value);
+};
+
+var displayConsole = function(spec) {
+    var path = document.getElementById("input-" + spec.key);
+    document.getElementById("path-sel-console").innerHTML = path.value;
+    ajax({
+	query: "cmd=get-console&path=" + path.value,
+	callback: function (res) {
+	    var elemInner = document.getElementById("console-output");
+	    elemInner.innerHTML += res;
+            elemInner.scrollTop = elemInner.scrollHeight;
+
+	    displayConsole(spec);
+	}
+    });
+}
 
 var displayStatus = function (status) {
     if (status === "not-running") {
@@ -614,13 +666,16 @@ var displayReconnecter = function (value, id) {
 var displayInputSelect = function (spec, id, callback) {
     // spec = {key: options: value:}
     var output = "<div class='btn-select'><select id='input-" + spec.key + "' onchange='" + callback + "(" + objectToString(spec) + ");'></div>";
+    if (String(spec.value) === "") {
+	output += "<option selected>" + String(spec.value);
+    }
 
     spec.options.forEach(function (item) {
         if (String(spec.value) === String(item))
-            output += "<option selected>";
-        else
-            output += "<option>";
-        output += item + "</option>";
+	    output += "<option selected>";
+	else
+	    output += "<option>";
+	output += item + "</option>";
     });
 
     document.getElementById(id).innerHTML = output;

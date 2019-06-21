@@ -412,7 +412,6 @@ function get_status_run {
 
 function get_status_sockets {
     declare -n ref="$1"
-
     ref='['
     check_socket_ports "$1"
     ref="${ref%,}]"
@@ -470,6 +469,11 @@ function create_status_json {
 
     ## current path
     ref_string_output+="\"path\":\"$PWD\","
+
+    ## active paths
+    local paths
+    get_paths_json paths
+    ref_string_output+="\"paths\":$paths,"
 
     ## run status
     get_status_run status
@@ -609,6 +613,23 @@ function check_playlist {
     return 0
 }
 
+function get_paths_json {
+    declare -n ref=$1
+    local path
+    ref='['
+    
+    while read path
+    do
+	if [ -s "$path"/.zdl_tmp/.pid.zdl ] &&
+	       check_pid $(cat "$path"/.zdl_tmp/.pid.zdl)
+	then
+	    ref+="\"$path\","
+	fi
+	
+    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    ref="${ref%\,}]"
+}
+
 function run_cmd {
     local line=( "$@" )
     local file link pid path
@@ -682,6 +703,33 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    send_json ${line[1]} || return
 	    ;;
 
+	get-paths)
+	    file_output="$path_server"/paths.json
+	    local json_out
+	    get_paths_json json_out
+	    echo "$json_out" >"$file_output"
+	    ;;
+
+	get-console)	    
+	    test -d "${line[1]}" && cd "${line[1]}"
+	    file_output="$path_tmp"/console_stdout.$socket_port
+	    touch "$file_output".diff
+	    local diff_out
+	    while :
+	    do
+		cp "$gui_log" "$file_output"
+		diff_out=$(comm --nocheck-order -23 "$file_output" "$file_output".diff)
+		
+		if [ -n "$diff_out" ]
+		then
+		    echo "$diff_out" >"$file_output"
+		    echo "$diff_out" >>"$file_output".diff
+		    break
+		fi
+		sleep 2
+	    done
+	    ;;
+	
 	get-playlist)
 	    file_output="$path_server"/playlist
 	    clean_playlist
