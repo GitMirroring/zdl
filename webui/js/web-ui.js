@@ -625,7 +625,8 @@ var changePath = function(spec){
 
 var displayConsole = function(spec) {
     var path = document.getElementById("input-" + spec.key);
-    document.getElementById("path-sel-console").innerHTML = path.value;
+    if (path.value)
+	document.getElementById("path-sel-console").innerHTML = path.value;
     ajax({
 	query: "cmd=get-console&path=" + path.value,
 	callback: function (res) {
