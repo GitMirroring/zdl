@@ -628,12 +628,12 @@ var displayConsole = function(spec) {
     if (path.value)
 	document.getElementById("path-sel-console").innerHTML = path.value;
     ajax({
-	query: "cmd=get-console&path=" + path.value,
+	query: "cmd=get-console&path=" + path.value + "&loop=" + spec.loop,
 	callback: function (res) {
 	    var elemInner = document.getElementById("console-output");
 	    elemInner.innerHTML += res;
             elemInner.scrollTop = elemInner.scrollHeight;
-
+	    spec.loop = true;
 	    displayConsole(spec);
 	}
     });

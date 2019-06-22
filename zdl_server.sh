@@ -630,6 +630,14 @@ function get_paths_json {
     ref="${ref%\,}]"
 }
 
+function stop_console_webui {
+    local flag_file="$1"
+    while read path
+    do
+	rm -f "$path"/"$flag_file"
+    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+}
+
 function run_cmd {
     local line=( "$@" )
     local file link pid path
@@ -713,9 +721,14 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	get-console)	    
 	    test -d "${line[1]}" && cd "${line[1]}"
 	    file_output="$path_tmp"/console_stdout.$socket_port
+	    local loop_console="${line[2]}"
+
+	    [ "$loop_console" == true ] ||
+		stop_console_webui "$file_output".diff
+	    
 	    touch "$file_output".diff
 	    local diff_out
-	    while :
+	    while [ -f "$file_output".diff ]
 	    do
 		cp "$gui_log" "$file_output"
 		diff_out=$(comm --nocheck-order -23 "$file_output" "$file_output".diff)
@@ -728,6 +741,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		fi
 		sleep 2
 	    done
+	    [ -f "$file_output".diff ] || echo >"$file_output"
 	    ;;
 	
 	get-playlist)
