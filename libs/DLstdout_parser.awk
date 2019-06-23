@@ -680,7 +680,10 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	array_out(axel_parts_out[i], "axel_parts_out")
 	array_out(aria2_parts_out[i], "aria2_parts_out") 
     }
-    
+
+    #speed_out[i] = int(speed_out[i])
+    percent_out[i] = int(percent_out[i])
+
     array_out(speed_out[i], "speed_out")
     array_out(speed_out_type[i], "speed_out_type")
     array_out(eta_out[i], "eta_out")

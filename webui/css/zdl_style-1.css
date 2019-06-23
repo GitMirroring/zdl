@@ -264,6 +264,17 @@ textarea {
     margin-top: 1em;
 }
 
+.label-subsection {
+    text-align: left;
+    line-height: 30px;
+    color: white;
+    background-color: #3066db;
+    padding-left: 1em;
+    padding-right: 1em;
+    font-weight: bold;
+    margin-top: 1em;
+}
+
 .info-label {
     float: left;
     color: #fff;
@@ -391,6 +402,24 @@ div.value-number {
     color: black;
     background: #eee;
     margin: 0.7em 0 0.2em 0.7em;
+}
+
+.subsublabel-element-dark {
+    float: left;
+    color: #fff;
+    background: #777;
+    padding: 0.5em 0.7em;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+.subsublabel-element-light {
+    float: left;
+    color: #black;
+    background: #eee;
+    padding: 0.5em 0.7em;
+    margin-right: 0;
+    box-sizing: border-box;
 }
 
 .element {
@@ -626,6 +655,10 @@ div.content {
         padding-bottom: 1em;
         width: calc(100% - 1em);
     }
+    .timer {
+	clear: none;
+	width: 2.4em;
+    }
 }
 
 @media screen and (max-width: 360px) {
@@ -634,6 +667,10 @@ div.content {
         float: none;
         display: block;
         overflow: hidden;
+    }
+    .timer {
+	clear: none;
+	width: 2.4em;
     }
 }
 
@@ -731,4 +768,9 @@ div.content {
     clear: none;
     display: inline;
     box-sizing: border-box;
+}
+
+.timer {
+    clear: none;
+    width: 2.4em;
 }

@@ -123,7 +123,6 @@ var getData = function () {
         return false;
 };
 
-// da integrare con getStatus()
 var getPaths = function () {
     var content = "";
     ajax({
@@ -442,7 +441,7 @@ var singlePath = function (path) {
 
 
 var changeSection = function (section) {
-    ["path", "config", "info", "server", "playlist", "links", "console"].forEach(function (item) {
+    ["path", "config", "info", "server", "playlist", "links", "console", "livestream"].forEach(function (item) {
         if (item === section) {
             document.getElementById(item).style.display = "block";
             document.getElementById(item + "-menu").setAttribute("class", "active");
@@ -595,6 +594,7 @@ var getStatus = function (repeat, op) {
                 displayConf(data.conf);
                 displaySockets(data.sockets);
 		displayPaths(data.paths);
+		displayLiveStream(data.livestream);
             }
 
             singlePath(ZDL.path).getFreeSpace();
@@ -608,8 +608,8 @@ var getStatus = function (repeat, op) {
 var displayPaths = function (paths) {
     if (paths[0]) {
 	var spec = {
-            "value": "",
-            "options": paths
+            value: "",
+            options: paths
 	};
 	spec.key = "active-path-manager";
 	displayInputSelect(spec, "active-paths-manager", "changePath");
@@ -626,18 +626,112 @@ var changePath = function(spec){
 var displayConsole = function(spec) {
     var path = document.getElementById("input-" + spec.key);
     if (path.value)
-	document.getElementById("path-sel-console").innerHTML = path.value;
+	ZDL.pathConsole = path.value;
+
+    if (ZDL.pathConsole) {
+	document.getElementById("path-sel-console").innerHTML = ZDL.pathConsole;
+	ajax({
+	    query: "cmd=get-console&path=" + ZDL.pathConsole + "&loop=" + spec.loop,
+	    callback: function (res) {
+		var elemInner = document.getElementById("console-output");
+		elemInner.innerHTML += res;
+		elemInner.scrollTop = elemInner.scrollHeight;
+		spec.loop = true;
+		displayConsole(spec);
+	    }
+	});
+    }
+};
+
+var stopConsole = function() {
+    document.getElementById("input-active-path-console").value = "";
+    ZDL.pathConsole = "";
+    document.getElementById("path-sel-console").innerHTML = "";
+    ajax({query: "cmd=stop-console"});
+};
+
+var getLiveStreamOpts = function() {
     ajax({
-	query: "cmd=get-console&path=" + path.value + "&loop=" + spec.loop,
-	callback: function (res) {
-	    var elemInner = document.getElementById("console-output");
-	    elemInner.innerHTML += res;
-            elemInner.scrollTop = elemInner.scrollHeight;
-	    spec.loop = true;
-	    displayConsole(spec);
+	query: "cmd=get-livestream-opts",
+	callback: displayLiveStreamForm
+    });
+};
+
+var displayLiveStreamForm = function(opts) {
+    if (isJsonString(opts)) {
+	var content = "<div class='btn-select'><select id='input-livestream-opts'>";
+        var data = JSON.parse(opts);
+	data.forEach(function(item){    
+	    content += "<option value='" + item.url + "'>" + item.chan + "</option>";
+	});
+	content += "</select></div>";
+	document.getElementById("livestream-opts").innerHTML = content;
+    }	    
+};
+
+var normalize_time = function (v) {
+    if (v.length == 0)
+	return false;
+    
+    if (v.length < 2) {
+	v = "0" + v;
+	return normalize_time(v);
+    } else {
+	return v;
+    }
+};
+
+var setLiveStreamTimer = function () {
+    var link = document.getElementById("input-livestream-opts").value;
+    var start = "",
+	duration = "",
+	s, d, failed;
+    
+    ["h","m","s"].forEach(function(e){
+	s = document.getElementById("input-live-start-" + e).value;
+	d = document.getElementById("input-live-duration-" + e).value;
+	if (s.length == 0 || d.length == 0) {
+	    failed = true;	    
+	}	    
+	start += normalize_time(s) + ":";
+	duration += normalize_time(d) + ":";
+    });
+    if (failed) {
+	alert("Non hai completato la programmazione del download:\nè necessario indicare ore/minuti/secondi");
+	return;
+    }
+    if (document.getElementById("input-live-start-tomorrow").checked)
+	start += "tomorrow";
+    else
+	start = start.slice(0,-1);
+    duration = duration.slice(0,-1);
+
+    var msg = "Il download da " + link + " si avvierà intorno alle " + start + " per la durata di " + duration;
+
+    ajax({
+	query: "cmd=set-livestream&path=" + ZDL.path + "&link=" + link + "&start=" + start + "&duration=" + duration,
+	callback: function (res){
+	    if (res)
+		alert(msg);
+	    else
+		alert("ERRORE: Il server non è riuscito a salvare la programmazione del download");
 	}
     });
-}
+};
+
+var displayLiveStream = function (data) {
+    var content = "<div>";
+    data.forEach(function(item){    
+	content += "<div class='background-element' style='text-align: right;'>" + 
+	    "<div class='subsublabel-element-dark'>Path:</div><div class='subsublabel-element-light'>" + item.path + "</div>" +
+	    "<div class='subsublabel-element-dark'>Link:</div><div class='subsublabel-element-light'>" + item.link + "</div>" +
+	    "<div class='subsublabel-element-dark'>Orario di inizio:</div><div class='subsublabel-element-light'>" + item.start + "</div>" +
+	    "<div class='subsublabel-element-dark'>Durata:</div><div class='subsublabel-element-light'>" + item.duration + "</div>" +
+	    "<button class='btn' onclick='singleLink(" + objectToString(item) + ").del();'>Elimina</button></div>";
+    });
+    content += "</div><br>";
+    document.getElementById("livestream-saved").innerHTML = content;
+};
 
 var displayStatus = function (status) {
     if (status === "not-running") {
@@ -666,7 +760,7 @@ var displayReconnecter = function (value, id) {
 
 var displayInputSelect = function (spec, id, callback) {
     // spec = {key: options: value:}
-    var output = "<div class='btn-select'><select id='input-" + spec.key + "' onchange='" + callback + "(" + objectToString(spec) + ");'></div>";
+    var output = "<div class='btn-select'><select id='input-" + spec.key + "' onchange='" + callback + "(" + objectToString(spec) + ");'>";
     if (String(spec.value) === "") {
 	output += "<option selected>" + String(spec.value);
     }
@@ -678,6 +772,7 @@ var displayInputSelect = function (spec, id, callback) {
 	    output += "<option>";
 	output += item + "</option>";
     });
+    output += "</select></div>";
 
     document.getElementById(id).innerHTML = output;
 };
@@ -1157,14 +1252,6 @@ var addPlaylist = function (file) {
         ajax({
             query: "cmd=add-playlist&file=" + file,
             callback: function (data) {
-                //     //displayPlaylistButton("playlist-browse");
-                // if (cleanInput(data) === "Non è un file audio/video") {
-                //     alert(data);
-                //     getPlaylist("playlist-list");
-                // } else {
-                //     // data = [...]
-                //     displayPlaylist("playlist-list", data);
-                // }
                 displayPlaylist("playlist-list", data);
             }
         });
@@ -1372,6 +1459,7 @@ var init = function (path) {
 
     displayPlaylistButton("playlist-browse");
     getPlaylist("playlist-list");
+    getLiveStreamOpts();
 };
 
 // window.onbeforeunload = function () {

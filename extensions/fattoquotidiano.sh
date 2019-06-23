@@ -34,14 +34,14 @@ then
     url_in_file=$(grep 'playlist: \[' <<< "$html" |
 			 sed -r 's|.+\":\"([^"]+\.m3u8)\".+|\1|g' |
 			 tr -d '\\' | head -n1)
-    print_c 4 "$url_in_file"
+    print_c 4 "Reindirizzamento: $url_in_file"
     
     if url "$url_in_file"
     then
 	url_in_file=$(curl -s "$url_in_file" |
 			     grep http |
 			     head -n1)
-	print_c 4 "$url_in_file"
+	print_c 4 "Reindirizzamento: $url_in_file"
     fi
     
     file_in=$(get_title "$html")

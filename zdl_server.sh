@@ -44,6 +44,7 @@ source $path_usr/libs/DLstdout_parser.sh
 source $path_usr/libs/utils.sh
 source $path_usr/libs/ip_changer.sh
 source $path_usr/libs/log.sh
+source $path_usr/libs/extension_utils.sh
 
 pid_prog=$$
 socket_port="$1"
@@ -503,11 +504,36 @@ function create_status_json {
     get_status_sockets status
     ref_string_output+="\"sockets\":$status,"
 
+    ## livestream saved
+    local paths
+    get_livestream_json status
+    ref_string_output+="\"livestream\":$status,"
+    
     ## conf
     get_status_conf status
     ref_string_output+="\"conf\":$status"
 
     ref_string_output+="}"
+}
+
+function get_livestream_json {
+    declare -n ref="$1"
+    local path
+    declare -a line
+    ref='['
+    
+    while read path
+    do
+	if [ -s "$path"/"$path_tmp"/livestream_time.txt ]
+	then
+	    while read -a line
+	    do
+		ref+="{\"path\":\"$path\",\"link\":\"${line[0]}\",\"start\":\"${line[1]}\",\"duration\":\"${line[2]}\"},"
+	    done < "$path"/"$path_tmp"/livestream_time.txt
+	fi
+	
+    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    ref="${ref%\,}]"
 }
 
 function send_ip {
@@ -725,8 +751,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	    [ "$loop_console" == true ] ||
 		stop_console_webui "$file_output".diff
-	    
+
 	    touch "$file_output".diff
+
 	    local diff_out
 	    while [ -f "$file_output".diff ]
 	    do
@@ -742,6 +769,41 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		sleep 2
 	    done
 	    [ -f "$file_output".diff ] || echo >"$file_output"
+	    ;;
+
+	stop-console)
+	    file_output="$path_tmp"/console_stdout.$socket_port
+	    stop_console_webui "$file_output".diff
+	    echo >"$file_output"
+	    ;;
+
+	get-livestream-opts)
+	    file_output="$path_server"/livestream-opts.json
+	    local live_chan_json='['
+	    for ((i=0; i<${#live_streaming_url[@]}; i++))
+	    do
+		live_chan_json+="{\"chan\":\"${live_streaming_chan[i]}\",\"url\":\"${live_streaming_url[i]}\"},"
+	    done
+	    live_chan_json="${live_chan_json%,}]"
+	    echo "$live_chan_json" >"$file_output"
+	    ;;
+
+	set-livestream)
+	    file_output="$path_server"/livestream
+	    test -d "${line[1]}" && cd "${line[1]}"
+	    
+	    if url "${line[2]}" &&
+		    [ -n "${line[3]}" ] &&
+		    [ -n "${line[4]}" ]
+	    then
+		set_link + "${line[2]}"
+		set_livestream_time "${line[2]}" "${line[3]}" "${line[4]}"
+		run_livestream_timer "${line[2]}" "${line[3]}" &&		
+		    echo "true" >"$file_output" ||
+			echo "false" >"$file_output"
+	    else
+		echo "false" >"$file_output"
+	    fi
 	    ;;
 	
 	get-playlist)
@@ -1237,6 +1299,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 		if url "$link"
 		then
+		    set_link - "$link"
+		    remove_livestream_link_start "$link"
 		    unset json_flag
 		    data_stdout
 		    json_flag=true
@@ -1245,8 +1309,6 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    do
 			if [ "${url_out[j]}" == "$link" ]
 			then
-			    set_link - "${url_out[j]}"
-
 			    kill -9 "${pid_out[j]}" &>/dev/null
 
 			    rm -f "${file_out[j]}"         \

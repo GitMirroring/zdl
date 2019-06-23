@@ -25,6 +25,7 @@
     <ul class="sidenav">
         <li><a id="links-menu" onclick="changeSection('links');">Download in corso</a></li>
         <li><a id="path-menu" onclick="changeSection('path');">Gestisci i download</a></li>
+	<li><a id="livestream-menu" onclick="changeSection('livestream');">Live Stream</a></li>
         <li><a id="playlist-menu" onclick="changeSection('playlist');">Playlist</a></li>
         <li><a id="server-menu" onclick="changeSection('server');">Gestisci il server</a></li>
         <li><a id="config-menu" onclick="changeSection('config');">Configurazione</a></li>
@@ -138,6 +139,51 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- sezione LIVESTREAM -->
+    <div id="livestream">
+        <div class="section">
+            <div class="label-section">Live Stream</div>
+            <div class="content">
+                <div class="background-element">
+                    <div class="label-element">Seleziona il canale:</div>
+                    <div id="livestream-opts"></div>
+                </div>
+                <div class="background-element" style="text-align: center;">
+		    <div class="label-element">Orario di inizio registrazione:</div>
+		    <div id="livestream-start">
+		      <div style="clear:both;margin-left:2em">Ore:Minuti:Secondi</div>
+		      <div style="clear:both;margin-left:2em">
+			<input id="input-live-start-h" class="timer" type="number" min="0" max="23" value="">
+			<input id="input-live-start-m" class="timer" type="number" min="0" max="59" value="">
+			<input id="input-live-start-s" class="timer" type="number" min="0" max="59" value="">
+		      </div>
+		      <div style="clear:both;margin-left:2em">
+			Orario di domani? <input id="input-live-start-tomorrow" type="checkbox" name="tomorrow" value="tomorrow">
+		      </div>
+		    </div>
+                </div>
+                <div class="background-element" style="text-align: center;">
+                    <div class="label-element">Durata registrazione:</div>
+		    <div id="livestream-duration">
+		      <div style="clear:both;margin-left:2em">Ore:Minuti:Secondi</div>
+		      <div style="clear:both;margin-left:2em">
+			<input id="input-live-duration-h" class="timer" type="number" min="0" max="23" value="">
+			<input id="input-live-duration-m" class="timer" type="number" min="0" max="59" value="">
+			<input id="input-live-duration-s" class="timer" type="number" min="0" max="59" value="">
+		      </div>
+		    </div>
+                </div>
+                <div class="background-element" style="text-align: center;">
+		  <button class="btn" onclick="setLiveStreamTimer();">Invia</button>
+		</div>
+
+                  <div class="label-subsection">Live Stream programmati</div>
+                  <div id="livestream-saved"></div>
+		
             </div>
         </div>
     </div>
@@ -299,6 +345,7 @@
 		</div>
                 <div class="background-element" style="text-align: center;">
 		  <button class="btn" onclick="document.getElementById('console-output').innerHTML='';">Svuota il buffer</button>
+		  <button class="btn" onclick="stopConsole();">Termina il flusso</button>
 		</div>
             </div>
 	</div>

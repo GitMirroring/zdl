@@ -1041,14 +1041,10 @@ function run_livestream_timer {
 	    [[ "$start_time" =~ ([0-9]+\:[0-9]+\:[0-9.]+) ]]
     then
 	{
-	    local ppid=$$
 	    while (( start_time_in_sec > now_in_sec ))
 	    do
 		sleep 1
 		now_in_sec=$(human_to_seconds $(date +%H\ %M\ %S))
-		
-		check_pid $ppid || exit
-		
 	    done
 
 	    if (( start_time_in_sec <= now_in_sec )) &&
@@ -1069,7 +1065,9 @@ function set_livestream_time {
 	  duration_time="$3"
     [ -s "$path_tmp"/livestream_time.txt ] &&
 	sed -r "s|$link\ .+||g" -i "$path_tmp"/livestream_time.txt
-    set_line_in_file + "$link $start_time $duration_time" "$path_tmp"/livestream_time.txt
+    set_line_in_file + "$link $start_time $duration_time" "$path_tmp"/livestream_time.txt &&
+	return 0 ||
+	    return 1
 }
 
 function get_livestream_duration_time {
@@ -1158,55 +1156,44 @@ function clean_livestream {
 	done
     fi
 
-    # if [ -s "$path_tmp"/clean_livestream_pid ]
-    # then
-    # 	check_pid $(cat "$path_tmp"/clean_livestream_pid) &&
-    # 	    return
-    # fi
+    [ ! -s "$path_tmp"/links_loop.txt ] &&
+	rm -f "$path_tmp"/livestream_time.txt
+    
+    if [ -s "$path_tmp"/livestream_time.txt ]
+    then
+	while read -a lines
+	do
+	    set_link in "${lines[0]}" ||
+		sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
 
-    # {
-	[ ! -s "$path_tmp"/links_loop.txt ] &&
-	    rm -f "$path_tmp"/livestream_time.txt
+	done < "$path_tmp"/livestream_time.txt
 	
-	if [ -s "$path_tmp"/livestream_time.txt ]
+	[ -e "$path_tmp"/livestream_time.txt ] &&
+	    line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
+
+	if [ -n "$line" ]
 	then
-	    while read -a lines
-	    do
-		set_link in "${lines[0]}" ||
-		    sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
-
-	    done < "$path_tmp"/livestream_time.txt
-	    
-	    [ -e "$path_tmp"/livestream_time.txt ] &&
-		line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
-
-	    if [ -n "$line" ]
-	    then
-		echo "$line" >"$path_tmp"/livestream_time.txt
-	    else
-		rm -f "$path_tmp"/livestream_time.txt
-	    fi
+	    echo "$line" >"$path_tmp"/livestream_time.txt
+	else
+	    rm -f "$path_tmp"/livestream_time.txt
 	fi
+    fi
 
-	[ ! -s "$path_tmp"/livestream_time.txt ] &&
-	    rm -f "$path_tmp"/livestream_start.txt
+    [ ! -s "$path_tmp"/livestream_time.txt ] &&
+	rm -f "$path_tmp"/livestream_start.txt
 
-	if [ -s "$path_tmp"/links_loop.txt ] &&
-	       [ -s "$path_tmp"/livestream_start.txt ]
-	then
-	    while read line
-	    do
-		grep -q "$line" "$path_tmp"/links_loop.txt ||
-		    sed -e "s|$line||g" -i "$path_tmp"/livestream_start.txt
-		
-	    done < "$path_tmp"/livestream_start.txt
+    if [ -s "$path_tmp"/links_loop.txt ] &&
+	   [ -s "$path_tmp"/livestream_start.txt ]
+    then
+	while read line
+	do
+	    grep -q "$line" "$path_tmp"/links_loop.txt ||
+		sed -e "s|$line||g" -i "$path_tmp"/livestream_start.txt
 	    
-	    clean_file "$path_tmp"/livestream_start.txt
-	fi
-    # } & disown
-    # local pid=$!
-    # echo $pid > "$path_tmp"/clean_livestream_pid
-    # wait $pid
+	done < "$path_tmp"/livestream_start.txt
+	
+	clean_file "$path_tmp"/livestream_start.txt
+    fi
 }
 
 function check_linksloop_livestream {

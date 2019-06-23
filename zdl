@@ -1722,6 +1722,7 @@ function read_binding {
     read -e -t 1 -n 1 binding_in_loop
 }
 
+check_linksloop_livestream
 
 if [ "$this_mode" == "daemon" ]
 then
@@ -1731,8 +1732,6 @@ then
     done 
 
 else    
-    check_linksloop_livestream
-    
     if [ "$lite_mode" == true ] ||
 	   [ "$this_mode" == lite ]
     then
