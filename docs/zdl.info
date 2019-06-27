@@ -523,19 +523,20 @@ _Video in streaming saltando il player del browser:_
      NeverWasRadio, Nowvideo, Openload(s), Portalevideo.unimi.it,
      Putstream, RaiPlay (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com
      (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango,
-     Streamin, Thevideo, TubeOffLine.com (tutti i servizi), Tutti i
-     video in streaming di tipo .m3u8, Tutti i video in streaming di
-     tipo .mpd, Verystream, VidABC, Vidce, Videowood, Vidhappy (RTMP),
-     Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), WStream (HD),
-     Youtube, Zinwa (RTMP) 
+     Streamin, Supervideo (HD), Thevideo, TubeOffLine.com (tutti i
+     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
+     in streaming di tipo .mpd, Verystream, VidABC, Vidce, Videowood,
+     Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK
+     (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, Cyberlocker, ddl.to, Deltabit (HD),
      dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg
      (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
      Nowdownload, Openload(s), Ozofiles, Pastebin, Rockfile, Sockshare
-     (HD), Subyshare, TubeOffLine.com (tutti i servizi), Tusfiles,
-     Uload, Uploadshub, Uppit, Uptobox, Vidoza, WStream (HD) 
+     (HD), Subyshare, Supervideo (HD), TubeOffLine.com (tutti i
+     servizi), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza,
+     WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1306,20 +1307,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 37)
+                                                               (line 38)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
                                                                (line 24)
 * file hosting:                          Servizi streaming/hosting.
                                                                (line 24)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 37)
+                                                               (line 38)
 * live:                                  Servizi streaming/hosting.
-                                                               (line 32)
+                                                               (line 33)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 41)
+                                                               (line 42)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1426,25 +1427,25 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL7489
 Node: Servizi streaming/hosting15832
-Node: Avviare ZDL20182
-Node: Arrestare ZDL22618
-Node: Controllare i download23723
-Node: Manuali d'uso28014
-Node: Modi28430
-Node: Readline31696
-Node: Editor33248
-Node: Omonimie34473
-Node: IRC/XDCC36008
-Node: Torrent37698
-Node: Filtri38582
-Node: Creare nuove estensioni38903
-Node: Software consigliati e dipendenze40678
-Node: Conkeror42131
-Node: zdl-xterm e XXXTerm/Xombrero43155
-Node: Installazione e aggiornamento45079
-Node: Tags48374
-Node: Copying52532
-Node: Contatti53582
+Node: Avviare ZDL20221
+Node: Arrestare ZDL22657
+Node: Controllare i download23762
+Node: Manuali d'uso28053
+Node: Modi28469
+Node: Readline31735
+Node: Editor33287
+Node: Omonimie34512
+Node: IRC/XDCC36047
+Node: Torrent37737
+Node: Filtri38621
+Node: Creare nuove estensioni38942
+Node: Software consigliati e dipendenze40717
+Node: Conkeror42170
+Node: zdl-xterm e XXXTerm/Xombrero43194
+Node: Installazione e aggiornamento45118
+Node: Tags48413
+Node: Copying52571
+Node: Contatti53621
 
 End Tag Table
 
