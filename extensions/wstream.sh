@@ -32,27 +32,30 @@ if [[ "$url_in" =~ wstream\. ]]
 then
     if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
     then
-	wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
-	wstream_link="${wstream_link//\/video\//\/}"
-	wstream_link="${wstream_link//https/http}"
+    	wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
+    	wstream_link="${wstream_link//\/video\//\/}"
+    	wstream_link="${wstream_link//https/http}"
 	
     elif [[ "$url_in" =~ download\.wstream ]]
     then
-	wstream_link="$url_in"
+	wstream_link="${url_in//\/\/download.wstream/\/\/video.wstream}"
+	wstream_link="$wstream_link"
     fi
 
     if url "$wstream_link"
     then
 	[ "$url_in" == "$wstream_link" ] ||
 	    print_c 4 "Reindirizzamento: $url_in -> $wstream_link"
+
 	html=$(wget -qO- \
 		    -o /dev/null \
 		    --keep-session-cookies \
 		    --save-cookies="$path_tmp"/cookies.zdl \
+		    --user-agent="$user_agent" \
 		    "$wstream_link")
 
 	##### per ora è solo client, quindi è commentato:
-	## countdown- 5
+	## countdown- 6
 
 	file_in=$(get_title "$html" |head -n1)
 	file_in="${file_in#Download Free}"
@@ -70,8 +73,16 @@ then
 	then
 	    for proto in http https
 	    do
-		print_c 4 "Reindirizzamento: $wstream_link -> $proto://download.wstream.video/$wstream_req"
-		url_in_file=$(curl -s $proto://download.wstream.video/"$wstream_req")
+		#wstream_url_req="$proto://download.wstream.video/$wstream_req"
+		wstream_url_req="$proto://video.wstream.video/$wstream_req"
+		print_c 4 "Reindirizzamento: $wstream_link -> $wstream_url_req"
+		url_in_file=$(curl -s \
+				   -b "$path_tmp"/cookies.zdl \
+				   -A "$user_agent" \
+				   -H "Referer: $wstream_link" \
+				   -H "TE: Trailers" \
+				   -H "X-Requested-With: XMLHttpRequest" \
+				   "$wstream_url_req")
 
 		if [[ "$url_in_file" =~ (Server problem.. please contact our support) ]]
 		then
@@ -79,7 +90,8 @@ then
 		    break
 
 		else
-		    url_in_file=$(grep "class='buttonDownload" <<< "$url_in_file")
+		    url_in_file=$(grep "class='btndw" <<< "$url_in_file")
+		    url_in_file="${url_in_file#*btndw}"
 		    url_in_file="${url_in_file#*href=\'}"
 		    url_in_file="${url_in_file%%\'*}"
 		    url "$url_in_file" && break
