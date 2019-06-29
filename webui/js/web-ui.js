@@ -685,19 +685,28 @@ var setLiveStreamTimer = function () {
     var link = document.getElementById("input-livestream-opts").value;
     var start = "",
 	duration = "",
-	s, d, failed;
+	s, d, failed, err_msg;
     
     ["h","m","s"].forEach(function(e){
 	s = document.getElementById("input-live-start-" + e).value;
 	d = document.getElementById("input-live-duration-" + e).value;
 	if (s.length == 0 || d.length == 0) {
+	    err_msg = "Non hai completato la programmazione del download:\nè necessario indicare ore/minuti/secondi";
 	    failed = true;	    
-	}	    
+	}
+	if (e == "h" && (s > 23 || d > 23)) {
+	    err_msg = "Per le ore è richiesto un numero intero da 0 a 23 compresi";
+	    failed = true;	    
+	}
+	else if ((e == "m" || e == "s") && (s > 59 || d > 59)) {
+	    err_msg = "Per i minuti e i secondi è richiesto un numero intero da 0 a 59 compresi";
+	    failed = true;	    
+	}
 	start += normalize_time(s) + ":";
 	duration += normalize_time(d) + ":";
     });
     if (failed) {
-	alert("Non hai completato la programmazione del download:\nè necessario indicare ore/minuti/secondi");
+	alert(err_msg);
 	return;
     }
     if (document.getElementById("input-live-start-tomorrow").checked)
