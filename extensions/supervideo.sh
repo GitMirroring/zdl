@@ -68,6 +68,9 @@ then
 	_log 3
 
     else
+	input_hidden "$html"
+	html=$(curl -d "$post_data" "$url_in")
+	
 	download_video=$(grep -P 'download_video\(' <<< "$html" |head -n1)
 
 	hash_supervideo="${download_video%\'*}"
@@ -79,17 +82,15 @@ then
 	declare -A movie_definition
 	movie_definition=(
 	    ['o']="Original"
+	    ['h']="High"
 	    ['n']="Normal"
 	    ['l']="Low"
 	)
 
-	grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
+	grep -qP "download_video.+','o','.+Original" <<< "$html" &&
 	    o=o
 
-	## file_in:
-	input_hidden "$html"
-						       
-	for mode_stream in $o n l
+	for mode_stream in $o h n l
 	do
 	    get_supervideo_definition mode_stream_test
 
