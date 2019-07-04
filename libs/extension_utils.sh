@@ -732,10 +732,11 @@ function check_cloudflare {
 function get_by_cloudflare {
     local url_in="$1"
     declare -n ref="$2"
+    local post_data="$3"
     local domain="${url_in#*\/\/}"
     domain="${domain%%\/*}"
 
-    ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in")
+    ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" "$post_data")
     return
     
     # curl                                                                                  \

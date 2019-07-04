@@ -32,15 +32,30 @@ then
     rm -f "$path_tmp"/cookies*.zdl "$path_tmp"/headers*.zdl 
     domain_rockfile="rockfile.co"
 
-    if check_cloudflare "$url_in"
+    if [[ ! "$url_in" =~ \/f\/ ]]
     then
-	get_location_by_cloudflare "$url_in" rockfile_location
+	if check_cloudflare "$url_in"
+	then
+	    get_location_by_cloudflare "$url_in" rockfile_location
+	else
+	    get_location "$url_in" rockfile_location
+	fi
+
 	if url "$rockfile_location"
 	then
 	    replace_url_in "$rockfile_location"
 	fi
     fi
-    html=$(curl -s "$url_in")
+    
+    if check_cloudflare "$url_in"
+    then
+	get_by_cloudflare "$url_in" html
+    else
+	html=$(curl -s \
+		    -A "$user_agent" \
+		    -c "$path_tmp"/cookies.zdl \
+		    "$url_in")
+    fi
 
     if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
     then
@@ -56,7 +71,11 @@ then
 	
 	post_data="${post_data##*document.write\(\&}&${method_free}=Free Download"
 
-	html=$(curl -v                                                                              \
+	if check_cloudflare "$url_in"
+	then
+	    get_by_cloudflare "$url_in" html "$post_data"
+	else
+	    html=$(curl -v                                                                              \
 		    -A "$user_agent"                                                                \
 		    -b "$path_tmp"/cookies2.zdl                                                     \
 		    -c "$path_tmp/cookies3.zdl"                                                     \
@@ -70,7 +89,8 @@ then
 		    -H 'Connection: "keep-alive"'                                                   \
 		    -H 'Upgrade-Insecure-Requests: "1"'                                             \
 		    -d "$post_data"                                                                 \
-		    "$url_in")	    
+		    "$url_in")
+	fi
 
 	if grep -P 'You can download files up.+only' <<< "$html" >/dev/null
 	then
@@ -117,7 +137,7 @@ then
 
 		errMsg=$(grep 'Devi attendere' <<< "$html" |
 				sed -r 's|[^>]+>([^<]+)<.+|\1|g')
-		
+
 		if [[ "$html" =~ (You can download files up to) ]]
 		then
 		    _log 4
@@ -125,18 +145,28 @@ then
 		elif [ -n "$code" ]
 		then
 		    timer=$(grep -P 'Wait <span.+span> Seconds' <<< "$html" |
-				   sed -r 's|.+>([0-9]+)<.+|\1|g')
+				sed -r 's|.+>([0-9]+)<.+|\1|g')
 
 		    countdown- $timer
 		    sleeping 2
-		    
-		    url_in_file=$(curl "${url_in}"                             \
-				       -b "$path_tmp"/cookies2.zdl             \
-				       -A "$user_agent"                        \
-				       -d "$post_data"                           |
-					 grep -P '[^\#]+btn_downloadLink'        |
-					 sed -r 's|.+href=\"([^"]+)\".+|\1|g')
-		    url_in_file=$(sanitize_url "$url_in_file")
+
+		    if check_cloudflare "$url_in"
+		    then
+			get_by_cloudflare "$url_in" html "$post_data"
+
+			url_in_file=$(grep -P '[^\#]+btn_downloadLink' <<< "$html"  |
+					  sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+			url_in_file=$(sanitize_url "$url_in_file")
+
+		    else
+			url_in_file=$(curl "${url_in}"                             \
+					   -b "$path_tmp"/cookies2.zdl             \
+					   -A "$user_agent"                        \
+					   -d "$post_data"                           |
+					  grep -P '[^\#]+btn_downloadLink'        |
+					  sed -r 's|.+href=\"([^"]+)\".+|\1|g')
+			url_in_file=$(sanitize_url "$url_in_file")
+		    fi
 		fi
 
 	    else
