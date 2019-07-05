@@ -100,7 +100,7 @@ then
 fi
 
 
-if [[ "$url_in" =~ vcrypt\..+\/(wss|wsd|shield)\/ ]]
+if [[ "$url_in" =~ vcrypt\..+\/(sb|wss|wsd|shield)\/ ]]
 then
     html=$(curl -s \
 		-A "$user_agent" \
@@ -117,7 +117,7 @@ then
         vcrypt_cookie="${BASH_REMATCH[1]}"
 	vcrypt_cookie="__cfduid=$(grep __cfduid "$path_tmp"/cookies.zdl |cut -f7); ${vcrypt_cookie%%\;*}"
     fi
-    
+
     wget -SO /dev/null \
 	 --user-agent="$user_agent" \
 	 --header="Cookie: \"$vcrypt_cookie\"" \
