@@ -66,6 +66,9 @@ function ElaboraFeed($url){
 
 }
 
-//ElaboraFeed($argv[1]);
-ElaboraFeed('https://savannah.nongnu.org/news/atom.php?group=zdl');
+if ($argv[1] !== '') {
+    ElaboraFeed($argv[1]);
+} else {
+    ElaboraFeed('https://savannah.nongnu.org/news/atom.php?group=zdl');
+}
 ?>
