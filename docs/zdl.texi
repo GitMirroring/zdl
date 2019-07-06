@@ -133,9 +133,9 @@
 <div class="container">
 <div class="left">
 <div class="nav">
-<p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+<p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p></div>
 <iframe src="http://zoninoz.altervista.org/zdl/zdl-feed2html.php"></iframe>
-</div><br>
+<br>
 @b{ZDL}
 <div class="nav">
 @menu
