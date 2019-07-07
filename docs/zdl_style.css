@@ -183,7 +183,7 @@ div {
     background-color: #343434;
     text-align: left;
     border: 0px;
-    display: inline-block;
+    /* display: inline-block;*/
     width: 200px;
     height: 200px;
 }

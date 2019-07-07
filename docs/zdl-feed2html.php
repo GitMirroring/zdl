@@ -37,7 +37,9 @@ function displayFeed($url){
 
     $feed_info['titolo_feed'] = $xml->title; 
     $feed_info['id_feed'] = $xml->id; 
-    $feed_info['updated_feed'] = $xml->updated; 
+    $feed_info['updated_feed'] = $xml->updated;
+
+    echo "<a href='" . $feed_info['id_feed'] . "' target='_blank'>" . $feed_info['titolo_feed'] . "</a>";
 
     $i = 0; 
     foreach($xml->entry as $item)
@@ -53,21 +55,13 @@ function displayFeed($url){
     $total = array_merge($feed_info,$feed_art);
     //print_r($total);
 
-    // foreach ($feed_info as $key => $value) {
-    //     echo "<p>".$key." - ".$value."</p>";
-    // }
-    // echo "<hr />";
-    // echo "<br />";echo "<br />";
-
     foreach ($feed_art as $key => $value) {
-        echo "<p>Titolo: ".$value['titolo_articolo']."</p>";
-        echo "<p>Descrizione: ".$value['descr_articolo']."</p>";
-        echo "<p>Autore: ".$value['autore_articolo']."</p>";
-        echo "<p>Data: ".$value['data_articolo']."</p>";
-        echo "<p>Link: ".$value['link_articolo']."</p>";
+        echo "<h3><a href='" . $value['link_articolo'] . "' target='_blank'>" . $value['titolo_articolo']."</a></h3>";
+        echo "<p>" . $value['descr_articolo'] . "</p>";
+        //echo "<p>by " . $value['autore_articolo'] . "</p>";
+        echo "<div class='feed_item_date'>Data: ".$value['data_articolo']."</div>";
         echo "<hr />";
     }
-
 }
 
 function displayHead() {
@@ -104,18 +98,6 @@ ZigzagDownLoader (ZDL)
  Gianluca Zoni (author)
  `http://inventati.org/zoninoz'
  <zoninoz@inventati.org>-->
-<meta http-equiv=\"Content-Style-Type\" content=\"text/css\">
-<style type=\"text/css\"><!--
-  pre.display { font-family:inherit }
-  pre.format  { font-family:inherit }
-  pre.smalldisplay { font-family:inherit; font-size:smaller }
-  pre.smallformat  { font-family:inherit; font-size:smaller }
-  pre.smallexample { font-size:smaller }
-  pre.smalllisp    { font-size:smaller }
-  span.sc    { font-variant:small-caps }
-  span.roman { font-family:serif; font-weight:normal; } 
-  span.sansserif { font-family:sans-serif; font-weight:normal; } 
---></style>
 <link rel=\"stylesheet\" type=\"text/css\" href=\"http://nongnu.org/zdl/zdl_rss_style.css\">
 </head>
 <body>";
