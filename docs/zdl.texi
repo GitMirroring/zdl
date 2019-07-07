@@ -129,7 +129,7 @@
 @html
 </p>
 <div class="container"><a href="index.html">
-<iframe heigth="200px" width="100%"><div class="header"></div><div class="header"></div><div class="header"></div><div class="header"></div><div class="header"></div></div>
+<iframe heigth="200px" width="100%"><div class="header"></div><div class="header"></div><div class="header"></div><div class="header"></div><div class="header"></div></iframe>
 </a>
 <div class="left">
 <div class="nav">
