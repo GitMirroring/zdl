@@ -30,7 +30,7 @@ body, html {
     font: 13px "Verdana", sans-serif;
     text-align: left;
     padding: 0px;
-    margin-left: 2em;
+    /*margin-left: 2em;*/
 }
 
 a {
