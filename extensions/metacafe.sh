@@ -31,7 +31,9 @@ if [ "$url_in" != "${url_in//metacafe.}" ]
 then
     html=$(curl "$url_in")
 
-    file_in=$(trim "$(grep '<title>' -A2 <<< "$html" | sed -n 2p)")
+    file_in=$(grep '<title>' -A2 <<< "$html" | sed -n 2p |tr -d "\t")
+    file_in="${file_in## }"
+    file_in="${file_in%% }"
     url_in_file=$(grep m3u8 <<< "$html" | head -n1 | tr -d '\\' |
 			 sed -r 's|.+src\":\"([^"]+)\".+|\1|g')
 

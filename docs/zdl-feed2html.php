@@ -56,11 +56,11 @@ function displayFeed($url){
     //print_r($total);
 
     foreach ($feed_art as $key => $value) {
+        echo "<hr />";
         echo "<h3><a href='" . $value['link_articolo'] . "' target='_blank'>" . $value['titolo_articolo']."</a></h3>";
         echo "<p>" . $value['descr_articolo'] . "</p>";
         //echo "<p>by " . $value['autore_articolo'] . "</p>";
         echo "<div class='feed_item_date'>Data: ".$value['data_articolo']."</div>";
-        echo "<hr />";
     }
 }
 

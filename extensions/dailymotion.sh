@@ -30,34 +30,40 @@
 
 if [ "$url_in" != "${url_in//dailymotion.com\/video}" ]
 then
-    echo -e ".dailymotion.com\tTRUE\t/\tFALSE\t0\tff\toff" > "$path_tmp"/cookies.zdl
-    html=$(wget -t 1 -T $max_waiting \
-		--load-cookies="$path_tmp"/cookies.zdl \
-		"$url_in" \
-		-qO- -o /dev/null)
+    dailymotion_data=$(youtube-dl --get-url --get-filename "$url_in")
 
-    if [ -n "$html" ]
-    then
-	file_in=$(grep "title>" <<< "$html")
-	file_in="${file_in#*'<title>'}"
-	file_in="${file_in%'</title>'*}.mp4"
+    file_in=$(tail -n1 <<< "$dailymotion_data")
+    url_in_file=$(head -n1 <<< "$dailymotion_data")
+    
+    end_extension
+    # echo -e ".dailymotion.com\tTRUE\t/\tFALSE\t0\tff\toff" > "$path_tmp"/cookies.zdl
+    # html=$(wget -t 1 -T $max_waiting \
+    # 		--load-cookies="$path_tmp"/cookies.zdl \
+    # 		"$url_in" \
+    # 		-qO- -o /dev/null)
 
-	url_in2="${url_in//'/video/'//embed/video/}"
-	url_in2="${url_in2%%_*}"
+    # if [ -n "$html" ]
+    # then
+    # 	file_in=$(grep "title>" <<< "$html")
+    # 	file_in="${file_in#*'<title>'}"
+    # 	file_in="${file_in%'</title>'*}.mp4"
 
-	code=$(urldecode "$(wget -t 1 -T $max_waiting -q $url_in2 -O - -o /dev/null)" | grep mp4\?auth)
+    # 	url_in2="${url_in//'/video/'//embed/video/}"
+    # 	url_in2="${url_in2%%_*}"
 
-	if [ -n "$code" ]
-	then
-	    auth="${code##*'mp4?auth='}"
-	    auth="${auth%%\"*}"
-	    url_in_file="${code%$auth*}$auth"
-	    url_in_file="${url_in_file##*\"}"
-	    url_in_file="${url_in_file//'\/'//}"
-	else
-	    _log 2
-	fi
-    else
-	_log 2
-    fi
+    # 	code=$(urldecode "$(wget -t 1 -T $max_waiting -q $url_in2 -O - -o /dev/null)" | grep mp4\?auth)
+
+    # 	if [ -n "$code" ]
+    # 	then
+    # 	    auth="${code##*'mp4?auth='}"
+    # 	    auth="${auth%%\"*}"
+    # 	    url_in_file="${code%$auth*}$auth"
+    # 	    url_in_file="${url_in_file##*\"}"
+    # 	    url_in_file="${url_in_file//'\/'//}"
+    # 	else
+    # 	    _log 2
+    # 	fi
+    # else
+    # 	_log 2
+    # fi
 fi

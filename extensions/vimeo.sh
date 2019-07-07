@@ -28,14 +28,15 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Vimeo (HD)
 
-# if [[ "$url_in" =~ vimeo\.com\/([0-9]+) ]]
-# then
-#     if command -v youtube-dl &>/dev/null
-#     then
-# 	json_vimeo=$(youtube-dl --dump-json "$url_in")
-# 	url_in_file=$(nodejs -e "var json = $json_vimeo; console.log(json.formats[2].url);")
-# 	file_in=$(nodejs -e "var json = $json_vimeo; console.log(json.description);")"_${BASH_REMATCH[1]}.mp4"
-#     fi
+if [[ "$url_in" =~ vimeo\.com\/([0-9]+) ]]
+then
+    if command -v youtube-dl &>/dev/null
+    then
+	vimeo_data=$(youtube-dl --get-url --get-filename "$url_in")
+	url_in_file=$(head -n1 <<< "$vimeo_data")
+	file_in=$(tail -n1 <<< "$vimeo_data")
+	youtubedl_m3u8="$url_in"
+    fi
     
-#     #end_extension
-# fi
+    end_extension
+fi
