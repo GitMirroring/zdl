@@ -23,8 +23,12 @@
 # zoninoz@inventati.org
 #
 
-function ElaboraFeed($url){
+function displayFeed($url){
     $getfile = html_entity_decode(file_get_contents($url));
+
+    // echo $getfile;
+    // exit;
+    
     $xml = new SimpleXMLElement($getfile);
     //$xml = simplexml_load_file($url);
 
@@ -49,12 +53,12 @@ function ElaboraFeed($url){
     $total = array_merge($feed_info,$feed_art);
     //print_r($total);
 
-    foreach ($feed_info as $key => $value) {
-        echo "<p>".$key." - ".$value."</p>";
-    }
-    echo "<hr />";
-        
-    echo "<br />";echo "<br />";
+    // foreach ($feed_info as $key => $value) {
+    //     echo "<p>".$key." - ".$value."</p>";
+    // }
+    // echo "<hr />";
+    // echo "<br />";echo "<br />";
+
     foreach ($feed_art as $key => $value) {
         echo "<p>Titolo: ".$value['titolo_articolo']."</p>";
         echo "<p>Descrizione: ".$value['descr_articolo']."</p>";
@@ -66,9 +70,6 @@ function ElaboraFeed($url){
 
 }
 
-if ($argv[1] !== '') {
-    ElaboraFeed($argv[1]);
-} else {
-    ElaboraFeed('https://savannah.nongnu.org/news/atom.php?group=zdl');
-}
+displayFeed("https://savannah.nongnu.org/news/atom.php?group=zdl");
+
 ?>
