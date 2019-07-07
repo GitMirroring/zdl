@@ -27,10 +27,10 @@ body, html {
     background: #343434;
     color: #959595;
     margin: 0em;
-    font: 13px "Verdana", sans-serif;
+    font: 12px "Verdana", sans-serif;
     text-align: left;
     padding: 0px;
-    /*margin-left: 2em;*/
+    margin-left: 0.5em;
 }
 
 a {
