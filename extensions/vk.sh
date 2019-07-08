@@ -35,6 +35,7 @@ then
 	_log 11
 
     else
+	youtubedl_m3u8="$url_in"
 	file_in=$(tail -n1 <<< "$vkdata")
 	sanitize_file_in
 	url_in_file=$(head -n1 <<< "$vkdata")
