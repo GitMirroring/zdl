@@ -1,0 +1,1346 @@
+\input texinfo @c -*- texinfo-*-
+@c %**start of header
+@setfilename zdl.info
+@settitle ZigzagDownLoader (ZDL)
+@c %**end of header
+
+@documentencoding UTF-8
+@documentlanguage it_IT
+
+@copying
+
+ ZigzagDownLoader (ZDL)
+ 
+ This program is free software: you can redistribute it and/or modify it 
+ under the terms of the GNU General Public License as published 
+ by the Free Software Foundation; either version 3 of the License, 
+ or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful, 
+ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License 
+ along with this program. If not, see http://www.gnu.org/licenses/. 
+ 
+ Copyright @copyright{} 2011
+ Gianluca Zoni <@email{zoninoz@@inventati.org}>
+
+ For information or to collaborate on the project:
+ @url{https://savannah.nongnu.org/projects/zdl}
+ 
+ Gianluca Zoni (author)
+ @url{http://inventati.org/zoninoz}
+ @email{zoninoz@@inventati.org}
+
+@end copying
+
+@dircategory Network Applications
+@direntry
+* ZigzagDownLoader: (zdl). Download manager per Wget, Axel, cURL e RTMPDump. Ha estensioni per servizi di file hosting e video streaming.
+@end direntry
+
+@ifinfo
+@titlepage
+@title Manuale di ZigzagDownLoader (zdl)
+
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+@end ifinfo
+@c @@@@@@@@@@@@@ MACROS @@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@macro menuZdl
+@ifhtml
+@html
+@end html
+@end ifhtml
+* Home:Top. ZigzagDownLoader@*
+* Il comando ZDL::@*Sintassi, opzioni e altri argomenti@*
+* Servizi streaming/hosting::@*Estensioni di ZDL e consigli pratici@*
+* Installazione e aggiornamento::@*Per GNU/Linux e Microsoft Windows/Cygwin@*
+@end macro
+
+@macro menuUso
+@ifhtml
+@html
+@end html
+@end ifhtml
+* Avviare ZDL::@*Modalità di esecuzione del programma e avvio dei download@*
+* Arrestare ZDL::@*Modalità di arresto del programma@*
+* Controllare i download::@*Modalità di controllo dei processi avviati, in coda o sospesi@*
+* Manuali d'uso::@*Documentazione disponibile per ZDL@*
+@end macro
+
+@macro menuTools
+@ifhtml
+@html
+@end html
+@end ifhtml
+* Modi::@*Predefinito, Lite, Interattivo, Demone@*
+* Readline::@*La riga di comando di ZDL@*
+* Editor::@*Editor integrato, per modificare la coda di download@*
+* Omonimie::@*Gestione dei file omonimi e recupero dei download interrotti@*
+* IRC/XDCC::@*Scaricamento file via chat attraverso comandi XDCC@*
+* Torrent::@*Scaricamento dei torrent con Aria2: URL magnet oppure file torrent@*
+* Filtri::@*Filtri per l'estrazione e la selezione di file e URL@*
+@end macro
+
+@macro menuExt
+@ifhtml
+@html
+@end html
+@end ifhtml
+* Creare nuove estensioni::@*Estensioni Bash di ZDL personalizzate e per nuovi servizi@*
+* Software consigliati e dipendenze::@*Programmi utili a ZDL@*
+* Conkeror::@*Comando @command{zdl} per il browser@*
+* zdl-xterm e XXXTerm/Xombrero::@*Uno script per collegare ZDL ad altri programmi@*
+@end macro
+
+@macro menuDev
+@itemize
+@item
+@uref{https://joindiaspora.com/tags/zdl,,Aggiornamenti in Diaspora*}
+@item
+@uref{https://savannah.nongnu.org/projects/zdl,,Progetto di sviluppo in Savannah/GNU}
+@item
+@uref{http://download-mirror.savannah.gnu.org/releases/zdl/,,Pacchetti rilasciati di ZDL}
+@item
+@uref{http://git.savannah.gnu.org/cgit/zdl.git,,Repository Git (controllo versione sorgenti)}
+@end itemize
+@end macro
+
+@macro menuFooter
+@ifhtml
+@html
+@end html
+@end ifhtml
+* Tags::Indici analitici@*
+
+* Copying::Autori e Licenza@*
+
+* Contatti::Per assistenza o per partecipare
+@end macro
+
+@macro htmlstart
+@ifhtml
+@html
+</p><a href="index.html">
+<div class="header"></div>
+</a>
+<div class="container">
+<div class="left">
+<div class="nav">
+<p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+<!-- <iframe src="http://z0n1n0z.000webhostapp.com/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe> -->
+<iframe src="http://zoninoz.altervista.org/zdl/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe>
+</div><br>
+@b{ZDL}
+<div class="nav">
+@menu
+@menuZdl
+@end menu
+</div>
+<br>
+@b{Come si usa ZDL}
+<div class="nav">
+@menu
+@menuUso
+@end menu
+</div>
+<br>
+@b{Strumenti e funzioni}
+<div class="nav">
+@menu
+@menuTools
+@end menu
+</div>
+<br>
+@b{Espandere ZDL}
+<div class="nav">
+@menu
+@menuExt
+@end menu
+</div>
+</div>
+<div class="content">
+@end html
+@end ifhtml
+@end macro
+
+@macro htmlend
+@ifhtml
+@html
+<br><br>
+</div>
+<div class="footer">
+<div class="contentfooter">
+@menu
+@menuFooter
+@end menu
+</div>
+<div class="contentfooter">
+@b{Progetto ZDL}
+@menu
+@menuDev
+@end menu
+</div>
+</div>
+</div>
+@end html
+@end ifhtml
+@end macro
+
+@c @@@@@@@@@@@@@ end MACROS @@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@ifhtml
+@node Top,Il comando ZDL, ,
+@end ifhtml
+@ifinfo
+@node Top,Il comando ZDL, ,(dir)
+@end ifinfo
+@htmlstart
+@top ZigzagDownLoader (ZDL)
+@cindex perché zdl
+
+@c @man{3}
+
+@c @ifman @unnumberedsec DESCRIZIONE
+@emph{ZigzagDownLoader} gestisce gli scaricamenti di alcuni downloader come @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} o @emph{cURL}. Inoltre, può estrarre l'URL dei file da scaricare da servizi di file hosting e video streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC, senza alcuna interazione via CHAT. Estende @emph{Conkeror}, @emph{XXXTerm/Xombrero}, @emph{Firefox} (attraverso l'estensione @emph{Flashgot}) e @emph{Microsoft Windows} (tramite @emph{Cygwin}). Tramite l'estensione @emph{External Application Button}, ZDL può essere integrato in @emph{Firefox}, @emph{Chrome/Chromium} e @emph{Opera}. Il programma dispone, inoltre, di un server per generare socket TCP, diverse interfacce web e API, per il controllo remoto e in rete, e di una interfaccia grafica.
+@c @end man
+
+@unnumbered Perché questo programma
+ZigzagDownLoader è un gestore di download estensibile, robusto ed interamente controllabile con un terminale o, attraverso socket, con un'interfaccia web adatta anche al formato di uno smartphone (@emph{--socket}, @emph{--web-ui}). Può essere integrato ai più diffusi web browser (@emph{Firefox}, @emph{Chrome/Chromium} e @emph{Opera}) e al desktop, utilizzando l'estensione @emph{External Application Button} e una pratica interfaccia grafica (@emph{--gui} e @emph{--path-gui}).
+È nato come script specifico per la Bash e si è trasformato in un gestore per downloader come @emph{Wget}, @emph{Axel} ed @emph{Aria2} (downloader predefinito), estendendosi a servizi di video streaming e file hosting e integrandosi con altre applicazioni. Oggi ZigzagDownLoader è anche un downloader per @emph{IRC/XDCC}: l'intero processo di scaricamento e recupero è automatico e non richiede alcuna interazione via CHAT. Inoltre, grazie all'adozione di Aria2, ZigzagDownLoader gestisce anche i @emph{TORRENT}.
+
+ZigzagDownLoader è molte cose: un @emph{server/client TCP} utile per un @emph{NAS}, un @emph{comando per il terminale}, un @emph{downloader/download manager} alternativo e @emph{intelligente} per il browser, un'@emph{applicazione grafica} per il desktop... tutto questo contemporaneamente e altro ancora.
+
+Nonostante i suoi limiti strutturali, il linguaggio della @emph{Bash} si è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso nella gestione dei processi di altri programmi. Una progressiva efficienza è stata raggiunta attraverso lo sviluppo di script @emph{monolitici} nel linguaggio di @emph{Awk} (@emph{Gawk}). Il software include, inoltre, interpreti di altri linguaggi (attualmente: @emph{node.js} e @emph{php}, necessari al trattamento dei link di alcuni servizi), fornendo un supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per certi versi, un esempio complesso di @emph{programmazione poliglotta}.
+
+@unnumberedsubsec Almeno quattro direttrici di sviluppo
+L'esecuzione dei downloader può richiedere assistenza: la connessione può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i nomi dei file scaricati possono non essere intelligibili o coincidere con altri di file già salvati, ecc. 
+@emph{In primo luogo}, ZigzagDownLoader serve ad automatizzare la gestione ed il recupero dei download o a semplificarne eventuali interventi manuali. ZDL è pensato, soprattutto, per il download @emph{accelerato} di grossi file e per il recupero del loro @emph{URL} a partire da informazioni disponibili nel web o fornite dall'utente. 
+
+@emph{In secondo luogo}, la gestione automatica è estesa a servizi di file hosting, video streaming, torrent e irc/xdcc: ZDL si sostituisce all'utente nelle operazioni inutili e noiose, riducendole all'unico atto di avvio del programma.
+
+@emph{Un terzo obiettivo} del progetto ZDL consiste nel fornire nuove articolazioni e modalità d'uso, allo scopo di costruire interazioni fra programmi e di rendere possibile un'automazione potenzialmente illimitata. 
+La gestione dei download può essere controllata da terminali distinti in modalità diverse. Per esempio, ZDL può essere avviato in modalità @emph{demone} e controllato in modalità @emph{interattiva}. Anche l'avvio @emph{predefinito} del programma offre diversi modi di interazione e di output. ZDL, inoltre, può essere integrato e collegato con altri programmi. 
+
+@emph{Infine}, una peculiarità del progetto ZDL consiste nella ricerca di efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash ne rende possibile l'esecuzione su hardware di limitate capacità e su sistemi operativi differenti. Pensato per @emph{GNU/Linux}, ZDL è interamente funzionante anche su @emph{Windows} tramite @emph{Cygwin} (NB: perdendo molto in termini di efficienza). È tecnicamente possibile estenderne l'uso su altri sistemi operativi che supportano la Bash (per esempio @emph{MacOSX}).
+
+
+@unnumbered Software Libero
+ZDL è software libero, rilasciato con licenza GPL (General Public License): @url{http://www.gnu.org/licenses/gpl.html}
+
+@ref{Copying}.
+
+@unnumbered Installa ZDL
+@ref{Installazione e aggiornamento}
+
+@ifinfo
+@menu
+@emph{ZDL}
+@menuZdl
+
+@emph{Come si usa ZDL}
+@menuUso
+
+@emph{Strumenti e funzioni}
+@menuTools
+
+@emph{Espandere ZDL}
+@menuExt
+
+@menuFooter
+@end menu
+@end ifinfo
+
+@htmlend
+
+@node Il comando ZDL,Servizi streaming/hosting,Top,Top
+
+@htmlstart
+@unnumbered Il comando ZDL
+@cindex comando zdl
+
+ZDL è un programma per la Bash, scritto prevalentemente con il linguaggio della Bash. Di seguito, l'esposizione sintetica della sintassi, delle opzioni e degli altri argomenti del comando @command{zdl}. Per maggiori informazioni, consulta le sezioni specializzate. ZDL è predisposto per il completamento automatico degli argomenti (usare il tasto @kbd{<Tab>}).
+@c @man{1}
+@c @ifman @unnumberedsec NOME
+@c @ifman @command{zdl} - CLI download manager per @emph{GNU/Linux} e @emph{Microsoft Windows + Cygwin}.
+
+@c @ifman @unnumberedsec SINTASSI
+@c @end man
+
+@cindex sintassi
+@unnumberedsec Sintassi
+
+@c @man{2}
+@command{zdl [@emph{OPZIONI}] [@emph{file} ...] [@emph{link} ...] [@emph{directory}] }
+@c @end man 
+
+@cindex argomenti
+@unnumberedsec Argomenti
+@c @man{4}
+@c @ifman @unnumberedsubsec Argomenti
+L'ordine delle opzioni e degli altri argomenti non è importante:
+
+@table @emph
+@item file
+Nomi dei file da cui estrarre i @emph{link}. I file devono essere testuali oppure container DLC o file TORRENT, questi ultimi contrassegnati rispettivamente dalle estensioni @emph{.dlc} e @emph{.torrent} (ZDL processa comunque i @emph{link} in memoria nella @emph{directory} e quelli in input)
+
+@item link
+URL dei file oppure delle pagine web dei servizi di hosting, streaming o di reindirizzamento (se omessi, ZDL processa quelli in memoria nella @emph{directory} e nei @emph{file}). Per scaricare via @emph{IRC/XDCC}, il link deve avere la seguente forma (porta non necessaria se è 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL accetta anche i link di @emph{xWeasel}, con protocollo @code{xdcc://}.
+
+
+@item directory
+Directory di avvio di ZDL e di destinazione dei download (se omessa, è quella corrente)
+
+@end table
+@c @end man
+@cindex opzioni
+@unnumberedsubsec Opzioni
+@c @man{5}
+@c @ifman @unnumberedsec OPZIONI
+Le opzioni brevi non seguite da valori possono essere contratte: 
+@option{-ufmd} equivale a @option{-u} @option{-f} @option{-m} @option{-d}
+
+@table @option
+@item -h, --help
+Help di @emph{ZigzagDownLoader (ZDL)}
+
+@item --list-extensions
+Elenco delle estensioni di @emph{ZigzagDownLoader (ZDL)}
+
+@item --aria2
+Scarica con @emph{Aria2}
+
+@item --axel
+Scarica con @emph{Axel}
+
+@item --wget                  
+Scarica con @emph{Wget}
+
+@item -m [@emph{numero}], --max-downloads[=@emph{numero}]
+Download parallelo. È possibile indicare il numero massimo di download da effettuare contemporaneamente 
+
+@item --login
+Utilizza eventuali account registrati per i servizi abilitati (configurare ZDL)
+
+@item -u, --update
+Aggiorna ZDL
+
+@item -f, --force
+Forza l'aggiornamento manuale di ZDL
+
+
+@item --clean
+Cancella eventuali file temporanei dalla directory di destinazione, prima di effettuare il download 
+
+@item -d, --daemon
+Avvia ZDL in modalità @emph{demone} (può essere controllato attraverso l'interfaccia interattiva) 
+
+@item -i, --interactive
+Avvia l'interfaccia interattiva di ZDL per i download che hanno come destinazione la directory attuale. I download gestiti possono essere attivi o registrati nei file temporanei della directory
+
+@item -l, --lite
+Avvia ZDL in modalità in standard output @emph{lite} (sono validi i comandi della modalità in @emph{standard output}). Può essere configurata come modalità di avvio predefinita.
+
+@item --out=@emph{programma}|@emph{file}
+Restituisce in output i nomi dei file dei download completati, in due modi alternativi: 
+
+@table @emph
+@item programma
+programma che può "aprire" il file scaricato
+
+@item file
+file testuale in cui sono registrati i nomi dei file
+@end table
+
+@item --live
+Permette di selezionare canali per il download della diretta di alcune televisioni in "live stream''
+
+@item --mp3
+@itemx --flac
+Convertono i file (anche da video in audio) in @acronym{MP3} oppure in @acronym{FLAC}: dipendono da @emph{FFMpeg/AVConv}
+                                
+@item --ip
+Scrive l'indirizzo IP attuale, prima di effettuare altre operazioni
+
+@item --reconnect
+Forza la riconnessione del modem al termine di ogni download, utilizzando uno script/comando/programma (configurare ZDL)
+
+
+@item -r, --resume
+Recupera o riscarica file parzialmente scaricati. Agisce in caso di omonimia fra file (leggi il manuale). Può essere configurato come comportamento predefinito
+
+@item --no-complete
+Cancella i file temporanei dei download completati
+
+@item  --no-stop
+Avvio senza interruzioni: salta l'eventuale aggiornamento automatico (che richiede l'immissione della password) o la richiesta di immettere nuovi link. L'input da tastiera è comunque disponibile
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec Interfaccia grafica (GUI):
+@c @man{6}
+@c @ifman @unnumberedsubsec Interfaccia grafica (GUI):
+@table @option
+@item -g, --gui
+Avvia l'interfaccia grafica nella directory corrente o in quella eventualmente inserita fra gli argomenti, attivando automaticamente zdl --daemon come "core", se ancora non è stato attivato zdl
+
+@item --path-gui
+Prima di avviare zdl, apre una finestra per la selezione della directory di destinazione, se non è indicata fra gli argomenti del comando (utile se "zdl --gui" è avviato da un'icona del desktop o da un'estensione del browser web, come "External Application Button")
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec Socket e interfacce utente:
+@c @man{6}
+@c @ifman @unnumberedsubsec Socket e interfacce utente:
+@table @option
+@item -s [@emph{porta}], --socket[=@emph{porta}]
+Avvia il programma collegandolo a un socket. Se non indicata, la porta è quella predefinita.
+
+@item --web-ui
+Interfaccia utente web.
+Avvia il programma in modalità demone nella directory corrente o, eventualmente, in quella passata come argomento, un socket alla porta predefinita o, se occupata da un'altra applicazione, alla prima porta libera e il browser predefinito all'indirizzo dell'interfaccia utente.
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec IRC/XDCC:
+@c @man{7}
+@c @ifman @unnumberedsubsec IRC/XDCC:
+@table @option
+@item -x, --xdcc
+Avvia l'inserimento interattivo di tre dati:
+
+@enumerate
+@item
+l'host del server IRC (@emph{HOST})
+
+@item
+il canale a cui connettersi (@emph{CHAN})
+
+@item
+il messaggio privato (@emph{PRIVMSG}) che contiene il comando @command{XDCC SEND}
+@end enumerate
+
+Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare opzioni, inserendo le informazioni nel link, che deve avere la forma seguente (porta non necessaria se è 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL accetta anche i link di @emph{xWeasel}, con protocollo @code{xdcc://}
+
+@end table
+
+
+@c @end man
+@unnumberedsubsubsec Torrent:
+@c @man{8}
+@c @ifman @unnumberedsubsec Torrent:
+@table @option
+@item -T @emph{file}, --torrent-file=@emph{file}
+File torrent per Aria2: può non avere estensione .torrent
+
+@item --tcp-port=@emph{porta}
+@itemx --udp-port=@emph{porta}
+Porte TCP e UDP aperte: verificare le impostazioni del router
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec Filtri:
+@c @man{9}
+@c @ifman @unnumberedsubsec Filtri:
+@table @option
+@item --scrape-url=@emph{URL pagina web}
+Estrae gli URL (i link) dalla pagina web indicata e li accoda all'elenco registrato
+
+@item --scrape-url
+Estrae gli URL (i link) dalle pagina web indicate come @emph{link}
+
+@item --url=@emph{regex}
+Processa solo gli URL (i link) che corrispondono alla REGEX
+
+@item --no-url=@emph{regex}
+Non processa gli URL (i link) che corrispondono alla REGEX
+
+@item --file=@emph{regex}
+Scarica solo file il cui nome corrisponde alla REGEX
+
+@item --no-file=@emph{regex}
+Non scarica i file il cui nome corrisponde alla REGEX
+
+@item --no-rev
+Non scarica i file con estensione '.rev'
+
+@item --no-sub
+Non scarica i file il cui nome contiene la stringa 'sub' (in lettere maiuscole e minuscole), scarta i file video sottotitolati.
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec Avvio con un editor:
+@c @man{10}
+@c @ifman @unnumberedsubsec Avvio con un editor:
+@table @option
+@item -e, --editor
+sostituisce l'interfaccia di ingresso di ZDL con l'editor predefinito dal sistema oppure con quello configurato per ZDL con @command{zdl -c}
+@item --emacs, --emacs-nw
+usa Emacs o la sua versione solo testo/non grafica
+@item --jed
+usa Jed, un piccolo editor in stile Emacs
+@item --jupp
+usa Jupp
+@item --mcedit
+usa l'editor di Midnight Commander
+@item --mg
+usa Mg, un micro editor in stile Emacs
+@item --nano
+usa l'editor Nano
+@item --vi, --vim
+usa l'editor Vi o Vim
+@item --zile
+usa Zile, un micro editor GNU in stile Emacs
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec Avvio con Proxy:
+@c @man{11}
+@c @ifman @unnumberedsubsec Avvio con proxy:
+@table @option
+
+@item --proxy
+Avvia ZDL attivando un proxy automaticamente (il tipo di proxy predefinito è Transparent) 
+
+@item --proxy=t|a|e
+Avvia ZDL attivando un proxy del tipo definito dall'utente:
+
+@itemize @w{}
+@item 
+@option{t} = Transparent
+
+@item 
+@option{a} = Anonymous
+
+@item
+@option{e} = Elite
+@end itemize
+	
+@item --proxy=@emph{IP}:@emph{PORTA}
+Avvia ZDL attivando il proxy indicato dall'utente, per l'intera durata del download (il proxy viene sostituito automaticamente solo per i link dei servizi abilitati che necessitano di un nuovo indirizzo IP) 
+
+@end table
+
+@c @end man
+@unnumberedsubsubsec Configurazione:
+
+@c @man{12}
+@c @ifman @unnumberedsubsec Configurazione:
+@table @option
+
+@item -c, --configure		
+Interfaccia di configurazione di ZDL, permette anche di salvare eventuali account dei servizi di hosting
+
+@item --stream [@emph{parametri}] [--noXterm]
+Per scaricare lo stream incorporando ZDL in nuovi script, il modello generico dei parametri per le componenti aggiuntive (rispettare l'ordine): 
+
+@end table
+@c @end man
+
+@htmlend
+
+@node Servizi streaming/hosting,Avviare ZDL,Il comando ZDL,Top
+@htmlstart
+
+@unnumbered Scaricare da servizi di @emph{video streaming} e di @emph{file hosting}
+
+@c @man{13}
+@c @ifman @unnumberedsec PANORAMICA
+@c @ifman @unnumberedsubsec Servizi
+ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream video (da Youtube, Nowvideo, Dailymotion...) per mezzo di estensioni dei browser, ed i file condivisi attraverso i seguenti servizi di hosting e di streaming, direttamente dal link (bypassando il player delle pagine web):
+
+@table @emph
+@cindex streaming
+@cindex video
+@item @b{Video in streaming saltando il player del browser:}
+__STREAMING__
+@cindex download
+@cindex file hosting
+@item @b{File hosting:}
+__DOWNLOAD__
+@cindex streaming
+@cindex live
+@item @b{Live stream:}
+__LIVESTREAM__
+@cindex generated
+@cindex captcha
+@item @b{Link generati dal web (anche dopo captcha):}
+__GENERATED__ ed altri servizi
+@cindex short links
+@item @b{Short links:}
+__SHORTLINKS__
+
+@item @b{Tutti i file scaricabili con le seguenti estensioni dei browser:}
+@emph{Flashgot} di @emph{Firefox/Iceweasel/Icecat}, funzione @kbd{M-x zdl} di @emph{Conkeror} e script @command{zdl-xterm} (@emph{XXXTerm/Xombrero} e altri)
+
+@item @b{Tutti i file scaricabili con i seguenti programmi:}
+__PROGRAMS__
+@end table
+
+@c @end man
+
+@unnumberedsec Altre informazioni utili.
+
+Per i servizi di hosting seguenti è consigliato estendere il limite massimo di download
+(aggiungere l'opzione @option{-m} alle istruzioni sopra elencate, 
+eventualmente indicando il massimo numero di download da effettuare in contemporanea)
+per procedere con il download in parallelo, eventualmente attraverso
+l'uso di proxy: Easybytez e Mediafire
+
+Molti server non permettono il recupero di download interrotti e il download parallelo.
+Per questi servizi ZDL usa Wget.
+
+I servizi seguenti richiedono l'uso di RTMPDump (in sua mancanza, ma con limitazioni, di cURL): Zinwa, Vidhappy, Videopremium e Streamin.
+
+Gli altri servizi sono abilitati in modo predefinito per Aria2. 
+
+Per scaricare da Sharpfile, Depositfiles e da altri servizi,
+attualmente è necessario utilizzare il browser web per risolvere il
+captcha, generare il link ed avviare il download attraverso le componenti
+aggiuntive compatibili dei browser oppure con ZDL avviato dal terminale.
+
+L'opzione @option{--login} attiva il login automatico nel caso la
+configurazione di ZDL comprenda uno o più account per l'uso di un
+servizio di hosting. In particolare, la registrazione di molti account
+per Easybytez non solo permette il download di file di grandezza fino
+a 600 MB, ma consente anche lo scaricamento in parallelo di più file
+senza l'uso di proxy (in questo caso è necessario specificare anche
+@option{-m} oppure @option{--max-downloads=}). Per configurare l'uso di account: @command{zdl [-c|--configure]}
+
+Per ogni servizio o link, nel caso in cui Aria2 non dovesse riuscire a connettersi si consiglia di provare ad usare Axel o Wget.
+
+@htmlend
+
+@node Avviare ZDL,Arrestare ZDL,Servizi streaming/hosting,Top
+@htmlstart
+
+@unnumbered Modalità di avvio
+
+@c @man{14}
+@c @ifman @unnumberedsubsec Avvio
+ZDL può essere avviato in diversi modi:
+
+@table @emph
+@item @b{A) Per immettere link e avviare nuovi download:}
+
+@enumerate
+@item
+generando automaticamente la lista dei link per il download:
+
+@itemize @minus
+@item
+apri un terminale ed entra nella directory che dovrà contenere i file scaricati
+
+@item
+avvia ZDL digitando il comando seguito da eventuali opzioni 
+
+@item 
+copia i link dei file da scaricare e incollali nel terminale (vai a capo dopo ogni link)
+
+@item
+digita @kbd{M-x} (@kbd{M}, il tasto @emph{Meta}, è @kbd{<Alt>}, @kbd{<Ctrl>} o @kbd{<Esc>})
+
+@end itemize
+
+@item
+Utilizzando uno o più file preparati con un editor di testi (andare a capo dopo ogni link) e raggiungibili dalla directory di destinazione (indica un path valido):
+@itemize @minus
+@item
+apri un terminale ed entra nella directory che dovrà contenere i file scaricati (in alternativa, puoi indicare a @emph{ZDL} la directory di lavoro)
+
+@item
+digita il comando @command{zdl} seguito dai nomi dei file che contengono la lista dei link: @command{zdl} @emph{path/file ...} 
+@end itemize
+
+@item
+Indicando direttamente a ZDL i link da processare (se link validi dovessero essere dichiarati non validi, prova con il modo @emph{1}):
+@command{zdl} @emph{link ...}
+
+@item
+Dal browser web, attraverso l'uso di componenti aggiuntive (@emph{Flashgot} per @emph{Firefox}, lo script @command{zdl-xterm}, il comando @command{zdl} di Conkeror, ...), allo scopo di catturare e salvare lo stream di un video o un altro file di qualsiasi tipo. 
+
+@item
+In modalità "demone" (anche dalla modalità interattiva)
+
+@item
+Usando un editor, con l'opzione @option{-e} o altre più specifiche (per esempio, @option{--emacs-nw})
+@end enumerate
+
+I file, la directory di lavoro e i link possono essere immessi in qualsiasi ordine. Tutti i link degli input sono salvati nel file @file{links.txt}, nella directory di destinazione. 
+
+@item @b{B) Per gestire download già avviati nelle modalità "non interattiva" e "demone":}
+avviando la modalità interattiva in due modi:
+
+@enumerate
+@item
+in console dalla directory di destinazione dei download, con il comando @command{zdl -i} oppure @command{zdl --interactive}
+
+@item
+nella modalità "non interattiva" (standard), digitando il tasto @kbd{i}
+@end enumerate
+@end table
+
+
+@c @end man
+@htmlend
+
+@node Arrestare ZDL,Controllare i download,Avviare ZDL,Top
+@htmlstart
+
+@unnumbered Modalità di arresto
+
+@c @man{15}
+@c @ifman @unnumberedsubsec Arresto
+ZDL può essere fermato in diversi modi:
+@itemize
+@item 
+Se i download sono gestiti dalla modalità "non interattiva"/standard:
+
+@enumerate
+@item
+digitando @kbd{M-k} (in questo caso saranno interrotti tutti i download avviati da ZDL nella directory di destinazione specificata o in quella corrente)
+
+@item
+digitando @kbd{M-q} (tutti i download già avviati nella directory corrente non saranno interrotti, ma non verranno più gestiti da ZDL fino ad una nuova istanza @emph{standard} oppure @emph{demone} del programma)
+@end enumerate
+
+@item 
+Se i download sono gestiti dalla modalità "demone": 
+attraverso la modalità interattiva @command{zdl -i} avviata nella directory gestita dal demone, digitando il tasto di uscita "Quit" (in maiuscolo, cioè con @kbd{Shift-q}): @kbd{Q} (in questo caso i download avviati nella directory non sarano interrotti, ma non verranno gestiti da ZDL a meno che non sia riavviato per gestire gli stessi download)
+@end itemize
+
+
+@c @end man
+
+@htmlend
+
+@node Controllare i download,Manuali d'uso,Arrestare ZDL,Top
+@htmlstart
+@unnumbered Controllare i download: recupero, eliminazione, arresto, riavvio...
+
+I download possono essere controllati in modalità diverse in base al tipo di operazione da effettuare.
+L'avvio da terminale permette l'esecuzione delle operazioni elencate nella presentazione del comando: @ref{Il comando ZDL}. Poiché ZDL può essere chiuso senza interrompere i download, questa modalità di controllo può essere adottata in ogni momento, a esecuzione già avviata. Per @emph{chiudere senza interrompere i download}:
+@itemize @minus
+@item
+se avviato in modalità standard, digitare @kbd{M-q} (tasti @kbd{<Alt>+<q>})
+@item
+da modalità interattiva, digitare @kbd{Q} (tasti @kbd{<Shift>+<q>})
+@end itemize
+
+Una volta @emph{chiuso} (o anche @emph{ucciso} interrompendo i download), ZDL può essere riavviato utilizzando nuove opzioni.
+
+@unnumberedsubsec Un esempio, partendo da un problema pratico: aggiungere opzioni a download avviati dal browser. 
+@table @emph
+@item Problema:
+voglio scaricare dei file da Easybytez usando @emph{Flashgot}, ma voglio
+anche usare le opzioni @option{--login}, @option{--max-downloads=} e @option{--clean}, che non sono
+impostate di default. Come posso utilizzare queste funzioni aggiuntive
+usando il browser (con @emph{Flashgot}), se queste possono essere attivate
+solo dal terminale?
+
+@item Soluzione:
+@itemize @minus
+@item
+avvio zdl in un terminale, dalla directory di destinazione,
+    utilizzando tutte le opzioni di cui ho bisogno:
+    		  @command{zdl -m --login --clean}
+@item
+usando @emph{Firefox}, clicco con il tasto destro del mouse sui link dei
+    file da scaricare e avvio il download con @emph{Flashgot}: il download
+    non viene effettuato subito e i link vengono registrati da zdl per
+    essere processati da un'altra istanza attiva del programma (quella
+    nel terminale)
+@item
+quando ho finito di registrare i link, torno al terminale e, senza
+    scrivere nulla, digito @kbd{M-x}
+@end itemize
+@end table
+
+@*@*
+@unnumberedsubsec Controllo manuale dei download.
+ZDL processa i @emph{link} registrati, generando per ciascuno un file temporaneo da cui può estrarre informazioni sul file da scaricare e sul download in corso, intattivo o completato. Grazie a tali informazioni, è possibile il controllo dei processi di download, sia automaticamente da parte di ZDL, sia manualmente da parte dell'utente.
+
+I download di ZDL possono essere controllati manualmente attraverso la modalità interattiva, che può essere attivata da quella standard digitando @kbd{M-i} (tasti @kbd{<Alt>+<i>}) o da un qualsiasi terminale @emph{Bash} dalla stessa directory di download, utilizzando l'opzione @option{-i|--interactive}. Se non è attiva alcuna istanza di avvio e gestione automatica dei download, dall'interfaccia interattiva è possibile avviare la modalità @emph{demone}, che agisce in background come @emph{server} ed è indipendente dal terminale di avvio. Per gestire i download e la stessa chiusura di ZDL in modalità demone, è comunque necessario utilizzare l'interfaccia interattiva, che ha funzione di @emph{client}.@*
+I comandi sono elencati nella stessa interfaccia interattiva: è possibile modificare il numero massimo di download (da 1 a 9, digitando i tasti dei numeri, o illimitati, digitando il tasto @kbd{m}), il tipo di downloader da utilizzare (Axel o Wget, digitando @emph{a} o @emph{w}), avviare l'editor predefinito per modificare l'elenco dei link da processare (tasto @emph{e}), selezionare con @emph{s} i download in gestione per @emph{riavviarli} (ZDL interrompe il download in corso e processa quello successivo fino al termine della lista registrata, poi ricomincia dal primo e così via), @emph{terminarli} in modo definitivo senza cancellare i file finora scaricati o @emph{eliminarli} completamente. Per queste ultime tre operazioni è possibile selezionare più download alla volta, indicandone i numeri identificativi separandoli con spazi.
+
+@unnumberedsubsec Controllo manuale dei download ancora da processare.
+In mancanza dei file temporanei relativi a @emph{link} non ancora processati, è possibile intervenire manualmente utilizzando un @emph{editor} (@ref{Editor}).
+
+@htmlend
+
+@node Manuali d'uso,Modi,Controllare i download,Top
+@htmlstart
+@unnumbered Manuali d'uso
+Documentazione attualmente disponibile:
+@itemize @bullet
+@item
+ipertesto online: @url{http://nongnu.org/zdl}
+@item
+ipertesto in formato @emph{info}, consultabile con il comando @command{info zdl} (per migliorarne la navigazione, si consigliano @command{pinfo} oppure @command{emacs})
+@item
+pagina di manuale in stile UNIX: @command{man zdl}
+@end itemize
+
+@htmlend
+
+
+
+@node Modi,Readline,Manuali d'uso,Top
+@htmlstart
+
+@unnumbered Modi
+ZDL può essere utilizzato in diverse modalità:
+
+@unnumberedsec Modalità in standard output (predefinita e @emph{lite}: @option{-l, --lite}).
+Sono disponibili due diverse @emph{modalità in standard output}: quella predefinita, che informa puntualmente l'utente di ogni operazione compiuta, comunicando i dati rilevanti dei download in corso e quella @emph{lite}, estremamente compatta nella rappresentazione dei download e @emph{silente} rispetto ai processi di estrazione e analisi. La seconda modalità può essere avviata con l'opzione @option{-l} (@option{--lite}) oppure configurata come @emph{predefinita} attraverso l'interfaccia di configurazione: @command{zdl [-c|--configure]}. È particolarmente indicata per l'utente che usa ZDL come downloader alternativo per il browser, per esempio attraverso l'estensione @emph{Flashgot}.
+@*
+Le @emph{modalità in standard output} sono dotate di una @ref{Readline} e accettano i seguenti comandi, espressi in combinazioni di tasti:
+
+@table @kbd
+@item M-i
+avvia la @emph{modalità interattiva}. Lo standard output del terminale viene ceduto ad un'altra modalità, senza però sospendere le attività della modalità precedente, che procedono silenti.
+@item M-e
+avvia l'editor predefinito (@ref{Editor}). Come per il comando precedente, le attività non sono sospese mentre si utilizza un editor per manipolare la lista dei link da processare.
+@item M-c
+cancella le informazioni (file temporanei) dei download completati.
+@item M-q
+permette l'uscita da ZDL senza l'interruzione dei downloader, che continuano a registrare dati utili per un eventuale riavvio di ZDL: i download possono essere controllati attraverso le funzioni della @emph{modalità interattiva} ma, in caso di interruzioni, devono essere processati dalle modalità @emph{in standard output} oppure @emph{demone}.
+@item M-k
+uccide tutti i processi avviati nella directory, senza cancellare i file temporanei.
+@end table
+
+@unnumberedsec Modalità interattiva (@option{-i, --interactive}).
+Permette il controllo manuale dei download (@ref{Controllare i download}) ed altre operazioni, descritte nella stessa interfaccia. @emph{Non processa i link} ed è solo un @emph{client}: per l'avvio dei download è necessario eseguire un'istanza @emph{server} di ZDL, come quelle @emph{in standard output} oppure @emph{demone}. Quest'ultima può essere avviata dalla stessa modalità interattiva.
+@*
+Questa modalità d'uso è quella che fornisce più informazioni sullo @emph{stato} dei download. La sua schermata è aggiornata automaticamente ogni 15 secondi o manualmente digitando un tasto qualsiasi.
+
+@unnumberedsec Modalità demone (@option{-d, --daemon}).
+Gestisce silenziosamente tutti i processi riferiti a una directory e può essere controllato manualmente attraverso la @emph{modalità interattiva}. È indipendente dal terminale in uso, che può essere chiuso senza conseguenze. È, in senso pieno, la modalità @emph{server} di ZDL: la modalità demone è sempre in attesa di nuovi link da processare e termina solo per intervento dell'utente, attraverso l'interfaccia interattiva. La modalità demone consuma meno risorse rispetto alle altre modalità.
+
+@htmlend
+
+@node Readline,Editor,Modi,Top
+@htmlstart
+
+@unnumbered Readline
+L'esecuzione delle @emph{modalità in standard output}, in mancanza di un input esterno (@emph{link} immessi attraverso la linea di comando, una @emph{pipe}, un @emph{file} container @emph{DLC} o testuale, l'estensione di un browser...), avvia la @emph{readline di ZDL}. È quasi identica alla readline della Bash: usa la stessa history e digitando il tasto @kbd{Invio} si esegue un comando. Ma la readline di ZDL accetta, come comandi, solo link che hanno la forma di un URL @emph{http, https o ftp}, di un link @emph{irc/xdcc} e file torrent.
+@*@*
+In presenza di spazi nell'URL, questi sono automaticamente convertiti nel @emph{codice percentuale} standard per gli URL (eventuali spazi a sinistra e a destra dell'URL sono ignorati). L'immissione di ogni link deve avvenire singolarmente, alla pressione del tasto @emph{Invio}. @*
+Utilizzando il mouse, si può @emph{incollare} un elenco di link, ma questi devono essere disposti in righe diverse. @*
+Le righe vuote e i link già registrati sono ignorati, le stringhe non corrispondenti ad un URL sono rifiutate esplicitamente e registrate nel file di log prodotto all'interno della stessa directory, mentre gli URL accettati sono registrati via via nel file gestito automaticamente da ZDL, come @emph{coda di download}.@*@*
+
+In ogni momento, durante l'immissione di link attraverso la readline, si può modificare la @emph{coda di download} con l'editor predefinito (@ref{Editor}). I processi di download sono avviati dal comando @kbd{M-x}, che chiude la readline ed esegue la coda di download.
+@*@*
+
+
+@htmlend
+
+@node Editor,Omonimie,Readline,Top
+@htmlstart
+
+@unnumbered Editor
+È possibile controllare la @emph{coda di download} attraverso un editor. Infatti, l'elenco dei link da processare è registrato in un file temporaneo gestito da ZDL. I link sono processati dal primo all'ultimo: in caso di riavvio manuale o disconnessione involontaria, ZDL esamina il link successivo. Da ogni modalità d'uso del programma è possibile avviare un editor per alterare i link ed il loro ordine di esecuzione.
+L'editor può essere utilizzato anche in sostituzione della @emph{readline di ZDL} (@ref{Readline}), da riga di comando attraverso le opzioni corrispondenti (@ref{Il comando ZDL}).
+@*@*
+La scelta dell'editor può essere esplicita (da riga di comando) o implicita, con l'avvio dell'editor predefinito: quest'ultimo può essere specificato nella configurazione di ZDL (@command{zdl [-c|--configure]}). In mancanza di indicazioni specifiche (per opzioni e configurazione), ZDL esegue l'editor predefinito per la Bash o per il sistema operativo. Nel caso si usi Cygwin, l'installatore e le funzioni di aggiornamento di ZDL installano automaticamente l'editor @emph{Nano}: è reso disponibile se non è presente altro editor predefinito.
+@*@*
+@htmlend
+
+@node Omonimie,IRC/XDCC,Editor,Top
+@htmlstart
+
+@unnumbered Omonimie
+Il download può diventare problematico in presenza di file omonimi nella stessa directory, se ZDL non dispone già di informazioni grazie alle quali riconoscere un eventuale scaricamento in sospeso o completato. Tali informazioni possono essere ricavate solo dai file temporanei generati da ZDL per ciascun link già processato. Cancellare tali file con l'opzione @option{--clean} provoca la perdita di questi dati.
+@*@*
+Nel caso in cui, in presenza di file omonimi, non esistono file temporanei dei link da processare, ZDL si comporta in due modi alternativi:
+
+@table @option
+@item @emph{predefinito}
+non sovrascrive il file omonimo, ma rinomina il nuovo file nel modo seguente: inserisce, fra il nome e l'estensione, una stringa composta da @code{__BIS__} e da un segmento dell'URL del link, opportunamente abbreviato e ricodificato. La stringa aggiuntiva aumenta la probabilità che non si ripeta un problema di omonimia, anche in mancanza dei file temporanei di processi di download precedenti. In ogni caso, la coda di download cancella automaticamente eventuali ripetizioni dello stesso link.
+@item @option{-r|--resume}
+l'uso di questa opzione comporta la sovrascrittura del file omonimo. In mancanza di file temporanei riferiti al link da processare, anche il download con Axel sovrascrive comunque il file dall'inizio. Questa opzione può essere configurata come comportamento predefinito (@command{zdl [-c|--configure]}).
+@end table
+@*@*
+
+@htmlend
+
+@node IRC/XDCC,Torrent,Omonimie,Top
+@htmlstart
+@unnumbered IRC/XDCC
+Il download dei file richiesti via chat, tramite comandi XDCC, non richiede alcun downloader nè dipende da alcun programma: ZigzagDownLoader, in questo caso, oltre a gestire gli scaricamenti, li effettua direttamente.
+
+L'immissione dei dati necessari (host del server IRC, la porta non è necessaria se è 6667, canale, messaggio privato che contiene il comando xdcc) può avvenire in diversi modi:
+@table @option
+@item @option{-x|--xdcc}
+Avvia l'inserimento interattivo dei tre dati in successione:
+
+@enumerate
+@item
+l'host del server IRC (@emph{HOST[:PORT]}). Se all'host segue il canale (@code{irc://[HOST]/[CHAN]}), l'immisione successiva viene saltata
+
+@item
+il canale a cui connettersi (@emph{CHAN})
+
+@item
+il messaggio privato (@emph{PRIVMSG}) che contiene il comando @command{XDCC SEND}
+@end enumerate
+
+@item @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}
+Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare opzioni, inserendo le informazioni direttamente nel link, che deve avere la forma qui sopra
+
+@item @code{xdcc://...LINK DI XWEASEL...}
+ZigzagDownLoader converte automaticamente e utilizza i link di xWeasel, che comprendono tutte le informazioni necessarie. Gli utenti che fanno uso di Firefox/Iceweasel/Icecat, attraverso questi link, possono scaricare i file direttamente dalle pagine web con un click del mouse, grazie all'estensione Flashgot, adattata anche per ZDL. Altri browser possono scaricare i file con la stessa immediatezza utilizzando altre funzioni (in altre sezioni: @ref{Conkeror}, @ref{zdl-xterm e XXXTerm/Xombrero})
+
+@end table
+@htmlend
+
+@node Torrent,Filtri,IRC/XDCC,Top
+@htmlstart
+
+@unnumbered Torrent
+Aria2 permette lo scaricamento dei @emph{torrent}. Questo downloader non deve essere esplicitamente indicato a ZDL, ma è necessario che sia installato correttamente. Un @emph{torrent} può essere avviato tramite il semplice invio dell'@emph{URL magnet} (attraverso tutti i sistemi previsti per gli URL in generale, ZDL riconosce il @emph{magnet} automaticamente) oppure inviando il @emph{file torrent}, utilizzando l'opzione @code{--torrent-file=} o il file contrassegnato dell'estensione @emph{.torrent}.
+@*@*
+Le porte @emph{TCP} e @emph{UDP} possono essere fissate nella configurazione di ZDL (con il comando @command{zdl --configure} oppure nel file @file{$HOME/.zdl/zdl.conf}), indicate esplicitamente con le opzioni @code{--tcp-port=} e @code{--udp-port=} oppure indicate nella configurazione di @emph{Aria2}. È importante che le porte siano aperte dal router.
+@htmlend
+
+@node Filtri,Creare nuove estensioni,Torrent,Top
+@htmlstart
+
+@unnumbered Filtri
+L'applicazione dei filtri è possibile solo attraverso l'uso di opzioni da riga di comando (o attraverso script che fanno uso di ZDL). Per filtri avanzati può essere utile l'uso di @emph{espressioni regolari [REGEX]}. 
+
+@htmlend
+
+
+
+@c --------
+
+@node Creare nuove estensioni,Software consigliati e dipendenze,Filtri,Top
+@htmlstart
+
+@unnumbered Creare nuove estensioni
+
+@unnumberedsec Come aggiungere estensioni personalizzate e sperimentali.
+ZDL incorpora il codice che trova in tutti gli script bash con estensione @code{.sh} nella
+directory @file{$HOME/.zdl/extensions/}
+
+@b{Script bash di esempio:}
+
+@example
+if [[ "$url_in" =~ PATTERN ]]
+then
+   url_in_file=$(sed -r 's|http://(.+)|http://USER:PASSWORD@@\1|g' \
+                     <<< "$url_in")
+   file_in="NOME_DEL_FILE"
+   max_dl=1
+   axel_parts=3
+   aria2_connections=3
+
+   end_extension
+fi
+@end example
+
+L'esempio può essere usato come modello per un link 
+riconosciuto attraverso una regex nel PATTERN.
+Lo script modifica il link del download in @code{$url_in} 
+per ottenere l'URL del file in @code{$url_in_file}, 
+aggiungendo USER e PASSWORD per accedere al server. 
+Inoltre, indica come ricavare il nome del file da scaricare 
+(variabile @code{$file_in}) e aggiunge o modifica opzioni:
+disattiva l'opzione @option{--max-downloads=} se applicata al comando
+e stabilisce il numero di parti da scaricare con Axel (il
+grado di accelerazione, che per default è 32 ma che per diversi server
+può essere eccessivo o insufficiente, peggiorando le prestazioni)
+e quello di Aria2 (massimo 16 connessioni). La funzione @code{end_extension}
+verifica se esiste un @code{file_in} e se @code{url_in_file} è valido.
+
+In questo modo, è possibile estendere ZDL ad altri servizi di file
+hosting (anche a scopo sperimentale), aggiungere opzioni mirate e
+personalizzate o implementare il funzionamento del programma,
+utilizzando le variabili e le funzioni disponibili in ZDL senza 
+modificare il sorgente
+@htmlend
+
+@node Software consigliati e dipendenze,Conkeror,Creare nuove estensioni,Top
+@htmlstart
+
+@unnumbered Software consigliati e dipendenze
+
+@c @man{16}
+@c @ifman @unnumberedsubsec Software consigliati e dipendenze
+@table @emph
+@pindex aria2
+@item Aria2                            
+Downloader con accelerazione e altro
+
+@pindex axel
+@item Axel                            
+Acceleratore di download
+
+@pindex ffmpeg
+@pindex avconv
+@item FFmpeg/AVConv
+Convertitore per MP3/FLAC
+
+@pindex rtmpdump
+@item cURL e RTMPDump
+Downloader per i servizi RTMP       
+
+@pindex xterm
+@item XTerm
+Terminale grafico predefinito per GNU/Linux
+
+@pindex flashgot
+@item Flashgot
+Estensione di Firefox/Iceweasel/Icecat
+
+@pindex youtube-dl
+@item youtube-dl
+Script in python che amplia e potenzia le estensioni di ZDL
+
+@pindex pinfo
+@item pinfo
+Programma in stile @emph{lynx} per sfogliare i file @emph{info}:
+migliore di @emph{info} ed esteticamente più simile a ZDL
+
+
+@pindex editor
+@item Emacs
+@itemx Jed
+@itemx Jupp
+@itemx Midnight Commander (MCEdit)
+@itemx Mg
+@itemx Nano
+@itemx Vi, Vim
+@itemx Zile
+Almeno un editor qualsiasi (qui solo alcuni suggerimenti) per poter modificare in qualsiasi momento la lista dei link da cui effettuare i download
+@end table
+
+@unnumberedsubsec ZDL estende: 
+@table @emph
+@pindex firefox
+@pindex iceweasel
+@pindex icecat
+@item Firefox/Iceweasel/Icecat
+Attraverso l'estensione @emph{Flashgot}
+
+@pindex xxxterm
+@pindex xombrero
+@item XXXTerm/Xombrero
+Script @file{zdl-xterm} in @file{/usr/local/bin}
+
+@pindex conkeror
+@item Conkeror
+Funzione @kbd{M-x zdl} autoinstallata
+
+@end table
+
+@unnumberedsubsec Dipendenze: 
+@table @emph
+@item Nodejs
+@item Panthomjs
+Motori Javascript per l'acquisizione di informazioni dal web
+
+@end table
+
+@unnumberedsubsec Dipendenze aggiuntive per Windows: 
+@table @emph
+@item Cygwin (x86 32-bit)
+Distribuzione per il porting di software di sistemi POSIX su Microsoft Windows
+
+@end table
+
+@c @end man
+
+@htmlend
+
+@node Conkeror,zdl-xterm e XXXTerm/Xombrero,Software consigliati e dipendenze,Top
+@htmlstart
+@unnumbered Conkeror: comando @command{zdl}
+ZDL implementa automaticamente il browser Conkeror con un nuovo comando. 
+Per usarlo, digita: @kbd{M-x zdl}
+
+@table @emph
+@item Dopo aver avviato il comando, il minibuffer di Conkeror
+@itemize @minus
+@item 
+chiede di selezionare la @emph{directory} di destinazione 
+@item
+offre la  possibilità di utilizzare le @emph{opzioni} di ZDL
+       (lasciare il campo vuoto per non selezionarle) 
+@item
+mostra e indicizza i @emph{link} nel buffer corrente (per
+       esempio la pagina web), per procedere nella selezione del link da immettere in ZDL
+       (il link della pagina corrente corrisponde all'indice 0) 
+@item
+avvia ZDL in un terminale xterm oppure, se è stata selezionata
+       l'opzione @option{--daemon} (oppure @option{-d}), in background. In ogni caso è
+       possibile gestire i download utilizzando l'interfaccia
+       interattiva
+@end itemize
+@end table
+
+@htmlend
+
+@node zdl-xterm e XXXTerm/Xombrero,Installazione e aggiornamento,Conkeror,Top
+@htmlstart
+@unnumbered Lo script @command{zdl-xterm}: XXXTerm/Xombrero e altri software 
+
+ZDL può essere avviato da XXXTerm/Xombrero e da altri software attraverso
+lo script @file{/usr/local/bin/zdl-xterm}, che
+può essere avviato da qualunque applicazione e da un terminale. È
+stato pensato per rendere possibile l'avvio di ZDL in contesti diversi
+da quelli previsti dal programma. In particolare, XXXTerm può avviare
+uno script bash, utilizzando il comando @command{:run_script},
+passandogli un solo argomento: il link della pagina corrente. Questo
+rende impossibile l'avvio standard di zdl in un'istanza di xterm,
+perché @command{:run_script} non accetta ulteriori parametri. L'avvio
+di zdl in un nuovo terminale virtuale xterm è reso possibile, appunto, 
+da @command{zdl-xterm}.
+
+@unnumberedsec Uso in XXXTerm:
+@itemize @minus
+@item
+comando @command{:run_script}
+@item
+digita: @command{zdl-xterm}
+@item
+il programma avvia un'istanza di xterm che:
+@itemize @bullet
+@item
+chiede in quale @emph{directory} scaricare il file (è
+         possibile evitare questa interazione configurando zdl-xterm:
+     	 inserisci in @file{/usr/local/bin/zdl-xterm}, come valore
+     	 della variabile @code{default_directory} all'inizio dello
+     	 script, il path di una @emph{directory valida})
+@item
+zdl-xterm avvia zdl sull'@emph{URL corrente}
+@end itemize
+@end itemize
+
+@unnumberedsubsec Semplificazione per XXXTerm. 
+Per utilizzare zdl-xterm con più rapidità, XXXTerm può essere
+configurato in molti modi.
+
+@b{Un suggerimento:}
+@itemize @minus
+@item
+apri il file @file{$HOME/.xxxterm.conf}
+@item
+inserisci il seguente testo:
+@example
+default_script = zdl-xterm
+keybinding = run_script,C-z
+@end example
+@end itemize
+
+Con la configurazione suggerita, digitando @kbd{Ctrl-z} si avvia
+il prompt di @command{:run_script} con il campo già occupato dal nome
+dello script @command{zdl-xterm}: è sufficiente premere @kbd{invio}.
+
+
+@htmlend
+
+@node Installazione e aggiornamento,Tags,zdl-xterm e XXXTerm/Xombrero,Top
+@htmlstart
+@unnumbered Installazione e aggiornamento di ZDL
+ZDL si installa automaticamente con uno script per la @emph{Bash}.
+
+@unnumberedsec Installazione per GNU/Linux
+@enumerate
+@item
+Scarica l'installatore (è uno script per la Bash):
+   @url{http://download-mirror.savannah.gnu.org/releases/zdl/install_zdl.sh}
+@item
+Attribuisci i diritti di esecuzione allo script:
+   @command{chmod +x install_zdl.sh}
+@item
+esegui lo script: @command{./install_zdl.sh}
+@item
+   L'installazione è automatizzata e potrebbe chiederti di installare nuovi pacchetti
+   (dipendenze) scegliendo fra più opzioni: l'opzione consigliata è sempre la numero 1
+@item
+Se tutto è andato a buon fine, hai terminato l'installazione   
+@end enumerate
+
+
+@unnumberedsec Installazione per Microsoft Windows
+ZDL funziona anche su Windows, ma attraverso @emph{Cygwin}
+
+@b{Installazione su Windows:}
+@table @emph
+@item FASE 1) Installazione di Cygwin 32 bit 
+installatore automatico di Cygwin (serve anche ad aggiornare il
+sistema emulato e ad installare nuovi pacchetti): @*
+@url{http://cygwin.com/setup-x86.exe}@*@*
+Si consiglia il seguente mirror: @url{http://bo.mirror.garr.it}@*
+Prima di procedere con l'installazione, leggi le istruzioni per
+la @emph{fase 2}
+
+@item FASE 2) Installazione delle dipendenze
+potrebbe non essere necessaria, in quanto la fase successiva
+comprende un sistema automatico (non sempre funzionante) che potrebbe
+essere in grado di installare correttamente tutti i pacchetti
+richiesti attraverso l'uso di @command{apt-cyg}. Ad ogni modo, si consiglia
+di installare le dipendenze utilizzando l'installatore di Cygwin,
+scegliendo i pacchetti aggiuntivi fin dalla @emph{fase 1}.@*@*
+@emph{Elenco dei pacchetti da installare:}
+@command{wget ffmpeg rtmpdump diffutils nano coreutils vim-common openssl}
+@*@*
+Per alcuni pacchetti potrebbe essere necessario aggiungere un mirror di Cygwinports:
+@command{http://bo.mirror.garr.it/mirrors/sourceware.org/cygwinports/}
+
+@item FASE 3) Installazione di ZDL
+@enumerate
+@item
+salva nella cartella @file{C:\cygwin} (la cartella potrebbe trovarsi 
+in un altro @emph{device}: controlla eventualmente anche in @file{D:}, 
+@file{E:}, ecc.) il seguente file:
+@url{http://download-mirror.savannah.gnu.org/releases/zdl/install_zdl.sh}
+
+@item
+avvia @emph{Cygwin} installato nella fase 1
+
+@item
+digita il seguente comando: @command{/install_zdl.sh}
+@end enumerate
+@end table
+
+@b{Modo d'uso di ZDL su Windows:} avvia Cygwin e utilizza ZDL nel terminale
+avviato, come descritto in questa guida. Puoi avviare download con ZDL 
+anche da @emph{Flashgot} di @emph{Firefox} e da @emph{Conkeror} eseguiti da MS-Windows: 
+Cygwin si avvia automaticamente.
+
+
+@unnumberedsec Aggiornare ZDL
+Se è disponibile una nuova versione del programma, ZDL si aggiorna
+automaticamente. È possibile disabilitare l'aggiornamento automatico
+modificando la configurazione con @option{zdl --configure}.
+
+Per aggiornare manualmente ZDL è sufficiente usare
+l'opzione @option{-u} (@option{--update}). 
+
+L'aggiornamento manuale può essere forzato aggiungendo l'opzione
+@option{-f} (@option{--force})
+
+
+@unnumberedsec Disinstallare ZDL
+È disponibile uno script di disinstallazione: @url{http://download-mirror.savannah.gnu.org/releases/zdl/uninstall_zdl.sh}.
+
+@htmlend
+
+@node Tags,Copying,Installazione e aggiornamento,Top
+@htmlstart
+@unnumbered Tags/indici analitici
+@unnumberedsec Indice analitico generale
+@printindex cp
+
+@unnumberedsec Indice dei programmi
+@printindex pg
+
+@htmlend
+
+
+@node Copying,Contatti,Tags,Top
+@htmlstart
+@unnumbered Copying
+@unnumberedsec Autori
+Gianluca Zoni (zoninoz): @url{http://inventati.org/zoninoz}
+
+@unnumberedsec Copyright
+ Copyright @copyright{} 2011@*
+ Gianluca Zoni (zoninoz): @url{http://inventati.org/zoninoz}@*
+
+ For information or to collaborate on the project:@*
+ @url{https://savannah.nongnu.org/projects/zdl}
+
+@unnumberedsec Licenza di ZigzagDownLoader (ZDL)
+ 
+ This program is free software: you can redistribute it and/or modify it 
+ under the terms of the GNU General Public License as published 
+ by the Free Software Foundation; either version 3 of the License, 
+ or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful, 
+ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License 
+ along with this program. If not, see @url{http://www.gnu.org/licenses/gpl.html} 
+ 
+@htmlend
+
+@node Contatti,,Copying,Top
+@htmlstart
+@unnumbered Contatti
+@unnumberedsec Riporta un bug (o una richiesta di supporto)
+@url{https://savannah.nongnu.org/bugs/?func=additem&group=zdl}
+
+@unnumberedsec Mailing list del progetto
+@emph{zdl-users - Lista degli utenti}:@* @url{https://lists.nongnu.org/mailman/listinfo/zdl-users}@*@*
+@emph{zdl-devel - Lista di sviluppo}:@* @url{https://lists.nongnu.org/mailman/listinfo/zdl-devel}
+
+@htmlend
+
+
+@bye
+
+@c @man{17}
+@unnumberedsec MANUALI
+Oltre alla presente guida, puoi consultare:
+@table @command
+@item info zdl
+Documentazione ipertestuale che puoi leggere più comodamente usando @emph{pinfo} oppure @emph{Emacs}
+
+@item @url{http://nongnu.org/zdl}
+Sito web di @emph{ZigzagDownLoader}
+@end table
+
+@unnumberedsec FILE
+I file di configurazione si trovano in @file{$HOME/.zdl/}. In particolare, il file di configurazione modificato da @command{zdl -c} è @file{$HOME/.zdl/zdl.conf}.
+Puoi creare liberamente nuove estensioni in @file{$HOME/.zdl/extensions/}. Il programma si trova in @file{/usr/local/bin/} (@file{zdl} e @file{zdl-xterm}) e in @file{/usr/local/share/zdl/}.
+
+Nella directory di download, ZDL produce file temporanei in @file{.zdl_tmp/} e salva la lista dei @emph{link} in @file{links.txt}. Inoltre, ZDL registra eventuali problemi nel file @file{zdl_log.txt}.
+
+@unnumberedsec VEDERE ANCHE
+@command{xterm}(1), @command{conkeror}(1), @command{aria2c}(1), @command{axel}(1), @command{wget}(1), @command{curl}(1), @command{rtmpdump}(1), @command{ffmpeg}(1), @command{avconv}(1)
+
+@unnumberedsec COPYING
+@itemize 
+@item
+Copyright @copyright{} 2011: Gianluca Zoni (zoninoz) <@email{zoninoz@@inventati.org}>
+@item
+ZDL è rilasciato con licenza GPL (General Public Licence, v.3 e successive). 
+@end itemize
+
+@unnumberedsec AUTORI
+@unnumberedsubsec Per informazioni e per collaborare al progetto:
+@itemize 
+@item
+@url{http://nongnu.org/zdl}
+@item
+@url{https://savannah.nongnu.org/projects/zdl}
+@item
+@url{https://joindiaspora.com/tags/zdl}
+@end itemize
+
+Gianluca Zoni (zoninoz)
+@url{http://inventati.org/zoninoz}
+
+@c @end man
+
+
+
+@bye
