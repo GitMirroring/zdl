@@ -120,7 +120,7 @@ function configure {
 	echo -en "\r \r"
 	case $option_0 in
 	    1)
-		while true
+		while :
 		do
 		    fclear
 		    header_z
@@ -133,7 +133,6 @@ function configure {
 - $(sprint_c 4 "*") significa un valore qualsiasi diverso dagli altri, anche nullo
 - gli attuali $(sprint_c 1 "valori registrati") sono in verde\n\n"
 
-		    ## get_conf
 		    source "$file_conf"
 
 		    show_conf
@@ -142,7 +141,10 @@ function configure {
 
 		    input_text opt
 		    
-		    [ "$opt" == "q" ] && break 
+		    [ "$opt" == "q" ] && {
+			get_conf
+			break
+		    }
 		    configure_key $opt
 		done
 		;;
