@@ -265,7 +265,29 @@ function get_conf {
     [[ "$(tty)" =~ tty ]] &&
 	background=tty
     
-    Color_Off="\033[0m${Foreground}${Background}" 
+    Color_Off="\033[0m${Foreground}${Background}"
+
+    if [ "$language" != it ]
+    then
+	language=en
+	string_conf[0]="Default downloader (Axel|Aria2|Wget)"
+	string_conf[1]="Number of parts in Axel parallel downloads"
+	string_conf[2]="Number of connections in Aria2 parallel downloads"
+	string_conf[3]="Maximum number of concurrent downloads (integer number|<empty=without limits>)"
+	string_conf[4]="Background color (black|transparent)"
+	string_conf[5]="Language"
+	string_conf[6]="Script/command/program to reconnect the modem/router"
+	string_conf[7]="ZDL automatic updates (enabled|*)"
+	string_conf[8]="Script/command/program to play audio/video files"
+	string_conf[9]="Default editor to edit the link queue"
+	string_conf[10]="Homonymous files recovery as the option --resume (enabled|*)"
+	string_conf[11]="Default program startup mode (lite|daemon|stdout)"
+	string_conf[12]="TCP open port for Aria2 torrents (check your modem/router settings)"
+	string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
+	string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
+	string_conf[15]="Browser for --web-ui option"
+	string_conf[16]="Select deafult web-ui (1|2|3|lite)"
+    fi
 }
 
 
@@ -380,7 +402,7 @@ key_conf[1]=axel_parts;          val_conf[1]="32";         string_conf[1]="Numer
 key_conf[2]=aria2_connections;   val_conf[2]="16";         string_conf[2]="Numero di connessioni in parallelo per Aria2"
 key_conf[3]=max_dl;              val_conf[3]="1";          string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
 key_conf[4]=background;          val_conf[4]=black;        string_conf[4]="Colore sfondo (black|transparent)"
-key_conf[5]=language;            val_conf[5]=${LANG::2};   string_conf[5]="Lingua"
+key_conf[5]=language;            val_conf[5]="${LANG::2}"; string_conf[5]="Lingua"
 key_conf[6]=reconnecter;         val_conf[6]="";           string_conf[6]="Script/comando/programma per riconnettere il modem/router"
 key_conf[7]=autoupdate;          val_conf[7]=enabled;      string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
 key_conf[8]=player;              val_conf[8]="";           string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
@@ -391,7 +413,7 @@ key_conf[12]=tcp_port;           val_conf[12]="";          string_conf[12]="Port
 key_conf[13]=udp_port;           val_conf[13]="";          string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
 key_conf[14]=socket_port;        val_conf[14]="8080";      string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
 key_conf[15]=browser;            val_conf[15]="firefox";   string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
-key_conf[16]=web_ui;             val_conf[16]="1";         string_conf[16]="Seleziona l'interfaccia web predefinita (1|2)"
+key_conf[16]=web_ui;             val_conf[16]="1";         string_conf[16]="Seleziona l'interfaccia web predefinita (1|2|3|lite)"
 
 declare -A label_conf
 function get_labels_conf {    
