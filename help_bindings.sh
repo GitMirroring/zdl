@@ -29,6 +29,7 @@ source $path_usr/config.sh
 source $path_usr/ui/widgets.sh
 source $path_usr/ui/ui.sh
 source $path_usr/libs/core.sh
+source $path_usr/libs/utils.sh
 
 if [ "$background" == "black" ]
 then
