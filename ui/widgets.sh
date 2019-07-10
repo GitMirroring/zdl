@@ -96,11 +96,13 @@ function print_c {
     then
 	print_case "$1"
 	
-	print_filter "$2" "\n"
+	( [ "$language" == it ] || [ -z "$3" ] ) &&
+	    print_filter "$2" "\n" ||
+		print_filter "$3" "\n"
 	
-	[ -z "$3" ] &&
+	[ -z "$4" ] &&
 	    echo -ne "${Color_Off}" ||
-		print_case "$3"
+		print_case "$4"
     fi
 }
 
@@ -108,7 +110,10 @@ function print_C {
     ## print_c FORCED
     print_case "$1"
     
-    echo -ne "$2\n"
+    ( [ "$language" == it ] || [ -z "$3" ] ) &&
+	echo -ne "$2\n" ||
+	    echo -ne "$3\n"
+
     echo -ne "${Color_Off}"
 }
 
@@ -118,10 +123,13 @@ function print_r {
     then
 	print_case "$1"
 	
-	echo -ne "\r$2"
-	[ -z "$3" ] &&
+	( [ "$language" == it ] || [ -z "$3" ] ) &&
+	    echo -ne "\r$2" ||
+		echo -ne "\r$3"
+
+	[ -z "$4" ] &&
 	    echo -ne "${Color_Off}" ||
-		print_case "$3"
+		print_case "$4"
     fi
 }
 
@@ -130,11 +138,14 @@ function sprint_c {
 	       [ -n "$redirected_link" ]
     then
 	print_case "$1"
-	echo -n "$2"
 
-	[ -z "$3" ] &&
+	( [ "$language" == it ] || [ -z "$3" ] ) &&
+	    echo -n "$2" ||
+		echo -n "$3"
+
+	[ -z "$4" ] &&
 	    echo -n "${Color_Off}" ||
-		print_case "$3"
+		print_case "$4"
     fi
 }
 
@@ -234,24 +245,44 @@ function header_z {
 
 function header_box {
     local text line
-    text=" $1 "
+    if [ "$language" == it ] || [ -z "$2" ]
+    then
+	text="$1"
+    else
+	text="$2"
+    fi
     
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	    [ -n "$redirected_link" ]
     then
-	print_header "$1" "${Black}${On_White}" "─"
+	print_header "$text" "${Black}${On_White}" "─"
     fi
 }
 
 function header_box_interactive {
-    print_header "$1" "$Black${On_White}" "─"
+    local text
+    if [ "$language" == it ] || [ -z "$2" ]
+    then
+	text="$1"
+    else
+	text="$2"
+    fi
+    print_header "$text" "$Black${On_White}" "─"
     print_c 0 ""
 }
 
 function header_dl {
+    local text
+    if [ "$language" == it ] || [ -z "$2" ]
+    then
+	text="$1"
+    else
+	text="$2"
+    fi
+
     if show_mode_in_tty "$this_mode" "$this_tty"
     then
-	print_header "$1 " "$White${On_Blue}"
+	print_header "$text " "$White${On_Blue}"
 	print_c 0 ""
     fi
 }

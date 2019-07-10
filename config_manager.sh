@@ -34,7 +34,7 @@ function colorize_values {
     text="${text//|/$bg_color|$BBlue}"
     text="${text//\)/$bg_color\)}"
 
-    sprint_c "$bg_color" "$text" "$bg_color"
+    sprint_c "$bg_color" "$text" "$text" "$bg_color"
 }
 
 function check_read {
@@ -69,7 +69,7 @@ function configure_key {
 	    extra_string=" [è necessario indicare il path completo e valido]"
 	fi
 	
-	print_c 2 "$(colorize_values "${string_conf[$opt]}" 2) (nome: $(sprint_c 3 "${key_conf[$opt]}" 2))$extra_string:"
+	print_c 2 "$(colorize_values "${string_conf[$opt]}" 2) (nome: $(sprint_c 3 "${key_conf[$opt]}" "${key_conf[$opt]}" 2))$extra_string:"
 
 	input_text new_value
 	
@@ -90,11 +90,13 @@ function configure_key {
 }
 
 function show_conf {
+    source "$file_conf"
     header_box "Configurazione attuale:"
     for ((i=0; i<${#key_conf[*]}; i++))
     do
 	printf "%b %+4s %b│  " "${BBlue}" "$(( $i+1 ))" "$Color_Off"
-	echo -ne "$(colorize_values "${string_conf[$i]}" 5): $(sprint_c 1 "$(eval echo \$${key_conf[$i]})")\n"
+	eval_echo=$(eval echo \$${key_conf[$i]})
+	echo -ne "$(colorize_values "${string_conf[$i]}" 5): $(sprint_c 1 "$eval_echo" "$eval_echo")\n"
     done
 }
 
@@ -133,11 +135,10 @@ function configure {
 - $(sprint_c 4 "*") significa un valore qualsiasi diverso dagli altri, anche nullo
 - gli attuali $(sprint_c 1 "valori registrati") sono in verde\n\n"
 
-		    source "$file_conf"
-
+		    get_conf
 		    show_conf
 		    
-		    print_c 2 "\nSeleziona l'elemento predefinito da modificare ($(sprint_c 4 "1-${#key_conf[*]}" 2) | $(sprint_c 4 "q" 2) per tornare indietro):"
+		    print_c 2 "\nSeleziona l'elemento predefinito da modificare ($(sprint_c 4 "1-${#key_conf[*]}" "1-${#key_conf[*]}" 2) | $(sprint_c 4 "q" "q" 2) per tornare indietro):"
 
 		    input_text opt
 		    

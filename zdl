@@ -36,7 +36,8 @@ function update_updater {
     then
 	fclear
 	header_z
-	header_box "Aggiornamento automatico di $name_prog"
+	header_box "Aggiornamento automatico di $name_prog" \
+		   "Updating $name_prog"
     fi    
 
     [ ! -f $path_conf/version ] &&
@@ -133,7 +134,7 @@ function update_updater {
 
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 
-	print_c 1 "Download in corso: attendere..."
+	print_c 1 "Download in corso: attendere..." "Downloading..."
 
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
@@ -425,8 +426,8 @@ then
 	then 
 	    unset args[i]
 	    rm -r ".zdl_tmp"/* 2>/dev/null && 
-		init_msg+="$(sprint_c 1 "File temporanei cancellati\n")" ||            
-		    init_msg+="$(sprint_c 3 "Pulizia file temporanei non effettuata (file inesistenti)\n")"
+		init_msg+="$(sprint_c 1 "File temporanei cancellati\n" "Temporary file deleted\n")" ||            
+		    init_msg+="$(sprint_c 3 "Pulizia file temporanei non effettuata (file inesistenti)\n" "Cleaning of temporary files not carried out (non-existent files)\n")"
 	fi
     done
 fi
@@ -709,7 +710,8 @@ then
 	then 
 	    if [ -z "$(command -v ffmpeg 2>/dev/null)$(command -v avconv 2>/dev/null)" ]
 	    then
-		print_c 3 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non trovati"
+		print_c 3 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non trovati" \
+			"The format conversion function depends on ffmpeg or avconv, not found"
 		exit
 	    fi
 	    echo ${args[i]##*-} > "$path_tmp"/format-post_processor
@@ -743,8 +745,10 @@ then
 		nohup /bin/bash zdl ${args[*]} --silent "$PWD" &>/dev/null &
 		
 		print_c 4 "${name_prog}:       "
-		print_c 1 "Avviato in modalità demone in $PWD\n"
-		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n"
+		print_c 1 "Avviato in modalità demone in $PWD\n" \
+			"Started in daemon mode in $PWD\n"
+		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n" \
+			"You can control it with: ${Color_Off}$prog -i \"$PWD\"\n"
 
 		[ -n "$xterm_stop_checked" ] && xterm_stop
 		exit 0
@@ -753,8 +757,10 @@ then
 		start_mode_in_tty stdout "$this_tty"
 		
 		print_c 4 "${name_prog}:       "
-		print_c 3 "Esiste già un'istanza attiva della modalità demone in $PWD\n"
-		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n"
+		print_c 3 "Esiste già un'istanza attiva della modalità demone in $PWD\n" \
+			"An active instance of daemon mode already exists in $PWD\n"
+		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n" \
+			"You can control it with: ${Color_Off}$prog -i \"$PWD\"\n"
 
 		this_mode=daemon
 	    fi
@@ -822,20 +828,23 @@ then
 		unset start_socket
 		if run_zdl_server $socket_port
 		then
-		    msg_server="Avviato nuovo socket alla porta $socket_port"
-		    init_msg+="$(sprint_c 1 "$msg_server\n")"
+		    msg_server_it="Avviato nuovo socket alla porta $socket_port"
+		    msg_server_en="New socket started at the port $socket_port"
+		    init_msg+="$(sprint_c 1 "$msg_server_it\n" "$msg_server_en\n")"
 		    echo 0 >"$path_server"/zdl-sockets-exit
 		fi
 		
 	    elif ! check_port "$socket_port"
 	    then
-		msg_server="Socket già in uso alla porta $socket_port (puoi specificare una nuova porta con: -s PORTA oppure --socket=PORTA)"
-		init_msg+="$(sprint_c 3 "$msg_server\n")"
+		msg_server_it="Socket già in uso alla porta $socket_port (puoi specificare una nuova porta con: -s PORTA oppure --socket=PORTA)"
+		msg_server_it="Socket already in use at the port $socket_port (you can specify a new port with: -s PORTA or --socket=PORTA)"
+		init_msg+="$(sprint_c 3 "$msg_server_it\n" "$msg_server_en\n")"
 		echo 1 >"$path_server"/zdl-sockets-exit
 		
 	    else
-		msg_server="Socket non avviato alla porta $socket_port"		
-		init_msg+="$(sprint_c 3 "$msg_server\n")"
+		msg_server_it="Socket non avviato alla porta $socket_port"
+		msg_server_en="Socket not started at the port $socket_port"		
+		init_msg+="$(sprint_c 3 "$msg_server_it\n" "$msg_server_en\n")"
 		echo 2 >"$path_server"/zdl-sockets-exit
 	    fi
 	fi
@@ -1063,15 +1072,15 @@ then
 	    separator-
 	    if [ -n "$http_proxy" ]
 	    then
-		print_c 1 "Rilevato proxy HTTP: $http_proxy"
+		print_c 1 "Rilevato proxy HTTP: $http_proxy" "HTTP proxy detected: $http_proxy"
 	    fi
 	    
 	    if [ -n "$myip" ]
 	    then
-		print_c 1 "Indirizzo IP: $myip"
+		print_c 1 "Indirizzo IP: $myip" "IP address: $myip"
 
 	    else
-		print_c 3 "Indirizzo IP non rilevato"
+		print_c 3 "Indirizzo IP non rilevato" "IP address not detected"
 	    fi
 
 	    separator-
@@ -1127,13 +1136,16 @@ then
 
 		if [ -e "$print_out" ] 
 		then
-		    init_msg+="$(sprint_c 3 "Esiste già un file con lo stesso nome di ${print_out}\n")"
+		    init_msg+=$(sprint_c 3 "Esiste già un file con lo stesso nome di ${print_out}\n" \
+					 "A file already exists with the same name as ${print_out}\n")
 		    print_out="$file_output"
+		    
 		elif [ -z "$print_out" ]
 		then
 		    print_out="$file_output"
 		fi
-		init_msg+="$(sprint_c 1 "La lista dei file verrà salvata in $print_out\n(puoi anche usarla per comunicare i file in scaricamento a un altro programma)\n")"
+		init_msg+=$(sprint_c 1 "La lista dei file verrà salvata in $print_out\n(puoi anche usarla per comunicare i file in scaricamento a un altro programma)\n" \
+				     "The file list will be saved in $print_out\n(you can also use it to communicate the files being downloaded to another program)")
 		touch "$print_out"
 	    fi
 	    unset args[i]
@@ -1171,14 +1183,14 @@ then
 		then
 		    echo "$proxy" > "$path_tmp"/proxy
 		    export http_proxy=$proxy
-		    print_c 1 "Proxy attivo: $http_proxy\n"
+		    print_c 1 "Proxy attivo: $http_proxy\n" "Active proxy: $http_proxy\n"
 
 		else
-		    print_c 3 "${args[i]}: argomento non valido\n\n"
+		    print_c 3 "${args[i]}: argomento non valido\n\n" "${args[i]}: invalid argument\n\n"
 		    usage
 		fi
 	    else
-		print_c 3 "${args[i]}: argomento non valido\n\n"
+		print_c 3 "${args[i]}: argomento non valido\n\n" "${args[i]}: invalid argument\n\n"
 		usage
 	    fi
 	    unset args[i]
@@ -1264,7 +1276,7 @@ for ((i=0; i<=$max_args; i++))
 do
     if [ "${args[i]}" != "${args[i]#-}" ]
     then
-	print_c 3 "${args[i]}: argomento non valido\n\n"
+	print_c 3 "${args[i]}: argomento non valido\n\n" "${args[i]}: invalid argument\n\n"
 	usage
     fi
 done
@@ -1275,7 +1287,7 @@ then
     for ((i=0; i<=$max_args; i++))
     do
 	[[ "${args[i]}" =~ xweaseldownload.php ]] &&
-	    print_c 2 "Connessione ed estrazione da:\n${args[i]}\n"
+	    print_c 2 "Connessione ed estrazione da:\n${args[i]}\n" "Connection and extraction from:\n${args[i]}\n"
 
 	if [ -f "${BASE_DIR}${args[i]}" ]
 	then
@@ -1331,7 +1343,7 @@ then
 	echo >> links.txt 2>/dev/null
 	date >> links.txt 2>/dev/null
 	cat "$start_file" >> links.txt 2>/dev/null
-	init_msg+="$(sprint_c 1 "L'elenco completo dei link è in links.txt\n")"
+	init_msg+=$(sprint_c 1 "L'elenco completo dei link è in links.txt\n" "The complete list of links is in links.txt\n")
 
 	if ! check_instance_prog &&
 		[ -z "$from_editor" ] &&
@@ -1530,10 +1542,10 @@ function main_loop {
 		    continue
 
 		print_c 0
-		header_box "Link da processare:"
+		header_box "Link da processare:" "Link to process:"
 		print_c 0 "$url_in\n"
 
-		print_c 1 "Connessione in corso..."
+		print_c 1 "Connessione in corso..." "Connecting..."
 
 		check_ip
 		
@@ -1673,7 +1685,7 @@ function main_loop {
 		    then
 			print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
 		    else
-			print_c 4 "URL del file: $url_in_file"
+			print_c 4 "URL del file: $url_in_file" "File URL: $url_in_file"
 		    fi
 
 		    if download && [ -n "$file_in" ]
@@ -1821,7 +1833,7 @@ then
 	{
 	    print_header
 	    separator-
-	    print_c 1 "Download completato"
+	    print_c 1 "Download completato" "Download completed"
 	    separator-
 	    print_header
 	    
@@ -1836,8 +1848,10 @@ cursor on
 
 if [ -f "$file_log" ]
 then
-    print_c 3 "\nIn $PWD è presente un file che contiene un elenco di operazioni di $PROG terminate senza successo."
-    print_c 0 "${BBlue}Per leggerlo, digita:${Color_Off}\n${Bold}cat $PWD/$file_log${Color_Off}\n"
+    print_c 3 "\nIn $PWD è presente un file che contiene un elenco di operazioni di $PROG terminate senza successo." \
+	    "\nIn $PWD there is a file that contains a list of operations of $PROG terminated without success."
+    print_c 0 "${BBlue}Per leggerlo, digita:${Color_Off}\n${Bold}cat $PWD/$file_log${Color_Off}\n" \
+	    "${BBlue}To read it, type:${Color_Off}\n${Bold}cat $PWD/$file_log${Color_Off}\n"
 fi
 
 

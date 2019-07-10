@@ -42,7 +42,7 @@ live_streaming_chan=(
 )
 
 live_streaming_url=(
-    http://www.la7.it/dirette-tv
+    https://www.la7.it/dirette-tv
     https://www.raiplay.it/dirette/rai1
     https://www.raiplay.it/dirette/rai2
     https://www.raiplay.it/dirette/rai3
