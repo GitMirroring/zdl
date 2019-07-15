@@ -342,7 +342,7 @@ function update {
     try install -T zdl/docs/zdl.completion /etc/bash_completion.d/zdl
     try mv "$prog" "$SHARE"
     
-    for dir in locale/*
+    for dir in zdl/locale/*
     do
 	if [ -d "$dir" ]
 	then
