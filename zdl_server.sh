@@ -24,13 +24,6 @@
 # zoninoz@inventati.org
 #
 
-TEXTDOMAINDIR=/usr/local/share/locale
-TEXTDOMAIN=zdl
-export TEXTDOMAINDIR
-export TEXTDOMAIN
-
-source /usr/bin/gettext.sh
-
 path_usr="/usr/local/share/zdl"
 path_webui="$path_usr/webui"
 
@@ -744,12 +737,12 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    send_json ${line[1]} || return
 	    ;;
 
-	# get-paths)
-	#     file_output="$path_server"/paths.json
-	#     local json_out
-	#     get_paths_json json_out
-	#     echo "$json_out" >"$file_output"
-	#     ;;
+	get-paths)
+	    file_output="$path_server"/paths.json
+	    local json_out
+	    get_paths_json json_out
+	    echo "$json_out" >"$file_output"
+	    ;;
 
 	get-console)	    
 	    test -d "${line[1]}" && cd "${line[1]}"

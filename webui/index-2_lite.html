@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+	ZigzagDownLoader (ZDL)
+
+	This program is free software: you can redistribute it and/or modify it
+	under the terms of the GNU General Public License as published
+	by the Free Software Foundation; either version 3 of the License,
+	or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+	or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see http://www.gnu.org/licenses/.
+
+	Copyright (C) 2011
+	Gianluca Zoni <<zoninoz@inventati.org>>
+
+	For information or to collaborate on the project:
+	`https://savannah.nongnu.org/projects/zdl'
+    -->
+
+    <title>ZDL Web Interface Lite</title>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,600|Lobster" rel="stylesheet">
+    <style>
+        body {
+            background: #223;
+            color: #eee;
+            font-family: "IBM Plex Sans", sans-serif;
+            font-size: 13px;
+        }
+
+        input {
+            background: #445;
+            border: 0;
+            color: #ddd;
+            font-size: inherit;
+            padding: 0 5px;
+        }
+
+        input::placeholder {
+            color: #bbb;
+            letter-spacing: 2px;
+        }
+
+        button {
+            background: #334;
+            color: #fff;
+            border: 1px solid #334;
+            height: 38px;
+            min-width: 110px;
+            vertical-align: top;
+        }
+
+        button:hover {
+            background: #112;
+            border-color: #112;
+            cursor: pointer;
+        }
+
+        .header {
+            padding: 15px 5px;
+        }
+
+        .logo {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AsBFC04BvsOiwAAAQFJREFUSMfNlssRwyAMRIVHJaQQikhXPtOVi3Ah6YEcYmPHrJCU+MclM/IGDU/SAtHBK3x+0iuvo/1jtzgTEcVMRP1ziqZh/r5HvFvSjYHGAA75X7w7ugYMoxuU6mroQYICcTqvttp6BgRdS9OfWIM1R6mvJe4NPdccpb5e07DrecsxZp2yR39WDYysvTOBvUhibenUujZsZe2dibk2V3hRA7plPopGSLCpBxn6HWrabgroW+Yj5tt4kaUe0IvqvwRwtHL2mNOA5uNbn4Y5AdqH9X63exHa5yIvkpiqc+B8F3nvCbRP5UUSU8scoH1u/C4y3hPau8jg+21uP72LPPfEG/Rrpj/wAYiIAAAAAElFTkSuQmCC') no-repeat;
+            color: #fff;
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            height: 32px;
+            line-height: 2em;
+            text-indent: 42px;
+            text-decoration: none;
+            width: 200px;
+        }
+
+        .container {
+            border: 1px solid #444;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .settings {
+            color: #aaa;
+            padding: 5px;
+        }
+
+        .settings span {
+            color: #fff;
+            margin-right: 20px;
+        }
+
+        .downloads {
+            background: #000;
+            color: #eee;
+            margin-bottom: 5px;
+            min-height: 160px;
+            overflow-x: hidden;
+            padding: 5px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .downloads span {
+            margin-right: 10px;
+        }
+
+        .section {
+            float: left;
+            width: 50%;
+        }
+
+        .section .input-slot,
+        .section .player,
+        .section .commands {
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .section .input-slot input {
+            flex: 1;
+        }
+
+        .section .input-slot button {
+            flex: 0;
+        }
+
+        .section .player input {
+            max-width: 150px;
+        }
+
+        .section .player select {
+            background: #445;
+            border: none;
+            color: #eee;
+            height: 38px;
+            margin-left: 6px;
+            overflow: hidden;
+            padding: 0 5px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+                    appearance: none;
+               -moz-appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .section .player select option {
+            /* this won't work !! option elem cannot be styled */
+            background: #445 !important;
+            color: #eee !important;
+        }
+
+        .section .player button {
+            flex: 0;
+        }
+
+        .section .reports {
+            padding-left: 6px;
+            position: relative;
+            text-align: center;
+        }
+
+        .section .reports .label {
+            background: #112;
+            color: #aaa;
+            padding: 2px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .section .reports textarea {
+            background: #000;
+            border: none;
+            color: #aaa;
+            height: 100px;
+            margin-top: 0;
+            overflow-y: hidden;
+            padding: 5px;
+            resize: none;
+            width: 100%;
+        }
+
+        .section .commands {
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .section .commands button {
+            height: 46px;
+        }
+
+        .section .commands button:not(.last) {
+            margin-right: 6px;
+        }
+
+        .footer {
+            color: #445;
+            font-family: "Lobster", cursive;
+            font-size: 18px;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .off {
+            color: #555;
+        }
+
+        .on {
+            color: #5bb8f4;
+        }
+
+        .stop {
+            color: #e49437;
+        }
+
+        .grey {
+            color: #888;
+        }
+
+        .blue {
+            color: #0e92f1;
+        }
+
+        .red {
+            color: #f00;
+        }
+
+        @media (max-width: 1025px) {
+            .section {
+                display: block;
+                float: none;
+                width: 100%;
+            }
+            .section .commands {
+                margin-bottom: 10px;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header"><a class="logo" href="index2_lite.html">ZDL webUI Lite</a></div>
+    <div class="container">
+        <div class="settings">
+            Downloader: <span id="downloader"></span> Path: <span id="path"></span> Player: <span id="player"></span>
+        </div>
+        <div class="downloads" id="output"></div>
+        <div class="section clickable">
+            <div class="input-slot"><input type="text" placeholder="http(s)://host/path/params ..."><button id="add-url">URL</button></div>
+            <div class="input-slot"><input type="text" placeholder="/path/to/file.torrent ..."><button id="add-torrent">Torrent</button></div>
+            <div class="input-slot"><input type="text" placeholder="irc-server/channel/bot/#pack ..."><button id="add-xdcc">XDCC</button></div>
+            <div class="player">
+                <input type="text" placeholder="Player ..."><button id="set-player">Set</button>
+                <select class="select" id="selector">
+                    <option selected="selected" disabled>Select file ...</option>
+                </select>
+                <button class="last" id="play">Play</button>
+            </div>
+            <div class="commands">
+                <button id="change-ui">UI 1</button>
+                <button id="update-log">Log</button>
+                <button id="clean">Clean</button>
+                <button id="flush-queue">Flush queue</button>
+            </div>
+            <div class="commands">
+                <button id="restart">Start</button>
+                <button id="kill-all">Stop</button>
+                <button class="last" id="exit-all">Exit</button>
+            </div>
+        </div>
+        <div class="section">
+            <div class="reports">
+                <div class="label">Console</div>
+                <textarea id="console"></textarea>
+                <div class="label">Log</div>
+                <textarea id="log"></textarea>
+                <div class="label">Queue</div>
+                <textarea id="queue"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Zigzagdownloader</div>
+
+    <script src="js/zdl.js"></script>
+
+    <script>
+        var _console = document.getElementById("console"),
+            _log = document.getElementById("log"),
+            _output = document.getElementById("output"),
+            _queue = document.getElementById("queue"),
+            files = [],
+            queue = [],
+            status;
+
+        function zdlConsole(msg) {
+            var lines = _console.value.split("\n");
+            lines.length === 8 ? _console.value = msg : _console.value += msg;
+        }
+
+        function zdlLog() {
+            myZDL.getFile("zdl_log.txt").then(function(content) {
+                if (content) {
+                    _log.value = decodeURIComponent(content.replace(/<br>/g, "\n"));
+                } else {
+                    _log.value = "zdl_log.txt not found or empty";
+                }
+                _log.scrollTop = _log.scrollHeight;
+            });
+        }
+
+        function zdlQueue() {
+            if (queue.length > 0) {
+                var items = "";
+                for (item of queue) {
+                    items += item + "\n";
+                }
+                _queue.value = items;
+            } else {
+                _queue.value = "";
+            }
+        }
+
+        function truncate(str, len) {
+            return (str.length > len) ? str.slice(0, len) + "..." : str;
+        }
+
+        function validateInput(str, type) {
+            var pattern = {
+                "URL": /^(https?):\/\/[^\s/$.?#].[^\s]*$/,
+                "XDCC": /^[\w\.-]+\/[\w-]+\/[\w\[\]|-]+\/#\d+$/,
+                "torrent": /^\/?[\w\/\s-]+\.torrent$/
+            };
+            return pattern[type].test(str);
+        }
+
+        function ready2play(file) {
+            var extensions = ["m4v", "avi", "mpg", "mp4", "webm", "mp3"];
+            return extensions.indexOf(file.split('.').pop()) > -1;
+        }
+
+        function isJson(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        }
+
+        // Status data flow
+        function statusFlow() {
+            var arg = arguments[0] || false;
+            myZDL.getStatus(arg).then(function(res) {
+                if (isJson(res)) {
+                    var obj = JSON.parse(res);
+                    document.getElementById("downloader").textContent = obj.downloader;
+                    document.getElementById("path").textContent = obj.path;
+                    document.getElementById("player").textContent = obj["conf"].player;
+                    status = obj.status;
+                }
+                if (!arg) zdlConsole("status updated\n");
+                zdlLog();
+                statusFlow();
+            }).catch(function(e) {
+                zdlConsole("status error: " + e + "\n");
+            });
+        }
+
+        // Downloads data flow
+        function downloadsFlow() {
+            var arg = arguments[0] || false;
+            myZDL.getData(arg).then(function(res) {
+                if (isJson(res)) {
+                    var obj = JSON.parse(res),
+                        fd, data = "", index;
+                    for (var key of obj) {
+                        fd = "<span class='blue'>" + key.percent + "%</span><span class='grey'>" + (key.length / 1048576).toFixed(2) + "MB</span>";
+                        if (parseInt(key.percent) < 100) {
+                            if (status === "running") {
+                                data += "<span class='on'>&#9642;</span>" + fd + "<span>" + key.file + "</span><span class='grey'>" + parseFloat(key.speed).toFixed() + key.speed_measure + " " + key.eta + "</span>";
+                            } else {
+                                data += "<span class='stop'>&#9642;</span>" + fd + "<span>" + key.file + "</span>";
+                            }
+                        } else {
+                            data += "<span class='off'>&#9642;</span>" + fd + key.file;
+                            index = queue.indexOf(decodeURIComponent(key.link));
+                            if (key.saved && index > -1) {
+                                queue.splice(index, 1);
+                                zdlQueue();
+                                zdlConsole("Successfully downloaded " + truncate(key.file, 60) + "\n");
+                            }
+                        }
+                        data += "<br>";
+                        _output.innerHTML = data;
+                        if (files.indexOf(key.file) < 0 && ready2play(key.file)) {
+                            files.push(key.file);
+                            var option = document.createElement("option");
+                            option.text = key.file;
+                            document.getElementById("selector").add(option);
+                        }
+                    }
+                }
+                downloadsFlow();
+            }).catch(function(e) {
+                zdlConsole("data error: " + e + "\n");
+            });
+        }
+
+        // Handling click events
+        document.querySelector(".clickable").addEventListener("click", function(event) {
+            if (event.target.nodeName === "BUTTON") {
+                var elem, chunks, req;
+
+                switch (event.target.id) {
+                    case "add-xdcc":
+                        elem = event.target.previousElementSibling;
+                        if (validateInput(elem.value, "XDCC")) {
+                            chunks = elem.value.trim().split("/");
+                            req = {
+                                host: chunks[0],
+                                channel: encodeURIComponent(chunks[1]),
+                                msg: encodeURIComponent(chunks[2] + " xdcc send " + chunks[3])
+                            };
+                            _output.innerHTML += "<span class='led red'>&#9642;</span>initializing download from " + req.host + " ... wait ...<br>";
+                            myZDL.addXdcc(req).then(function() {
+                                queue.push("irc://" + chunks[0] + "/" + chunks[1] + "/msg " + chunks[2] + " xdcc send " + chunks[3]);
+                                zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
+                                elem.value = "";
+                                zdlLog();
+                                zdlQueue();
+                            });
+                        } else {
+                           zdlConsole("xdcc request entered is malformed\n");
+                        }
+                        break;
+                    case "add-url":
+                        elem = event.target.previousElementSibling;
+                        if (validateInput(elem.value, "URL")) {
+                            chunks = elem.value.trim().split("/");
+                            _output.innerHTML += "<span class='led red'>&#9642;</span>initializing download from " + chunks[2] + " ... wait ...<br>";
+                            myZDL.addLink(elem.value).then(function() {
+                                queue.push(elem.value);
+                                zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
+                                elem.value = "";
+                                zdlLog();
+                                zdlQueue();
+                            });
+                        } else {
+                            zdlConsole("URL entered is malformed\n");
+                        }
+                        break;
+                    case "add-torrent":
+                        elem = event.target.previousElementSibling;
+                        if (validateInput(elem.value, "torrent")) {
+                            chunks = elem.value.trim().split("/");
+                            _output.innerHTML += "<span class='led red'>&#9642;</span>initializing download of " + chunks[chunks.length - 1] + " ... wait ...<br>";
+                            myZDL.addLink(elem.value).then(function() {
+                                queue.push(elem.value);
+                                zdlConsole("added " + truncate(elem.value, 60) + " to queue\n");
+                                elem.value = "";
+                                zdlLog();
+                                zdlQueue();
+                            });
+                        } else {
+                            zdlConsole("file torrent path entered is malformed\n");
+                        }
+                        break;
+                    case "clean":
+                        _output.innerHTML = "";
+                        myZDL.cleanCompleted().then(function() {
+                            zdlConsole("clean downloaded and not started items\n");
+                        });
+                        break;
+                    case "set-player":
+                        elem = event.target.previousElementSibling;
+                        myZDL.setConf("player", elem.value).then(function() {
+                            zdlConsole("added player: " + truncate(elem.value, 60) + "\n");
+                            elem.value = "";
+                        });
+                        break;
+                    case "play":
+                        elem = event.target.previousElementSibling;
+                        myZDL.play(elem.value).then(function() {
+                            zdlConsole("play file: " + truncate(elem.value, 60) + "\n");
+                        });
+                        break;
+                    case "change-ui":
+                        zdlConsole("change UI ...\n");
+                        myZDL.setConf("web_ui", "1").then(function() {
+                            window.setTimeout(function() {
+                                window.location.href = window.location.pathname;
+                            }, 3000);
+                        });
+                        break;
+                    case "update-log":
+                        _log.value = "reading zdl_log.txt ...";
+                        window.setTimeout(function() {
+                            zdlLog();
+                            zdlConsole("display content of zdl_log.txt\n");
+                        }, 3000);
+                        break;
+                    case "flush-queue":
+                        if (queue.length > 0) {
+                            zdlConsole("flush the queue\n");
+                            myZDL.command("set-links", "links=''").then(function() {
+                                myZDL.deleteFile("links.txt").then(function() {
+                                    queue = [];
+                                    zdlQueue();
+                                });
+                            });
+                        } else {
+                            zdlConsole("cannot flushing an empty queue\n");
+                        }
+                        break;
+                    case "kill-all":
+                        if (status === "running") {
+                            myZDL.killAll().then(function() {
+                                zdlLog();
+                                zdlConsole("ZDL stopped\n");
+                            });
+                        }
+                        break;
+                    case "restart":
+                        if (status === "not-running") {
+                            myZDL.run().then(function() {
+                                zdlConsole("ZDL started\n");
+                            });
+                        } else {
+                            zdlConsole("ZDL already running\n");
+                        }
+                        break;
+                    case "exit-all":
+                        zdlConsole("server shutdown ...\n");
+                        myZDL.exitAll().then(function() {
+                            window.setTimeout(function() {
+                                window.location.href = window.location.pathname;
+                            }, 3000);
+                        });
+                        break;
+                    default:
+                        zdlConsole("Event target error.\n");
+                }
+            }
+        }, false);
+
+        // Istantiate a new ZDL object
+        var myZDL = new ZDL("__START_PATH__", "index.html");
+
+        // Initialize the client
+        myZDL.initClient().then(function() {
+            zdlConsole("flows initialized\n");
+            statusFlow(true);
+            downloadsFlow(true);
+            myZDL.getFile(".zdl_tmp/links_loop.txt").then(function(res) {
+                if (res) {
+                    var items = res.trim().split("\n");
+                    for (i of items) {
+                        if (i) {
+                            queue.push(decodeURIComponent(i.replace(/<br>/ig, "")));
+                        }
+                    }
+                    zdlQueue();
+                }
+            });
+        }).catch(function(e) {
+            zdlConsole("error: " + e + "\n");
+        });
+    </script>
+</body>
+
+</html>

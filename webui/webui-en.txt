@@ -28,6 +28,9 @@ Delete the file downloaded.
 [ Action path ]
 Select the path to working on.
 
+[ Select an active path ]
+Change path choosing between active ones
+
 [ Free space ]
 Display the available space in the action path.
 
@@ -45,6 +48,9 @@ Select and add a file torrent to download (the torrent will be processed to star
 
 [ Read links.txt ]
 Read or delete the file links.txt (the list of all links processed).
+
+[ Read zdl_log.txt ]
+Read or delete zdl_log.txt (a file containing some information about downloads failures).
 
 [ Max parallel downloads ]
 Set the max number of parallel download in the action path.
@@ -94,6 +100,29 @@ Remove file from playlist.
 
 [ Audio ]
 Extract audio (mp3/flac) from video.
+
+
+## LIVESTREAM
+
+[ Select channel ]
+Select the TV channel
+
+[ Tomorrow time ]
+Select if the program starts the next day.
+
+[ Start recording ]
+Select the start time.
+(From keyboard: Pag UP/DOWN increases/decreases hours | Arrow UP/DOWN increases/decreases minutes).
+
+[ Recording duration ]
+Select the duration of the recording.
+(From keyboard: Pag UP/DOWN increases/decreases hours | Arrow UP/DOWN increases/decreases minutes).
+
+[ Save ]
+Save the download schedule.
+
+[ x ]
+Delete the scheduled recording.
 
 
 ## SOCKETS
@@ -176,14 +205,20 @@ Reset your web ui account.
 
 ## CONSOLE
 
-[ Records only errors ]
-Record only errors in the console.
-
-[ Read zdl_log.txt ]
-Read or delete zdl_log.txt (a file containing some information about downloads failures).
+[ Select an active path ]
+View the download log stream in an active path.
 
 [ Clean ]
-Remove all recorded events in the console.
+Clean the download log stream.
+
+[ Stop ]
+Stop the download log stream.
+
+[ Records only errors ]
+Record only errors of the webui.
+
+[ Clean ]
+Remove all recorded events of the webui.
 
 
 ## EXIT

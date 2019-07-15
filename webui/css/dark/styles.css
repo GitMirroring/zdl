@@ -16,7 +16,6 @@ Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
 
 For information or to collaborate on the project:
 https://savannah.nongnu.org/projects/zdl */
-
 @font-face {
   font-family: "FontAwesome";
   font-style: normal;
@@ -31,6 +30,15 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-weight: 400;
+}
+
+h4 {
+  font-size: 14px;
+}
+
+h4.subtitle {
+  font-size: 13px;
+  margin-bottom: 3px;
 }
 
 .header {
@@ -100,24 +108,24 @@ body {
   position: relative;
 }
 
-.toggle > .content {
+.toggle>.content {
   display: none;
   background: #333;
   border-color: #444;
   scrollbar-color: #555 #444;
 }
 
-.toggle > .info {
+.toggle>.info {
   padding: 0 0 10px 10px;
   margin-bottom: 10px;
 }
 
-.toggle > .info > .button {
+.toggle>.info>.button {
   margin-right: 5px;
 }
 
-.toggle > .read,
-.toggle > .browse {
+.toggle>.read,
+.toggle>.browse {
   background: #333;
   margin-bottom: 10px;
   padding: 10px;
@@ -135,11 +143,11 @@ body {
   margin-bottom: 10px;
 }
 
-.toggle > .browse > .hidden {
+.toggle>.browse>.hidden {
   display: none;
 }
 
-.toggle > .browse > .path {
+.toggle>.browse>.path {
   width: 80%;
   padding: 5px 5px 6px;
   background: #444;
@@ -148,27 +156,27 @@ body {
   display: inline-block;
 }
 
-.toggle > .browse > .tree {
+.toggle>.browse>.tree {
   margin: 10px 0 5px 15px;
   height: 170px;
   overflow-y: auto;
   scrollbar-color: #555 #444;
 }
 
-.toggle > .browse > .tree > li {
+.toggle>.browse>.tree>li {
   padding-left: 25px;
   position: relative;
 }
 
-.toggle > .browse > .tree > li > a {
+.toggle>.browse>.tree>li>a {
   text-decoration: none;
 }
 
-.toggle > .browse > .tree > li > a:hover {
+.toggle>.browse>.tree>li>a:hover {
   color: #3275ab;
 }
 
-.toggle > .browse > .tree > li:before {
+.toggle>.browse>.tree>li:before {
   font-family: "FontAwesome";
   display: block;
   position: absolute;
@@ -178,7 +186,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.toggle > .browse > .tree > li.folder:before {
+.toggle>.browse>.tree>li.folder:before {
   font-size: 1.3em;
   content: "\f07b";
   top: 0;
@@ -186,7 +194,7 @@ body {
   color: #d38958;
 }
 
-.toggle > .browse > .tree > li.file:before {
+.toggle>.browse>.tree>li.file:before {
   font-size: 1em;
   content: "\f15b";
   top: 2px;
@@ -194,7 +202,7 @@ body {
   color: #ccc;
 }
 
-.toggle > .browse > .tree > li.media:before {
+.toggle>.browse>.tree>li.media:before {
   font-size: 1em;
   content: "\f15b";
   top: 2px;
@@ -202,7 +210,7 @@ body {
   color: #479e5a;
 }
 
-.toggle > .browse > .tree > li.executable:before {
+.toggle>.browse>.tree>li.executable:before {
   font-size: 1em;
   content: "\f15b";
   top: 2px;
@@ -210,7 +218,7 @@ body {
   color: #c764b4;
 }
 
-.toggle > .browse > .tree > li.torrent:before {
+.toggle>.browse>.tree>li.torrent:before {
   font-size: 1em;
   content: "\f15b";
   top: 2px;
@@ -230,7 +238,7 @@ body {
   word-wrap: break-word;
 }
 
-.toggle ul li > span:not(.dl-size) {
+.toggle ul li>span:not(.dl-size) {
   color: #4da6ff;
   font-weight: bold;
 }
@@ -290,13 +298,13 @@ body {
   text-align: center;
 }
 
-.inline-group > .slider {
+.inline-group>.slider {
   width: 30%;
   margin: 0 1.4em 0 0.8em;
   height: 1px !important;
 }
 
-.inline-group > .slider > .custom-handle {
+.inline-group>.slider>.custom-handle {
   width: 2em;
   height: 1.8em;
   top: 50%;
@@ -324,12 +332,12 @@ body {
   overflow: hidden;
 }
 
-.playlist > .pl-item {
+.playlist>.pl-item {
   margin-bottom: 5px;
   overflow: hidden;
 }
 
-.playlist > .pl-item > .pl-file {
+.playlist>.pl-item>.pl-file {
   width: 70%;
   padding: 6px 10px;
   float: left;
@@ -338,13 +346,81 @@ body {
   text-overflow: ellipsis;
 }
 
-.playlist > .pl-item > .pl-buttons {
+.playlist>.pl-item>.pl-buttons {
   float: left;
   margin-left: 5px;
 }
 
-.playlist > .pl-item > .pl-buttons > .button:not(:last-child) {
+.playlist>.pl-item>.pl-buttons>.button:not(:last-child) {
   margin-right: 5px;
+}
+
+.livestream-channels>label:not(:last-child) {
+  margin-right: 5px;
+}
+
+.scheduled>.scheduled-item {
+  background: #444;
+  color: #ccc;
+  margin: 0 10px 10px 0;
+  display: inline-block;
+  width: 300px;
+  border: 1px solid #007fff;
+  position: relative;
+}
+
+.scheduled-item>.title {
+  width: 100%;
+  padding: 8px 0;
+  font-weight: bold;
+  background: #007fff;
+  color: #fff;
+  text-align: center;
+}
+
+.scheduled-item>.content {
+  padding: 10px;
+}
+
+.scheduled-item>.title>button {
+  position: absolute;
+  right: 0.3em;
+  top: 0.4em;
+  width: 20px;
+  padding: 2px;
+  height: 20px;
+}
+
+.scheduled-item>.title>button>span {
+  pointer-events: none;
+}
+
+.scheduled-item>.content>span {
+  display: block;
+  padding: 2px 0;
+}
+
+.static-area {
+  background: #000;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 50%;
+  scrollbar-color: #555 #444;
+}
+
+.static-area>textarea {
+  background: #000;
+  width: 100%;
+  height: 120px;
+  display: block;
+  font-size: 90%;
+  border: none;
+  resize: none;
+  margin-bottom: 10px;
+  color: #ddd;
+  white-space: pre;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 .console {
@@ -356,25 +432,25 @@ body {
   white-space: pre;
 }
 
-.console > span {
+.console>span {
   display: block;
   color: #aaa;
 }
 
-.console > .error {
+.console>.error {
   color: red;
 }
 
-ul.info > li {
+ul.info>li {
   padding: 5px 0;
 }
 
-ul.info > li > a {
+ul.info>li>a {
   color: #3275ab;
   text-decoration: none;
 }
 
-ul.info > li > a:hover {
+ul.info>li>a:hover {
   text-decoration: underline;
 }
 
@@ -385,9 +461,13 @@ ul.info > li > a:hover {
   display: inline-block;
 }
 
-.local-info > span {
+.local-info>span {
   display: block;
   margin-top: 5px;
+}
+
+fieldset {
+  display: inline-block;
 }
 
 .centered {
@@ -445,7 +525,6 @@ ul.info > li > a:hover {
 }
 
 /* FontAwesome 5 */
-
 .fa {
   font-family: 'FontAwesome';
   font-weight: 900;
@@ -463,7 +542,6 @@ ul.info > li > a:hover {
 }
 
 /* jQuery UI  */
-
 .ui-tabs-nav a {
   outline: none;
 }
@@ -476,6 +554,10 @@ ul.info > li > a:hover {
   padding: 0;
   margin: 0;
   width: 4.5em;
+}
+
+.ui-spinner-input.time-spinner {
+  width: 6em;
 }
 
 .ui-selectmenu-menu .ui-menu {
@@ -497,11 +579,11 @@ ul.info > li > a:hover {
   top: 6px;
 }
 
-.ui-checkboxradio-checked > .ui-checkboxradio-icon {
+.ui-checkboxradio-checked>.ui-checkboxradio-icon {
   box-shadow: none !important;
 }
 
-.ui-checkboxradio-checked > .ui-icon {
+.ui-checkboxradio-checked>.ui-icon {
   border-color: #09f !important;
 }
 
@@ -509,16 +591,11 @@ ul.info > li > a:hover {
   background-image: url("images/ui-icons_444444_256x240.png") !important;
 }
 
-.xdcc-search-send > .ui-button-icon.ui-icon {
+.xdcc-search-send>.ui-button-icon.ui-icon {
   background-image: url("images/ui-icons_777620_256x240.png") !important;
 }
 
 /* DataTable */
-
-/* table.dataTable {
-  table-layout: fixed;
-} */
-
 table.dataTable thead th {
   background: #383D43;
   font-weight: bold !important;
@@ -534,7 +611,6 @@ table.dataTable tr td {
 }
 
 /* Simple responsive */
-
 @media (max-width: 600px) {
   .console {
     white-space: pre-wrap;
@@ -569,7 +645,7 @@ table.dataTable tr td {
     width: 95% !important;
   }
 
-  .toggle > .browse > .tree {
+  .toggle>.browse>.tree {
     height: 100px;
   }
 

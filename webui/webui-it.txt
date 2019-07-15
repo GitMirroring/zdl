@@ -28,6 +28,9 @@ Elimina il file scaricato.
 [ Agisci nel path ]
 Seleziona il path di lavoro.
 
+[ Seleziona un path attivo ]
+Passa ad un'altro path scegliendolo tra quelli attivi.
+
 [ Spazio libero ]
 Visualizza lo spazio libero nel path di lavoro.
 
@@ -45,6 +48,9 @@ Seleziona e aggiunge un file torrent da scaricare (il torrent verrà elaborato p
 
 [ Leggi links.txt ]
 Leggi o cancella il file links.txt (la lista di tutti i link processati).
+
+[ Leggi zdl_log.txt ]
+Leggi o cancella zdl_log.txt (file contenente alcune informazioni sui download non riusciti).
 
 [ Max download paralleli ]
 Imposta il numero massimo di download paralleli nel path di lavoro.
@@ -94,6 +100,29 @@ Rimuove il file dalla playlist.
 
 [ Audio ]
 Estrae la traccia audio (mp3/flac) dal video.
+
+
+## LIVESTREAM
+
+[ Seleziona il canale ]
+Seleziona il canale TV da dove scaricare.
+
+[ Orario di domani ]
+Seleziona se il programma inizia il giorno dopo.
+
+[ Inizio registrazione ]
+Seleziona l'orario di inizio.
+(Da tastiera: Pag SU/GIÙ aumenta/diminuisce le ore | Freccia SU/GIÙ aumenta/diminuisce i minuti).
+
+[ Durata registrazione ]
+Seleziona la durata della registrazione.
+(Da tastiera: Pag SU/GIÙ aumenta/diminuisce le ore | Freccia SU/GIÙ aumenta/diminuisce i minuti).
+
+[ Salva ]
+Salva la programmazione del download.
+
+[ x ]
+Cancella la registrazione programmata.
 
 
 ## SOCKET
@@ -176,14 +205,20 @@ Resetta l'account webui.
 
 ## CONSOLE
 
-[ Registra solo gli errori ]
-Registra solo gli errori nella console.
-
-[ Leggi zdl_log.txt ]
-Leggi o cancella zdl_log.txt (file contenente alcune informazioni sui download non riusciti).
+[ Seleziona un path attivo ]
+Visualizza il flusso di log dei download in un path attivo.
 
 [ Pulisci ]
-Rimuove tutti gli eventi registrati nella console.
+Cancella il flusso di log dei download mostrato.
+
+[ Ferma ]
+Ferma il flusso di log dei download.
+
+[ Registra solo gli errori ]
+Registra solo gli errori della webui.
+
+[ Pulisci ]
+Rimuove tutti gli eventi della webui registrati.
 
 
 ## ESCI

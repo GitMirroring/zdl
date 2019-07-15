@@ -44,6 +44,8 @@ function buttonHandler( e ) {
             "add-torrent-send": manage.addTorrent,
             "links-file-toggle": common.readFileToggle,
             "links-file-delete": common.deleteFile,
+            "zdl-log-toggle": common.readFileToggle,
+            "zdl-log-delete": common.deleteFile,
             "local-max-downloads-save": manage.maxDownload,
             "reconnect-modem": manage.reconnectModem,
             "get-ip": manage.getIP,
@@ -54,6 +56,7 @@ function buttonHandler( e ) {
             "playlist-toggle": common.browseFsToggle,
             "playlist-play": playlist.play,
             "playlist-save": playlist.add,
+            "recording-save": livestream.set,
             "new-socket-start": sockets.new,
             "socket-kill-this": sockets.kill,
             "downloads-killall": sockets.killDownloads,
@@ -74,8 +77,10 @@ function buttonHandler( e ) {
             "reconnecter-toggle": common.browseFsToggle,
             "reconnecter-save": common.setApplication,
             "account-reset": config.resetAccount,
-            "zdl-log-toggle": common.readFileToggle,
-            "zdl-log-delete": common.deleteFile,
+            "download-log-toggle": common.readFileToggle,
+            "download-log-delete": common.deleteFile,
+            "download-log-clean": zdlconsole.cleanDownloadLog,
+            "download-log-stop": zdlconsole.stopDownloadLog,
             "console-clean": zdlconsole.clean,
             "webui-info-toggle": info.toggleWebuiInfo,
             "exit": exit.shutdown
@@ -99,6 +104,7 @@ function handleByClasses( target ) {
             "dl-delete": downloads.delete,
             "pl-remove": playlist.remove,
             "to-audio": playlist.extractAudio,
+            "rec-delete": livestream.delete,
             "xdcc-search-send": xdcc.add,
             "socket": sockets.manage
         },
@@ -114,13 +120,14 @@ function handleByClasses( target ) {
     if ( typeof obj[ classname ] === "function" ) {
         obj[ classname ]( target );
     } else {
-        utils.log( "button-error", target[ 0 ].id, true );
+        utils.log( "button-error", target[ 0 ].innerText, true );
     }
 }
 
 /* Handling the 'change' event of select menu */
 function selectMenuHandler( id, value ) {
     var obj = {
+        "action-path-select": manage.selectPath,
         "local-downloader": manage.downloader,
         "reconnect": manage.reconnectionOption,
         "webui": config.webui,
@@ -129,7 +136,8 @@ function selectMenuHandler( id, value ) {
         "bg-terminal": config.xtermBackground,
         "auto-update": config.autoUpdate,
         "resume": config.resume,
-        "start-mode": config.startMode
+        "start-mode": config.startMode,
+        "console-path-select": zdlconsole.startDownloadLog
     };
 
     if ( typeof obj[ id ] === "function" ) {

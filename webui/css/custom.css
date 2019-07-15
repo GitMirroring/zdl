@@ -35,7 +35,8 @@ https://savannah.nongnu.org/projects/zdl */
 }
 
 /* Spinners background */
-.inline-group .spinner {
+.inline-group .spinner,
+.inline-group .time-spinner {
   background: #fff !important;
 }
 

@@ -126,6 +126,17 @@ var manage = {
         }
     },
 
+    // Select an active action path
+    selectPath: function ( value ) {
+        if ( value !== myZDL.path ) {
+            myZDL.initClient( value ).then( function () {
+                utils.log( "client-init", value );
+            } ).catch( function ( e ) {
+                utils.log( "client-init-error", e, true );
+            } );
+        }
+    },
+
     // Get and display free space in the path
     updateSpace: function ( elem ) {
         myZDL.getFreeSpace().then( function ( res ) {
@@ -545,7 +556,52 @@ var playlist = {
 };
 
 /**
- *	SOCKETS :: Tab 5
+ *	LIVESTREAM :: Tab 5
+ */
+var livestream = {
+    // Schedule a new download
+    set: function () {
+        var channel = null;
+        $( ".livestream-channels > input" ).each( function () {
+            if ( $( this ).prop( "checked" ) )  {
+                channel = $( this ).val();
+            }
+        } );
+        if ( channel ) {
+            var start = $( "#start-rec" ).val(),
+                duration = $( "#duration-rec" ).val(),
+                channels = client.get( "channels" );
+
+            if ( $( "#tomorrow-time" ).prop( "checked" ) ) {
+                start += "tomorrow";
+            }
+            myZDL.setLivestream( myZDL.path, channel, start, duration ).then( function ( res ) {
+                var response = res.trim();
+                if ( response ) {
+                    var sched = channels[channel] + " | " + start + " | " + duration;
+                    utils.log( "livestream-scheduled", sched );
+                } else {
+                    utils.log( "livestream-scheduled-failure", null, true );
+                }
+            } );
+        } else {
+            utils.log( "livestream-scheduled-no-channel", null, true );
+        }
+    },
+
+    // Delete scheduled download
+    delete: function ( elem ) {
+        var link = elem.data( "link" ),
+            path = elem.data( "path" ),
+            channels = client.get( "channels" );
+        myZDL.deleteLink( encodeURIComponent( link ), path ).then( function () {
+            utils.log( "livestream-delete", channels[link] );
+        } );
+    }
+};
+
+/**
+ *	SOCKETS :: Tab 6
  */
 var sockets = {
     // Start a new socket
@@ -598,7 +654,7 @@ var sockets = {
 };
 
 /*
- *	CONFIGURATION :: Tab 6
+ *	CONFIGURATION :: Tab 7
  */
 var config = {
     // Set and change the webUI
@@ -681,9 +737,52 @@ var config = {
 };
 
 /**
- *	CONSOLE :: Tab 7
+ *	CONSOLE :: Tab 8
  */
 var zdlconsole = {
+    // Set active path
+    startDownloadLog: function ( val ) {
+        $( "#console-path" ).val( val );
+        utils.log( "console-download-log-start" );
+        zdlconsole.getDownloadLog( val, false );
+    },
+
+    // Display the download log flow
+    getDownloadLog( path, loop ) {
+        var textArea = $( "#download-log" );
+        if ( path === $( "#console-path" ).val() ) {
+            myZDL.getConsoleLog( path, loop ).then( function ( res ) {
+                var logged = textArea.val(),
+                    response = res.replace(/^\s*[0-9\s]+(.*)$/gm, "$1"); // remove counters
+                response = response.replace(/^(Link da processare:)/gm, "\n$1"); // add empty line as block divider
+                textArea.val( logged + response ).animate( {
+                    scrollTop: textArea.prop( "scrollHeight" ) - textArea.height()
+                }, 1000 );
+                zdlconsole.getDownloadLog( path, true );
+            } );
+        }
+    },
+
+    // Clean the download log
+    cleanDownloadLog( elem ) {
+        elem.prev().val("");
+    },
+
+    // Stop the download log flow
+    stopDownloadLog( elem ) {
+        var path = $( "#console-path" );
+        //elem.siblings( "#download-log" ).val( "" );
+        //$( "#console-path" ).val( "" );
+        if ( path.val() ) {
+            path.val( "" );
+            myZDL.stopConsoleLog().then( function () {
+                $( "#console-path-select option" ).first().prop("selected", true);
+    			$( "#console-path-select" ).selectmenu( "refresh" );
+                utils.log( "console-download-log-stop" );
+            } );
+        }
+    },
+
     // Clean all console entries
     clean: function ( elem ) {
         elem.parent().prev().text( "" );
@@ -692,7 +791,7 @@ var zdlconsole = {
 };
 
 /**
- *	INFO :: Tab 8
+ *	INFO :: Tab 9
  */
 var info = {
     // Toggle info on webui
@@ -717,7 +816,7 @@ var info = {
 };
 
 /**
- *	EXIT :: Tab 9
+ *	EXIT :: Tab 10
  */
 var exit = {
     // Terminate all and shutdown the server
@@ -748,7 +847,7 @@ var exit = {
 var common = {
     /*
      *	Set numeric configuration values from spinners/sliders
-     *	Tab: 6
+     *	Tab: 7
      *  Sliders: Axel parts, Aria2 connections, Max parallel download
      *	Spinners: torrent TCP/UDP port, socket TCP port
      */
@@ -767,7 +866,7 @@ var common = {
 
     /*
      *	Set applications
-     *	Tab: 6
+     *	Tab: 7
      *	App: player, editor, browser, reconnecter
      */
     setApplication: function ( elem ) {
@@ -790,7 +889,7 @@ var common = {
 
     /*
      *	Toggle view of directory tree
-     *	Tab: 2, 4, 6
+     *	Tab: 2, 4, 7
      *	Views: action path, torrent, playlist, player, editor, browser, launcher, reconnecter
      */
     browseFsToggle: function ( elem ) {
@@ -814,7 +913,7 @@ var common = {
 
     /*
      *  Toggle view of txt files
-     *  Tab: 2, 7
+     *  Tab: 2, 8
      *  Files: links.txt, zdl_log.txt
      */
     readFileToggle: function ( elem ) {
@@ -842,7 +941,7 @@ var common = {
 
     /*
      *  Delete text files
-     *  Tab: 2, 7
+     *  Tab: 2, 8
      *  Files: links.txt, zdl_log.txt
      */
     deleteFile: function ( elem ) {
@@ -911,7 +1010,7 @@ var utils = {
 
             if ( error ) {
                 type = "error";
-                utils.switchToTab( 6 );
+                utils.switchToTab( 7 );
             }
 
             $( "#console" ).append( "<span class='" + type + "'>" + time + " > " + msg.trim() + "</span>" );
@@ -1018,18 +1117,26 @@ var utils = {
         $( "#playlist > .pl-item:first-child > .pl-buttons > .button" ).button().i18n();
     },
 
-    /* Display OK to inform that command was successful */
-    success: function ( elem ) {
-        elem.removeClass( "hidden" );
-        window.setTimeout( function () {
-            elem.addClass( "hidden" );
-        }, 1000 );
+    /* Build the livestream */
+    buildLivestream: function ( data ) {
+        var channels = "",
+            dataChannels = {},
+            id = "channel-",
+            n = 1;
+        $.each( data, function ( index, item ) {
+            n += index;
+            dataChannels[item.url] = item.chan;
+            channels += "<label for='" + id + n + "'>" + item.chan + "</label><input class='radio-stream' type='radio' name='channel-radio' id='" + id + n + "' value='" + item.url + "'>";
+        } );
+        $( ".livestream-channels" ).append( channels );
+        client.set( "channels", dataChannels );
     },
 
-    /* Localize difficult parts */
+    /* Fix localization in problematic areas */
     localizeHard: function () {
         $( "#console-only-errors" ).checkboxradio( "option", "label", $.i18n( "radio-log-label" ) );
         $( ".input-editable" ).checkboxradio( "option", "label", $.i18n( "radio-edit-label" ) );
+        $( "#tomorrow-time" ).checkboxradio( "option", "label", $.i18n( "radio-tomorrow-label" ) );
         $( "#edit-links-delete" ).attr( "title", $.i18n( "delete-queue-tooltip" ) );
         $( ".dl-delete" ).attr( "title", $.i18n( "delete-download-tooltip" ) );
     },
@@ -1037,6 +1144,14 @@ var utils = {
     /* Change tab */
     switchToTab: function ( num ) {
         $( "#tabs" ).tabs( "option", "active", num );
+    },
+
+    /* Display OK to inform that command was successful */
+    success: function ( elem ) {
+        elem.removeClass( "hidden" );
+        window.setTimeout( function () {
+            elem.addClass( "hidden" );
+        }, 1000 );
     },
 
     /* Validate url and path */

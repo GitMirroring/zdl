@@ -123,20 +123,20 @@ var getData = function () {
         return false;
 };
 
-// var getPaths = function () {
-//     var content = "";
-//     ajax({
-//         query: "cmd=get-paths",
-//         callback: function (res) {
-// 	    var item = "";
-// 	    JSON.parse(res).forEach(function(item) {
-// 		content += item + "<br>";
-// 	    });
-// 	    document.getElementById("console-output").innerHTML = content;
-// 	    //getPaths();
-// 	}
-//     });
-// };
+var getPaths = function () {
+    var content = "";
+    ajax({
+        query: "cmd=get-paths",
+        callback: function (res) {
+	    var item = "";
+	    JSON.parse(res).forEach(function(item) {
+		content += item + "<br>";
+	    });
+	    document.getElementById("console-output").innerHTML = content;
+	    //getPaths();
+	}
+    });
+};
 
 
 var showInfoLink = function (spec) {

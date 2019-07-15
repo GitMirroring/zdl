@@ -29,7 +29,8 @@ var client = ( function () {
         log: "all",
         table: {},
         locale: "en",
-        audio: "mp3"
+        audio: "mp3",
+        channels: {}
     };
 
     /* Display some initial info */
@@ -55,6 +56,61 @@ var client = ( function () {
                 }
             }
         } );
+    }
+
+    /* Display Livestream */
+    function displayLivestream() {
+        myZDL.getLivestream().then( function ( data ) {
+            if ( data && utils.parseJson( data ) ) {
+                utils.buildLivestream( JSON.parse( data ) );
+                $( ".radio-stream" ).checkboxradio( { icon: false } );
+            } else {
+                if ( data.trim() ) {
+                    utils.log( "livestream-json-corrupted", null, true );
+                }
+            }
+        } );
+    }
+
+    /* Display livestream scheduled */
+    function displayLivestreamScheduled( livestream ) {
+        if ( livestream.length > 0 ) {
+            var node = "";
+            $.each( livestream, function ( index, item ) {
+                node += "<div class='scheduled-item'><div class='title'>" + data.channels[item.link] + "<button class='button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only' data-link='" + item.link + "' data-path='" + item.path + "'><span class='ui-button-icon ui-icon ui-icon-close'></span></button></div><div class='content'><span><strong>Url:</strong> " + item.link + "</span><span><strong>Path:</strong> " + item.path + "</span><span><strong data-i18n='scheduled-start'>Start:</strong> " + item.start + "</span><span><strong data-i18n='scheduled-duration'>Duration:</strong> " + item.duration + "</span></div></div>";
+            } );
+            $( "#scheduled-rec" ).empty().append( node ).i18n();
+            $( "#scheduled-rec .button" ).button().i18n();
+        } else {
+            var elem = $( "#scheduled-rec" );
+            if ( elem.children().length > 0 ) {
+                elem.empty();
+            }
+        }
+    }
+
+    /* Display active paths */
+    function displayActivePaths( paths, active ) {
+        var placeholder = "<option val='' disabled selected>Paths</option>",
+            node = "";
+        $.each( paths, function ( index, item ) {
+            node += "<option value='" + item + "'>" + item + "</option>";
+        } );
+        $( "#action-path-select, #console-path-select" ).empty().append( placeholder + node );
+    }
+
+    /* Display sockets buttons */
+    function displaySocketsButtons( sockets ) {
+        var socketGo = $( ".sockets-go" ),
+            socketKill = $( ".sockets-kill" );
+        $( ".socket" ).each( function () {
+            $( this ).remove();
+        } );
+        $.each( sockets, function ( index, value ) {
+            $( "<button class='socket button'>" + value + "</button>" ).appendTo( socketGo );
+            $( "<button class='socket button'>" + value + "</button>" ).appendTo( socketKill );
+        } );
+        $( ".socket" ).button();
     }
 
     /* Get class from color */
@@ -92,20 +148,6 @@ var client = ( function () {
             ],
             i = Math.floor( Math.log( bytes ) / Math.log( 1024 ) );
         return parseFloat( ( bytes / 1024 ** i ).toFixed( 2 ) ) + " " + sizes[ i ];
-    }
-
-    /* Display sockets buttons */
-    function displaySocketsButtons( sockets ) {
-        var socketGo = $( ".sockets-go" ),
-            socketKill = $( ".sockets-kill" );
-        $( ".socket" ).each( function () {
-            $( this ).remove();
-        } );
-        $.each( sockets, function ( index, value ) {
-            $( "<button class='socket button'>" + value + "</button>" ).appendTo( socketGo );
-            $( "<button class='socket button'>" + value + "</button>" ).appendTo( socketKill );
-        } );
-        $( ".socket" ).button();
     }
 
     /* Toggle editable input */
@@ -175,13 +217,17 @@ var client = ( function () {
                 $( "#aria2-connections" ).slider( "value", obj.conf.aria2_connections ).children().text( obj.conf.aria2_connections );
                 $( "#max-downloads" ).slider( "value", obj.conf.max_dl ).children().text( obj.conf.max_dl );
 
-                $( ".selectmenu" ).selectmenu( "refresh" );
+                displayActivePaths( obj.paths, obj.path );
+
+                displayLivestreamScheduled( obj.livestream );
 
                 displaySocketsButtons( obj.sockets );
 
                 if ( arg ) {
                     $( "#new-socket" ).val( parseInt( window.location.port ) + 1 );
                 }
+
+                $( ".selectmenu" ).selectmenu( "refresh" );
             }
             statusFlow();
         } ).catch( function ( e ) {
@@ -343,10 +389,11 @@ var client = ( function () {
                     selectMenuHandler( e.target.id, data.item.value );
                 }
             } );
-            $( "#console-only-errors" ).prop( "checked", false ).checkboxradio().change( loggingToggle );
-            $( ".input-editable" ).prop( "checked", false ).checkboxradio().change( editableToggle );
-            $( ".radio-audio" ).prop( "checked", false ).checkboxradio().change( audioFormat );
-            $( "#radio-mp3" ).prop( "checked", true ).checkboxradio( "refresh" );
+            //$( "input[type='checkbox'], input[type='radio']" ).checkboxradio();
+            $( "#console-only-errors" ).checkboxradio().change( loggingToggle );
+            $( ".input-editable" ).checkboxradio().change( editableToggle );
+            $( ".radio-audio" ).checkboxradio( { icon: false } ).change( audioFormat );
+            $( "#tomorrow-time" ).checkboxradio();
             $( "#tabs" ).on( "click", ".button", buttonHandler );
 
             $( "#edit-links-delete" ).attr( "title", $.i18n( "delete-queue-tooltip" ) ).tooltip( {
@@ -359,6 +406,28 @@ var client = ( function () {
                 }
             } );
 
+            // Extend widget for time spinner
+            $.widget( "ui.timespinner", $.ui.spinner, {
+                options: {
+                    step: 60 * 1000,
+                    page: 60
+                },
+                _parse: function( value ) {
+                    if ( typeof value === "string" ) {
+                        if ( Number( value ) == value ) {
+                            return Number( value );
+                        }
+                        return +Globalize.parseDate( value );
+                    }
+                    return value;
+                },
+                _format: function( value ) {
+                    return Globalize.format( new Date(value), "T" );
+                }
+            });
+            Globalize.culture( "it-IT" );
+            $( ".time-spinner" ).timespinner();
+
             /* init table */
             data.table = datatable( language );
 
@@ -366,6 +435,7 @@ var client = ( function () {
             myZDL.initClient().then( function () {
                 displayInfo();
                 displayPlaylist();
+                displayLivestream();
                 statusFlow( true );
                 downloadFlow( true );
                 showUI();

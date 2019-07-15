@@ -85,6 +85,14 @@ class ZDL {
         return this.request( "cmd=get-desktop-path" );
     }
 
+    getLivestream() {
+        return this.request( "cmd=get-livestream-opts" );
+    }
+
+    getConsoleLog( path, loop ) {
+        return this.request( `cmd=get-console&path=${path}&loop=${loop}` );
+    }
+
     getIP() {
         return this.request( "cmd=get-ip" );
     }
@@ -111,6 +119,10 @@ class ZDL {
 
     stopLink( link ) {
         return this.request( `cmd=stop-link&path=${this.path}&link=${link}` );
+    }
+
+    stopConsoleLog() {
+        return this.request( "cmd=stop-console" );
     }
 
     deleteLink( link, path ) {
@@ -159,6 +171,10 @@ class ZDL {
 
     setDesktopPath( path ) {
         return this.request( `cmd=set-desktop-path&path=${path}` );
+    }
+
+    setLivestream( path, link, start, duration ) {
+        return this.request( `cmd=set-livestream&path=${path}&link=${link}&start=${start}&duration=${duration}` );
     }
 
     createAccount(user, pwd) {
