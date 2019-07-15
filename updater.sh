@@ -340,7 +340,6 @@ function update {
     try install-info --info-dir=/usr/share/info /usr/share/info/zdl.info &>/dev/null
     try mkdir -p /etc/bash_completion.d/
     try install -T zdl/docs/zdl.completion /etc/bash_completion.d/zdl
-    try mv "$prog" "$SHARE"
     
     for dir in zdl/locale/*
     do
@@ -351,6 +350,8 @@ function update {
 	fi
     done
 
+    try mv "$prog" "$SHARE"
+    
     if [ $? != 0 ]
     then
 	print_c 3 "$op non riuscit${suffix}. Riprova un'altra volta"
