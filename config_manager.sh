@@ -130,7 +130,8 @@ function configure {
 
 		    print_c 0 "La configurazione è composta da ${BRed}nomi${Color_Off} e ${BBlue}valori${Color_Off}.\n"
 		    print_c 2 "Per ogni nome può essere specificato un valore:"
-		    print_c 0 "- i $(sprint_c 4 "valori alternativi disponibili"), in blu, possono essere suggeriti tra le parentesi tonde e separati dalla barra verticale
+		    print_c 0 "
+- i $(sprint_c 4 "valori alternativi disponibili"), in blu, possono essere suggeriti tra le parentesi tonde e separati dalla barra verticale
 - di fianco, in rosso, è indicato il $(sprint_c 3 "nome") a cui verrà assegnato il valore
 - $(sprint_c 4 "*") significa un valore qualsiasi diverso dagli altri, anche nullo
 - gli attuali $(sprint_c 1 "valori registrati") sono in verde\n\n"

@@ -26,6 +26,13 @@
 
 # path_usr="/usr/local/share/zdl"
 
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
+
 source $path_usr/docs/help.sh
 source $path_usr/config.sh
 source $path_usr/config_manager.sh

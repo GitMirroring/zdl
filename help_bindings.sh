@@ -24,12 +24,21 @@
 # zoninoz@inventati.org
 #
 
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
+
 path_usr="/usr/local/share/zdl"
 source $path_usr/config.sh
 source $path_usr/ui/widgets.sh
 source $path_usr/ui/ui.sh
 source $path_usr/libs/core.sh
 source $path_usr/libs/utils.sh
+
+get_conf
 
 if [ "$background" == "black" ]
 then

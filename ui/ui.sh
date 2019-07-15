@@ -85,10 +85,11 @@ function show_downloads_lite {
 
     elif [ -f "$start_file" ]
     then
+	local connecting="$(gettext "Connecting")"
 	header_lite
 	check_wait_connecting &&
-	    print_header " Connessione in corso ..." "$BYellow" ||
-		print_header " Connessione in corso . . . " "$BGreen"
+	    print_header "$BYellow" "" " $connecting ..."  ||
+		print_header "$BGreen" "" " $connecting . . . " 
 
 	[ -f "$path_tmp"/no-clear-lite ] ||
 	    [ -f "$path_tmp"/stop-binding ] ||
@@ -113,14 +114,14 @@ function show_downloads_extended {
 
     fclear
     header_z
-    header_box_interactive "Modalità interattiva"
+    header_box_interactive "$(gettext "Interactive mode")"
 
     [ -f "$path_tmp/downloader" ] && downloader_in=$(cat "$path_tmp/downloader")
     echo -e "\n${BBlue}Downloader:${Color_Off} $downloader_in\t${BBlue}Directory:${Color_Off} $PWD\n"
 
     if check_instance_daemon
     then
-	print_c 1 "$PROG è attivo in modalità demone (pid: $daemon_pid)\n"
+	print_c 1 "$(gettext "%s is active in daemon mode (pid: %s)\n")" "$PROG" "$daemon_pid"
 	instance_pid="$daemon_pid"
 	
     else
@@ -128,13 +129,13 @@ function show_downloads_extended {
 	then
 	    if [ "$this_tty" == "$that_tty" ]
 	    then
-		term_msg="in questo stesso terminale: $this_tty"
+		term_msg="$(eval_gettext "in this same terminal: \$this_tty")"
 
 	    else
-		term_msg="in un altro terminale: $that_tty"
+		term_msg="$(eval_gettext "in another terminal: \$that_tty")"
 	    fi
 	    
-	    echo -e "${BGreen}$PROG è attivo in modalità standard $term_msg\n${Color_Off}"
+	    print_c 1 "$(gettext "%s is active in standard mode %s\n")" "$PROG" "$term_msg" 
 
 	    if [ "$that_tty" != "$this_tty" ]
 	    then
@@ -144,7 +145,7 @@ function show_downloads_extended {
 		unset instance_pid
 	    fi
 	else
-	    echo -e "${BRed}Non ci sono istanze attive di $PROG\n${Color_Off}"
+	    print_c 3 "$(gettext "There are no active instances of %s\n")" "$PROG" 
 	fi
     fi
 
@@ -176,16 +177,16 @@ function services_box {
     print_C 4 "\nLive stream:"
     cat $path_usr/livestream.txt 2>/dev/null
 
-    print_C 4 "\nLink generati dal web (anche dopo captcha):"
-    echo -e "$(cat $path_usr/generated.txt 2>/dev/null) ed altri servizi"
+    print_C 4 "$(gettext "\nWeb-generated links (even after captcha)")"
+    echo -e "$(cat $path_usr/generated.txt 2>/dev/null) $(gettext "and other services")"
     
     print_C 4 "\nShort links:"
     cat $path_usr/shortlinks.txt 2>/dev/null
 
-    print_C 4 "\nTutti i file scaricabili con le seguenti estensioni dei browser:"
-    echo -e "Flashgot di Firefox/Iceweasel/Icecat, funzione 'M-x zdl' di Conkeror e script 'zdl-xterm' (XXXTerm/Xombrero e altri)"
+    print_C 4 "$(gettext "\nAll downloadable files with the following browser extensions:")"
+    echo -e "$(gettext "Flashgot of Firefox/Iceweasel/Icecat, function 'M-x zdl' by Conkeror and script 'zdl-xterm' (XXXTerm/Xombrero and others)")" 
 
-    print_C 4 "\nTutti i file scaricabili con i seguenti programmi:"
+    print_C 4 "$(gettext "\nAll downloadable files with the following programs:")"
     cat $path_usr/programs.txt 2>/dev/null
     echo
 }
@@ -196,8 +197,8 @@ function standard_box {
     stdbox=true
     
     [ "$this_mode" == help ] &&
-	header_msg="Help dei comandi" ||
-	    header_msg="Modalità in standard output${header_lite_msg}"
+	header_msg="$(gettext "help of commands")" ||
+	    header_msg="$(eval_gettext "Standard output mode\${header_lite_msg}")"
     header_box "$header_msg"
 
     [ -n "$init_msg" ] &&
@@ -214,14 +215,14 @@ function standard_box {
 	   [ -n "$binding" ]
     then
 	echo -e "${BBlue}       │${Color_Off}"
-	header_box "Readline: immetti URL e link dei servizi"
+	header_box "$(gettext "Readline: enter URLs and service links")"
 	echo -e ""
 
     elif [ -z "$1" ] &&
 	   [ -n "$live_streaming" ]
     then
 	echo -e "${BBlue}       │${Color_Off}"
-	header_box "Live stream: seleziona il canale della diretta"
+	header_box "$(gettext "Live stream: select the live channel")"
 	echo -e ""
 
     elif [ "$1" == help ] &&
@@ -240,23 +241,23 @@ function standard_box {
 
 
 function commands_box {
-    header_dl "Comandi in modalità standard output (tasto M=Meta: <Alt>, <Ctrl> o <Esc>)"
+    header_dl "$(gettext "Commands in standard output mode (key M=Meta: <Alt>, <Ctrl> or <Esc>)")"
 
-    echo -e "${BGreen} INVIO ${BBlue}│${Color_Off}  immetti un link e digita ${BGreen}INVIO
-${BGreen} M-x   ${BBlue}│${Color_Off}  esegue i download [e${BGreen}x${Color_Off}ec]
-${BGreen} M-e   ${BBlue}│${Color_Off}  avvia l'${BGreen}e${Color_Off}ditor predefinito
-${BGreen} M-c   ${BBlue}│${Color_Off}  ${BGreen}c${Color_Off}ancella le informazioni dei download completati
-       ${BBlue}│${Color_Off} 
-${BYellow} M-i   ${BBlue}│${Color_Off}  modalità ${BYellow}i${Color_Off}nterattiva
-${BYellow} M-C   ${BBlue}│${Color_Off}  ${BYellow}C${Color_Off}onfigura $PROG
-       ${BBlue}│${Color_Off} 
-${BRed} M-q   ${BBlue}│${Color_Off}  chiudi ZDL senza interrompere i downloader [${BRed}q${Color_Off}uit]
-${BRed} M-k   ${BBlue}│${Color_Off}  uccidi tutti i processi [${BRed}k${Color_Off}ill]
-       ${BBlue}│${Color_Off}
-${BBlue} M-t   │${Color_Off}  sfoglia il ${BBlue}t${Color_Off}utorial
-${BBlue} M-l   │${Color_Off}  ${BBlue}l${Color_Off}ista dei servizi abilitati
-${BBlue} M-h   │${Color_Off}  visualizza questo riquadro [${BBlue}h${Color_Off}elp]"
-
+    echo -e "$(eval_gettext "\${BGreen} ENTER \${BBlue}│\${Color_Off}  enter a link and type \${BGreen}ENTER
+\${BGreen} M-x   \${BBlue}│\${Color_Off}  performs downloads [e\${BGreen}x\${Color_Off}ec]
+\${BGreen} M-e   \${BBlue}│\${Color_Off}  starts the default \${BGreen}e\${Color_Off}ditor
+\${BGreen} M-c   \${BBlue}│\${Color_Off}  \${BGreen}c\${Color_Off}lean the information of the completed downloads
+       \${BBlue}│\${Color_Off}
+\${BYellow} M-i   \${BBlue}│\${Color_Off}  \${BYellow}i\${Color_Off}nteractive mode
+\${BYellow} M-C   \${BBlue}│\${Color_Off}  \${BYellow}C\${Color_Off}onfigure \$PROG
+       \${BBlue}│\${Color_Off} 
+\${BRed} M-q   \${BBlue}│\${Color_Off}  close ZDL without interrupting the downloaders [\${BRed}q\${Color_Off}uit]
+\${BRed} M-k   \${BBlue}│\${Color_Off}  kill all processes [\${BRed}k\${Color_Off}ill]
+       \${BBlue}│\${Color_Off} 
+\${BBlue} M-t   │\${Color_Off}  browse the \${BBlue}t\${Color_Off}utorial
+\${BBlue} M-l   │\${Color_Off}  available services \${BBlue}l\${Color_Off}ist
+\${BBlue} M-h   │\${Color_Off}  displays this box [\${BBlue}h\${Color_Off}elp]")"
+    
 }
 
 function readline_links {
@@ -265,7 +266,7 @@ function readline_links {
     ##             unset -> break immissione URL                    }
 
     [ "$this_mode" != lite ] &&
-	msg_end_input="Immissione URL terminata: avvio download\n"
+	msg_end_input="$(gettext "URL entry completed: download start\n")" 
 
     ## bind -x "\"\C-l\":\"\"" 2>/dev/null
     bind -x "\"\C-x\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
@@ -371,9 +372,9 @@ function change_mode {
 	    ;;
     
 	info)
-	    command -v pinfo &>/dev/null &&
-		pinfo -x zdl ||
-		    info zdl
+	    # command -v pinfo &>/dev/null &&
+	    # 	pinfo -x zdl ||
+	    info zdl
 	    ;;
 	
 	list)
@@ -438,36 +439,34 @@ function interactive {
 	    num_downloads=$max_dl
 	fi
 	
-	header_box_interactive "Opzioni [numero download alla volta: $num_downloads]"
-	echo -e "${BYellow}   s ${Color_Off}│ ${BYellow}s${Color_Off}eleziona uno o più download (per riavviare, eliminare, riprodurre file audio/video)\n     │
-${BGreen}   e ${Color_Off}│ modifica la coda dei link da scaricare, usando l'${BGreen}e${Color_Off}ditor predefinito
-     │"
+	header_box_interactive "$(eval_gettext "Options [number of simultaneous downloads: \$num_downloads]")" 
+	
+	echo -e "$(eval_gettext "\${BYellow}   s \${Color_Off}│ \${BYellow}s\${Color_Off}elect one or more downloads (to restart, delete, play audio/video files)\n     │
+\${BGreen}   e \${Color_Off}│ change the queue of links to be downloaded, using the default \${BGreen}e\${Color_Off}ditor\n     │")"
+
 	local Axel Aria2 Wget
-	Axel="${BGreen}   a ${Color_Off}│ scarica con ${BGreen}a${Color_Off}xel\n"
-	Aria2="${BGreen}   A ${Color_Off}│ scarica con ${BGreen}A${Color_Off}ria2\n"
-	Wget="${BGreen}   w ${Color_Off}│ scarica con ${BGreen}w${Color_Off}get\n"
+	Axel="$(eval_gettext "\${BGreen}   a \${Color_Off}│ download with \${BGreen}a\${Color_Off}xel\n")"	
+	Aria2="$(eval_gettext "\${BGreen}   A \${Color_Off}│ download with \${BGreen}A\${Color_Off}ria2\n")"
+	Wget="$(eval_gettext "\${BGreen}   w \${Color_Off}│ download with \${BGreen}w\${Color_Off}get\n")"
 	
 	unset $downloader_in
 	echo -en "$Axel$Aria2$Wget" 
 	
-	echo -e "     │\n${BGreen} 0-9 ${Color_Off}│ scarica ${BGreen}un numero da 0 a 9${Color_Off} di file alla volta (pausa di $PROG = 0)
-${BGreen}   m ${Color_Off}│ scarica ${BGreen}m${Color_Off}olti file alla volta
-     │"
-
+	echo -e "$(eval_gettext "     │\n\${BGreen} 0-9 \${Color_Off}│ download \${BGreen}a number from 0 to 9\${Color_Off} files at a time (\$PROG pause = 0)
+\${BGreen}   m \${Color_Off}│ download \${BGreen}m\${Color_Off}any files at a time\n     │")"
 	
 	[ -z "$daemon_pid" ] && [ -z "$that_pid" ] &&
-	    echo -e "${BGreen}   d ${Color_Off}│ avvia ${BGreen}d${Color_Off}emone"
+	    echo -e "$(eval_gettext "\${BGreen}   d \${Color_Off}│ start \${BGreen}d\${Color_Off}aemon")"
 
-	echo -e "${BGreen}   c ${Color_Off}│ ${BGreen}c${Color_Off}ancella i file temporanei dei download completati
+	echo -e "$(eval_gettext "\${BGreen}   c \${Color_Off}│ \${BGreen}c\${Color_Off}lean temporary files of completed downloads
      │
-${BRed}   K ${Color_Off}│ interrompi tutti i download e ogni istanza di ZDL nella directory (${BRed}K${Color_Off}ill-all)"
+\${BRed}   K \${Color_Off}│ stop all downloads and every instance of ZDL in the directory (\${BRed}K\${Color_Off}ill-all)")"
 
 	( [ -n "$daemon_pid" ] || [ -n "$instance_pid" ] ) &&
-	    echo -e "${BRed}   Q ${Color_Off}│ ferma un'istanza attiva di $PROG in $PWD lasciando attivi i downloader già avviati"
-	
-	echo -e "     │\n${BBlue}   q ${Color_Off}│ esci da $PROG --interactive (${BBlue}q${Color_Off}uit)"
-	echo -e "${BBlue}   * ${Color_Off}│ ${BBlue}aggiorna lo stato${Color_Off} (automatico ogni 15 secondi)
-     │"
+	    echo -e "$(eval_gettext "\${BRed}   Q \${Color_Off}│ stop an active instance of \$PROG in \$PWD but not the downloads already started")"
+
+	echo -e "$(eval_gettext "     │\n\${BBlue}   q \${Color_Off}│ \${BBlue}q\${Color_Off}uit from \$PROG --interactive ")"
+	echo -e "$(eval_gettext "\${BBlue}   * \${Color_Off}│ \${BBlue}update status\${Color_Off} (automatic every 15 seconds)\n     │")"
 
 	read -s -n 1 -t 15 action
 
@@ -477,27 +476,26 @@ ${BRed}   K ${Color_Off}│ interrompi tutti i download e ogni istanza di ZDL ne
 		header_z
 		echo
 		show_downloads_extended
-		header_box_interactive "Seleziona (Riavvia/sospendi, Elimina, Riproduci audio/video)"
-		#echo -e -n "${BYellow}Seleziona i numeri dei download, separati da spazi (puoi non scegliere):${Color_Off}\n"
-		print_c 2 "Seleziona i numeri dei download, separati da spazi (puoi non scegliere):"
+		header_box_interactive "$(gettext "Select (Restart/interrupt, Eliminate, Play audio/video)")"
+
+		print_c 2 "$(gettext "Select download numbers, separated by spaces (you can not select):")"
 
 		input_text inputs array
 		
 		if [ -n "${inputs[*]}" ]
 		then
 		    echo
-		    header_box_interactive "Riavvia o Elimina"
-		    echo -e -n "${BYellow}Cosa vuoi fare con i download selezionati?${Color_Off}\n\n"
-
-		    echo -e "${BYellow} r ${Color_Off}│ ${BYellow}r${Color_Off}iavviarli se è attiva un'istanza di ZDL (con --multi >0), altrimenti sospenderli
-${BRed} E ${Color_Off}│ ${BRed}e${Color_Off}liminarli definitivamente (e cancellare il file scaricato)
-${BRed} T ${Color_Off}│ ${BRed}t${Color_Off}erminarli definitivamente SENZA cancellare il file scaricato (cancella solo il link dalla coda di download)
+		    header_box_interactive "$(gettext "Proceed")"
+		    print_c 2 "$(gettext "What do you want to do with the selected downloads?")"
+		    
+		    echo -e "$(eval_gettext "\${BYellow} r \${Color_Off}│ \${BYellow}r\${Color_Off}estart, if an instance of ZDL is active (if --multi >0), otherwise suspend them
+\${BRed} E \${Color_Off}│ definitively \${BRed}e\${Color_Off}liminate them (and delete the downloaded file)
    │
-${BGreen} p ${Color_Off}│ riprodurre (${BGreen}p${Color_Off}lay) i file audio/video
+\${BGreen} p \${Color_Off}│ (\${BGreen}p\${Color_Off}lay) the audio/video files
    │
-${BBlue} * ${Color_Off}│ ${BBlue}schermata principale${Color_Off}\n"
+\${BBlue} * \${Color_Off}│ \${BBlue}main screen\${Color_Off}\n")"
 
-		    echo -e -n "${BYellow}Scegli cosa fare: ( r | E | T | p | * ):${Color_Off}\n"
+		    print_c 2 "$(gettext "Select what to do: ( r | E | p | * ):")"
 
 		    input_text input
 		    
@@ -539,15 +537,6 @@ ${BBlue} * ${Color_Off}│ ${BBlue}schermata principale${Color_Off}\n"
 				   "$path_tmp"/"${file_out[$i]}_stdout.tmp" \
 				   "$path_tmp"/"${file_out[$i]}.MEGAenc_stdout.tmp"
 
-			    done
-			    ;;
-
-			T)
-			    for i in ${inputs[*]}
-			    do
-				set_link - "${url_out[$i]}"
-				kill -9 ${pid_out[$i]} &>/dev/null
-				rm -f "$path_tmp"/"${file_out[$i]}_stdout.tmp" "$path_tmp"/"${file_out[$i]}.MEGAenc_stdout.tmp"
 			    done
 			    ;;
 
@@ -688,12 +677,12 @@ function input_text {
 
 function input_xdcc {
     declare -A out_msg=(
-	[host]="Indirizzo dell'host irc (il protocollo 'irc://' non è necessario):"
-	[chan]="Canale (il cancelletto '#' non è necessario):"
-	[msg]="Messaggio privato (il comando '/msg' non è necessario):"
+	[host]="$(gettext "Address of the irc host (the 'irc://' protocol is not necessary):")" 
+	[chan]="$(gettext "Channel (the hash '#' is not necessary):")"
+	[msg]="$(gettext "Private message (the '/msg' command is not necessary):")" 
     )
     
-    header_box "Acquisizione dati mancanti per XDCC (inserisci 'quit' per annullare)"
+    header_box "$(gettext "Acquisition of missing data for XDCC (enter 'quit' to cancel)")" 
     for index in host chan msg
     do
 	while [ -z "${irc[$index]}" ]
@@ -736,9 +725,9 @@ function input_time {
 	while [[ ! "$val" =~ ^([0-9]+)$ ]]
 	do
 	    case $var in
-		h) print_c 2 "Ore:";;
-		m) print_c 2 "Minuti:";;
-		s) print_c 2 "Secondi:";;
+		h) print_c 2 "$(gettext "Hours:")";;
+		m) print_c 2 "$(gettext "Minutes:")";;
+		s) print_c 2 "$(gettext "Seconds:")";;
 	    esac
 
 	    read -e $var
@@ -760,7 +749,7 @@ function input_time {
 
 	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
 	    then
-		print_c 3 "Digitare un numero intero nell'intervallo da 0 a $max (compresi)\n"
+		print_c 3 "$(gettext "Enter an integer in the range from 0 to %d (inclusive)\n")" "$max"
 		unset val
 	    else
 		val=$(printf "%.2d" "$val" 2>/dev/null)
@@ -786,10 +775,10 @@ function display_set_livestream {
     else
     	cursor on
     fi
-
+    
     if ! url "$link"
     then
-	print_c 4 "Canali disponibili (scegli il numero corrispondente):"
+	print_c 4 "$(gettext "Available channels (choose the corresponding number):")" 
 	for ((i=0; i<${#live_streaming_chan[@]}; i++))
 	do
 	    printf "${BYellow}%3d  ${BCyan}%-20s ${Color_Off}%s\n" $i "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
@@ -798,7 +787,7 @@ function display_set_livestream {
 	while [[ ! "$opt" =~ ^([0-9]+)$ ]] ||
 		  ((opt > (i -1 )))
 	do
-	    print_c 2 "\nSeleziona il canale da cui scaricare la diretta (0-$[i-1]):"
+	    print_c 2 "$(gettext "\nSelect the channel from which to download the live (0-\$[i-1]):")" 
 	    read -e opt
 	done
 	    
@@ -807,12 +796,12 @@ function display_set_livestream {
 
 	if check_livestream_link_time "$link"
 	then
-	    print_c 3 "Esiste già una programmazione per questo canale:"
-	    print_c 0 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n"
-	    print_c 2 "Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
+	    print_c 3 "$(gettext "A schedule already exists for this channel:")"
+	    print_c 0 "$(gettext "you can delete the previous one and create a new one or leave the previous one and cancel this operation.\n")"
+	    print_c 2 "$(gettext "Do you want to create a new schedule, deleting the previous one? [yes|*]")"
 	    read -e opt
-
-	    if [ "$opt" == "sì" ]
+	    
+	    if [[ "$opt" =~ ^(sì|yes)$ ]]
 	    then
 		remove_livestream_link_start "$link"
 		
@@ -834,24 +823,23 @@ function display_set_livestream {
 		    done	
 		fi
 	    else
-		print_c 1 "Operazione annullata: è mantenuta la programmazione precedente"
+		print_c 1 "$(gettext "Operation canceled: previous programming is maintained")"
 		return 1
 	    fi
 	fi
-
+	
 	unset opt i live_streaming
     fi
     
-    header_box "Live stream: programma il download della diretta"
+    header_box "$(gettext "Live stream: program for downloading the live")"
     print_c 4 "Link: $link"
-    print_c 0 "È necessario indicare l'orario di inizio registrazione e la sua durata\n"
+    print_c 0 "$(gettext "It is necessary to indicate the recording start time and its duration\n")"
 
-    print_c 4 "Orario di inizio registrazione:"
-    print_c 2 "Vuoi registrare subito? [sì|*]"
-    
+    print_c 4 "$(gettext "Recording start time:")"
+    print_c 2 "$(gettext "Do you want to register right away? [yes|*]")"
     read -e opt
 
-    if [ "$opt" == 'sì' ]
+    if [[ "$opt" =~ ^(sì|yes)$ ]]
     then
 	h=$(date +%H)
 	m=$(date +%M)
@@ -864,7 +852,7 @@ function display_set_livestream {
     fi
     start_time="$h:$m:$s"
     
-    print_c 4 "Durata registrazione:"
+    print_c 4 "$(gettext "Recording duration:")" 
     input_time
     duration_time="$h:$m:$s"
 
@@ -873,7 +861,7 @@ function display_set_livestream {
 
     if ((start_time_in_sec<now_in_sec))
     then
-	print_c 2 "L'orario di inizio è inferiore a quello attuale: è di domani? [*|no]"
+	print_c 2 "$(gettext "The starting time is lower than the current one: is it tomorrow? [*|no]")"
 	read -e opt
 
 	[ "$opt" == no ] ||
@@ -883,7 +871,8 @@ function display_set_livestream {
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
 
-    print_c 1 "\nIl download da $link si avvierà intorno alle $start_time per la durata di $duration_time\n"
+    print_c 1 "$(gettext "\nThe download from %s will start around %s for the duration of %s\n")" \
+	    "$link" "$start_time" "$duration_time"
     cursor off
 }
 
@@ -891,13 +880,11 @@ function display_livestreams {
     local line
     if [ -s "$path_tmp"/livestream_time.txt ]
     then
-	print_c 4 "Live Stream programmati (link, orario inizio, durata):"
+	print_c 4 "$(gettext "Scheduled Live Streams (link, start time, duration):")"
 	while read line
 	do
 	    print_c 4 "$line"
 	done < "$path_tmp"/livestream_time.txt
 	print_c 0 ""
-    # else
-    # 	print_c 4 "Nessun Live Stream in programma"
     fi
 }

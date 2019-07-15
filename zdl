@@ -36,8 +36,7 @@ function update_updater {
     then
 	fclear
 	header_z
-	header_box "Aggiornamento automatico di $name_prog" \
-		   "Updating $name_prog"
+	header_box "$(eval_gettext "Updating \$name_prog")"
     fi    
 
     [ ! -f $path_conf/version ] &&
@@ -62,15 +61,15 @@ function update_updater {
 	    if [ "$force_update" != true ]
 	    then
 		local res
-		res=($(yad --title="Aggiornamento" \
-			   --image="$IMAGE2" \
-			   --text="$TEXT\n\nDisponibile un nuovo aggiornamento, scegli cosa fare:\n\n" \
-			   --form \
-			   --center --on-top \
-			   --separator=' ' \
-			   --field="Non chiederlo più in questa sessione":CHK FALSE \
-			   --button="Rimanda":0 \
-			   --button="Aggiorna":1 \
+		res=($(yad --title="$(gettext "Updating")"                                                                  \
+			   --image="$IMAGE2"                                                                                \
+			   --text="$(eval_gettext "\$TEXT\n\nA new update is available, choose what to do:\n\n")"           \
+			   --form                                                                                           \
+			   --center --on-top                                                                                \
+			   --separator=' '                                                                                  \
+			   --field="$(gettext "Don't ask for it again in this session")":CHK FALSE                          \
+			   --button="$(gettext "Postpone")":0                                                               \
+			   --button="$(gettext "Update")":1                                                                 \
 			   "${YAD_ZDL[@]}" 2>/dev/null))
 		ret=$?
 	    else
@@ -86,7 +85,7 @@ function update_updater {
 			while :
 			do
 			    pass=$(yad --title="Password SUDO" \
-				       --text="Digita la password utente (sudo):" \
+				       --text="$(gettext "Enter the user password (sudo):")" \
 				       --image="dialog-password" \
 				       --entry --hide-text \
 				       --center \
@@ -134,7 +133,7 @@ function update_updater {
 
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 
-	print_c 1 "Download in corso: attendere..." "Downloading..."
+	print_c 1 "$(gettext "Downloading...")"
 
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
@@ -153,7 +152,7 @@ function update_updater {
 	    then
 		if [ "$this_mode" != gui ]
 		then
-		    print_c 3 "Problemi di connessione: se non dovesse risolversi, chiudi il programma con <Control+c>" 
+		    print_c 3 "$(gettext "Connection problems: if it does not resolve, close the program with <Control + c>")"
 		fi
 		sleep 1
 	    fi
@@ -161,7 +160,7 @@ function update_updater {
 
 	package="zdl-2.0.tar.gz"
 
-	print_c 1 "Aggiornamento di $PROG con $package"
+	print_c 1 "$(gettext "Update %s with %s")" "$PROG" "$package" 
 
 	tar -xzf "$package" 2>/dev/null &&
 	    {		
@@ -175,7 +174,7 @@ function update_updater {
 		update
 	    } ||
 		{
-		    print_c 3 "Aggiornamento fallito: non è possibile aprire il pacchetto $package"
+		    print_c 3 "$(gettext "Update failed: package %s cannot be opened")" "$package"
 		    if [ "$this_mode" != gui ]
 		    then
 			pause
@@ -185,7 +184,7 @@ function update_updater {
 		}
 
     else
-	init_msg+="${BGreen}$PROG è già alla versione più recente\n"
+	init_msg+="$(eval_gettext "\${BGreen}\$PROG is already the latest version\n")"
     fi
 }
 
@@ -426,8 +425,8 @@ then
 	then 
 	    unset args[i]
 	    rm -r ".zdl_tmp"/* 2>/dev/null && 
-		init_msg+="$(sprint_c 1 "File temporanei cancellati\n" "Temporary file deleted\n")" ||            
-		    init_msg+="$(sprint_c 3 "Pulizia file temporanei non effettuata (file inesistenti)\n" "Cleaning of temporary files not carried out (non-existent files)\n")"
+		init_msg+="$(sprint_c 1 "$(gettext "Temporary file deleted\n")")" ||            
+		    init_msg+="$(sprint_c 3 "$(gettext "Cleaning of temporary files not carried out (non-existent files)\n")")"
 	fi
     done
 fi
@@ -710,13 +709,12 @@ then
 	then 
 	    if [ -z "$(command -v ffmpeg 2>/dev/null)$(command -v avconv 2>/dev/null)" ]
 	    then
-		print_c 3 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non trovati" \
-			"The format conversion function depends on ffmpeg or avconv, not found"
+		print_c 3 "$(gettext "The format conversion function depends on ffmpeg or avconv, not found")" 
 		exit
 	    fi
 	    echo ${args[i]##*-} > "$path_tmp"/format-post_processor
 	    unset args[i]
-	    echo "scaricati_da_zdl.txt" >"$path_tmp"/print_out-post_processor 2>/dev/null
+	    echo "$downloaded_by_zdl" >"$path_tmp"/print_out-post_processor 2>/dev/null
 	    unset args[i]
 	fi
     done
@@ -745,10 +743,8 @@ then
 		nohup /bin/bash zdl ${args[*]} --silent "$PWD" &>/dev/null &
 		
 		print_c 4 "${name_prog}:       "
-		print_c 1 "Avviato in modalità demone in $PWD\n" \
-			"Started in daemon mode in $PWD\n"
-		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n" \
-			"You can control it with: ${Color_Off}$prog -i \"$PWD\"\n"
+		print_c 1 "$(gettext "Started in daemon mode in %s\n")" "$PWD"
+		print_c 4 "$(eval_gettext "You can control it with: \${Color_Off}\$prog -i \"\$PWD\"\n")"
 
 		[ -n "$xterm_stop_checked" ] && xterm_stop
 		exit 0
@@ -757,10 +753,8 @@ then
 		start_mode_in_tty stdout "$this_tty"
 		
 		print_c 4 "${name_prog}:       "
-		print_c 3 "Esiste già un'istanza attiva della modalità demone in $PWD\n" \
-			"An active instance of daemon mode already exists in $PWD\n"
-		print_c 4 "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\n" \
-			"You can control it with: ${Color_Off}$prog -i \"$PWD\"\n"
+		print_c 3 "$(gettext "An active instance of daemon mode already exists in %s\n")" "$PWD" 
+		print_c 4 "$(eval_gettext  "You can control it with: \${Color_Off}\$prog -i \"\$PWD\"\n")"
 
 		this_mode=daemon
 	    fi
@@ -828,23 +822,20 @@ then
 		unset start_socket
 		if run_zdl_server $socket_port
 		then
-		    msg_server_it="Avviato nuovo socket alla porta $socket_port"
-		    msg_server_en="New socket started at the port $socket_port"
-		    init_msg+="$(sprint_c 1 "$msg_server_it\n" "$msg_server_en\n")"
+		    msg_server="$(eval_gettext "New socket started at the port \$socket_port")"
+		    init_msg+="$(sprint_c 1 "$msg_server\n")"
 		    echo 0 >"$path_server"/zdl-sockets-exit
 		fi
 		
 	    elif ! check_port "$socket_port"
 	    then
-		msg_server_it="Socket già in uso alla porta $socket_port (puoi specificare una nuova porta con: -s PORTA oppure --socket=PORTA)"
-		msg_server_it="Socket already in use at the port $socket_port (you can specify a new port with: -s PORTA or --socket=PORTA)"
-		init_msg+="$(sprint_c 3 "$msg_server_it\n" "$msg_server_en\n")"
+		msg_server="$(eval_gettext "Socket already in use at the port \$socket_port (you can specify a new port with: -s PORTA or --socket=PORTA)")"
+		init_msg+="$(sprint_c 3 "$msg_server\n")"
 		echo 1 >"$path_server"/zdl-sockets-exit
 		
 	    else
-		msg_server_it="Socket non avviato alla porta $socket_port"
-		msg_server_en="Socket not started at the port $socket_port"		
-		init_msg+="$(sprint_c 3 "$msg_server_it\n" "$msg_server_en\n")"
+		msg_server="$(eval_gettext "Socket not started at the port \$socket_port")"
+		init_msg+="$(sprint_c 3 "$msg_server\n")"
 		echo 2 >"$path_server"/zdl-sockets-exit
 	    fi
 	fi
@@ -1049,7 +1040,7 @@ then
 	    max_dl="${BASH_REMATCH[1]}"
 	    
 	    [[ "${args[i]}" =~ ^\-\-multi ]] &&
-		init_msg+="${BRed}Opzione deprecata: '--multi=[NUMERO]' è sostituita con '--max-downloads=[NUMERO]'. Resta invariata l'opzione breve '-m [NUMERO]'\n"
+		init_msg+="$(eval_gettext "\${BRed}Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = [NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\n")"
 
 	    echo $max_dl >"$path_tmp/max-dl"
 	    #unlock_fifo max-downloads "$PWD" &
@@ -1072,15 +1063,15 @@ then
 	    separator-
 	    if [ -n "$http_proxy" ]
 	    then
-		print_c 1 "Rilevato proxy HTTP: $http_proxy" "HTTP proxy detected: $http_proxy"
+		print_c 1 "$(gettext "HTTP proxy detected: %s")" "$http_proxy"
 	    fi
 	    
 	    if [ -n "$myip" ]
 	    then
-		print_c 1 "Indirizzo IP: $myip" "IP address: $myip"
+		print_c 1 "$(gettext "IP address: %s")" "$myip"
 
 	    else
-		print_c 3 "Indirizzo IP non rilevato" "IP address not detected"
+		print_c 3 "$(gettext "IP address not detected")"
 	    fi
 
 	    separator-
@@ -1131,21 +1122,20 @@ then
 		pipe_out=( ${pipe_out_str#\"} )
 
 	    else
-		file_output=scaricati_da_zdl.txt
+		file_output=$downloaded_by_zdl
 		print_out="${args[i]#'--out='}"
 
 		if [ -e "$print_out" ] 
 		then
-		    init_msg+=$(sprint_c 3 "Esiste già un file con lo stesso nome di ${print_out}\n" \
-					 "A file already exists with the same name as ${print_out}\n")
+		    init_msg+=$(sprint_c 3 "$(eval_gettext "A file already exists with the same name as \${print_out}\n"))")
 		    print_out="$file_output"
 		    
 		elif [ -z "$print_out" ]
 		then
 		    print_out="$file_output"
 		fi
-		init_msg+=$(sprint_c 1 "La lista dei file verrà salvata in $print_out\n(puoi anche usarla per comunicare i file in scaricamento a un altro programma)\n" \
-				     "The file list will be saved in $print_out\n(you can also use it to communicate the files being downloaded to another program)")
+		init_msg+=$(sprint_c 1 "$(eval_gettext "The file list will be saved in \$print_out\n(you can also use it to communicate the files being downloaded to another program)\n")")
+		
 		touch "$print_out"
 	    fi
 	    unset args[i]
@@ -1183,14 +1173,15 @@ then
 		then
 		    echo "$proxy" > "$path_tmp"/proxy
 		    export http_proxy=$proxy
-		    print_c 1 "Proxy attivo: $http_proxy\n" "Active proxy: $http_proxy\n"
+		    print_c 1 "$(gettext "Active proxy: %s\n")" "$http_proxy"
 
 		else
-		    print_c 3 "${args[i]}: argomento non valido\n\n" "${args[i]}: invalid argument\n\n"
+		    print_c 3 "$(gettext "%s: invalid argument\n\n")" "${args[i]}"
 		    usage
 		fi
 	    else
-		print_c 3 "${args[i]}: argomento non valido\n\n" "${args[i]}: invalid argument\n\n"
+		print_c 3 "$(gettext "%s: invalid argument\n\n")" "${args[i]}"
+
 		usage
 	    fi
 	    unset args[i]
@@ -1276,7 +1267,8 @@ for ((i=0; i<=$max_args; i++))
 do
     if [ "${args[i]}" != "${args[i]#-}" ]
     then
-	print_c 3 "${args[i]}: argomento non valido\n\n" "${args[i]}: invalid argument\n\n"
+	print_c 3 "$(gettext "%s: invalid argument\n\n")" "${args[i]}"
+
 	usage
     fi
 done
@@ -1287,7 +1279,7 @@ then
     for ((i=0; i<=$max_args; i++))
     do
 	[[ "${args[i]}" =~ xweaseldownload.php ]] &&
-	    print_c 2 "Connessione ed estrazione da:\n${args[i]}\n" "Connection and extraction from:\n${args[i]}\n"
+	    print_c 2 "$(gettext "Connection and extraction from:\n%s\n")" "${args[i]}" 
 
 	if [ -f "${BASE_DIR}${args[i]}" ]
 	then
@@ -1343,7 +1335,7 @@ then
 	echo >> links.txt 2>/dev/null
 	date >> links.txt 2>/dev/null
 	cat "$start_file" >> links.txt 2>/dev/null
-	init_msg+=$(sprint_c 1 "L'elenco completo dei link è in links.txt\n" "The complete list of links is in links.txt\n")
+	init_msg+=$(sprint_c 1 "$(gettext "The complete list of links is in links.txt\n")")
 
 	if ! check_instance_prog &&
 		[ -z "$from_editor" ] &&
@@ -1542,10 +1534,10 @@ function main_loop {
 		    continue
 
 		print_c 0
-		header_box "Link da processare:" "Link to process:"
+		header_box "$(gettext "Processing link:")"
 		print_c 0 "$url_in\n"
 
-		print_c 1 "Connessione in corso..." "Connecting..."
+		print_c 1 "$(gettext "Connecting...")"
 
 		check_ip
 		
@@ -1667,25 +1659,18 @@ function main_loop {
 		    continue
 		fi
 
-		## temporaneo: da qualche tempo, wget genera file di log nelle subshell
-		## urge convertire integralmente zdl all'uso di curl (conversione già avviata)
-		rm -f wget-log*
-
 		#### DOWNLOAD ####
 		if [ -z "$premium" ] &&                                                 
 		       check_in_file &&                                                         
 		       check_freespace
 		then
-		    #
-		    ## check in nuova posizione da testare: prima era più in alto
-		    #
 		    check_dler_forcing
 
 		    if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
 		    then
 			print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
 		    else
-			print_c 4 "URL del file: $url_in_file" "File URL: $url_in_file"
+			print_c 4 "$(gettext "File URL: %s")" "$url_in_file"
 		    fi
 
 		    if download && [ -n "$file_in" ]
@@ -1695,10 +1680,6 @@ function main_loop {
 		    rm -f "$path_tmp/cookies.zdl"
 		    unset no_newip
 		fi
-
-		## temporaneo: da qualche tempo, wget genera file di log nelle subshell
-		## urge convertire inegralmente zdl all'uso di curl (conversione già avviata)
-		rm -f wget-log*
 
 		newip_add_host
 		from_loop=true
@@ -1833,7 +1814,7 @@ then
 	{
 	    print_header
 	    separator-
-	    print_c 1 "Download completato" "Download completed"
+	    print_c 1 "$(gettext "Download completed")" 
 	    separator-
 	    print_header
 	    
@@ -1848,10 +1829,10 @@ cursor on
 
 if [ -f "$file_log" ]
 then
-    print_c 3 "\nIn $PWD è presente un file che contiene un elenco di operazioni di $PROG terminate senza successo." \
-	    "\nIn $PWD there is a file that contains a list of operations of $PROG terminated without success."
-    print_c 0 "${BBlue}Per leggerlo, digita:${Color_Off}\n${Bold}cat $PWD/$file_log${Color_Off}\n" \
-	    "${BBlue}To read it, type:${Color_Off}\n${Bold}cat $PWD/$file_log${Color_Off}\n"
+    print_c 0 ""
+    print_c 3 "$(gettext "\nIn %s there is a file that contains a list of operations of %s terminated without success.")" "$PWD" "$PROG"
+    print_c 4 "$(gettext "To read it, enter:")"
+    print_c 0 "${Bold}cat $PWD/$file_log${Color_Off}\n"
 fi
 
 

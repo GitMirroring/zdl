@@ -43,7 +43,7 @@ then
 
     for i in {20..0}
     do
-	print_c 4 "$i  \r\c"
+	sprint_c 4 "%d                  \r" $i
 	sleep 1
 	! check_pid $pid_yt_dl && break
     done

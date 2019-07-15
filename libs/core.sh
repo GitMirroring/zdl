@@ -1035,7 +1035,7 @@ function redirect {
 	    sleeping 1
     	    s=$(date +"%s")
     	    s=$(( $s-$k ))
-    	    print_c 0 "$s\r\c"
+    	    sprint_c 0 "%s\r" $s
     	fi
     done
 
@@ -1059,7 +1059,9 @@ function redirect_links {
     then
 	[ -z "$stdbox" ] &&
 	    header_dl "Downloading in $PWD"
-	print_c 1 "La gestione dei download è inoltrata a un'altra istanza attiva di $name_prog (pid: $that_pid), nel seguente terminale: $that_tty\n"
+#	print_c 1 "$(eval_gettext "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: %d), nel seguente terminale: %s\n")" 
+	print_c 1 "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: %d), nel seguente terminale: %s\n" \
+		"$name_prog" "$that_pid" "$that_tty"
     fi
 
     bindings

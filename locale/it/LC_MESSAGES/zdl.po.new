@@ -1,0 +1,488 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-15 21:19+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../zdl:39
+#, sh-format
+msgid "Updating $name_prog"
+msgstr ""
+
+#: ../zdl:64
+msgid "Updating"
+msgstr ""
+
+#: ../zdl:66
+#, sh-format
+msgid "$TEXT\\n\\nA new update is available, choose what to do:\\n\\n"
+msgstr ""
+
+#: ../zdl:70
+msgid "Don't ask for it again in this session"
+msgstr ""
+
+#: ../zdl:71
+msgid "Postpone"
+msgstr ""
+
+#: ../zdl:72
+msgid "Update"
+msgstr ""
+
+#: ../zdl:88
+msgid "Enter the user password (sudo):"
+msgstr ""
+
+#: ../zdl:136
+msgid "Downloading..."
+msgstr ""
+
+#: ../zdl:155
+msgid ""
+"Connection problems: if it does not resolve, close the program with <Control "
+"+ c>"
+msgstr ""
+
+#: ../zdl:163
+msgid "Update %s with %s"
+msgstr ""
+
+#: ../zdl:177
+msgid "Update failed: package %s cannot be opened"
+msgstr ""
+
+#: ../zdl:187
+#, sh-format
+msgid "${BGreen}$PROG is already the latest version\\n"
+msgstr ""
+
+#: ../zdl:428
+msgid "Temporary file deleted\\n"
+msgstr ""
+
+#: ../zdl:429
+msgid "Cleaning of temporary files not carried out (non-existent files)\\n"
+msgstr ""
+
+#: ../zdl:712
+msgid "The format conversion function depends on ffmpeg or avconv, not found"
+msgstr ""
+
+#: ../zdl:746
+msgid "Started in daemon mode in %s\\n"
+msgstr ""
+
+#: ../zdl:747 ../zdl:757
+#, sh-format
+msgid "You can control it with: ${Color_Off}$prog -i \"$PWD\"\\n"
+msgstr ""
+
+#: ../zdl:756
+msgid "An active instance of daemon mode already exists in %s\\n"
+msgstr ""
+
+#: ../zdl:825
+#, sh-format
+msgid "New socket started at the port $socket_port"
+msgstr ""
+
+#: ../zdl:832
+#, sh-format
+msgid ""
+"Socket already in use at the port $socket_port (you can specify a new port "
+"with: -s PORTA or --socket=PORTA)"
+msgstr ""
+
+#: ../zdl:837
+#, sh-format
+msgid "Socket not started at the port $socket_port"
+msgstr ""
+
+#: ../zdl:1043
+#, sh-format
+msgid ""
+"${BRed}Deprecated option: '--multi = [NUMBER]' is replaced by '--max-"
+"downloads = [NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
+msgstr ""
+
+#: ../zdl:1066
+msgid "HTTP proxy detected: %s"
+msgstr ""
+
+#: ../zdl:1071
+msgid "IP address: %s"
+msgstr ""
+
+#: ../zdl:1074
+msgid "IP address not detected"
+msgstr ""
+
+#: ../zdl:1130
+#, sh-format
+msgid "A file already exists with the same name as ${print_out}\\n"
+msgstr ""
+
+#: ../zdl:1137
+#, sh-format
+msgid ""
+"The file list will be saved in $print_out\\n(you can also use it to "
+"communicate the files being downloaded to another program)\\n"
+msgstr ""
+
+#: ../zdl:1176
+msgid "Active proxy: %s\\n"
+msgstr ""
+
+#: ../zdl:1179 ../zdl:1183 ../zdl:1270
+msgid "%s: invalid argument\\n\\n"
+msgstr ""
+
+#: ../zdl:1282
+msgid "Connection and extraction from:\\n%s\\n"
+msgstr ""
+
+#: ../zdl:1338
+msgid "The complete list of links is in links.txt\\n"
+msgstr ""
+
+#: ../zdl:1537
+msgid "Processing link:"
+msgstr ""
+
+#: ../zdl:1540
+msgid "Connecting..."
+msgstr ""
+
+#: ../zdl:1673
+msgid "File URL: %s"
+msgstr ""
+
+#: ../zdl:1817
+msgid "Download completed"
+msgstr ""
+
+#: ../zdl:1833
+msgid ""
+"\\nIn %s there is a file that contains a list of operations of %s terminated "
+"without success."
+msgstr ""
+
+#: ../zdl:1834
+msgid "To read it, enter:"
+msgstr ""
+
+#: ../ui/ui.sh:88
+msgid "Connecting"
+msgstr ""
+
+#: ../ui/ui.sh:117
+msgid "Interactive mode"
+msgstr ""
+
+#: ../ui/ui.sh:124
+msgid "%s is active in daemon mode (pid: %s)\\n"
+msgstr ""
+
+#: ../ui/ui.sh:132
+#, sh-format
+msgid "in this same terminal: $this_tty"
+msgstr ""
+
+#: ../ui/ui.sh:135
+#, sh-format
+msgid "in another terminal: $that_tty"
+msgstr ""
+
+#: ../ui/ui.sh:138
+msgid "%s is active in standard mode %s\\n"
+msgstr ""
+
+#: ../ui/ui.sh:148
+msgid "There are no active instances of %s\\n"
+msgstr ""
+
+#: ../ui/ui.sh:180
+msgid "\\nWeb-generated links (even after captcha)"
+msgstr ""
+
+#: ../ui/ui.sh:181
+msgid "and other services"
+msgstr ""
+
+#: ../ui/ui.sh:186
+msgid "\\nAll downloadable files with the following browser extensions:"
+msgstr ""
+
+#: ../ui/ui.sh:187
+msgid ""
+"Flashgot of Firefox/Iceweasel/Icecat, function 'M-x zdl' by Conkeror and "
+"script 'zdl-xterm' (XXXTerm/Xombrero and others)"
+msgstr ""
+
+#: ../ui/ui.sh:189
+msgid "\\nAll downloadable files with the following programs:"
+msgstr ""
+
+#: ../ui/ui.sh:200
+msgid "help of commands"
+msgstr ""
+
+#: ../ui/ui.sh:201
+#, sh-format
+msgid "Standard output mode${header_lite_msg}"
+msgstr ""
+
+#: ../ui/ui.sh:218
+msgid "Readline: enter URLs and service links"
+msgstr ""
+
+#: ../ui/ui.sh:225
+msgid "Live stream: select the live channel"
+msgstr ""
+
+#: ../ui/ui.sh:244
+msgid "Commands in standard output mode (key M=Meta: <Alt>, <Ctrl> or <Esc>)"
+msgstr ""
+
+#: ../ui/ui.sh:246
+#, sh-format
+msgid ""
+"${BGreen} ENTER ${BBlue}│${Color_Off}  enter a link and type ${BGreen}ENTER\n"
+"${BGreen} M-x   ${BBlue}│${Color_Off}  performs downloads [e${BGreen}x"
+"${Color_Off}ec]\n"
+"${BGreen} M-e   ${BBlue}│${Color_Off}  starts the default ${BGreen}e"
+"${Color_Off}ditor\n"
+"${BGreen} M-c   ${BBlue}│${Color_Off}  ${BGreen}c${Color_Off}lean the "
+"information of the completed downloads\n"
+"       ${BBlue}│${Color_Off}\n"
+"${BYellow} M-i   ${BBlue}│${Color_Off}  ${BYellow}i${Color_Off}nteractive "
+"mode\n"
+"${BYellow} M-C   ${BBlue}│${Color_Off}  ${BYellow}C${Color_Off}onfigure "
+"$PROG\n"
+"       ${BBlue}│${Color_Off} \n"
+"${BRed} M-q   ${BBlue}│${Color_Off}  close ZDL without interrupting the "
+"downloaders [${BRed}q${Color_Off}uit]\n"
+"${BRed} M-k   ${BBlue}│${Color_Off}  kill all processes [${BRed}k${Color_Off}"
+"ill]\n"
+"       ${BBlue}│${Color_Off} \n"
+"${BBlue} M-t   │${Color_Off}  browse the ${BBlue}t${Color_Off}utorial\n"
+"${BBlue} M-l   │${Color_Off}  available services ${BBlue}l${Color_Off}ist\n"
+"${BBlue} M-h   │${Color_Off}  displays this box [${BBlue}h${Color_Off}elp]"
+msgstr ""
+
+#: ../ui/ui.sh:269
+msgid "URL entry completed: download start\\n"
+msgstr ""
+
+#: ../ui/ui.sh:442
+#, sh-format
+msgid "Options [number of simultaneous downloads: $num_downloads]"
+msgstr ""
+
+#: ../ui/ui.sh:444
+#, sh-format
+msgid ""
+"${BYellow}   s ${Color_Off}│ ${BYellow}s${Color_Off}elect one or more "
+"downloads (to restart, delete, play audio/video files)\\n     │\n"
+"${BGreen}   e ${Color_Off}│ change the queue of links to be downloaded, "
+"using the default ${BGreen}e${Color_Off}ditor\\n     │"
+msgstr ""
+
+#: ../ui/ui.sh:448
+#, sh-format
+msgid "${BGreen}   a ${Color_Off}│ download with ${BGreen}a${Color_Off}xel\\n"
+msgstr ""
+
+#: ../ui/ui.sh:449
+#, sh-format
+msgid "${BGreen}   A ${Color_Off}│ download with ${BGreen}A${Color_Off}ria2\\n"
+msgstr ""
+
+#: ../ui/ui.sh:450
+#, sh-format
+msgid "${BGreen}   w ${Color_Off}│ download with ${BGreen}w${Color_Off}get\\n"
+msgstr ""
+
+#: ../ui/ui.sh:455
+#, sh-format
+msgid ""
+"     │\\n${BGreen} 0-9 ${Color_Off}│ download ${BGreen}a number from 0 to "
+"9${Color_Off} files at a time ($PROG pause = 0)\n"
+"${BGreen}   m ${Color_Off}│ download ${BGreen}m${Color_Off}any files at a "
+"time\\n     │"
+msgstr ""
+
+#: ../ui/ui.sh:459
+#, sh-format
+msgid "${BGreen}   d ${Color_Off}│ start ${BGreen}d${Color_Off}aemon"
+msgstr ""
+
+#: ../ui/ui.sh:461
+#, sh-format
+msgid ""
+"${BGreen}   c ${Color_Off}│ ${BGreen}c${Color_Off}lean temporary files of "
+"completed downloads\n"
+"     │\n"
+"${BRed}   K ${Color_Off}│ stop all downloads and every instance of ZDL in "
+"the directory (${BRed}K${Color_Off}ill-all)"
+msgstr ""
+
+#: ../ui/ui.sh:466
+#, sh-format
+msgid ""
+"${BRed}   Q ${Color_Off}│ stop an active instance of $PROG in $PWD but not "
+"the downloads already started"
+msgstr ""
+
+#: ../ui/ui.sh:468
+#, sh-format
+msgid ""
+"     │\\n${BBlue}   q ${Color_Off}│ ${BBlue}q${Color_Off}uit from $PROG --"
+"interactive "
+msgstr ""
+
+#: ../ui/ui.sh:469
+#, sh-format
+msgid ""
+"${BBlue}   * ${Color_Off}│ ${BBlue}update status${Color_Off} (automatic "
+"every 15 seconds)\\n     │"
+msgstr ""
+
+#: ../ui/ui.sh:479
+msgid "Select (Restart/interrupt, Eliminate, Play audio/video)"
+msgstr ""
+
+#: ../ui/ui.sh:481
+msgid "Select download numbers, separated by spaces (you can not select):"
+msgstr ""
+
+#: ../ui/ui.sh:488
+msgid "Proceed"
+msgstr ""
+
+#: ../ui/ui.sh:489
+msgid "What do you want to do with the selected downloads?"
+msgstr ""
+
+#: ../ui/ui.sh:491
+#, sh-format
+msgid ""
+"${BYellow} r ${Color_Off}│ ${BYellow}r${Color_Off}estart, if an instance of "
+"ZDL is active (if --multi >0), otherwise suspend them\n"
+"${BRed} E ${Color_Off}│ definitively ${BRed}e${Color_Off}liminate them (and "
+"delete the downloaded file)\n"
+"   │\n"
+"${BGreen} p ${Color_Off}│ (${BGreen}p${Color_Off}lay) the audio/video files\n"
+"   │\n"
+"${BBlue} * ${Color_Off}│ ${BBlue}main screen${Color_Off}\\n"
+msgstr ""
+
+#: ../ui/ui.sh:498
+msgid "Select what to do: ( r | E | p | * ):"
+msgstr ""
+
+#: ../ui/ui.sh:680
+msgid "Address of the irc host (the 'irc://' protocol is not necessary):"
+msgstr ""
+
+#: ../ui/ui.sh:681
+msgid "Channel (the hash '#' is not necessary):"
+msgstr ""
+
+#: ../ui/ui.sh:682
+msgid "Private message (the '/msg' command is not necessary):"
+msgstr ""
+
+#: ../ui/ui.sh:685
+msgid "Acquisition of missing data for XDCC (enter 'quit' to cancel)"
+msgstr ""
+
+#: ../ui/ui.sh:728
+msgid "Hours:"
+msgstr ""
+
+#: ../ui/ui.sh:729
+msgid "Minutes:"
+msgstr ""
+
+#: ../ui/ui.sh:730
+msgid "Seconds:"
+msgstr ""
+
+#: ../ui/ui.sh:752
+msgid "Enter an integer in the range from 0 to %d (inclusive)\\n"
+msgstr ""
+
+#: ../ui/ui.sh:781
+msgid "Available channels (choose the corresponding number):"
+msgstr ""
+
+#: ../ui/ui.sh:790
+msgid "\\nSelect the channel from which to download the live (0-$[i-1]):"
+msgstr ""
+
+#: ../ui/ui.sh:799
+msgid "A schedule already exists for this channel:"
+msgstr ""
+
+#: ../ui/ui.sh:800
+msgid ""
+"you can delete the previous one and create a new one or leave the previous "
+"one and cancel this operation.\\n"
+msgstr ""
+
+#: ../ui/ui.sh:801
+msgid ""
+"Do you want to create a new schedule, deleting the previous one? [yes|*]"
+msgstr ""
+
+#: ../ui/ui.sh:826
+msgid "Operation canceled: previous programming is maintained"
+msgstr ""
+
+#: ../ui/ui.sh:834
+msgid "Live stream: program for downloading the live"
+msgstr ""
+
+#: ../ui/ui.sh:836
+msgid ""
+"It is necessary to indicate the recording start time and its duration\\n"
+msgstr ""
+
+#: ../ui/ui.sh:838
+msgid "Recording start time:"
+msgstr ""
+
+#: ../ui/ui.sh:839
+msgid "Do you want to register right away? [yes|*]"
+msgstr ""
+
+#: ../ui/ui.sh:855
+msgid "Recording duration:"
+msgstr ""
+
+#: ../ui/ui.sh:864
+msgid "The starting time is lower than the current one: is it tomorrow? [*|no]"
+msgstr ""
+
+#: ../ui/ui.sh:874
+msgid "\\nThe download from %s will start around %s for the duration of %s\\n"
+msgstr ""
+
+#: ../ui/ui.sh:883
+msgid "Scheduled Live Streams (link, start time, duration):"
+msgstr ""

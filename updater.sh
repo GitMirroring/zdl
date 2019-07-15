@@ -341,6 +341,15 @@ function update {
     try mkdir -p /etc/bash_completion.d/
     try install -T zdl/docs/zdl.completion /etc/bash_completion.d/zdl
     try mv "$prog" "$SHARE"
+    
+    for dir in locale/*
+    do
+	if [ -d "$dir" ]
+	then
+	    try mkdir -p /usr/local/share/locale/"$dir"/LC_MESSAGES/
+	    sudo install zdl/locale/"$dir"/LC_MESSAGES/zdl.mo /usr/local/share/locale/"$dir"/LC_MESSAGES/
+	fi
+    done
 
     if [ $? != 0 ]
     then

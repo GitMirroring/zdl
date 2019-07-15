@@ -1,0 +1,569 @@
+# ZigzagDownLoader: italian locale
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <zoninoz@inventati.org>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-15 21:19+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
+"Language-Team: Italiano <it@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../zdl:39
+#, sh-format
+msgid "Updating $name_prog"
+msgstr "Aggiornamento automatico di $name_prog"
+
+#: ../zdl:64
+msgid "Updating"
+msgstr "Aggiornamento"
+
+#: ../zdl:66
+#, sh-format
+msgid "$TEXT\\n\\nA new update is available, choose what to do:\\n\\n"
+msgstr "$TEXT\\n\\nDisponibile un nuovo aggiornamento, scegli cosa fare:\\n\\n"
+
+#: ../zdl:70
+msgid "Don't ask for it again in this session"
+msgstr "Non chiederlo più in questa sessione"
+
+#: ../zdl:71
+msgid "Postpone"
+msgstr "Rimanda"
+
+#: ../zdl:72
+msgid "Update"
+msgstr "Aggiorna"
+
+#: ../zdl:88
+msgid "Enter the user password (sudo):"
+msgstr "Digita la password utente (sudo):"
+
+#: ../zdl:136
+msgid "Downloading..."
+msgstr "Download in corso: attendere..."
+
+#: ../zdl:155
+msgid ""
+"Connection problems: if it does not resolve, close the program with <Control "
+"+ c>"
+msgstr ""
+"Problemi di connessione: se non dovesse risolversi, chiudi il programma con "
+"<Control + c>"
+
+#: ../zdl:163
+msgid "Update %s with %s"
+msgstr "Aggiornamento di %s con %s"
+
+#: ../zdl:177
+msgid "Update failed: package %s cannot be opened"
+msgstr "Aggiornamento fallito: non è possibile aprire il pacchetto %s"
+
+#: ../zdl:187
+#, sh-format
+msgid "${BGreen}$PROG is already the latest version\\n"
+msgstr "${BGreen}$PROG è già alla versione più recente\\n"
+
+#: ../zdl:428
+msgid "Temporary file deleted\\n"
+msgstr "File temporanei cancellati\\n"
+
+#: ../zdl:429
+msgid "Cleaning of temporary files not carried out (non-existent files)\\n"
+msgstr "Pulizia file temporanei non effettuata (file inesistenti)\\n"
+
+#: ../zdl:712
+msgid "The format conversion function depends on ffmpeg or avconv, not found"
+msgstr ""
+"La funzione di conversione in formato dipende da ffmpeg o da avconv, non "
+"trovati"
+
+#: ../zdl:746
+msgid "Started in daemon mode in %s\\n"
+msgstr "Avviato in modalità demone in %s\\n"
+
+#: ../zdl:747 ../zdl:757
+#, sh-format
+msgid "You can control it with: ${Color_Off}$prog -i \"$PWD\"\\n"
+msgstr "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\\n"
+
+#: ../zdl:756
+msgid "An active instance of daemon mode already exists in %s\\n"
+msgstr "Esiste già un'istanza attiva della modalità demone in %s\\n"
+
+#: ../zdl:825
+#, sh-format
+msgid "New socket started at the port $socket_port"
+msgstr "Avviato nuovo socket alla porta $socket_port"
+
+#: ../zdl:832
+#, sh-format
+msgid ""
+"Socket already in use at the port $socket_port (you can specify a new port "
+"with: -s PORTA or --socket=PORTA)"
+msgstr ""
+"Socket già in uso alla porta $socket_port (puoi specificare una nuova porta "
+"con: -s PORTA oppure --socket=PORTA)"
+
+#: ../zdl:837
+#, sh-format
+msgid "Socket not started at the port $socket_port"
+msgstr "Socket non avviato alla porta $socket_port"
+
+#: ../zdl:1043
+#, sh-format
+msgid ""
+"${BRed}Deprecated option: '--multi = [NUMBER]' is replaced by '--max-"
+"downloads = [NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
+msgstr ""
+"${BRed}Opzione deprecata: '--multi=[NUMERO]' è sostituita da '--max-"
+"downloads=[NUMERO]'. Resta invariata l'opzione breve '-m [NUMERO]'\\n"
+
+#: ../zdl:1066
+msgid "HTTP proxy detected: %s"
+msgstr "Rilevato proxy HTTP: %s"
+
+#: ../zdl:1071
+msgid "IP address: %s"
+msgstr "Indirizzo IP: %s"
+
+#: ../zdl:1074
+msgid "IP address not detected"
+msgstr "Indirizzo IP non rilevato"
+
+#: ../zdl:1130
+#, sh-format
+msgid "A file already exists with the same name as ${print_out}\\n"
+msgstr "Esiste già un file con lo stesso nome di ${print_out}\\n"
+
+#: ../zdl:1137
+#, sh-format
+msgid ""
+"The file list will be saved in $print_out\\n(you can also use it to "
+"communicate the files being downloaded to another program)\\n"
+msgstr ""
+"La lista dei file verrà salvata in $print_out\\n(puoi anche usarla per "
+"comunicare i file in scaricamento a un altro programma)\\n"
+
+#: ../zdl:1176
+msgid "Active proxy: %s\\n"
+msgstr "Proxy attivo: %s\\n"
+
+#: ../zdl:1179 ../zdl:1183 ../zdl:1270
+msgid "%s: invalid argument\\n\\n"
+msgstr "%s: argomento non valido\\n\\n"
+
+#: ../zdl:1282
+msgid "Connection and extraction from:\\n%s\\n"
+msgstr "Connessione ed estrazione da:\\n%s\\n"
+
+#: ../zdl:1338
+msgid "The complete list of links is in links.txt\\n"
+msgstr "L'elenco completo dei link è in links.txt\\n"
+
+#: ../zdl:1537
+msgid "Processing link:"
+msgstr "Link da processare:"
+
+#: ../zdl:1540
+msgid "Connecting..."
+msgstr "Connessione in corso"
+
+#: ../zdl:1673
+msgid "File URL: %s"
+msgstr "URL del file: %s"
+
+#: ../zdl:1817
+msgid "Download completed"
+msgstr "Download completato"
+
+#: ../zdl:1833
+msgid ""
+"\\nIn %s there is a file that contains a list of operations of %s terminated "
+"without success."
+msgstr ""
+"\\nIn %s è presente un file che contiene un elenco di operazioni di %s "
+"terminate senza successo."
+
+#: ../zdl:1834
+msgid "To read it, enter:"
+msgstr "Per leggerlo, digita:"
+
+#: ../ui/ui.sh:88
+msgid "Connecting"
+msgstr "Connessione in corso"
+
+#: ../ui/ui.sh:117
+msgid "Interactive mode"
+msgstr "Modalità interattiva"
+
+#: ../ui/ui.sh:124
+msgid "%s is active in daemon mode (pid: %s)\\n"
+msgstr "%s è attivo in modalità demone (pid: %s)\\n"
+
+#: ../ui/ui.sh:132
+#, sh-format
+msgid "in this same terminal: $this_tty"
+msgstr "in questo stesso terminale: $this_tty"
+
+#: ../ui/ui.sh:135
+#, sh-format
+msgid "in another terminal: $that_tty"
+msgstr "in un altro terminale: $that_tty"
+
+#: ../ui/ui.sh:138
+msgid "%s is active in standard mode %s\\n"
+msgstr "%s è attivo in modalità standard %s\\n"
+
+#: ../ui/ui.sh:148
+msgid "There are no active instances of %s\\n"
+msgstr "Non ci sono istanze attive di %s\\n"
+
+#: ../ui/ui.sh:180
+msgid "\\nWeb-generated links (even after captcha)"
+msgstr "\\nLink generati dal web (anche dopo captcha):"
+
+#: ../ui/ui.sh:181
+msgid "and other services"
+msgstr "ed altri servizi"
+
+#: ../ui/ui.sh:186
+msgid "\\nAll downloadable files with the following browser extensions:"
+msgstr "\\nTutti i file scaricabili con le seguenti estensioni dei browser:"
+
+#: ../ui/ui.sh:187
+msgid ""
+"Flashgot of Firefox/Iceweasel/Icecat, function 'M-x zdl' by Conkeror and "
+"script 'zdl-xterm' (XXXTerm/Xombrero and others)"
+msgstr ""
+"Flashgot di Firefox/Iceweasel/Icecat, funzione 'M-x zdl' di Conkeror e "
+"script 'zdl-xterm' (XXXTerm/Xombrero e altri)"
+
+#: ../ui/ui.sh:189
+msgid "\\nAll downloadable files with the following programs:"
+msgstr "\\nTutti i file scaricabili con i seguenti programmi:"
+
+#: ../ui/ui.sh:200
+msgid "help of commands"
+msgstr "Help dei comandi"
+
+#: ../ui/ui.sh:201
+#, sh-format
+msgid "Standard output mode${header_lite_msg}"
+msgstr "Modalità in standard output${header_lite_msg}"
+
+#: ../ui/ui.sh:218
+msgid "Readline: enter URLs and service links"
+msgstr "Readline: immetti URL e link dei servizi"
+
+#: ../ui/ui.sh:225
+msgid "Live stream: select the live channel"
+msgstr "Live stream: seleziona il canale della diretta"
+
+#: ../ui/ui.sh:244
+msgid "Commands in standard output mode (key M=Meta: <Alt>, <Ctrl> or <Esc>)"
+msgstr ""
+"Comandi in modalità standard output (tasto M=Meta: <Alt>, <Ctrl> o <Esc>)"
+
+#: ../ui/ui.sh:246
+#, sh-format
+msgid ""
+"${BGreen} ENTER ${BBlue}│${Color_Off}  enter a link and type ${BGreen}ENTER\n"
+"${BGreen} M-x   ${BBlue}│${Color_Off}  performs downloads [e${BGreen}x"
+"${Color_Off}ec]\n"
+"${BGreen} M-e   ${BBlue}│${Color_Off}  starts the default ${BGreen}e"
+"${Color_Off}ditor\n"
+"${BGreen} M-c   ${BBlue}│${Color_Off}  ${BGreen}c${Color_Off}lean the "
+"information of the completed downloads\n"
+"       ${BBlue}│${Color_Off}\n"
+"${BYellow} M-i   ${BBlue}│${Color_Off}  ${BYellow}i${Color_Off}nteractive "
+"mode\n"
+"${BYellow} M-C   ${BBlue}│${Color_Off}  ${BYellow}C${Color_Off}onfigure "
+"$PROG\n"
+"       ${BBlue}│${Color_Off} \n"
+"${BRed} M-q   ${BBlue}│${Color_Off}  close ZDL without interrupting the "
+"downloaders [${BRed}q${Color_Off}uit]\n"
+"${BRed} M-k   ${BBlue}│${Color_Off}  kill all processes [${BRed}k${Color_Off}"
+"ill]\n"
+"       ${BBlue}│${Color_Off} \n"
+"${BBlue} M-t   │${Color_Off}  browse the ${BBlue}t${Color_Off}utorial\n"
+"${BBlue} M-l   │${Color_Off}  available services ${BBlue}l${Color_Off}ist\n"
+"${BBlue} M-h   │${Color_Off}  displays this box [${BBlue}h${Color_Off}elp]"
+msgstr ""
+"${BGreen} INVIO ${BBlue}│${Color_Off}  immetti un link e digita ${BGreen}"
+"INVIO\n"
+"${BGreen} M-x   ${BBlue}│${Color_Off}  esegue i download [e${BGreen}x"
+"${Color_Off}ec]\n"
+"${BGreen} M-e   ${BBlue}│${Color_Off}  avvia l'${BGreen}e${Color_Off}ditor "
+"predefinito\n"
+"${BGreen} M-c   ${BBlue}│${Color_Off}  ${BGreen}c${Color_Off}ancella le "
+"informazioni dei download completati\n"
+"       ${BBlue}│${Color_Off} \n"
+"${BYellow} M-i   ${BBlue}│${Color_Off}  modalità ${BYellow}i${Color_Off}"
+"nterattiva\n"
+"${BYellow} M-C   ${BBlue}│${Color_Off}  ${BYellow}C${Color_Off}onfigura "
+"$PROG\n"
+"       ${BBlue}│${Color_Off} \n"
+"${BRed} M-q   ${BBlue}│${Color_Off}  chiudi ZDL senza interrompere i "
+"downloader [${BRed}q${Color_Off}uit]\n"
+"${BRed} M-k   ${BBlue}│${Color_Off}  uccidi tutti i processi[${BRed}k"
+"${Color_Off}ill]\n"
+"       ${BBlue}│${Color_Off}\n"
+"${BBlue} M-t   │${Color_Off}  sfoglia il ${BBlue}t${Color_Off}utorial\n"
+"${BBlue} M-l   │${Color_Off}  ${BBlue}l${Color_Off}ista dei servizi "
+"abilitati\n"
+"${BBlue} M-h   │${Color_Off}  visualizza questo riquadro [${BBlue}h"
+"${Color_Off}elp]"
+
+#: ../ui/ui.sh:269
+msgid "URL entry completed: download start\\n"
+msgstr "Immissione URL terminata: avvio download\\n"
+
+#
+# echo -e "$(eval_gettext )"
+#: ../ui/ui.sh:442
+#, sh-format
+msgid "Options [number of simultaneous downloads: $num_downloads]"
+msgstr "Opzioni [numero di download simultanei: $num_downloads]"
+
+#: ../ui/ui.sh:444
+#, sh-format
+msgid ""
+"${BYellow}   s ${Color_Off}│ ${BYellow}s${Color_Off}elect one or more "
+"downloads (to restart, delete, play audio/video files)\\n     │\n"
+"${BGreen}   e ${Color_Off}│ change the queue of links to be downloaded, "
+"using the default ${BGreen}e${Color_Off}ditor\\n     │"
+msgstr ""
+"${BYellow}   s ${Color_Off}│ ${BYellow}s${Color_Off}eleziona uno o più "
+"download (per riavviare, eliminare, riprodurre fileaudio/video)\n"
+"     │\n"
+"${BGreen}   e ${Color_Off}│ modifica la coda dei link da scaricare, usando "
+"l'${BGreen}e${Color_Off}ditor predefinito\n"
+"     │"
+
+#: ../ui/ui.sh:448
+#, sh-format
+msgid "${BGreen}   a ${Color_Off}│ download with ${BGreen}a${Color_Off}xel\\n"
+msgstr "${BGreen}   a ${Color_Off}│ scarica con ${BGreen}a${Color_Off}xel\\n"
+
+#: ../ui/ui.sh:449
+#, sh-format
+msgid "${BGreen}   A ${Color_Off}│ download with ${BGreen}A${Color_Off}ria2\\n"
+msgstr "${BGreen}   A ${Color_Off}│ scarica con ${BGreen}A${Color_Off}ria2\\n"
+
+#: ../ui/ui.sh:450
+#, sh-format
+msgid "${BGreen}   w ${Color_Off}│ download with ${BGreen}w${Color_Off}get\\n"
+msgstr "${BGreen}   w ${Color_Off}│ scarica con ${BGreen}w${Color_Off}get\\n"
+
+#: ../ui/ui.sh:455
+#, sh-format
+msgid ""
+"     │\\n${BGreen} 0-9 ${Color_Off}│ download ${BGreen}a number from 0 to "
+"9${Color_Off} files at a time ($PROG pause = 0)\n"
+"${BGreen}   m ${Color_Off}│ download ${BGreen}m${Color_Off}any files at a "
+"time\\n     │"
+msgstr ""
+"     │\\n${BGreen} 0-9 ${Color_Off}│ scarica ${BGreen}un numero da 0 a "
+"9${Color_Off} di file alla volta (pausa di $PROG = 0)\n"
+"${BGreen}   m ${Color_Off}│ scarica ${BGreen}m${Color_Off}olti file alla "
+"volta\\n     │"
+
+#: ../ui/ui.sh:459
+#, sh-format
+msgid "${BGreen}   d ${Color_Off}│ start ${BGreen}d${Color_Off}aemon"
+msgstr "${BGreen}   d ${Color_Off}│ avvia ${BGreen}d${Color_Off}emone"
+
+#: ../ui/ui.sh:461
+#, sh-format
+msgid ""
+"${BGreen}   c ${Color_Off}│ ${BGreen}c${Color_Off}lean temporary files of "
+"completed downloads\n"
+"     │\n"
+"${BRed}   K ${Color_Off}│ stop all downloads and every instance of ZDL in "
+"the directory (${BRed}K${Color_Off}ill-all)"
+msgstr ""
+"${BGreen}   c ${Color_Off}│ ${BGreen}c${Color_Off}ancella i file "
+"temporaneidei download completati\n"
+"     │\n"
+"${BRed}   K ${Color_Off}│ interrompi tutti i download e ogni istanzadi ZDL "
+"nella directory (${BRed}K${Color_Off}ill-all)"
+
+#: ../ui/ui.sh:466
+#, sh-format
+msgid ""
+"${BRed}   Q ${Color_Off}│ stop an active instance of $PROG in $PWD but not "
+"the downloads already started"
+msgstr ""
+"${BRed}   Q ${Color_Off}│ ferma un'istanza attiva di $PROG in $PWD lasciando "
+"attivi i downloader già avviati"
+
+#: ../ui/ui.sh:468
+#, sh-format
+msgid ""
+"     │\\n${BBlue}   q ${Color_Off}│ ${BBlue}q${Color_Off}uit from $PROG --"
+"interactive "
+msgstr ""
+"     │\\n${BBlue}   q ${Color_Off}│ esci da $PROG --interactive (${BBlue}q"
+"${Color_Off}uit)"
+
+#: ../ui/ui.sh:469
+#, sh-format
+msgid ""
+"${BBlue}   * ${Color_Off}│ ${BBlue}update status${Color_Off} (automatic "
+"every 15 seconds)\\n     │"
+msgstr ""
+"${BBlue}   * ${Color_Off}│ ${BBlue}aggiorna lo stato${Color_Off}(automatico "
+"ogni 15 secondi)\n"
+"     │"
+
+#: ../ui/ui.sh:479
+msgid "Select (Restart/interrupt, Eliminate, Play audio/video)"
+msgstr "Seleziona (Riavvia/sospendi, Elimina, Riproduci audio/video)"
+
+#: ../ui/ui.sh:481
+msgid "Select download numbers, separated by spaces (you can not select):"
+msgstr ""
+"Seleziona i numeri dei download, separati da spazi (puoi non scegliere):"
+
+#: ../ui/ui.sh:488
+msgid "Proceed"
+msgstr "Procedi"
+
+#: ../ui/ui.sh:489
+msgid "What do you want to do with the selected downloads?"
+msgstr "Cosa vuoi fare con i download selezionati?"
+
+#: ../ui/ui.sh:491
+#, sh-format
+msgid ""
+"${BYellow} r ${Color_Off}│ ${BYellow}r${Color_Off}estart, if an instance of "
+"ZDL is active (if --multi >0), otherwise suspend them\n"
+"${BRed} E ${Color_Off}│ definitively ${BRed}e${Color_Off}liminate them (and "
+"delete the downloaded file)\n"
+"   │\n"
+"${BGreen} p ${Color_Off}│ (${BGreen}p${Color_Off}lay) the audio/video files\n"
+"   │\n"
+"${BBlue} * ${Color_Off}│ ${BBlue}main screen${Color_Off}\\n"
+msgstr ""
+"${BYellow} r ${Color_Off}│ ${BYellow}r${Color_Off}iavviarli se è "
+"attivaun'istanza di ZDL (con --multi >0), altrimenti sospenderli\n"
+"${BRed} E ${Color_Off}│ ${BRed}e${Color_Off}liminarli definitivamente(e "
+"cancellare il file scaricato)\n"
+"${BRed} T ${Color_Off}│ ${BRed}t${Color_Off}erminarli definitivamenteSENZA "
+"cancellare il file scaricato (cancella solo il link dalla coda di download)\n"
+"   │\n"
+"${BGreen} p ${Color_Off}│ riprodurre (${BGreen}p${Color_Off}lay) i file "
+"audio/video\n"
+"   │\n"
+"${BBlue} * ${Color_Off}│ ${BBlue}schermata principale${Color_Off}\\n"
+
+#: ../ui/ui.sh:498
+msgid "Select what to do: ( r | E | p | * ):"
+msgstr "Scegli cosa fare: ( r | E | p | * ):"
+
+#: ../ui/ui.sh:680
+msgid "Address of the irc host (the 'irc://' protocol is not necessary):"
+msgstr "Indirizzo dell'host irc (il protocollo 'irc://' non è necessario):"
+
+#: ../ui/ui.sh:681
+msgid "Channel (the hash '#' is not necessary):"
+msgstr "Canale (il cancelletto '#' non è necessario):"
+
+#: ../ui/ui.sh:682
+msgid "Private message (the '/msg' command is not necessary):"
+msgstr "Messaggio privato (il comando '/msg' non è necessario):"
+
+#: ../ui/ui.sh:685
+msgid "Acquisition of missing data for XDCC (enter 'quit' to cancel)"
+msgstr "Acquisizione dati mancanti per XDCC (inserisci 'quit' per annullare)"
+
+#: ../ui/ui.sh:728
+msgid "Hours:"
+msgstr "Ore:"
+
+#: ../ui/ui.sh:729
+msgid "Minutes:"
+msgstr "Minuti:"
+
+#: ../ui/ui.sh:730
+msgid "Seconds:"
+msgstr "Secondi:"
+
+#: ../ui/ui.sh:752
+msgid "Enter an integer in the range from 0 to %d (inclusive)\\n"
+msgstr "Digitare un numero intero nell'intervallo da 0 a %d (compresi)\\n"
+
+#: ../ui/ui.sh:781
+msgid "Available channels (choose the corresponding number):"
+msgstr "Canali disponibili (scegli il numero corrispondente):"
+
+#: ../ui/ui.sh:790
+msgid "\\nSelect the channel from which to download the live (0-$[i-1]):"
+msgstr "\\nSeleziona il canale da cui scaricare la diretta (0-$[i-1]):"
+
+#: ../ui/ui.sh:799
+msgid "A schedule already exists for this channel:"
+msgstr "Esiste già una programmazione per questo canale:"
+
+#: ../ui/ui.sh:800
+msgid ""
+"you can delete the previous one and create a new one or leave the previous "
+"one and cancel this operation.\\n"
+msgstr ""
+"puoi cancellare quella precedente e crearne una nuova oppure lasciare quella "
+"precedente e annullare questa operazione.\\n"
+
+#: ../ui/ui.sh:801
+msgid ""
+"Do you want to create a new schedule, deleting the previous one? [yes|*]"
+msgstr ""
+"Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
+
+#: ../ui/ui.sh:826
+msgid "Operation canceled: previous programming is maintained"
+msgstr "Operazione annullata: è mantenuta la programmazione precedente"
+
+#: ../ui/ui.sh:834
+msgid "Live stream: program for downloading the live"
+msgstr "Live stream: programma il download della diretta"
+
+#: ../ui/ui.sh:836
+msgid ""
+"It is necessary to indicate the recording start time and its duration\\n"
+msgstr ""
+"È necessario indicare l'orario di inizio registrazione e la sua durata\\n"
+
+#: ../ui/ui.sh:838
+msgid "Recording start time:"
+msgstr "Orario di inizio registrazione:"
+
+#: ../ui/ui.sh:839
+msgid "Do you want to register right away? [yes|*]"
+msgstr "Vuoi registrare subito? [sì|*]"
+
+#: ../ui/ui.sh:855
+msgid "Recording duration:"
+msgstr "Durata registrazione:"
+
+#: ../ui/ui.sh:864
+msgid "The starting time is lower than the current one: is it tomorrow? [*|no]"
+msgstr "L'orario di inizio è inferiore a quello attuale: è di domani? [*|no]"
+
+#: ../ui/ui.sh:874
+msgid "\\nThe download from %s will start around %s for the duration of %s\\n"
+msgstr "\\nIl download da %s si avvierà intorno alle %s per la durata di %s\\n"
+
+#: ../ui/ui.sh:883
+msgid "Scheduled Live Streams (link, start time, duration):"
+msgstr "Live Stream programmati (link, orario inizio, durata):"
+
+#~ msgid "Restart or Eliminate"
+#~ msgstr "Riavvia o Elimina"

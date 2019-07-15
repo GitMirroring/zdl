@@ -1273,7 +1273,7 @@ function display_multiprogress_opts {
 		if [[ "${res[2]}" =~ ^(flac|mp3)$ ]]
 		then
 		    echo "${res[2]}" > "$path_tmp"/format-post_processor
-		    echo "scaricati_da_zdl.txt" >"$path_tmp"/print_out-post_processor 2>/dev/null
+		    echo "$downloaded_by_zdl" >"$path_tmp"/print_out-post_processor 2>/dev/null
 
 		else
 		    echo > "$path_tmp"/format-post_processor

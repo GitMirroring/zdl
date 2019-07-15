@@ -145,7 +145,7 @@ function countdown+ {
 	sleeping 1
 	s=`date +"%s"`
 	s=$(( $s-$k ))
-	print_c 0 "$s\r\c"
+	print_c 0 "%d\r" $s
     done 
 }
 
@@ -164,8 +164,8 @@ function countdown- {
 	fi
 	this=`date +"%s"`
 	diff=$(( $stop-$this ))
-	print_c 0 "           \r\c"
-	print_c 0 "$diff\r\c"
+	sprint_c 0 "           \r"
+	sprint_c 0 "%d\r" $diff
 	sleeping 1
     done
 }

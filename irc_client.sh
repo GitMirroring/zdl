@@ -24,6 +24,13 @@
 # zoninoz@inventati.org
 #
 
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
+
 path_usr="/usr/local/share/zdl"
 path_tmp=".zdl_tmp"
 gui_log="$path_tmp"/gui-log.txt

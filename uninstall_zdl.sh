@@ -24,6 +24,12 @@
 # zoninoz@inventati.org
 #
 
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
 
 function usage {
     echo "Uso: ./uninstall_zdl.sh [--purge] [-h|--help]"
