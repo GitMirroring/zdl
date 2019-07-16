@@ -1149,35 +1149,35 @@ function clean_livestream {
     local line
     declare -a lines
 
-    if [ -f "$path_tmp/rewriting" ]
+    if [ -f "$path_tmp"/live-rewriting ]
     then
-	while [ -f "$path_tmp/rewriting" ]
-	do
-	    sleeping 0.1
-	done
+    	while [ -f "$path_tmp"/live-rewriting ]
+    	do
+    	    sleeping 0.1
+    	done
     fi
-
-    [ ! -s "$path_tmp"/links_loop.txt ] &&
-	rm -f "$path_tmp"/livestream_time.txt
-    
+    touch "$path_tmp"/live-rewriting
+#touch entrato
     if [ -s "$path_tmp"/livestream_time.txt ]
     then
-	while read -a lines
-	do
-	    set_link in "${lines[0]}" ||
-		sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
+    	while read -a lines
+    	do
+    	    if ! set_link in "${lines[0]}"
+	    then
+    		sed -r "s|^${lines[0]}\ [0-9]{2}.+$||g" -i "$path_tmp"/livestream_time.txt
+	    fi
 
-	done < "$path_tmp"/livestream_time.txt
+    	done < "$path_tmp"/livestream_time.txt
 	
-	[ -e "$path_tmp"/livestream_time.txt ] &&
-	    line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
+    	[ -e "$path_tmp"/livestream_time.txt ] &&
+    	    line=$(awk '!($0 in a){a[$0]; if ($0) print}' "$path_tmp"/livestream_time.txt) 
 
-	if [ -n "$line" ]
-	then
-	    echo "$line" >"$path_tmp"/livestream_time.txt
-	else
-	    rm -f "$path_tmp"/livestream_time.txt
-	fi
+    	if [ -n "$line" ]
+    	then
+    	    echo "$line" >"$path_tmp"/livestream_time.txt
+    	else
+    	    rm -f "$path_tmp"/livestream_time.txt
+    	fi
     fi
 
     [ ! -s "$path_tmp"/livestream_time.txt ] &&
@@ -1195,6 +1195,8 @@ function clean_livestream {
 	
 	clean_file "$path_tmp"/livestream_start.txt
     fi
+
+    rm -f "$path_tmp/live-rewriting"
 }
 
 function check_linksloop_livestream {

@@ -330,17 +330,35 @@ function update {
     [ ! -e "$SHARE" ] && try mkdir -p "$SHARE"
 
     try rm -rf "$SHARE"
-    try mkdir -p /usr/share/info
-    try mkdir -p /usr/share/man/it/man1
-    try install zdl/docs/zdl.1 /usr/share/man/it/man1/
-    try rm -f /usr/share/man/man1/zdl.1
-    try ln -s /usr/share/man/it/man1/zdl.1 /usr/share/man/man1/zdl.1
+    # try mkdir -p /usr/share/info
+    # try mkdir -p /usr/share/man/it/man1
+    # try install zdl/docs/zdl.1 /usr/share/man/it/man1/
+    # try rm -f /usr/share/man/man1/zdl.1
+    # try ln -s /usr/share/man/it/man1/zdl.1 /usr/share/man/man1/zdl.1
+    # try mandb -q
+    # try install -m 644 zdl/docs/zdl.info /usr/share/info/
+    # try install-info --info-dir=/usr/share/info /usr/share/info/zdl.info &>/dev/null
+    for lang in it en
+    do
+	## info zdl
+	try rm -f /usr/share/info/zdl.info
+	try mkdir -p /usr/share/info/$lang/
+	try install -m 644 $HOME/zdl-git/code/docs/$lang/zdl.info /usr/share/info/$lang/
+	try install-info --info-dir=/usr/share/info/$lang/ /usr/share/info/$lang/zdl.info &>/dev/null
+
+	## man zdl
+	try mkdir -p /usr/share/man/$lang/man1/
+	try install $HOME/zdl-git/code/docs/$lang/zdl.1 /usr/share/man/$lang/man1/
+	try rm -f /usr/share/man/man1/zdl.1
+	#try ln -s /usr/share/man/it/man1/zdl.1 /usr/share/man/man1/zdl.1
+    done
     try mandb -q
-    try install -m 644 zdl/docs/zdl.info /usr/share/info/
-    try install-info --info-dir=/usr/share/info /usr/share/info/zdl.info &>/dev/null
+
+    ## bash completion
     try mkdir -p /etc/bash_completion.d/
     try install -T zdl/docs/zdl.completion /etc/bash_completion.d/zdl
-    
+
+    ## software locale
     for dir in zdl/locale/*
     do
 	if [ -d "$dir" ]
@@ -390,10 +408,10 @@ NB:
   (puoi collegarle automaticamente con: zdl -fu)
 
 ESTENSIONI:
-" > "$path_conf"/extensions/README.txt
+" > "$path_conf"/extensions/LEGGIMI.txt
 
     find $SHARE/extensions/ -type f |
-	grep -P extensions/[^/]+.sh$  >> "$path_conf"/extensions/README.txt
+	grep -P extensions/[^/]+.sh$  >> "$path_conf"/extensions/LEGGIMI.txt
     
     if [[ $(ls "$path_conf"/extensions/*.sh 2>/dev/null) ]]
     then

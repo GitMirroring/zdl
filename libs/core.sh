@@ -318,22 +318,22 @@ function set_link {
 	
 	if set_line_in_file "$op" "$link" "$path_tmp/links_loop.txt"
 	then
-	    if [ "$op" == '-' ] &&
-		   data_stdout
+	    if [ "$op" == '-' ]
 	    then
-		for ((i=0; i<${#file_out[@]}; i++))
-		do
-		    if [ "${url_out[i]}" == "$link" ]
-		    then
-			check_pid "${pid_out[i]}" && kill -9 "${pid_out[i]}" &>/dev/null
-			rm -rf "${file_out[i]}" \
-			   "${file_out[i]}".st \
-			   "${file_out[i]}".aria2 \
+		data_stdout &&
+		    for ((i=0; i<${#file_out[@]}; i++))
+		    do
+			if [ "${url_out[i]}" == "$link" ]
+			then
+			    check_pid "${pid_out[i]}" && kill -9 "${pid_out[i]}" &>/dev/null
+			    rm -rf "${file_out[i]}" \
+			       "${file_out[i]}".st \
+			       "${file_out[i]}".aria2 \
 			   "${file_out[i]}".MEGAenc \
 			   "$path_tmp"/"${file_out[i]}"_stdout.*
-			break
-		    fi
-		done
+			    break
+			fi
+		    done
 	    fi
 	    return 0
 	else
@@ -634,9 +634,9 @@ function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizio
 	local file_to_clean="$1"
 
 	## impedire scrittura non-lineare da più istanze di ZDL
-	if [ -f "$path_tmp/rewriting" ]
+	if [ -f "${file_to_clean}-rewriting" ]
 	then
-	    while [ -f "$path_tmp/rewriting" ]
+	    while [ -f "${file_to_clean}-rewriting" ]
 	    do
 		sleeping 0.1
 	    done

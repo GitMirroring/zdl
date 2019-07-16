@@ -372,9 +372,9 @@ function change_mode {
 	    ;;
     
 	info)
-	    # command -v pinfo &>/dev/null &&
-	    # 	pinfo -x zdl ||
-	    info zdl
+	    command -v pinfo &>/dev/null &&
+	    	pinfo -x zdl ||
+		    info zdl
 	    ;;
 	
 	list)

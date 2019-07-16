@@ -90,223 +90,235 @@ function set_item_conf {
 }
 
 function get_conf {
-    source "$file_conf"
-    if [ -z "$zdl_mode" ]
+    if [ -s "$file_conf" ]
     then
-	zdl_mode=stdout
-	set_item_conf zdl_mode stdout
-    fi
-    
-    if [ -z "$this_mode" ]
-    then
-	this_mode="$zdl_mode"	
-    fi
-    
-    ## downloader predefinito
-    if [ -f "$path_tmp/downloader" ]
-    then
-	downloader_in=$(cat "$path_tmp/downloader")
-	
-    else
-	if [ -z "$downloader" ]
+	source "$file_conf"
+	if [ -z "$zdl_mode" ]
 	then
-	    downloader=${val_conf[0]}
-	    set_item_conf downloader ${val_conf[0]}
+	    zdl_mode=stdout
+	    set_item_conf zdl_mode stdout
 	fi
-
-	for dlr in "$downloader" Aria2 Axel Wget
-	do
-	    if command -v "${_downloader[$dlr]}" &>/dev/null
-	    then
-		downloader_in="$dlr"
-		break
-	    fi
-	done
-	set_downloader "$downloader_in"
-    fi    
-
-    ## parti di Axel:
-    axel_parts_conf="$axel_parts"
-    if [ -z "$axel_parts_conf" ]
-    then
-	axel_parts_conf=32
-	set_item_conf axel_parts_conf 32
-    fi
-    ## CYGWIN
-    if [ -e "/cygdrive" ] &&
-	   (( $axel_parts_conf>10 ))
-    then
-	axel_parts_conf=10
-	set_item_conf axel_parts_conf 10
-    fi
-    axel_parts="$axel_parts_conf"
-    
-
-    ## connessioni di Aria2:
-    if [ -z "$aria2_connections" ]
-    then
-	aria2_connections=16
-	set_item_conf aria2_connections 16
-    fi
-    ## Valori massimi:
-    if [ -d /cygdrive ]
-    then
-	((aria2_connections>8)) &&
-	    aria2_connections=8
 	
-	set_item_conf aria2_connections 8
-
-    else
-	((aria2_connections>16)) &&
-	    aria2_connections=16
-	
-	set_item_conf aria2_connections 16
-    fi
-
-    #### pulizia vecchi parametri
-    ## single/multi
-    if [ "$mode" == "single" ]
-    then
-	max_dl=1
-	sed -r "/(^mode=|num_dl|stream_mode)/d" -i "$file_conf"
-	set_item_conf max_dl 1
-
-    elif [ "$mode" == "multi" ]
-    then
-	unset max_dl
-	sed -r "/(^mode=|num_dl|stream_mode)/d" -i "$file_conf"
-	set_item_conf max_dl ''
-    fi
-    ##
-    ##############################
-    
-    if [ -f "$path_tmp/max-dl" ]
-    then
-	max_dl="$(cat "$path_tmp/max-dl" 2>/dev/null)"
-
-    else
-	echo "$max_dl" > "$path_tmp/max-dl"
-    fi
-    
-    ## editor
-    if ! command -v "$(trim "${editor%% *}")" &>/dev/null
-    then
-	unset editor
-	set_item_conf editor ''
-    fi
-
-    ## player
-    if [ -z "$player" ]
-    then
-	if command -v mimeopen &>/dev/null
+	if [ -z "$this_mode" ]
 	then
-	    local mime_app=$(mimeopen -a NULL.mp4 <<< '' 2>/dev/null |
-				 grep '1)' |
-				 tr -d '\t')
-
-	    local player_name=$(sed -r 's|[^\)]+\)[\ ]*(.+)\(.+|\1|g' <<< "$mime_app")
-	    player_name="${player_name%% }"
-	    player_name="${player_name%% }" ## <-- perché è necessario due volte?
+	    this_mode="$zdl_mode"	
+	fi
+	
+	## downloader predefinito
+	if [ -f "$path_tmp/downloader" ]
+	then
+	    downloader_in=$(cat "$path_tmp/downloader")
 	    
-	    local player_filename="${mime_app##*\(}"
-	    player_filename="${player_filename%*\)*}"
-
-	    local mime_app_desktop=$(locate "$player_filename".desktop | head -n1)
-    
-	    if [ -s "$mime_app_desktop" ] &&
-		   grep -qP "^Name=$player_name" "$mime_app_desktop" &&
-		   [[ "$(cat "$mime_app_desktop")" =~ ^Exec=(.+) ]]
+	else
+	    if [ -z "$downloader" ]
 	    then
-		player="${BASH_REMATCH[1]%%\ *}"
-
-	    elif [ -n "$player_name" ] &&
-		     command -v "$player_name" &>/dev/null
-	    then
-		player="$player_name"
+		downloader=${val_conf[0]}
+		set_item_conf downloader ${val_conf[0]}
 	    fi
-	fi
 
-	if [ -z "$player" ]
-	then
-	    for cmd_player in vlc mpv smplayer dragon mplayer mplayer2 cvlc
+	    for dlr in "$downloader" Aria2 Axel Wget
 	    do
-		if command -v "$cmd_player" &>/dev/null
+		if command -v "${_downloader[$dlr]}" &>/dev/null
 		then
-		    player="$cmd_player"
+		    downloader_in="$dlr"
 		    break
 		fi
 	    done
+	    set_downloader "$downloader_in"
+	fi    
+
+	## parti di Axel:
+	axel_parts_conf="$axel_parts"
+	if [ -z "$axel_parts_conf" ]
+	then
+	    axel_parts_conf=32
+	    set_item_conf axel_parts_conf 32
 	fi
-    fi
-    
-    ## socket
-    if [ -z "$socket_port" ]
-    then
-	socket_port=${val_conf[14]}
-	set_item_conf socket_port ${val_conf[14]}
-    fi
+	## CYGWIN
+	if [ -e "/cygdrive" ] &&
+	       (( $axel_parts_conf>10 ))
+	then
+	    axel_parts_conf=10
+	    set_item_conf axel_parts_conf 10
+	fi
+	axel_parts="$axel_parts_conf"
+	
 
-    if [ -z "$web_ui" ]
-    then
-	web_ui=${val_conf[16]}
-	set_item_conf web_ui "$web_ui"
-    fi
+	## connessioni di Aria2:
+	if [ -z "$aria2_connections" ]
+	then
+	    aria2_connections=16
+	    set_item_conf aria2_connections 16
+	fi
+	## Valori massimi:
+	if [ -d /cygdrive ]
+	then
+	    ((aria2_connections>8)) &&
+		aria2_connections=8
+	    
+	    set_item_conf aria2_connections 8
 
-    if [ -z "$background" ]
-    then
-	background=${val_conf[4]}
-	set_item_conf background "$background"
-    fi
-    
-    [ "$background" == "black" ] &&
-	Background="$On_Black" && Foreground="$White" ||
-	    unset Background Foreground
+	else
+	    ((aria2_connections>16)) &&
+		aria2_connections=16
+	    
+	    set_item_conf aria2_connections 16
+	fi
 
-    [[ "$(tty)" =~ tty ]] &&
-	background=tty
-    
-    Color_Off="\033[0m${Foreground}${Background}"
+	#### pulizia vecchi parametri
+	## single/multi
+	if [ "$mode" == "single" ]
+	then
+	    max_dl=1
+	    sed -r "/(^mode=|num_dl|stream_mode)/d" -i "$file_conf"
+	    set_item_conf max_dl 1
 
-    [ -n "$language" ] &&
+	elif [ "$mode" == "multi" ]
+	then
+	    unset max_dl
+	    sed -r "/(^mode=|num_dl|stream_mode)/d" -i "$file_conf"
+	    set_item_conf max_dl ''
+	fi
+	##
+	##############################
+	
+	if [ -f "$path_tmp/max-dl" ]
+	then
+	    max_dl="$(cat "$path_tmp/max-dl" 2>/dev/null)"
+
+	else
+	    echo "$max_dl" > "$path_tmp/max-dl"
+	fi
+	
+	## editor
+	if ! command -v "$(trim "${editor%% *}")" &>/dev/null
+	then
+	    unset editor
+	    set_item_conf editor ''
+	fi
+
+	## player
+	if [ -z "$player" ]
+	then
+	    if command -v mimeopen &>/dev/null
+	    then
+		local mime_app=$(mimeopen -a NULL.mp4 <<< '' 2>/dev/null |
+				     grep '1)' |
+				     tr -d '\t')
+
+		local player_name=$(sed -r 's|[^\)]+\)[\ ]*(.+)\(.+|\1|g' <<< "$mime_app")
+		player_name="${player_name%% }"
+		player_name="${player_name%% }" ## <-- perché è necessario due volte?
+		
+		local player_filename="${mime_app##*\(}"
+		player_filename="${player_filename%*\)*}"
+
+		local mime_app_desktop=$(locate "$player_filename".desktop | head -n1)
+		
+		if [ -s "$mime_app_desktop" ] &&
+		       grep -qP "^Name=$player_name" "$mime_app_desktop" &&
+		       [[ "$(cat "$mime_app_desktop")" =~ ^Exec=(.+) ]]
+		then
+		    player="${BASH_REMATCH[1]%%\ *}"
+
+		elif [ -n "$player_name" ] &&
+			 command -v "$player_name" &>/dev/null
+		then
+		    player="$player_name"
+		fi
+	    fi
+
+	    if [ -z "$player" ]
+	    then
+		for cmd_player in vlc mpv smplayer dragon mplayer mplayer2 cvlc
+		do
+		    if command -v "$cmd_player" &>/dev/null
+		    then
+			player="$cmd_player"
+			break
+		    fi
+		done
+	    fi
+	fi
+	
+	## socket
+	if [ -z "$socket_port" ]
+	then
+	    socket_port=${val_conf[14]}
+	    set_item_conf socket_port ${val_conf[14]}
+	fi
+
+	if [ -z "$web_ui" ]
+	then
+	    web_ui=${val_conf[16]}
+	    set_item_conf web_ui "$web_ui"
+	fi
+
+	if [ -z "$background" ]
+	then
+	    background=${val_conf[4]}
+	    set_item_conf background "$background"
+	fi
+	
+	[ "$background" == "black" ] &&
+	    Background="$On_Black" && Foreground="$White" ||
+		unset Background Foreground
+
+	[[ "$(tty)" =~ tty ]] &&
+	    background=tty
+	
+	Color_Off="\033[0m${Foreground}${Background}"
+
+	if [ -z "$language" ]
+	then
+	    language=en_US.UTF-8
+
+	elif [[ "$language" =~ ^it ]]
+	then
+	    language=it_IT.UTF-8
+	fi
 	export LANGUAGE="$language"
-    
-    if [ "$language" == it ]
-    then
-	string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
-	string_conf[1]="Numero di parti in download parallelo per Axel"		
-	string_conf[2]="Numero di connessioni in parallelo per Aria2"	
-	string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
-	string_conf[4]="Colore sfondo (black|transparent)"	
-	string_conf[5]="Lingua"
-	string_conf[6]="Script/comando/programma per riconnettere il modem/router"
-	string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
-	string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
-	string_conf[9]="Editor predefinito per modificare la lista dei link in coda"
-	string_conf[10]="Recupero file omonimi come con opzione --resume (enabled|*)"
-	string_conf[11]="Modalità predefinita di avvio (lite|daemon|stdout)"
-	string_conf[12]="Porta TCP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
-	string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
-	string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
-	string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
-	string_conf[16]="Seleziona l'interfaccia web predefinita (1|2|3|lite)"
-    else
-	key_conf[0]=downloader;          val_conf[0]=Aria2;             string_conf[0]="Default downloader (Axel|Aria2|Wget)"
-	key_conf[1]=axel_parts;          val_conf[1]="32";              string_conf[1]="Number of parts in Axel parallel downloads"
-	key_conf[2]=aria2_connections;   val_conf[2]="16";              string_conf[2]="Number of connections in Aria2 parallel downloads"
-	key_conf[3]=max_dl;              val_conf[3]="1";               string_conf[3]="Maximum number of concurrent downloads (integer number|<empty=without limits>)"
-	key_conf[4]=background;          val_conf[4]=black;             string_conf[4]="Background color (black|transparent)"
-	key_conf[5]=language;            val_conf[5]="${LANG::2}";      string_conf[5]="Language"
-	key_conf[6]=reconnecter;         val_conf[6]="";           	string_conf[6]="Script/command/program to reconnect the modem/router"
-	key_conf[7]=autoupdate;          val_conf[7]=enabled;      	string_conf[7]="ZDL automatic updates (enabled|*)"
-	key_conf[8]=player;              val_conf[8]="";           	string_conf[8]="Script/command/program to play audio/video files"
-	key_conf[9]=editor;              val_conf[9]="nano";       	string_conf[9]="Default editor to edit the link queue"
-	key_conf[10]=resume;             val_conf[10]="";          	string_conf[10]="Homonymous files recovery as the option --resume (enabled|*)"
-	key_conf[11]=zdl_mode;           val_conf[11]="stdout";    	string_conf[11]="Default program startup mode (lite|daemon|stdout)"
-	key_conf[12]=tcp_port;           val_conf[12]="";          	string_conf[12]="TCP open port for Aria2 torrents (check your modem/router settings)"
-	key_conf[13]=udp_port;           val_conf[13]="";          	string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
-	key_conf[14]=socket_port;        val_conf[14]="8080";      	string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
-	key_conf[15]=browser;            val_conf[15]="firefox";   	string_conf[15]="Browser for --web-ui option"
-	key_conf[16]=web_ui;             val_conf[16]="1";         	string_conf[16]="Select deafult web-ui (1|2|3|lite)"
+	export LANG="$language"
+	export LC_ALL="$language"
+	
+	if [[ "$language" =~ ^it ]]
+	then
+	    string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
+	    string_conf[1]="Numero di parti in download parallelo per Axel"		
+	    string_conf[2]="Numero di connessioni in parallelo per Aria2"	
+	    string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
+	    string_conf[4]="Colore sfondo (black|transparent)"	
+	    string_conf[5]="Lingua"
+	    string_conf[6]="Script/comando/programma per riconnettere il modem/router"
+	    string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
+	    string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
+	    string_conf[9]="Editor predefinito per modificare la lista dei link in coda"
+	    string_conf[10]="Recupero file omonimi come con opzione --resume (enabled|*)"
+	    string_conf[11]="Modalità predefinita di avvio (lite|daemon|stdout)"
+	    string_conf[12]="Porta TCP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
+	    string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
+	    string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
+	    string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
+	    string_conf[16]="Seleziona l'interfaccia web predefinita (1|2|3|lite)"
+	else
+	    key_conf[0]=downloader;          val_conf[0]=Aria2;         string_conf[0]="Default downloader (Axel|Aria2|Wget)"
+	    key_conf[1]=axel_parts;          val_conf[1]="32";          string_conf[1]="Number of parts in Axel parallel downloads"
+	    key_conf[2]=aria2_connections;   val_conf[2]="16";          string_conf[2]="Number of connections in Aria2 parallel downloads"
+	    key_conf[3]=max_dl;              val_conf[3]="1";           string_conf[3]="Maximum number of concurrent downloads (integer number|<empty=without limits>)"
+	    key_conf[4]=background;          val_conf[4]=black;         string_conf[4]="Background color (black|transparent)"
+	    key_conf[5]=language;            val_conf[5]="${LANG::2}";  string_conf[5]="Language"
+	    key_conf[6]=reconnecter;         val_conf[6]="";           	string_conf[6]="Script/command/program to reconnect the modem/router"
+	    key_conf[7]=autoupdate;          val_conf[7]=enabled;      	string_conf[7]="ZDL automatic updates (enabled|*)"
+	    key_conf[8]=player;              val_conf[8]="";           	string_conf[8]="Script/command/program to play audio/video files"
+	    key_conf[9]=editor;              val_conf[9]="nano";       	string_conf[9]="Default editor to edit the link queue"
+	    key_conf[10]=resume;             val_conf[10]="";          	string_conf[10]="Homonymous files recovery as the option --resume (enabled|*)"
+	    key_conf[11]=zdl_mode;           val_conf[11]="stdout";    	string_conf[11]="Default program startup mode (lite|daemon|stdout)"
+	    key_conf[12]=tcp_port;           val_conf[12]="";          	string_conf[12]="TCP open port for Aria2 torrents (check your modem/router settings)"
+	    key_conf[13]=udp_port;           val_conf[13]="";          	string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
+	    key_conf[14]=socket_port;        val_conf[14]="8080";      	string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
+	    key_conf[15]=browser;            val_conf[15]="firefox";   	string_conf[15]="Browser for --web-ui option"
+	    key_conf[16]=web_ui;             val_conf[16]="1";         	string_conf[16]="Select deafult web-ui (1|2|3|lite)"
+	fi
     fi
 }
 

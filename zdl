@@ -32,6 +32,8 @@ function update_updater {
     ## "...-mirror..." è quello principale (veloce)
     URL_ROOT="http://download-mirror.savannah.gnu.org/releases/zdl/"
 
+    get_conf
+    
     if [ "$this_mode" != gui ]
     then
 	fclear
@@ -740,7 +742,10 @@ then
 		
 		date +%s >"$path_tmp"/.date_daemon
 
-		nohup /bin/bash zdl ${args[*]} --silent "$PWD" &>/dev/null &
+		#nohup /bin/bash zdl ${args[*]} --silent "$PWD" & #>/dev/null &
+
+		/bin/bash zdl ${args[*]} --silent "$PWD" &>/dev/null &
+		disown
 		
 		print_c 4 "${name_prog}:       "
 		print_c 1 "$(gettext "Started in daemon mode in %s\n")" "$PWD"
@@ -766,6 +771,7 @@ export pid_prog=$$
 
 function add_path4server {
     mkdir -p "$path_server"
+    echo "$1" >>"$path_server"/paths.txt
 
     ##clean
     if [ -s "$path_server"/paths.txt ]
@@ -784,12 +790,6 @@ function add_path4server {
 	    rm -f "$path_server"/paths.txt.new
 	    echo >"$path_server"/paths.txt
 	fi
-    fi
-
-    ##add
-    if ! grep -qP "^$1$" "$path_server"/paths.txt
-    then
-        echo "$1" >>"$path_server"/paths.txt
     fi
 }
 
@@ -1440,13 +1440,16 @@ fi
 
 function main_loop {
     local nline nlines loop_url_in url_in_old
+    clean_livestream
 
     if ( [ "$this_mode" == "daemon" ] &&
-	     [ ! -f "$start_file" ] &&
+	     [ ! -s "$path_tmp"/links_loop.txt ] &&
 	     [ -z "$lite_mode" ] ) ||
-	   zero_dl
+	   ( [ -n "$(cat "$path_tmp"/max-dl 2>/dev/null)" ] &&
+		 ((max_dl < 1)) &&
+		 zero_dl )
     then
-    	start_file="$path_tmp/links_loop.txt"
+    	start_file="$path_tmp"/links_loop.txt
 	post_process
    	sleep 2
 
@@ -1462,11 +1465,13 @@ function main_loop {
 	    
 	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
 	    do
-		check_pid $(cat "$gui_instance") && gui_alive=true && break
+		if check_pid $(cat "$gui_instance") &&
+			gui_alive=true
+		then
+		    check_linksloop_livestream
+		    break
+		fi
 	    done
-	    
-	    [ -n "$gui_alive" ] &&
-		check_linksloop_livestream
 
 	    show_downloads
 	    
@@ -1716,6 +1721,7 @@ function read_binding {
 }
 
 check_linksloop_livestream
+clean_livestream
 
 if [ "$this_mode" == "daemon" ]
 then
@@ -1737,9 +1743,9 @@ else
 
     echo "$COLUMNS" > "$path_tmp"/columns
     {	
-	main_loop 2>/dev/null &
+	main_loop & #2>/dev/null &
 	loops_pid=$!
-    } 2>/dev/null
+    } #2>/dev/null
     
     [ "$lite_mode" == true ] &&
 	this_mode=lite

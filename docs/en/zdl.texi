@@ -5,7 +5,7 @@
 @c %**end of header
 
 @documentencoding UTF-8
-@documentlanguage it_IT
+@documentlanguage en_US
 
 @copying
 
@@ -208,6 +208,7 @@
 @c @man{3}
 
 @c @ifman @unnumberedsec DESCRIZIONE
+(versione inglese)
 @emph{ZigzagDownLoader} gestisce gli scaricamenti di alcuni downloader come @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} o @emph{cURL}. Inoltre, può estrarre l'URL dei file da scaricare da servizi di file hosting e video streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC, senza alcuna interazione via CHAT. Estende @emph{Conkeror}, @emph{XXXTerm/Xombrero}, @emph{Firefox} (attraverso l'estensione @emph{Flashgot}) e @emph{Microsoft Windows} (tramite @emph{Cygwin}). Tramite l'estensione @emph{External Application Button}, ZDL può essere integrato in @emph{Firefox}, @emph{Chrome/Chromium} e @emph{Opera}. Il programma dispone, inoltre, di un server per generare socket TCP, diverse interfacce web e API, per il controllo remoto e in rete, e di una interfaccia grafica.
 @c @end man
 
