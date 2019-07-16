@@ -269,6 +269,7 @@ function get_conf {
 	
 	Color_Off="\033[0m${Foreground}${Background}"
 
+	## list: /usr/share/i18n/SUPPORTED
 	if [ -z "$language" ]
 	then
 	    language=en_US.UTF-8
@@ -276,12 +277,28 @@ function get_conf {
 	elif [[ "$language" =~ ^it ]]
 	then
 	    language=it_IT.UTF-8
+
+	elif (( ${#language} == 2 ))
+	then
+	    case "$language" in
+		en) language="en_US.UTF-8" ;;
+		fr) language="fr_FR.UTF-8" ;;
+		de) language="de_DE.UTF-8" ;;
+		es) language="es_ES.UTF-8" ;;
+		*)	    
+		    if [[ "$(</usr/share/i18n/SUPPORTED)" =~ ("$language"_[^\ ]+\.UTF-8) ]]
+		    then
+			language="${BASH_REMATCH[1]}"
+		    fi
+		    ;;
+	    esac
 	fi
+
 	export LANGUAGE="$language"
 	export LANG="$language"
 	export LC_ALL="$language"
 	
-	if [[ "$language" =~ ^it ]]
+	if [ "$language" == it_IT.UTF-8 ]
 	then
 	    string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
 	    string_conf[1]="Numero di parti in download parallelo per Axel"		
