@@ -23,13 +23,20 @@
 
 var displayLinks = function (op) {
     var query = "cmd=get-data";
+    var spec = {};
+    spec.long_polling = true;
 
     if (op === "force")
         query += "&op=force";
-
+    if (op === "stop") {
+    	spec.long_polling = false;
+        query += "&op=force";
+    }
+    
     ajax({
         query: query,
-        callback: function (str) {
+	params: spec,
+        callback: function (str, spec) {
             if (isJsonString(str)) {
                 var data = JSON.parse(str);
                 var output = "";
@@ -87,7 +94,8 @@ var displayLinks = function (op) {
                             "<div class='element'><p>" + data[i].streamer + "</p></div>";
                         output += "<div class='label-element'>Playpath:</div>" +
                             "<div class='element'><p>" + data[i].playpath + "</p></div>";
-                    } else {
+                    }
+		    else {
                         output += "<div class='label-element'>Url:</div>" +
                             "<div class='element'><p>" + toHtmlEntities(data[i].url) + "</p></div>";
                     }
@@ -158,11 +166,18 @@ var displayLinks = function (op) {
                     });
                 }
 
-                return displayLinks(op);
-            } else {
+		if (spec.long_polling === true)
+                    return displayLinks(op);
+		else
+		    return true;
 
+            } else {
 		document.getElementById("output-links").innerHTML = "";
-		return displayLinks();
+
+		if (spec.long_polling === true)
+		    return displayLinks();
+		else
+		    return true;
 	    }
         }
     });

@@ -43,30 +43,6 @@ init_colors
 
 Color_Off="\033[0m${Foreground}${Background}" 
 
-
-# function print_case {    
-#     case "$1" in
-# 	0)
-# 	    echo -ne ""
-# 	    ;;
-# 	1)
-# 	    echo -ne "$BGreen" 
-# 	    ;;
-# 	2)
-# 	    echo -ne "$BYellow"
-# 	    ;;	
-# 	3)
-# 	    echo -ne "$BRed" 
-# 	    ;;	
-# 	4)
-# 	    echo -ne "$BBlue"
-# 	    ;;	
-# 	5)
-# 	    echo -ne "$Color_Off"
-# 	    ;;	
-#     esac
-# }
-
 function print_case {
     [[ "$2" ]] &&
 	declare -n ref="$2" ||
@@ -95,7 +71,6 @@ function print_case {
 }
 
 function print_filter {
-    #local ads="$2"
     local log filter
     local text="$1"
     shift
@@ -122,45 +97,28 @@ function print_filter {
     else
     	printf "$text" "$@"
     fi
-    
-    # if [ -f "$log" ]
-    # then
-    # 	echo -ne "$1$ads" | tee "$filter"
-    # 	sanitize_text <"$filter" >>"$log" 
-	
-    # else
-    # 	echo -ne "$1$ads" 
-    # fi
 }
 
 function print_c {
+    local case
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	       [ -n "$redirected_link" ]
     then
-	local case
 	print_case "$1" case
 	shift
 	local text="$1"
 	shift
 	print_filter "${case}${text}${Color_Off}\n" "$@"
 
-	# ( [ "$language" == it ] || [ -z "$3" ] ) &&
-	#     print_filter "$2" "\n" ||
-	# 	print_filter "$3" "\n"
-	
-	# [ -z "$4" ] &&
-	#     echo -ne "${Color_Off}" ||
-	# 	print_case "$4"
-
     elif [ "$this_mode" == daemon ]
     then
 	daemon_filter=true
-	local case
+
 	print_case "$1" case
 	shift
 	local text="$1"
 	shift
-	print_filter "${case}${text}${Color_Off}\n" "$@"	
+	print_filter "${case}${text}${Color_Off}\n" "$@"
     fi
 }
 
@@ -173,79 +131,57 @@ function print_C {
     shift
     
     printf "${case}${text}${Color_Off}\n" "$@"
-    # ( [ "$language" == it ] || [ -z "$3" ] ) &&
-    # 	echo -ne "$2\n" ||
-    # 	    echo -ne "$3\n"
-
-    #echo -ne "${Color_Off}"
 }
-
-# function print_C {
-#     ## print_c FORCED
-#     print_case "$1"
-    
-#     ( [ "$language" == it ] || [ -z "$3" ] ) &&
-# 	echo -ne "$2\n" ||
-# 	    echo -ne "$3\n"
-
-#     echo -ne "${Color_Off}"
-# }
 
 function print_r {
+    local case text
+    
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	       [ -n "$redirected_link" ]
     then
 	print_case "$1" case
 	shift
-
-	local text="$1"
+	text="$1"
 	shift
+	#printf ?
+	print_filter "\r${case}${text}${Color_Off}" "$@"
 	
-	printf "\r${case}${text}${Color_Off}" "$@"
+    elif [ "$this_mode" == daemon ]
+    then
+	daemon_filter=true
 	
-	# ( [ "$language" == it ] || [ -z "$3" ] ) &&
-	#     echo -ne "\r$2" ||
-	# 	echo -ne "\r$3"
+	print_case "$1" case
+	shift
+	text="$1"
+	shift
+	print_filter "\r${case}${text}${Color_Off}" "$@"
 
-	# [ -z "$4" ] &&
-	#     echo -ne "${Color_Off}" ||
-	# 	print_case "$4"
     fi
 }
-# function print_r {
-#     if show_mode_in_tty "$this_mode" "$this_tty" ||
-# 	       [ -n "$redirected_link" ]
-#     then
-# 	print_case "$1"
-	
-# 	( [ "$language" == it ] || [ -z "$3" ] ) &&
-# 	    echo -ne "\r$2" ||
-# 		echo -ne "\r$3"
-
-# 	[ -z "$4" ] &&
-# 	    echo -ne "${Color_Off}" ||
-# 		print_case "$4"
-#     fi
-# }
 
 function sprint_c {
+    local case text
+    
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	       [ -n "$redirected_link" ]
     then
 	print_case "$1" case
 	shift
-
-	local text="$1"
+	text="$1"
 	shift
 
-	printf "${case}${text}${Color_Off}" "$@"
-	# ( [ "$language" == it ] || [ -z "$3" ] ) &&
-	#     echo -n "$2" ||
-	# 	echo -n "$3"
-
-	# [ -z "$4" ] &&
-	#     echo -n "${Color_Off}" ||
-	# 	print_case "$4"
+	#printf ?
+	print_filter "${case}${text}${Color_Off}" "$@"
+	
+    elif [ "$this_mode" == daemon ]
+    then
+	daemon_filter=true
+	
+	print_case "$1" case
+	shift
+	text="$1"
+	shift
+	print_filter "${case}${text}${Color_Off}" "$@"
     fi
 }
 
@@ -264,7 +200,10 @@ function print_header { # $1=label ; $2=color ; $3=header pattern
     shift
     
     eval printf -v line "%.0s${hpattern}" {1..$(( $COLUMNS-${#text} ))}
-    #echo -en "${color}${text}$line${Color_Off}"
+
+    [ "$this_mode" == daemon ] &&
+	daemon_filter=true
+
     print_filter "${color}%s${line}${Color_Off}" "${text}" "$@"
 }
 
@@ -291,7 +230,6 @@ function fclear {
     if [ -z "$already_clean" ] &&
 	   show_mode_in_tty "$this_mode" "$this_tty"
     then
-	## echo -ne "\033c${White}${Background}\033[J"
 	echo -ne "\033c${Color_Off}\033[J"
 
     else
@@ -351,17 +289,15 @@ function header_z {
 function header_box {
     local text="$1"
     shift
-    # if [ "$language" == it ] || [ -z "$2" ]
-    # then
-    # 	text="$1"
-    # else
-    # 	text="$2"
-    # fi
-    
     
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	    [ -n "$redirected_link" ]
     then
+	print_header "${Black}${On_White}" "─" "$text" "$@"
+
+    elif [ "$this_mode" == daemon ]
+    then
+	daemon_filter=true
 	print_header "${Black}${On_White}" "─" "$text" "$@"
     fi
 }
@@ -369,12 +305,7 @@ function header_box {
 function header_box_interactive {
     local text="$1"
     shift
-    # if [ "$language" == it ] || [ -z "$2" ]
-    # then
-    # 	text="$1"
-    # else
-    # 	text="$2"
-    # fi
+
     print_header "$Black${On_White}" "─" "$text" "$@"
     print_c 0 ""
 }
@@ -382,12 +313,6 @@ function header_box_interactive {
 function header_dl {
     local text="$1 "
     shift
-    # if [ "$language" == it ] || [ -z "$2" ]
-    # then
-    # 	text="$1"
-    # else
-    # 	text="$2"
-    # fi
 
     if show_mode_in_tty "$this_mode" "$this_tty"
     then

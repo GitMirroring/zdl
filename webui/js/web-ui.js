@@ -123,21 +123,6 @@ var getData = function () {
         return false;
 };
 
-// var getPaths = function () {
-//     var content = "";
-//     ajax({
-//         query: "cmd=get-paths",
-//         callback: function (res) {
-// 	    var item = "";
-// 	    JSON.parse(res).forEach(function(item) {
-// 		content += item + "<br>";
-// 	    });
-// 	    document.getElementById("console-output").innerHTML = content;
-// 	    //getPaths();
-// 	}
-//     });
-// };
-
 
 var showInfoLink = function (spec) {
     document.getElementById(spec.id).setAttribute("class", "download-info visible");
@@ -168,7 +153,10 @@ var singleLink = function (spec) {
 
     that.del = function () {
         ajax({
-            query: "cmd=del-link&path=" + that.path + "&link=" + encodeURIComponent(that.link)
+            query: "cmd=del-link&path=" + that.path + "&link=" + encodeURIComponent(that.link),
+	    callback: function () {
+		displayLinks("stop");
+	    }
         });
     };
 
@@ -720,10 +708,11 @@ var setLiveStreamTimer = function () {
     ajax({
 	query: "cmd=set-livestream&path=" + ZDL.path + "&link=" + link + "&start=" + start + "&duration=" + duration,
 	callback: function (res){
-	    if (res)
-		alert(msg);
-	    else
+	    if (res == "") {
+	    // 	alert(msg);
+	    // else
 		alert("ERRORE: Il server non è riuscito a salvare la programmazione del download");
+	    }
 	}
     });
 };

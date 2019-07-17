@@ -743,15 +743,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
     	get-data)
 	    send_json ${line[1]} || return
-	    #send_json force || return
 	    ;;
-
-	# get-paths)
-	#     file_output="$path_server"/paths.json
-	#     local json_out
-	#     get_paths_json json_out
-	#     echo "$json_out" >"$file_output"
-	#     ;;
 
 	get-console)	    
 	    test -d "${line[1]}" && cd "${line[1]}"
@@ -1331,6 +1323,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    done
 		fi
 	    done
+	    ## force get-data: send_json
+	    rm -f "$server_data".$socket_port.diff
 	    init_client
 	    ;;
 
