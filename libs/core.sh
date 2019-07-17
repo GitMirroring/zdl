@@ -1422,3 +1422,27 @@ function del_link_timer {
     sed -r "s|^$link\s+.+||g" -i "$links_timer"
     [ ! -s "$links_timer" ] && rm -f "$links_timer"
 }
+
+function add_path4server {
+    mkdir -p "$path_server"
+    echo "$1" >>"$path_server"/paths.txt
+
+    ##clean
+    if [ -s "$path_server"/paths.txt ]
+    then
+	rm -f "$path_server"/paths.txt.new
+	while read line
+	do
+	    [ -d "$line" ] && echo "$line" >>"$path_server"/paths.txt.new
+	done < <(awk '!($0 in a){a[$0]; print}' "$path_server"/paths.txt)
+
+	if [ -s "$path_server"/paths.txt.new ]
+	then
+	    mv "$path_server"/paths.txt.new "$path_server"/paths.txt
+
+	else
+	    rm -f "$path_server"/paths.txt.new
+	    echo >"$path_server"/paths.txt
+	fi
+    fi
+}

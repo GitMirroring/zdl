@@ -1092,18 +1092,24 @@ function remove_livestream_link_start {
     local link="$1"
     link="${link//\%3[aA]/:}"
     link="${link//\%2[fF]//}"
-    [ -s "$path_tmp"/livestream_start.txt ] &&
+    if [ -s "$path_tmp"/livestream_start.txt ]
+    then
 	sed -r "s|^$link$||g" -i "$path_tmp"/livestream_start.txt
-    test -z "$(<"$path_tmp"/livestream_start.txt)" && rm -f "$path_tmp"/livestream_start.txt
+	test -z "$(<"$path_tmp"/livestream_start.txt)" &&
+	    rm -f "$path_tmp"/livestream_start.txt
+    fi
 }
 
 function remove_livestream_link_time {
     local link="$1"
     link="${link//\%3[aA]/:}"
     link="${link//\%2[fF]//}"
-    [ -s "$path_tmp"/livestream_time.txt ] &&
+    if [ -s "$path_tmp"/livestream_time.txt ]
+    then
 	sed -r "s|^$link\ [0-9]{2}\:.+$||g" -i "$path_tmp"/livestream_time.txt
-    test -z "$(<"$path_tmp"/livestream_time.txt)" && rm -f "$path_tmp"/livestream_time.txt
+	test -z "$(<"$path_tmp"/livestream_time.txt)" &&
+	    rm -f "$path_tmp"/livestream_time.txt
+    fi
 }
 
 function get_livestream_start_time {
