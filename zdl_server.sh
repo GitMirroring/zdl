@@ -277,6 +277,7 @@ function create_json {
     then
 	echo -ne '[' >"$server_data".$socket_port
 
+	rm -f "$server_paths".new
 	while read path
 	do
 	    if [ -d "$path" ]
@@ -290,16 +291,13 @@ function create_json {
 		    then
 			echo -en "," >>"$server_data".$socket_port
 		    fi
-
-		else
-		    set_line_in_file - "$path" "$server_paths" &
 		fi
-
-	    else
-		set_line_in_file - "$path" "$server_paths" &
+		echo "$path" >>"$server_paths".new
 	    fi
 
 	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+
+	mv "$server_paths".new "$server_paths"
 
 	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
 	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
@@ -745,6 +743,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
     	get-data)
 	    send_json ${line[1]} || return
+	    #send_json force || return
 	    ;;
 
 	# get-paths)
@@ -1332,7 +1331,6 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    done
 		fi
 	    done
-	    #clean_livestream
 	    init_client
 	    ;;
 

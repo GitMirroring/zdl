@@ -42,7 +42,15 @@ var displayLinks = function (op) {
                     else
                         visibility = "hidden";
 
-                    output += "<div id='info-" + i + "-bar'>";
+
+    		    if (data[i].downloader == "FFMpeg" &&
+    			data[i].percent < 100 &&
+    			data[i].color == "green")
+    		    {
+    			var op = "force";
+    		    }
+		    
+		    output += "<div id='info-" + i + "-bar'>";
 
                     output += "<div id='progress-bar'>" +
                         "<div id='progress-label-file'>" + data[i].file + "</div>" +
@@ -150,7 +158,7 @@ var displayLinks = function (op) {
                     });
                 }
 
-                return displayLinks();
+                return displayLinks(op);
             } else {
 
 		document.getElementById("output-links").innerHTML = "";
