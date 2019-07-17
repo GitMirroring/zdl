@@ -1743,9 +1743,9 @@ else
 
     echo "$COLUMNS" > "$path_tmp"/columns
     {	
-	main_loop & #2>/dev/null &
+	main_loop 2>/dev/null &
 	loops_pid=$!
-    } #2>/dev/null
+    } 2>/dev/null
     
     [ "$lite_mode" == true ] &&
 	this_mode=lite
