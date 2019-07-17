@@ -1721,13 +1721,13 @@ function read_binding {
 }
 
 check_linksloop_livestream
-clean_livestream
 
 if [ "$this_mode" == "daemon" ]
 then
     while true
     do
 	main_loop &>/dev/null || break
+	clean_livestream
     done 
 
 else    

@@ -311,7 +311,7 @@ function set_link {
 	if [ "$op" == "+" ]
 	then
 	    link="${link%'#20\x'}"
-	    clean_livestream 
+	    #clean_livestream 
 	    #check_linksloop_livestream 
 	    check_livestream_twice "$link"
 	fi
@@ -320,6 +320,12 @@ function set_link {
 	then
 	    if [ "$op" == '-' ]
 	    then
+		if check_livestream "$link"
+		then
+		    remove_livestream_link_start "$link"
+		    remove_livestream_link_time "$link"
+		fi
+		
 		data_stdout &&
 		    for ((i=0; i<${#file_out[@]}; i++))
 		    do

@@ -111,9 +111,14 @@ function print_filter {
 
     if [ -f "$log" ]
     then
-    	printf "$text" "$@" | tee "$filter"
-    	sanitize_text <"$filter" >>"$log" 
-	
+	if test deamon_filter == true
+	then
+    	    filter=$(printf "$text" "$@")
+    	    sanitize_text <"$filter" >>"$log" 
+	else
+    	    printf "$text" "$@" | tee "$filter"
+    	    sanitize_text <"$filter" >>"$log" 
+	fi
     else
     	printf "$text" "$@"
     fi
@@ -147,7 +152,15 @@ function print_c {
 	#     echo -ne "${Color_Off}" ||
 	# 	print_case "$4"
 
-	
+    elif [ "$this_mode" == daemon ]
+    then
+	daemon_filter=true
+	local case
+	print_case "$1" case
+	shift
+	local text="$1"
+	shift
+	print_filter "${case}${text}${Color_Off}\n" "$@"	
     fi
 }
 

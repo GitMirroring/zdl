@@ -57,6 +57,8 @@ pid_prog=$$
 socket_port="$1"
 add_server_pid "$socket_port"
 
+echo > "$gui_log"
+
 server_index="$path_server/index-${web_ui}.html"
 template_index="$path_webui/index-${web_ui}.html"
 
@@ -535,7 +537,8 @@ function get_livestream_json {
 	then
 	    while read -a line
 	    do
-		ref+="{\"path\":\"$path\",\"link\":\"${line[0]}\",\"start\":\"${line[1]}\",\"duration\":\"${line[2]}\"},"
+		test -n "${line[0]}" &&
+		    ref+="{\"path\":\"$path\",\"link\":\"${line[0]}\",\"start\":\"${line[1]}\",\"duration\":\"${line[2]}\"},"
 	    done < "$path"/"$path_tmp"/livestream_time.txt
 	fi
 	
@@ -1308,6 +1311,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		then
 		    set_link - "$link"
 		    remove_livestream_link_start "$link"
+		    remove_livestream_link_time "$link"
 		    unset json_flag
 		    data_stdout
 		    json_flag=true
@@ -1328,7 +1332,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    done
 		fi
 	    done
-
+	    #clean_livestream
 	    init_client
 	    ;;
 

@@ -1090,8 +1090,20 @@ function get_livestream_duration_time {
 
 function remove_livestream_link_start {
     local link="$1"
+    link="${link//\%3[aA]/:}"
+    link="${link//\%2[fF]//}"
     [ -s "$path_tmp"/livestream_start.txt ] &&
 	sed -r "s|^$link$||g" -i "$path_tmp"/livestream_start.txt
+    test -z "$(<"$path_tmp"/livestream_start.txt)" && rm -f "$path_tmp"/livestream_start.txt
+}
+
+function remove_livestream_link_time {
+    local link="$1"
+    link="${link//\%3[aA]/:}"
+    link="${link//\%2[fF]//}"
+    [ -s "$path_tmp"/livestream_time.txt ] &&
+	sed -r "s|^$link\ [0-9]{2}\:.+$||g" -i "$path_tmp"/livestream_time.txt
+    test -z "$(<"$path_tmp"/livestream_time.txt)" && rm -f "$path_tmp"/livestream_time.txt
 }
 
 function get_livestream_start_time {
@@ -1149,17 +1161,24 @@ function clean_livestream {
     local line
     declare -a lines
 
-    if [ -f "$path_tmp"/live-rewriting ]
+    if [ ! -f "$path_tmp"/links_loop.txt ] &&
+	   test -z "$(<"$path_tmp"/links_loop.txt)"
     then
-    	while [ -f "$path_tmp"/live-rewriting ]
-    	do
-    	    sleeping 0.1
-    	done
+	rm -f "$path_tmp"/livestream_time.txt "$path_tmp"/livestream_start.txt
     fi
-    touch "$path_tmp"/live-rewriting
-#touch entrato
-    if [ -s "$path_tmp"/livestream_time.txt ]
+
+    if test -f "$path_tmp"/livestream_time.txt
     then
+
+	if [ -f "$path_tmp"/live-rewriting ]
+	then
+    	    while [ -f "$path_tmp"/live-rewriting ]
+    	    do
+    		sleeping 0.1
+    	    done
+	fi
+	touch "$path_tmp"/live-rewriting
+
     	while read -a lines
     	do
     	    if ! set_link in "${lines[0]}"

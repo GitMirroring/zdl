@@ -116,3 +116,7 @@ function rm_line (line, file) {
 function add_line (line, file) {
     print "set_line_in_file + \"" line "\" \"" file "\"; " >>".zdl_tmp/awk2bash_commands"
 }
+
+function set_awk2bash_cmd (cmd) {
+    print cmd >>".zdl_tmp/awk2bash_commands"
+}

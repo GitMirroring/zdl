@@ -622,6 +622,9 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	if (progress_end[i]) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
+	    
+	    set_awk2bash_cmd("remove_livestream_link_start " url_out[i])
+	    set_awk2bash_cmd("remove_livestream_link_time " url_out[i])
 
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    percent_out[i] = 100
