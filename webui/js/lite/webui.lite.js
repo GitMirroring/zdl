@@ -98,6 +98,7 @@ var client = ( function () {
     /* Downloads management (polling) */
     function downloadFlow() {
         var arg = arguments[ 0 ] || false;
+	var force;
         myZDL.getData( arg )
             .then( function ( res ) {
                 if ( parseJson( res ) ) {
@@ -112,6 +113,13 @@ var client = ( function () {
                         perc = parseInt( value.percent );
                         if ( perc < 100 ) {
                             statusVal = value.percent + "% " + Math.round( value.speed ) + value.speed_measure + " " + value.eta;
+			    //inizio-zoninoz:
+			    if (value.downloader === "FFMpeg" &&
+				value.color === "green")
+			    {
+				force = true;
+			    }
+			    //fine-zoninoz
                         } else {
                             statusVal = "100%";
                         }
@@ -139,7 +147,7 @@ var client = ( function () {
                         }
                     } );
                 }
-                downloadFlow();
+                downloadFlow( force );
             } )
             .catch( function ( e ) {
                 if ( data.running ) {

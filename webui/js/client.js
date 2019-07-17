@@ -259,8 +259,7 @@ var client = ( function () {
                         statusClass = colorToClass( value.color );
                         statusVal = value.percent + "% " + Math.round( value.speed ) + value.speed_measure + " " + value.eta;
 			//inizio-zoninoz:
-			if (perc < 100 &&
-			    value.downloader === "FFMpeg" &&
+			if (value.downloader === "FFMpeg" &&
 			    value.color === "green")
 			{
 			    force = true;
