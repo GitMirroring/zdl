@@ -19,10 +19,11 @@ var client = ( function () {
 
     /* Monitoring download */
     function downloadCompleted( file, perc ) {
-        if ( perc < 100 && !data.active.includes( file ) ) {
+        var isActive = data.active.includes( file );
+        if ( perc < 100 && !isActive ) {
             data.active.push( file );
         } else {
-            if ( data.active.includes( file ) && perc === 100 ) {
+            if ( perc === 100 && isActive  ) {
                 data.active.splice( data.active.indexOf( file ), 1 );
                 return true;
             }
@@ -97,8 +98,8 @@ var client = ( function () {
 
     /* Downloads management (polling) */
     function downloadFlow() {
-        var arg = arguments[ 0 ] || false;
-	var force;
+        var arg = arguments[ 0 ] || false,
+            force = false;
         myZDL.getData( arg )
             .then( function ( res ) {
                 if ( parseJson( res ) ) {
@@ -113,24 +114,20 @@ var client = ( function () {
                         perc = parseInt( value.percent );
                         if ( perc < 100 ) {
                             statusVal = value.percent + "% " + Math.round( value.speed ) + value.speed_measure + " " + value.eta;
-			    //inizio-zoninoz:
-			    if (value.downloader === "FFMpeg" &&
-				value.color === "green")
-			    {
-				force = true;
-			    }
-			    //fine-zoninoz
+                            if ( value.downloader === "FFMpeg" && value.color === "green" ) {
+                                force = true;
+                            }
                         } else {
                             statusVal = "100%";
                         }
                         len = formatFileLength( value.length );
-                        if ( !data.list.includes( value.file ) ) {
+                        if ( !data.list.includes( id ) ) {
                             $( "<div class='custom-bar'><div class='progress custom-progress'><div id='bar-" + id + "' class='progress-bar green' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' data-file='" + value.file + "'></div></div><div class='custom-info' data-toggle='collapse' data-target='#collapse-" + id + "' aria-expanded='false' aria-controls='collapse-" + id + "'><div class='row'><div class='filename col-12 col-md-10'>" + value.file + "</div><div id='status-" + id + "' class='status col-12 col-md-2'>" + statusVal + "</div></div></div><div class='collapse custom-commands' id='collapse-" + id + "'><div class='card card-body'><button class='btn custom-btn-style-1 _size-2 text-color-light custom-handler stop-download' type='button' data-file='" + value.file + "' data-link='" + value.link + "'><i class='fas fa-minus-circle mr-2'></i>FERMA</button><button class='btn custom-btn-style-1 _size-2 text-color-light custom-handler delete-download' type='button' data-path='" + value.path + "' data-link='" + value.link + "' data-file='" + value.file + "'><i class='fas fa-trash mr-2'></i>ELIMINA</button></div></div></div>" )
                                 .prependTo( "#downloads" );
                             $( "#bar-" + id )
                                 .css( "width", perc + "%" )
                                 .attr( "aria-valuenow", perc );
-                            data.list.push( value.file );
+                            data.list.push( id );
                         } else {
                             progress = $( "#bar-" + id );
                             if ( !progress.hasClass( value.color ) ) {

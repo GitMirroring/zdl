@@ -125,11 +125,11 @@ var client = ( function () {
 
     /* Monitoring download */
     function downloadCompleted( file, perc ) {
-        if ( perc < 100 && !data.active.includes( file ) ) {
+        var isActive = data.active.includes( file );
+        if ( perc < 100 && !isActive ) {
             data.active.push( file );
         } else {
-            //var index = client.data.active.indexOf( file );
-            if ( data.active.includes( file ) && perc === 100 ) {
+            if ( perc === 100 && isActive  ) {
                 data.active.splice( data.active.indexOf( file ), 1 );
                 return true;
             }
@@ -240,11 +240,12 @@ var client = ( function () {
 
     /* Downloads management (polling) */
     function downloadFlow() {
-        var arg = arguments[ 0 ] || false;
-	var force;
+        var arg = arguments[ 0 ] || false,
+            force = false;
         myZDL.getData( arg ).then( function ( res ) {
             if ( utils.parseJson( res ) ) {
                 var obj = JSON.parse( res ),
+                    bar,
                     id,
                     len,
                     perc,
@@ -258,19 +259,15 @@ var client = ( function () {
                     if ( perc < 100 ) {
                         statusClass = colorToClass( value.color );
                         statusVal = value.percent + "% " + Math.round( value.speed ) + value.speed_measure + " " + value.eta;
-			//inizio-zoninoz:
-			if (value.downloader === "FFMpeg" &&
-			    value.color === "green")
-			{
-			    force = true;
-			}
-			//fine-zoninoz
+                        if ( value.downloader === "FFMpeg" && value.color === "green" ) {
+                            force = true;
+                        }
                     } else {
                         statusClass = "";
                         statusVal = "100%";
                     }
                     len = formatFileLength( value.length );
-                    if ( !data.list.includes( value.file ) ) {
+                    if ( !data.list.includes( id ) ) {
                         if ( statusClass ) {
                             statusClass = " " + statusClass;
                         }
@@ -286,22 +283,28 @@ var client = ( function () {
                                 "ui-tooltip": "tooltip-custom-red"
                             }
                         } );
-                        if ( perc === 0 ) {
+                        if ( perc < 100 ) {
                             perc = false;
                         }
                         $( "#bar-" + id ).progressbar( {
                             value: perc
                         } );
-                        data.list.push( value.file );
+                        data.list.push( id );
                     } else {
+                        bar = $( "#bar-" + id );
+                        if ( bar.hasClass("ui-progressbar-indeterminate") ) {
+                        	bar.progressbar( "value", 0.1 );
+						}
+                        bar.children( ".ui-progressbar-value" ).animate( {
+        					width: perc + "%"
+    					}, 500 );
+                        $( "#info-" + id + " .dl-size").text( len );
                         status = $( "#dl-status-" + id );
                         statusParent = status.parent();
                         if ( !statusParent.hasClass( statusClass ) ) {
                             statusParent.removeClass().addClass( "side-status " + statusClass );
                         }
                         status.text( statusVal );
-                        $( "#bar-" + id ).progressbar( "value", perc );
-                        $( "#info-" + id + " .dl-size").text( len );
                         if ( downloadCompleted( value.file, perc ) ) {
                             utils.log( "file-downloaded", value.file );
                         }
@@ -455,6 +458,7 @@ var client = ( function () {
         } );
     }
 
+    // expose fn
     return {
         remove: function ( key, name ) {
             data[ key ].splice( data[ key ].indexOf( name ), 1 );

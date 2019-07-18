@@ -649,18 +649,18 @@ var displayLiveStreamForm = function(opts) {
     if (isJsonString(opts)) {
 	var content = "<div class='btn-select'><select id='input-livestream-opts'>";
         var data = JSON.parse(opts);
-	data.forEach(function(item){    
+	data.forEach(function(item){
 	    content += "<option value='" + item.url + "'>" + item.chan + "</option>";
 	});
 	content += "</select></div>";
 	document.getElementById("livestream-opts").innerHTML = content;
-    }	    
+    }
 };
 
 var normalize_time = function (v) {
     if (v.length == 0)
 	return false;
-    
+
     if (v.length < 2) {
 	v = "0" + v;
 	return normalize_time(v);
@@ -674,21 +674,21 @@ var setLiveStreamTimer = function () {
     var start = "",
 	duration = "",
 	s, d, failed, err_msg;
-    
+
     ["h","m","s"].forEach(function(e){
 	s = document.getElementById("input-live-start-" + e).value;
 	d = document.getElementById("input-live-duration-" + e).value;
 	if (s.length == 0 || d.length == 0) {
 	    err_msg = "Non hai completato la programmazione del download:\nè necessario indicare ore/minuti/secondi";
-	    failed = true;	    
+	    failed = true;
 	}
 	if (e == "h" && (s > 23 || d > 23)) {
 	    err_msg = "Per le ore è richiesto un numero intero da 0 a 23 compresi";
-	    failed = true;	    
+	    failed = true;
 	}
 	else if ((e == "m" || e == "s") && (s > 59 || d > 59)) {
 	    err_msg = "Per i minuti e i secondi è richiesto un numero intero da 0 a 59 compresi";
-	    failed = true;	    
+	    failed = true;
 	}
 	start += normalize_time(s) + ":";
 	duration += normalize_time(d) + ":";
@@ -719,8 +719,8 @@ var setLiveStreamTimer = function () {
 
 var displayLiveStream = function (data) {
     var content = "<div>";
-    data.forEach(function(item){    
-	content += "<div class='background-element' style='text-align: right;'>" + 
+    data.forEach(function(item){
+	content += "<div class='background-element' style='text-align: right;'>" +
 	    "<div class='subsublabel-element-dark'>Path:</div><div class='subsublabel-element-light'>" + item.path + "</div>" +
 	    "<div class='subsublabel-element-dark'>Link:</div><div class='subsublabel-element-light'>" + item.link + "</div>" +
 	    "<div class='subsublabel-element-dark'>Orario di inizio:</div><div class='subsublabel-element-light'>" + item.start + "</div>" +
@@ -759,17 +759,25 @@ var displayReconnecter = function (value, id) {
 var displayInputSelect = function (spec, id, callback) {
     // spec = {key: options: value:}
     var output = "<div class='btn-select'><select id='input-" + spec.key + "' onchange='" + callback + "(" + objectToString(spec) + ");'>";
-    if (String(spec.value) === "") {
-	output += "<option selected>" + String(spec.value);
+
+    var selected, otpName;
+	var webuiNames = {"1":"Default", "2":"Multilang", "3":"Multilang dark", "lite":"Lite"};
+
+	if (!spec.value) {
+		output += "<option selected></option>";
     }
 
     spec.options.forEach(function (item) {
-        if (String(spec.value) === String(item))
-	    output += "<option selected>";
-	else
-	    output += "<option>";
-	output += item + "</option>";
+    	if (spec.value === item) {
+	    	selected = " selected";
+		} else {
+			selected = "";
+        }
+
+		optName = webuiNames[item] || item;
+		output += "<option value='" + item + "'" + selected + ">" + optName + "</option>";
     });
+
     output += "</select></div>";
 
     document.getElementById(id).innerHTML = output;
