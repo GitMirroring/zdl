@@ -293,6 +293,12 @@ function update {
 
     mkdir -p "$path_conf/extensions"
 
+    if [ ! -f "$path_conf"/.zdl-counter ]
+    then
+	curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null &&
+	    touch "$path_conf"/.zdl-counter
+    fi
+    
     if [ ! -f "$file_conf" ]
     then
 	echo "# ZigzagDownLoader configuration file" > "$file_conf"
