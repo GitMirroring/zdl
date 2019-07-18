@@ -318,23 +318,7 @@ function get_conf {
 	    string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
 	    string_conf[16]="Seleziona l'interfaccia web predefinita (1|2|3|lite)"
 	else
-	    key_conf[0]=downloader;          val_conf[0]=Aria2;         string_conf[0]="Default downloader (Axel|Aria2|Wget)"
-	    key_conf[1]=axel_parts;          val_conf[1]="32";          string_conf[1]="Number of parts in Axel parallel downloads"
-	    key_conf[2]=aria2_connections;   val_conf[2]="16";          string_conf[2]="Number of connections in Aria2 parallel downloads"
-	    key_conf[3]=max_dl;              val_conf[3]="1";           string_conf[3]="Maximum number of concurrent downloads (integer number|<empty=without limits>)"
-	    key_conf[4]=background;          val_conf[4]=black;         string_conf[4]="Background color (black|transparent)"
-	    key_conf[5]=language;            val_conf[5]="${LANG::2}";  string_conf[5]="Language"
-	    key_conf[6]=reconnecter;         val_conf[6]="";           	string_conf[6]="Script/command/program to reconnect the modem/router"
-	    key_conf[7]=autoupdate;          val_conf[7]=enabled;      	string_conf[7]="ZDL automatic updates (enabled|*)"
-	    key_conf[8]=player;              val_conf[8]="";           	string_conf[8]="Script/command/program to play audio/video files"
-	    key_conf[9]=editor;              val_conf[9]="nano";       	string_conf[9]="Default editor to edit the link queue"
-	    key_conf[10]=resume;             val_conf[10]="";          	string_conf[10]="Homonymous files recovery as the option --resume (enabled|*)"
-	    key_conf[11]=zdl_mode;           val_conf[11]="stdout";    	string_conf[11]="Default program startup mode (lite|daemon|stdout)"
-	    key_conf[12]=tcp_port;           val_conf[12]="";          	string_conf[12]="TCP open port for Aria2 torrents (check your modem/router settings)"
-	    key_conf[13]=udp_port;           val_conf[13]="";          	string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
-	    key_conf[14]=socket_port;        val_conf[14]="8080";      	string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
-	    key_conf[15]=browser;            val_conf[15]="firefox";   	string_conf[15]="Browser for --web-ui option"
-	    key_conf[16]=web_ui;             val_conf[16]="1";         	string_conf[16]="Select deafult web-ui (1|2|3|lite)"
+	    set_default_configure_values
 	fi
     fi
 }
@@ -445,24 +429,27 @@ TAG1='## NEW: ...ARIA2!'
 TAG2='## ARIA2: già chiesto'
 XDCC_EU_SEARCHKEY_URL="http://www.xdcc.eu/search.php?searchkey="
 
-# configuration keys        --   default values      --         description for config-manager
-key_conf[0]=downloader;          val_conf[0]=Aria2;             string_conf[0]="Default downloader (Axel|Aria2|Wget)"
-key_conf[1]=axel_parts;          val_conf[1]="32";              string_conf[1]="Number of parts in Axel parallel downloads"
-key_conf[2]=aria2_connections;   val_conf[2]="16";              string_conf[2]="Number of connections in Aria2 parallel downloads"
-key_conf[3]=max_dl;              val_conf[3]="1";               string_conf[3]="Maximum number of concurrent downloads (integer number|<empty=without limits>)"
-key_conf[4]=background;          val_conf[4]=black;             string_conf[4]="Background color (black|transparent)"
-key_conf[5]=language;            val_conf[5]="${LANG::2}";      string_conf[5]="Language"
-key_conf[6]=reconnecter;         val_conf[6]="";           	string_conf[6]="Script/command/program to reconnect the modem/router"
-key_conf[7]=autoupdate;          val_conf[7]=enabled;      	string_conf[7]="ZDL automatic updates (enabled|*)"
-key_conf[8]=player;              val_conf[8]="";           	string_conf[8]="Script/command/program to play audio/video files"
-key_conf[9]=editor;              val_conf[9]="nano";       	string_conf[9]="Default editor to edit the link queue"
-key_conf[10]=resume;             val_conf[10]="";          	string_conf[10]="Homonymous files recovery as the option --resume (enabled|*)"
-key_conf[11]=zdl_mode;           val_conf[11]="stdout";    	string_conf[11]="Default program startup mode (lite|daemon|stdout)"
-key_conf[12]=tcp_port;           val_conf[12]="";          	string_conf[12]="TCP open port for Aria2 torrents (check your modem/router settings)"
-key_conf[13]=udp_port;           val_conf[13]="";          	string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
-key_conf[14]=socket_port;        val_conf[14]="8080";      	string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
-key_conf[15]=browser;            val_conf[15]="firefox";   	string_conf[15]="Browser for --web-ui option"
-key_conf[16]=web_ui;             val_conf[16]="1";         	string_conf[16]="Select deafult web-ui (1|2|3|lite)"
+function set_default_configure_values {
+    # configuration keys        --   default values      --         description for config-manager
+    key_conf[0]=downloader;          val_conf[0]=Aria2;             string_conf[0]="Default downloader (Axel|Aria2|Wget)"
+    key_conf[1]=axel_parts;          val_conf[1]="32";              string_conf[1]="Number of parts in Axel parallel downloads"
+    key_conf[2]=aria2_connections;   val_conf[2]="16";              string_conf[2]="Number of connections in Aria2 parallel downloads"
+    key_conf[3]=max_dl;              val_conf[3]="1";               string_conf[3]="Maximum number of concurrent downloads (integer number|<empty=without limits>)"
+    key_conf[4]=background;          val_conf[4]=black;             string_conf[4]="Background color (black|transparent)"
+    key_conf[5]=language;            val_conf[5]="${LANG::2}";      string_conf[5]="Language"
+    key_conf[6]=reconnecter;         val_conf[6]="";           	string_conf[6]="Script/command/program to reconnect the modem/router"
+    key_conf[7]=autoupdate;          val_conf[7]=enabled;      	string_conf[7]="ZDL automatic updates (enabled|*)"
+    key_conf[8]=player;              val_conf[8]="";           	string_conf[8]="Script/command/program to play audio/video files"
+    key_conf[9]=editor;              val_conf[9]="nano";       	string_conf[9]="Default editor to edit the link queue"
+    key_conf[10]=resume;             val_conf[10]="";          	string_conf[10]="Homonymous files recovery as the option --resume (enabled|*)"
+    key_conf[11]=zdl_mode;           val_conf[11]="stdout";    	string_conf[11]="Default program startup mode (lite|daemon|stdout)"
+    key_conf[12]=tcp_port;           val_conf[12]="";          	string_conf[12]="TCP open port for Aria2 torrents (check your modem/router settings)"
+    key_conf[13]=udp_port;           val_conf[13]="";          	string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
+    key_conf[14]=socket_port;        val_conf[14]="8080";      	string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
+    key_conf[15]=browser;            val_conf[15]="firefox";   	string_conf[15]="Browser for --web-ui option"
+    key_conf[16]=web_ui;             val_conf[16]="1";         	string_conf[16]="Select deafult web-ui (1|2|3|lite)"
+}
+set_default_configure_values
 
 declare -A label_conf
 function get_labels_conf {    

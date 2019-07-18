@@ -23,12 +23,33 @@
 # zoninoz@inventati.org
 #
 
+function getLocale () {
+    $prefLocales = array_reduce(
+        explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']), 
+        function ($res, $el) { 
+            list($l, $q) = array_merge(explode(';q=', $el), [1]); 
+            $res[$l] = (float) $q; 
+            return $res; 
+        }, 
+        []);
+    arsort($prefLocales);
+    foreach($prefLocales as $key => $value) {
+        if ($value == 1) {
+            $lang = $key;
+            break;
+        }	
+    }
+    
+    // Set default language if a `$lang` version of site is not available
+    if ($lang !== "it" && $lang !== "en")
+        $lang = 'en';
+    return $lang;
+}
+
 function displayFeed($url){
     $getfile = html_entity_decode(file_get_contents($url));
+    $lang = getLocale();
 
-    // echo $getfile;
-    // exit;
-    
     $xml = new SimpleXMLElement($getfile);
     //$xml = simplexml_load_file($url);
 
@@ -39,17 +60,28 @@ function displayFeed($url){
     $feed_info['id_feed'] = $xml->id; 
     $feed_info['updated_feed'] = $xml->updated;
 
-    echo "<a href='" . $feed_info['id_feed'] . "' target='_blank'>" . $feed_info['titolo_feed'] . "</a>";
+    // $feed_info['id_feed'] è l'url del feed, sostituito dalla pagina html di savannah
+    echo "<a href='" . "https://savannah.nongnu.org/news/?group_id=11047" . "' target='_blank'>" . $feed_info['titolo_feed'] . "</a>";
 
     $i = 0; 
     foreach($xml->entry as $item)
     {
-        $feed_art[$i]['titolo_articolo'] = $item->title;
-        $feed_art[$i]['descr_articolo'] = $item->content->asXML();
-        $feed_art[$i]['autore_articolo'] = $item->author->name;
-        $feed_art[$i]['data_articolo'] = $item->updated;
-        $feed_art[$i]['link_articolo'] = $item->id;
-        $i++;
+        if (preg_match('/^\[' . $lang . '\]/', $item->title)) {
+            $feed_art[$i]['titolo_articolo'] = preg_replace('/^\[' . $lang. '\]\ /','', $item->title);
+            $feed_art[$i]['descr_articolo'] = $item->content->asXML();
+            $feed_art[$i]['autore_articolo'] = $item->author->name;
+            $feed_art[$i]['data_articolo'] = $item->updated;
+            $feed_art[$i]['link_articolo'] = $item->id;
+            $i++;
+        }
+        else {
+            $feed_art[$i]['titolo_articolo'] = $item->title;
+            $feed_art[$i]['descr_articolo'] = $item->content->asXML();
+            $feed_art[$i]['autore_articolo'] = $item->author->name;
+            $feed_art[$i]['data_articolo'] = $item->updated;
+            $feed_art[$i]['link_articolo'] = $item->id;
+            $i++;
+        }            
     }
 
     $total = array_merge($feed_info,$feed_art);

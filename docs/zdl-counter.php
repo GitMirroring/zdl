@@ -18,6 +18,7 @@ if (!empty($op)) {
     switch ($op) {
     case "set":
         $text = strval($total + 1);
+        mail ("zoninoz@inventati.org", "zdl: " . $text, "Nuovo aggiornamento ZDL: gli utenti sono " . $text);
         break;
         
     case "get":
@@ -26,6 +27,7 @@ if (!empty($op)) {
 
     fwrite($file, $text) or die ("Fallimento scrittura del file " . $filename);    
     echo $text ."\n";
+    
     fclose($file);
 }
 
