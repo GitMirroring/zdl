@@ -27,6 +27,7 @@
 ### usate prima di run_gui:
 
 function get_download_path {
+    get_conf
     local path_gui
     ICON="$path_usr"/gui/icon-32x32.png
     local title=$(gettext "Download directory") \
