@@ -29,9 +29,11 @@
 function get_download_path {
     local path_gui
     ICON="$path_usr"/gui/icon-32x32.png
-    local title="Directory di download"
-    local text="Seleziona la directory di destinazione dei download:"
-    local IMAGE2="$path_usr"/gui/zdl.png
+    local title=$(gettext "Download directory") \
+	  text=$(gettext "Select the download destination directory:") \
+	  button_quit=$(gettext "Quit") \
+	  button_select=$(gettext "Select") \
+	  IMAGE2="$path_usr"/gui/zdl.png
     
     if hash yad
     then
@@ -46,8 +48,8 @@ function get_download_path {
 		       --borders=5 \
 		       --width=800 \
 		       --height=600 \
-		       --button="Esci!gtk-close":1 \
-		       --button="Seleziona!gtk-yes":0 2>/dev/null)
+		       --button="${button_quit}!gtk-close":1 \
+		       --button="${button_select}!gtk-yes":0 2>/dev/null)
 	if [ "$?" == 0 ]
 	then
 	    if [ -n "$1" ]
@@ -138,7 +140,7 @@ function get_data_multiprogress {
 	    
 	    if [ "${percent_out[i]}" == 100 ]
 	    then
-		text_out_gui[$n]="${item:0:120}   download completato"
+		text_out_gui[$n]="${item:0:120}   $(gettext "download completed")"
 		grep -q "${url_out[i]}" "$start_file_gui_complete" 2>/dev/null ||
 		    set_line_in_file + "${url_out[i]}" "$start_file_gui_complete" &>/dev/null
 	    fi
@@ -157,7 +159,7 @@ function get_data_multiprogress {
 	    while read link
 	    do
 		url_out_gui[$n]="$link"
-		text_out_gui[$n]="${link:0:120}   attendi"
+		text_out_gui[$n]="${link:0:120}   $(gettext "wait")"
 		percent_out_gui[$n]=0
 		((n++))
 	    done < <(awk 'NR == FNR {file1[$0]++; next} !($0 in file1)' "$start_file_gui_diff" "$start_file")
@@ -169,7 +171,7 @@ function get_data_multiprogress {
 	    while read link
 	    do
 		url_out_gui[$n]="$link"
-		text_out_gui[$n]="${link:0:120}   attendi"
+		text_out_gui[$n]="${link:0:120}   $(gettext "wait")"
 		percent_out_gui[$n]=0
 		((n++))
 	    done < "$start_file"		 
@@ -179,11 +181,11 @@ function get_data_multiprogress {
     if check_instance_daemon &>/dev/null ||
 	    check_instance_prog &>/dev/null
     then
-	text_out_gui[$n]="Attivo"
+	text_out_gui[$n]=$(gettext "Active")
 	percent_out_gui[$n]="50"
 
     else
-	text_out_gui[$n]="Non attivo"
+	text_out_gui[$n]=$(gettext "Inactive")
 	percent_out_gui[$n]=""
     fi
 
@@ -255,7 +257,7 @@ function start_daemon_gui {
 	    fi
 	done
     fi
-    start_daemon_msg="<b>${name_prog}:</b>\n\nProgramma attivo in\n\t$PWD\n\n Puoi controllarlo con:\n\t$prog -i \"$PWD\"\n"
+    start_daemon_msg="<b>${name_prog}:</b>\n\n$(gettext "The program is active in")\n\t$PWD\n\n $(gettext "You can control it with:")\n\t$prog -i \"$PWD\"\n"
 }
 
 function stop_daemon_gui {
@@ -276,11 +278,11 @@ function stop_daemon_gui {
 	if check_instance_daemon &>/dev/null ||
 		check_instance_prog &>/dev/null
 	then
-	    start_daemon_msg="<b>${name_prog}:</b>\n\nProgramma ancora in funzione in\n\t$PWD\n\n Puoi controllarlo con:\n\t$prog -i \"$PWD\"\n"
+	    start_daemon_msg="<b>${name_prog}:</b>\n\n$(gettext "The program is still active in")\n\t$PWD\n\n $(gettext "You can control it with:")\n\t$prog -i \"$PWD\"\n"
 	    return 1
 
 	else
-	    start_daemon_msg="<b>${name_prog}:</b>\n\nProgramma terminato in\n\t$PWD\n\n Puoi controllarlo con:\n\t$prog -i \"$PWD\"\n"
+	    start_daemon_msg="<b>${name_prog}:</b>\n\n$(gettext "The program was killed in")\n\t$PWD\n\n $(gettext "You can control it with:")\n\t$prog -i \"$PWD\"\n"
 	    return 0
 	fi
     fi
@@ -386,9 +388,11 @@ function get_yad_multiprogress_args {
 function display_link_error_gui {
     local msg="$1"
     msg=$(sanitize_text "$msg")
-    msg="<b>Alcuni link non sono stati accettati</b> perché non hanno la forma corretta, ecco i messaggi di errore (il riepilogo è salvato nel file zdl_log.txt):\n\n$msg"
+
+    msg="$(gettext "<b>Some links were not accepted </b> because they do not have the correct form, here are the error messages (the summary is saved in the zdl_log.txt file):")\n\n$msg"
+    
     yad --center \
-	--title="Attenzione!" \
+	--title=$(gettext "Warning!") \
 	--window-icon="$ICON" \
 	--borders=5 \
 	--image "dialog-error" \
@@ -407,9 +411,8 @@ function edit_links_gui {
 	then
 	    cp "$start_file" "$start_file_tmp"
 	fi
-	text="$TEXT\n\nModifica la lista dei link da cui avviare lo scaricamento:
-vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignorati)\n"
 	
+	text="$TEXT\n\n$(gettext "Edit the list of links to start downloading:")\n$(gettext "head to each link (the spaces between the lines and around the links will be ignored)")\n"	
 	links=(
 	    $(yad --title="Editor links" \
 		  --image="gtk-execute" \
@@ -423,8 +426,8 @@ vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno ignora
 		  --width=800 --height=600 \
 		  --filename="$start_file_tmp" \
 		  --width=800 \
-		  --button="Salva!gtk-ok:0" \
-		  --button="Annulla!gtk-no:1" \
+		  --button="$(gettext "Save")!gtk-ok:0" \
+		  --button="$(gettext "Cancel")!gtk-no:1" \
 		  "${YAD_ZDL[@]}" 2>/dev/null)
 	)
 	
@@ -566,8 +569,8 @@ function display_download_manager_gui {
     mkfifo $PIPE_04
     exec 44<> $PIPE_04
 
-    local text="${TEXT}\n\nSeleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere la funzione o fai doppio click su un download:" 
-
+    local text="${TEXT}\n\n$(gettext "Select one or more downloads (Ctrl + Click) and press the button to choose the function or double click on a download:")"
+    
     {
 	declare -a res
 	while :
@@ -582,21 +585,21 @@ function display_download_manager_gui {
 		       --image="$IMAGE2" \
 		       --expand-column=3 \
 		       --hide-column=6 \
-		       --column "Link" --column "%:BAR" --column "File" --column "Grandezza" --column "DLer" --column "PID" \
+		       --column "Link" --column "%:BAR" --column "File" --column "$(gettext "Length")" --column "DLer" --column "PID" \
 		       --separator=' ' \
-		       --button="Aggiorna!gtk-refresh!Aggiorna la tabella dei download (automatico ogni $waiting secondi):bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
-		       --button="Play!gtk-media-play-ltr!Riproduci il file audio/video selezionato":4 \
-		       --button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":2  \
-		       --button="Arresta tutti!gtk-stop!Arresta tutti i download. Se ZDL core è attivo, i download saranno riavviati:bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
-		       --button="Elimina!gtk-delete!Arresta i download selezionati e cancella i file":0  \
-		       --button="Completati!gtk-refresh!Togli i download completati dall'elenco:bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
-		       --button="Log!dialog-information!Leggi le info sui download in corso o già effettuati:bash -c \"echo 'display_download_manager_log' > '$yad_download_manager_result_file'\"" \
-		       --button="Chiudi!gtk-close!Chiudi questa finestra":1  \
+		       --button="$(gettext "Update")!gtk-refresh!$(gettext "Update the download table (automatically every") $waiting seconds":"bash -c \"echo 'load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Play!gtk-media-play-ltr!$(gettext "Play the selected audio/video file")":4 \
+		       --button="$(gettext "Stop")!gtk-stop!$(gettext "Stop the selected download process. If ZDL core is active, the download will be restarted")":2  \
+		       --button="$(gettext "Stop all")!gtk-stop!$(gettext "Stop all downloads. If ZDL core is active, the downloads will be restarted"):bash -c \"echo 'kill_downloads &>/dev/null' > '$yad_download_manager_result_file'\"" \
+		       --button="$(gettext "Remove")!gtk-delete!$(gettext "Stop selected downloads and delete files")":0  \
+		       --button="$(gettext "Completed")!gtk-refresh!$(gettext "Remove completed downloads from the list"):bash -c \"echo 'eval no_complete=true; data_stdout; load_download_manager_gui' > '$yad_download_manager_result_file'\"" \
+		       --button="Log!dialog-information!$(gettext "Read the info on the downloads in progress or already made"):bash -c \"echo 'display_download_manager_log' > '$yad_download_manager_result_file'\"" \
+		       --button="$(gettext "Close")!gtk-close!Chiudi questa finestra":1  \
 		       --listen \
 		       --dclick-action="bash -c \"echo 'yad_download_manager_dclick %s' >'$yad_download_manager_result_file'\"" \
 		       "${YAD_ZDL[@]}" \
 		       --borders=0 < $PIPE_03 2>/dev/null))
-	    
+
 	    case $? in
 		1)
 		    break
@@ -671,11 +674,11 @@ function play_gui {
     
     if [ -z "$player" ] #&>/dev/null
     then	
-	msg_error="Non è stato configurato alcun player per audio/video"
+	msg_error=$(gettext "No audio/video player has been configured")
 	
     elif [[ ! "$mime_type" =~ (audio|video) ]]
     then	
-	msg_error="$target non è un file audio/video.\n\nmime-type: $mime_type"
+	msg_error="$target $(gettext "is not an audio/video file.")\n\nmime-type: $mime_type"
 	
     else
 	nohup $player "$target" &>/dev/null &
@@ -683,12 +686,12 @@ function play_gui {
 
     if [ -n "$msg_error" ]
     then
-	yad --title="Attenzione" \
+	yad --title="$(gettext "Warning!")" \
 	    --text="$msg_error" \
 	    --image="dialog-error" \
 	    --center \
 	    --on-top \
-	    --button="Chiudi":0 \
+	    --button="$(gettext "Close")":0 \
 	    "${YAD_ZDL[@]}" 2>/dev/null &	
     fi
 }
@@ -697,7 +700,7 @@ function yad_download_manager_dclick {
     declare -a res
     res=( "$@" )
     
-    local text="$TEXT\n\n<b>Link:</b>\n${res[0]}\n\n<b>Scegli cosa fare:</b>"
+    local text="$TEXT\n\n<b>Link:</b>\n${res[0]}\n\n<b>$(gettext "Choose what to do:")</b>"
     {
 	while read line
 	do
@@ -723,14 +726,14 @@ function yad_download_manager_dclick {
 	    
 	done < <(
 	    yad --text "$text" \
-    		--title="Azione su un download" \
+    		--title="$(gettext "Action on a download")" \
     		--image="gtk-execute" \
 		--center \
 		--on-top \
-		--button="Riproduci!gtk-media-play-ltr!Riproduci il file audio/video selezionato":"bash -c 'echo 3'"  \
-    		--button="Arresta!gtk-stop!Arresta il processo di download selezionato. Se ZDL core è attivo, il download sarà riavviato":"bash -c 'echo 0'"  \
-    		--button="Elimina!gtk-delete!Arresta il processo di download selezionato e ancella il file":"bash -c 'echo 1'"  \
-    		--button="Chiudi!gtk-close":0  \
+		--button="$(gettext "Play")!gtk-media-play-ltr!$(gettext "Play the selected audio/video file")":"bash -c 'echo 3'"  \
+		--button="$(gettext "Stop")!gtk-stop!$(gettext "Stop the selected download process. If ZDL core is active, the download will be restarted")":"bash -c 'echo 0'"  \
+		--button="$(gettext "Remove")!gtk-delete!$(gettext "Stop selected downloads and delete files")":"bash -c 'echo 1'"  \
+    		--button="$(gettext "Close")!gtk-close":0  \
     		"${YAD_ZDL[@]}" 2>/dev/null &
 	    local pid=$!
 	    echo $pid >"$path_tmp"/dclick_yad-pid.$GUI_ID
@@ -740,15 +743,15 @@ function yad_download_manager_dclick {
 
 function display_old_links_gui {
     display_file_gui "$links_log" \
-		     "Elenco dei link" \
-		     "${TEXT}\n\nElenco dei link già immessi\n"
+		     "$(gettext "List of links")" \
+		     "${TEXT}\n\n$(gettext "List of links already entered")\n"
     
 }
 
 function display_download_manager_log {
     display_file_gui "$downloads_log" \
-		     "Risultati attività di download" \
-		     "${TEXT}\n\nLog delle operazioni di download: in particolare, sono registrati i tentativi senza successo e i reindirizzamenti\n"
+		     "$(gettext "Download activity results")" \
+		     "${TEXT}\n\n$(gettext "Log of download operations: in particular, unsuccessful attempts and redirects are recorded")\n"
 }
 
 function display_file_gui {
@@ -783,8 +786,8 @@ function display_file_gui {
 		    "${uri_opts[@]}" \
 		    --listen \
 		    --filename="$filename" \
-		    --button="Cancella il file!gtk-delete":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
-		    --button="Chiudi!gtk-close":0 \
+		    --button="$(gettext "Delete the file")!gtk-delete":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
+		    --button="$(gettext "Close")!gtk-close":0 \
 		    "${YAD_ZDL[@]}" \
 		    --width=800 --height=600 2>/dev/null &
 	    local pid=$!
@@ -792,12 +795,12 @@ function display_file_gui {
 	    tail -f "$filename" --pid=$pid </dev/null >>$PIPE_088
 	    
 	else
-	    yad --title="Attenzione!" \
-		--text="Il file $filename non è disponibile in $PWD" \
+	    yad --title="$(gettext "Warning!")" \
+		--text="$(eval_gettext "The file \$filename is not available in \$PWD")" \
 		--image="dialog-error" \
 		--center \
 		--on-top \
-		--button="Chiudi!gtk-ok:0" \
+		--button="$(gettext "Close")!gtk-ok:0" \
 		"${YAD_ZDL[@]}" 2>/dev/null
 	fi
     } &
@@ -836,8 +839,8 @@ function display_livestream_gui {
     local h=$(date +%H)
     local m=$(date +%M)
     local s=$(date +%S)
-    
-    local text="${TEXT}\n\nProgrammazione della diretta da <b>$chan</b> ($link):\n"
+    # Programmazione della diretta da
+    local text="${TEXT}\n\n$(gettext "Programming of live broadcasting from") <b>$chan</b> ($link):\n"
 
     {
 	declare -a res
@@ -861,6 +864,9 @@ function display_livestream_gui {
 	#     --field="Secondi:":NUM \
 	#     '' $h'!0..23' $m'!0..59' $s'!0..59' '' '!0..23' '!0..59' '!0..59' 
 
+	###### <b>Orario di inizio</b> (attuale:
+	
+	
 	## in orizzontale su 3 colonne e 2 righe:
 	res=($(yad --title="Links LIVE stream" \
 		   --image="$IMAGE2" \
@@ -871,20 +877,20 @@ function display_livestream_gui {
 		   --columns=3 \
 		   --align=center \
 		   --field=" ":LBL \
-		   --field="Ore:":NUM \
+		   --field="$(gettext "Hours:")":NUM \
 		   --field="":LBL \
 		   --field=" ":LBL \
-		   --field="Ore:":NUM \
-		   --field="<b>Orario di inizio</b> (attuale: $h:$m:$s)":LBL \
-		   --field="Minuti:":NUM \
+		   --field="$(gettext "Hours:")":NUM \
+		   --field="$(gettext "<b> Start time </b> (current:") $h:$m:$s)":LBL \
+		   --field="$(gettext "Minutes:")":NUM \
 		   --field="":LBL \
-		   --field="<b>Durata</b>":LBL \
-		   --field="Minuti:":NUM \
+		   --field="<b>$(gettext "Duration")</b>":LBL \
+		   --field="$(gettext "Minutes:")":NUM \
 		   --field=" ":LBL \
-		   --field="Secondi:":NUM \
+		   --field="$(gettext "Seconds:")":NUM \
 		   --field="":LBL \
 		   --field=" ":LBL \
-		   --field="Secondi:":NUM \
+		   --field="$(gettext "Seconds:")":NUM \
 		   '' $h'!0..23' '' '' 0'!0..23' '' $m'!0..59' '' '' 0'!0..59' '' $s'!0..59' '' '' 0'!0..59' \
 		   "${YAD_ZDL[@]}" 2>/dev/null))
 
@@ -908,11 +914,12 @@ function display_livestream_gui {
 	    local now_in_sec=$(human_to_seconds $now_h $now_m $now_s)       
 	    local start_time_in_sec=$(human_to_seconds $start_h $start_m $start_s)
 	    
-	    text="L'orario di inizio è inferiore a quello attuale: è di domani?\nSe non lo è, ZDL procederà non appena possibile"
+#	    text="L'orario di inizio è inferiore a quello attuale: è di domani?\nSe non lo è, ZDL procederà non appena possibile"
+	    text="The start time is lower than the current one: is it tomorrow?\nIf it is not, ZDL will proceed as soon as possible"
 
 	    if ((start_time_in_sec<now_in_sec))
 	    then
-		yad --title "Orario di inizio" \
+		yad --title "$(gettext "Start time")" \
 		    --image dialog-question \
 		    --text "$text" \
 		    --button=gtk-yes:0 \
@@ -936,11 +943,11 @@ function display_link_manager_gui {
     local IFS_old="$IFS"
 
     local msg
-    local text="${TEXT}\n\n<b>Gestisci i link:</b>"
+    local text="${TEXT}\n\n<b>$(gettext "Manage the links:")</b>"
     
     ## è strano, ma non funziona per riferimento:
     local livestream_list=$(get_livestream_list)
-    
+
     {
 	declare -a res
 	while :
@@ -954,17 +961,17 @@ function display_link_manager_gui {
 		       --text="$text" \
 		       --separator="€" \
 		       --align=right \
-		       --field="Nuovo link:":CE ''\
-		       --field="Diretta LIVE:":CB "^!$livestream_list" \
-		       --field="Aggiungi file .torrent:":FL \
-		       --field="Cerca in www.XDCC.eu:":CE \
-		       --field="Aggiungi XDCC server:":CE \
-		       --field="Aggiungi XDCC canale:":CE \
-		       --field="Aggiungi XDCC comando:":CE \
-		       --button="Edita links!gtk-edit!Modifica il file da cui ZDL core estrae i link da processare":"bash -c \"echo edit_links_gui >'$yad_link_manager_result_file'\"" \
-		       --button="Leggi links.txt!dialog-information!Leggi l'elenco dei link già immessi":"bash -c \"echo display_old_links_gui >'$yad_link_manager_result_file'\"" \
-		       --button="Esegui!gtk-execute":0  \
-		       --button="Chiudi!gtk-close":1  \
+		       --field="$(gettext "New link:")":CE '' \
+		       --field="$(gettext "Live stream:")":CB "^!$livestream_list" \
+		       --field="$(gettext "Add .torrent file:")":FL \
+		       --field="$(gettext "Search in www.XDCC.eu:")":CE \
+		       --field="$(gettext "Add XDCC server:")":CE \
+		       --field="$(gettext "Add XDCC channel:")":CE \
+		       --field="$(gettext "Add XDCC command:")":CE \
+		       --button="$(gettext "Edit links")!gtk-edit!$(gettext "Edit the file from which ZDL core extracts the links to be processed")":"bash -c \"echo edit_links_gui >'$yad_link_manager_result_file'\"" \
+		       --button="$(gettext "Read links.txt")!dialog-information!$(gettext "Read the list of links already entered")":"bash -c \"echo display_old_links_gui >'$yad_link_manager_result_file'\"" \
+		       --button="$(gettext "Enter")!gtk-execute":0  \
+		       --button="$(gettext "Close")!gtk-close":1  \
 		       "${YAD_ZDL[@]}" 2>/dev/null))
 	    ret=$?
 	    IFS="$IFS_old"
@@ -995,15 +1002,11 @@ function display_link_manager_gui {
 			    then
 				if check_livestream_link_time "${live_streaming_url[i]}"
 				then
-				    # print_c 3 "Esiste già una programmazione per questo canale:"
-				    # print_c 0 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n"
-				    # print_c 2 "Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
-				    # read -e opt
-				    text="<b>Esiste già una programmazione per questo canale:</b>
-puoi cancellare quella precedente e crearne una nuova oppure lasciare quella precedente e annullare questa operazione.\n
-<b>Vuoi creare una nuova programmazione, cancellando quella precedente?</b>"
-
-				    if yad --title "Già esistente" \
+				    text=$(gettext "<b> A schedule already exists for this channel: </b>
+you can delete the previous one and create a new one or leave the previous one and cancel this operation
+<b> Do you want to create a new schedule, deleting the previous one? </b>")
+				    
+				    if yad --title "$(gettext "Already existing")" \
 					   --image dialog-question \
 					   --text "$text" \
 					   --button=gtk-yes:0 \
@@ -1084,8 +1087,7 @@ puoi cancellare quella precedente e crearne una nuova oppure lasciare quella pre
 		    then
 			yad --title="Attenzione" \
 			    --image="dialog-error" \
-			    --text="<b>ZigzagDownLoader</b>\n
-Non hai inserito un campo del form necessario ad effettuare il download tramite XDCC: ripeti l'operazione" \
+			    --text="<b>ZigzagDownLoader</b>\n\n$(gettext "You have not entered a form field required to download via XDCC: repeat the operation")" \
 			    "${YAD_ZDL[@]}" 2>/dev/null &
 		    fi
 		    print_links_txt
@@ -1124,7 +1126,7 @@ function display_sockets_gui {
 	    socket_ports+=( $port )
     done < "$path_server"/socket-ports
 
-    local text="${TEXT}\n\nAttiva o disattiva connessioni TCP:\nindicare una porta libera\n\n"
+    local text="${TEXT}\n\n$(gettext "Enable or disable TCP connections:")\n$(gettext "enter a free port")\n\n"
     local title="Sockets"
     local msg_img msg_server
 
@@ -1141,14 +1143,14 @@ function display_sockets_gui {
     
     if [ -n "${socket_ports[*]}" ]
     then
-	text+="<b>Socket già attivati:</b>\n"
+	text+="<b>$(gettext "Sockets already enabled:")</b>\n"
 	for port in "${socket_ports[@]}"
 	do
 	    text+="$port\n"
 	done
 	text+="\n"
     else
-	text+="<b>Nessun socket attivato</b>\n"
+	text+="<b>$(gettext "No socket enabled")</b>\n"
     fi
 
     {
@@ -1159,17 +1161,17 @@ function display_sockets_gui {
 		   --on-top \
 		   --center \
 		   --align=right \
-		   --field="Porta socket:":NUM "$default_port!1024..65535" \
-		   --field="Comando:":CB "Attiva!Disattiva" \
-		   --button="Esegui!gtk-ok":0 \
-		   --button="Chiudi!gtk-close":1 \
+		   --field="$(gettext "Socket port:")":NUM "$default_port!1024..65535" \
+		   --field="$(gettext "Command:")":CB "$(gettext "Start")!$(gettext "Stop")" \
+		   --button="$(gettext "Enter")!gtk-ok":0 \
+		   --button="$(gettext "Close")!gtk-close":1 \
 		   --separator=' ' \
 		   "${YAD_ZDL[@]}" 2>/dev/null))
 
 	[ "$?" == 0 ] &&
 	    {
 		local socket_port="${res[0]}"
-		if [ "${res[1]}" == Attiva ]
+		if [ "${res[1]}" == "$(gettext "Start")" ]
 		then
 		    local PWD_TO_SERVER_PATHS=$(realpath "$PWD")
 		    if ! set_line_in_file in "$PWD_TO_SERVER_PATHS$" "$path_server"/paths.txt
@@ -1182,19 +1184,19 @@ function display_sockets_gui {
 	    		unset start_socket
 	    		if run_zdl_server $socket_port
 	    		then
-			    msg_server="Avviato nuovo socket alla porta $socket_port"
+			    msg_server="$(gettext "New socket started at the port") $socket_port"
 			    msg_img="gtk-ok"
 			fi
 			
 		    elif ! check_port "$socket_port"
 		    then
-			msg_server="Socket già in uso alla porta $socket_port"
+			msg_server="$(gettext "Socket already in use at the port") $socket_port"
 			msg_img="dialog-error"
 			
 		    elif [[ "$socket_port" =~ ^([0-9]+)$ ]] &&
 			     ((socket_port > 1024)) && ((socket_port < 65535))
 		    then
-			msg_server="<b>Porta $socket_port non valida!</b>\n\nInserire come porta TCP un numero naturale compreso fra 1024 e 65535"
+			msg_server=$(eval_gettext "<b>Port \$socket_port not valid!</b>\n\nEnter a natural number between 1024 and 65535 as the TCP port")
 			msg_img="dialog-error"
 		    else
 			msg_server="Socket alla porta $socket_port fallito"
@@ -1207,30 +1209,30 @@ function display_sockets_gui {
 			sleep 2
 			
 			if ! check_port $socket_port
-			then
-			    msg_server="Arresto socket fallito alla porta $socket_port"
+			then			
+			    msg_server="$(gettext "Socket stopping failed at the port") $socket_port"
 			    msg_img="gtk-dialog-error"
 			else
-			    msg_server="Arrestato socket alla porta $socket_port"
+			    msg_server="$(gettext "The socket is stopped at the port") $socket_port"
 			    msg_img="gtk-ok"
 			fi
 		    else
-			msg_server="Socket già non disponibile alla porta $socket_port"
+			msg_server="$(gettext "Socket not already available at the port") $socket_port"
 			msg_img="gtk-dialog-error"
 		    fi
 		fi
 
 		if [ -z "$msg_server" ]
 		then
-			msg_server="Qualcosa non ha funzionato"
-			msg_img="gtk-dialog-error"		    
+		    msg_server="$(gettext "Something didn't work")"
+		    msg_img="gtk-dialog-error"		    
 		fi
 		
 		yad --image="$msg_img" \
 		    --center \
 		    --on-top \
 		    "${YAD_ZDL[@]}" \
-		    --button="Chiudi":0 \
+		    --button="$(gettext "Close")":0 \
 		    --text="$msg_server" 2>/dev/null &
 	    }
     } &
@@ -1250,7 +1252,7 @@ function display_multiprogress_opts {
     [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
     
     {
-	res=($(yad --title="Opzioni" \
+	res=($(yad --title="$(gettext "Options")" \
     		   --text="$text" \
     		   --form \
     		   --separator=' ' \
@@ -1258,13 +1260,13 @@ function display_multiprogress_opts {
     		   --center \
 		   --image="$IMAGE2" \
 		   --align=right \
-    		   --field="Downloader predefinito:":CB "${downloaders#\!}"\
-    		   --field="Download simultanei:":NUM "${max_dl#\!}"\
-		   --field="Formato del file:":CB "${format}Non convertire!mp3!flac"\
-		   --button="Configura!dialog-information!Configurazione di ZDL":3 \
-		   --button="Aggiorna!gtk-save!Re/Installa l'ultimo aggiornamento disponibile di ZDL":2 \
-    		   --button="Salva!gtk-ok!Salva le opzioni della directory di download":0 \
-		   --button="Chiudi!gtk-close!Annulla l'operazione chiudendo la finestra":1  \
+    		   --field="$(gettext "Default downloader:")":CB "${downloaders#\!}" \
+    		   --field="$(gettext "Simultaneous downloads:")":NUM "${max_dl#\!}" \
+		   --field="$(gettext "File format:")":CB "${format}$(gettext "Don't convert")!mp3!flac" \
+		   --button="$(gettext "Configure")!dialog-information!$(gettext "ZDL configuration")":3 \
+		   --button="$(gettext "Update")!gtk-save!$(gettext "Re/Install the latest ZDL update available")":2 \
+    		   --button="$(gettext "Save")!gtk-ok!$(gettext "Save the download directory options")":0 \
+		   --button="$(gettext "Close")!gtk-close!$(gettext "Cancel the operation and close the window")":1  \
     		   ${YAD_ZDL[@]} 2>/dev/null))
 	case $? in
 	    0)
@@ -1315,15 +1317,15 @@ function display_multiprogress_gui {
 	    --text="$TEXT" \
 	    --buttons-layout=center \
 	    --button="Links!gtk-connect!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Downloads!browser-download!Gestisci i download:bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Opzioni!gtk-properties!Modifica le opzioni di controllo dei download:bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
-	    --button="Console ZDL!dialog-information!Segui le operazioni del gestore di download (ZDL core):bash -c \"echo display_console_gui pid_console >'$yad_multiprogress_result_file'\"" \
-	    --button="Dis/Attiva ZDL core!gtk-execute!Attiva o disattiva il gestore di download (ZDL core):bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="ZDL sockets!gtk-execute!Attiva o disattiva i socket per l'accesso a ZDL attraverso la rete:bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Esci!gtk-quit!Esci solo dalla GUI, lasciando attivi i downloader, il core o i sockets:bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
-	    --title "Principale" \
+	    --button="Downloads!browser-download!$(gettext "Manage downloads"):bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="$(gettext "Options")!gtk-properties!$(gettext "Change the download control options"):bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
+	    --button="$(gettext "ZDL console")!dialog-information!$(gettext "Follow the download manager operations") (ZDL core)":"bash -c \"echo display_console_gui pid_console >'$yad_multiprogress_result_file'\"" \
+	    --button="$(gettext "Start/Stop ZDL core")!gtk-execute!$(gettext "Start/Stop the download manager") (ZDL core)":"bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="ZDL sockets!gtk-execute!$(gettext "Enable or disable sockets for ZDL access through the network")":"bash -c \"echo display_sockets_gui >'$yad_multiprogress_result_file'\"" \
+	    --button="$(gettext "Quit")!gtk-quit!$(gettext "Exit only from the GUI, leaving the downloaders, core or sockets running")":"bash -c \"echo quit_gui >'$yad_multiprogress_result_file'\"" \
+	    --title "Main" \
     	    "${YAD_ZDL[@]}" 2>/dev/null &
-
+    
     yad_multiprogress_pid=$!
     echo "$yad_multiprogress_pid" >"$yad_multiprogress_pid_file"
     
@@ -1347,24 +1349,21 @@ function display_console_gui {
 	cat < $PIPE_099 |
 	    yad --title="Console" \
 		--image="$IMAGE2" \
-		--text="${TEXT}\n\nConsole dei processi di estrazione e download\n\n" \
+		--text="${TEXT}\n\n$(gettext "Extraction and download process console")\n\n" \
 		--text-info \
 		--show-uri \
 		--uri-color=blue \
 		--tail \
 		"${YAD_ZDL[@]}" \
-		--button="Pulisci!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
-		--button="Chiudi!gtk-ok:0" \
+		--button="$(gettext "Clean")!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
+		--button="$(gettext "Close")!gtk-ok:0" \
 		--width=800 --height=600 &
 	
 	local pid=$!
 	echo $pid > /tmp/display_console_gui_zdl.pid
 	tail -f "$gui_log" --pid=$pid </dev/null >>$PIPE_099
-	## OPZIONI AGGIUNTIVE:
-	# --listen --filename="$gui_log"
     } &
     #local pid_c=$!
-
     local pid_c
 
     while ! check_pid_file /tmp/display_console_gui_zdl.pid
@@ -1385,50 +1384,53 @@ function display_configure_gui {
     IFS="€"
     {
 	source "$file_conf"
-	res=($(yad --title="Configurazione" \
-		   --text="${TEXT}\n\nGestisci la configurazione di ZDL" \
+
+	## local locale_code_list=$(awk '/\.UTF-8/{opts = opts "!" $1; }END{print opts}' /usr/share/i18n/SUPPORTED)
+	res=($(yad --title="$(gettext "Configuration")" \
+		   --text="${TEXT}\n\n$(gettext "Manage ZDL configuration")" \
 		   --form \
 		   --align=right \
 		   --separator='€' \
 		   --scroll \
 		   --height=700 --width=800 \
 		   --image="$IMAGE2" \
-		   --field="Downloader predefinito:":CB "${downloader}!Aria2!Axel!Wget" \
-		   --field="Numero parti di download per Axel:":NUM "$axel_parts!1..32" \
-		   --field="Numero parti di download per Aria2:":NUM "$aria2_connections!1..16" \
-		   --field="Max download simultanei:":NUM "$max_dl!0..20" \
-		   --field="Colore di sfondo nei terminali virtuali:":CB "$background!transparent!black" \
-		   --field="Lingua:":CB "$language" \
-		   --field="Comando per riconnettere il modem/router:":CE "$reconnecter" \
-		   --field="Aggiornamenti automatici:":CB "$autoupdate!enabled!disabled" \
-		   --field="Player per anteprima audio/video:":MFL "$player" \
-		   --field="Editor per la lista dei link:":MFL "$editor" \
-		   --field="Sovrascrittura file omonimi (--resume):":CB "${resume}!enabled!disabled" \
-		   --field="Modalità avvio":CB "${zdl_mode}!stdout!lite!daemon" \
-		   --field="Porta TCP torrent":NUM "$tcp_port!1024..65535" \
-		   --field="Porta UDP torrent":NUM "$udp_port!1024..65535" \
-		   --field="Porta TCP (--socket|--web-ui)":NUM "$socket_port!1024..65535" \
-		   --field="Browser web (--web-ui):":MFL "$browser" \
-		   --field="Interfaccia socket web (--socket|--web-ui)":CB "$web_ui!1!1_flat!2!2_lite" \
-		   --button="Backup configurazione!gtk-save":3 \
-		   --button="Salva!gtk-ok":2 \
-		   --button="Annulla!gtk-close":0 \
+		   --field="$(gettext "Default downloader:")":CB "${downloader}!Aria2!Axel!Wget" \
+		   --field="$(gettext "Number of download parts for Axel:")":NUM "$axel_parts!1..32" \
+		   --field="$(gettext "Number of download parts for Aria2:")":NUM "$aria2_connections!1..16" \
+		   --field="$(gettext "Maximum number of concurrent downloads:")":NUM "$max_dl!0..20" \
+		   --field="$(gettext "Background color in virtual terminals:")":CB "$background!transparent!black" \
+		   --field="$(gettext "Language:")":CB "$language!it!en" \
+		   --field="$(gettext "Script/command/program to reconnect the modem/router:")":CE "$reconnecter" \
+		   --field="$(gettext "Automaic updates:")":CB "$autoupdate!enabled!disabled" \
+		   --field="$(gettext "Script/command/program to play audio/video files:")":MFL "$player" \
+		   --field="$(gettext "Default editor to edit the link queue:")":MFL "$editor" \
+		   --field="$(gettext "Homonymous files recovery as the option --resume:")":CB "${resume}!enabled!disabled" \
+		   --field="$(gettext "Default program startup mode:")":CB "${zdl_mode}!stdout!lite!daemon" \
+		   --field="$(gettext "Torrent TCP port:")":NUM "$tcp_port!1024..65535" \
+		   --field="$(gettext "Torrent UDP port:")":NUM "$udp_port!1024..65535" \
+		   --field="$(gettext "TCP port for sockets (--socket|--web-ui):")":NUM "$socket_port!1024..65535" \
+		   --field="$(gettext "Web browser (--web-ui):")":MFL "$browser" \
+		   --field="$(gettext "Web User Interface (--socket|--web-ui):")":CB "$web_ui!1!1_flat!2!2_lite" \
+		   --button="$(gettext "Configuration backup")!gtk-save":3 \
+		   --button="$(gettext "Save")!gtk-ok":2 \
+		   --button="$(gettext "Cancel")!gtk-close":0 \
 		   "${YAD_ZDL[@]}" 2>/dev/null))
 	ret=$?
 	case $ret in
 	    2)
 		for ((i=0; i<${#key_conf[@]}; i++))
 		do
+		    
 		    set_item_conf ${key_conf[i]} "${res[i]}"
 		done
 		;;
 	    3)
 		local ext=$(date +%F)
 		cp "$file_conf" "$file_conf".$ext
-		yad --title="Backup configurazione" \
-		    --text="$TEXT\n\n\n<b>Backup della configurazione in:</b>\n$file_conf.$ext" \
+		yad --title="Configuration backup" \
+		    --text="$TEXT\n\n\n<b>$(gettext "Configuration backup in"):</b>\n$file_conf.$ext" \
 		    --image="gtk-ok" \
-		    --button="Chiudi!gtk-ok":0 \
+		    --button="$(gettext "Close")!gtk-ok":0 \
 		    --on-top --center \
 		    --borders=10 \
 		    "${YAD_ZDL[@]}" 2>/dev/null
@@ -1612,9 +1614,9 @@ function display_xdcc_eu_gui {
     if ( [[ "$pid" =~ ^[0-9]+$ ]] && check_pid $pid ) ||
 	   [ -z "${link_xdcc_eu[0]}" ]
     then
-	local msg="<b>Non è stato trovato alcun link</b> corrispondente alle seguenti chiavi di ricerca: $xdcc_eu_searchkey"
+	local msg="$(gettext "<b>No links found</b> corresponding to the following search keys:") $xdcc_eu_searchkey"
 	yad --center \
-	    --title="Attenzione!" \
+	    --title="$(gettext "Warning!")" \
 	    --window-icon="$ICON" \
 	    --borders=5 \
 	    --image "dialog-error" \
@@ -1634,12 +1636,12 @@ function display_xdcc_eu_gui {
 	declare -a res
 	res=($(yad --list --checklist --multiple \
 		   --separator=' ' \
-		   --title="Ricerca con xdcc.eu" \
-		   --text="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD\n\nSeleziona i link trovati da xdcc.eu:" \
+		   --title="$(gettext "Search in www.XDCC.eu:")" \
+		   --text="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD\n\n$(gettext "Select the links found by xdcc.eu:")" \
     		   --width=1200 --height=300 \
     		   --image-on-top --image="$IMAGE2" \
 		   "${YAD_ZDL[@]}" \
-		   --column ":CHK" --column "File" --column "Grandezza" --column "Link" \
+		   --column ":CHK" --column "File" --column "$(gettext "Length")" --column "Link" \
 		   "${data_xdcc_eu[@]}" 2>/dev/null))
 
 	if [ "$?" == 0 ] &&

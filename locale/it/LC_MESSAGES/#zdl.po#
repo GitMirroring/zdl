@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 22:19+0200\n"
+"POT-Creation-Date: 2019-07-19 22:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -287,9 +287,9 @@ msgstr ""
 "Seleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere "
 "la funzione o fai doppio click su un download:"
 
-#: ../gui/gui.sh:588 ../gui/gui.sh:1644 ../ui/ui.awk:303
-msgid "Length"
-msgstr "Grandezza"
+#: ../gui/gui.sh:588
+msgid "Grandezza"
+msgstr "Length"
 
 #: ../gui/gui.sh:590
 msgid "Update the download table (automatically every"
@@ -734,6 +734,10 @@ msgstr ""
 #: ../gui/gui.sh:1640
 msgid "Select the links found by xdcc.eu:"
 msgstr "Seleziona i link trovati da xdcc.eu:"
+
+#: ../gui/gui.sh:1644 ../ui/ui.awk:303
+msgid "Length"
+msgstr "Grandezza"
 
 #: ../ui/ui.sh:92
 msgid "Connecting"
