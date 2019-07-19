@@ -247,7 +247,7 @@ fi
 cd "$DIR"
 rm -fr "$path_conf/src"
 
-print_c 4 "$(getext "For information on") ZigzagDownLoader (zdl):" #"Per informazioni su
+print_c 4 "$(gettext "For information on") ZigzagDownLoader (zdl):" #"Per informazioni su
 print_c 0 "\tzdl --help
 \tman zdl
 \tpinfo zdl
