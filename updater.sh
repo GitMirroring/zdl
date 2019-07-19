@@ -417,7 +417,7 @@ NB:
   (you can automatically link them with: zdl -fu)
 
 EXTENSIONS:
-")" > "$path_conf "/extensions/$(gettext "README").txt
+")" > "$path_conf"/extensions/$(gettext "README").txt
 
     find $SHARE/extensions/ -type f |
 	grep -P extensions/[^/]+.sh$  >> "$path_conf"/extensions/$(gettext "README").txt
