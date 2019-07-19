@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 23:32+0200\n"
+"POT-Creation-Date: 2019-07-20 01:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -15,6 +15,173 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../updater.sh:55
+msgid "Automatic compilation of zdl-wise.c"
+msgstr "Compilazione automatica di zdl-wise.c"
+
+#: ../updater.sh:99
+msgid "ZDL update"
+msgstr "Aggiornamento di ZDL"
+
+#: ../updater.sh:100
+msgid ""
+"The root user password is required.\\nRepeat the ZDL update using the "
+"terminal."
+msgstr ""
+"È richiesta la password di root.\\nRipeti l'aggiornamento di ZDL usando il "
+"terminale"
+
+#: ../updater.sh:117
+msgid ""
+"can download with Wget but strongly recommends Axel, because:\n"
+"- can significantly speed up the download\n"
+"- allows the recovery of downloads in case of interruption\n"
+"\n"
+"For more information on Axel: http://alioth.debian.org/projects/axel/\n"
+msgstr ""
+"può scaricare con Wget ma raccomanda fortemente Axel, perché:\n"
+" \t- può accelerare sensibilmente il download\n"
+" \t- permette il recupero dei download in caso di interruzione\n"
+"\n"
+"Per ulteriori informazioni su Axel: http://alioth.debian.org/projects/axel/\n"
+
+#: ../updater.sh:124
+msgid ""
+"uses XTerm if launched from a graphical application such as Firefox/"
+"Iceweasel/Icecat (via Flashgot), Chrome/Chromium (via Download Assistant or "
+"Simple Get), XXXTerm/Xombrero and Conkeror:"
+msgstr ""
+"utilizza XTerm se avviato da un'applicazione grafica come Firefox/Iceweasel/"
+"Icecat (tramite Flashgot), Chrome/Chromium (attraverso Download Assistant o "
+"Simple Get), XXXTerm/Xombrero e Conkeror:"
+
+#: ../updater.sh:133
+#, sh-format
+msgid "WARNING: $dep is not installed on your system"
+msgstr "ATTENZIONE: $dep non è installato nel tuo sistema"
+
+#: ../updater.sh:135
+msgid ""
+"${alert_msg[$dep]}\n"
+"1) Automatically install $dep from packages (RECOMMENDED)\n"
+"2) Automatically installs $dep from sources\n"
+"3) Skip the $dep installation and continue with the installation of $PROG "
+"and its other dependencies\n"
+"4) Exit $PROG to install dep manually (you can find it here: http://pkgs.org/"
+"search/?keyword=$dep)"
+msgstr ""
+"${alert_msg[dep]}\n"
+"1) Installa automaticamente $dep da pacchetti (CONSIGLIATO)\n"
+"2) Installa automaticamente $dep da sorgenti\n"
+"3) Salta l'installazione di $dep e continua con l'installazione di $PROG e "
+"delle altre sue dipendenze\n"
+"4) Esci da $PROG per installare $dep manualmente (puoi trovarlo qui: http://"
+"pkgs.org/search/?keyword=$dep)"
+
+#: ../updater.sh:142
+msgid "Choose what to do (1-4):"
+msgstr "Scegli cosa fare:"
+
+#: ../updater.sh:169
+msgid "Automatic installation failed"
+msgstr "Installazione automatica non riuscita"
+
+#: ../updater.sh:172
+msgid "did not find the following package:"
+msgstr "non ha trovato il seguente pacchetto:"
+
+#: ../updater.sh:175
+msgid "Errors in compilation or installation"
+msgstr "Errori nella compilazione o nell'installazione"
+
+#: ../updater.sh:189 ../updater.sh:452 ../updater.sh:460 ../updater.sh:466
+#: ../updater.sh:481 ../updater.sh:510 ../updater.sh:582
+msgid "Installing"
+msgstr "Installazione di"
+
+#: ../updater.sh:233
+msgid "Enter the root password"
+msgstr "Digita la password di utente root"
+
+#: ../updater.sh:276
+msgid "Update completed"
+msgstr "Aggironamento completato"
+
+#: ../updater.sh:277
+msgid "Update failed"
+msgstr "Aggiornamento fallito"
+
+#: ../updater.sh:328 ../updater.sh:384
+#, sh-format
+msgid "$op failed${suffix}. Please try again"
+msgstr "$op non riuscit${suffix}. Riprova un'altra volta"
+
+#: ../updater.sh:393
+msgid "Startup batch script installed:"
+msgstr "Script batch di avvio installato:"
+
+#: ../updater.sh:407
+#, sh-format
+msgid ""
+"Below, the existing ZigzagDownLoader extensions,\n"
+"in $SHARE/extensions/\n"
+"NB:\n"
+"- any homonymous extensions will be ignored\n"
+"- you can control the process flow by assigning\n"
+"  extension file names:\n"
+"  ZDL will read the files in lexicographic order\n"
+"  (also to replace or enrich existing extensions)\n"
+"- new user extensions must be connected in\n"
+"  $SHARE/extensions/\n"
+"  (you can automatically link them with: zdl -fu)\n"
+"\n"
+"EXTENSIONS:\n"
+msgstr ""
+"Di seguito, le estensioni già esistenti di ZigzagDownLoader,\n"
+"in $SHARE/extensions/\n"
+"NB: \n"
+"- eventuali estensioni omonime dell'utente saranno ignorate\n"
+"- puoi controllare il flusso del processo assegnando\n"
+"  i nomi ai file delle estensioni:\n"
+"  ZDL leggerà i file in ordine lessicografico\n"
+"  (anche per sostituire o arricchire le estensioni già esistenti)\n"
+"- le nuove estensioni dell'utente devono essere collegate in\n"
+"  $SHARE/extensions/\n"
+"  (puoi collegarle automaticamente con: zdl -fu)\n"
+"\n"
+"ESTENSIONI:\n"
+
+#: ../updater.sh:420 ../updater.sh:423
+msgid "README"
+msgstr "LEGGIMI"
+
+#: ../updater.sh:474
+msgid "Recovery packages not found:"
+msgstr "Recupero pacchetti non trovati"
+
+#: ../updater.sh:624
+#, sh-format
+msgid "$op automatic${suffix} completed${suffix}"
+msgstr "$op automatic${suffix} completat${suffix}"
+
+#: ../updater.sh:631
+msgid "ZigzagDownLoader update"
+msgstr "Aggiornamento di ZigzagDownLoader"
+
+#: ../updater.sh:632
+msgid "ZigzagDownLoader updated with success"
+msgstr "ZigzagDownLoader aggiornato con successo"
+
+#: ../updater.sh:637 ../gui/gui.sh:597 ../gui/gui.sh:694 ../gui/gui.sh:736
+#: ../gui/gui.sh:790 ../gui/gui.sh:803 ../gui/gui.sh:974 ../gui/gui.sh:1167
+#: ../gui/gui.sh:1235 ../gui/gui.sh:1269 ../gui/gui.sh:1359 ../gui/gui.sh:1433
+msgid "Close"
+msgstr "Chiudi"
+
+#: ../updater.sh:638
+msgid "Restart ZDL"
+msgstr "Riavvia ZDL"
 
 #: ../zdl.sh:41
 #, sh-format
@@ -328,12 +495,6 @@ msgstr "Rimuovi i download completati dalla lista"
 #: ../gui/gui.sh:596
 msgid "Read the info on the downloads in progress or already made"
 msgstr "Leggi le info sui download in corso o già effettuati"
-
-#: ../gui/gui.sh:597 ../gui/gui.sh:694 ../gui/gui.sh:736 ../gui/gui.sh:790
-#: ../gui/gui.sh:803 ../gui/gui.sh:974 ../gui/gui.sh:1167 ../gui/gui.sh:1235
-#: ../gui/gui.sh:1269 ../gui/gui.sh:1359 ../gui/gui.sh:1433
-msgid "Close"
-msgstr "Chiudi"
 
 #: ../gui/gui.sh:677
 msgid "No audio/video player has been configured"
@@ -1046,8 +1207,7 @@ msgstr "Live stream: programma il download della diretta"
 
 #: ../ui/ui.sh:842
 msgid "It is necessary to indicate the recording start time and its duration"
-msgstr ""
-"È necessario indicare l'orario di inizio registrazione e la sua durata"
+msgstr "È necessario indicare l'orario di inizio registrazione e la sua durata"
 
 #: ../ui/ui.sh:844
 msgid "Recording start time:"

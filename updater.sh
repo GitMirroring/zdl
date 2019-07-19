@@ -52,7 +52,7 @@ function install_phpcomposer {
 function update_zdl-wise {
     if [ ! -e "/cygdrive" ]
     then
-	print_c 1 "Compilazione automatica di zdl-wise.c"
+	print_c 1 "$(gettext "Automatic compilation of zdl-wise.c")"
 	gcc extensions/zdl-wise.c -o extensions/zdl-wise 2>/dev/null 
     fi
 }
@@ -95,8 +95,9 @@ function try {
 	then
 	    if [ "$real_mode" == gui ]
 	    then
-		yad --title="Aggiornamento ZDL" \
-		    --text="È necessaria la password di utente root.\nRipeti l'aggiornamento del sistema utilizzando il terminale." \
+		#È necessaria la password di utente root.\nRipeti l'aggiornamento di ZDL utilizzando il terminale.
+		yad --title="$(gettext "ZDL update")" \
+		    --text="$(gettext "The root user password is required.\nRepeat the ZDL update using the terminal.")" \
 		    --image="dialog-error" \
 		    "${YAD_ZDL[@]}"
 		exit 1
@@ -113,15 +114,15 @@ function install_dep {
     local dep="$1"
     
     declare -A alert_msg
-    alert_msg['axel']="$PROG può scaricare con Wget ma raccomanda fortemente Axel, perché:\n
-	- può accelerare sensibilmente il download
-	- permette il recupero dei download in caso di interruzione
-	
-Per ulteriori informazioni su Axel: http://alioth.debian.org/projects/axel/
-"
+    alert_msg['axel']="$PROG $(gettext "can download with Wget but strongly recommends Axel, because:
+- can significantly speed up the download
+- allows the recovery of downloads in case of interruption
+
+For more information on Axel: http://alioth.debian.org/projects/axel/
+")"
     
-    alert_msg['xterm']="$PROG utilizza XTerm se avviato da un'applicazione grafica come Firefox/Iceweasel/Icecat (tramite Flashgot), Chrome/Chromium (attraverso Download Assistant o Simple Get), XXXTerm/Xombrero e Conkeror:
-"
+    alert_msg['xterm']="$PROG $(gettext "uses XTerm if launched from a graphical application such as Firefox/Iceweasel/Icecat (via Flashgot), Chrome/Chromium (via Download Assistant or Simple Get), XXXTerm/Xombrero and Conkeror:")"
+    
     for cmd in "${!deps[@]}"
     do
 	[ "$dep" == "${deps[$cmd]}" ] && break
@@ -129,16 +130,16 @@ Per ulteriori informazioni su Axel: http://alioth.debian.org/projects/axel/
 
     while ! command -v $cmd &>/dev/null
     do
-	print_c 3 "ATTENZIONE: $dep non è installato nel tuo sistema"
+	print_c 3 "$(eval_gettext "WARNING: \$dep is not installed on your system")"
 
-	echo -e "${alert_msg[dep]}
-1) Installa automaticamente $dep da pacchetti (CONSIGLIATO)
-2) Installa automaticamente $dep da sorgenti
-3) Salta l'installazione di $dep e continua con l'installazione di $PROG e delle altre sue dipendenze
-4) Esci da $PROG per installare $dep manualmente (puoi trovarlo qui: http://pkgs.org/search/?keyword=$dep)"
+	local depmsg="$(eval_gettext "\${alert_msg[\$dep]}
+1) Automatically install \$dep from packages (RECOMMENDED)
+2) Automatically installs \$dep from sources
+3) Skip the \$dep installation and continue with the installation of \$PROG and its other dependencies
+4) Exit \$PROG to install dep manually (you can find it here: http://pkgs.org/search/?keyword=\$dep)")"
 
-	print_c 2 "Scegli cosa fare (1-4):"
-
+	echo -e "$depmsg"
+	print_c 2 "$(gettext "Choose what to do (1-4):")"
 	cursor on
 	read -e input
 	cursor off
@@ -165,13 +166,13 @@ function install_test {
 
     if ! command -v $cmd &>/dev/null
     then
-	print_c 3 "Installazione automatica non riuscita"
+	print_c 3 "$(gettext "Automatic installation failed")"
 	case $test_type in
 	    pk)
-		echo "$installer non ha trovato il seguente pacchetto: $dep"
+		echo "$installer $(gettext "did not find the following package:") $dep"
 		;;
 	    src)
-		echo "Errori nella compilazione o nell'installazione"
+		echo "$(gettext "Errors in compilation or installation")"
 		;;
 	esac
 
@@ -185,7 +186,7 @@ function install_test {
 function install_pk {
     local dep="$1"
     
-    print_c 1 "Installazione di: $dep"
+    print_c 1 "$(gettext "Installing") $dep"
 
     ## apt-get yum pacman zypper port
 
@@ -229,7 +230,7 @@ function make_install {
     make
     sudo make install ||
 	(
-	    echo "Digita la password di root"
+	    echo "$(gettext "Enter the root password")" #"Digita la password di root"
 	    su -c "make install"
 	)
     make clean
@@ -272,8 +273,8 @@ function update {
     SHARE="/usr/local/share/zdl"
     ## sources: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
     axel_url="http://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
-    success="Aggiornamento completato"
-    failure="Aggiornamento non riuscito"
+    success="$(gettext "Update completed")"
+    failure="$(gettext "Update failed")"
     path_conf="$HOME/.$prog"
     file_conf="$path_conf/$prog.conf"
 
@@ -324,7 +325,7 @@ function update {
     setterm --cursor on
     if ! try mv -f zdl zdl-xterm zdl-sockets $BIN
     then
-	print_c 3 "$op non riuscit${suffix}. Riprova un'altra volta"
+	print_c 3 "$(eval_gettext "\$op failed\${suffix}. Please try again")"
 	exit 1
     else
 	print_c 1 "$op automatic${suffix} in $BIN"
@@ -380,7 +381,7 @@ function update {
     
     if [ $? != 0 ]
     then
-	print_c 3 "$op non riuscit${suffix}. Riprova un'altra volta"
+	print_c 3 "$(eval_gettext "\$op failed\${suffix}. Please try again")"
 	exit 1
     else
 	print_c 1 "$op automatic${suffix} in $SHARE/$prog"
@@ -389,7 +390,7 @@ function update {
     if [ -e /cygdrive ]
     then
 	code_batch=$(cat $SHARE/zdl.bat)
-	echo "${code_batch//'{{{CYGDRIVE}}}'/$cygdrive}" > /${prog}.bat && print_c 1 "\nScript batch di avvio installato: $(cygpath -m /)/zdl.bat "
+	echo "${code_batch//'{{{CYGDRIVE}}}'/$cygdrive}" > /${prog}.bat && print_c 1 "\n$(gettext "Startup batch script installed:") $(cygpath -m /)/zdl.bat " 
 	chmod +x /${prog}.bat
     fi
 
@@ -403,23 +404,23 @@ function update {
     source $SHARE/config.sh
     set_default_conf
 
-    echo -e "Di seguito, le estensioni già esistenti di ZigzagDownLoader, 
-in $SHARE/extensions/
-NB: 
-- eventuali estensioni omonime dell'utente saranno ignorate
-- puoi controllare il flusso del processo assegnando 
-  i nomi ai file delle estensioni: 
-  ZDL leggerà i file in ordine lessicografico 
-  (anche per sostituire o arricchire le estensioni già esistenti)
-- le nuove estensioni dell'utente devono essere collegate in
-  $SHARE/extensions/
-  (puoi collegarle automaticamente con: zdl -fu)
+    echo -e "$(eval_gettext "Below, the existing ZigzagDownLoader extensions,
+in \$SHARE/extensions/
+NB:
+- any homonymous extensions will be ignored
+- you can control the process flow by assigning
+  extension file names:
+  ZDL will read the files in lexicographic order
+  (also to replace or enrich existing extensions)
+- new user extensions must be connected in
+  \$SHARE/extensions/
+  (you can automatically link them with: zdl -fu)
 
-ESTENSIONI:
-" > "$path_conf"/extensions/LEGGIMI.txt
+EXTENSIONS:
+")" > "$path_conf "/extensions/$(gettext "README").txt
 
     find $SHARE/extensions/ -type f |
-	grep -P extensions/[^/]+.sh$  >> "$path_conf"/extensions/LEGGIMI.txt
+	grep -P extensions/[^/]+.sh$  >> "$path_conf"/extensions/$(gettext "README").txt
     
     if [[ $(ls "$path_conf"/extensions/*.sh 2>/dev/null) ]]
     then
@@ -448,7 +449,7 @@ ESTENSIONI:
 	
 	if ! command -v apt-cyg &>/dev/null
 	then
-	    print_c 1 "Installazione di apt-cyg"
+	    print_c 1 "$(gettext "Installing") apt-cyg"
 
 	    wget http://rawgit.com/transcode-open/apt-cyg/master/apt-cyg
 	    install apt-cyg /bin
@@ -456,13 +457,13 @@ ESTENSIONI:
 
 	if ! command -v node &>/dev/null
 	then
-	    print_c 1 "Installazione di Nodejs.exe in $SHARE"
+	    print_c 1 "$(gettext "Installing") Nodejs.exe in $SHARE"
 	    wget -O $SHARE/node.exe https://nodejs.org/dist/v4.4.4/win-x86/node.exe
 	fi
 
 	if ! command -v ffmpeg &>/dev/null
 	then
-	    print_c 1 "Installazione di FFMpeg"
+	    print_c 1 "$(gettext "Installing") FFMpeg"
 	    
 	    rm -f /tmp/list-pkts.txt
 	    apt-cyg mirror "${mirrors[1]}"
@@ -470,14 +471,14 @@ ESTENSIONI:
 	    
 	    unset pkts
 	    mapfile pkts <<< "$(grep Unable /tmp/list-pkts.txt | sed -r 's|.+ ([^\ ]+)$|\1|g')"
-	    print_c 1 "\nRecupero pacchetti non trovati:\n${pkts[*]}\n"
+	    print_c 1 "\n$(gettext "Recovery packages not found:")\n${pkts[*]}\n"
 	    apt-cyg mirror "${mirrors[0]}"
 	    apt-cyg install ${pkts[*]} 
 	fi
 	
 	if ! command -v rtmpdump &>/dev/null
 	then
-	    print_c 1 "Installazione di RTMPDump"
+	    print_c 1 "$(gettext "Installing") RTMPDump"
 	    
 	    apt-cyg mirror "${mirrors[1]}"
 	    apt-cyg install rtmpdump
@@ -506,7 +507,7 @@ ESTENSIONI:
 	    if ! command -v $cmd &>/dev/null 
 	    then
 		apt-cyg mirror "${mirrors[0]}"
-		print_c 1 "Installazione di ${deps[$cmd]}"
+		print_c 1 "$(gettext "Installing") ${deps[$cmd]}"
 		apt-cyg install ${deps[$cmd]}
 	    fi
 	done
@@ -578,7 +579,7 @@ ESTENSIONI:
 	    then
 		if [ "$cmd" != node ] || ( [ "$cmd" == node ] && ! command -v nodejs &>/dev/null )
 		then
-		    print_c 1 "Installazione di ${deps[$cmd]}"
+		    print_c 1 "$(gettext "Installing") ${deps[$cmd]}"
 		    install_dep ${deps[$cmd]}
 		fi
 	    fi
@@ -620,21 +621,21 @@ ESTENSIONI:
     #### aggiornamento versione da URL_ROOT
     echo "$remote_version" >"$path_conf"/version
     
-    print_c 1 "$op automatic${suffix} completat${suffix}"
+    print_c 1 "$(eval_gettext "\$op automatic\${suffix} completed\${suffix}")"
 
     if [ -z "$installer_zdl" ]
     then
 	if [ "$real_mode" == gui ]
 	then
 	    this_mode=gui
-	    yad --title="Aggiornamento ZigzagDownLoader" \
-		--text="ZigzagDownLoader aggiornato con successo" \
+	    yad --title="$(gettext "ZigzagDownLoader update")" \
+		--text="$(gettext "ZigzagDownLoader updated with success")" \
 		--image="$IMAGE2" \
 		--center \
 		--on-top \
 		"${YAD_ZDL[@]}" \
-		--button="Chiudi!gtk-close:1" \
-		--button="Riavvia ZDL!gtk-execute:0"
+		--button="$(gettext "Close")!gtk-close:1" \
+		--button="$(gettext "Restart ZDL")!gtk-execute:0"
 
 	    case $? in
 		0)

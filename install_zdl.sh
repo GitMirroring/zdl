@@ -43,8 +43,6 @@ URL_ROOT="http://download.savannah.gnu.org/releases/zdl/"
 
 ## from: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
 cygaxel_url="http://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
-success="Installazione completata"
-failure="Installazione non riuscita"
 path_conf="$HOME/.$prog"
 file_conf="$path_conf/$prog.conf"
 installer_zdl="true"
@@ -139,9 +137,9 @@ function bold {
 
 ##############################################
 echo
-echo "======================================="
-echo "Installazione di ZigzagDownLoader (ZDL)"
-echo "======================================="
+echo "======================"
+echo "ZigzagDownLoader (ZDL)"
+echo "======================"
 echo
 ##############################################
 
@@ -149,7 +147,7 @@ mkdir -p "$path_conf/src"
 cd "$path_conf/src"
 rm *.tar.gz* $prog -rf
 
-echo "Download in corso: attendere..."
+echo "Downloading..."
 echo
 
 if [ -e /cygdrive ]
@@ -170,8 +168,7 @@ BinStream.SaveToFile(WScript.Arguments(1));' > downloader_tmp.js
     if ! command -v wget &>/dev/null
     then
 	echo -e "
-Installazione di Wget
-...attendi...
+Installing Wget...
 
 "
 	init
@@ -209,6 +206,7 @@ do
     
     if [ ! -f zdl-2.0.tar.gz ]
     then
+	echo "Connection problems: if it does not resolve, close the program with <Control+c>"
 	echo "Problemi di connessione: se non dovesse risolversi, chiudi il programma con <Control+c>"
 	sleep 1
     fi
@@ -249,7 +247,7 @@ fi
 cd "$DIR"
 rm -fr "$path_conf/src"
 
-print_c 4 "Per informazioni su ZigzagDownLoader (zdl):"
+print_c 4 "$(getext "For information on") ZigzagDownLoader (zdl):" #"Per informazioni su
 print_c 0 "\tzdl --help
 \tman zdl
 \tpinfo zdl
