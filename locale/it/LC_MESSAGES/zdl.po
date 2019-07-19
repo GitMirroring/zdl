@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 01:12+0200\n"
+"POT-Creation-Date: 2019-07-19 02:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -176,7 +176,7 @@ msgstr "Link da processare:"
 msgid "Connecting..."
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:1652 ../ui/ui.awk:303
+#: ../zdl.sh:1652 ../ui/ui.awk:302
 #, sh-format
 msgid "File URL"
 msgstr "URL del file"
@@ -568,26 +568,26 @@ msgstr "Live Stream programmati (link, orario inizio, durata):"
 msgid "Download id:"
 msgstr "Numero download:"
 
-#: ../ui/ui.awk:158
+#: ../ui/ui.awk:157
 msgid "(file size not specified by the server)"
 msgstr "(grandezza del file non specificata dal server)"
 
-#: ../ui/ui.awk:163
+#: ../ui/ui.awk:162
 msgid "killed"
 msgstr "terminato"
 
-#: ../ui/ui.awk:208
+#: ../ui/ui.awk:207
 msgid "completed"
 msgstr "completato"
 
-#: ../ui/ui.awk:213 ../ui/ui.awk:237
+#: ../ui/ui.awk:212 ../ui/ui.awk:236
 msgid "wait"
 msgstr "attendi"
 
-#: ../ui/ui.awk:220
+#: ../ui/ui.awk:219
 msgid "inactive"
 msgstr "non attivo"
 
-#: ../ui/ui.awk:304
+#: ../ui/ui.awk:303
 msgid "Length"
 msgstr "Grandezza"

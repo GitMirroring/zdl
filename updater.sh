@@ -349,15 +349,17 @@ function update {
 	## info zdl
 	try rm -f /usr/share/info/zdl.info
 	try mkdir -p /usr/share/info/$lang/
-	try install -m 644 $HOME/zdl-git/code/docs/$lang/zdl.info /usr/share/info/$lang/
+	try install -m 644 zdl/docs/$lang/zdl.info /usr/share/info/$lang/
 	try install-info --info-dir=/usr/share/info/$lang/ /usr/share/info/$lang/zdl.info &>/dev/null
-
+	
 	## man zdl
 	try mkdir -p /usr/share/man/$lang/man1/
-	try install $HOME/zdl-git/code/docs/$lang/zdl.1 /usr/share/man/$lang/man1/
+	try install zdl/docs/$lang/zdl.1 /usr/share/man/$lang/man1/
 	try rm -f /usr/share/man/man1/zdl.1
 	#try ln -s /usr/share/man/it/man1/zdl.1 /usr/share/man/man1/zdl.1
     done
+    try rm -f /usr/share/info/zdl.info
+    try ln -s /usr/share/info/en/zdl.info /usr/share/info/zdl.info
     try mandb -q
 
     ## bash completion
