@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-20 01:18+0200\n"
+"POT-Creation-Date: 2019-07-20 01:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -96,7 +96,7 @@ msgid "Errors in compilation or installation"
 msgstr "Errori nella compilazione o nell'installazione"
 
 #: ../updater.sh:189 ../updater.sh:452 ../updater.sh:460 ../updater.sh:466
-#: ../updater.sh:481 ../updater.sh:510
+#: ../updater.sh:481 ../updater.sh:510 ../updater.sh:582
 msgid "Installing"
 msgstr "Installazione di"
 
