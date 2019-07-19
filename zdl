@@ -65,7 +65,7 @@ function update_updater {
 		local res
 		res=($(yad --title="$(gettext "Updating")"                                                                  \
 			   --image="$IMAGE2"                                                                                \
-			   --text="$(eval_gettext "\$TEXT\n\nA new update is available, choose what to do:\n\n")"           \
+			   --text="$TEXT\n\n$(gettext "A new update is available, choose what to do:")\n\n"                 \
 			   --form                                                                                           \
 			   --center --on-top                                                                                \
 			   --separator=' '                                                                                  \
@@ -86,12 +86,12 @@ function update_updater {
 		    then
 			while :
 			do
-			    pass=$(yad --title="Password SUDO" \
-				       --text="$(gettext "Enter the user password (sudo):")" \
-				       --image="dialog-password" \
-				       --entry --hide-text \
-				       --center \
-				       --on-top \
+			    pass=$(yad --title="Password SUDO"                                  \
+				       --text="$(gettext "Enter the user password (sudo):")"    \
+				       --image="dialog-password"                                \
+				       --entry --hide-text                                      \
+				       --center                                                 \
+				       --on-top                                                 \
 				       "${YAD_ZDL[@]}" 2>/dev/null)
 			    
 			    [[ -z "$pass" ]] && exit 1
@@ -135,7 +135,7 @@ function update_updater {
 
 	rm -fr *.gz *.sig "$prog" 2>/dev/null
 
-	print_c 1 "$(gettext "Downloading...")"
+	print_c 1 "$(gettext "Downloading")..."
 
 	#### dal repo git: 
 	# wget "http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz" -q
@@ -186,7 +186,7 @@ function update_updater {
 		}
 
     else
-	init_msg+="$(eval_gettext "\${BGreen}\$PROG is already the latest version\n")"
+	init_msg+="${BGreen}$PROG $(gettext "is already the latest version")\n"
     fi
 }
 
@@ -427,8 +427,8 @@ then
 	then 
 	    unset args[i]
 	    rm -r ".zdl_tmp"/* 2>/dev/null && 
-		init_msg+="$(sprint_c 1 "$(gettext "Temporary file deleted\n")")" ||            
-		    init_msg+="$(sprint_c 3 "$(gettext "Cleaning of temporary files not carried out (non-existent files)\n")")"
+		init_msg+="$(sprint_c 1 "$(gettext "Temporary file deleted")\n")" ||            
+		    init_msg+="$(sprint_c 3 "$(gettext "Cleaning of temporary files not carried out (non-existent files)")\n")"
 	fi
     done
 fi
@@ -748,8 +748,8 @@ then
 		disown
 		
 		print_c 4 "${name_prog}:       "
-		print_c 1 "$(gettext "Started in daemon mode in %s\n")" "$PWD"
-		print_c 4 "$(eval_gettext "You can control it with: \${Color_Off}\$prog -i \"\$PWD\"\n")"
+		print_c 1 "$(gettext "Started in daemon mode in %s")\n" "$PWD"
+		print_c 4 "$(gettext "You can control it with:") ${Color_Off}$prog -i \"$PWD\"\n"
 
 		[ -n "$xterm_stop_checked" ] && xterm_stop
 		exit 0
@@ -758,8 +758,8 @@ then
 		start_mode_in_tty stdout "$this_tty"
 		
 		print_c 4 "${name_prog}:       "
-		print_c 3 "$(gettext "An active instance of daemon mode already exists in %s\n")" "$PWD" 
-		print_c 4 "$(eval_gettext  "You can control it with: \${Color_Off}\$prog -i \"\$PWD\"\n")"
+		print_c 3 "$(gettext "An active instance of daemon mode already exists in %s")\n" "$PWD" 
+		print_c 4 "$(gettext  "You can control it with:") ${Color_Off}$prog -i \"$PWD\"\n"
 
 		this_mode=daemon
 	    fi
@@ -796,19 +796,19 @@ then
 		unset start_socket
 		if run_zdl_server $socket_port
 		then
-		    msg_server="$(eval_gettext "New socket started at the port \$socket_port")"
+		    msg_server="$(gettext "New socket started at the port") $socket_port"
 		    init_msg+="$(sprint_c 1 "$msg_server\n")"
 		    echo 0 >"$path_server"/zdl-sockets-exit
 		fi
 		
 	    elif ! check_port "$socket_port"
 	    then
-		msg_server="$(eval_gettext "Socket already in use at the port \$socket_port (you can specify a new port with: -s PORTA or --socket=PORTA)")"
+		msg_server="$(gettext "Socket already in use at the port") $socket_port (you can specify a new port with: -s PORTA or --socket=PORTA)"
 		init_msg+="$(sprint_c 3 "$msg_server\n")"
 		echo 1 >"$path_server"/zdl-sockets-exit
 		
 	    else
-		msg_server="$(eval_gettext "Socket not started at the port \$socket_port")"
+		msg_server="$(gettext "Socket not started at the port") $socket_port"
 		init_msg+="$(sprint_c 3 "$msg_server\n")"
 		echo 2 >"$path_server"/zdl-sockets-exit
 	    fi
@@ -1014,7 +1014,7 @@ then
 	    max_dl="${BASH_REMATCH[1]}"
 	    
 	    [[ "${args[i]}" =~ ^\-\-multi ]] &&
-		init_msg+="$(eval_gettext "\${BRed}Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = [NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\n")"
+		init_msg+="${BRed}$(gettext "Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = [NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\n")"
 
 	    echo $max_dl >"$path_tmp/max-dl"
 	    #unlock_fifo max-downloads "$PWD" &
@@ -1101,7 +1101,7 @@ then
 
 		if [ -e "$print_out" ] 
 		then
-		    init_msg+=$(sprint_c 3 "$(eval_gettext "A file already exists with the same name as \${print_out}\n"))")
+		    init_msg+=$(sprint_c 3 "$(gettext "A file already exists with the same name as") ${print_out}\n")
 		    print_out="$file_output"
 		    
 		elif [ -z "$print_out" ]
@@ -1241,7 +1241,7 @@ for ((i=0; i<=$max_args; i++))
 do
     if [ "${args[i]}" != "${args[i]#-}" ]
     then
-	print_c 3 "$(gettext "%s: invalid argument\n\n")" "${args[i]}"
+	print_c 3 "$(gettext "%s: invalid argument")\n\n" "${args[i]}"
 
 	usage
     fi
@@ -1253,7 +1253,7 @@ then
     for ((i=0; i<=$max_args; i++))
     do
 	[[ "${args[i]}" =~ xweaseldownload.php ]] &&
-	    print_c 2 "$(gettext "Connection and extraction from:\n%s\n")" "${args[i]}" 
+	    print_c 2 "$(gettext "Connection and extraction from:")\n%s\n" "${args[i]}" 
 
 	if [ -f "${BASE_DIR}${args[i]}" ]
 	then
@@ -1309,7 +1309,7 @@ then
 	echo >> links.txt 2>/dev/null
 	date >> links.txt 2>/dev/null
 	cat "$start_file" >> links.txt 2>/dev/null
-	init_msg+=$(sprint_c 1 "$(gettext "The complete list of links is in links.txt\n")")
+	init_msg+=$(sprint_c 1 "$(gettext "The complete list of links is in links.txt")\n")
 
 	if ! check_instance_prog &&
 		[ -z "$from_editor" ] &&
@@ -1649,7 +1649,7 @@ function main_loop {
 		    then
 			print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
 		    else
-			local FILEURL=$(eval_gettext "File URL")
+			local FILEURL=$(gettext "File URL")
 			print_c 4 "%s: %s" "$FILEURL" "$url_in_file"
 		    fi
 
@@ -1811,7 +1811,7 @@ cursor on
 if [ -f "$file_log" ]
 then
     print_c 0 ""
-    print_c 3 "$(gettext "\nIn %s there is a file that contains a list of operations of %s terminated without success.")" "$PWD" "$PROG"
+    print_c 3 "\n$(gettext "In %s there is a file that contains a list of operations of %s terminated without success.")" "$PWD" "$PROG"
     print_c 4 "$(gettext "To read it, enter:")"
     print_c 0 "${Bold}cat $PWD/$file_log${Color_Off}\n"
 fi

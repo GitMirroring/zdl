@@ -133,13 +133,13 @@ function show_downloads_extended {
 	then
 	    if [ "$this_tty" == "$that_tty" ]
 	    then
-		term_msg="$(eval_gettext "in this same terminal: \$this_tty")"
+		term_msg="$(gettext "in this same terminal:") $this_tty"
 
 	    else
-		term_msg="$(eval_gettext "in another terminal: \$that_tty")"
+		term_msg="$(gettext "in another terminal:") $that_tty"
 	    fi
 	    
-	    print_c 1 "$(gettext "%s is active in standard mode %s\n")" "$PROG" "$term_msg" 
+	    print_c 1 "$(gettext "%s is running in standard mode %s")\n" "$PROG" "$term_msg" 
 
 	    if [ "$that_tty" != "$this_tty" ]
 	    then
@@ -149,7 +149,7 @@ function show_downloads_extended {
 		unset instance_pid
 	    fi
 	else
-	    print_c 3 "$(gettext "There are no active instances of %s\n")" "$PROG" 
+	    print_c 3 "$(gettext "There are no running instances of %s")\n" "$PROG" 
 	fi
     fi
 
@@ -173,8 +173,8 @@ function show_downloads_extended {
 function services_box {
     fclear
     header_z
-    header_box_interactive "Estensioni"
-    print_C 4 "\nVideo in streaming saltando il player del browser:"
+    header_box_interactive "$(gettext "Extensions")"
+    print_C 4 "\n$(gettext "Streaming video skipping the browser player:")" #"\nVideo in streaming saltando il player del browser:"
     cat $path_usr/streaming.txt 2>/dev/null
     
     print_C 4 "\nFile hosting:"
@@ -183,16 +183,16 @@ function services_box {
     print_C 4 "\nLive stream:"
     cat $path_usr/livestream.txt 2>/dev/null
 
-    print_C 4 "$(gettext "\nWeb-generated links (even after captcha)")"
+    print_C 4 "\n$(gettext "Web-generated links (even after captcha)")"
     echo -e "$(cat $path_usr/generated.txt 2>/dev/null) $(gettext "and other services")"
     
     print_C 4 "\nShort links:"
     cat $path_usr/shortlinks.txt 2>/dev/null
 
-    print_C 4 "$(gettext "\nAll downloadable files with the following browser extensions:")"
+    print_C 4 "\n$(gettext "All downloadable files with the following browser extensions:")"
     echo -e "$(gettext "Flashgot of Firefox/Iceweasel/Icecat, function 'M-x zdl' by Conkeror and script 'zdl-xterm' (XXXTerm/Xombrero and others)")" 
 
-    print_C 4 "$(gettext "\nAll downloadable files with the following programs:")"
+    print_C 4 "\n$(gettext "All downloadable files with the following programs:")"
     cat $path_usr/programs.txt 2>/dev/null
     echo
 }
@@ -204,7 +204,7 @@ function standard_box {
     
     [ "$this_mode" == help ] &&
 	header_msg="$(gettext "help of commands")" ||
-	    header_msg="$(eval_gettext "Standard output mode\${header_lite_msg}")"
+	    header_msg="$(gettext "Standard output mode")${header_lite_msg}"
     header_box "$header_msg"
 
     [ -n "$init_msg" ] &&
@@ -272,7 +272,7 @@ function readline_links {
     ##             unset -> break immissione URL                    }
 
     [ "$this_mode" != lite ] &&
-	msg_end_input="$(gettext "URL entry completed: download start\n")" 
+	msg_end_input="$(gettext "URL entry completed: download start")\n" 
 
     ## bind -x "\"\C-l\":\"\"" 2>/dev/null
     bind -x "\"\C-x\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
@@ -445,7 +445,7 @@ function interactive {
 	    num_downloads=$max_dl
 	fi
 	
-	header_box_interactive "$(eval_gettext "Options [number of simultaneous downloads: \$num_downloads]")" 
+	header_box_interactive "$(gettext "Options [number of simultaneous downloads:") $num_downloads]" 
 	
 	echo -e "$(eval_gettext "\${BYellow}   s \${Color_Off}│ \${BYellow}s\${Color_Off}elect one or more downloads (to restart, delete, play audio/video files)\n     │
 \${BGreen}   e \${Color_Off}│ change the queue of links to be downloaded, using the default \${BGreen}e\${Color_Off}ditor\n     │")"
@@ -482,7 +482,7 @@ function interactive {
 		header_z
 		echo
 		show_downloads_extended
-		header_box_interactive "$(gettext "Select (Restart/interrupt, Eliminate, Play audio/video)")"
+		header_box_interactive "$(gettext "Select (Restart/stop, Eliminate, Play audio/video)")"
 
 		print_c 2 "$(gettext "Select download numbers, separated by spaces (you can not select):")"
 
@@ -755,7 +755,7 @@ function input_time {
 
 	    if [[ ! "$val" =~ ^([0-9]+)$ ]] || ((val > max))
 	    then
-		print_c 3 "$(gettext "Enter an integer in the range from 0 to %d (inclusive)\n")" "$max"
+		print_c 3 "$(gettext "Enter an integer in the range from 0 to %d (inclusive)")\n" "$max"
 		unset val
 	    else
 		val=$(printf "%.2d" "$val" 2>/dev/null)
@@ -793,7 +793,7 @@ function display_set_livestream {
 	while [[ ! "$opt" =~ ^([0-9]+)$ ]] ||
 		  ((opt > (i -1 )))
 	do
-	    print_c 2 "$(gettext "\nSelect the channel from which to download the live (0-\$[i-1]):")" 
+	    print_c 2 "\n$(gettext "Select the channel from which to download the live (0-\$[i-1]):")" 
 	    read -e opt
 	done
 	    
@@ -839,7 +839,7 @@ function display_set_livestream {
     
     header_box "$(gettext "Live stream: program for downloading the live")"
     print_c 4 "Link: $link"
-    print_c 0 "$(gettext "It is necessary to indicate the recording start time and its duration\n")"
+    print_c 0 "$(gettext "It is necessary to indicate the recording start time and its duration")\n"
 
     print_c 4 "$(gettext "Recording start time:")"
     print_c 2 "$(gettext "Do you want to register right away? [yes|*]")"
@@ -877,7 +877,7 @@ function display_set_livestream {
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
 
-    print_c 1 "$(gettext "\nThe download from %s will start around %s for the duration of %s\n")" \
+    print_c 1 "\n$(gettext "The download from %s will start around %s for the duration of %s")\n" \
 	    "$link" "$start_time" "$duration_time"
     cursor off
 }

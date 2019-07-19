@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 22:17+0200\n"
+"POT-Creation-Date: 2019-07-19 23:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -26,9 +26,8 @@ msgid "Updating"
 msgstr "Aggiornamento"
 
 #: ../zdl.sh:68
-#, sh-format
-msgid "$TEXT\\n\\nA new update is available, choose what to do:\\n\\n"
-msgstr "$TEXT\\n\\nDisponibile un nuovo aggiornamento, scegli cosa fare:\\n\\n"
+msgid "A new update is available, choose what to do:"
+msgstr "Disponibile un nuovo aggiornamento, scegli cosa fare:"
 
 #: ../zdl.sh:72
 msgid "Don't ask for it again in this session"
@@ -47,8 +46,8 @@ msgid "Enter the user password (sudo):"
 msgstr "Digita la password utente (sudo):"
 
 #: ../zdl.sh:138
-msgid "Downloading..."
-msgstr "Download in corso: attendere..."
+msgid "Downloading"
+msgstr "Download in corso: attendere"
 
 #: ../zdl.sh:157
 msgid ""
@@ -67,17 +66,16 @@ msgid "Update failed: package %s cannot be opened"
 msgstr "Aggiornamento fallito: non è possibile aprire il pacchetto %s"
 
 #: ../zdl.sh:189
-#, sh-format
-msgid "${BGreen}$PROG is already the latest version\\n"
-msgstr "${BGreen}$PROG è già alla versione più recente\\n"
+msgid "is already the latest version"
+msgstr "è già alla versione più recente"
 
 #: ../zdl.sh:430
-msgid "Temporary file deleted\\n"
-msgstr "File temporanei cancellati\\n"
+msgid "Temporary file deleted"
+msgstr "File temporanei cancellati"
 
 #: ../zdl.sh:431
-msgid "Cleaning of temporary files not carried out (non-existent files)\\n"
-msgstr "Pulizia file temporanei non effettuata (file inesistenti)\\n"
+msgid "Cleaning of temporary files not carried out (non-existent files)"
+msgstr "Pulizia file temporanei non effettuata (file inesistenti)"
 
 #: ../zdl.sh:714
 msgid "The format conversion function depends on ffmpeg or avconv, not found"
@@ -86,44 +84,36 @@ msgstr ""
 "trovati"
 
 #: ../zdl.sh:751
-msgid "Started in daemon mode in %s\\n"
-msgstr "Avviato in modalità demone in %s\\n"
+msgid "Started in daemon mode in %s"
+msgstr "Avviato in modalità demone in %s"
 
-#: ../zdl.sh:752 ../zdl.sh:762
-#, sh-format
-msgid "You can control it with: ${Color_Off}$prog -i \"$PWD\"\\n"
-msgstr "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\\n"
+#: ../zdl.sh:752 ../zdl.sh:762 ../gui/gui.sh:260 ../gui/gui.sh:281
+#: ../gui/gui.sh:285
+msgid "You can control it with:"
+msgstr "Puoi controllarlo con:"
 
 #: ../zdl.sh:761
-msgid "An active instance of daemon mode already exists in %s\\n"
-msgstr "Esiste già un'istanza attiva della modalità demone in %s\\n"
+msgid "An active instance of daemon mode already exists in %s"
+msgstr "Esiste già un'istanza attiva della modalità demone in %s"
 
-#: ../zdl.sh:799
-#, sh-format
-msgid "New socket started at the port $socket_port"
-msgstr "Avviato nuovo socket alla porta $socket_port"
+#: ../zdl.sh:799 ../gui/gui.sh:1187
+msgid "New socket started at the port"
+msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:806
-#, sh-format
-msgid ""
-"Socket already in use at the port $socket_port (you can specify a new port "
-"with: -s PORTA or --socket=PORTA)"
-msgstr ""
-"Socket già in uso alla porta $socket_port (puoi specificare una nuova porta "
-"con: -s PORTA oppure --socket=PORTA)"
+#: ../zdl.sh:806 ../gui/gui.sh:1193
+msgid "Socket already in use at the port"
+msgstr "Socket già in uso alla porta"
 
 #: ../zdl.sh:811
-#, sh-format
-msgid "Socket not started at the port $socket_port"
-msgstr "Socket non avviato alla porta $socket_port"
+msgid "Socket not started at the port"
+msgstr "Avviato nuovo socket alla porta"
 
 #: ../zdl.sh:1017
-#, sh-format
 msgid ""
-"${BRed}Deprecated option: '--multi = [NUMBER]' is replaced by '--max-"
-"downloads = [NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
+"Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = "
+"[NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
 msgstr ""
-"${BRed}Opzione deprecata: '--multi=[NUMERO]' è sostituita da '--max-"
+"Opzione deprecata: '--multi=[NUMERO]' è sostituita da '--max-"
 "downloads=[NUMERO]'. Resta invariata l'opzione breve '-m [NUMERO]'\\n"
 
 #: ../zdl.sh:1040
@@ -139,9 +129,8 @@ msgid "IP address not detected"
 msgstr "Indirizzo IP non rilevato"
 
 #: ../zdl.sh:1104
-#, sh-format
-msgid "A file already exists with the same name as ${print_out}\\n"
-msgstr "Esiste già un file con lo stesso nome di ${print_out}\\n"
+msgid "A file already exists with the same name as"
+msgstr "Esiste già un file con lo stesso nome di"
 
 #: ../zdl.sh:1111
 #, sh-format
@@ -156,17 +145,21 @@ msgstr ""
 msgid "Active proxy: %s\\n"
 msgstr "Proxy attivo: %s\\n"
 
-#: ../zdl.sh:1153 ../zdl.sh:1157 ../zdl.sh:1244
+#: ../zdl.sh:1153 ../zdl.sh:1157
 msgid "%s: invalid argument\\n\\n"
 msgstr "%s: argomento non valido\\n\\n"
 
+#: ../zdl.sh:1244
+msgid "%s: invalid argument"
+msgstr "%s: argomento non valido"
+
 #: ../zdl.sh:1256
-msgid "Connection and extraction from:\\n%s\\n"
-msgstr "Connessione ed estrazione da:\\n%s\\n"
+msgid "Connection and extraction from:"
+msgstr "Connessione ed estrazione da:"
 
 #: ../zdl.sh:1312
-msgid "The complete list of links is in links.txt\\n"
-msgstr "L'elenco completo dei link è in links.txt\\n"
+msgid "The complete list of links is in links.txt"
+msgstr "L'elenco completo dei link è in links.txt"
 
 #: ../zdl.sh:1516
 msgid "Processing link:"
@@ -177,7 +170,6 @@ msgid "Connecting..."
 msgstr "Connessione in corso"
 
 #: ../zdl.sh:1652 ../ui/ui.awk:302
-#, sh-format
 msgid "File URL"
 msgstr "URL del file"
 
@@ -187,10 +179,10 @@ msgstr "Download completato"
 
 #: ../zdl.sh:1814
 msgid ""
-"\\nIn %s there is a file that contains a list of operations of %s terminated "
+"In %s there is a file that contains a list of operations of %s terminated "
 "without success."
 msgstr ""
-"\\nIn %s è presente un file che contiene un elenco di operazioni di %s "
+"In %s è presente un file che contiene un elenco di operazioni di %s "
 "terminate senza successo."
 
 #: ../zdl.sh:1815
@@ -232,10 +224,6 @@ msgstr "Non attivo"
 #: ../gui/gui.sh:260
 msgid "The program is active in"
 msgstr "Programma attivo in"
-
-#: ../gui/gui.sh:260 ../gui/gui.sh:281 ../gui/gui.sh:285
-msgid "You can control it with:"
-msgstr "Puoi controllarlo con:"
 
 #: ../gui/gui.sh:281
 msgid "The program is still active in"
@@ -528,14 +516,6 @@ msgstr "Comando:"
 #: ../gui/gui.sh:1165 ../gui/gui.sh:1174
 msgid "Start"
 msgstr "Avvia"
-
-#: ../gui/gui.sh:1187
-msgid "New socket started at the port"
-msgstr "Avviato nuovo socket alla porta"
-
-#: ../gui/gui.sh:1193
-msgid "Socket already in use at the port"
-msgstr "Socket già in uso alla porta"
 
 #: ../gui/gui.sh:1199
 #, sh-format
@@ -1109,3 +1089,19 @@ msgstr "completato"
 #: ../ui/ui.awk:219
 msgid "inactive"
 msgstr "non attivo"
+
+#~ msgid "You can control it with: ${Color_Off}$prog -i \"$PWD\"\\n"
+#~ msgstr "Puoi controllarlo con: ${Color_Off}$prog -i \"$PWD\"\\n"
+
+#~ msgid "New socket started at the port $socket_port"
+#~ msgstr "Avviato nuovo socket alla porta $socket_port"
+
+#~ msgid ""
+#~ "Socket already in use at the port $socket_port (you can specify a new "
+#~ "port with: -s PORTA or --socket=PORTA)"
+#~ msgstr ""
+#~ "Socket già in uso alla porta $socket_port (puoi specificare una nuova "
+#~ "porta con: -s PORTA oppure --socket=PORTA)"
+
+#~ msgid "Socket not started at the port $socket_port"
+#~ msgstr "Socket non avviato alla porta $socket_port"
