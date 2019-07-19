@@ -628,7 +628,8 @@ var sockets = {
                 utils.log( "socket-killed", port );
                 if ( port === document.location.port ) {
                     window.setTimeout( function () {
-                        window.location.href = window.location.pathname;
+                        //window.location.href = window.location.pathname;
+                        $("body").empty().append("<p class='centered'>ZDL web UI is turned off. See you later :)</p>");
                     }, 2000 );
                 }
             } );
@@ -834,7 +835,9 @@ var exit = {
                     count = count - 1;
                     if ( count < 0 ) {
                         clearInterval( countdown );
-                        window.location.href = window.location.pathname;
+                        //window.location.href = window.location.pathname;
+                        $( ".wrapper" ).replaceWith("<p data-i18n='[html]zdl-shutdown' class='shutdown'>All ZDL instances have been closed.<br>The server is stopped.</p>");
+                        $( ".shutdown" ).i18n();
                     }
                 }, 500 );
         } );

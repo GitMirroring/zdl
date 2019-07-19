@@ -231,6 +231,7 @@
     "xdcc-th-size": "Peso",
     "xdcc-th-name": "Nome",
     "xdcc-th-send": "Invia",
+    "zdl-shutdown": "Tutte le istanze di ZDL sono state chiuse.<br>Il server è stato arrestato.",
     "zdl-killed": "ZDL e download nel path terminati",
     "zdl-started": "ZDL avviato",
     "zdl-stopped": "ZDL fermato"

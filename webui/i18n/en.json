@@ -231,6 +231,7 @@
 	"xdcc-th-size": "Size",
 	"xdcc-th-name": "Name",
 	"xdcc-th-send": "Send",
+	"zdl-shutdown": "All ZDL instances have been closed.<br>The server is stopped.",
 	"zdl-killed": "ZDL and downloads inside path terminated",
 	"zdl-started": "ZDL started",
 	"zdl-stopped": "ZDL stopped"

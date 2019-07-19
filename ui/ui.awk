@@ -69,7 +69,7 @@ function show_downloads_extended () {
 	if (exists(file_out[i]))
 	    length_saved[i] = size_file(file_out[i])
 
-	title = "Numero download: "i
+	title = _"Download id:" " "i
 	code = code header(title, " ", White, On_Blue) "\n"
 
 	if (downloader_out[i] ~ /cURL|RTMPDump/) {
@@ -80,9 +80,9 @@ function show_downloads_extended () {
 	    code = code BBlue "Playpath: " Color_Off playpath_out[i] "\n"
 	} else {
 	    code = code BBlue "File: " Color_Off file_out[i] "\n"
-	    code = code BBlue "Grandezza: " Color_Off length_H BBlue "\tDownloader: " Color_Off downloader_out[i] "\n"
+	    code = code BBlue LENGTH ": " Color_Off length_H BBlue "\tDownloader: " Color_Off downloader_out[i] "\n"
 	    code = code BBlue "Link: " Color_Off url_out[i] "\n"
-	    code = code BBlue "Url del file: " Color_Off url_out_file[i] "\n"
+	    code = code BBlue FILEURL ": " Color_Off url_out_file[i] "\n"
 	}
 
 	if (downloader_out[i] ~ /cURL|FFMpeg/ && length_out[i] == "unspecified") {
@@ -154,12 +154,12 @@ function show_downloads_lite () {
 
 
 function progress_unspecified (status) {
-    progress_text = BBlue "(grandezza del file non specificata dal server) "  BGreen human_length(length_saved[i])
+    progress_text = BBlue _"(file size not specified by the server)" " "  BGreen human_length(length_saved[i])
     if (status == "downloading")
 	return progress_text " " BBlue speed Color_Off
 
     if (status == "complete")
-	return progress_text " terminato" Color_Off
+	return progress_text " " _"killed" Color_Off
 }
 
 function bar_colors (content, I) {
@@ -204,19 +204,19 @@ function make_progress (size_bar, progress_bar, progress) {
 	if (percent_out[i] == 100) {
 	    diff_bar_color = BGreen 
 	    bar_color = On_Green
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", "completato            " Color_Off)	
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"completed" "             " Color_Off)	
 	}
 	else if (check_irc_pid()) {
 	    diff_bar_color = BYellow
 	    bar_color = On_Yellow
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", "attendi               " Color_Off)	
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"wait" "                  " Color_Off)	
 	}    
 	else {	    
 	    diff_bar_color = BRed 
 	    bar_color = On_Red
 	    # if (downloader_out[i] == "Wget")
 	    # 	percent_out[i] = 0
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", "non attivo            " Color_Off)	
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"inactive" "              " Color_Off)	
 	}
     } else {
 	if (speed_out[i] > 0) {
@@ -233,7 +233,7 @@ function make_progress (size_bar, progress_bar, progress) {
 	} else {
 	    diff_bar_color = BYellow
 	    bar_color = On_Yellow
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", "attendi               " Color_Off)
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"wait" "                  " Color_Off)
 	}		    
     }
 
@@ -298,6 +298,10 @@ function clear_lite () {
 
 
 function display () {
+    bindtextdomain (TEXTDOMAINDIR)
+    FILEURL = _"File URL"
+    LENGTH = _"Length"
+    
     info_space = 34
     init_colors()
     if (Background) Foreground = White

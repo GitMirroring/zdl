@@ -467,6 +467,17 @@ fieldset {
   text-align: center;
 }
 
+.shutdown {
+  font-size: 14px;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  line-height: 20px;
+  letter-spacing: 1px;
+}
+
 .align-right {
   text-align: right;
 }

@@ -1649,7 +1649,8 @@ function main_loop {
 		    then
 			print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
 		    else
-			print_c 4 "$(gettext "File URL: %s")" "$url_in_file"
+			local FILEURL=$(eval_gettext "File URL")
+			print_c 4 "%s: %s" "$FILEURL" "$url_in_file"
 		    fi
 
 		    if download && [ -n "$file_in" ]

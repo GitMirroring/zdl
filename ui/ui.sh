@@ -47,6 +47,8 @@ function show_downloads {
 		   -f $path_usr/ui/colors-${background}.awk.sh      \
 		   -f $path_usr/ui/ui.awk                           \
 		   -v cols="$cols"                                  \
+		   -v TEXTDOMAIN="$TEXTDOMAIN"                      \
+		   -v TEXTDOMAINDIR="$TEXTDOMAINDIR"                \
 		   -v Color_Off="$Color_Off"                        \
 		   -v Background="$Background"                      \
 		   -e "BEGIN {$awk_data display()}" 
@@ -75,6 +77,8 @@ function show_downloads_lite {
 	       -f $path_usr/ui/colors-${background}.awk.sh     \
 	       -f $path_usr/ui/ui.awk                          \
 	       -v cols="$COLUMNS"                              \
+	       -v TEXTDOMAIN="$TEXTDOMAIN"                     \
+	       -v TEXTDOMAINDIR="$TEXTDOMAINDIR"               \
 	       -v lines="$LINES"                               \
 	       -v no_clear="$no_clear"                         \
 	       -v this_mode="lite"                             \
@@ -157,6 +161,8 @@ function show_downloads_extended {
 	       -f $path_usr/ui/ui.awk                              \
 	       -v cols="$COLUMNS"                                  \
 	       -v zdl_mode="extended"                              \
+	       -v TEXTDOMAIN="$TEXTDOMAIN"                         \
+	       -v TEXTDOMAINDIR="$TEXTDOMAINDIR"                   \
 	       -v Color_Off="$Color_Off"                           \
 	       -v Background="$Background"                         \
 	       -e "BEGIN {$awk_data display()}" 

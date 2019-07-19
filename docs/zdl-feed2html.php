@@ -74,7 +74,7 @@ function displayFeed($url){
             $feed_art[$i]['link_articolo'] = $item->id;
             $i++;
         }
-        else {
+        elseif (!preg_match('/^\[[a-z]{2}\]/', $item->title)) {
             $feed_art[$i]['titolo_articolo'] = $item->title;
             $feed_art[$i]['descr_articolo'] = $item->content->asXML();
             $feed_art[$i]['autore_articolo'] = $item->author->name;

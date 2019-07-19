@@ -760,6 +760,7 @@ var displayInputSelect = function (spec, id, callback) {
     // spec = {key: options: value:}
     var output = "<div class='btn-select'><select id='input-" + spec.key + "' onchange='" + callback + "(" + objectToString(spec) + ");'>";
 
+    /****** AGGIORNAMENTO: Visualizzare nomi delle webui nel selector ******/
     var selected, otpName;
 	var webuiNames = {"1":"Default", "2":"Multilang", "3":"Multilang dark", "lite":"Lite"};
 
@@ -777,7 +778,7 @@ var displayInputSelect = function (spec, id, callback) {
 		optName = webuiNames[item] || item;
 		output += "<option value='" + item + "'" + selected + ">" + optName + "</option>";
     });
-
+    /****** FINE AGGIORNAMENTO ******/
     output += "</select></div>";
 
     document.getElementById(id).innerHTML = output;
