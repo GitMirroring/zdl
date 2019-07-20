@@ -1402,7 +1402,7 @@ function display_configure_gui {
 		   --field="$(gettext "Background color in virtual terminals:")":CB "$background!transparent!black" \
 		   --field="$(gettext "Language:")":CB "$language!it!en" \
 		   --field="$(gettext "Script/command/program to reconnect the modem/router:")":CE "$reconnecter" \
-		   --field="$(gettext "Automaic updates:")":CB "$autoupdate!enabled!disabled" \
+		   --field="$(gettext "Automatic updates:")":CB "$autoupdate!enabled!disabled" \
 		   --field="$(gettext "Script/command/program to play audio/video files:")":MFL "$player" \
 		   --field="$(gettext "Default editor to edit the link queue:")":MFL "$editor" \
 		   --field="$(gettext "Homonymous files recovery as the option --resume:")":CB "${resume}!enabled!disabled" \
@@ -1424,6 +1424,8 @@ function display_configure_gui {
 		    
 		    set_item_conf ${key_conf[i]} "${res[i]}"
 		done
+		get_conf
+		new_yad_multiprogress
 		;;
 	    3)
 		local ext=$(date +%F)
