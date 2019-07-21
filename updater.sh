@@ -485,6 +485,7 @@ EXTENSIONS:
 	fi
 
 	declare -A deps
+	deps['gettext']=gettext
 	deps['aria2c']=aria2
 	deps['nano']=nano
 	deps['diff']=diffutils
@@ -545,6 +546,7 @@ EXTENSIONS:
 	## GNU/LINUX
 	
 	declare -A deps
+	deps['gettext']=gettext
 	deps['pinfo']=pinfo
 	deps['aria2c']=aria2
 	deps['axel']=axel
