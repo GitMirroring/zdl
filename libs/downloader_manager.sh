@@ -594,7 +594,8 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.ytdl"
 		while check_pid $pid_ytdl
 		do
 		    sleep 2
-		    print_r 0 "$(tail -n1 "$path_tmp/${file_in}_stdout.ytdl")                                                                        "
+		    [[ "$this_mode" =~ ^(daemon|lite)$ ]] ||
+			print_r 0 "$(tail -n1 "$path_tmp/${file_in}_stdout.ytdl")                                                                        "
 		done
 		rm -f "$path_tmp/${file_in}_stdout.ytdl"
 	    fi

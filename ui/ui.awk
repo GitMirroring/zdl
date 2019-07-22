@@ -204,19 +204,19 @@ function make_progress (size_bar, progress_bar, progress) {
 	if (percent_out[i] == 100) {
 	    diff_bar_color = BGreen 
 	    bar_color = On_Green
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"completed" "           " Color_Off)	
+	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"completed" "           " Color_Off)	
 	}
 	else if (check_irc_pid()) {
 	    diff_bar_color = BYellow
 	    bar_color = On_Yellow
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"wait" "                " Color_Off)	
+	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"wait" "                " Color_Off)	
 	}    
 	else {	    
 	    diff_bar_color = BRed 
 	    bar_color = On_Red
 	    # if (downloader_out[i] == "Wget")
 	    # 	percent_out[i] = 0
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"inactive" "            " Color_Off)	
+	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"inactive" "            " Color_Off)	
 	}
     } else {
 	if (speed_out[i] > 0) {

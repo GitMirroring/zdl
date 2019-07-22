@@ -43,7 +43,8 @@ then
 
     for i in {20..0}
     do
-	sprint_c 4 "%d                  \r" $i
+	[[ "$this_mode" =~ ^(daemon|lite)$ ]] ||
+	    sprint_c 4 "%d                  \r" $i
 	sleep 1
 	! check_pid $pid_yt_dl && break
     done
