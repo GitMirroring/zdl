@@ -797,7 +797,7 @@ function display_set_livestream {
 	    read -e opt
 	done
 	    
-	link="${live_streaming_url[opt]}"
+	tag_link "${live_streaming_url[opt]}" link
 	set_link + "$link"
 
 	if check_livestream_link_time "$link"

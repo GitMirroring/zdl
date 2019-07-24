@@ -797,9 +797,11 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    [ -n "${line[3]}" ] &&
 		    [ -n "${line[4]}" ]
 	    then
-		set_link + "${line[2]}"
-		set_livestream_time "${line[2]}" "${line[3]}" "${line[4]}"
-		run_livestream_timer "${line[2]}" "${line[3]}" &&		
+		local live_link
+		tag_link "${line[2]}" live_link
+		set_link + "$live_link"
+		set_livestream_time "$live_link" "${line[3]}" "${line[4]}"
+		run_livestream_timer "$live_link" "${line[3]}" &&		
 		    echo "true" >"$file_output" ||
 			echo "false" >"$file_output"
 	    else

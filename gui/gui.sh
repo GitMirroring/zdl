@@ -841,7 +841,7 @@ function display_livestream_gui {
     local h=$(date +%H)
     local m=$(date +%M)
     local s=$(date +%S)
-    # Programmazione della diretta da
+
     local text="${TEXT}\n\n$(gettext "Programming of live broadcasting from") <b>$chan</b> ($link):\n"
 
     {
@@ -916,7 +916,6 @@ function display_livestream_gui {
 	    local now_in_sec=$(human_to_seconds $now_h $now_m $now_s)       
 	    local start_time_in_sec=$(human_to_seconds $start_h $start_m $start_s)
 	    
-#	    text="L'orario di inizio è inferiore a quello attuale: è di domani?\nSe non lo è, ZDL procederà non appena possibile"
 	    text="The start time is lower than the current one: is it tomorrow?\nIf it is not, ZDL will proceed as soon as possible"
 
 	    if ((start_time_in_sec<now_in_sec))
@@ -929,7 +928,13 @@ function display_livestream_gui {
 		    "${YAD_ZDL[@]}" 2>/dev/null &&
 		    start_time+=':tomorrow'
 	    fi
+
+	    if [[ ! "$link" =~ \#[0-9]+ ]]
+	    then 
+		tag_link "$link" link
+	    fi
 	    
+	    yad --text "$link"
 	    set_livestream_time "$link" "$start_time" "$duration_time"
 	    set_link + "$link"
 	    run_livestream_timer "$link" "$start_time"
@@ -998,11 +1003,14 @@ function display_link_manager_gui {
 		    ## livestream
 		    if [ -n "${res[1]}" ]
 		    then
+			local link
 			for ((i=0; i<${#live_streaming_chan[@]}; i++))
 			do
 			    if [ "${live_streaming_chan[i]}" == "${res[1]}" ]
 			    then
-				if check_livestream_link_time "${live_streaming_url[i]}"
+				tag_link "${live_streaming_url[i]}" link
+				
+				if check_livestream_link_time "$link"
 				then
 				    text=$(gettext "<b> A schedule already exists for this channel: </b>
 you can delete the previous one and create a new one or leave the previous one and cancel this operation
@@ -1019,13 +1027,13 @@ you can delete the previous one and create a new one or leave the previous one a
 					then
 					    for ((j=0; j<${#pid_out[@]}; j++))
 					    do
-						if [ "${live_streaming_url[i]}" == "${url_out[j]}" ] &&
+						if [ "$link" == "${url_out[j]}" ] &&
 						       check_pid "${pid_out[j]}"
 						then
 						    kill -9 "${pid_out[j]}"
 						fi
 						
-						if [ "${live_streaming_url[i]}" == "${url_out[j]}" ] &&
+						if [ "$link" == "${url_out[j]}" ] &&
 						       [ -f "${file_out[j]}" ]
 						then
 						    rm -f "${file_out[j]}" "$path_tmp"/"${file_out[j]}"_stdout.* "$path_tmp"/"${file_out[j]}".MEGAenc_stdout.* 
@@ -1037,7 +1045,7 @@ you can delete the previous one and create a new one or leave the previous one a
 				    fi
 				fi
 
-				display_livestream_gui "${live_streaming_chan[i]}" "${live_streaming_url[i]}"
+				display_livestream_gui "${live_streaming_chan[i]}" "$link"
 				break
 			    fi
 			done

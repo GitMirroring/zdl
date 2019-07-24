@@ -1300,3 +1300,15 @@ function check_livestream_twice {
     fi
 }
 
+function tag_link { ## 1=link 2=name_variable_to_assign_link
+    local url="$1"
+    local tag=$(date +%s)
+
+    if [ -n "$2" ]
+    then
+	declare -n ref="$2"
+	ref="${url}#$tag"
+    else
+	echo "${url}#$tag"
+    fi
+}
