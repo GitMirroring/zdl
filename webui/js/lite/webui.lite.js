@@ -45,26 +45,41 @@ var client = ( function () {
             .toFixed( 2 ) ) + " " + sizes[ i ];
     }
 
-    function alertModal( message ) {
-        $( "<div class='modal fade' id='errorModal' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class='modal-body text-center p-10'><h4 class='modal-alert'>Errore!</h4><p>" + message + "</p><div class='text-center'><button class='btn btn-danger btn-close'>Chiudi</button></div></div></div></div> " )
-            .appendTo( 'body' );
+    function displayModal( title, data ) {
+        var datatype = typeof data,
+            path = "",
+            content;
 
-        $( "#errorModal" )
+        if ( datatype === "object" ) {
+            path = "<span id='current-path'></span>";
+            content = "<ul id='" + data.id + "-tree' class='tree'></ul>";
+        } else {
+            content = "<p>" + data + "</p>";
+        }
+
+        $( "<div class='modal fade' id='clientModal' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class='modal-body p-10'><div class='modal-title'><h4>" + title + "</h4>" + path + "</div>" + content + "<div class='text-center'><button class='btn btn-danger btn-close'>Chiudi</button></div></div></div></div>" )
+            .appendTo( "body" );
+
+        $( "#clientModal" )
             .modal( {
-                backdrop: 'static',
+                backdrop: "static",
                 keyboard: false
             } );
 
         $( ".btn-close" )
             .click(function () {
-                $("#errorModal").modal("hide");
+                $("#clientModal").modal("hide");
             });
 
-        $( "#errorModal" )
-            .on( 'hidden.bs.modal', function () {
-                $( "#errorModal" )
+        $( "#clientModal" )
+            .on( "hidden.bs.modal", function () {
+                $( "#clientModal" )
                     .remove();
             } );
+
+        if ( datatype === "object" ) {
+            utils.browseFs( myZDL.path, data.id, data.ls );
+        }
     }
 
     /* Configuration settings (polling) */
@@ -180,8 +195,8 @@ var client = ( function () {
         exist: function ( key, name ) {
             return data[ key ].includes( name );
         },
-        alert: function ( msg ) {
-            alertModal( msg );
+        show: function ( title, data ) {
+            displayModal( title, data );
         },
         init: init
     };

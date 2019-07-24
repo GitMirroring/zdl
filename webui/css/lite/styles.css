@@ -74,8 +74,8 @@ li {
 }
 
 /*
-* General Elements
-*/
+ * Section
+ */
 section.section {
   position: relative;
   background: #f7f7f7;
@@ -83,6 +83,9 @@ section.section {
   border: none !important;
 }
 
+/*
+ * Input elements
+ */
 input[type="text"],
 textarea {
   -webkit-appearance: none;
@@ -117,8 +120,8 @@ textarea::placeholder {
 }
 
 /*
-* Headings
-*/
+ * Headings
+ */
 h1,
 h2,
 h3,
@@ -188,21 +191,6 @@ h2.custom-bar._color-light:after {
   border-color: #fff !important;
 }
 
-h4.modal-alert {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.2em;
-  font-weight: normal;
-  letter-spacing: 0;
-}
-
-h4.modal-alert::after {
-  content: '';
-  display: block;
-  width: 100%;
-  border-bottom: 1px solid #eee;
-  margin: 10px 0;
-}
-
 @media (max-width: 991px) {
 
   h2.custom-bar._right:after,
@@ -229,8 +217,8 @@ h6 {
 }
 
 /*
-* Header
-*/
+ * Header
+ */
 html:not(.sticky-header-active) #header .header-nav.header-nav-links nav>ul li>a.active {
   color: #fff !important;
   opacity: 0.7;
@@ -994,8 +982,60 @@ html.sticky-header-reveal.sticky-header-active #header .header-body {
 }
 
 /*
-* Custom Classes
-*/
+ * Modal
+ */
+.modal-title {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.modal-title>h4 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+  font-weight: bold;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.modal-title>span {
+  font-size: 90%;
+}
+
+.modal-body>.tree {
+  margin-bottom: 15px;
+  height: 170px;
+  overflow-y: auto;
+  scrollbar-color: #bbb #ddd;
+}
+
+.modal-body>.tree {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modal-body>.tree>li {
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.modal-body>.tree>li>a {
+  width: 90%;
+  text-decoration: none;
+  padding: 5px 10px;
+  background: #f5f5f5;
+  color: #333;
+  display: block;
+}
+
+.modal-body>.tree>li>a:hover {
+  background: #ffcfcc;
+}
+
+/*
+ * Custom Classes
+ */
 .custom-bg-color-1 {
   background-color: #e64337 !important;
 }
@@ -1079,8 +1119,7 @@ html.sticky-header-reveal.sticky-header-active #header .header-body {
   text-align: right;
 }
 
-.custom-btn-style-1,
-.custom-btn-style-1:active {
+.custom-btn-style-1 {
   background: #f4645a;
   background: -webkit-gradient(linear, left top, right top, from(#f4645a), to(#ff857c));
   background: linear-gradient(to right, #f4645a 0%, #ff857c 100%);
@@ -1091,10 +1130,6 @@ html.sticky-header-reveal.sticky-header-active #header .header-body {
   font-weight: 600;
   -webkit-transition: ease all 300ms;
   transition: ease all 300ms;
-}
-
-.custom-btn-style-1:hover {
-  opacity: 0.9;
 }
 
 .custom-btn-style-1._size-1 {
@@ -1110,13 +1145,16 @@ html.sticky-header-reveal.sticky-header-active #header .header-body {
   margin: 0 5px;
 }
 
-.custom-btn-style-1,
+.custom-btn-style-1:hover,
 .custom-btn-style-1:active {
-  background: #f4645a;
-  background: -webkit-gradient(left top, right top, color-stop(0%, #f4645a), color-stop(100%, hsl(3.8961039, 100%, 75%)));
-  background: -webkit-gradient(linear, left top, right top, from(#f4645a), to(hsl(3.8961039, 100%, 75%)));
-  background: linear-gradient(to right, #f4645a 0%, hsl(3.8961039, 100%, 75%) 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#f4645a', endColorstr='#ff857c', GradientType=1);
+  background: #e35a50;
+  background: -webkit-gradient(linear, left top, right top, from(#e35a50), to(#f97c72));
+  background: linear-gradient(to right, #e35a50 0%, #f97c72 100%);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#e35a50', endColorstr='#f97c72', GradientType=1);
+}
+
+.custom-btn-style-1>.fas {
+  pointer-events: none;
 }
 
 @media (max-width: 1199px) {
@@ -1166,8 +1204,8 @@ html.sticky-header-reveal.sticky-header-active #header .header-body {
 }
 
 /*
-* Footer
-*/
+ * Footer
+ */
 #footer {
   font-size: 0.9em;
   margin: 0;
@@ -1182,8 +1220,8 @@ html.sticky-header-reveal.sticky-header-active #header .header-body {
 }
 
 /*
-* Scroll to top
-*/
+ * Scroll to top
+ */
 html .scroll-to-top.visible {
   opacity: 0.75;
 }
