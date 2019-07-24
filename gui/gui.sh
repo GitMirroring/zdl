@@ -347,12 +347,13 @@ function check_yad_multiprogress {
 function exe_button_result {
     local yad_button_result_file="$1"
     declare -a cmd
+
     if [ -s "$yad_button_result_file" ]
     then
 	cmd=( $(cat "$yad_button_result_file") )
 	rm "$yad_button_result_file"
 
-	"${cmd[@]}"
+	eval "${cmd[@]}"
     fi
 }
 
@@ -929,8 +930,8 @@ function display_livestream_gui {
 		    start_time+=':tomorrow'
 	    fi
 	    
-	    set_link + "$link"
 	    set_livestream_time "$link" "$start_time" "$duration_time"
+	    set_link + "$link"
 	    run_livestream_timer "$link" "$start_time"
 	fi
     } &
@@ -1333,6 +1334,7 @@ function display_multiprogress_gui {
     wait $yad_multiprogress_pid
 }
 
+
 function display_console_gui {
     if [ -n "$1" ]
     then
@@ -1425,6 +1427,8 @@ function display_configure_gui {
 		    set_item_conf ${key_conf[i]} "${res[i]}"
 		done
 		get_conf
+		stop_daemon_gui
+		start_daemon_gui
 		new_yad_multiprogress
 		;;
 	    3)
