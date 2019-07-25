@@ -1645,19 +1645,15 @@ function main_loop {
 		then
 		    check_dler_forcing
 
-		    if [[ ! "$this_mode" =~ ^(daemon|lite)$ ]]
+		    if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
 		    then
-			if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
-			then
-			    print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
-			else
-			    local FILEURL=$(gettext "File URL")
-			    print_c 4 "%s: %s" "$FILEURL" "$url_in_file"
-			fi
+			print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
+		    else
+			local FILEURL=$(gettext "File URL")
+			print_c 4 "%s: %s" "$FILEURL" "$url_in_file"		    
 		    fi
 		    
-		    if download && [ -n "$file_in" ] &&
-			    [[ ! "$this_mode" =~ ^(daemon|lite)$ ]]
+		    if download && [ -n "$file_in" ]
 		    then
 			print_c 1 "downloading --> $file_in ..."
 		    fi		    
