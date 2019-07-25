@@ -1816,7 +1816,7 @@ cursor on
 if [ -f "$file_log" ]
 then
     print_c 0 ""
-    print_c 3 "\n$(gettext "In %s there is a file that contains a list of operations of %s terminated without success.")" "$PWD" "$PROG"
+    print_c 3 "\n$(gettext "In %s there is a file that contains a list of operations of %s.")" "$PWD" "$PROG"
     print_c 4 "$(gettext "To read it, enter:")"
     print_c 0 "${Bold}cat $PWD/$file_log${Color_Off}\n"
 fi
