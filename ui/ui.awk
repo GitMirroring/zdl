@@ -91,11 +91,11 @@ function show_downloads_extended () {
 	    } else if (exists(file_out[i])) {
 		code = code BGreen downloader_out[i] ": " progress_unspecified("complete") "\n"
 	    } else {
-		code = code BBlue "Stato: " Color_Off BRed "Download non attivo" Color_Off "\n"
+		code = code BBlue _"Status" ": " Color_Off BRed _"Download not active" Color_Off "\n"
 	    }
 	} else {
 	    progress_bar = make_progress() 
-	    code = code BBlue "Stato: " diff_bar_color progress_bar Color_Off "\n"
+	    code = code BBlue _"Status" ": " diff_bar_color progress_bar Color_Off "\n"
 	}
     }
     return code
@@ -204,7 +204,7 @@ function make_progress (size_bar, progress_bar, progress) {
 	if (percent_out[i] == 100) {
 	    diff_bar_color = BGreen 
 	    bar_color = On_Green
-	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"completed" "     " Color_Off)	
+	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"completed" "      " Color_Off)	
 	}
 	else if (check_irc_pid()) {
 	    diff_bar_color = BYellow
