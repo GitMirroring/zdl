@@ -1718,12 +1718,14 @@ else
 
     echo "$COLUMNS" > "$path_tmp"/columns
     {
-	if [[ "$this_mode" =~ ^(daemon|lite)$ ]]
-	then
-	    main_loop &>/dev/null &
-	else
-	    main_loop 2>/dev/null &
-	fi
+	(
+	    if [[ "$this_mode" =~ ^(daemon|lite)$ ]]
+	    then
+		main_loop &>/dev/null 
+	    else
+		main_loop 2>/dev/null 
+	    fi
+	) &
 	loops_pid=$!
     } 2>/dev/null
     
@@ -1734,9 +1736,9 @@ else
 
     ## sblocca read_binding, che non si temporizza con "-e" (serve un numero intero: perché?)
     bindings
-    read -t 1
+    read -t 0.1
 
-    set -m
+    #set -m
     
     [ "$this_mode" == "lite" ] && fclear
 
@@ -1745,13 +1747,11 @@ else
 	    [ -s "$path_tmp/links_loop.txt" ] 
     do
 	echo "$COLUMNS" > "$path_tmp"/columns
-
-	
 	
 	if [ "$this_mode" == "lite" ]
 	then	    
 	    show_downloads_lite
-	    read_binding 
+	    read_binding
 	    
 	else
 	    read_binding

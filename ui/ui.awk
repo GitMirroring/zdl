@@ -95,7 +95,7 @@ function show_downloads_extended () {
 	    }
 	} else {
 	    progress_bar = make_progress() 
-	    code = code BBlue _"Status" ": " diff_bar_color progress_bar Color_Off "\n"
+	    code = code BBlue _"Status" ": " diff_bar_color progress_bar Color_Off "\n\n"
 	}
     }
     return code
@@ -122,7 +122,7 @@ function show_downloads () {
 	if (length(downloader)<5)
 	    downloader = downloader ":" 
 
-	code = code diff_bar_color downloader " " progress_bar blue_line
+	code = code diff_bar_color downloader " " progress_bar "\n" blue_line "\n"
     }
     return code "\n\n\n\n\n"
 }
@@ -144,12 +144,25 @@ function show_downloads_lite () {
 
 	if (length(downloader)<5)
 	    downloader = downloader ":"
-	
-	code = code diff_bar_color downloader " " progress_bar
+
+	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +1) "\n"
     }
     
-    if (no_clear != "no-clear") clear_lite()
+    if (no_clear != "no-clear") clean_lite()
     return code
+}
+
+function clean_after (length_text,    num_spaces, spaces, i) {
+    num_spaces = int(cols - length_text)
+    for (i=0; i<num_spaces; i++)
+	spaces = spaces " "
+    return spaces
+}
+
+function clean_lite () {
+    spaces = int((lines-i-4) * cols)
+    for (c=1; c<spaces; c++)
+	code = code Background " "
 }
 
 
@@ -168,21 +181,25 @@ function bar_colors (content, I) {
 	    if (! (I%2)) {
 		bg_color = On_Green
 		fg_color = Black
-	    } else {
+	    }
+	    else {
 		bg_color = on_diff_color
 		fg_color = Black #White
 	    }
-	} else {
+	}
+	else {
 	    if (! (I%2)) {
 		bg_color = on_diff_color
 		fg_color = Black #White
-	    } else {
+	    }
+	    else {
 		bg_color = On_Green
 		fg_color = Black
 	    }
 	}
 	return fg_color bg_color content
-    } else {
+    }
+    else {
 	return content
     }
 }
@@ -204,36 +221,37 @@ function make_progress (size_bar, progress_bar, progress) {
 	if (percent_out[i] == 100) {
 	    diff_bar_color = BGreen 
 	    bar_color = On_Green
-	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"completed" "      " Color_Off)	
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"completed" Color_Off)	
 	}
 	else if (check_irc_pid()) {
 	    diff_bar_color = BYellow
 	    bar_color = On_Yellow
-	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"wait" "          " Color_Off)	
-	}    
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"wait" Color_Off)	
+	}
 	else {	    
 	    diff_bar_color = BRed 
 	    bar_color = On_Red
 	    # if (downloader_out[i] == "Wget")
 	    # 	percent_out[i] = 0
-	    info = sprintf("%-5s%-9s\n", int(percent_out[i]) "%", _"inactive" "      " Color_Off)	
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"inactive" Color_Off)	
 	}
-    } else {
+    }
+    else {
 	if (speed_out[i] > 0) {
 
 	    diff_bar_color = BGreen
 	    bar_color = On_Green 
 	    speed = int(speed_out[i]) speed_out_type[i]
 	    if (eta_out[i])
-		eta = clear_after(eta_out[i])
+		eta = eta_out[i]
+	    
 	    if ((length_out[i] == "unspecified") && (this_mode != "lite")) {
 		progress = progress_unspecified("downloading")
-
 	    }
 	} else {
 	    diff_bar_color = BYellow
 	    bar_color = On_Yellow
-	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"wait" "         " Color_Off)
+	    info = sprintf("%-5s%-9s", int(percent_out[i]) "%", _"wait" Color_Off)
 	}		    
     }
 
@@ -241,6 +259,8 @@ function make_progress (size_bar, progress_bar, progress) {
     size_bar = int((cols-info_space) * percent_out[i]/100)
     diff_size_bar = (cols-info_space) - size_bar
 
+    length_bar[i] = size_bar + diff_size_bar
+    
     bar = ""
     diff_bar = ""
     if (this_mode == "lite") {
@@ -275,25 +295,14 @@ function make_progress (size_bar, progress_bar, progress) {
     }
     
     if (! progress) {
-	if (! info)
-	    info = sprintf("%-5s" Color_Off BBlue "%-9s" Color_Off "%-12s", int(percent_out[i]) "%", speed, eta)	
+	if (! info) {
+	    info = sprintf("%-5s" Color_Off BBlue "%-9s" Color_Off "%-12s", int(percent_out[i]) "%", speed, eta)
+	}
 	progress = progress_bar Color_Off diff_bar_color " " info
+	length_info[i] = length(info)
 	info = ""
     }
     return progress
-}
-
-function clear_after (item, num_spaces, spaces, i) {
-    num_spaces = int(cols - (cols - 13 + length(item)))
-    for (i=0; i<num_spaces; i++)
-	item = item " "
-    return item 
-}
-
-function clear_lite () {
-    spaces = int((lines-i-4) * cols)
-    for (c=1; c<spaces; c++)
-	code = code Background " "
 }
 
 

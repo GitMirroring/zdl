@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 13:04+0200\n"
+"POT-Creation-Date: 2019-07-25 13:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -349,12 +349,9 @@ msgid "Download completed"
 msgstr "Download completato"
 
 #: ../zdl.sh:1819
-msgid ""
-"In %s there is a file that contains a list of operations of %s terminated "
-"without success."
+msgid "In %s there is a file that contains a list of operations of %s."
 msgstr ""
-"In %s è presente un file che contiene un elenco di operazioni di %s "
-"terminate senza successo."
+"In %s è presente un file che contiene un elenco di operazioni di %s."
 
 #: ../zdl.sh:1820
 msgid "To read it, enter:"

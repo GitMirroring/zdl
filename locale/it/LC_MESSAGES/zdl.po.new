@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 13:45+0200\n"
+"POT-Creation-Date: 2019-07-25 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -303,7 +303,7 @@ msgstr ""
 msgid "Connecting..."
 msgstr ""
 
-#: ../zdl.sh:1652 ../ui/ui.awk:302
+#: ../zdl.sh:1652 ../ui/ui.awk:311
 msgid "File URL"
 msgstr ""
 
@@ -339,7 +339,7 @@ msgstr ""
 msgid "download completed"
 msgstr ""
 
-#: ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:212 ../ui/ui.awk:236
+#: ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:229 ../ui/ui.awk:254
 msgid "wait"
 msgstr ""
 
@@ -398,7 +398,7 @@ msgid ""
 "the function or double click on a download:"
 msgstr ""
 
-#: ../gui/gui.sh:590 ../gui/gui.sh:1659 ../ui/ui.awk:303
+#: ../gui/gui.sh:590 ../gui/gui.sh:1659 ../ui/ui.awk:312
 msgid "Length"
 msgstr ""
 
@@ -1053,7 +1053,7 @@ msgid "Available channels (choose the corresponding number):"
 msgstr ""
 
 #: ../ui/ui.sh:796
-msgid "Select the channel from which to download the live (0-$[i-1]):"
+msgid "Select the channel from which to download the live"
 msgstr ""
 
 #: ../ui/ui.sh:805
@@ -1119,18 +1119,18 @@ msgstr ""
 msgid "Download not active"
 msgstr ""
 
-#: ../ui/ui.awk:157
+#: ../ui/ui.awk:170
 msgid "(file size not specified by the server)"
 msgstr ""
 
-#: ../ui/ui.awk:162
+#: ../ui/ui.awk:175
 msgid "killed"
 msgstr ""
 
-#: ../ui/ui.awk:207
+#: ../ui/ui.awk:224
 msgid "completed"
 msgstr ""
 
-#: ../ui/ui.awk:219
+#: ../ui/ui.awk:236
 msgid "inactive"
 msgstr ""

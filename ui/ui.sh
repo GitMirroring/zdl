@@ -61,7 +61,7 @@ function show_downloads {
 function show_downloads_lite {
     local no_clear="$1"
     [ -n "$no_clear" ] && force_header=force
-        
+
     cursor off
     
     (( odd_run++ ))
@@ -95,9 +95,9 @@ function show_downloads_lite {
 	    print_header "$BYellow" "" " $connecting ..."  ||
 		print_header "$BGreen" "" " $connecting . . . " 
 
-	[ -f "$path_tmp"/no-clear-lite ] ||
-	    [ -f "$path_tmp"/stop-binding ] ||
-	    clear_lite
+	# [ -f "$path_tmp"/no-clear-lite ] ||
+	#     [ -f "$path_tmp"/stop-binding ] ||
+	#     clear_lite
     fi
 }
 
@@ -793,7 +793,7 @@ function display_set_livestream {
 	while [[ ! "$opt" =~ ^([0-9]+)$ ]] ||
 		  ((opt > (i -1 )))
 	do
-	    print_c 2 "\n$(gettext "Select the channel from which to download the live (0-\$[i-1]):")" 
+	    print_c 2 "\n$(gettext "Select the channel from which to download the live") (0-$[i-1]):" 
 	    read -e opt
 	done
 	    
