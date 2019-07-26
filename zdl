@@ -1717,17 +1717,16 @@ else
     rm -f "$path_tmp/stop-binding"     
 
     echo "$COLUMNS" > "$path_tmp"/columns
-    {
-	(
-	    if [[ "$this_mode" =~ ^(daemon|lite)$ ]]
-	    then
-		main_loop &>/dev/null 
-	    else
-		main_loop 2>/dev/null 
-	    fi
-	) &
-	loops_pid=$!
-    } 2>/dev/null
+    (
+	if [[ "$this_mode" =~ ^(daemon|lite)$ ]]
+	then
+	    main_loop &>/dev/null 
+	else
+	    main_loop 2>/dev/null 
+	fi
+    ) &
+    disown
+    loops_pid=$!
     
     [ "$lite_mode" == true ] &&
 	this_mode=lite

@@ -75,9 +75,11 @@ var client = ( function () {
     /* Display livestream scheduled */
     function displayLivestreamScheduled( livestream ) {
         if ( livestream.length > 0 ) {
-            var node = "";
+            var node = "",
+		title = "";
             $.each( livestream, function ( index, item ) {
-                node += "<div class='scheduled-item'><div class='title'>" + data.channels[item.link] + "<button class='button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only' data-link='" + item.link + "' data-path='" + item.path + "'><span class='ui-button-icon ui-icon ui-icon-close'></span></button></div><div class='content'><span><strong>Url:</strong> " + item.link + "</span><span><strong>Path:</strong> " + item.path + "</span><span><strong data-i18n='scheduled-start'>Start:</strong> " + item.start + "</span><span><strong data-i18n='scheduled-duration'>Duration:</strong> " + item.duration + "</span></div></div>";
+		title = data.channels[item.link.replace(/\#[0-9]+$/,"")];
+                node += "<div class='scheduled-item'><div class='title'>" + title + "<button class='button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only' data-link='" + item.link + "' data-path='" + item.path + "'><span class='ui-button-icon ui-icon ui-icon-close'></span></button></div><div class='content'><span><strong>Url:</strong> " + item.link + "</span><span><strong>Path:</strong> " + item.path + "</span><span><strong data-i18n='scheduled-start'>Start:</strong> " + item.start + "</span><span><strong data-i18n='scheduled-duration'>Duration:</strong> " + item.duration + "</span></div></div>";
             } );
             $( "#scheduled-rec" ).empty().append( node ).i18n();
             $( "#scheduled-rec .button" ).button().i18n();
@@ -289,7 +291,6 @@ var client = ( function () {
                         $( "#bar-" + id ).progressbar( {
                             value: perc
                         } );
-                        data.list.push( id );
                     } else {
                         bar = $( "#bar-" + id );
                         if ( bar.hasClass("ui-progressbar-indeterminate") ) {
@@ -309,6 +310,7 @@ var client = ( function () {
                             utils.log( "file-downloaded", value.file );
                         }
                     }
+		    data.list.push( id );
                 } );
             }
             downloadFlow( force );
