@@ -294,8 +294,8 @@ var client = ( function () {
                     } else {
                         bar = $( "#bar-" + id );
                         if ( bar.hasClass("ui-progressbar-indeterminate") ) {
-                        	bar.progressbar( "value", 0.1 );
-						}
+                            bar.progressbar( "value", 0.1 );
+			}
                         bar.children( ".ui-progressbar-value" ).animate( {
         					width: perc + "%"
     					}, 500 );

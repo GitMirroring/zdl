@@ -29,12 +29,18 @@ var downloads = {
     clean: function () {
         myZDL.cleanCompleted().then( function () {
             $( ".progressbar" ).each( function () {
-                if ( $( this ).find( ".ui-progressbar" ).attr( "aria-valuenow" ) === "100" ) {
+                // if ( $( this ).find( ".ui-progressbar" ).attr( "aria-valuenow" ) === "100" ) {
+                //     var fileName = $( this ).find( ".label" ).text();
+                //     client.remove( "list", fileName );
+                //     $( this ).next( ".toggle" ).remove();
+                //     $( this ).remove();
+                // }
+		if ( $( this ).find( ".side-status" ).find( '*' ).text() === "100%" ) {
                     var fileName = $( this ).find( ".label" ).text();
                     client.remove( "list", fileName );
                     $( this ).next( ".toggle" ).remove();
                     $( this ).remove();
-                }
+		}
             } );
             utils.log( "downloads-completed-cleaned" );
         } );
