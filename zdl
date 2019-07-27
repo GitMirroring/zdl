@@ -1514,7 +1514,7 @@ function main_loop {
 
 		print_c 0
 		header_box "$(gettext "Processing link:")"
-		print_c 0 "$url_in"
+		print_c 0 "%s" "$url_in"
 
 		print_c 1 "\n$(gettext "Connecting...")"
 
@@ -1647,7 +1647,7 @@ function main_loop {
 
 		    if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
 		    then
-			print_c 4 "Streamer: $streamer\nPlaypath: $playpath\n"
+			print_c 4 "Streamer: %s\nPlaypath: %s\n" "$streamer" "$playpath"
 		    else
 			local FILEURL=$(gettext "File URL")
 			print_c 4 "%s: %s" "$FILEURL" "$url_in_file"		    
