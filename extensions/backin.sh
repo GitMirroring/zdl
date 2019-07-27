@@ -37,8 +37,16 @@ then
     if url "$backin_url"
     then
 	print_c 4 "Redirezione: $backin_url"
-	html=$(wget -o /dev/null -qO- "$backin_url")
+
+	if check_cloudflare "$backin_url"
+	then
+	    get_by_cloudflare "$backin_url" html
+	else
+	    html=$(wget -o /dev/null -qO- "$backin_url")
+	fi
+
 	file_in=$(get_title "$html")
+	file_in="${file_in#Streaming }"
 	url_in_file=$(unpack "$html")
 	url_in_file="${url_in_file#*file\:\"}"
 	url_in_file="${url_in_file%%\"*}"
