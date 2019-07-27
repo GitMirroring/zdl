@@ -28,19 +28,14 @@ var downloads = {
     // Delete progressbar and Info of completed download
     clean: function () {
         myZDL.cleanCompleted().then( function () {
+            var uibar;
             $( ".progressbar" ).each( function () {
-                // if ( $( this ).find( ".ui-progressbar" ).attr( "aria-valuenow" ) === "100" ) {
-                //     var fileName = $( this ).find( ".label" ).text();
-                //     client.remove( "list", fileName );
-                //     $( this ).next( ".toggle" ).remove();
-                //     $( this ).remove();
-                // }
-		if ( $( this ).find( ".side-status" ).find( '*' ).text() === "100%" ) {
-                    var fileName = $( this ).find( ".label" ).text();
-                    client.remove( "list", fileName );
+                uibar = $( this ).find( ".ui-progressbar" );
+                if ( uibar.attr( "aria-valuenow" ) === "100" ) {
+                    client.remove( "list", uibar.attr( "id" ).substring( 4 ) );
                     $( this ).next( ".toggle" ).remove();
                     $( this ).remove();
-		}
+                }
             } );
             utils.log( "downloads-completed-cleaned" );
         } );
@@ -107,7 +102,7 @@ var downloads = {
             if ( client.exist( "active", fileName ) ) {
                 client.remove( "active", fileName );
             }
-            client.remove( "list", fileName );
+            client.remove( "list", $.md5( link ) );
             utils.log( "download-deleted", fileName );
         } );
     }

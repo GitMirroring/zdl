@@ -76,10 +76,10 @@ var client = ( function () {
     function displayLivestreamScheduled( livestream ) {
         if ( livestream.length > 0 ) {
             var node = "",
-		title = "";
+                defUrl;
             $.each( livestream, function ( index, item ) {
-		title = data.channels[item.link.replace(/\#[0-9]+$/,"")];
-                node += "<div class='scheduled-item'><div class='title'>" + title + "<button class='button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only' data-link='" + item.link + "' data-path='" + item.path + "'><span class='ui-button-icon ui-icon ui-icon-close'></span></button></div><div class='content'><span><strong>Url:</strong> " + item.link + "</span><span><strong>Path:</strong> " + item.path + "</span><span><strong data-i18n='scheduled-start'>Start:</strong> " + item.start + "</span><span><strong data-i18n='scheduled-duration'>Duration:</strong> " + item.duration + "</span></div></div>";
+                defUrl = item.link.slice(0, item.link.lastIndexOf("#"));
+                node += "<div class='scheduled-item'><div class='title'>" + data.channels[defUrl] + "<button class='button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only' data-link='" + item.link + "' data-path='" + item.path + "'><span class='ui-button-icon ui-icon ui-icon-close'></span></button></div><div class='content'><span><strong>Url:</strong> " + item.link + "</span><span><strong>Path:</strong> " + item.path + "</span><span><strong data-i18n='scheduled-start'>Start:</strong> " + item.start + "</span><span><strong data-i18n='scheduled-duration'>Duration:</strong> " + item.duration + "</span></div></div>";
             } );
             $( "#scheduled-rec" ).empty().append( node ).i18n();
             $( "#scheduled-rec .button" ).button().i18n();
@@ -269,7 +269,7 @@ var client = ( function () {
                         statusVal = "100%";
                     }
                     len = formatFileLength( value.length );
-                    if ( !data.list.includes( id ) ) {
+                    if ( !data.list.includes( id ) && !$( "#bar-" + id ).length ) {
                         if ( statusClass ) {
                             statusClass = " " + statusClass;
                         }
@@ -291,11 +291,12 @@ var client = ( function () {
                         $( "#bar-" + id ).progressbar( {
                             value: perc
                         } );
+                        data.list.push( id );
                     } else {
                         bar = $( "#bar-" + id );
                         if ( bar.hasClass("ui-progressbar-indeterminate") ) {
-                            bar.progressbar( "value", 0.1 );
-			}
+                        	bar.progressbar( "value", 0.1 );
+						}
                         bar.children( ".ui-progressbar-value" ).animate( {
         					width: perc + "%"
     					}, 500 );
@@ -307,10 +308,10 @@ var client = ( function () {
                         }
                         status.text( statusVal );
                         if ( downloadCompleted( value.file, perc ) ) {
+                            bar.attr( "aria-valuenow", perc );
                             utils.log( "file-downloaded", value.file );
                         }
                     }
-		    data.list.push( id );
                 } );
             }
             downloadFlow( force );
@@ -463,7 +464,9 @@ var client = ( function () {
     // expose fn
     return {
         remove: function ( key, name ) {
-            data[ key ].splice( data[ key ].indexOf( name ), 1 );
+            if ( data[ key ].includes( name ) ) {
+                data[ key ].splice( data[ key ].indexOf( name ), 1 );
+            }
         },
         exist: function ( key, name ) {
             return data[ key ].includes( name );

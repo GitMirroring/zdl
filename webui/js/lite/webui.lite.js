@@ -23,7 +23,7 @@ var client = ( function () {
         if ( perc < 100 && !isActive ) {
             data.active.push( file );
         } else {
-            if ( perc === 100 && isActive  ) {
+            if ( perc === 100 && isActive ) {
                 data.active.splice( data.active.indexOf( file ), 1 );
                 return true;
             }
@@ -67,9 +67,10 @@ var client = ( function () {
             } );
 
         $( ".btn-close" )
-            .click(function () {
-                $("#clientModal").modal("hide");
-            });
+            .click( function () {
+                $( "#clientModal" )
+                    .modal( "hide" );
+            } );
 
         $( "#clientModal" )
             .on( "hidden.bs.modal", function () {
