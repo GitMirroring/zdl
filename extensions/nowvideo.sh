@@ -30,23 +30,26 @@
     
 if [[ "$url_in" =~ nowvideo\. ]]
 then
-    html=$(curl -s "$url_in")
-
-    countdown- 5
+    html=$(curl -s \
+		-c "$path_tmp"/cookies.zdl \
+		"$url_in")
     
     input_hidden "$html"
 
-    action_url="${url_in//\/video\///videos/}"
+    action_url="${url_in//\/play\///videos/}"
 
-    url_in_file=$(curl -s \
-		       -d "$post_data" \
-		       "$action_url" 2>&1 |
-		      grep 'source: "' |
-		      head -n1 |
-		      sed -r 's|.+source: \"([^"]+)\".+|\1|g')
+    html=$(curl -s \
+		-b "$path_tmp"/cookies.zdl \
+		-d "$post_data" \
+		"$action_url")
+
+    url_in_file=$(unpack "$html")
+
+    url_in_file="${url_in_file#*\'}"
+    url_in_file="${url_in_file%%\'*}"
 
     file_in=$(get_title "$html")
-    file_in="${file_in%' |'*}".${url_in_file##*.}
+    file_in="${file_in#Nowvideo }".${url_in_file##*.}
     
     end_extension
 fi
