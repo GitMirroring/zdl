@@ -1514,9 +1514,9 @@ function main_loop {
 
 		print_c 0
 		header_box "$(gettext "Processing link:")"
-		print_c 0 "$url_in\n"
+		print_c 0 "$url_in"
 
-		print_c 1 "$(gettext "Connecting...")"
+		print_c 1 "\n$(gettext "Connecting...")"
 
 		check_ip
 		
