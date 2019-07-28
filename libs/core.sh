@@ -37,11 +37,12 @@ function check_pid {
 function check_instance_daemon {
     unset daemon_pid
 
-    (( $(date +%s) < $(cat "$path_tmp"/.date_daemon 2>/dev/null)+2 )) &&
-	print_c 2 "Avvio modalità demone..."
+    # (( $(date +%s) < $(cat "$path_tmp"/.date_daemon 2>/dev/null)+2 )) &&
+    # 	print_c 2 "Avvio modalità demone..."
     ## ritardare il controllo
     while (( $(date +%s) < $(cat "$path_tmp"/.date_daemon 2>/dev/null)+2 ))
     do
+	echo -ne "$(sprint_c 2 "Avvio modalità demone...")\r"
 	sleep 0.1
     done
     

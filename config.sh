@@ -476,7 +476,7 @@ path_tmp=".${prog}_tmp"
 ## forza la creazione del file per le console gui e webui:
 mkdir -p "$path_tmp"
 gui_log="$path_tmp"/gui-log.txt
-echo >"$gui_log"
+touch "$gui_log"
 
 path_server="$HOME"/.zdl/zdl.d
 #path_server=/tmp/zdl.d
