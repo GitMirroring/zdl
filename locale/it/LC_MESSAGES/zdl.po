@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 19:34+0200\n"
+"POT-Creation-Date: 2019-07-28 15:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -336,23 +336,23 @@ msgstr "L'elenco completo dei link è in links.txt"
 msgid "Processing link:"
 msgstr "Link da processare:"
 
-#: ../zdl.sh:1519
-msgid "Connecting..."
+#: ../zdl.sh:1519 ../ui/ui.sh:92
+msgid "Connecting"
 msgstr "Connessione in corso"
 
 #: ../zdl.sh:1652 ../ui/ui.awk:311
 msgid "File URL"
 msgstr "URL del file"
 
-#: ../zdl.sh:1803
+#: ../zdl.sh:1802
 msgid "Download completed"
 msgstr "Download completato"
 
-#: ../zdl.sh:1819
+#: ../zdl.sh:1818
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 
-#: ../zdl.sh:1820
+#: ../zdl.sh:1819
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
@@ -876,10 +876,6 @@ msgstr ""
 msgid "Select the links found by xdcc.eu:"
 msgstr "Seleziona i link trovati da xdcc.eu:"
 
-#: ../ui/ui.sh:92
-msgid "Connecting"
-msgstr "Connessione in corso"
-
 #: ../ui/ui.sh:121
 msgid "Interactive mode"
 msgstr "Modalità interattiva"
@@ -1260,3 +1256,6 @@ msgstr "completato"
 #: ../ui/ui.awk:236
 msgid "inactive"
 msgstr "non attivo"
+
+#~ msgid "Connecting..."
+#~ msgstr "Connessione in corso"

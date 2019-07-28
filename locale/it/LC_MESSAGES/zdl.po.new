@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-25 19:34+0200\n"
+"POT-Creation-Date: 2019-07-28 15:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -299,23 +299,23 @@ msgstr ""
 msgid "Processing link:"
 msgstr ""
 
-#: ../zdl.sh:1519
-msgid "Connecting..."
+#: ../zdl.sh:1519 ../ui/ui.sh:92
+msgid "Connecting"
 msgstr ""
 
 #: ../zdl.sh:1652 ../ui/ui.awk:311
 msgid "File URL"
 msgstr ""
 
-#: ../zdl.sh:1803
+#: ../zdl.sh:1802
 msgid "Download completed"
 msgstr ""
 
-#: ../zdl.sh:1819
+#: ../zdl.sh:1818
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr ""
 
-#: ../zdl.sh:1820
+#: ../zdl.sh:1819
 msgid "To read it, enter:"
 msgstr ""
 
@@ -812,10 +812,6 @@ msgstr ""
 
 #: ../gui/gui.sh:1655
 msgid "Select the links found by xdcc.eu:"
-msgstr ""
-
-#: ../ui/ui.sh:92
-msgid "Connecting"
 msgstr ""
 
 #: ../ui/ui.sh:121
