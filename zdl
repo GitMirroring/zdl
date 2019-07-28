@@ -1650,7 +1650,7 @@ function main_loop {
 			print_c 4 "Streamer: %s\nPlaypath: %s\n" "$streamer" "$playpath"
 		    else
 			local FILEURL=$(gettext "File URL")
-			print_c 4 "%s: %s" "$FILEURL" "$url_in_file"		    
+			print_c 4 "%s: %s" "$FILEURL" "${url_in_file}"
 		    fi
 		    
 		    if download && [ -n "$file_in" ]
@@ -1701,7 +1701,7 @@ if [ "$this_mode" == "daemon" ]
 then
     while true
     do
-	main_loop &>/dev/null || break
+	main_loop 2>/dev/null || break
 	clean_livestream
     done 
 

@@ -72,8 +72,6 @@ function print_case {
 
 function print_filter {
     local log filter
-    local text="$1"
-    shift
     
     if [[ "$PWD" =~ "$path_tmp" ]]
     then
@@ -88,14 +86,14 @@ function print_filter {
     then
 	if test deamon_filter == true
 	then
-    	    filter=$(printf "$text" "$@")
+    	    printf "$@" > "$filter"
     	    sanitize_text <"$filter" >>"$log" 
 	else
-    	    printf "$text" "$@" | tee "$filter"
+    	    printf "$@" | tee "$filter"
     	    sanitize_text <"$filter" >>"$log" 
 	fi
     else
-    	printf "$text" "$@"
+    	printf "$@"
     fi
 }
 

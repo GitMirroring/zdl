@@ -39,6 +39,8 @@ source $path_usr/libs/core.sh
 source $path_usr/libs/utils.sh
 source $path_usr/libs/downloader_manager.sh
 source $path_usr/libs/log.sh
+source $path_usr/config.sh
+get_conf
 
 [ -z "$background" ] && background=tty
 source $path_usr/ui/widgets.sh
