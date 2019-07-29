@@ -798,7 +798,6 @@ function display_set_livestream {
 	done
 	    
 	tag_link "${live_streaming_url[opt]}" link
-	set_link + "$link"
 
 	if check_livestream_link_time "$link"
 	then
@@ -874,6 +873,7 @@ function display_set_livestream {
 	    start_time+=':tomorrow'
     fi
 
+    set_link + "$link"
     set_livestream_time "$link" "$start_time" "$duration_time"
     run_livestream_timer "$link" "$start_time"
 
