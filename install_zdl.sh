@@ -255,4 +255,6 @@ print_c 0 "\tzdl --help
 "
 print_c 4 "http://nongnu.org/zdl"
 
+cursor on
+
 exit
