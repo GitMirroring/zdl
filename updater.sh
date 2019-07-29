@@ -132,7 +132,7 @@ For more information on Axel: http://alioth.debian.org/projects/axel/
     do
 	print_c 3 "$(eval_gettext "WARNING: \$dep is not installed on your system")"
 
-	local depmsg="$(eval_gettext "\${alert_msg[\$dep]}
+	local depmsg="${alert_msg[$dep]}$(eval_gettext "
 1) Automatically install \$dep from packages (RECOMMENDED)
 2) Automatically installs \$dep from sources
 3) Skip the \$dep installation and continue with the installation of \$PROG and its other dependencies
@@ -568,7 +568,7 @@ EXTENSIONS:
 	deps['mimeopen']=libfile-mimeinfo-perl
 	deps['youtube-dl']=youtube-dl
 	## deps['tput']=ncurses-bin
-	## deps['ffmpeg']=ffmpeg
+	deps['ffmpeg']=ffmpeg
 
 	## php-mbstring
 	
