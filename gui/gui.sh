@@ -934,7 +934,6 @@ function display_livestream_gui {
 		tag_link "$link" link
 	    fi
 	    
-	    yad --text "$link"
 	    set_livestream_time "$link" "$start_time" "$duration_time"
 	    set_link + "$link"
 	    run_livestream_timer "$link" "$start_time"
