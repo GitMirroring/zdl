@@ -23,6 +23,7 @@
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
 #
+#set -x
 
 path_usr="/usr/local/share/zdl"
 
@@ -280,6 +281,7 @@ fi
 add_path4server "$(realpath "$PWD")"
 mkdir -p "$path_tmp"
 echo > "$gui_log"
+
 if [[ "${args[*]}" =~ (--gui|-g) ]]
 then
     for ((i=0; i<=$max_args; i++))

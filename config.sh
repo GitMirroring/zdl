@@ -269,57 +269,61 @@ function get_conf {
 	
 	Color_Off="\033[0m${Foreground}${Background}"
 
-	## list: /usr/share/i18n/SUPPORTED
-	if [ -z "$language" ]
-	then
-	    language=en_US.UTF-8
+	get_language
+    fi
+}
 
-	elif [[ "$language" =~ ^it ]]
-	then
-	    language=it_IT.UTF-8
+function get_language {
+    ## list: /usr/share/i18n/SUPPORTED
+    if [ -z "$language" ]
+    then
+	language=en_US.UTF-8
 
-	elif (( ${#language} == 2 ))
-	then
-	    case "$language" in
-		en) language="en_US.UTF-8" ;;
-		fr) language="fr_FR.UTF-8" ;;
-		de) language="de_DE.UTF-8" ;;
-		es) language="es_ES.UTF-8" ;;
-		*)	    
-		    if [[ "$(</usr/share/i18n/SUPPORTED)" =~ ("$language"_[^\ ]+\.UTF-8) ]]
-		    then
-			language="${BASH_REMATCH[1]}"
-		    fi
-		    ;;
-	    esac
-	fi
+    elif [[ "$language" =~ ^it ]]
+    then
+	language=it_IT.UTF-8
 
-	export LANGUAGE="$language"
-	export LANG="$language"
-	export LC_ALL="$language"
-	
-	if [ "$language" == it_IT.UTF-8 ]
-	then
-	    string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
-	    string_conf[1]="Numero di parti in download parallelo per Axel"		
-	    string_conf[2]="Numero di connessioni in parallelo per Aria2"	
-	    string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
-	    string_conf[4]="Colore sfondo (black|transparent)"	
-	    string_conf[5]="Lingua"
-	    string_conf[6]="Script/comando/programma per riconnettere il modem/router"
-	    string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
-	    string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
-	    string_conf[9]="Editor predefinito per modificare la lista dei link in coda"
-	    string_conf[10]="Recupero file omonimi come con opzione --resume (enabled|*)"
-	    string_conf[11]="Modalità predefinita di avvio (lite|daemon|stdout)"
-	    string_conf[12]="Porta TCP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
-	    string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
-	    string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
-	    string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
-	    string_conf[16]="Seleziona l'interfaccia web predefinita (1|2|3|lite)"
-	else
-	    set_default_configure_values
-	fi
+    elif (( ${#language} == 2 ))
+    then
+	case "$language" in
+	    en) language="en_US.UTF-8" ;;
+	    fr) language="fr_FR.UTF-8" ;;
+	    de) language="de_DE.UTF-8" ;;
+	    es) language="es_ES.UTF-8" ;;
+	    *)	    
+		if [[ "$(</usr/share/i18n/SUPPORTED)" =~ ("$language"_[^\ ]+\.UTF-8) ]]
+		then
+		    language="${BASH_REMATCH[1]}"
+		fi
+		;;
+	esac
+    fi
+
+    export LANGUAGE="$language"
+    export LANG="$language"
+    export LC_ALL="$language"
+    
+    if [ "$language" == it_IT.UTF-8 ]
+    then
+	string_conf[0]="Downloader predefinito (Axel|Aria2|Wget)"
+	string_conf[1]="Numero di parti in download parallelo per Axel"		
+	string_conf[2]="Numero di connessioni in parallelo per Aria2"	
+	string_conf[3]="Numero massimo di download simultanei (numero intero|<vuota=senza limiti>)"
+	string_conf[4]="Colore sfondo (black|transparent)"	
+	string_conf[5]="Lingua"
+	string_conf[6]="Script/comando/programma per riconnettere il modem/router"
+	string_conf[7]="Aggiornamenti automatici di ZDL (enabled|*)"
+	string_conf[8]="Script/comando/programma per riprodurre un file audio/video"
+	string_conf[9]="Editor predefinito per modificare la lista dei link in coda"
+	string_conf[10]="Recupero file omonimi come con opzione --resume (enabled|*)"
+	string_conf[11]="Modalità predefinita di avvio (lite|daemon|stdout)"
+	string_conf[12]="Porta TCP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
+	string_conf[13]="Porta UDP aperta per i torrent di Aria2 (verifica le impostazioni del tuo router)"
+	string_conf[14]="Porta TCP per creare socket, usata da opzioni come --socket e --web-ui"
+	string_conf[15]="Browser per l'interfaccia web: opzione --web-ui"
+	string_conf[16]="Seleziona l'interfaccia web predefinita (1|2|3|lite)"
+    else
+	set_default_configure_values
     fi
 }
 
@@ -472,11 +476,7 @@ prog=zdl
 name_prog="ZigzagDownLoader"
 PROG="ZDL"  #`echo $prog | tr a-z A-Z`
 path_tmp=".${prog}_tmp"
-
-## forza la creazione del file per le console gui e webui:
-mkdir -p "$path_tmp"
 gui_log="$path_tmp"/gui-log.txt
-touch "$gui_log"
 
 path_server="$HOME"/.zdl/zdl.d
 #path_server=/tmp/zdl.d
