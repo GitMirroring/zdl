@@ -36,17 +36,23 @@ then
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"
     
-    url_in_file=$(grep -oP "[^']+\.m3u8[^']*" <<< "$html")
+    url_in_file=$(grep -oP "[^\']+\.m3u8[^\']*" <<< "$html")
 
     if [ -z "$url_in_file" ]
     then
-	url_in_file=$(grep -oP '[^"]+\.m3u8[^"]*' <<< "$html")
+	url_in_file=$(grep -oP '[^\"]+\.m3u8[^\"]*' <<< "$html")
     fi
 
     if [ -n "$url_in_file" ] &&
 	   ! url "$url_in_file"
     then
-	url_in_file=https://"${url_in_file##\/\/}"
+	url_in_file="${url_in_file#*\'}"
+	url_in_file="${url_in_file%%\'*}"
+
+	url_in_file="${url_in_file#*\"}"
+	url_in_file="${url_in_file%%\"*}"
+
+	url_in_file=https://"${url_in_file##*\/\/}"
     fi
     
     if [[ "$file_in" =~ Diretta ]]
