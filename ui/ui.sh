@@ -123,6 +123,8 @@ function show_downloads_extended {
     [ -f "$path_tmp/downloader" ] && downloader_in=$(cat "$path_tmp/downloader")
     echo -e "\n${BBlue}Downloader:${Color_Off} $downloader_in\t${BBlue}Directory:${Color_Off} $PWD\n"
 
+    check_instance_daemon
+
     if check_instance_daemon
     then
 	print_c 1 "$(gettext "%s is active in daemon mode (pid: %s)\n")" "$PROG" "$daemon_pid"

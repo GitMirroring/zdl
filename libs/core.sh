@@ -37,8 +37,6 @@ function check_pid {
 function check_instance_daemon {
     unset daemon_pid
 
-    # (( $(date +%s) < $(cat "$path_tmp"/.date_daemon 2>/dev/null)+2 )) &&
-    # 	print_c 2 "Avvio modalità demone..."
     ## ritardare il controllo
     while (( $(date +%s) < $(cat "$path_tmp"/.date_daemon 2>/dev/null)+2 ))
     do
@@ -51,7 +49,7 @@ function check_instance_daemon {
 
     daemon_pid=$(ps ax | awk -f "$path_usr/libs/common.awk" \
 			     -e "BEGIN{pwd=\"$PWD\"} /bash/ $cyg_condition {check_instance_daemon()}")
-    
+
     if [[ "$daemon_pid" =~ ^([0-9]+)$ ]]
     then
 	return 0

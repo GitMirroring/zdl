@@ -37,7 +37,7 @@ function check_instance_daemon () {
     c | getline dir
     close(c)
     if (dir ~ /zdl.*silent/) {
-	match(dir, /zdl.*silent\0(.+)\0/, matched)
+	match(dir, /zdl.*silent\0([^\0]+)\0/, matched)
 
 	if (matched[1] == pwd) { 
 	    print pid
