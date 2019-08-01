@@ -68,6 +68,7 @@ h4.subtitle {
   position: relative;
   width: 100%;
   height: auto;
+  overflow: hidden;
   display: none;
 }
 
@@ -85,6 +86,13 @@ h4.subtitle {
   float: left;
   overflow: hidden;
   width: 70%;
+}
+
+.progressbar .side-bar .label {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .progressbar .side-status {
@@ -157,7 +165,8 @@ h4.subtitle {
 }
 
 .toggle>.browse>.tree {
-  margin: 10px 0 5px 15px;
+  margin-left: 15px;
+  margin-bottom: 5px;
   height: 170px;
   overflow-y: auto;
   scrollbar-color: #555 #444;
@@ -229,7 +238,6 @@ h4.subtitle {
 .toggle ul {
   list-style: none;
   padding-left: 0;
-  margin-top: 0;
 }
 
 .toggle ul li {
@@ -404,14 +412,13 @@ h4.subtitle {
   background: #000;
   margin-bottom: 10px;
   padding: 10px;
-  width: 50%;
   scrollbar-color: #555 #444;
 }
 
 .static-area>textarea {
   background: #000;
   width: 100%;
-  height: 120px;
+  height: 160px;
   display: block;
   font-size: 90%;
   border: none;
@@ -434,7 +441,6 @@ h4.subtitle {
 
 .console>span {
   display: block;
-  color: #aaa;
 }
 
 .console>.error {
@@ -607,6 +613,11 @@ fieldset {
 }
 
 /* DataTable */
+.table-container {
+  width: 100%;
+  overflow: hidden;
+}
+
 table.dataTable thead th {
   background: #383D43;
   font-weight: bold !important;
@@ -622,9 +633,23 @@ table.dataTable tr td {
 }
 
 /* Simple responsive */
-@media (max-width: 600px) {
-  .console {
-    white-space: pre-wrap;
+@media (max-width: 1360px) {
+  .toggle>.browse>.path.editable {
+    width: 70%;
+  }
+}
+
+@media (max-width: 880px) {
+  .ui-tabs .ui-tabs-nav li {
+    border-bottom: 1px solid #444;
+    border-radius: 1px !important;
+    margin-bottom: 2px;
+  }
+
+  .ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: 2px;
+    padding: 0;
+    border: 1px solid #003eff;
   }
 
   .progressbar {
@@ -634,13 +659,6 @@ table.dataTable tr td {
   .progressbar .side-bar {
     float: none;
     width: 100%;
-  }
-
-  .progressbar .side-bar .label {
-    width: 98%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .progressbar .side-status {
@@ -660,6 +678,34 @@ table.dataTable tr td {
     height: 100px;
   }
 
+  .playlist .pl-item {
+    margin-bottom: 15px;
+  }
+
+  .playlist .pl-file {
+    width: 100% !important;
+    margin-bottom: 4px;
+  }
+
+  .playlist .pl-buttons {
+    margin-left: 0 !important;
+  }
+
+  .inline-group .choose-audio {
+    display: block;
+    margin: 10px auto;
+  }
+
+  .livestream-channels>label {
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .console {
+    white-space: pre-wrap;
+  }
+
   .inline-group {
     margin-bottom: 20px;
   }
@@ -668,8 +714,20 @@ table.dataTable tr td {
     text-align: center;
   }
 
+  .inline-group .ui-spinner,
+  .inline-group .ui-selectmenu-button {
+    margin-bottom: 2px !important;
+    background: #555;
+  }
+
   .inline-group .slider-label {
     margin-bottom: 20px !important;
+  }
+
+  .inline-group fieldset div.label {
+    display: block;
+    margin: 2px 0;
+    width: auto !important;
   }
 
   .inline-group button:not(.hidden),
@@ -680,31 +738,20 @@ table.dataTable tr td {
     width: 100% !important;
   }
 
-  .inline-group span {
-    margin-bottom: 2px;
-  }
-
-  #local-max-downloads-save,
-  #max-downloads-save,
-  #axel-connections-save,
-  #aria2-connections-save {
+  .inline-group .slider-save {
     margin-top: 20px;
   }
 
-  #tabs-7 label {
-    margin-bottom: 2px;
+  table.dataTable>tbody>tr>td>ul.dtr-details {
+    width: 100%;
   }
 
-  .playlist .pl-item {
-    margin-bottom: 15px;
+  table.dataTable>tbody>tr>td>ul>li>span.dtr-data {
+    word-wrap: anywhere;
   }
 
-  .playlist .pl-file {
-    width: 100% !important;
-    margin-bottom: 2px;
-  }
-
-  .playlist .pl-buttons {
-    margin-left: 0 !important;
+  .console>.event,
+  .console>.error {
+    font-size: 90%;
   }
 }

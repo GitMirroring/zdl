@@ -406,6 +406,7 @@ var xdcc = {
                     }
                     $( ".xdcc-search-send" ).button();
                     input.val( "" );
+                    table.columns.adjust().responsive.recalc();
                 } else {
                     input.val( $.i18n( "xdcc-search-no-results" ) );
                 }

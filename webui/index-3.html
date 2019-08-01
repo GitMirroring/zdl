@@ -152,7 +152,7 @@
                     <div id="local-max-downloads" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
-                    <button data-i18n="button-save" id="local-max-downloads-save" class="button">Save</button>
+                    <button data-i18n="button-save" id="local-max-downloads-save" class="button slider-save">Save</button>
                     <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
@@ -192,20 +192,22 @@
                     <div data-i18n="tab-3-label-max-results" class="label">Max results:</div>
                     <input id="max-xdcc" class="spinner" readonly>
                 </div>
-                <table id="xdcc-eu" class="display nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Network</th>
-                            <th data-i18n="xdcc-th-channel">Channel</th>
-                            <th>Bot</th>
-                            <th>Slot</th>
-                            <th data-i18n="xdcc-th-gets">Gets</th>
-                            <th data-i18n="xdcc-th-size">Size</th>
-                            <th data-i18n="xdcc-th-name">Name</th>
-                            <th data-i18n="xdcc-th-send">Send</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div class="table-container">
+                    <table id="xdcc-eu" class="display responsive" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Network</th>
+                                <th data-i18n="xdcc-th-channel">Channel</th>
+                                <th>Bot</th>
+                                <th>Slot</th>
+                                <th data-i18n="xdcc-th-gets">Gets</th>
+                                <th data-i18n="xdcc-th-size">Size</th>
+                                <th data-i18n="xdcc-th-name">Name</th>
+                                <th data-i18n="xdcc-th-send">Send</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
 
             <!-- TAB 4 - Playlist -->
@@ -321,7 +323,7 @@
                     <div id="axel-parts" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
-                    <button data-i18n="button-save" data-key="axel_parts" id="axel-connections-save" class="button">Save</button>
+                    <button data-i18n="button-save" data-key="axel_parts" id="axel-connections-save" class="button slider-save">Save</button>
                     <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
@@ -329,7 +331,7 @@
                     <div id="aria2-connections" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
-                    <button data-i18n="button-save" data-key="aria2_connections" id="aria2-connections-save" class="button">Save</button>
+                    <button data-i18n="button-save" data-key="aria2_connections" id="aria2-connections-save" class="button slider-save">Save</button>
                     <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
@@ -337,7 +339,7 @@
                     <div id="max-downloads" class="slider">
                         <div class="custom-handle ui-slider-handle"></div>
                     </div>
-                    <button data-i18n="button-save" data-key="max_dl" id="max-downloads-save" class="button">Save</button>
+                    <button data-i18n="button-save" data-key="max_dl" id="max-downloads-save" class="button slider-save">Save</button>
                     <span class="hidden">ok</span>
                 </div>
                 <div class="inline-group">
@@ -354,7 +356,7 @@
                 </div>
                 <div class="toggle">
                     <div id="player-browse" class="content browse ui-widget-content ui-corner-all">
-                        <input id="player-path" class="path" type="text" readonly>
+                        <input id="player-path" class="path editable" type="text" readonly>
                         <button data-i18n="button-save" data-key="player" id="player-save" class="button">Save</button>
                         <label data-i18n="radio-edit-label" for="player-editable">Edit</label>
                         <input type="checkbox" name="player-editable" id="player-editable" class="input-editable">
@@ -368,7 +370,7 @@
                 </div>
                 <div class="toggle">
                     <div id="editor-browse" class="content browse ui-widget-content ui-corner-all">
-                        <input id="editor-path" class="path" type="text" readonly>
+                        <input id="editor-path" class="path editable" type="text" readonly>
                         <button data-i18n="button-save" data-key="editor" id="editor-save" class="button">Save</button>
                         <label data-i18n="radio-edit-label" for="editor-editable">Edit</label>
                         <input type="checkbox" name="editor-editable" id="editor-editable" class="input-editable">
@@ -382,7 +384,7 @@
                 </div>
                 <div class="toggle">
                     <div id="browser-browse" class="content browse ui-widget-content ui-corner-all">
-                        <input id="browser-path" class="path" type="text" readonly>
+                        <input id="browser-path" class="path editable" type="text" readonly>
                         <button data-i18n="button-save" data-key="browser" id="browser-save" class="button">Save</button>
                         <label data-i18n="radio-edit-label" for="browser-editable">Edit</label>
                         <input type="checkbox" name="browser-editable" id="browser-editable" class="input-editable">
@@ -469,7 +471,7 @@
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-8-label-log-path" class="label">Path log:</div>
-                    <input id="console-path" class="mid" type="text" readonly>
+                    <input id="console-path" type="text" readonly>
                 </div>
                 <div class="static-area ui-widget-content ui-corner-all">
                     <textarea id="download-log" readonly></textarea>

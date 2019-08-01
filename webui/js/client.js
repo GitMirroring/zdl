@@ -336,8 +336,11 @@ var client = ( function () {
                 responsivePriority: 1,
                 targets: 0
             }, {
-                responsivePriority: 1,
-                targets: -3
+                responsivePriority: 2,
+                targets: -1
+            }, {
+                responsivePriority: 3,
+                targets: -4
             } ],
             language: {
                 url: "/i18n/" + lang + ".lang"
@@ -383,7 +386,17 @@ var client = ( function () {
             utils.log( "start-locale", language.toUpperCase() );
 
             // Init widgets
-            $( "#tabs" ).tabs();
+            $( "#tabs" ).tabs( {
+				activate: function (event, ui) {
+        			var active = $('#tabs').tabs('option', 'active');
+        			if ( active === 2 ) {
+                        // fix column responsive for datatable inside tab
+						$( $.fn.dataTable.tables( true ) ).DataTable()
+							.columns.adjust()
+							.responsive.recalc();
+					}
+				}
+			} );
             $( ".button" ).button();
             $( ".spinner" ).spinner( {
                 create: function ( e, ui ) {
