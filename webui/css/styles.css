@@ -72,6 +72,19 @@ h4.subtitle {
   display: none;
 }
 
+.counters>dl {
+  font-size: 1.1em;
+}
+
+.counters>dl>dt {
+  display: inline-block;
+}
+
+.counters>dl>dd {
+  display: inline;
+  margin: 0 15px 0 0;
+}
+
 .downloads {
   overflow: hidden;
 }

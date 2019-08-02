@@ -7,7 +7,7 @@
 		"locale": "en"
 	},
 	"tab-1-name": "Downloads",
-	"tab-1-title": "Downloads in progress",
+	"tab-1-title": "Download list",
 	"tab-2-name": "Manage",
 	"tab-2-title": "Manage downloads inside path",
 	"tab-2-label-path": "Action path:",
@@ -129,6 +129,9 @@
 	"console-download-log-stop": "Stopped the console download log",
 	"delete-download-tooltip": "Warning! This action deletes the file downloaded. Are you sure?",
 	"delete-queue-tooltip": "Warning! This action deletes the entire queue. Are you sure?",
+	"download-active": "Active:",
+    "download-completed": "Completed:",
+    "download-total": "Total:",
 	"download-deleted": "Deleted download of: $1",
 	"download-stopped": "Stopped download of: $1",
 	"download-flow-error": "Download flow restarted ($1)",

@@ -72,6 +72,17 @@ h4.subtitle {
   display: none;
 }
 
+.counters>dl>dt {
+  font-weight: bold;
+  display: inline-block;
+  color: #aaa;
+}
+
+.counters>dl>dd {
+  display: inline;
+  margin: 0 15px 0 0;
+}
+
 .downloads {
   overflow: hidden;
 }

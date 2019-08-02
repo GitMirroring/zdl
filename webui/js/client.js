@@ -130,6 +130,7 @@ var client = ( function () {
         var isActive = data.active.includes( file );
         if ( perc < 100 && !isActive ) {
             data.active.push( file );
+            utils.updateCounters( data.list.length, data.active.length );
         } else {
             if ( perc === 100 && isActive  ) {
                 data.active.splice( data.active.indexOf( file ), 1 );
@@ -227,6 +228,7 @@ var client = ( function () {
 
                 if ( arg ) {
                     $( "#new-socket" ).val( parseInt( window.location.port ) + 1 );
+                    utils.updateCounters( data.list.length, data.active.length );
                 }
 
                 $( ".selectmenu" ).selectmenu( "refresh" );
@@ -292,6 +294,7 @@ var client = ( function () {
                             value: perc
                         } );
                         data.list.push( id );
+                        utils.updateCounters( data.list.length, data.active.length );
                     } else {
                         bar = $( "#bar-" + id );
                         if ( bar.hasClass("ui-progressbar-indeterminate") ) {
@@ -309,6 +312,7 @@ var client = ( function () {
                         status.text( statusVal );
                         if ( downloadCompleted( value.file, perc ) ) {
                             bar.attr( "aria-valuenow", perc );
+                            utils.updateCounters( data.list.length, data.active.length );
                             utils.log( "file-downloaded", value.file );
                         }
                     }
@@ -487,8 +491,11 @@ var client = ( function () {
         get: function ( key ) {
             return data[ key ];
         },
-        set: function( key, val ) {
+        set: function ( key, val ) {
             data[ key ] = val;
+        },
+        getCount: function () {
+            return [ data.list.length, data.active.length ];
         },
         table: function () {
             return data.table;

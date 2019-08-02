@@ -7,7 +7,7 @@
         "locale": "it"
     },
     "tab-1-name": "Download",
-    "tab-1-title": "Download in corso",
+    "tab-1-title": "Lista download",
     "tab-2-name": "Gestisci",
     "tab-2-title": "Gestisci i download nel path",
     "tab-2-label-path": "Agisci nel path:",
@@ -129,6 +129,9 @@
 	"console-download-log-stop": "Fermato il log dei download in console",
     "delete-download-tooltip": "Attenzione! Questa azione cancella il file scaricato. Sei sicuro?",
     "delete-queue-tooltip": "Attenzione! Questa azione rimuove l'intera coda. Sei sicuro?",
+    "download-active": "Attivi:",
+    "download-completed": "Completati:",
+    "download-total": "Totale:",
     "download-deleted": "Cancellato il download di: $1",
     "download-stopped": "Fermato il download di: $1",
     "download-flow-error": "Flusso di download riavviato ($1)",

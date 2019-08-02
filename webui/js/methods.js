@@ -37,6 +37,7 @@ var downloads = {
                     $( this ).remove();
                 }
             } );
+            utils.updateCounters();
             utils.log( "downloads-completed-cleaned" );
         } );
     },
@@ -103,6 +104,7 @@ var downloads = {
                 client.remove( "active", fileName );
             }
             client.remove( "list", $.md5( link ) );
+            utils.updateCounters();
             utils.log( "download-deleted", fileName );
         } );
     }
@@ -1137,7 +1139,20 @@ var utils = {
         client.set( "channels", dataChannels );
     },
 
-    /* Fix localization in problematic areas */
+    /* Update download counters */
+    updateCounters: function ( ...args ) {
+        var counters = [];
+        if ( args.length ) {
+            counters = args;
+        } else {
+            counters = client.getCount();
+        }
+        $( "#counters .total" ).text( counters[0] );
+        $( "#counters .active" ).text( counters[1] );
+        $( "#counters .completed" ).text( counters[0] - counters[1] );
+    },
+
+    /* Force localization in problematic areas */
     localizeHard: function () {
         $( "#console-only-errors" ).checkboxradio( "option", "label", $.i18n( "radio-log-label" ) );
         $( ".input-editable" ).checkboxradio( "option", "label", $.i18n( "radio-edit-label" ) );
