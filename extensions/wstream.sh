@@ -58,7 +58,7 @@ then
 	## countdown- 6
 
 	file_in=$(get_title "$html" |head -n1)
-	file_in="${file_in#Download Free}"
+	file_in="${file_in#Download Free }"
 
 	#### 
 	# for wstream_exp in downloadlink dwn
@@ -97,6 +97,12 @@ then
 		    url "$url_in_file" && break
 		fi
 	    done
+	fi
+
+	if url "$url_in_file" &&
+		test -z "$file_in"
+	then
+	    file_in="${url_in_file##*\/}"
 	fi
 
 	check_wget || {
