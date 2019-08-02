@@ -223,7 +223,7 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
     if [ -z "$break_loop" ] 
     then
 	init_log
-	print_c $color_code "$msg"
+	print_c $color_code "%s" "$msg"
 	echo -e "$msg" >> $file_log
 	# no_msg=true
 	# unset from_loop
