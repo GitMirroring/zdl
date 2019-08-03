@@ -50,12 +50,11 @@ then
     		       tr '[A-Z]' '[a-z]'                             |
     		       sed -r 's/_amp//ig')
 
-
 	if command -v youtube-dl &>/dev/null
 	then
 	    data=$(youtube-dl --get-url -f best --get-filename "${url_in}")
 	    file_in="$(tail -n1 <<< "$data")"
-	    file_in="${file_in% _ *}"
+	    file_in="${title}${file_in% _ *}"
 
 	    url_in_file="$(tail -n2 <<< "$data" | head -n1)"
 
