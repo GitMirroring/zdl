@@ -54,8 +54,12 @@ then
 	then
 	    data=$(youtube-dl --get-url -f best --get-filename "${url_in}")
 	    file_in="$(tail -n1 <<< "$data")"
-	    file_in="${title}${file_in% _ *}"
-
+	    file_in="${file_in% _ *}"
+	    
+	    if [[ "$file_in" =~ ^(_|\ )$ ]]
+	    then
+		file_in="${title}${file_in}"
+	    fi
 	    url_in_file="$(tail -n2 <<< "$data" | head -n1)"
 
 	    if ! url "$url_in_file"
