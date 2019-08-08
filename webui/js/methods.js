@@ -599,7 +599,11 @@ var livestream = {
             path = elem.data( "path" ),
             channels = client.get( "channels" );
         myZDL.deleteLink( encodeURIComponent( link ), path ).then( function () {
-            utils.log( "livestream-delete", channels[link] );
+            var elem = $( "button.dl-delete[data-link='" + link + "']" );
+            if ( elem.length ) {
+                downloads.delete( elem );
+            }
+            utils.log( "livestream-delete", channels[ link.slice(0, link.lastIndexOf("#")) ] );
         } );
     }
 };
@@ -757,10 +761,10 @@ var zdlconsole = {
         var textArea = $( "#download-log" );
         if ( path === $( "#console-path" ).val() ) {
             myZDL.getConsoleLog( path, loop ).then( function ( res ) {
-                var logged = textArea.val(),
-                    response = res.replace(/^\s*[0-9\s]+(.*)$/gm, "$1"); // remove counters
-                response = response.replace(/^(Link da processare:)/gm, "\n$1"); // add empty line as block divider
-                textArea.val( logged + response ).animate( {
+                var content = textArea.val() + res;
+                    //response = res.replace(/^\s*[0-9\s]+(.*)$/gm, "$1"); // remove counters
+                //response = response.replace(/^(Link da processare:)/gm, "\n$1"); // add empty line as block divider
+                textArea.val( content ).animate( {
                     scrollTop: textArea.prop( "scrollHeight" ) - textArea.height()
                 }, 1000 );
                 zdlconsole.getDownloadLog( path, true );
@@ -776,8 +780,6 @@ var zdlconsole = {
     // Stop the download log flow
     stopDownloadLog( elem ) {
         var path = $( "#console-path" );
-        //elem.siblings( "#download-log" ).val( "" );
-        //$( "#console-path" ).val( "" );
         if ( path.val() ) {
             path.val( "" );
             myZDL.stopConsoleLog().then( function () {
@@ -789,9 +791,9 @@ var zdlconsole = {
     },
 
     // Clean all console entries
-    clean: function ( elem ) {
+    cleanEvents: function ( elem ) {
         elem.parent().prev().text( "" );
-        utils.log( "console-cleaned" );
+        utils.log( "console-events-cleaned" );
     }
 };
 
@@ -1006,8 +1008,9 @@ var utils = {
                 },
                 date = new Date(),
                 time = to2( date.getHours() ) + ":" + to2( date.getMinutes() ) + ":" + to2( date.getSeconds() ),
-                type = "event",
-                msg;
+                row = "row",
+                msg,
+                node;
 
             if ( param ) {
                 msg = $.i18n( key, param );
@@ -1016,11 +1019,12 @@ var utils = {
             }
 
             if ( error ) {
-                type = "error";
+                row += " error";
                 utils.switchToTab( 7 );
             }
 
-            $( "#console" ).append( "<span class='" + type + "'>" + time + " > " + msg.trim() + "</span>" );
+            node = "<div class='" + row + "'><div class='time'>" + time + "</div><div>" + msg + "</div></div>";
+            $( "#events" ).prepend( node );
         }
     },
 

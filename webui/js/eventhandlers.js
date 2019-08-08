@@ -81,7 +81,7 @@ function buttonHandler( e ) {
             "download-log-delete": common.deleteFile,
             "download-log-clean": zdlconsole.cleanDownloadLog,
             "download-log-stop": zdlconsole.stopDownloadLog,
-            "console-clean": zdlconsole.clean,
+            "events-clean": zdlconsole.cleanEvents,
             "webui-info-toggle": info.toggleWebuiInfo,
             "exit": exit.shutdown
         };
