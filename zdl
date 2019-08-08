@@ -49,7 +49,9 @@ function update_updater {
     [[ ! "$remote_version" =~ ^([0-9]+)$ ]] &&
 	remote_version=0
     
-    local_version=$(cat "$path_conf/version")
+    [ -s "$path_conf/version" ] &&
+	read local_version < "$path_conf/version"
+
     [[ ! "$local_version" =~ ^(-1|[0-9]+)$ ]] &&
 	local_version='-1'
 
@@ -207,7 +209,7 @@ done
 # if [ "${stdin}" != "${stdin//'pipe:['}" ]
 if [ -p /dev/fd/0 ]
 then    
-    pipe=$(cat /dev/fd/0)
+    read pipe < /dev/fd/0
     exec 0<$(echo /dev/$(ps ax| grep ^[\ ]*$$ | awk "{print $ps_ax_tty}"))
     
     args+=( $pipe )
@@ -1326,7 +1328,7 @@ fi
 
 if [ -f "$path_tmp/downloader" ]
 then
-    downloader_in=$(cat "$path_tmp/downloader")
+    read downloader_in < "$path_tmp/downloader"
 else
     echo $downloader_in > "$path_tmp/downloader"
 fi
@@ -1418,10 +1420,13 @@ function main_loop {
     local nline nlines loop_url_in url_in_old
     clean_livestream
 
+    test -f "$path_tmp"/max-dl &&
+	read max_dl < "$path_tmp"/max-dl
+    
     if ( [ "$this_mode" == "daemon" ] &&
 	     [ ! -s "$path_tmp"/links_loop.txt ] &&
 	     [ -z "$lite_mode" ] ) ||
-	   ( [ -n "$(cat "$path_tmp"/max-dl 2>/dev/null)" ] &&
+	   ( [ -n "$max_dl" ] &&
 		 ((max_dl < 1)) &&
 		 zero_dl )
     then
@@ -1441,14 +1446,16 @@ function main_loop {
 	    
 	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
 	    do
-		if check_pid $(cat "$gui_instance") &&
+		read gui_instance_pid < "$gui_instance"
+		if check_pid "$gui_instance_pid" &&
 			gui_alive=true
 		then
 		    check_linksloop_livestream
 		    break
 		fi
 	    done
-
+	    unset gui_instance_pid
+	    
 	    show_downloads
 	    
 	    if check_in_loop
@@ -1502,7 +1509,7 @@ function main_loop {
 	    
 	    if [ -f "$path_tmp/downloader" ]
 	    then
-		downloader_in=$(cat "$path_tmp/downloader")
+		read downloader_in < "$path_tmp/downloader"
 	    fi
 
 	    if check_link "$url_in"
@@ -1593,8 +1600,10 @@ function main_loop {
 		    items=( $(ls "$path_tmp"/filename_* 2>/dev/null) )
 		    for item in ${items[*]}
 		    do
-			url=$(cat "$item" 2>/dev/null)
-			if [ "${url%% }" == "$url_in" ]
+			unset __url
+			[ -f "$item" ] && read __url < "$item"
+
+			if [ "${__url%% }" == "$url_in" ]
 			then
 			    item="${item// /_}"
 			    file_in="${item#*filename_}"
@@ -1794,7 +1803,8 @@ fi
 
 if ! get_exit
 then
-    test_pid=$(cat "$path_tmp"/.pid.zdl 2>/dev/null)
+    [ -f "$path_tmp"/.pid.zdl ] &&
+	read test_pid < "$path_tmp"/.pid.zdl
 
     [ "$test_pid" == "$pid_prog" ] &&
 	! check_start_file &&

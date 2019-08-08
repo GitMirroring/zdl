@@ -993,7 +993,8 @@ function zero_dl {
     [ "$1" == show ] &&
 	unset hide_zero
     
-    max_dl=$(cat "$path_tmp"/max-dl 2>/dev/null)
+    test -f "$path_tmp"/max-dl &&
+	read max_dl < "$path_tmp"/max-dl
 
     if [ -n "$max_dl" ] && ((max_dl < 1))
     then
@@ -1015,6 +1016,7 @@ function zero_dl {
 function redirect {
     url_input="$1"
     sleeping 1
+    local pid wpid
 
     if ! url "$url_input" 
     then
@@ -1051,13 +1053,19 @@ function redirect {
 
 	if url "$url_redirect" &&
 		[ "$url_redirect" != "https://tusfiles.net" ]
-    	then 
-    	    kill -9 $(cat "$path_tmp"/pid_redirects) &>/dev/null
+    	then
+	    while read pid
+	    do
+    		kill -9 $pid &>/dev/null
+	    done < "$path_tmp"/pid_redirects
     	    break
 
 	elif (( $s>90 ))
     	then
-    	    kill -9 $(cat "$path_tmp"/pid_redirects) &>/dev/null
+	    while read pid
+	    do
+    		kill -9 $pid &>/dev/null
+	    done < "$path_tmp"/pid_redirects
     	    return
 
 	else
@@ -1207,11 +1215,13 @@ function set_exit {
 }
 
 function get_exit {
-    if [ -f "$path_tmp"/zdl_exit ] &&
-	   [ "$pid_prog" == "$(cat "$path_tmp"/zdl_exit)" ]
+    if [ -f "$path_tmp"/zdl_exit ]
     then
-	return 0
-
+	local test_exit
+	read test_exit < "$path_tmp"/zdl_exit
+	[ "$pid_prog" == "$test_exit" ] &&
+	    return 0 ||
+		return 1
     else
 	return 1
     fi
@@ -1388,9 +1398,13 @@ function create_hash {
 }
 
 function kill_ffmpeg {
+    local pid
     if [ -s "$path_tmp"/ffmpeg-pids ]
     then
-	kill $(cat "$path_tmp"/ffmpeg-pids) &>/dev/null
+	while read pid
+	do	    
+	    kill $line &>/dev/null
+	done  < "$path_tmp"/ffmpeg-pids
     fi
 }
 
