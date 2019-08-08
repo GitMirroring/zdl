@@ -264,9 +264,10 @@ function start_daemon_gui {
 function stop_daemon_gui {
     local pid
     
-    if [ -d "$path_tmp" ]
+    if [ -d "$path_tmp" ] &&
+	   [ -f "$path_tmp/.pid.zdl" ]
     then
-	pid=$(cat "$path_tmp/.pid.zdl")
+	read pid < "$path_tmp/.pid.zdl"
 
 	check_pid $pid &&
 	    kill -9 $pid &>/dev/null
@@ -304,11 +305,11 @@ function toggle_daemon_gui {
 ##########################################
 
 function kill_pid_file {
-    local pid_file="$1"
+    local pid_file="$1" pid
 
     if [ -s "$pid_file" ]
     then
-	local pid=$(cat "$pid_file")
+	read pid < "$pid_file"
 	[ -z "$2" ] &&
 	    rm "$pid_file"
 	kill -9 $pid
@@ -350,7 +351,7 @@ function exe_button_result {
 
     if [ -s "$yad_button_result_file" ]
     then
-	cmd=( $(cat "$yad_button_result_file") )
+	read -a cmd < "$yad_button_result_file"
 	rm "$yad_button_result_file"
 
 	eval "${cmd[@]}"
@@ -826,7 +827,9 @@ function get_livestream_list {
 function check_livestream_gui {
     if [ -s "$path_tmp"/livestream_gui_pid ]
     then
-	check_pid $(cat "$path_tmp"/livestream_gui_pid) &&
+	local pid
+	read pid < "$path_tmp"/livestream_gui_pid
+	check_pid $pid &&
 	    return 0		
     fi
     return 1
@@ -1249,15 +1252,19 @@ function display_sockets_gui {
 
 function display_multiprogress_opts {
     declare -a dlers=( Aria2 Wget Axel )
-    local dler=$(cat "$path_tmp"/downloader)
+    local dler
+    read dler < "$path_tmp"/downloader
     dlers=( ${dlers[@]//$dler} )
     local downloaders="${dler}!"
     downloaders+=$(tr ' ' '!' <<< "${dlers[*]}")
 
-    local max_dl="$(cat "$path_tmp"/max-dl)!0..20"
+    local max_dl
+    test -f "$path_tmp"/max-dl && read max_dl < "$path_tmp"/max-dl
+    max_dl+="!0..20"
   
-    local text="$TEXT\n\n"
-    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
+    local text="$TEXT\n\n" format
+    test -f "$path_tmp"/format-post_processor &&
+	read format < "$path_tmp"/format-post_processor
     [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
     
     {
@@ -1381,7 +1388,7 @@ function display_console_gui {
 	sleep 0.1
     done
 
-    pid_c=$(cat /tmp/display_console_gui_zdl.pid)
+    read pid_c < /tmp/display_console_gui_zdl.pid
     
     if [ -n "$1" ]
     then
@@ -1461,7 +1468,9 @@ function get_GUI_ID {
 function check_instance_yad_multiprogress {
     if [ -s "$yad_multiprogress_pid_file" ]
     then
-	check_pid $(cat "$yad_multiprogress_pid_file") &&
+	local pid
+	read pid < "$yad_multiprogress_pid_file"
+	check_pid $pid &&
 	    {
 		return 0
 	    } || {
@@ -1473,7 +1482,7 @@ function check_instance_yad_multiprogress {
 }
 
 function check_instance_gui {
-    local pid_id 
+    local pid_id pid
 
     if [ -n "$(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)" ]
     then
@@ -1483,7 +1492,8 @@ function check_instance_gui {
 	    if [[ "$line" =~ \.([0-9]+)$ ]]
 	    then
 		pid_id=${BASH_REMATCH[1]}
-		if check_pid $(cat "$line")
+		read pid < "$line"
+		if check_pid $pid
 		then
 		    return 0
 		else
@@ -1569,18 +1579,23 @@ function run_gui {
 }
 
 function tail_recall {
-	display_multiprogress_gui
-
-	if [ "$(cat "$exit_file")" == $GUI_ID  ]
-	then
-	    rm "$exit_file"
-	    exit
-	fi
-	tail_recall
+    display_multiprogress_gui
+    local id_test
+    read id_test < "$exit_file"
+    if [ "$id_test" == $GUI_ID  ]
+    then
+	rm "$exit_file"
+	exit
+    fi
+    tail_recall
 }
 
 function check_pid_file {
-    if [ -s "$1" ] && check_pid $(cat "$1")
+    local pid
+
+    if [ -s "$1" ] &&
+	   read pid < "$1" &&
+	   check_pid $pid
     then
 	return 0
     else
@@ -1616,7 +1631,9 @@ function display_xdcc_eu_gui {
 	--borders=5
     )
 
-    local pid=$(cat "$path_tmp"/xdcc_eu_lock 2>/dev/null)
+    local pid
+    test -f "$path_tmp"/xdcc_eu_lock &&
+	read pid < "$path_tmp"/xdcc_eu_lock
     local xdcc_eu_searchkey="$1"
     local xdcc_eu_search_link="${XDCC_EU_SEARCHKEY_URL}${xdcc_eu_searchkey// /+}"
     

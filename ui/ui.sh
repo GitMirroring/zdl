@@ -135,10 +135,10 @@ function show_downloads_extended {
 	then
 	    if [ "$this_tty" == "$that_tty" ]
 	    then
-		term_msg="$(gettext "in this same terminal:") $this_tty"
+		term_msg="$(gettext "in this same terminal:") $this_tty (pid: $that_pid)"
 
 	    else
-		term_msg="$(gettext "in another terminal:") $that_tty"
+		term_msg="$(gettext "in another terminal:") $that_tty (pid: $that_pid)"
 	    fi
 	    
 	    print_c 1 "$(gettext "%s is running in standard mode %s")\n" "$PROG" "$term_msg" 

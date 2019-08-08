@@ -25,7 +25,13 @@ var ZDL = {
     "path": "",
     "pathDesktop": "",
     "visible": [],
-    "webUI": ["1","2","3","lite"]
+    "webUI": ["1","2","3","lite"],
+    "webuiNames": {
+	"1": "Default",
+	"2": "Multilang",
+	"3": "Multilang dark",
+	"lite": "Lite"
+    }
 };
 
 var toHtmlEntities = function (str) {
@@ -594,16 +600,14 @@ var getStatus = function (repeat, op) {
 };
 
 var displayPaths = function (paths) {
-    if (paths[0]) {
-	var spec = {
-            value: "",
-            options: paths
-	};
+    var spec = {
+        value: "",
+        options: paths
+    };
 	spec.key = "active-path-manager";
-	displayInputSelect(spec, "active-paths-manager", "changePath");
-	spec.key = "active-path-console";
-	displayInputSelect(spec, "active-paths-console", "displayConsole");
-    }
+    displayInputSelect(spec, "active-paths-manager", "changePath");
+    spec.key = "active-path-console";
+    displayInputSelect(spec, "active-paths-console", "displayConsole");
 }
 
 var changePath = function(spec){
@@ -759,28 +763,26 @@ var displayReconnecter = function (value, id) {
 var displayInputSelect = function (spec, id, callback) {
     // spec = {key: options: value:}
     var output = "<div class='btn-select'><select id='input-" + spec.key + "' onchange='" + callback + "(" + objectToString(spec) + ");'>";
-
-    /****** AGGIORNAMENTO: Visualizzare nomi delle webui nel selector ******/
-    var selected, otpName;
-	var webuiNames = {"1":"Default", "2":"Multilang", "3":"Multilang dark", "lite":"Lite"};
-
-	if (!spec.value) {
-		output += "<option selected></option>";
+    var selected, otpName;    
+    if (!spec.value) {
+	output += "<option selected></option>";
     }
-
     spec.options.forEach(function (item) {
     	if (spec.value === item) {
-	    	selected = " selected";
-		} else {
-			selected = "";
+	    selected = " selected";
+	} else {
+	    selected = "";
         }
+	if (spec.key === "web_ui") {
+	    optName = ZDL.webuiNames[item];
+	} else {
+	    optName = item;
+	}
 
-		optName = webuiNames[item] || item;
-		output += "<option value='" + item + "'" + selected + ">" + optName + "</option>";
+	output += "<option value='" + item + "'" + selected + ">" + optName + "</option>";
     });
-    /****** FINE AGGIORNAMENTO ******/
     output += "</select></div>";
-
+    
     document.getElementById(id).innerHTML = output;
 };
 
@@ -1037,108 +1039,108 @@ var displayConf = function (conf) {
         var spec = {
             "key": item,
             "value": cleanInput(conf[item])
-        },
-        options = {
-            "web_ui": ZDL.webUI,
-            "conf_downloader": ["Aria2", "Axel", "Wget"],
-            "background": ["transparent", "black"],
-            "language": ["it"],
-            "resume": ["enabled", "disabled"],
-            "autoupdate": ["enabled", "disabled"],
-            "zdl_mode": ["stdout", "lite", "daemon"]
-        },
-        spinners = {
-            "axel_parts": {min:1, max:32},
-            "aria2_connections": {min:1, max:16},
-            "max_dl": {min:0, max:100},
-            "tcp_port": {min:1025, max:65535},
-            "udp_port": {min:1025, max:65535},
-            "socket_port": {min:1025, max:65535}
+        }
+        var options = {
+	    "web_ui": ZDL.webUI,
+	    "conf_downloader": ["Aria2", "Axel", "Wget"],
+	    "background": ["transparent", "black"],
+	    "language": ["it"],
+	    "resume": ["enabled", "disabled"],
+	    "autoupdate": ["enabled", "disabled"],
+	    "zdl_mode": ["stdout", "lite", "daemon"]
+        }	    
+        var spinners = {
+	    "axel_parts": {min:1, max:32},
+	    "aria2_connections": {min:1, max:16},
+	    "max_dl": {min:0, max:100},
+	    "tcp_port": {min:1025, max:65535},
+	    "udp_port": {min:1025, max:65535},
+	    "socket_port": {min:1025, max:65535}
         };
 
         switch (item) {
-            case "web_ui":
-            case "conf_downloader":
-            case "background":
-            case "language":
-            case "resume":
-            case "autoupdate":
-            case "zdl_mode":
-                if (!spec.options) {
-                    spec.options = options[item];
-                    if (item === "resume" || item === "autoupdate") {
-                        if (spec.value !== "enabled") spec.value = "disabled";
-                    }
-                    displayInputSelect(spec, "conf-" + spec.key, "setConf");
-                } else {
-                    console.log("not spec options");
+        case "web_ui":
+        case "conf_downloader":
+        case "background":
+        case "language":
+        case "resume":
+        case "autoupdate":
+        case "zdl_mode":
+            if (!spec.options) {
+                spec.options = options[item];
+                if (item === "resume" || item === "autoupdate") {
+                    if (spec.value !== "enabled") spec.value = "disabled";
                 }
+                displayInputSelect(spec, "conf-" + spec.key, "setConf");
+            } else {
+                console.log("not spec options");
+            }
             break;
-            case "axel_parts":
-            case "aria2_connections":
-            case "max_dl":
-            case "tcp_port":
-            case "udp_port":
-            case "socket_port":
-                if (isNaN(spec.min) || isNaN(spec.max)) {
-                    spec.min = spinners[item].min;
-                    spec.max = spinners[item].max;
-                } else {
-                    console.log("not spec min / max");
-                }
+        case "axel_parts":
+        case "aria2_connections":
+        case "max_dl":
+        case "tcp_port":
+        case "udp_port":
+        case "socket_port":
+            if (isNaN(spec.min) || isNaN(spec.max)) {
+                spec.min = spinners[item].min;
+                spec.max = spinners[item].max;
+            } else {
+                console.log("not spec min / max");
+            }
 
-                var output = "<button class='btn' onclick='displayInputNumber(" + objectToString(spec) + ", \"conf-" + spec.key + "\");'>Cambia</button>";
+            var output = "<button class='btn' onclick='displayInputNumber(" + objectToString(spec) + ", \"conf-" + spec.key + "\");'>Cambia</button>";
 
-                document.getElementById("conf-" + spec.key).innerHTML = "<div class='value-number'>" + spec.value + "</div>" + output;
+            document.getElementById("conf-" + spec.key).innerHTML = "<div class='value-number'>" + spec.value + "</div>" + output;
             break;
-            case "reconnecter":
-            case "player":
-            case "editor":
-            case "browser":
-                var id_inputFile = "conf-input-file-" + spec.key;
-                var inputFile = document.getElementById(id_inputFile);
+        case "reconnecter":
+        case "player":
+        case "editor":
+        case "browser":
+            var id_inputFile = "conf-input-file-" + spec.key;
+            var inputFile = document.getElementById(id_inputFile);
 
-                var id_inputText = "conf-" + spec.key + "-text";
-                var inputText = document.getElementById(id_inputText);
+            var id_inputText = "conf-" + spec.key + "-text";
+            var inputText = document.getElementById(id_inputText);
 
-                inputFile.innerHTML = "<div class='value'>" + spec.value + "</div>" +
-                    "<button class='btn' id='conf-browse-file-" + spec.key + "'>Sfoglia</button>";
+            inputFile.innerHTML = "<div class='value'>" + spec.value + "</div>" +
+                "<button class='btn' id='conf-browse-file-" + spec.key + "'>Sfoglia</button>";
 
-                inputFile.style.display = "initial";
+            inputFile.style.display = "initial";
 
-                spec.id = id_inputFile;
-                spec.callback = browseFile;
-                spec.type = "executable";
-                spec.path = ZDL.path;
+            spec.id = id_inputFile;
+            spec.callback = browseFile;
+            spec.type = "executable";
+            spec.path = ZDL.path;
 
-                onClick({
-                    id: "conf-browse-file-" + spec.key,
-                    callback: function (params) {
-                        document.getElementById(id_inputText).style.display = "none";
-                        browseFile(params);
-                    },
-                    params: spec
-                });
+            onClick({
+                id: "conf-browse-file-" + spec.key,
+                callback: function (params) {
+                    document.getElementById(id_inputText).style.display = "none";
+                    browseFile(params);
+                },
+                params: spec
+            });
 
-                inputText.innerHTML = "<button class='btn' id='conf-text-file-" + spec.key + "'>Scrivi</button>";
-                inputText.style.display = "initial";
+            inputText.innerHTML = "<button class='btn' id='conf-text-file-" + spec.key + "'>Scrivi</button>";
+            inputText.style.display = "initial";
 
-                spec.idDiv = id_inputText;
-                spec.idHide = id_inputFile;
-                spec.idInput = "input-" + spec.key;
-                spec.callback = setConf;
+            spec.idDiv = id_inputText;
+            spec.idHide = id_inputFile;
+            spec.idInput = "input-" + spec.key;
+            spec.callback = setConf;
 
-                onClick({
-                    id: "conf-text-file-" + spec.key,
-                    callback: function (params) {
-                        document.getElementById(params.idHide).style.display = "none";
-                        displayInputText(params);
-                    },
-                    params: spec
-                });
+            onClick({
+                id: "conf-text-file-" + spec.key,
+                callback: function (params) {
+                    document.getElementById(params.idHide).style.display = "none";
+                    displayInputText(params);
+                },
+                params: spec
+            });
             break;
-            default:
-                return false;
+        default:
+            return false;
         }
         //console.log(spec);
     });

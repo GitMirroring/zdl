@@ -38,12 +38,17 @@ function check_instance_daemon {
     unset daemon_pid
 
     ## ritardare il controllo
-    while (( $(date +%s) < $(cat "$path_tmp"/.date_daemon 2>/dev/null)+2 ))
+    local date_daemon
+    test -f "$path_tmp"/.date_daemon &&
+	read date_daemon < "$path_tmp"/.date_daemon
+
+    while (( $(date +%s) < (date_daemon + 2) ))
     do
 	echo -ne "$(sprint_c 2 "Avvio modalità demone...")\r"
 	sleep 0.1
     done
-    
+
+    ## controllo
     [ -d /cygdrive ] &&
 	cyg_condition='&& ($2 == 1)'
 
@@ -53,7 +58,6 @@ function check_instance_daemon {
     if [[ "$daemon_pid" =~ ^([0-9]+)$ ]]
     then
 	return 0
-
     else
 	unset daemon_pid
 	return 1
@@ -61,16 +65,23 @@ function check_instance_daemon {
 }
 
 function check_instance_prog {
-    local test_pid
-    
+    local test_pid test_cmdline
+
     if [ -f "$path_tmp/.pid.zdl" ]
     then
-	test_pid="$(cat "$path_tmp/.pid.zdl" 2>/dev/null)"
-	if check_pid "$test_pid" && [ "$pid_prog" != "$test_pid" ]
+	read test_pid < "$path_tmp/.pid.zdl"
+
+	if test -f /proc/"$test_pid"/cmdline
 	then
-	    that_pid=$test_pid
-	    that_tty=$(tty_pid "$test_pid")
-	    return 0
+	    read test_cmdline < /proc/"$test_pid"/cmdline
+	    
+	    if [[ "$test_cmdline" =~ \/bin\/zdl ]] &&
+		   check_pid "$test_pid" && [ "$pid_prog" != "$test_pid" ]
+	    then
+		that_pid=$test_pid
+		tty_pid "$test_pid" that_tty
+		return 0
+	    fi
 	fi
     fi
 
@@ -351,7 +362,9 @@ function set_link {
 function check_link {
     local link="$1"
     local i ret=0
-    local max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
+    local max_dl
+    test -f "$path_tmp/max-dl" &&
+	read max_dl < "$path_tmp/max-dl"
 
     if [ -z "$max_dl" ]
     then
@@ -399,9 +412,9 @@ function check_link {
 }
 
 function check_in_loop {
-    local line i j \
-	  max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null) \
-	  ret=1
+    local line i j max_dl ret=1
+    test -f "$path_tmp/max-dl" &&
+	read max_dl < "$path_tmp/max-dl"
 
     if data_stdout
     then
@@ -677,9 +690,13 @@ function check_start_file {
 }
 
 function pipe_files {
-    local line
-    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
-    local print_out=$(cat "$path_tmp"/print_out-post_processor 2>/dev/null)
+    local line format print_out
+
+    test -f "$path_tmp"/format-post_processor &&
+	read format < "$path_tmp"/format-post_processor
+    
+    test -f "$path_tmp"/print_out-post_processor &&
+	read print_out < "$path_tmp"/print_out-post_processor
 
     [ -z "$print_out" ] && [ -z "${pipe_out[*]}" ] && return
 
@@ -687,7 +704,7 @@ function pipe_files {
     then
 	if [ -f "$path_tmp"/pid_pipe ]
 	then
-	    pid_pipe_out=$(cat "$path_tmp"/pid_pipe)
+	    read pid_pipe_out < "$path_tmp"/pid_pipe
 	else
 	    pid_pipe_out=NULL
 	fi
@@ -708,7 +725,7 @@ function pipe_files {
 	    return
 
 	else
-	    outfiles=( $(cat "$path_tmp"/pipe_files.txt) )
+	    read -a outfiles < "$path_tmp"/pipe_files.txt
 
 	    if [ -n "${outfiles[*]}" ]
 	    then
@@ -794,13 +811,22 @@ function tty_pid {
     
     if [ -e "/cygdrive" ]
     then
-	that_tty="$(cat /proc/$pid/ctty)"
+	test -f /proc/$pid/ctty
+	read that_tty < /proc/$pid/ctty
     else
 	that_tty=$(ps ax |grep -P '^[\ ]*'$pid)
 	that_tty="${that_tty## }"
 	that_tty="/dev/"$(cut -d ' ' -f 2 <<< "${that_tty## }")
     fi
-    echo "$that_tty"
+
+    if [ -n "$2" ]
+    then
+	declare -n ref="$2"
+	ref="$that_tty"
+
+    else
+	echo "$that_tty"
+    fi
 }
 
 function grep_tty {
@@ -1264,7 +1290,7 @@ function run_zdl_server {
 	   ((port > 1024 )) && (( port < 65535 )) &&
 	   check_port $port
     then
-	socat TCP-LISTEN:$port,fork,reuseaddr EXEC:"$path_usr/zdl_server.sh $port" 2>/dev/null &
+	socat TCP-LISTEN:$port,fork,reuseaddr EXEC:"$path_usr/zdl_server.sh $port" 2>/dev/null & #2>serverlog-$(date +%s).txt & 
 	disown
 	set_line_in_file + $port "$path_server"/socket-ports
 

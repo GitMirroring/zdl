@@ -467,7 +467,7 @@ function get_status_conf {
 }
 
 function create_status_json {
-    local reconn
+    local reconn max_dl downloader
 
     [ -n "$1" ] &&
 	declare -n ref_string_output="$1" ||
@@ -493,7 +493,9 @@ function create_status_json {
 	mkdir -p "$path_tmp"
 	get_item_conf 'downloader' >"$path_tmp/downloader"
     fi
-    ref_string_output+="\"downloader\":\"$(cat "$path_tmp/downloader")\","
+    #read downloader < "$path_tmp/downloader"
+    downloader=$(< "$path_tmp/downloader")
+    ref_string_output+="\"downloader\":\"$downloader\","
 
     ## max downloads
     if [ ! -f "$path_tmp/max-dl" ]
@@ -501,7 +503,9 @@ function create_status_json {
 	mkdir -p "$path_tmp"
 	get_item_conf 'max_dl' >"$path_tmp/max-dl"
     fi
-    ref_string_output+="\"maxDownloads\":\"$(cat "$path_tmp/max-dl")\","
+    #read max_dl < "$path_tmp/max-dl"
+    max_dl=$(< "$path_tmp/max-dl")
+    ref_string_output+="\"maxDownloads\":\"$max_dl\","
 
     ## reconnect
     [ -f "$path_tmp"/reconnect ] && reconn=enabled || reconn=disabled
@@ -615,7 +619,9 @@ function search_xdcc {
 }
 
 function clean_playlist {
-    local line playlist="["
+    local line playlist="[" \
+	  server_playlist
+    read server_playlist < "$path_server"/playlist
 
     while read line
     do
@@ -623,7 +629,7 @@ function clean_playlist {
     	then
     	    playlist+="\"$line\","
     	fi
-    done < <(node -e "$(cat "$path_server"/playlist).forEach(function(f){console.log(f)})")
+    done < <(node -e "${server_playlist}.forEach(function(f){console.log(f)})")
 
     playlist="${playlist%,}]"
     
@@ -649,18 +655,21 @@ function check_playlist {
 
 function get_paths_json {
     declare -n ref=$1
-    local path
+    local path pid
+    local old_path="$PWD"
     ref='['
     
     while read path
     do
-	if [ -s "$path"/.zdl_tmp/.pid.zdl ] &&
-	       check_pid $(cat "$path"/.zdl_tmp/.pid.zdl)
+	cd "$path"
+	if check_instance_prog || check_instance_daemon
 	then
 	    ref+="\"$path\","
 	fi
 	
     done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+
+    cd "$old_path"
     ref="${ref%\,}]"
 }
 
@@ -1087,22 +1096,33 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	    if [ "${line[2]}" == 'loop' ]
 	    then
-		[ -s "$path_server"/pid_loop_status.$socket_port ] &&
-		    kill -9 $(cat "$path_server"/pid_loop_status.$socket_port 2>/dev/null) 2>/dev/null
-
+		if [ -s "$path_server"/pid_loop_status.$socket_port ]
+		then
+		    local pid_loop_status
+		    read pid_loop_status < "$path_server"/pid_loop_status.$socket_port
+		    kill -9 $pid_loop_status 2>/dev/null
+		fi
+		
 		echo "$PWD" > "$path_server"/path.$socket_port
 
 		unset line[2]
 		while ! check_port $socket_port
 		do
-		    [ -s "$path_server"/path.$socket_port ] &&
-			cd $(cat "$path_server"/path.$socket_port)
-
+		    if [ -s "$path_server"/path.$socket_port ]
+		    then
+			local path_socket
+			read path_socket < "$path_server"/path.$socket_port
+			cd "$path_socket"
+		    fi
+		    
 		    create_status_json string_output
 		    current_timeout=$(date +%s)
 
+		    [ -s "$file_output" ] &&
+			read file_output_val < "$file_output"
+		    
 		    if [ ! -s "$file_output" ] ||
-			   [ "$string_output" != "$(cat "$file_output")" ] ||
+			   [ "$string_output" != "$file_output_val" ] ||
 			   (( (current_timeout - start_timeout) > 240 ))
 		    then
 			init_client "$PWD" "$socket_port"
@@ -1739,9 +1759,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    {
 			cd "${line[i]}"
 
-			if [ -d "$path_tmp" ]
+			if [ -s "$path_tmp/.pid.zdl" ]
 			then
-			    pid=$(cat "$path_tmp/.pid.zdl")
+			    read pid < "$path_tmp/.pid.zdl"
 
 			    check_pid $pid &&
 				kill -9 $pid &>/dev/null
@@ -1761,9 +1781,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    {
 			cd "${line[i]}"
 
-			if [ -d "$path_tmp" ]
+			if [ -s "$path_tmp/.pid.zdl" ]
 			then
-			    pid=$(cat "$path_tmp/.pid.zdl")
+			    read pid < "$path_tmp/.pid.zdl"
 
 			    check_pid $pid &&
 				kill -9 $pid &>/dev/null
@@ -1793,8 +1813,8 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    cd "$path"
 
 	    	kill_downloads
-
-		instance_pid=$(cat "$path_tmp"/.pid.zdl)
+		[ -s "$path_tmp"/.pid.zdl ] &&
+		    read instance_pid < "$path_tmp"/.pid.zdl
 		[ -n "$instance_pid" ] &&
 		    {
 			kill -9 "$instance_pid" &>/dev/null
