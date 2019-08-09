@@ -519,7 +519,7 @@ function create_status_json {
     local paths
     get_livestream_json status
     ref_string_output+="\"livestream\":$status,"
-    
+
     ## conf
     get_status_conf status
     ref_string_output+="\"conf\":$status"
@@ -532,7 +532,7 @@ function get_livestream_json {
     local path
     declare -a line
     ref='['
-    
+
     while read path
     do
 	if [ -s "$path"/"$path_tmp"/livestream_time.txt ]
@@ -543,7 +543,7 @@ function get_livestream_json {
 		    ref+="{\"path\":\"$path\",\"link\":\"${line[0]}\",\"start\":\"${line[1]}\",\"duration\":\"${line[2]}\"},"
 	    done < "$path"/"$path_tmp"/livestream_time.txt
 	fi
-	
+
     done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
     ref="${ref%\,}]"
 }
@@ -632,13 +632,13 @@ function clean_playlist {
     done < <(node -e "${server_playlist}.forEach(function(f){console.log(f)})")
 
     playlist="${playlist%,}]"
-    
+
     echo -e "$playlist" > "$path_server"/playlist
-}    
+}
 
 function check_playlist {
     local list="$1"
-    
+
     if [ -n "$list" ] && [ "$list" != "[]" ]
     then
 	list=$(echo "${list}" | sed 's/\("\),\+\([^"]\)/\1\2/g' | sed 's/\([^"]\),\+/\1/g')
@@ -649,7 +649,7 @@ function check_playlist {
 	then
 	    return 1
 	fi
-    fi    
+    fi
     return 0
 }
 
@@ -658,7 +658,7 @@ function get_paths_json {
     local path pid
     local old_path="$PWD"
     ref='['
-    
+
     while read path
     do
 	cd "$path"
@@ -666,7 +666,7 @@ function get_paths_json {
 	then
 	    ref+="\"$path\","
 	fi
-	
+
     done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
     cd "$old_path"
@@ -754,7 +754,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    send_json ${line[1]} || return
 	    ;;
 
-	get-console)	    
+	get-console)
 	    test -d "${line[1]}" && cd "${line[1]}"
 	    file_output="$path_tmp"/console_stdout.$socket_port
 	    local loop_console="${line[2]}"
@@ -769,7 +769,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    do
 		cp "$gui_log" "$file_output"
 		diff_out=$(comm --nocheck-order -23 "$file_output" "$file_output".diff)
-		
+
 		if [ -n "$diff_out" ]
 		then
 		    echo "$diff_out" >"$file_output"
@@ -801,7 +801,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	set-livestream)
 	    file_output="$path_server"/livestream
 	    test -d "${line[1]}" && cd "${line[1]}"
-	    
+
 	    if url "${line[2]}" &&
 		    [ -n "${line[3]}" ] &&
 		    [ -n "${line[4]}" ]
@@ -810,21 +810,21 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		tag_link "${line[2]}" live_link
 		set_link + "$live_link"
 		set_livestream_time "$live_link" "${line[3]}" "${line[4]}"
-		run_livestream_timer "$live_link" "${line[3]}" &&		
+		run_livestream_timer "$live_link" "${line[3]}" &&
 		    echo "true" >"$file_output" ||
 			echo "false" >"$file_output"
 	    else
 		echo "false" >"$file_output"
 	    fi
 	    ;;
-	
+
 	get-playlist)
 	    file_output="$path_server"/playlist
 	    clean_playlist
             list=$(< "$file_output")
 
             if check_playlist "$list"
-            then		
+            then
 		touch "$file_output"
 
             else
@@ -837,12 +837,12 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	add-playlist)
             file_output="$path_server"/playlist
 	    clean_playlist
-	    
+
             if [ -f "${line[1]}" ] &&
 		   [[ "$(file -b --mime-type "${line[1]}")" =~ (video|audio) ]]
             then
 		list=$(< "$file_output")
-		
+
 		if check_playlist "$list"
     		then
                     if [ -z "$list" ] || [ "$list" == "[]" ]
@@ -888,7 +888,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    get_conf
 	    file_output="$path_server"/playlist-file.$socket_port
 	    local term
-	    
+
 	    #local item
 	    declare -a list
 	    while read item
@@ -900,7 +900,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    #unset item
 	    declare -a opts=()
 	    local id=0
-	    
+
 	    if [ -z "$player" ]
 	    then
 	    	echo -e "Non è stato configurato alcun player per audio/video" > "$file_output"
@@ -912,7 +912,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		then
 		    local playlist="#EXTM3U"
 		    local title
-		    
+
 		    for item in "${list[@]}"
 		    do
 			if [[ -e "$item" ]]
@@ -935,7 +935,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 				Space
 				--global-key-next
 				Enter
-			    ) 
+			    )
 			fi
 
 			if [[ "$player_filename" =~ ^mpv ]]
@@ -971,7 +971,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    else
 			echo -e "Nessun file audio trovato" > "$file_output"
 		    fi
-		    
+
 		elif [ -n "$player" ] &&
 			 [[ "$player" =~ ^([^\ ]+) ]]
 		then
@@ -1008,7 +1008,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    get_conf
 	    file_output="$path_server"/msg-file.$socket_port
 	    local term
-	    
+
 	    if [ -f "${line[1]}" ]
 	    then
 		if [ -z "$player" ]
@@ -1029,13 +1029,13 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    then
 			term="xterm -e"
 		    fi
-		    
+
 		    case "$player_filename" in
 			mpv)
 			    opts+=(
 				--profile=pseudo-gui
 			    )
-			    
+
 			    [[ "$(file -b --mime-type "${line[1]}")" =~ (audio) ]] &&
 				opts+=(
 				    --geometry=800x50
@@ -1102,7 +1102,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 		    read pid_loop_status < "$path_server"/pid_loop_status.$socket_port
 		    kill -9 $pid_loop_status 2>/dev/null
 		fi
-		
+
 		echo "$PWD" > "$path_server"/path.$socket_port
 
 		unset line[2]
@@ -1114,13 +1114,13 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			read path_socket < "$path_server"/path.$socket_port
 			cd "$path_socket"
 		    fi
-		    
+
 		    create_status_json string_output
 		    current_timeout=$(date +%s)
 
 		    [ -s "$file_output" ] &&
 			read file_output_val < "$file_output"
-		    
+
 		    if [ ! -s "$file_output" ] ||
 			   [ "$string_output" != "$file_output_val" ] ||
 			   (( (current_timeout - start_timeout) > 240 ))
@@ -1825,6 +1825,12 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	    init_client
 	    ;;
+
+    get-language)
+        file_output="$path_server"/language.i18n
+        local lang=$(get_item_conf 'language')
+        echo "$lang" > "$file_output"
+        ;;
 
 	get-conf)
 	    get_conf

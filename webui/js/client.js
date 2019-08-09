@@ -19,7 +19,7 @@
 //  For information or to collaborate on the project:
 //  https://savannah.nongnu.org/projects/zdl
 
-/* jshint esversion: 7 */
+/* jshint esversion: 8 */
 
 var client = ( function () {
     var data = {
@@ -345,6 +345,12 @@ var client = ( function () {
             }, {
                 responsivePriority: 3,
                 targets: -4
+            }, {
+                responsivePriority: 4,
+                targets: -2
+            }, {
+                responsivePriority: 5,
+                targets: -3
             } ],
             language: {
                 url: "/i18n/" + lang + ".lang"
@@ -356,28 +362,18 @@ var client = ( function () {
     function showUI() {
         $( ".loader" ).hide();
         $( ".wrapper" ).show();
-        console.log( "ZDL UI start" );
+        console.log( "ZDL web UI start" );
     }
 
     /*Start the client */
-    function init() {
-        // Retrieve the configured language
-        var language = document.cookie.replace( /(?:(?:^|.*;\s*)_zdlstartuplanguage\s*\=\s*([^;]*).*$)|^.*$/, "$1" );
-        if ( language ) {
-            localStorage.setItem( "ZDLlanguage", language );
-            console.log( "ZDL language (cookie): " + language.toUpperCase() );
-            document.cookie = "_zdlstartuplanguage=; Thu, 01 Jan 1970 00:00:01 GMT";
-        } else {
-            language = localStorage.getItem( "ZDLlanguage" );
-            if ( language ) {
-                console.log( "ZDL language (storage): " + language.toUpperCase() );
-            } else {
-                language = "en";
-                console.log( "Unable to get ZDL language. Use default: EN" );
-            }
+    function init( lang ) {
+
+        if ( !lang ) {
+            lang = "en";
+            console.log( "ZDL language is undefined! Use default: EN" );
         }
 
-        data.locale = language;
+        data.locale = lang;
 
         // Load i18n strings
         $.i18n().load( {
@@ -385,9 +381,9 @@ var client = ( function () {
             en: "i18n/en.json"
         } ).done( function () {
             // Localize
-            $.i18n().locale = language;
+            $.i18n().locale = lang;
             $( "body" ).i18n();
-            utils.log( "start-locale", language.toUpperCase() );
+            utils.log( "start-locale", lang.toUpperCase() );
 
             // Init widgets
             $( "#tabs" ).tabs( {

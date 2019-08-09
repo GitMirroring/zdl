@@ -57,6 +57,10 @@ class ZDL {
         return this.request( `cmd=init-client&path=${this.path}` );
     }
 
+    getLanguage() {
+        return this.request( "cmd=get-language" );
+    }
+
     getStatus( loop ) {
         var query = `cmd=get-status&path=${this.path}`;
         if ( loop ) query += "&op=loop";

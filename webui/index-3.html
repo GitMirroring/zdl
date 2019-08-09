@@ -19,7 +19,7 @@
 
 <body>
     <div class="header"><a class="logo" href="">ZDL web UI</a></div>
-    <div class="loader">Loading ...</div>
+    <div class="loader"><div class="donut"></div></div>
     <div class="wrapper">
         <div id="tabs">
             <ul>
@@ -39,7 +39,7 @@
             <div id="tabs-1">
                 <div class="clearfix">
                     <div class="float-left">
-                        <h4 data-i18n="tab-1-title">Downloads in progress</h4>
+                        <h4 data-i18n="tab-1-title">Download</h4>
                     </div>
                     <div class="float-right">
                         <button data-i18n="button-clean-completed" id="downloads-clean" class="button">Clean completed</button>
@@ -483,7 +483,7 @@
                     <div data-i18n="tab-8-label-log-path" class="label">Path log:</div>
                     <input id="console-path" type="text" readonly>
                 </div>
-                <div class="static-area ui-widget-content ui-corner-all">
+                <div class="log-container ui-widget-content ui-corner-all">
                     <textarea id="download-log" readonly></textarea>
                     <button data-i18n="button-clean" id="download-log-clean" class="button">Clean</button>
                     <button data-i18n="button-stop" id="download-log-stop" class="button">Stop</button>
@@ -493,9 +493,9 @@
                     <label data-i18n="radio-log-label" for="console-only-errors">Records only errors</label>
                     <input type="checkbox" name="console-only-errors" id="console-only-errors">
                 </div>
-                <div id="console" class="console"></div>
-                <div class="centered">
-                    <button data-i18n="button-clean" id="console-clean" class="button">Clean</button>
+                <div class="events-container ui-widget-content ui-corner-all">
+                    <div id="events" class="events"></div>
+                    <div class="clean"><button data-i18n="button-clean" id="events-clean" class="button">Clean</button></div>
                 </div>
             </div>
 
@@ -573,7 +573,9 @@
 
         var myZDL = new ZDL( "__START_PATH__", "index.html" );
 
-        client.init();
+        myZDL.getLanguage().then( function ( res ) {
+            client.init( res.trim() );
+        } );
     </script>
 </body>
 
