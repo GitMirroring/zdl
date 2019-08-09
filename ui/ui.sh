@@ -25,17 +25,18 @@
 #
 
 function show_downloads {
+    local cols
     if test -f "$path_tmp"/columns
     then
-	local cols=$(cat "$path_tmp"/columns)
+	read cols < "$path_tmp"/columns
 	
 	while [ -z "$cols" ] || ((cols==0))
 	do
-	    cols=$(cat "$path_tmp"/columns)
+	    read cols < "$path_tmp"/columns
 	    sleep 0.1
 	done
     else
-	local cols=$COLUMNS
+	cols=$COLUMNS
     fi
     
     if show_mode_in_tty "$this_mode" "$this_tty"
@@ -120,7 +121,7 @@ function show_downloads_extended {
     header_z
     header_box_interactive "$(gettext "Interactive mode")"
 
-    [ -f "$path_tmp/downloader" ] && downloader_in=$(cat "$path_tmp/downloader")
+    [ -f "$path_tmp/downloader" ] && read downloader_in < "$path_tmp/downloader"
     echo -e "\n${BBlue}Downloader:${Color_Off} $downloader_in\t${BBlue}Directory:${Color_Off} $PWD\n"
 
     check_instance_daemon
@@ -173,6 +174,10 @@ function show_downloads_extended {
 
 
 function services_box {
+    local generated
+    test -f $path_usr/generated.txt &&
+	read generated < "$path_usr"/generated.txt
+    
     fclear
     header_z
     header_box_interactive "$(gettext "Extensions")"
@@ -186,7 +191,7 @@ function services_box {
     cat $path_usr/livestream.txt 2>/dev/null
 
     print_C 4 "\n$(gettext "Web-generated links (even after captcha)")"
-    echo -e "$(cat $path_usr/generated.txt 2>/dev/null) $(gettext "and other services")"
+    echo -e "$generated $(gettext "and other services")"
     
     print_C 4 "\nShort links:"
     cat $path_usr/shortlinks.txt 2>/dev/null
@@ -214,7 +219,8 @@ function standard_box {
 	    echo
     
     [ -f "$path_tmp/downloader" ] && 
-	downloader_in=$(cat "$path_tmp/downloader")
+	read downloader_in < "$path_tmp/downloader"
+    
     print_c 0 "\n${BBlue}Downloader:${Color_Off} $downloader_in\t${BBlue}Directory:${Color_Off} $PWD\n"
     #[ -z "$1" ] && services_box
     
@@ -437,12 +443,16 @@ function interactive {
 	unset instance_pid daemon_pid that_pid that_tty list file_stdout file_out url_out downloader_out pid_out length_out
 
 	show_downloads_extended
-	max_dl=$(cat "$path_tmp/max-dl" 2>/dev/null)
+	if test -f "$path_tmp/max-dl"
+	then
+	    read max_dl < "$path_tmp/max-dl"
+	else
+	    max_dl=1
+	fi
 	
-	[ ! -f "$path_tmp/max-dl" ] && max_dl=1
 	if [ -z "$max_dl" ]
 	then
-	    num_downloads=illimitati
+	    num_downloads=$(gettext "unlimited")
 	else
 	    num_downloads=$max_dl
 	fi

@@ -127,9 +127,9 @@ function post_m3u8 {
 }
 
 function post_process {
-    local line
+    local line format print_out
+    
     ## mega.nz
-
     for line in *.MEGAenc
     do
 	if [ -f "${path_tmp}/${line}.tmp" ] &&
@@ -145,8 +145,11 @@ function post_process {
 	fi
     done
 
-    local format=$(cat "$path_tmp"/format-post_processor 2>/dev/null)
-    local print_out=$(cat "$path_tmp"/print_out-post_processor 2>/dev/null)
+    test -f "$path_tmp"/format-post_processor &&
+	read format < "$path_tmp"/format-post_processor
+    
+    test -f "$path_tmp"/print_out-post_processor &&
+	read print_out < "$path_tmp"/print_out-post_processor
 
     ## --mp3/--flac: conversione formato
     if [ -n "$format" ]
@@ -176,7 +179,7 @@ function post_process {
 
 	if [ -f "$print_out" ]
 	then	    
-	    for line in $(cat "$print_out")
+	    while read line
 	    do
 		if [ -f "$line" ] &&
 		       [ ! -f "${line}.st" ] && [ ! -f "${line}.aria2" ]
@@ -221,7 +224,7 @@ function post_process {
 			print_header
 		    fi
 		fi
-	    done
+	    done < "$print_out"
 
 	    rm "$print_out"
 	fi

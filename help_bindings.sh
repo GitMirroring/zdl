@@ -48,7 +48,7 @@ fi
 [ -n "$Background" ] && Foreground="$White"
 Color_Off="\033[0m${Foreground}${Background}" #\033[40m"
 
-downloader_in=$(cat .zdl_tmp/downloader)
+read downloader_in < .zdl_tmp/downloader
 
 this_mode=help
 fclear

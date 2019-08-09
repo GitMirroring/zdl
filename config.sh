@@ -107,7 +107,7 @@ function get_conf {
 	## downloader predefinito
 	if [ -f "$path_tmp/downloader" ]
 	then
-	    downloader_in=$(cat "$path_tmp/downloader")
+	    read downloader_in < "$path_tmp/downloader"
 	    
 	else
 	    if [ -z "$downloader" ]
@@ -184,7 +184,7 @@ function get_conf {
 	
 	if [ -f "$path_tmp/max-dl" ]
 	then
-	    max_dl="$(cat "$path_tmp/max-dl" 2>/dev/null)"
+	    read max_dl < "$path_tmp/max-dl"
 
 	else
 	    echo "$max_dl" > "$path_tmp/max-dl"
@@ -239,6 +239,8 @@ function get_conf {
 		    fi
 		done
 	    fi
+
+	    set_item_conf player "$player"
 	fi
 	
 	## socket
@@ -278,6 +280,7 @@ function get_language {
     if [ -z "$language" ]
     then
 	language=en_US.UTF-8
+	set_item_conf language "$language"
 
     elif [[ "$language" =~ ^it ]]
     then
@@ -349,11 +352,12 @@ function check_default_downloader {
     if command -v aria2c &>/dev/null &&
 	    [ -f "$file_conf" ]
     then
-	if [ "$(get_item_conf downloader)" == "Aria2" ]
+	local test_downloader=$(get_item_conf downloader)
+	if [ "$test_downloader" == "Aria2" ]
 	then
 	    sed -r "s|$TAG1||g" -i "$file_conf"
 	    
-	elif [ "$(get_item_conf downloader)" != "Aria2" ] &&
+	elif [ "$test_downloader" != "Aria2" ] &&
 		 ! grep "$TAG2" "$file_conf" &>/dev/null 
 	then
 	    unset def

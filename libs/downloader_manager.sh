@@ -121,7 +121,10 @@ function check_axel {
     axel -U "$user_agent" -n $axel_parts $headers -o "$path_tmp"/axel_o_test "$url_in_file" -v 2>&1 >> "$path_tmp"/axel_stdout_test &
     pid_axel_test=$!
 
-    while [[ ! "$(cat "$path_tmp"/axel_stdout_test)" =~ (Starting download|HTTP/[0-9.]+ [0-9]{3} ) ]] &&
+    test -f "$path_tmp"/axel_stdout_test &&
+	read axel_stdout_test < "$path_tmp"/axel_stdout_test
+
+    while [[ ! "$axel_stdout_test" =~ (Starting download|HTTP/[0-9.]+ [0-9]{3} ) ]] &&
 	      check_pid $pid_prog
     do
 	if ! check_pid $pid_axel_test ||
@@ -133,11 +136,17 @@ function check_axel {
 	fi
 	sleep 0.5
 	(( loops++ ))
+	
+	test -f "$path_tmp"/axel_stdout_test &&
+	    read axel_stdout_test < "$path_tmp"/axel_stdout_test
     done
     
     kill -9 $pid_axel_test 2>/dev/null
 
-    if [[ "$(cat "$path_tmp"/axel_stdout_test 2>/dev/null)" =~ (Connection gone.|Unable to connect to server|Server unsupported|400 Bad Request|403 Forbidden|Too many redirects) ]] &&
+    test -f "$path_tmp"/axel_stdout_test &&
+	read axel_stdout_test < "$path_tmp"/axel_stdout_test
+
+    if [[ "$axel_stdout_test" =~ (Connection gone.|Unable to connect to server|Server unsupported|400 Bad Request|403 Forbidden|Too many redirects) ]] &&
 	   [ -z "$result_ck" ]
     then
 	result_ck="1"
@@ -145,7 +154,7 @@ function check_axel {
 	result_ck="0"
     fi
 
-    rm -f "$path_tmp"/axel_*_test
+    rm -f "$path_tmp"/axel_stdout_test
     return "$result_ck"
 }
 
@@ -157,7 +166,8 @@ function check_wget {
     wget -t3 -T10 -S --spider -U "$user_agent" "$url_in_file" -o "$path_tmp"/wget_checked
     kill -9 $pid_countdown
 
-    wget_checked=$(cat "$path_tmp"/wget_checked)
+    test -f "$path_tmp"/wget_checked &&
+	read wget_checked < "$path_tmp"/wget_checked
 
     if grep -P '(Remote file does not exist|failed: Connection refused)' "$path_tmp"/wget_checked &>/dev/null
     then
@@ -298,7 +308,7 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 		    
 		elif [ -f "$path_tmp"/flashgot_cookie.zdl ]
 		then
-		    COOKIES="$(cat "$path_tmp"/flashgot_cookie.zdl)"
+		    read COOKIES < "$path_tmp"/flashgot_cookie.zdl
 		    if [ -n "$COOKIES" ]
 		    then
 			headers+=( "Cookie:$COOKIES" )
@@ -359,7 +369,7 @@ $aria2_parts" >"$path_tmp/${file_in}_stdout.tmp"
 
 	    elif [ -f "$path_tmp"/flashgot_cookie.zdl ]
 	    then
-		COOKIES="$(cat "$path_tmp"/flashgot_cookie.zdl)"
+		read COOKIES < "$path_tmp"/flashgot_cookie.zdl
 		if [ -n "$COOKIES" ]
 		then
 		    headers+=( "Cookie:$COOKIES" )
@@ -577,8 +587,13 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 		      -e "youtube-dl \"$url_in_file\"" &
 		
 	    else
-		[ -f "$path_tmp/external-dl_pids.txt" ] && kill $(cat "$path_tmp/external-dl_pids.txt") 
-		
+		if [ -f "$path_tmp/external-dl_pids.txt" ]
+		then
+		    while read line_pid
+		    do
+			kill $line_pid
+		    done < "$path_tmp/external-dl_pids.txt" 
+		fi
 		youtube-dl "$url_in_file" --newline &>> "$path_tmp/${file_in}_stdout.ytdl" &
  		pid_ytdl=$!
 		

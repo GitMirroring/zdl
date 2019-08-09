@@ -514,7 +514,7 @@ function grep_urls {
 	    return 0
 	fi
 	
-	input=$(cat "$1")
+	input=$(< "$1")
 
     else
 	input="$1"
@@ -596,7 +596,7 @@ function cmp_file {
 	    return 0
 
     else
-	[ "$(cat "$1")" == "$(cat "$2")" ] &&
+	[ "$(< "$1")" == "$(< "$2")" ] &&
 	    return 0
     fi
     return 1

@@ -725,7 +725,7 @@ function pipe_files {
 	    return
 
 	else
-	    read -a outfiles < "$path_tmp"/pipe_files.txt
+	    outfiles=( $(< "$path_tmp"/pipe_files.txt) )
 
 	    if [ -n "${outfiles[*]}" ]
 	    then
