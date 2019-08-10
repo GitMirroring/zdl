@@ -573,7 +573,9 @@
 
         var myZDL = new ZDL( "__START_PATH__", "index.html" );
 
-        client.init();
+        myZDL.getLanguage().then( function ( res ) {
+            client.init( res.trim() );
+        } );
     </script>
 </body>
 
