@@ -331,26 +331,23 @@ var client = ( function () {
     function datatable( lang ) {
         return $( "#xdcc-eu" ).DataTable( {
             order: [
-                [ 4, "desc" ]
+                [ 0, "asc" ]
             ],
             //retrieve: true,
             paginate: false,
             responsive: true,
             columnDefs: [ {
                 responsivePriority: 1,
-                targets: 0
-            }, {
-                responsivePriority: 2,
                 targets: -1
             }, {
+                responsivePriority: 2,
+                targets: 0
+            }, {
                 responsivePriority: 3,
-                targets: -4
+                targets: 1
             }, {
-                responsivePriority: 4,
-                targets: -2
-            }, {
-                responsivePriority: 5,
-                targets: -3
+                className: "centered",
+                targets: [ 0, 2, 3, 4, 5 ]
             } ],
             language: {
                 url: "/i18n/" + lang + ".lang"
@@ -456,7 +453,7 @@ var client = ( function () {
             $( ".time-spinner" ).timespinner();
 
             /* init table */
-            data.table = datatable( language );
+            data.table = datatable( lang );
 
             /* init client */
             myZDL.initClient().then( function () {

@@ -683,6 +683,10 @@ table.dataTable thead th {
   font-weight: bold !important;
 }
 
+table.dataTable td.centered {
+  text-align: center;
+}
+
 /* Simple responsive */
 @media (max-width: 1360px) {
   .toggle>.browse>.path.editable {

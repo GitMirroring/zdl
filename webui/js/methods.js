@@ -390,13 +390,14 @@ var xdcc = {
                             send = $.i18n( "button-send" );
                         $.each( obj, function ( i, o ) {
                             table.row.add( [
-                                o.server,
-                                o.channel,
-                                o.bot,
-                                o.slot,
-                                o.gets,
-                                o.length,
+                                i + 1,
                                 o.name,
+                                o.length,
+				o.server,
+				o.channel,
+				o.bot,
+				o.slot,
+                                o.gets,
                                 "<button data-i18n='button-send' class='button xdcc-search-send'>" + send + "</button>"
                             ] ).draw( false );
                             if ( i === max - 1 ) {
@@ -424,9 +425,9 @@ var xdcc = {
     add: function ( elem ) {
         var tr = elem.closest( "tr" );
         var xdccreq = {
-            host: tr.children().eq( 0 ).text(),
-            channel: encodeURIComponent( tr.children().eq( 1 ).text() ),
-            msg: encodeURIComponent( "/msg " + tr.children().eq( 2 ).text() + " xdcc send " + tr.children().eq( 3 ).text() )
+            host: tr.children().eq( 3 ).text(),
+            channel: encodeURIComponent( tr.children().eq( 4 ).text() ),
+            msg: encodeURIComponent( "/msg " + tr.children().eq( 5 ).text() + " xdcc send " + tr.children().eq( 6 ).text() )
         };
         elem.button( "option", {
             label: "",
