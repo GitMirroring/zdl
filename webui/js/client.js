@@ -257,7 +257,7 @@ var client = ( function () {
                     statusVal,
                     statusParent,
                     statusClass;
-                $.each( obj, function ( index, value ) {
+		$.each( obj, function ( index, value ) {
                     id = $.md5( value.link );
                     perc = parseInt( value.percent );
                     if ( perc < 100 ) {
@@ -271,6 +271,7 @@ var client = ( function () {
                         statusVal = "100%";
                     }
                     len = formatFileLength( value.length );
+
                     if ( !data.list.includes( id ) && !$( "#bar-" + id ).length ) {
                         if ( statusClass ) {
                             statusClass = " " + statusClass;

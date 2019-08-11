@@ -301,11 +301,13 @@ function create_json {
 
 	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
 	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
-	    echo > "$server_data".$socket_port
-
-	return 0
+	    echo '[]' > "$server_data".$socket_port
     fi
-    return 1
+
+    if [ ! -s "$server_data".$socket_port ]
+    then
+	echo '[]' > "$server_data".$socket_port
+    fi
 }
 
 function check_xfer_running {
@@ -751,7 +753,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    ;;
 
     	get-data)
-	    send_json ${line[1]} || return
+	    send_json ${line[1]} || {
+		return
+	    }
 	    ;;
 
 	get-console)
