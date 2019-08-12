@@ -764,6 +764,7 @@ then
 		print_c 3 "$(gettext "An active instance of daemon mode already exists in %s")\n" "$PWD" 
 		print_c 4 "$(gettext  "You can control it with:") ${Color_Off}$prog -i \"$PWD\"\n"
 
+		already_daemon=true
 		this_mode=daemon
 	    fi
 	fi
@@ -1401,9 +1402,12 @@ then
     fi
 fi
 
+# if check_instance_daemon &&
+# 	[ "$this_mode" != "daemon" ] ||
+# 	    check_instance_prog	    
 if check_instance_daemon &&
-	[ "$this_mode" != "daemon" ] ||
-	    check_instance_prog	    
+    [ "$already_daemon" == true ] ||
+	check_instance_prog	    
 then
     redirect_links
 
@@ -1418,7 +1422,7 @@ fi
 function main_loop {
     local nline nlines loop_url_in url_in_old
     clean_livestream
-
+    
     test -f "$path_tmp"/max-dl &&
 	read max_dl < "$path_tmp"/max-dl
     
@@ -1712,7 +1716,8 @@ then
     while true
     do
 	main_loop &>/dev/null || break
-	clean_livestream
+	test -s "$path_tmp"/links_loop.txt &&
+	    clean_livestream
     done 
 
 else    
