@@ -719,7 +719,6 @@ then
 		exit
 	    fi
 	    echo ${args[i]##*-} > "$path_tmp"/format-post_processor
-	    unset args[i]
 	    echo "$downloaded_by_zdl" >"$path_tmp"/print_out-post_processor 2>/dev/null
 	    unset args[i]
 	fi

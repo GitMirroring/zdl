@@ -65,11 +65,15 @@ function data_stdout {
 
 	#### attivazione json solo da: zdl_server.sh <port>
 	# json_flag=true
+	test -f "$path_tmp"/format-post_processor &&
+	    read format_out < "$path_tmp"/format-post_processor
 
 	awk_data=$(stdbuf -oL -eL                                              \
 			  awk                                                  \
 			  -v pwd="$PWD"                                        \
 			  -v file_in="$file_in"                                \
+			  -v url_in="$url_in"                                  \
+			  -v format_out="$format_out"                          \
 			  -v url_in="$url_in"                                  \
 			  -v no_complete="$no_complete"                        \
 			  -v num_check="$num_check"                            \

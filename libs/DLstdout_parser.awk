@@ -306,7 +306,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if ((file_out[i] ~ /\.MEGAenc$/) &&
 	    	(!exists(file_out[i]))) {
 	    	match(file_out[i], /(.+)\.MEGAenc/, matched)
-	    	file_out[i] = matched[1]
+		if (exists(matched[1]))
+		    file_out[i] = matched[1]
 	    }
 	}
 	else if (progress_abort[i]) {
@@ -414,7 +415,16 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if ((file_out[i] ~ /\.MEGAenc$/) &&
 	    	(!exists(file_out[i]))) {
 	    	match(file_out[i], /(.+)\.MEGAenc/, matched)
-	    	file_out[i] = matched[1]
+		if (exists(matched[1]))
+		    file_out[i] = matched[1]
+	    }
+
+	    ## conversione formato --mp3|--flac:
+	    if ((format_out != "") &&
+	    	(!exists(file_out[i]))) {
+		match(file_out[i], /(.+)\.[^\.]+$/, matched)
+		if (exists(matched[1] "." format_out))
+		    file_out[i] = matched[1] "." format_out
 	    }
 	}
 	else if (progress_abort[i]) {
@@ -460,7 +470,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if ((file_out[i] ~ /\.MEGAenc$/) &&
 	    	(!exists(file_out[i]))) {
 	    	match(file_out[i], /(.+)\.MEGAenc/, matched)
-	    	file_out[i] = matched[1]
+		if (exists(matched[1]))
+		    file_out[i] = matched[1]
 	    }
 	}
 	else if (progress_abort[i]) {

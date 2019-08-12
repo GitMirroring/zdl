@@ -270,38 +270,38 @@ function get_file_output {
 }
 
 function create_json {
-    local path
+    local path data
     rm -f "$server_data".$socket_port
 
     if [ -s "$server_paths" ]
     then
-	echo -ne '[' >"$server_data".$socket_port
+    	echo -ne '[' >"$server_data".$socket_port
 
-	rm -f "$server_paths".new
-	while read path
-	do
-	    if [ -d "$path" ]
-	    then
-		cd "$path"
+    	rm -f "$server_paths".new
+    	while read path
+    	do
+    	    if [ -d "$path" ]
+    	    then
+    		cd "$path"
 
-		if [ -d "$path_tmp" ]
-		then
-		    if data_stdout &&
-			    ! grep -P '\[$' "$server_data".$socket_port &>/dev/null
-		    then
-			echo -en "," >>"$server_data".$socket_port
-		    fi
-		fi
-		echo "$path" >>"$server_paths".new
-	    fi
+    		if [ -d "$path_tmp" ]
+    		then
+    		    if data_stdout &&
+    		    	    ! grep -P '\[$' "$server_data".$socket_port &>/dev/null
+    		    then
+    			echo -en "," >>"$server_data".$socket_port
+    		    fi
+    		fi
+    		echo "$path" >>"$server_paths".new
+    	    fi
 
-	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
-	mv "$server_paths".new "$server_paths"
+    	mv "$server_paths".new "$server_paths"
 
-	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
-	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
-	    echo '[]' > "$server_data".$socket_port
+    	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
+    	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
+    	    echo '[]' > "$server_data".$socket_port
     fi
 
     if [ ! -s "$server_data".$socket_port ]
@@ -342,7 +342,8 @@ function check_downloader_running {
 }
 
 function send_json {
-    local counter=0
+    local counter=0 \
+	  data data_diff
 
     [ "$1" == force ] &&
 	rm -f "$server_data".$socket_port.diff
@@ -356,7 +357,13 @@ function send_json {
 	    create_json
 	    touch "$server_data".$socket_port "$server_data".$socket_port.diff
 	    current_timeout=$(date +%s)
-	    if ! cmp_file "$server_data".$socket_port "$server_data".$socket_port.diff ||
+
+	    read -d '' data < "$server_data".$socket_port
+	    read -d '' data_diff < "$server_data".$socket_port.diff
+
+	    ## funzione alternativa: `cmp_file`
+	    #if ! cmp_file "$server_data".$socket_port "$server_data".$socket_port.diff ||
+	    if [ "$data" != "$data_diff" ] ||
 		    check_port $socket_port ||
 		    (( (current_timeout - start_timeout) > 240 ))
 	    then
@@ -364,13 +371,17 @@ function send_json {
 		break
 	    fi
 
-	    ((counter<3)) &&
+	    ((counter<2)) &&
 		((counter++))
 	fi
 	sleep 2
     done
     ##sleep 0.1
 
+    ## per debug:
+    # cp "$server_data".$socket_port.diff "$server_data".$socket_port.old
+    ####
+    
     cp "$server_data".$socket_port "$server_data".$socket_port.diff
 
     rm -rf "$path_server"/clean-complete.$socket_port

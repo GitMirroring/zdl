@@ -488,7 +488,7 @@ EXTENSIONS:
 	deps['gettext']=gettext
 	deps['aria2c']=aria2
 	deps['nano']=nano
-	deps['diff']=diffutils
+	# deps['cmp']=diffutils
 	deps['base64']=coreutils
 	deps['xxd']=vim-common
 	deps['pinfo']=pinfo
@@ -552,7 +552,7 @@ EXTENSIONS:
 	deps['axel']=axel
 	deps['node']=nodejs
 	deps['php']=php-cli
-	deps['cmp']=diffutils
+	# deps['cmp']=diffutils
 	deps['socat']=socat
 	deps['gawk']=gawk
 	deps['rlwrap']=rlwrap

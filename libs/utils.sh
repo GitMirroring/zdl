@@ -589,17 +589,16 @@ function equal_file_size {
 	return 0 || return 1
 }
 
-function cmp_file {
-    if command -v cmp &>/dev/null
+function cmp_file {    
+    local file1 file2
+    read -d '' file1 < "$1"
+    read -d '' file2 < "$2"
+    if [ "$file1" == "$file2" ]
     then
-	cmp --silent "$1" "$2" &&
-	    return 0
-
+	return 0
     else
-	[ "$(< "$1")" == "$(< "$2")" ] &&
-	    return 0
+	return 1
     fi
-    return 1
 }
 
 function parse_int {
