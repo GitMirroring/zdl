@@ -271,7 +271,6 @@ var client = ( function () {
                         statusVal = "100%";
                     }
                     len = formatFileLength( value.length );
-
                     if ( !data.list.includes( id ) && !$( "#bar-" + id ).length ) {
                         if ( statusClass ) {
                             statusClass = " " + statusClass;
@@ -299,11 +298,11 @@ var client = ( function () {
                     } else {
                         bar = $( "#bar-" + id );
                         if ( bar.hasClass("ui-progressbar-indeterminate") ) {
-                        	bar.progressbar( "value", 0.1 );
-						}
+                            bar.progressbar( "value", 0.1 );
+			}
                         bar.children( ".ui-progressbar-value" ).animate( {
-        					width: perc + "%"
-    					}, 500 );
+        		    width: perc + "%"
+    			}, 500 );
                         $( "#info-" + id + " .dl-size").text( len );
                         status = $( "#dl-status-" + id );
                         statusParent = status.parent();
@@ -348,7 +347,7 @@ var client = ( function () {
                 targets: 1
             }, {
                 className: "centered",
-                targets: [ 0, 2, 3, 4, 5 ]
+                targets: [ 0, 2, 3, 4, 5, 6, 7, 8 ]
             } ],
             language: {
                 url: "/i18n/" + lang + ".lang"

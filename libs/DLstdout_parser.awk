@@ -303,6 +303,11 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_file(file_out[i])
 	    percent_out[i] = 100
+	    if ((file_out[i] ~ /\.MEGAenc$/) &&
+	    	(!exists(file_out[i]))) {
+	    	match(file_out[i], /(.+)\.MEGAenc/, matched)
+	    	file_out[i] = matched[1]
+	    }
 	}
 	else if (progress_abort[i]) {
 	    bash_var("url_in", "")
@@ -452,6 +457,11 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_file(file_out[i])
 	    percent_out[i] = 100
+	    if ((file_out[i] ~ /\.MEGAenc$/) &&
+	    	(!exists(file_out[i]))) {
+	    	match(file_out[i], /(.+)\.MEGAenc/, matched)
+	    	file_out[i] = matched[1]
+	    }
 	}
 	else if (progress_abort[i]) {
 	    bash_var("url_in", "")
