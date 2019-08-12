@@ -43,5 +43,6 @@ function ffmpeg_stdout {
 	    tr '\n' '\r'
 	sleep 1
     done
+    rm -f $1-*.log
 }
 

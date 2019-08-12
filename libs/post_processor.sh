@@ -164,7 +164,7 @@ function post_process {
 	    do
 		if ! grep -P '^$line$' $print_out &>/dev/null
 		then
-		    for ((i=0; i<${#pid_out[@]}; 0++))
+		    for ((i=0; i<${#pid_out[@]}; i++))
 		    do
 			if [ "$line" == "${file_out[i]}" ] &&
 			       (( "${percent_out[i]}" == 100 ))
@@ -183,8 +183,14 @@ function post_process {
 	    do
 		if [ -f "$line" ] &&
 		       [ ! -f "${line}.st" ] && [ ! -f "${line}.aria2" ]
-		then
+		then		    
 		    mime="$(file -b --mime-type "$line")"
+
+		    if [[ "$mime" =~ audio ]] &&
+			   [[ "$line" =~ $format$ ]]
+		    then
+			continue
+		    fi
 		    
 		    if [[ "$mime" =~ (audio|video) ]]
 		    then

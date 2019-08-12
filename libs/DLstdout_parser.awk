@@ -309,6 +309,14 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		if (exists(matched[1]))
 		    file_out[i] = matched[1]
 	    }
+
+	    ## conversione formato --mp3|--flac:
+	    if ((format_out != "") &&
+	    	(!exists(file_out[i]))) {
+		match(file_out[i], /(.+)\.[^\.]+$/, matched)
+		if (exists(matched[1] "." format_out))
+		    file_out[i] = matched[1] "." format_out
+	    }
 	}
 	else if (progress_abort[i]) {
 	    bash_var("url_in", "")
@@ -473,6 +481,14 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		if (exists(matched[1]))
 		    file_out[i] = matched[1]
 	    }
+
+	    ## conversione formato --mp3|--flac:
+	    if ((format_out != "") &&
+	    	(!exists(file_out[i]))) {
+		match(file_out[i], /(.+)\.[^\.]+$/, matched)
+		if (exists(matched[1] "." format_out))
+		    file_out[i] = matched[1] "." format_out
+	    }
 	}
 	else if (progress_abort[i]) {
 	    bash_var("url_in", "")
@@ -527,6 +543,14 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_file(file_out[i])
 	    percent_out[i] = 100
+
+	    ## conversione formato --mp3|--flac:
+	    if ((format_out != "") &&
+	    	(!exists(file_out[i]))) {
+		match(file_out[i], /(.+)\.[^\.]+$/, matched)
+		if (exists(matched[1] "." format_out))
+		    file_out[i] = matched[1] "." format_out
+	    }
 	}
 	else if (progress_line) {
 	    cmd = "date +%s"
