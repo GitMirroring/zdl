@@ -63,7 +63,8 @@ var downloads = {
             } ).catch( function ( e ) {
                 utils.log( "client-init-error", e, true );
             } );
-        }
+        } else
+	    utils.switchToTab( 1 );
     },
 
     // Add file downloaded to the playlist
