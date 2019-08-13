@@ -293,10 +293,16 @@ function get_language {
 	    fr) language="fr_FR.UTF-8" ;;
 	    de) language="de_DE.UTF-8" ;;
 	    es) language="es_ES.UTF-8" ;;
-	    *)	    
-		if [[ "$(</usr/share/i18n/SUPPORTED)" =~ ("$language"_[^\ ]+\.UTF-8) ]]
+	    *)
+		local supported
+		read -d '' supported < /usr/share/i18n/SUPPORTED
+		
+		if [[ "$supported" =~ ("$language"_[^\ ]+\.UTF-8) ]]
 		then
 		    language="${BASH_REMATCH[1]}"
+
+		else
+		    language="en_US.UTF-8"
 		fi
 		;;
 	esac

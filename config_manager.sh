@@ -132,11 +132,12 @@ function configure {
 	    1)
 		while :
 		do
+		    get_conf
+
 		    fclear
 		    header_z
 		    header_box "$(gettext "ZigzagDownLoader configuration")"
 		    
-		    get_conf
 		    intro="$(eval_gettext "The configuration consists of \${BRed}names\${Color_Off} and \${BBlue}values\${Color_Off}.\n\n\${BYellow}For each name, a value can be specified:\${Color_Off}\n- the \${BBlue}available alternative values\${Color_Off}, in blue, can be suggested between the round brackets and separated by the vertical bar\n- the \${BRed}name\${Color_Off} to which the value is assigned is in red\n- \${BBlue}*\${Color_Off} means any value other than the others, even null\n- the current \${BGreen}values recorded\${Color_Off} are in green\n")"
 
 		    echo -e "$intro"
