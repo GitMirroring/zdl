@@ -1406,7 +1406,7 @@ fi
 # 	[ "$this_mode" != "daemon" ] ||
 # 	    check_instance_prog	    
 if check_instance_daemon &&
-    [ "$already_daemon" == true ] ||
+    ( [ "$already_daemon" == true ] || [ "$this_mode" != daemon ] ) ||
 	check_instance_prog	    
 then
     redirect_links
