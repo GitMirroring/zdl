@@ -108,9 +108,7 @@ function configure {
     this_mode="configure"
     start_mode_in_tty "$this_mode" "$this_tty"
     local res_color intro
-
-    intro="$(eval_gettext "The configuration consists of \${BRed}names\${Color_Off} and \${BBlue}values\${Color_Off}.\n\n\${BYellow}For each name, a value can be specified:\${Color_Off}\n- the \${BBlue}available alternative values\${Color_Off}, in blue, can be suggested between the round brackets and separated by the vertical bar\n- the \${BRed}name\${Color_Off} to which the value is assigned is in red\n- \${BBlue}*\${Color_Off} means any value other than the others, even null\n- the current \${BGreen}values recorded\${Color_Off} are in green\n")"
-
+    
     while true
     do
 	fclear
@@ -136,10 +134,12 @@ function configure {
 		do
 		    fclear
 		    header_z
-		    header_box "$name_prog configuration"
+		    header_box "$(gettext "ZigzagDownLoader configuration")"
+		    
+		    get_conf
+		    intro="$(eval_gettext "The configuration consists of \${BRed}names\${Color_Off} and \${BBlue}values\${Color_Off}.\n\n\${BYellow}For each name, a value can be specified:\${Color_Off}\n- the \${BBlue}available alternative values\${Color_Off}, in blue, can be suggested between the round brackets and separated by the vertical bar\n- the \${BRed}name\${Color_Off} to which the value is assigned is in red\n- \${BBlue}*\${Color_Off} means any value other than the others, even null\n- the current \${BGreen}values recorded\${Color_Off} are in green\n")"
 
 		    echo -e "$intro"
-		    get_conf
 		    show_conf
 
 		    printf "\n${BYellow}%s (${BBlue}1-${#key_conf[*]}${BYellow} | ${BBlue}q${BYellow} %s):${Color_Off}\n" \

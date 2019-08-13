@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-13 17:38+0200\n"
+"POT-Creation-Date: 2019-08-13 17:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,35 @@ msgstr ""
 msgid "Current configuration"
 msgstr ""
 
-#: ../config_manager.sh:112
+#: ../config_manager.sh:116
+msgid "Settings"
+msgstr ""
+
+#: ../config_manager.sh:119
+msgid "Change the configuration"
+msgstr ""
+
+#: ../config_manager.sh:120
+msgid "Reset the web interface account (socket account)"
+msgstr ""
+
+#: ../config_manager.sh:121
+msgid "Manage hosting service accounts"
+msgstr ""
+
+#: ../config_manager.sh:122 ../gui/gui.sh:35 ../gui/gui.sh:1341
+msgid "Quit"
+msgstr ""
+
+#: ../config_manager.sh:124
+msgid "Select an option"
+msgstr ""
+
+#: ../config_manager.sh:137
+msgid "ZigzagDownLoader configuration"
+msgstr ""
+
+#: ../config_manager.sh:140
 #, sh-format
 msgid ""
 "The configuration consists of ${BRed}names${Color_Off} and ${BBlue}values"
@@ -52,30 +80,6 @@ msgid ""
 "is in red\\n- ${BBlue}*${Color_Off} means any value other than the others, "
 "even null\\n- the current ${BGreen}values recorded${Color_Off} are in green"
 "\\n"
-msgstr ""
-
-#: ../config_manager.sh:118
-msgid "Settings"
-msgstr ""
-
-#: ../config_manager.sh:121
-msgid "Change the configuration"
-msgstr ""
-
-#: ../config_manager.sh:122
-msgid "Reset the web interface account (socket account)"
-msgstr ""
-
-#: ../config_manager.sh:123
-msgid "Manage hosting service accounts"
-msgstr ""
-
-#: ../config_manager.sh:124 ../gui/gui.sh:35 ../gui/gui.sh:1341
-msgid "Quit"
-msgstr ""
-
-#: ../config_manager.sh:126
-msgid "Select an option"
 msgstr ""
 
 #: ../config_manager.sh:146

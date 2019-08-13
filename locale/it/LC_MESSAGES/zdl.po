@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-13 17:38+0200\n"
+"POT-Creation-Date: 2019-08-13 17:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -40,7 +40,35 @@ msgstr "Riconfigurazione fallita: programma non esistente"
 msgid "Current configuration"
 msgstr "Configurazione attuale"
 
-#: ../config_manager.sh:112
+#: ../config_manager.sh:116
+msgid "Settings"
+msgstr "Preferenze"
+
+#: ../config_manager.sh:119
+msgid "Change the configuration"
+msgstr "Modifica la configurazione"
+
+#: ../config_manager.sh:120
+msgid "Reset the web interface account (socket account)"
+msgstr "Resetta l'account delle interfacce web (account del socket)"
+
+#: ../config_manager.sh:121
+msgid "Manage hosting service accounts"
+msgstr "Gestisci gli account dei servizi di hosting"
+
+#: ../config_manager.sh:122 ../gui/gui.sh:35 ../gui/gui.sh:1341
+msgid "Quit"
+msgstr "Esci"
+
+#: ../config_manager.sh:124
+msgid "Select an option"
+msgstr "Seleziona un'opzione"
+
+#: ../config_manager.sh:137
+msgid "ZigzagDownLoader configuration"
+msgstr "Configurazione di ZigzagDownLoader"
+
+#: ../config_manager.sh:140
 #, sh-format
 msgid ""
 "The configuration consists of ${BRed}names${Color_Off} and ${BBlue}values"
@@ -62,30 +90,6 @@ msgstr ""
 "- ${BBlue}*${Color_Off} significa qualunque valore diverso dagli altri, "
 "anche nullo\n"
 "- gli attuali ${BGreen}valori registrati${Color_Off} sono in verde\\n"
-
-#: ../config_manager.sh:118
-msgid "Settings"
-msgstr "Preferenze"
-
-#: ../config_manager.sh:121
-msgid "Change the configuration"
-msgstr "Modifica la configurazione"
-
-#: ../config_manager.sh:122
-msgid "Reset the web interface account (socket account)"
-msgstr "Resetta l'account delle interfacce web (account del socket)"
-
-#: ../config_manager.sh:123
-msgid "Manage hosting service accounts"
-msgstr "Gestisci gli account dei servizi di hosting"
-
-#: ../config_manager.sh:124 ../gui/gui.sh:35 ../gui/gui.sh:1341
-msgid "Quit"
-msgstr "Esci"
-
-#: ../config_manager.sh:126
-msgid "Select an option"
-msgstr "Seleziona un'opzione"
 
 #: ../config_manager.sh:146
 msgid "Select the default item to edit"
