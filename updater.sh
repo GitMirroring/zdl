@@ -95,7 +95,6 @@ function try {
 	then
 	    if [ "$real_mode" == gui ]
 	    then
-		#È necessaria la password di utente root.\nRipeti l'aggiornamento di ZDL utilizzando il terminale.
 		yad --title="$(gettext "ZDL update")" \
 		    --text="$(gettext "The root user password is required.\nRepeat the ZDL update using the terminal.")" \
 		    --image="dialog-error" \
@@ -278,15 +277,6 @@ function update {
     path_conf="$HOME/.$prog"
     file_conf="$path_conf/$prog.conf"
 
-    if [ "$installer_zdl" == "true" ]
-    then
-	op="Installazione"
-	suffix="a"
-    else
-	op="Aggiornamento"
-	suffix="o"
-    fi
-
     if [[ -z "$(grep 'shopt -s checkwinsize' $HOME/.bashrc)" ]]
     then
 	echo "shopt -s checkwinsize" >> ~/.bashrc 
@@ -325,10 +315,10 @@ function update {
     setterm --cursor on
     if ! try mv -f zdl zdl-xterm zdl-sockets $BIN
     then
-	print_c 3 "$(eval_gettext "\$op failed\${suffix}. Please try again")"
+	print_c 3 "$BIN: $(gettext "failed. Please try again")"
 	exit 1
     else
-	print_c 1 "$op automatic${suffix} in $BIN"
+	print_c 1 "$BIN: $(gettext "saved successfully")"
     fi
 
     [ "$?" != 0 ] && return
@@ -381,10 +371,10 @@ function update {
     
     if [ $? != 0 ]
     then
-	print_c 3 "$(eval_gettext "\$op failed\${suffix}. Please try again")"
+	print_c 3 "$SHARE: $(gettext "failed. Please try again")"
 	exit 1
     else
-	print_c 1 "$op automatic${suffix} in $SHARE/$prog"
+	print_c 1 "$SHARE: $(gettext "saved successfully")"
     fi
 
     if [ -e /cygdrive ]
@@ -623,7 +613,7 @@ EXTENSIONS:
     #### aggiornamento versione da URL_ROOT
     echo "$remote_version" >"$path_conf"/version
     
-    print_c 1 "$(eval_gettext "\$op automatic\${suffix} completed\${suffix}")"
+    print_c 1 "$(gettext "Successfully completed")"
 
     if [ -z "$installer_zdl" ]
     then

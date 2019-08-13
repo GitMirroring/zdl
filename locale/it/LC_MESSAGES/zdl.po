@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-13 18:14+0200\n"
+"POT-Creation-Date: 2019-08-13 18:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -179,11 +179,11 @@ msgstr "Per informazioni su"
 msgid "Automatic compilation of zdl-wise.c"
 msgstr "Compilazione automatica di zdl-wise.c"
 
-#: ../updater.sh:99
+#: ../updater.sh:98
 msgid "ZDL update"
 msgstr "Aggiornamento di ZDL"
 
-#: ../updater.sh:100
+#: ../updater.sh:99
 msgid ""
 "The root user password is required.\\nRepeat the ZDL update using the "
 "terminal."
@@ -191,7 +191,7 @@ msgstr ""
 "È richiesta la password di root.\\nRipeti l'aggiornamento di ZDL usando il "
 "terminale"
 
-#: ../updater.sh:117
+#: ../updater.sh:116
 msgid ""
 "can download with Wget but strongly recommends Axel, because:\n"
 "- can significantly speed up the download\n"
@@ -205,7 +205,7 @@ msgstr ""
 "\n"
 "Per ulteriori informazioni su Axel: http://alioth.debian.org/projects/axel/\n"
 
-#: ../updater.sh:124
+#: ../updater.sh:123
 msgid ""
 "uses XTerm if launched from a graphical application such as Firefox/"
 "Iceweasel/Icecat (via Flashgot), Chrome/Chromium (via Download Assistant or "
@@ -215,12 +215,12 @@ msgstr ""
 "Icecat (tramite Flashgot), Chrome/Chromium (attraverso Download Assistant o "
 "Simple Get), XXXTerm/Xombrero e Conkeror:"
 
-#: ../updater.sh:133
+#: ../updater.sh:132
 #, sh-format
 msgid "WARNING: $dep is not installed on your system"
 msgstr "ATTENZIONE: $dep non è installato nel tuo sistema"
 
-#: ../updater.sh:135
+#: ../updater.sh:134
 #, sh-format
 msgid ""
 "\n"
@@ -239,49 +239,52 @@ msgstr ""
 "4) Esci da $PROG per installare $dep manualmente (puoi trovarlo qui: http://"
 "pkgs.org/search/?keyword=$dep)"
 
-#: ../updater.sh:142
+#: ../updater.sh:141
 msgid "Choose what to do (1-4):"
 msgstr "Scegli cosa fare:"
 
-#: ../updater.sh:169
+#: ../updater.sh:168
 msgid "Automatic installation failed"
 msgstr "Installazione automatica non riuscita"
 
-#: ../updater.sh:172
+#: ../updater.sh:171
 msgid "did not find the following package:"
 msgstr "non ha trovato il seguente pacchetto:"
 
-#: ../updater.sh:175
+#: ../updater.sh:174
 msgid "Errors in compilation or installation"
 msgstr "Errori nella compilazione o nell'installazione"
 
-#: ../updater.sh:189 ../updater.sh:452 ../updater.sh:460 ../updater.sh:466
-#: ../updater.sh:481 ../updater.sh:511 ../updater.sh:584
+#: ../updater.sh:188 ../updater.sh:442 ../updater.sh:450 ../updater.sh:456
+#: ../updater.sh:471 ../updater.sh:501 ../updater.sh:574
 msgid "Installing"
 msgstr "Installazione di"
 
-#: ../updater.sh:233
+#: ../updater.sh:232
 msgid "Enter the root password"
 msgstr "Digita la password di utente root"
 
-#: ../updater.sh:276
+#: ../updater.sh:275
 msgid "Update completed"
-msgstr "Aggironamento completato"
+msgstr "Aggiornamento completato"
 
-#: ../updater.sh:277
+#: ../updater.sh:276
 msgid "Update failed"
 msgstr "Aggiornamento fallito"
 
-#: ../updater.sh:328 ../updater.sh:384
-#, sh-format
-msgid "$op failed${suffix}. Please try again"
-msgstr "$op non riuscit${suffix}. Riprova un'altra volta"
+#: ../updater.sh:318 ../updater.sh:374
+msgid "failed. Please try again"
+msgstr "fallito. Riprova un'altra volta"
 
-#: ../updater.sh:393
+#: ../updater.sh:321 ../updater.sh:377
+msgid "saved successfully"
+msgstr "salvato con successo"
+
+#: ../updater.sh:383
 msgid "Startup batch script installed:"
 msgstr "Script batch di avvio installato:"
 
-#: ../updater.sh:407
+#: ../updater.sh:397
 #, sh-format
 msgid ""
 "Below, the existing ZigzagDownLoader extensions,\n"
@@ -312,34 +315,33 @@ msgstr ""
 "\n"
 "ESTENSIONI:\n"
 
-#: ../updater.sh:420 ../updater.sh:423
+#: ../updater.sh:410 ../updater.sh:413
 msgid "README"
 msgstr "LEGGIMI"
 
-#: ../updater.sh:474
+#: ../updater.sh:464
 msgid "Recovery packages not found:"
 msgstr "Recupero pacchetti non trovati"
 
-#: ../updater.sh:626
-#, sh-format
-msgid "$op automatic${suffix} completed${suffix}"
-msgstr "$op automatic${suffix} completat${suffix}"
+#: ../updater.sh:616
+msgid "Successfully completed"
+msgstr "Completato con successo"
 
-#: ../updater.sh:633
+#: ../updater.sh:623
 msgid "ZigzagDownLoader update"
 msgstr "Aggiornamento di ZigzagDownLoader"
 
-#: ../updater.sh:634
+#: ../updater.sh:624
 msgid "ZigzagDownLoader updated with success"
 msgstr "ZigzagDownLoader aggiornato con successo"
 
-#: ../updater.sh:639 ../gui/gui.sh:600 ../gui/gui.sh:697 ../gui/gui.sh:739
+#: ../updater.sh:629 ../gui/gui.sh:600 ../gui/gui.sh:697 ../gui/gui.sh:739
 #: ../gui/gui.sh:793 ../gui/gui.sh:806 ../gui/gui.sh:983 ../gui/gui.sh:1179
 #: ../gui/gui.sh:1247 ../gui/gui.sh:1285 ../gui/gui.sh:1376 ../gui/gui.sh:1454
 msgid "Close"
 msgstr "Chiudi"
 
-#: ../updater.sh:640
+#: ../updater.sh:630
 msgid "Restart ZDL"
 msgstr "Riavvia ZDL"
 
@@ -1416,3 +1418,4 @@ msgstr "completato"
 #: ../ui/ui.awk:236
 msgid "inactive"
 msgstr "non attivo"
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-13 18:14+0200\n"
+"POT-Creation-Date: 2019-08-13 18:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,17 +168,17 @@ msgstr ""
 msgid "Automatic compilation of zdl-wise.c"
 msgstr ""
 
-#: ../updater.sh:99
+#: ../updater.sh:98
 msgid "ZDL update"
 msgstr ""
 
-#: ../updater.sh:100
+#: ../updater.sh:99
 msgid ""
 "The root user password is required.\\nRepeat the ZDL update using the "
 "terminal."
 msgstr ""
 
-#: ../updater.sh:117
+#: ../updater.sh:116
 msgid ""
 "can download with Wget but strongly recommends Axel, because:\n"
 "- can significantly speed up the download\n"
@@ -187,19 +187,19 @@ msgid ""
 "For more information on Axel: http://alioth.debian.org/projects/axel/\n"
 msgstr ""
 
-#: ../updater.sh:124
+#: ../updater.sh:123
 msgid ""
 "uses XTerm if launched from a graphical application such as Firefox/"
 "Iceweasel/Icecat (via Flashgot), Chrome/Chromium (via Download Assistant or "
 "Simple Get), XXXTerm/Xombrero and Conkeror:"
 msgstr ""
 
-#: ../updater.sh:133
+#: ../updater.sh:132
 #, sh-format
 msgid "WARNING: $dep is not installed on your system"
 msgstr ""
 
-#: ../updater.sh:135
+#: ../updater.sh:134
 #, sh-format
 msgid ""
 "\n"
@@ -211,49 +211,52 @@ msgid ""
 "search/?keyword=$dep)"
 msgstr ""
 
-#: ../updater.sh:142
+#: ../updater.sh:141
 msgid "Choose what to do (1-4):"
 msgstr ""
 
-#: ../updater.sh:169
+#: ../updater.sh:168
 msgid "Automatic installation failed"
 msgstr ""
 
-#: ../updater.sh:172
+#: ../updater.sh:171
 msgid "did not find the following package:"
 msgstr ""
 
-#: ../updater.sh:175
+#: ../updater.sh:174
 msgid "Errors in compilation or installation"
 msgstr ""
 
-#: ../updater.sh:189 ../updater.sh:452 ../updater.sh:460 ../updater.sh:466
-#: ../updater.sh:481 ../updater.sh:511 ../updater.sh:584
+#: ../updater.sh:188 ../updater.sh:442 ../updater.sh:450 ../updater.sh:456
+#: ../updater.sh:471 ../updater.sh:501 ../updater.sh:574
 msgid "Installing"
 msgstr ""
 
-#: ../updater.sh:233
+#: ../updater.sh:232
 msgid "Enter the root password"
 msgstr ""
 
-#: ../updater.sh:276
+#: ../updater.sh:275
 msgid "Update completed"
 msgstr ""
 
-#: ../updater.sh:277
+#: ../updater.sh:276
 msgid "Update failed"
 msgstr ""
 
-#: ../updater.sh:328 ../updater.sh:384
-#, sh-format
-msgid "$op failed${suffix}. Please try again"
+#: ../updater.sh:318 ../updater.sh:374
+msgid "failed. Please try again"
 msgstr ""
 
-#: ../updater.sh:393
+#: ../updater.sh:321 ../updater.sh:377
+msgid "saved successfully"
+msgstr ""
+
+#: ../updater.sh:383
 msgid "Startup batch script installed:"
 msgstr ""
 
-#: ../updater.sh:407
+#: ../updater.sh:397
 #, sh-format
 msgid ""
 "Below, the existing ZigzagDownLoader extensions,\n"
@@ -271,34 +274,33 @@ msgid ""
 "EXTENSIONS:\n"
 msgstr ""
 
-#: ../updater.sh:420 ../updater.sh:423
+#: ../updater.sh:410 ../updater.sh:413
 msgid "README"
 msgstr ""
 
-#: ../updater.sh:474
+#: ../updater.sh:464
 msgid "Recovery packages not found:"
 msgstr ""
 
-#: ../updater.sh:626
-#, sh-format
-msgid "$op automatic${suffix} completed${suffix}"
+#: ../updater.sh:616
+msgid "Successfully completed"
 msgstr ""
 
-#: ../updater.sh:633
+#: ../updater.sh:623
 msgid "ZigzagDownLoader update"
 msgstr ""
 
-#: ../updater.sh:634
+#: ../updater.sh:624
 msgid "ZigzagDownLoader updated with success"
 msgstr ""
 
-#: ../updater.sh:639 ../gui/gui.sh:600 ../gui/gui.sh:697 ../gui/gui.sh:739
+#: ../updater.sh:629 ../gui/gui.sh:600 ../gui/gui.sh:697 ../gui/gui.sh:739
 #: ../gui/gui.sh:793 ../gui/gui.sh:806 ../gui/gui.sh:983 ../gui/gui.sh:1179
 #: ../gui/gui.sh:1247 ../gui/gui.sh:1285 ../gui/gui.sh:1376 ../gui/gui.sh:1454
 msgid "Close"
 msgstr ""
 
-#: ../updater.sh:640
+#: ../updater.sh:630
 msgid "Restart ZDL"
 msgstr ""
 
