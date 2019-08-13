@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-13 17:56+0200\n"
+"POT-Creation-Date: 2019-08-13 18:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,11 +65,11 @@ msgstr ""
 msgid "Select an option"
 msgstr ""
 
-#: ../config_manager.sh:137
+#: ../config_manager.sh:139
 msgid "ZigzagDownLoader configuration"
 msgstr ""
 
-#: ../config_manager.sh:140
+#: ../config_manager.sh:141
 #, sh-format
 msgid ""
 "The configuration consists of ${BRed}names${Color_Off} and ${BBlue}values"
@@ -82,81 +82,81 @@ msgid ""
 "\\n"
 msgstr ""
 
-#: ../config_manager.sh:146
+#: ../config_manager.sh:147
 msgid "Select the default item to edit"
 msgstr ""
 
-#: ../config_manager.sh:147
+#: ../config_manager.sh:148
 msgid "to go back"
 msgstr ""
 
-#: ../config_manager.sh:160
+#: ../config_manager.sh:161
 msgid ""
 "Do you really want to reset the socket account? You can reset it from the "
 "web interface (yes|*)"
 msgstr ""
 
-#: ../config_manager.sh:214 ../gui/gui.sh:1271 ../gui/gui.sh:1337
+#: ../config_manager.sh:215 ../gui/gui.sh:1271 ../gui/gui.sh:1337
 msgid "Options"
 msgstr ""
 
-#: ../config_manager.sh:217
+#: ../config_manager.sh:218
 msgid "Add/edit an account"
 msgstr ""
 
-#: ../config_manager.sh:218
+#: ../config_manager.sh:219
 msgid "Delete an account"
 msgstr ""
 
-#: ../config_manager.sh:219
+#: ../config_manager.sh:220
 msgid "View account passwords"
 msgstr ""
 
-#: ../config_manager.sh:220
+#: ../config_manager.sh:221
 msgid "Return to the main configuration page"
 msgstr ""
 
-#: ../config_manager.sh:233
+#: ../config_manager.sh:234
 msgid "Enter an account for automatic login"
 msgstr ""
 
-#: ../config_manager.sh:235
+#: ../config_manager.sh:236
 msgid "Username:"
 msgstr ""
 
-#: ../config_manager.sh:240
+#: ../config_manager.sh:241
 msgid "the characters will not be printed"
 msgstr ""
 
-#: ../config_manager.sh:243
+#: ../config_manager.sh:244
 msgid "Repeat the password (for verification)"
 msgstr ""
 
-#: ../config_manager.sh:255
+#: ../config_manager.sh:256
 msgid "Repeat the operation: mismatched passwords"
 msgstr ""
 
-#: ../config_manager.sh:257
+#: ../config_manager.sh:258
 msgid "Repeat the operation: missing username or password"
 msgstr ""
 
-#: ../config_manager.sh:260
+#: ../config_manager.sh:261
 msgid "Do you want to enter a new account? (y|*)"
 msgstr ""
 
-#: ../config_manager.sh:267 ../config_manager.sh:282 ../config_manager.sh:307
+#: ../config_manager.sh:268 ../config_manager.sh:283 ../config_manager.sh:308
 msgid "No username entered"
 msgstr ""
 
-#: ../config_manager.sh:274
+#: ../config_manager.sh:275
 msgid "Account username to be deleted"
 msgstr ""
 
-#: ../config_manager.sh:301
+#: ../config_manager.sh:302
 msgid "Account registered for"
 msgstr ""
 
-#: ../config_manager.sh:323
+#: ../config_manager.sh:324
 msgid "List of registered users"
 msgstr ""
 

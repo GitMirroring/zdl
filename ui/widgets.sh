@@ -326,7 +326,7 @@ function pause {
 	    [ -n "$redirected_link" ]
     then
 	echo
-	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to continue") " #Digita <Invio> per continuare
+	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to continue")"
 	print_c 0 ""
 	cursor off
 	read -e
@@ -340,7 +340,7 @@ function xterm_stop {
 		   [ -z "${pipe_out[*]}" ]             ||
 		       [ -n "$redirected_link" ] )
     then
-	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to exit") " #Digita <Invio> per uscire
+	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to exit")"
 	echo -ne "\n"
 	cursor off
 	read -e 

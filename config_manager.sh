@@ -80,7 +80,7 @@ function configure_key {
 	    if [[ "${key_conf[$opt]}" =~ (reconnecter|player|editor) ]] &&
 		   ! command -v ${new_value%% *} >/dev/null
 	    then
-		printf "${BRed}%s" "$(gettext "Reconfiguration failed: non-existent program")${extra_string}$Color_Off"
+		printf "${BRed}%s${Color_Off}\n" "$(gettext "Reconfiguration failed: non-existent program")${extra_string}"
 		pause
 
 	    else
