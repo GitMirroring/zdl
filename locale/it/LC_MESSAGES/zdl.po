@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-09 16:35+0200\n"
+"POT-Creation-Date: 2019-08-13 17:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -15,6 +15,157 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../config_manager.sh:45
+msgid "No value entered: do you want to delete the previous value? (yes|*)"
+msgstr "Nessun valore inserito: vuoi cancellare il precedente valore? (sì|*)"
+
+#: ../config_manager.sh:67
+msgid "Enter the new value"
+msgstr "Inserisci il nuovo valore"
+
+#: ../config_manager.sh:71
+msgid "complete and valid path"
+msgstr "path completo e valido"
+
+#: ../config_manager.sh:75
+msgid "name"
+msgstr "nome"
+
+#: ../config_manager.sh:83
+msgid "Reconfiguration failed: non-existent program"
+msgstr "Riconfigurazione fallita: programma non esistente"
+
+#: ../config_manager.sh:98
+msgid "Current configuration"
+msgstr "Configurazione attuale"
+
+#: ../config_manager.sh:112
+#, sh-format
+msgid ""
+"The configuration consists of ${BRed}names${Color_Off} and ${BBlue}values"
+"${Color_Off}.\\n\\n${BYellow}For each name, a value can be specified:"
+"${Color_Off}\\n- the ${BBlue}available alternative values${Color_Off}, in "
+"blue, can be suggested between the round brackets and separated by the "
+"vertical bar\\n- the ${BRed}name${Color_Off} to which the value is assigned "
+"is in red\\n- ${BBlue}*${Color_Off} means any value other than the others, "
+"even null\\n- the current ${BGreen}values recorded${Color_Off} are in green"
+"\\n"
+msgstr ""
+"La configurazione consiste di ${BRed}nomi${Color_Off} e ${BBlue}valori"
+"${Color_Off}.\n"
+"\n"
+"${BYellow}Per ogni nome, un valore può essere specificato:${Color_Off}\n"
+"- i ${BBlue}valori disponibili alternativi${Color_Off}, in blu, possono "
+"essere suggeriti tra parentesi tonde e separati dalla barra verticale\n"
+"- il ${BRed}nome${Color_Off} al quale è assegnato il valore è in rosso\n"
+"- ${BBlue}*${Color_Off} significa qualunque valore diverso dagli altri, "
+"anche nullo\n"
+"- gli attuali ${BGreen}valori registrati${Color_Off} sono in verde\\n"
+
+#: ../config_manager.sh:118
+msgid "Settings"
+msgstr "Preferenze"
+
+#: ../config_manager.sh:121
+msgid "Change the configuration"
+msgstr "Modifica la configurazione"
+
+#: ../config_manager.sh:122
+msgid "Reset the web interface account (socket account)"
+msgstr "Resetta l'account delle interfacce web (account del socket)"
+
+#: ../config_manager.sh:123
+msgid "Manage hosting service accounts"
+msgstr "Gestisci gli account dei servizi di hosting"
+
+#: ../config_manager.sh:124 ../gui/gui.sh:35 ../gui/gui.sh:1341
+msgid "Quit"
+msgstr "Esci"
+
+#: ../config_manager.sh:126
+msgid "Select an option"
+msgstr "Seleziona un'opzione"
+
+#: ../config_manager.sh:146
+msgid "Select the default item to edit"
+msgstr "Seleziona l'elemento predefinito da modificare"
+
+#: ../config_manager.sh:147
+msgid "to go back"
+msgstr "per tornare indietro"
+
+#: ../config_manager.sh:160
+msgid ""
+"Do you really want to reset the socket account? You can reset it from the "
+"web interface (yes|*)"
+msgstr ""
+"Vuoi davvero resettare l'account dei socket? Potrai reimpostarlo "
+"dall'interfaccia web. (sì|*)"
+
+#: ../config_manager.sh:214 ../gui/gui.sh:1271 ../gui/gui.sh:1337
+msgid "Options"
+msgstr "Opzioni"
+
+#: ../config_manager.sh:217
+msgid "Add/edit an account"
+msgstr "Aggiungi/modifica un account"
+
+#: ../config_manager.sh:218
+msgid "Delete an account"
+msgstr "Elimina un account"
+
+#: ../config_manager.sh:219
+msgid "View account passwords"
+msgstr "Visualizza password degli account"
+
+#: ../config_manager.sh:220
+msgid "Return to the main configuration page"
+msgstr "Torna alla pagina principale di configurazione"
+
+#: ../config_manager.sh:233
+msgid "Enter an account for automatic login"
+msgstr "Inserisci un account per il login automatico"
+
+#: ../config_manager.sh:235
+msgid "Username:"
+msgstr "Nome utente:"
+
+#: ../config_manager.sh:240
+msgid "the characters will not be printed"
+msgstr "i caratteri non saranno stampati"
+
+#: ../config_manager.sh:243
+msgid "Repeat the password (for verification)"
+msgstr "Ripeti la password (per verifica)"
+
+#: ../config_manager.sh:255
+msgid "Repeat the operation: mismatched passwords"
+msgstr "Ripeti l'operazione: password non corrispondenti"
+
+#: ../config_manager.sh:257
+msgid "Repeat the operation: missing username or password"
+msgstr "Ripeti l'operazione: nome utente o password mancante"
+
+#: ../config_manager.sh:260
+msgid "Do you want to enter a new account? (y|*)"
+msgstr "Vuoi inserire un nuovo account? [s|*]"
+
+#: ../config_manager.sh:267 ../config_manager.sh:282 ../config_manager.sh:307
+msgid "No username entered"
+msgstr "Nessun username inserito"
+
+#: ../config_manager.sh:274
+msgid "Account username to be deleted"
+msgstr "Nome utente dell'account da cancellare"
+
+#: ../config_manager.sh:301
+msgid "Account registered for"
+msgstr "Account registrati per"
+
+#: ../config_manager.sh:323
+msgid "List of registered users"
+msgstr "Lista utenti registrati:"
 
 #: ../install_zdl.sh:250
 msgid "For information on"
@@ -66,6 +217,7 @@ msgid "WARNING: $dep is not installed on your system"
 msgstr "ATTENZIONE: $dep non è installato nel tuo sistema"
 
 #: ../updater.sh:135
+#, sh-format
 msgid ""
 "\n"
 "1) Automatically install $dep from packages (RECOMMENDED)\n"
@@ -254,16 +406,16 @@ msgstr ""
 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non "
 "trovati"
 
-#: ../zdl.sh:755
+#: ../zdl.sh:754
 msgid "Started in daemon mode in %s"
 msgstr "Avviato in modalità demone in %s"
 
-#: ../zdl.sh:756 ../zdl.sh:766 ../gui/gui.sh:261 ../gui/gui.sh:283
+#: ../zdl.sh:755 ../zdl.sh:765 ../gui/gui.sh:261 ../gui/gui.sh:283
 #: ../gui/gui.sh:287
 msgid "You can control it with:"
 msgstr "Puoi controllarlo con:"
 
-#: ../zdl.sh:765
+#: ../zdl.sh:764
 msgid "An active instance of daemon mode already exists in %s"
 msgstr "Esiste già un'istanza attiva della modalità demone in %s"
 
@@ -332,27 +484,27 @@ msgstr "Connessione ed estrazione da:"
 msgid "The complete list of links is in links.txt"
 msgstr "L'elenco completo dei link è in links.txt"
 
-#: ../zdl.sh:1525
+#: ../zdl.sh:1528
 msgid "Processing link:"
 msgstr "Link da processare:"
 
-#: ../zdl.sh:1528 ../ui/ui.sh:93
+#: ../zdl.sh:1531 ../ui/ui.sh:93
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:1663 ../ui/ui.awk:311
+#: ../zdl.sh:1666 ../ui/ui.awk:311
 msgid "File URL"
 msgstr "URL del file"
 
-#: ../zdl.sh:1814
+#: ../zdl.sh:1818
 msgid "Download completed"
 msgstr "Download completato"
 
-#: ../zdl.sh:1830
+#: ../zdl.sh:1834
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 
-#: ../zdl.sh:1831
+#: ../zdl.sh:1835
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
@@ -363,10 +515,6 @@ msgstr "Numero download:"
 #: ../gui/gui.sh:34
 msgid "Select the download destination directory:"
 msgstr "Seleziona la directory di destinazione dei download:"
-
-#: ../gui/gui.sh:35 ../gui/gui.sh:1341
-msgid "Quit"
-msgstr "Esci"
 
 #: ../gui/gui.sh:36
 msgid "Select"
@@ -702,10 +850,6 @@ msgstr "Socket già non disponibile alla porta"
 #: ../gui/gui.sh:1239
 msgid "Something didn't work"
 msgstr "Qualcosa non ha funzionato"
-
-#: ../gui/gui.sh:1271 ../gui/gui.sh:1337
-msgid "Options"
-msgstr "Opzioni"
 
 #: ../gui/gui.sh:1279 ../gui/gui.sh:1414
 msgid "Default downloader:"
@@ -1232,6 +1376,14 @@ msgstr "Il download da %s si avvierà intorno alle %s per la durata di %s"
 #: ../ui/ui.sh:901
 msgid "Scheduled Live Streams (link, start time, duration):"
 msgstr "Live Stream programmati (link, orario inizio, durata):"
+
+#: ../ui/widgets.sh:329
+msgid "<Return> to continue"
+msgstr ""
+
+#: ../ui/widgets.sh:343
+msgid "<Return> to exit"
+msgstr ""
 
 #: ../ui/ui.awk:72
 msgid "Download id:"

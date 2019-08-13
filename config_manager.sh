@@ -25,26 +25,28 @@
 #
 
 function colorize_values {
-    local text
-    text="$1"
+    print_case "$1" bg_color
+    local txt="$2"
+    declare -n ref="$3"
     
-    bg_color="$(print_case $2)"
-    
-    text="${text//\(/\($BBlue}"
-    text="${text//|/$bg_color|$BBlue}"
-    text="${text//\)/$bg_color\)}"
+    txt="${txt//\(/\($BBlue}"
+    txt="${txt//|/$bg_color|$BBlue}"
+    txt="${txt//\)/$bg_color\)}"
 
-    sprint_c "$bg_color" "$text" "$text" "$bg_color"
+    ref="$bg_color$txt$Color_Off"
 }
 
 function check_read {
     local input
     if [ -z "$1" ]
     then
-	print_c 2 "Nessun valore inserito: vuoi cancellare il valore precedente? (sì|*)"
+	#print_c 2 "Nessun valore inserito: vuoi cancellare il valore precedente? (sì|*)"
+	local res
+	colorize_values 2 "$(gettext "No value entered: do you want to delete the previous value? (yes|*)")" res
+	echo -e "$res"
 	input_text input
 	
-	if [ "$input" == "sì" ]
+	if [[ "$input" =~ (sì|yes) ]]
 	then
 	    return 0
 
@@ -62,14 +64,15 @@ function configure_key {
 	   (( $opt <= ${#key_conf[*]} ))
     then 
 	(( opt-- ))
-	header_box "Scrivi il nuovo valore"
+	header_box "$(gettext "Enter the new value")" #"Inserisci il nuovo valore"
 
-	if [ "${key_conf[$opt]}" == "$reconnecter" ]
+	if [ "${key_conf[$opt]}" == reconnecter ]
 	then
-	    extra_string=" [è necessario indicare il path completo e valido]"
+	    extra_string=" [$(gettext "complete and valid path")]" #path completo e valido
 	fi
-	
-	print_c 2 "$(colorize_values "${string_conf[$opt]}" 2) (nome: $(sprint_c 3 "${key_conf[$opt]}" "${key_conf[$opt]}" 2))$extra_string:"
+	local label
+	colorize_values 2 "${string_conf[$opt]}" label 
+	echo -e "$label ($(gettext "name"): ${BRed}${key_conf[$opt]}${Color_Off})$extra_string:"
 
 	input_text new_value
 	
@@ -77,12 +80,11 @@ function configure_key {
 	    if [[ "${key_conf[$opt]}" =~ (reconnecter|player|editor) ]] &&
 		   ! command -v ${new_value%% *} >/dev/null
 	    then
-		print_c 3 "Riconfigurazione non riuscita: programma inesistente${extra_string}"
+		printf "${BRed}%s" "$(gettext "Reconfiguration failed: non-existent program")${extra_string}$Color_Off"
 		pause
 
 	    else
 		set_item_conf ${key_conf[$opt]} "$new_value"
-		#unlock_fifo conf &
 	    fi
 	
 	touch "$path_conf/updated"
@@ -90,31 +92,39 @@ function configure_key {
 }
 
 function show_conf {
+    local res_color
     source "$file_conf"
-    header_box "Configurazione attuale:"
+    
+    header_box "$(gettext "Current configuration")"
     for ((i=0; i<${#key_conf[*]}; i++))
-    do
-	printf "%b %+4s %b│  " "${BBlue}" "$(( $i+1 ))" "$Color_Off"
+    do       
 	eval_echo=$(eval echo \$${key_conf[$i]})
-	echo -ne "$(colorize_values "${string_conf[$i]}" 5): $(sprint_c 1 "$eval_echo" "$eval_echo")\n"
+	colorize_values 5 "${string_conf[$i]}" res_color
+	printf "%b %+4s %b│  $res_color:${BGreen} $eval_echo\n" "${BBlue}" "$(( $i+1 ))" "$Color_Off"
     done
 }
 
 function configure {
     this_mode="configure"
     start_mode_in_tty "$this_mode" "$this_tty"
-    
+    local res_color intro
+
+    intro="$(eval_gettext "The configuration consists of \${BRed}names\${Color_Off} and \${BBlue}values\${Color_Off}.\n\n\${BYellow}For each name, a value can be specified:\${Color_Off}\n- the \${BBlue}available alternative values\${Color_Off}, in blue, can be suggested between the round brackets and separated by the vertical bar\n- the \${BRed}name\${Color_Off} to which the value is assigned is in red\n- \${BBlue}*\${Color_Off} means any value other than the others, even null\n- the current \${BGreen}values recorded\${Color_Off} are in green\n")"
+
     while true
     do
 	fclear
 	header_z
-	header_box "Preferenze"
-	echo -e "   ${BBlue} 1 ${Color_Off}│  Modifica la configurazione
-   ${BBlue} 2 ${Color_Off}│  Resetta l'account dell'interfaccia web (socket account)
-   ${BBlue} 3 ${Color_Off}│  Gestisci gli account dei servizi di hosting
-   ${BBlue} q ${Color_Off}│  Esci
-"
-	print_c 2 "$(colorize_values "Scegli un'opzione (1|2|3|q)" 2)"
+	header_box "$(gettext "Settings")"
+
+	printf "   ${BBlue} 1 ${Color_Off}│  %s\n   ${BBlue} 2 ${Color_Off}│  %s\n   ${BBlue} 3 ${Color_Off}│  %s\n   ${BBlue} q ${Color_Off}│  %s\n" \
+	       "$(gettext "Change the configuration")" \
+	       "$(gettext "Reset the web interface account (socket account)")" \
+	       "$(gettext "Manage hosting service accounts")" \
+	       "$(gettext "Quit")"
+	
+	colorize_values 2 "$(gettext "Select an option") (1|2|3|q)" res_color
+	echo -e "\n$res_color"
 	
 	cursor off
 	read -s -n1 option_0
@@ -126,21 +136,16 @@ function configure {
 		do
 		    fclear
 		    header_z
-		    header_box "Configurazione di $name_prog"
+		    header_box "$name_prog configuration"
 
-		    print_c 0 "La configurazione è composta da ${BRed}nomi${Color_Off} e ${BBlue}valori${Color_Off}.\n"
-		    print_c 2 "Per ogni nome può essere specificato un valore:"
-		    print_c 0 "
-- i $(sprint_c 4 "valori alternativi disponibili"), in blu, possono essere suggeriti tra le parentesi tonde e separati dalla barra verticale
-- di fianco, in rosso, è indicato il $(sprint_c 3 "nome") a cui verrà assegnato il valore
-- $(sprint_c 4 "*") significa un valore qualsiasi diverso dagli altri, anche nullo
-- gli attuali $(sprint_c 1 "valori registrati") sono in verde\n\n"
-
+		    echo -e "$intro"
 		    get_conf
 		    show_conf
-		    
-		    print_c 2 "\nSeleziona l'elemento predefinito da modificare ($(sprint_c 4 "1-${#key_conf[*]}" "1-${#key_conf[*]}" 2) | $(sprint_c 4 "q" "q" 2) per tornare indietro):"
 
+		    printf "\n${BYellow}%s (${BBlue}1-${#key_conf[*]}${BYellow} | ${BBlue}q${BYellow} %s):${Color_Off}\n" \
+			   "$(gettext "Select the default item to edit")" \
+			   "$(gettext "to go back")"
+		    
 		    input_text opt
 		    
 		    [ "$opt" == "q" ] && {
@@ -152,10 +157,10 @@ function configure {
 		;;
 
 	    2)
-		print_c 2 "Vuoi davvero resettare l'account dei socket? Potrai reimpostarlo dall'interfaccia web. (sì|*)"
+		printf "${BYellow}$(gettext "Do you really want to reset the socket account? You can reset it from the web interface (yes|*)"):${Color_Off}\n"
 		input_text opt
 		
-		if [ "$opt" == "sì" ]
+		if [[ "$opt" =~ (yes|sì) ]]
 		then
 		    rm -f "$path_conf"/.socket-account
 		fi
@@ -206,13 +211,14 @@ function configure_accounts {
     do
 	init_accounts
 	
-	header_box "Opzioni"
-	echo -e "   ${BBlue} 1 ${Color_Off}│  Aggiungi/modifica un account
-   ${BBlue} 2 ${Color_Off}│  Elimina un account
-   ${BBlue} 3 ${Color_Off}│  Visualizza password degli account
-   ${BBlue} q ${Color_Off}│  Torna alla pagina principale di configurazione
-"
+	header_box "$(gettext "Options")" 
 
+	printf "   ${BBlue} 1 ${Color_Off}│  %s\n   ${BBlue} 2 ${Color_Off}│  %s\n   ${BBlue} 3 ${Color_Off}│  %s\n   ${BBlue} q ${Color_Off}│  %s\n" \
+	       "$(gettext "Add/edit an account")" \
+	       "$(gettext "Delete an account")" \
+	       "$(gettext "View account passwords")" \
+	       "$(gettext "Return to the main configuration page")" 
+	
 	cursor off
 	read -s -n1 option_2
 	echo -e -n "\r \r"
@@ -224,18 +230,17 @@ function configure_accounts {
 		    ## clean file "$path_conf"/accounts/$host
 		    init_accounts
 
-		    header_box "Registra un account per il login automatico ($host)"
+		    header_box "$(gettext "Enter an account for automatic login") ($host)" 
 
-		    print_c 2 "\rNome utente:"
+		    echo -e "${BYellow}$(gettext "Username:")${Color_Off}"
 		    input_text user
 		    
 		    if [ -n "$user" ]
 		    then
-			
-			print_c 2 "Password (i caratteri non saranno stampati):"
+			echo -e "${BYellow}Password ($(gettext "the characters will not be printed")):${Color_Off}"
 			read -ers pass
 			
-			print_c 2 "Ripeti la password (per verifica):"
+			echo -e "${BYellow}$(gettext "Repeat the password (for verification)"):${Color_Off}"
 			read -ers pass2
 
 			if [ -n "$pass" ] &&
@@ -247,26 +252,26 @@ function configure_accounts {
 			    
 			elif [ "$pass" != "$pass2" ]
 			then
-			    print_c 3 "Ripeti l'operazione: password non corrispondenti"
+			    echo -e "${BRed}$(gettext "Repeat the operation: mismatched passwords")${Color_Off}"
 			else
-			    print_c 3 "Ripeti l'operazione: nome utente o password mancante"
+			    echo -e "${BRed}$(gettext "Repeat the operation: missing username or password")${Color_Off}"
 			fi
-
-			print_c 2 "\nVuoi registrare un nuovo account? (s|*)"
+			
+			echo -e "${BYellow}$(gettext "Do you want to enter a new account? (y|*)"):${Color_Off}"
 			cursor off
 			read -s -n1 new_input
 			cursor on
-			[ "$new_input" != "s" ] && break
+			[[ ! "$new_input" =~ ^(s|y)$ ]] && break
 
 		    else
-			print_c 3 "Nessun nome utente selezionato"
+			echo -e "${BRed}$(gettext "No username entered")${Color_Off}"
 			pause
 			break
 		    fi
 		done
 		;;
 	    2)	##remove
-		print_c 2 "Nome utente dell'account da cancellare:"
+		echo -e "${BYellow}$(gettext "Account username to be deleted"):${Color_Off}"
 		input_text user
 		
 		if grep -P "^$user\s.+$" "$path_conf"/accounts/$host &>/dev/null
@@ -274,7 +279,7 @@ function configure_accounts {
 		    sed -r "s|^$user\s.+$||g" -i "$path_conf"/accounts/$host
 
 		else
-		    print_c 3 "Nessun account selezionato"
+		    echo -e "${BRed}$(gettext "No username entered")${Color_Off}"
 		    pause
 		fi
 		;;
@@ -293,27 +298,29 @@ function configure_accounts {
 
 function show_accounts {
     local accounts
-    header_box "Account registrati per $host:"
+    header_box "$(gettext "Account registered for") $host:"
 
-    accounts=$(cat "$path_conf"/accounts/$host)
+    read -d '' accounts < "$path_conf"/accounts/$host
 
-    [ -z "$accounts" ] &&
-	print_c 3 "Nessun account registrato" &&
+    if [ -z "$accounts" ]
+    then
+	echo -e "${BRed}$(gettext "No username entered")${Color_Off}"
 	return 1
-
+    fi
+    
     if [ "$1" == "pass" ]
     then
 	get_accounts
 	((length_user+=4))
 	
-	print_c 4 "$(printf "%+${length_user}s ${Color_Off}│${BBlue} %s" "Utenti:" "Password:")"
+	printf "${BBlue}%+${length_user}s ${Color_Off}│${BBlue} %s${Color_Off}\n" "Username:" "Password:"
 	for ((i=0; i<${#accounts_user[@]}; i++))
 	do
-	    print_c 0 "$(printf "%+${length_user}s │ %s" "${accounts_user[i]}" "${accounts_pass[i]}")"
+	    printf "%+${length_user}s │ %s\n" "${accounts_user[i]}" "${accounts_pass[i]}"
 	done
 
     else
-	print_c 4 "Lista utenti registrati:"
+	echo -e "${BBlue}$(gettext "List of registered users"):${Color_Off}"
 	awk '{print $1}' <<< "$accounts"
     fi
     return 0
