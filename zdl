@@ -1270,6 +1270,11 @@ then
 		set_link + "${BASE_DIR}${args[i]}"
 		
 	    else
+		## dos2unix:
+		tr -d '\r' < "${BASE_DIR}${args[i]}" > "${BASE_DIR}${args[i]}".unix
+		echo >>"${BASE_DIR}${args[i]}".unix
+		mv "${BASE_DIR}${args[i]}".unix "${BASE_DIR}${args[i]}"
+
 		while read line
 		do
 		    sanitize_url "$line" >>"$path_tmp/sanitized_links"

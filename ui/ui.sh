@@ -25,7 +25,9 @@
 #
 
 function show_downloads {
-    local cols
+    local cols olang="$LANGUAGE"
+    get_language
+    
     if test -f "$path_tmp"/columns
     then
 	read cols < "$path_tmp"/columns
@@ -57,12 +59,18 @@ function show_downloads {
     else
 	data_stdout
     fi
+    
+    export LANGUAGE="$olang"
+    export LANG="$olang"
+    export LC_ALL="$olang"
 }
 
 function show_downloads_lite {
     local no_clear="$1"
     [ -n "$no_clear" ] && force_header=force
-
+    local olang="$LANGUAGE"
+    get_language
+    
     cursor off
     
     (( odd_run++ ))
@@ -100,6 +108,9 @@ function show_downloads_lite {
 	#     [ -f "$path_tmp"/stop-binding ] ||
 	#     clear_lite
     fi
+    export LANGUAGE="$olang"
+    export LANG="$olang"
+    export LC_ALL="$olang"
 }
 
 function check_wait_connecting {
@@ -116,7 +127,9 @@ function check_wait_connecting {
 
 function show_downloads_extended {
     unset instance_pid daemon_pid
-
+    local olang="$LANGUAGE"
+    get_language
+    
     fclear
     header_z
     header_box_interactive "$(gettext "Interactive mode")"
@@ -170,6 +183,10 @@ function show_downloads_extended {
 	       -v Background="$Background"                         \
 	       -e "BEGIN {$awk_data display()}" 
     fi
+
+    export LANGUAGE="$olang"
+    export LANG="$olang"
+    export LC_ALL="$olang"
 }
 
 

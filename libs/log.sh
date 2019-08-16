@@ -47,11 +47,14 @@ function _log {
 	    ;;
 	2)
 	    [ -n "$errMsg" ] &&
-		errMsg=":\n$errMsg"
+		errMsg=":
+$errMsg"
 	    msg="$url_in --> File$msg_file_in non disponibile, riprovo più tardi${errMsg}"
-	    [ -z "$file_in" ] && msg+="\nManca il nome del file"
+	    [ -z "$file_in" ] && msg+="
+Manca il nome del file"
 	    [ -n "$url_in_file" ] && msg_url_in_file=": $url_in_file"
-	    url "$url_in_file" || msg+="\nNon è stato trovato un url valido$msg_url_in_file"
+	    url "$url_in_file" || msg+="
+Non è stato trovato un url valido$msg_url_in_file"
 	    ;;
 	3)
 	    msg="$url_in --> Indirizzo errato o file non disponibile" 
@@ -75,7 +78,8 @@ function _log {
 	    msg="$url_in --> File$msg_file_in già in download (${url_out[$i]})"
 	    ;;
 	8)
-	    msg="$url_in --> Indirizzo errato o file non disponibile.\nErrore nello scaricare la pagina HTML del video. Controllare che l'URL sia stato inserito correttamente o che il video non sia privato."
+	    msg="$url_in --> Indirizzo errato o file non disponibile.
+Errore nello scaricare la pagina HTML del video. Controllare che l'URL sia stato inserito correttamente o che il video non sia privato."
 	    set_link - "$url_in"
 	    ;;
 	9)
@@ -92,7 +96,8 @@ function _log {
 	12)
 	    if [ -n "$2" ]
 	    then
-		msg="$2 --> Non è un URL adatto per $name_prog\n"
+		msg="$2 --> Non è un URL adatto per $name_prog
+"
 
 	    else
 		msg="URL non trovato"
