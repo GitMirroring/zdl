@@ -74,7 +74,7 @@ function show_downloads_extended () {
 
 	if (downloader_out[i] ~ /cURL|RTMPDump/) {
 	    code = code BBlue "File: " Color_Off file_out[i] "\n"
-	    code = code BBlue "Downloader: " Color_Off downloader_out[i] BYellow " protocollo RTMP" Color_Off "\n"
+	    code = code BBlue "Downloader: " Color_Off downloader_out[i] BYellow _" RTMP protocol" Color_Off "\n"
 	    code = code BBlue "Link: " Color_Off url_out[i] "\n"
 	    code = code BBlue "Streamer: " Color_Off streamer_out[i] "\n"
 	    code = code BBlue "Playpath: " Color_Off playpath_out[i] "\n"
@@ -87,16 +87,18 @@ function show_downloads_extended () {
 
 	if (downloader_out[i] ~ /cURL|FFMpeg/ && length_out[i] == "unspecified") {
 	    if (check_pid(pid_out[i])) {
-		code = code BGreen downloader_out[i] ": " progress_unspecified("downloading") "\n\n"
+		code = code BGreen downloader_out[i] ": " progress_unspecified("downloading") "\n"
 	    } else if (exists(file_out[i])) {
 		code = code BGreen downloader_out[i] ": " progress_unspecified("complete") "\n"
 	    } else {
 		code = code BBlue _"Status" ": " Color_Off BRed _"Download not active" Color_Off "\n"
 	    }
 	} else {
-	    progress_bar = make_progress() 
-	    code = code BBlue _"Status" ": " diff_bar_color progress_bar Color_Off "\n\n"
+	    progress_bar = make_progress()
+	    gsub(/\ *$/,"", progress_bar)
+	    code = code BBlue _"Status" ": " diff_bar_color progress_bar Color_Off "\n"
 	}
+	code = code "\n"
     }
     return code
 }

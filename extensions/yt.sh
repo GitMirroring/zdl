@@ -56,7 +56,7 @@ then
 	    file_in="$(tail -n1 <<< "$data")"
 	    file_in="${file_in% _ *}"
 	    
-	    if [[ "$file_in" =~ ^(_|\ )$ ]]
+	    if [[ "$file_in" =~ ^(_|\ )\- ]]
 	    then
 		file_in="${title}${file_in}"
 	    fi

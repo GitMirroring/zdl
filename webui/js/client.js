@@ -78,7 +78,7 @@ var client = ( function () {
             var node = "",
                 defUrl;
             $.each( livestream, function ( index, item ) {
-                defUrl = item.link.slice(0, item.link.lastIndexOf("#"));
+                defUrl = item.link.slice( 0, item.link.lastIndexOf( "#" ) );
                 node += "<div class='scheduled-item'><div class='title'>" + data.channels[defUrl] + "<button class='button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only' data-link='" + item.link + "' data-path='" + item.path + "'><span class='ui-button-icon ui-icon ui-icon-close'></span></button></div><div class='content'><span><strong>Url:</strong> " + item.link + "</span><span><strong>Path:</strong> " + item.path + "</span><span><strong data-i18n='scheduled-start'>Start:</strong> " + item.start + "</span><span><strong data-i18n='scheduled-duration'>Duration:</strong> " + item.duration + "</span></div></div>";
             } );
             $( "#scheduled-rec" ).empty().append( node ).i18n();
@@ -132,7 +132,7 @@ var client = ( function () {
             data.active.push( file );
             utils.updateCounters( data.list.length, data.active.length );
         } else {
-            if ( perc === 100 && isActive  ) {
+            if ( perc === 100 && isActive ) {
                 data.active.splice( data.active.indexOf( file ), 1 );
                 return true;
             }
@@ -256,9 +256,12 @@ var client = ( function () {
                     status,
                     statusVal,
                     statusParent,
-                    statusClass;
-		$.each( obj, function ( index, value ) {
+                    statusClass,
+                    filename,
+                    links = [];
+                $.each( obj, function ( index, value ) {
                     id = $.md5( value.link );
+                    links.push( value.link );
                     perc = parseInt( value.percent );
                     if ( perc < 100 ) {
                         statusClass = colorToClass( value.color );
@@ -275,7 +278,7 @@ var client = ( function () {
                         if ( statusClass ) {
                             statusClass = " " + statusClass;
                         }
-                        $( "<div class='progressbar'><div class='side-bar'><div id='bar-" + id + "'><div class='label' id='dl-filename-" + id + "'>" + value.file + "</div></div></div><div class='side-status" + statusClass + "'><span id='dl-status-" + id + "'></span></div><div class='side-button'><button data-i18n='button-info' class='button open-info' data-toggle='info-" + id + "'>Info</button></div></div><div class='toggle'><div id='info-" + id + "' class='content info ui-widget-content ui-corner-all'><ul><li><span>Downloader: </span>" + value.downloader + "</li><li><span>Link: </span>" + value.link + "</li><li><span>Path: </span>" + value.path + "</li><li><span>Length: </span><span class='dl-size'>" + len + "</span></li><li><span>URL: </span>" + value.url + "</li></ul><button data-i18n='button-manage' class='button dl-manage' data-path='" + value.path + "'>Manage</button><button data-i18n='button-play' class='button play-file' id='play-file-" + id + "' data-file='" + value.path + "/" + value.file + "'>Play</button><button data-i18n='button-playlist' class='button dl-playlist' id='dl-playlist-" + id + "' data-file='" + value.path + "/" + value.file + "'>Add to playlist</button><button data-i18n='button-stop' class='button dl-stop' data-link='" + value.link + "' data-file='" + value.file + "'>Stop</button><button data-i18n='button-delete' class='button dl-delete' data-path='" + value.path + "' data-link='" + value.link + "' data-file='" + value.file + "' title='" + $.i18n("delete-download-tooltip") + "'>Delete</button></div></div>" ).prependTo( "#downloads" );
+                        $( "<div class='progressbar'><div class='side-bar'><div id='bar-" + id + "'><div class='label'>" + value.file + "</div></div></div><div class='side-status" + statusClass + "'><span id='dl-status-" + id + "'></span></div><div class='side-button'><button data-i18n='button-info' class='button open-info' data-toggle='info-" + id + "'>Info</button></div></div><div class='toggle'><div id='info-" + id + "' class='content info ui-widget-content ui-corner-all'><ul><li><span>Downloader: </span>" + value.downloader + "</li><li><span>Link: </span>" + value.link + "</li><li><span>Path: </span>" + value.path + "</li><li><span>Length: </span><span class='dl-size'>" + len + "</span></li><li><span>URL: </span>" + value.url + "</li></ul><button data-i18n='button-manage' class='button dl-manage' data-path='" + value.path + "'>Manage</button><button data-i18n='button-play' class='button play-file' data-file='" + value.path + "/" + value.file + "'>Play</button><button data-i18n='button-playlist' class='button dl-playlist' data-file='" + value.path + "/" + value.file + "'>Add to playlist</button><button data-i18n='button-stop' class='button dl-stop' data-link='" + value.link + "' data-file='" + value.file + "'>Stop</button><button data-i18n='button-delete' class='button dl-delete' data-path='" + value.path + "' data-link='" + value.link + "' data-file='" + value.file + "' title='" + $.i18n("delete-download-tooltip") + "'>Delete</button></div></div>" ).prependTo( "#downloads" );
                         $( "#dl-status-" + id ).text( statusVal );
                         $( ".progressbar:first-child > .side-button > .button" ).button();
                         $( "#info-" + id + " > .button" ).button().i18n().tooltip( {
@@ -299,10 +302,10 @@ var client = ( function () {
                         bar = $( "#bar-" + id );
                         if ( bar.hasClass("ui-progressbar-indeterminate") ) {
                             bar.progressbar( "value", 0.1 );
-			}
+                        }
                         bar.children( ".ui-progressbar-value" ).animate( {
-        		    width: perc + "%"
-    			}, 500 );
+                            width: perc + "%"
+                        }, 500 );
                         $( "#info-" + id + " .dl-size").text( len );
                         status = $( "#dl-status-" + id );
                         statusParent = status.parent();
@@ -310,9 +313,14 @@ var client = ( function () {
                             statusParent.removeClass().addClass( "side-status " + statusClass );
                         }
                         status.text( statusVal );
-			$( "#dl-filename-" + id ).text( value.file );
-			$( "#play-file-" + id ).attr( "data-file", value.path + "/" + value.file );
-			$( "#dl-playlist-" + id ).attr( "data-file", value.path + "/" + value.file );
+
+                        filename = bar.children( ".label" ).text();
+                        if ( filename !== value.file ) {
+                            data.active.splice( data.active.indexOf( filename ), 1, value.file );
+                            bar.children( ".label" ).text( value.file );
+                            $( "#info-" + id ).children( "button.play-file, button.dl-playlist" ).attr( "data-file", value.path + "/" + value.file );
+                        }
+
                         if ( downloadCompleted( value.file, perc ) ) {
                             bar.attr( "aria-valuenow", perc );
                             utils.updateCounters( data.list.length, data.active.length );
@@ -320,6 +328,7 @@ var client = ( function () {
                         }
                     }
                 } );
+                utils.checkBars( links );
             }
             downloadFlow( force );
         } ).catch( function ( e ) {

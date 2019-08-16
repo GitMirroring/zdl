@@ -181,6 +181,7 @@
     "playlist-video-to-audio": "Extracted audio from video $1",
     "playlist-video-to-audio-not-found": "Unable to extract audio from video $1 (not found)",
     "playlist-video-ffmpeg-not-found": "Audio extraction requires ffmpeg which is not found on your system",
+    "progressbar-inexistent-deleted": "Deleted progressbar of download removed by external action: $1",
     "radio-edit-label": "Edit",
     "radio-log-label": "Records only errors",
     "radio-tomorrow-label": "Tomorrow time",

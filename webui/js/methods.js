@@ -59,11 +59,10 @@ var downloads = {
         if ( path !== myZDL.path ) {
             myZDL.initClient( path ).then( function () {
                 utils.log( "client-init", path );
-                utils.switchToTab( 1 );
             } ).catch( function ( e ) {
                 utils.log( "client-init-error", e, true );
             } );
-        } else
+        }
 	    utils.switchToTab( 1 );
     },
 
@@ -1156,6 +1155,28 @@ var utils = {
         $( "#counters .total" ).text( counters[0] );
         $( "#counters .active" ).text( counters[1] );
         $( "#counters .completed" ).text( counters[0] - counters[1] );
+    },
+
+    /* Check and delete download progressbar removed by external action */
+    checkBars: function ( links ) {
+        var bars = client.get( "list" ),
+            barId,
+            progress,
+            link,
+            file;
+        $.each( bars, function ( index, item ) {
+            barId = $( "#bar-" + item );
+            file = barId.children( ".label" ).text();
+            link = $( "#info-" + item + " button:last-child" ).data( "link" );
+            if ( link && !links.includes( link ) ) {
+                progress = barId.closest( '.progressbar' );
+                progress.next( ".toggle" ).remove();
+                progress.remove();
+				client.remove( "list", item );
+				utils.updateCounters();
+                utils.log( "progressbar-inexistent-deleted", file );
+            }
+        } );
     },
 
     /* Force localization in problematic areas */
