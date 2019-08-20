@@ -366,26 +366,23 @@ function check_link {
     test -f "$path_tmp/max-dl" &&
 	read max_dl < "$path_tmp/max-dl"
 
-    if [ -z "$max_dl" ]
-    then
-	if check_livestream_link_time "$link" &&
-		! check_livestream_link_start "$link"
-	then
-	    return 1
-	else
-	    return 0
-	fi
-    fi
+    print_c 4 "Checking link: %s" "$link"
     
+    if [ -z "$max_dl" ] &&
+	   check_livestream_link_time "$link" &&
+	   ! check_livestream_link_start "$link"
+    then
+	return 1
+    fi
+
     if url "$link" &&
 	   set_link in "$link"
     then
 	if data_stdout
 	then
-	    if (( "${#pid_alive[*]}" < "$max_dl" )) || check_livestream_link_start "$link"
+	    if ( [ -n "$max_dl" ] && (( "${#pid_alive[*]}" >= "$max_dl" )) ) ||
+		   ( check_livestream "$link" && ! check_livestream_link_start "$link" )
 	    then
-		ret=0
-	    else
 		ret=1
 	    fi
 
@@ -406,7 +403,8 @@ function check_link {
 
     check_livestream_link_time "$link" &&
 	! check_livestream_link_start "$link" &&
-	ret=1
+	ret=1 &&
+	echo 3
 
     return $ret
 }
@@ -492,7 +490,7 @@ function check_in_file { 	## return --> no_download=1 / download=0
 	return 1
 
     elif [ -z "$url_in_file" ] ||                               
-	( [ -z "$file_in" ] && [[ "$downloader_in" =~ (Aria2|Axel) ]] )
+	( [ -z "$file_in" ] && [[ "$downloader_in" =~ (Aria2|Axel|Wget) ]] )
     then
 	_log 2
 	unset no_newip
