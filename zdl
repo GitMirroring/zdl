@@ -1428,15 +1428,9 @@ function main_loop {
     local nline nlines loop_url_in url_in_old
     clean_livestream
     
-    test -f "$path_tmp"/max-dl &&
-	read max_dl < "$path_tmp"/max-dl
-    
-    if ( [ "$this_mode" == "daemon" ] &&
+    if [ "$this_mode" == "daemon" ] &&
 	     [ ! -s "$path_tmp"/links_loop.txt ] &&
-	     [ -z "$lite_mode" ] ) ||
-	   ( [ -n "$max_dl" ] &&
-		 ((max_dl < 1)) &&
-		 zero_dl )
+	     [ -z "$lite_mode" ] 
     then
     	start_file="$path_tmp"/links_loop.txt
 	post_process
@@ -1448,6 +1442,13 @@ function main_loop {
 	nline=1
 	while :
 	do
+	    test -f "$path_tmp"/max-dl &&
+		read max_dl < "$path_tmp"/max-dl
+    
+	    [ -n "$max_dl" ] &&
+		((max_dl < 1)) &&
+		zero_dl 
+
 	    post_process
 	    clean_livestream
 	    display_livestreams
@@ -1520,6 +1521,8 @@ function main_loop {
 		read downloader_in < "$path_tmp/downloader"
 	    fi
 
+	    print_c 4 "Checking link: %s" "$url_in"
+	    
 	    if check_link "$url_in"
 	    then
 		axel_parts=$axel_parts_conf

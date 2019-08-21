@@ -365,8 +365,6 @@ function check_link {
     local max_dl
     test -f "$path_tmp/max-dl" &&
 	read max_dl < "$path_tmp/max-dl"
-
-    print_c 4 "Checking link: %s" "$link"
     
     if [ -z "$max_dl" ] &&
 	   check_livestream_link_time "$link" &&
@@ -1001,7 +999,7 @@ function zero_dl {
 	    print_c 3 "$PROG in pausa"
 	    print_c 4 "Per processare nuovi link, scarica un numero di file maggiore di zero:"
 	    print_c 0 "usa l'opzione [-m|--multi [NUMERO]] oppure entra nella modalità interattiva e digita un numero da 1 a 9"
-	    hide_zero=true
+	    #hide_zero=true
 	fi
 	return 0
 
