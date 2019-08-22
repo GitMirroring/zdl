@@ -46,13 +46,15 @@ then
     if [ -n "$url_in_file" ] &&
 	   ! url "$url_in_file"
     then
-	url_in_file="${url_in_file#*\'m3u8\'\ \:\ \'}"
+#	url_in_file="${url_in_file#*\'m3u8\'\ \:\ \'}"
+	url_in_file="${url_in_file#*\'m3u8\'}"
 	url_in_file="${url_in_file%%\'*}"
 
-	url_in_file="${url_in_file#*\"m3u8\"\ \:\ \"}"
+#	url_in_file="${url_in_file#*\"m3u8\"\ \:\ \"}"
+	url_in_file="${url_in_file#*\"}"
 	url_in_file="${url_in_file%%\"*}"
 
-	url_in_file=https://"${url_in_file##*\/\/}"
+	url_in_file=http://"${url_in_file##*\/\/}"
     fi
 
     if [[ "$file_in" =~ Diretta ]]
