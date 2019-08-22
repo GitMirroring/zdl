@@ -98,7 +98,6 @@ Errore nello scaricare la pagina HTML del video. Controllare che l'URL sia stato
 	    then
 		msg="$2 --> Non è un URL adatto per $name_prog
 "
-
 	    else
 		msg="URL non trovato"
 	    fi
