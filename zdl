@@ -1810,7 +1810,8 @@ then
     pipe_files
 fi
 
-if ! get_exit
+if ! get_exit &&
+	! check_instance_gui
 then
     [ -f "$path_tmp"/.pid.zdl ] &&
 	read test_pid < "$path_tmp"/.pid.zdl
