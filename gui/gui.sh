@@ -136,7 +136,7 @@ function get_data_multiprogress {
 
 	    if [ -z "${text_out_gui[$n]}" ]
 	    then
-		text_out_gui[$n]="${item:0:120}  attendi"
+		text_out_gui[$n]="${item:0:120}  $(gettext "wait")"
 	    fi
 	    
 	    if [ "${percent_out[i]}" == 100 ]

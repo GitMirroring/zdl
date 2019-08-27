@@ -193,6 +193,291 @@ function update_updater {
     fi
 }
 
+function read_binding {
+    read -e -t 1 -n 1 binding_in_loop
+}
+
+function main_loop {
+    local nline nlines loop_url_in url_in_old
+    clean_livestream
+    
+    if [ "$this_mode" == "daemon" ] &&
+	     [ ! -s "$path_tmp"/links_loop.txt ] &&
+	     [ -z "$lite_mode" ] 
+    then
+    	start_file="$path_tmp"/links_loop.txt
+	post_process
+   	sleep 2
+
+    elif check_start_file &&
+	    ! get_exit
+    then
+	nline=1
+	while :
+	do
+	    test -f "$path_tmp"/max-dl &&
+		read max_dl < "$path_tmp"/max-dl
+    
+	    [ -n "$max_dl" ] &&
+		((max_dl < 1)) &&
+		zero_dl 
+
+	    post_process
+	    clean_livestream
+	    display_livestreams
+
+	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
+	    do
+		read gui_instance_pid < "$gui_instance"
+		if check_pid "$gui_instance_pid" &&
+			gui_alive=true
+		then
+		    check_linksloop_livestream
+		    break
+		fi
+	    done
+	    unset gui_instance_pid
+	    
+	    show_downloads
+	    
+	    if check_in_loop
+	    then
+		sleep 2
+		continue
+	    fi
+
+	    unset break_loop
+
+	    if [ -s "$start_file" ]
+	    then
+		nlines=$(wc -l < "$start_file")		
+		((nline > nlines)) && nline=1
+
+		url_in=$(sed -n ${nline}p < "$start_file")
+
+		if [ "$url_in_old" == "$url_in" ] &&
+		       ((nlines > 1))
+		then
+		    ((nline++))
+		    continue
+		fi
+		url_in_old="$url_in"
+
+		if ! check_link "$url_in"
+		then
+		    sleep 2
+		    ((nline++))
+		    continue
+		fi
+	    else
+		show_downloads
+		break
+	    fi
+
+	    
+	    if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
+	    then
+		set_link - "$url_in"
+		_log 15 "$url_in"
+	    fi
+
+	    if [ -n "$url_regex" ] && [[ ! "${url_in}" =~ $url_regex ]]
+	    then
+		set_link - "$url_in"
+		_log 16 "$url_in"
+	    fi
+
+	    unset pid_in file_in url_in_file
+	    unset_temp_proxy
+	    
+	    if [ -f "$path_tmp/downloader" ]
+	    then
+		read downloader_in < "$path_tmp/downloader"
+	    fi
+
+	    print_c 4 "Checking link: %s" "$url_in"
+	    
+	    if check_link "$url_in"
+	    then
+		axel_parts=$axel_parts_conf
+		url_in="${url_in## }"
+		url_in="${url_in%% }"
+
+		check_captcha "$url_in" ||
+		    continue
+
+		print_c 0
+		header_box "$(gettext "Processing link:")"
+		print_c 0 "%s" "$url_in"
+
+		print_c 1 "\n$(gettext "Connecting")..."
+
+		check_ip
+		
+		check_link_timer "$url_in" ||
+		    {
+			show_downloads
+			sleep 1
+			((nline++))
+
+			continue
+		    }
+
+		## se ancora presenti redirezioni fantasma:
+		if [ -f "$path_tmp"/pid_redirects ]
+		then
+		    while read pid_redirect
+		    do
+			kill -9 $pid_redirect &>/dev/null
+		    done <  "$path_tmp"/pid_redirects 
+		    rm -f "$path_tmp/redirect"
+		fi
+		###################
+
+		try_end=$try_end_default
+		## extensions
+		if [ -d "$path_usr/extensions/" ]
+		then
+		    get_language_prog
+		    shopt -s nullglob		    
+		    for srcfile in "$path_usr"/extensions/*.sh
+		    do
+			[ -f "$srcfile" ] &&
+			    source "$srcfile"
+		    done
+    		    shopt -u nullglob
+		fi
+		get_language
+		
+		## se ancora presenti redirezioni fantasma:
+		if [ -s "$path_tmp"/pid_redirects ]
+		then
+		    while read pid_redirect
+		    do
+			kill -9 $pid_redirect &>/dev/null
+		    done < "$path_tmp"/pid_redirects
+		    rm -f "$path_tmp/redirect"
+		fi
+		###################
+
+		get_exit && return 1
+		
+		if [ "$break_loop" == "true" ]
+		then
+		    unset break_loop
+		    show_downloads
+		    sleep 1
+		    continue
+		fi
+
+		if [ -z "$file_in" ] || [ -z "$url_in_file" ]
+		then
+		 
+		## streaming downloader
+		    items=( $(ls "$path_tmp"/filename_* 2>/dev/null) )
+		    for item in ${items[*]}
+		    do
+			unset __url
+			[ -f "$item" ] && read __url < "$item"
+
+			if [ "${__url%% }" == "$url_in" ]
+			then
+			    item="${item// /_}"
+			    file_in="${item#*filename_}"
+			    file_in="${file_in%.txt}"
+			    break
+			fi
+		    done
+		    
+
+		## universal downloader
+		    if [ -z "$file_in" ] && ! url "$url_in_file"
+		    then
+			file_in="${url_in##*'/'}"
+			file_in="${file_in%'?'*}"
+			file_in="${file_in%%'&'*}"
+		    fi
+		    url_in_file="${url_in%% }"
+		    url_in_file="${url_in_file## }"
+		fi
+
+		sanitize_file_in
+
+		if ! check_freespace
+		then
+		    break_loop="true"
+		    set_exit
+		fi
+
+		if [ -z "$file_filtered" ]
+		then
+		    file_filter "$url_in"
+		else
+		    unset file_filtered
+		fi
+
+		if ! url "$url_in_file" && 
+			[[ "$downloader_in" =~ (Aria2|Wget|Axel|FFMpeg) ]] ||
+			    [ "$break_loop" == "true" ]
+		then
+		    unset break_loop
+		    show_downloads
+		    sleep 1
+		    continue
+		fi
+
+		#### DOWNLOAD ####
+		if [ -z "$premium" ] &&                                                 
+		       check_in_file &&                                                         
+		       check_freespace
+		then
+		    check_dler_forcing
+
+		    if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
+		    then
+			print_c 4 "Streamer: %s\nPlaypath: %s\n" "$streamer" "$playpath"
+		    else
+			print_c 4 "$(gettext "File URL"): %s" "$url_in_file"
+		    fi
+		    
+		    if download && [ -n "$file_in" ]
+		    then
+			print_c 1 "downloading --> $file_in ..."
+		    fi		    
+		    rm -f "$path_tmp/cookies.zdl"
+		    unset no_newip
+		fi
+
+		newip_add_host
+		from_loop=true
+
+		[ "$ch_dler" == "1" ] &&
+		    downloader_in=$dler &&
+		    unset ch_dler
+
+		noproxy
+	    fi	    
+
+	    show_downloads
+	    pipe_files
+	    [ ! -s "$start_file" ] && sleeping_pause=0 
+	    sleeping "$sleeping_pause"
+	    unset break_loop post_data not_available exceeded
+	done 
+
+	if [ "$this_mode" != "daemon" ]
+	then
+	    touch "$path_tmp"/stop-binding
+	    while [ -f "$path_tmp"/stop-binding ]
+	    do
+		sleep 0.1
+	    done
+	fi
+    fi
+}
+
+#### INPUT:
+
 args=( "$@" )
 
 tags=( $(ps ax |head -n1) )
@@ -203,7 +488,8 @@ do
     [ "${tags[i]}" == "TTY" ] && ps_ax_tty="\$$j"
 done
 
-#### è una pipe?
+#### PIPE:
+#
 # stdin="$(ls -l /dev/fd/0)"
 # stdin="${stdin/*-> /}"
 # if [ "${stdin}" != "${stdin//'pipe:['}" ]
@@ -216,6 +502,8 @@ then
     
     unset pipe
 fi
+
+#### OPTIONS:
 
 max_args=$(( ${#args[*]}-1 ))
 
@@ -245,6 +533,7 @@ then
     done
 fi
 
+#### PATH:
 
 for ((i=0; i<"${#args[@]}"; i++)) 
 do
@@ -438,7 +727,7 @@ then
 fi
 
 
-#### MAIN
+#### INIT:
 init
 
 
@@ -1251,6 +1540,10 @@ do
     fi
 done
 
+
+
+#### FILE / CONTAINER / TORRENT / SCRAPE-URL
+
 if [ -n "${args[*]}" ]
 then
     COOKIE="$path_tmp/flashgot_cfile.zdl"
@@ -1338,6 +1631,8 @@ else
     echo $downloader_in > "$path_tmp/downloader"
 fi
 
+#### EDITOR
+
 if [ -n "$from_editor" ]
 then
     start_mode_in_tty editor "$this_tty"
@@ -1361,7 +1656,8 @@ then
 fi
 
 
-#############################################################################
+#### READLINE
+
 if [ -z "$start_file" ]
 then
     start_file="$path_tmp/links_loop.txt"
@@ -1421,298 +1717,8 @@ fi
 [ -f "$path_tmp/downloader" ] ||    
     echo "$downloader_in" > "$path_tmp/downloader"
 
-function main_loop {
-    local nline nlines loop_url_in url_in_old
-    clean_livestream
-    
-    if [ "$this_mode" == "daemon" ] &&
-	     [ ! -s "$path_tmp"/links_loop.txt ] &&
-	     [ -z "$lite_mode" ] 
-    then
-    	start_file="$path_tmp"/links_loop.txt
-	post_process
-   	sleep 2
-
-    elif check_start_file &&
-	    ! get_exit
-    then
-	nline=1
-	while :
-	do
-	    test -f "$path_tmp"/max-dl &&
-		read max_dl < "$path_tmp"/max-dl
-    
-	    [ -n "$max_dl" ] &&
-		((max_dl < 1)) &&
-		zero_dl 
-
-	    post_process
-	    clean_livestream
-	    display_livestreams
-	    
-	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
-	    do
-		read gui_instance_pid < "$gui_instance"
-		if check_pid "$gui_instance_pid" &&
-			gui_alive=true
-		then
-		    check_linksloop_livestream
-		    break
-		fi
-	    done
-	    unset gui_instance_pid
-	    
-	    show_downloads
-	    
-	    if check_in_loop
-	    then
-		sleep 2
-		continue
-	    fi
-
-	    unset break_loop
-
-	    if [ -s "$start_file" ]
-	    then
-		nlines=$(wc -l < "$start_file")		
-		((nline > nlines)) && nline=1
-
-		url_in=$(sed -n ${nline}p < "$start_file")
-
-		if [ "$url_in_old" == "$url_in" ] &&
-		       ((nlines > 1))
-		then
-		    ((nline++))
-		    continue
-		fi
-		url_in_old="$url_in"
-
-		if ! check_link "$url_in"
-		then
-		    sleep 2
-		    ((nline++))
-		    continue
-		fi
-	    else
-		show_downloads
-		break
-	    fi
-	    
-	    if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
-	    then
-		set_link - "$url_in"
-		_log 15 "$url_in"
-	    fi
-
-	    if [ -n "$url_regex" ] && [[ ! "${url_in}" =~ $url_regex ]]
-	    then
-		set_link - "$url_in"
-		_log 16 "$url_in"
-	    fi
-
-	    unset pid_in file_in url_in_file
-	    unset_temp_proxy
-	    
-	    if [ -f "$path_tmp/downloader" ]
-	    then
-		read downloader_in < "$path_tmp/downloader"
-	    fi
-
-	    print_c 4 "Checking link: %s" "$url_in"
-	    
-	    if check_link "$url_in"
-	    then
-		axel_parts=$axel_parts_conf
-		url_in="${url_in## }"
-		url_in="${url_in%% }"
-
-		check_captcha "$url_in" ||
-		    continue
-
-		print_c 0
-		header_box "$(gettext "Processing link:")"
-		print_c 0 "%s" "$url_in"
-
-		print_c 1 "\n$(gettext "Connecting")..."
-
-		check_ip
-		
-		check_link_timer "$url_in" ||
-		    {
-			show_downloads
-			sleep 1
-			((nline++))
-
-			continue
-		    }
-
-		## se ancora presenti redirezioni fantasma:
-		if [ -f "$path_tmp"/pid_redirects ]
-		then
-		    cat "$path_tmp"/pid_redirects |
-			while read pid_redirect
-			do
-			    kill -9 $pid_redirect &>/dev/null
-			done
-		    rm -f "$path_tmp/redirect"
-		fi
-		###################
-
-		try_end=$try_end_default
-		## extensions
-		if [ -d "$path_usr/extensions/" ]
-		then
-		    shopt -s nullglob
-		    export LANG="$prog_lang"
-		    export LANGUAGE="$prog_lang"
-
-		    for srcfile in "$path_usr"/extensions/*.sh
-		    do
-			[ -f "$srcfile" ] &&
-			    source "$srcfile"
-		    done
-
-		    export LANG="$user_lang"
-		    export LANGUAGE="$user_language"
-    		    shopt -u nullglob
-		fi
-
-####		check_dler_forcing
-		
-		## se ancora presenti redirezioni fantasma:
-		if [ -f "$path_tmp"/pid_redirects ]
-		then
-		    cat "$path_tmp"/pid_redirects |
-			while read pid_redirect
-			do
-			    kill -9 $pid_redirect &>/dev/null
-			done
-		    rm -f "$path_tmp/redirect"
-		fi
-		###################
-
-		get_exit && return 1
-		
-		if [ "$break_loop" == "true" ]
-		then
-		    unset break_loop
-		    show_downloads
-		    sleep 1
-		    continue
-		fi
-
-		if [ -z "$file_in" ] || [ -z "$url_in_file" ]
-		then
-		 
-		## streaming downloader
-		    items=( $(ls "$path_tmp"/filename_* 2>/dev/null) )
-		    for item in ${items[*]}
-		    do
-			unset __url
-			[ -f "$item" ] && read __url < "$item"
-
-			if [ "${__url%% }" == "$url_in" ]
-			then
-			    item="${item// /_}"
-			    file_in="${item#*filename_}"
-			    file_in="${file_in%.txt}"
-			    break
-			fi
-		    done
-		    
-
-		## universal downloader
-		    if [ -z "$file_in" ] && ! url "$url_in_file"
-		    then
-			file_in="${url_in##*'/'}"
-			file_in="${file_in%'?'*}"
-			file_in="${file_in%%'&'*}"
-		    fi
-		    url_in_file="${url_in%% }"
-		    url_in_file="${url_in_file## }"
-		fi
-
-		sanitize_file_in
-
-		if ! check_freespace
-		then
-		    break_loop="true"
-		    set_exit
-		fi
-
-		if [ -z "$file_filtered" ]
-		then
-		    file_filter "$url_in"
-		else
-		    unset file_filtered
-		fi
-
-		if ! url "$url_in_file" && 
-			[[ "$downloader_in" =~ (Aria2|Wget|Axel|FFMpeg) ]] ||
-			    [ "$break_loop" == "true" ]
-		then
-		    unset break_loop
-		    show_downloads
-		    sleep 1
-		    continue
-		fi
-
-		#### DOWNLOAD ####
-		if [ -z "$premium" ] &&                                                 
-		       check_in_file &&                                                         
-		       check_freespace
-		then
-		    check_dler_forcing
-
-		    if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
-		    then
-			print_c 4 "Streamer: %s\nPlaypath: %s\n" "$streamer" "$playpath"
-		    else
-			local FILEURL=$(gettext "File URL")
-			print_c 4 "%s: %s" "$FILEURL" "$url_in_file"
-		    fi
-		    
-		    if download && [ -n "$file_in" ]
-		    then
-			print_c 1 "downloading --> $file_in ..."
-		    fi		    
-		    rm -f "$path_tmp/cookies.zdl"
-		    unset no_newip
-		fi
-
-		newip_add_host
-		from_loop=true
-
-		[ "$ch_dler" == "1" ] &&
-		    downloader_in=$dler &&
-		    unset ch_dler
-
-		noproxy
-	    fi	    
-
-	    show_downloads
-	    pipe_files
-	    [ ! -s "$start_file" ] && sleeping_pause=0 
-	    sleeping "$sleeping_pause"
-	    unset break_loop post_data not_available exceeded
-	done 
-
-	if [ "$this_mode" != "daemon" ]
-	then
-	    touch "$path_tmp"/stop-binding
-	    while [ -f "$path_tmp"/stop-binding ]
-	    do
-		sleep 0.1
-	    done
-	fi
-    fi
-}
 
 reset_exit
-
-function read_binding {
-    read -e -t 1 -n 1 binding_in_loop
-}
 
 check_linksloop_livestream
 

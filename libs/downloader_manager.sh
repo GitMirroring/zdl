@@ -188,9 +188,8 @@ function download {
 	unset downwait_extra
     fi
     
-    export LANG="$prog_lang"
-    export LANGUAGE="$prog_lang"
-
+    get_language_prog
+    
     if ! dler_type "no-check" "$url_in" &&
 	    [ -z "$debrided" ]
     then
@@ -624,8 +623,8 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.ytdl"
 	unset user host
     fi
     unset post_data checked headers opts fileout COOKIES header
-    export LANG="$user_lang"
-    export LANGUAGE="$user_language"
+
+    get_language
     rm -f "$path_tmp/._stdout.tmp" "$path_tmp/_stdout.tmp"
     
     ## è necessario aspettare qualche secondo

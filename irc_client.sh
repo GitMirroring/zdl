@@ -483,7 +483,7 @@ function irc_client {
     if exec 3<>/dev/tcp/${irc[host]}/${irc[port]}
     then
 	print_c 1 "host: ${irc[host]}\nchan: ${irc[chan]}\nmsg: ${irc[msg]}\nnick: ${irc[nick]}"
-	
+
 	irc_send "NICK ${irc[nick]}"
 	irc_send "USER ${irc[nick]} localhost ${irc[host]} :${irc[nick]}"
 

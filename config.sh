@@ -336,6 +336,11 @@ function get_language {
     fi
 }
 
+function get_language_prog {
+    export LANG="$prog_lang"
+    export LANGUAGE="$prog_lang"
+    export LC_ALL="$prog_lang"
+}
 
 function check_editor {
     [ -n "$EDITOR" ] &&
