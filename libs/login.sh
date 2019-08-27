@@ -84,7 +84,7 @@ function host_login {
     if [ -z "$user" ] ||
 	   [ -z "$pass" ]
     then
-	print_c 3 "Nessun account disponibile"
+	print_c 3 "$(gettext "No account available")"
 
     else
 	print_c 1 "Login: ${user}@${host}"

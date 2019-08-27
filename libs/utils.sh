@@ -88,7 +88,7 @@ function add_container {
 	(( i == 1 )) && url_in="$new"
 
 	echo "$new" >> "$path_tmp"/links_loop.txt &&
-	    print_c 1 "Aggiunto URL: $new"
+	    print_c 1 "$(gettext "New link:") $new" #"Aggiunto URL: $new"
 
     done <<< "$URLlist"
 }
@@ -132,7 +132,8 @@ function obfuscate {
 
 function countdown+ {
     local max=$1
-    print_c 2 "Attendi $max secondi:"
+    print_c 2 "$(gettext "Wait %s seconds")" $max
+    #"Attendi $max secondi:"
     local k=`date +"%s"`
     local s=0
 
@@ -202,7 +203,7 @@ function scrape_url {
     
     if url "$url_page"
     then
-	print_c 1 "[--scrape-url] connessione in corso: $url_page"
+	print_c 1 "[--scrape-url] $(gettext "connecting"): $url_page" #connessione in corso
 
 	baseURL="${url_page%'/'*}"
 
@@ -243,7 +244,7 @@ function scrape_url {
 	    fi
 	done <<< "$html" 
 
-	print_c 1 "Estrazione URL dalla pagina web $url_page completata"
+	print_c 1 "$(gettext "URL extraction from the web page %s completed")" "$url_page"
 	countdown- 3
     fi
 }

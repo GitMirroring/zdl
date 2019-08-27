@@ -30,7 +30,7 @@ function force_dler {
     downloader_in="$1"
     ch_dler=1
     [ "$dler" != "$downloader_in" ] &&
-	print_c 3 "Il server non permette l'uso di $dler: il download verrà effettuato con $downloader_in"
+	print_c 3 "$(gettext "The server does not allow the use of %s: the download will be made with %s")" "$dler" "$downloader_in"
 }
 
 
@@ -106,7 +106,8 @@ function check_dler_forcing {
 	    force_dler "cURL"
 	    url_in_file="http://DOMA.IN/PATH"
 	else
-	    print_c 3 "$url_in --> il download richiede l'uso di RTMPDump, che non è installato" | tee -a $file_log
+#	    print_c 3 "$url_in --> il download richiede l'uso di RTMPDump, che non è installato" | tee -a $file_log
+	    print_c 3 "$url_in --> $(gettext "the download requires the use of RTMPDump, which is not installed")" | tee -a $file_log
 	    set_link - "$url_in"
 	    break_loop=true
 	fi

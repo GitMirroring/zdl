@@ -44,7 +44,7 @@ function check_instance_daemon {
 
     while (( $(date +%s) < (date_daemon + 2) ))
     do
-	echo -ne "$(sprint_c 2 "Avvio modalità demone...")\r"
+	echo -ne "$(sprint_c 2 "$(gettext "Starting daemon mode")...")\r" #Avvio modalità demone
 	sleep 0.1
     done
 
@@ -136,7 +136,8 @@ function run_web_client {
     if [ -z "$no_socket" ]
     then
 	zdl "$@" --socket=$port -d &&
-	    print_c 1 "Avviato nuovo socket alla porta $port"
+	    print_c 1 "$(gettext "New socket started at port") $port"
+	#"Avviato nuovo socket alla porta $port"
 
     else
 	zdl "$@" -d
@@ -178,7 +179,7 @@ function x_www_browser {
 	    browser=x-www-browser
 
 	else
-	    print_c 3 "Non è stato impostato alcun browser predefinito.\nAvvia un browser all'indirizzo: $@"
+	    print_c 3 "$(gettext "No default web browser has been set. Start a web browser at:") $@"
 	    return 1	
 	fi
     fi
@@ -996,9 +997,9 @@ function zero_dl {
     then
 	if [ -z "$hide_zero" ]
 	then
-	    print_c 3 "$PROG in pausa"
-	    print_c 4 "Per processare nuovi link, scarica un numero di file maggiore di zero:"
-	    print_c 0 "usa l'opzione [-m|--multi [NUMERO]] oppure entra nella modalità interattiva e digita un numero da 1 a 9"
+	    print_c 3 "$(gettext "%s paused")" "$PROG" #"$PROG in pausa"
+	    print_c 4 "$(gettext "To process new links, download a number of files greater than zero:")" 
+	    print_c 0 "$(gettext "use the [-m|--multi [NUMBER]] option or enter the interactive mode and type in a number from 1 to 9")"
 	    #hide_zero=true
 	fi
 	return 0
@@ -1066,7 +1067,7 @@ function redirect {
 
 	else
     	    [ "$s" == 0 ] &&
-		print_c 2 "Redirezione (attendi massimo 90 secondi):"
+		print_c 2 "$(gettext "Redirection (wait up to 90 seconds):")" 
 
 	    sleeping 1
     	    s=$(date +"%s")
@@ -1086,7 +1087,7 @@ function redirect_links {
     redirected_link="true"
     if [ -n "$links" ]
     then
-	header_box "Links da processare"
+	header_box "$(gettext "Processing Links")" 
 	echo -e "${links}\n"
     fi
     
@@ -1095,8 +1096,7 @@ function redirect_links {
     then
 	[ -z "$stdbox" ] &&
 	    header_dl "Downloading in $PWD"
-#	print_c 1 "$(eval_gettext "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: %d), nel seguente terminale: %s\n")" 
-	print_c 1 "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: %d), nel seguente terminale: %s\n" \
+	print_c 1 "$(gettext "Download management is forwarded to another active instance of %s (pid: %d), in the following terminal: %s\n")" \
 		"$name_prog" "$that_pid" "$that_tty"
     fi
 
@@ -1429,7 +1429,7 @@ function check_link_timer {
 	    del_link_timer "$link"
 	    return 0
 	else
-	    print_c 3 "$url_in -> Link in pausa: mancano $(seconds_to_human $((timeout - now)) )"
+	    print_c 3 "$url_in -> $(gettext "Link paused"): $(seconds_to_human $((timeout - now)) )"
 	    return 1
 	fi
     fi

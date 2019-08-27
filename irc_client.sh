@@ -339,7 +339,7 @@ function dcc_xfer {
 			
 	    if [ -n "$pid_cat" ]
 	    then
-		print_c 1 "Connesso all'indirizzo: ${ctcp[address]}:${ctcp[port]}"
+		print_c 1 "$(gettext "Connected to the address"): ${ctcp[address]}:${ctcp[port]}"
 		set_mode "daemon"
 		echo "$url_in"  >"$file_in.zdl"
 		add_pid_url "$pid_cat" "$url_in" "xfer-pids"

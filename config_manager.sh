@@ -40,7 +40,6 @@ function check_read {
     local input
     if [ -z "$1" ]
     then
-	#print_c 2 "Nessun valore inserito: vuoi cancellare il valore precedente? (sì|*)"
 	local res
 	colorize_values 2 "$(gettext "No value entered: do you want to delete the previous value? (yes|*)")" res
 	echo -e "$res"
@@ -64,11 +63,11 @@ function configure_key {
 	   (( $opt <= ${#key_conf[*]} ))
     then 
 	(( opt-- ))
-	header_box "$(gettext "Enter the new value")" #"Inserisci il nuovo valore"
+	header_box "$(gettext "Enter the new value")" 
 
 	if [ "${key_conf[$opt]}" == reconnecter ]
 	then
-	    extra_string=" [$(gettext "complete and valid path")]" #path completo e valido
+	    extra_string=" [$(gettext "complete and valid path")]"
 	fi
 	local label
 	colorize_values 2 "${string_conf[$opt]}" label 

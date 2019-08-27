@@ -142,7 +142,7 @@ function base64_decode {
 function simply_debrid {
     local url="$1"
 
-    print_c 2 "Estrazione dell'URL del file attraverso https://simply-debrid.com ..."
+    print_c 2 "$(gettext "Extracting the URL of the file using https://simply-debrid.com ...")"
     
     local html=$(wget --keep-session-cookies                                 \
     		      --save-cookies="$path_tmp/cookies.zdl"                 \
@@ -177,15 +177,16 @@ function simply_debrid {
 
     elif [[ "$url_in" =~ (nowdownload) ]]
     then
-	print_c 3 "$PROG non è riuscito ad acquisire l'URL del file da simply-debrid: prova manualmente dalla pagina https://simply-debrid.com/generate#show\n"
+	print_c 3 "$PROG $(gettext "failed to acquire the URL of the file using simply-debrid: try it manually from the page https://simply-debrid.com/generate#show")\n"
 	set_link - "$url_in"
 	break_loop=true
 	breakloop=true
     
     else
 	_log 11
-	print_c 3 "Riprova cambiando indirizzo IP (verrà estratto da https://simply-debrid.com)\nPuoi usare le opzioni --reconnect oppure --proxy" |
+	print_c 3 "$(gettext "Please try again by changing the IP address (it will be extracted using https://simply-debrid.com)\\nYou can use the --reconnect or --proxy options")" |
 	    tee -a $file_log
+
 	breakloop=true
     fi		    
 }
@@ -576,10 +577,12 @@ function extension_mega {
 
 	    if grep -q 'Bandwidth Limit Exceeded' "$path_tmp"/mega.log
 	    then
-		print_c 3 "Superato il limite di banda imposto dal server:"
-		print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+		print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded:")"
+		print_c 1 "$(gettext "A proxy will be activated (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
+
 		# touch "$path_tmp"/proxy
 		# check_ip
+
 		set_temp_proxy
 	    fi
 	fi
@@ -722,7 +725,7 @@ function check_cloudflare {
 
     if grep jschl_answer <<< "$html" &>/dev/null
     then
-	print_c 2 "Rilevato Cloudflare"
+	print_c 2 "$(gettext "Detected cloudflare")" 
 	return 0
     else
 	return 1
