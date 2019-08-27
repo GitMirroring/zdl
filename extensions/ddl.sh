@@ -89,11 +89,24 @@ then
 	fi
     done
 
-    check_wget || {
+    if ! check_wget
+    then
     	print_c 3 "Superato il limite di banda imposto dal server:"
     	print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
 
     	set_temp_proxy
-    }
+
+    elif data_stdout
+    then
+	for ((i=0; i<${#url_out[@]}; i++))
+	do
+	    if [[ "${url_out[i]}" =~ (ddl.to) ]] &&
+		   check_pid "${pid_out[i]}"
+	    then
+		set_temp_proxy
+	    fi
+	done
+    fi
+
     end_extension
 fi
