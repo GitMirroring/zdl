@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 14:52+0200\n"
+"POT-Creation-Date: 2019-08-27 15:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -1040,40 +1040,43 @@ msgstr "Avviato nuovo socket alla porta"
 
 #: ../libs/core.sh:182
 msgid "No default web browser has been set. Start a web browser at:"
-msgstr "Non è stato impostato alcun browser predefinito.\nAvvia un browser all'indirizzo:"
+msgstr ""
+"Non è stato impostato alcun browser predefinito.\n"
+"Avvia un browser all'indirizzo:"
 
-#: ../libs/core.sh:1001
+#: ../libs/core.sh:1000
 msgid "%s paused"
 msgstr "%s in pausa"
 
-#: ../libs/core.sh:1002
+#: ../libs/core.sh:1001
 msgid "To process new links, download a number of files greater than zero:"
 msgstr "Per processare nuovi link, scarica un numero di file maggiore di zero:"
 
-#: ../libs/core.sh:1003
+#: ../libs/core.sh:1002
 msgid ""
 "use the [-m|--multi [NUMBER]] option or enter the interactive mode and type "
 "in a number from 1 to 9"
 msgstr ""
-"usa l'opzione [-m|--multi [NUMERO]] oppure entra nella modalità interattiva e digita un numero da 1 a 9"
+"usa l'opzione [-m|--multi [NUMERO]] oppure entra nella modalità interattiva "
+"e digita un numero da 1 a 9"
 
-#: ../libs/core.sh:1072
+#: ../libs/core.sh:1070
 msgid "Redirection (wait up to 90 seconds):"
-msgstr ""
-"Redirezione (attendi massimo 90 secondi):"
+msgstr "Redirezione (attendi massimo 90 secondi):"
 
-#: ../libs/core.sh:1092
+#: ../libs/core.sh:1090
 msgid "Processing Links"
 msgstr "Link da processare:"
 
-#: ../libs/core.sh:1102
+#: ../libs/core.sh:1099
 msgid ""
 "Download management is forwarded to another active instance of %s (pid: %d), "
 "in the following terminal: %s\\n"
 msgstr ""
-"La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: %d), nel seguente terminale: %s\\n" 
+"La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: "
+"%d), nel seguente terminale: %s\\n"
 
-#: ../libs/core.sh:1435
+#: ../libs/core.sh:1432
 msgid "Link paused"
 msgstr "Link in pausa"
 
@@ -1083,45 +1086,46 @@ msgid ""
 msgstr ""
 "Il server non permette l'uso di %s: il download verrà effettuato con %s"
 
-#: ../libs/downloader_manager.sh:111
+#: ../libs/downloader_manager.sh:110
 msgid "the download requires the use of RTMPDump, which is not installed"
 msgstr "il download richiede l'uso di RTMPDump, che non è installato"
 
 #: ../libs/extension_utils.sh:145
 msgid "Extracting the URL of the file using https://simply-debrid.com ..."
-msgstr ""
-"Estrazione dell'URL del file usando https://simply-debrid.com ..."
+msgstr "Estrazione dell'URL del file usando https://simply-debrid.com ..."
 
-#: ../libs/extension_utils.sh:181
+#: ../libs/extension_utils.sh:180
 msgid ""
 "failed to acquire the URL of the file using simply-debrid: try it manually "
 "from the page https://simply-debrid.com/generate#show"
 msgstr ""
-"non è riuscito ad acquisire l'URL del file usando simply-debrid: prova manualmente dalla pagina https://simply-debrid.com/generate#show\n"
+"non è riuscito ad acquisire l'URL del file usando simply-debrid: prova "
+"manualmente dalla pagina https://simply-debrid.com/generate#show\n"
 
-#: ../libs/extension_utils.sh:189
+#: ../libs/extension_utils.sh:187
 msgid ""
 "Please try again by changing the IP address (it will be extracted using "
 "https://simply-debrid.com)\\nYou can use the --reconnect or --proxy options"
 msgstr ""
-"Riprova cambiando indirizzo IP (verrà estratto usando https://simply-debrid.com)\nPuoi usare le opzioni --reconnect oppure --proxy" 
+"Riprova cambiando indirizzo IP (verrà estratto usando https://simply-debrid."
+"com)\n"
+"Puoi usare le opzioni --reconnect oppure --proxy"
 
-#: ../libs/extension_utils.sh:583
+#: ../libs/extension_utils.sh:580
 msgid "The bandwidth limit set by the server has been exceeded:"
-msgstr ""
-"Superato il limite di banda imposto dal server:"
+msgstr "Superato il limite di banda imposto dal server:"
 
-#: ../libs/extension_utils.sh:584
+#: ../libs/extension_utils.sh:581
 msgid ""
 "A proxy will be activated (to use more band, perhaps, you can change IP "
 "address by reconnecting the modem/router)"
 msgstr ""
-"Sarà utilizzato un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+"Sarà utilizzato un proxy (per usare più banda, forse, puoi cambiare "
+"indirizzo IP riconnettendo il modem/router)"
 
-#: ../libs/extension_utils.sh:732
+#: ../libs/extension_utils.sh:728
 msgid "Detected cloudflare"
-msgstr ""
-"Rilevato Cloudflare"
+msgstr "Rilevato Cloudflare"
 
 #: ../libs/login.sh:87
 msgid "No account available"
@@ -1137,8 +1141,7 @@ msgstr "connessione in corso"
 
 #: ../libs/utils.sh:247
 msgid "URL extraction from the web page %s completed"
-msgstr ""
-"Estrazione URL dalla pagina web $s completata"
+msgstr "Estrazione URL dalla pagina web $s completata"
 
 #: ../ui/ui.sh:135
 msgid "Interactive mode"
