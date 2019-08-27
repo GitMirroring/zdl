@@ -104,6 +104,7 @@ then
 		   check_pid "${pid_out[i]}"
 	    then
 		set_temp_proxy
+		break
 	    fi
 	done
     fi
