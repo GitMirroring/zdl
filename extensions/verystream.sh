@@ -25,10 +25,10 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Verystream
+## zdl-extension name: Verystream, Woof
 
 
-if [[ "$url_in" =~ verystream\. ]]
+if [[ "$url_in" =~ (verystream\.|woof\.) ]]
 then
     html=$(curl -s "$url_in")
 
@@ -45,6 +45,7 @@ then
     link_parser "$url_in"
     url_in_file="${parser_proto}${parser_domain}/gettoken/${videolink_token}"
     file_in=$(get_title "$html")
+    file_in="${file_in% \| *}"
     
     end_extension
 fi
