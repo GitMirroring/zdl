@@ -338,16 +338,18 @@ function main_loop {
 		## extensions
 		if [ -d "$path_usr/extensions/" ]
 		then
-		    get_language_prog
 		    shopt -s nullglob		    
 		    for srcfile in "$path_usr"/extensions/*.sh
 		    do
-			[ -f "$srcfile" ] &&
+			if [ -f "$srcfile" ]
+			then
+			    get_language_prog
 			    source "$srcfile"
+			    get_language
+			fi
 		    done
     		    shopt -u nullglob
 		fi
-		get_language
 		
 		## se ancora presenti redirezioni fantasma:
 		if [ -s "$path_tmp"/pid_redirects ]

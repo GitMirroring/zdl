@@ -27,7 +27,7 @@
 function init_log {
     if [ -z "$log" ]
     then
-	echo "File log di $name_prog:" > $file_log
+	echo "File log di $name_prog:" > $file_log #echo "File log di $name_prog:" > $file_log
 	log=1
     fi
     echo >> $file_log
@@ -35,7 +35,8 @@ function init_log {
 }
 
 function _log {
-    local color_code=3
+    get_language
+    local color_code=3 no_filelog
     
     [ -n "$file_in" ] &&
 	msg_file_in=" $file_in"
@@ -221,16 +222,21 @@ Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il link d
 	    msg="$url_in --> Durata del Live Stream non registrata: ripetere la programmazione (il link è cancellato dalla coda)" 
 	    set_link - "$url_in"
 	    ;;
+	44)
+	    msg="$url_in --> attesa imposta a utenti non premium, riprovo più tardi"
+	    no_filelog=true
+	    ;;
     esac
     
-    ##  if [ -z "$no_msg" ] || [ -n "$from_loop" ]
     if [ -z "$break_loop" ] 
     then
-	init_log
+	[ -z "$no_filelog" ] && {
+	    init_log
+	    echo -e "$msg" >> $file_log
+	}
+	unset no_filelog
 	print_c $color_code "%s" "$msg"
-	echo -e "$msg" >> $file_log
-	# no_msg=true
-	# unset from_loop
+
 	[[ ! "$1" =~ ^(12|18|34)$ ]] && break_loop=true
     fi
 }
