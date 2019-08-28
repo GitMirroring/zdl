@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 23:28+0200\n"
+"POT-Creation-Date: 2019-08-28 17:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -1128,9 +1128,93 @@ msgstr ""
 msgid "Detected cloudflare"
 msgstr "Rilevato Cloudflare"
 
+#: ../libs/ip_changer.sh:50 ../libs/ip_changer.sh:74
+msgid "Starting modem/router reconnection program"
+msgstr "Avvio programma di riconnessione del modem/router"
+
+#: ../libs/ip_changer.sh:182
+msgid "Proxy list search"
+msgstr "Ricerca lista proxy"
+
+#: ../libs/ip_changer.sh:188
+msgid "Proxy not available, please try again later"
+msgstr "Proxy non disponibili, riprovo più tardi"
+
+#: ../libs/ip_changer.sh:224
+msgid "Download speed test"
+msgstr "Test velocità di download"
+
+#: ../libs/ip_changer.sh:273
+msgid "Sufficient download speed using the proxy"
+msgstr "Velocità di download sufficiente usando il proxy"
+
+#: ../libs/ip_changer.sh:286
+msgid ""
+"The maximum download speed achieved using the proxy is less than the minimum "
+"required"
+msgstr ""
+"La massima velocità di download raggiunta usando il proxy è inferiore a "
+"quella minima richiesta"
+
+#: ../libs/ip_changer.sh:291
+msgid "Maximum download speed achieved using the proxy"
+msgstr "Massima velocità di download raggiunta usando il proxy"
+
+#: ../libs/ip_changer.sh:322
+msgid "Update proxy"
+msgstr "Aggiorna il proxy"
+
+#: ../libs/ip_changer.sh:347
+msgid "Proxy currently unavailable: attempt with proxy disabled"
+msgstr "Proxy attualmente non disponibile: tentativo con proxy disattivato"
+
+#: ../libs/ip_changer.sh:357
+msgid "Start connection"
+msgstr "Avvia connessione"
+
+#: ../libs/ip_changer.sh:365
+msgid "Temporary proxy enabled"
+msgstr "Attivato proxy temporaneo"
+
+#: ../libs/ip_changer.sh:374
+msgid "Temporary proxy disabled"
+msgstr "Disattivato proxy temporaneo"
+
 #: ../libs/login.sh:87
 msgid "No account available"
 msgstr "Nessun account disponibile"
+
+#: ../libs/post_processor.sh:64
+msgid "Segment %s was recovered"
+msgstr "Segmento %s recuperato"
+
+#: ../libs/post_processor.sh:77
+msgid "%s file creation"
+msgstr "Creazione del file %s"
+
+#: ../libs/post_processor.sh:141
+msgid "Re-encoding of %s into %s"
+msgstr "Ricodifica di %s in %s"
+
+#: ../libs/post_processor.sh:144
+msgid "The %s file has been decrypted as %s"
+msgstr "Il file %s è stato decrittato come %s"
+
+#: ../libs/post_processor.sh:198
+msgid "Conversion to"
+msgstr "Conversione in"
+
+#: ../libs/post_processor.sh:199
+msgid "File conversion"
+msgstr "Conversione del file"
+
+#: ../libs/post_processor.sh:210 ../libs/post_processor.sh:221
+msgid "Successful conversion"
+msgstr "Conversione riuscita"
+
+#: ../libs/post_processor.sh:211 ../libs/post_processor.sh:222
+msgid "Conversion failed"
+msgstr "Conversione non riuscita"
 
 #: ../libs/utils.sh:135
 msgid "Wait %s seconds"

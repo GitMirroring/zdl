@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 23:28+0200\n"
+"POT-Creation-Date: 2019-08-28 17:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1040,8 +1040,90 @@ msgstr ""
 msgid "Detected cloudflare"
 msgstr ""
 
+#: ../libs/ip_changer.sh:50 ../libs/ip_changer.sh:74
+msgid "Starting modem/router reconnection program"
+msgstr ""
+
+#: ../libs/ip_changer.sh:182
+msgid "Proxy list search"
+msgstr ""
+
+#: ../libs/ip_changer.sh:188
+msgid "Proxy not available, please try again later"
+msgstr ""
+
+#: ../libs/ip_changer.sh:224
+msgid "Download speed test"
+msgstr ""
+
+#: ../libs/ip_changer.sh:273
+msgid "Sufficient download speed using the proxy"
+msgstr ""
+
+#: ../libs/ip_changer.sh:286
+msgid ""
+"The maximum download speed achieved using the proxy is less than the minimum "
+"required"
+msgstr ""
+
+#: ../libs/ip_changer.sh:291
+msgid "Maximum download speed achieved using the proxy"
+msgstr ""
+
+#: ../libs/ip_changer.sh:322
+msgid "Update proxy"
+msgstr ""
+
+#: ../libs/ip_changer.sh:347
+msgid "Proxy currently unavailable: attempt with proxy disabled"
+msgstr ""
+
+#: ../libs/ip_changer.sh:357
+msgid "Start connection"
+msgstr ""
+
+#: ../libs/ip_changer.sh:365
+msgid "Temporary proxy enabled"
+msgstr ""
+
+#: ../libs/ip_changer.sh:374
+msgid "Temporary proxy disabled"
+msgstr ""
+
 #: ../libs/login.sh:87
 msgid "No account available"
+msgstr ""
+
+#: ../libs/post_processor.sh:64
+msgid "Segment %s was recovered"
+msgstr ""
+
+#: ../libs/post_processor.sh:77
+msgid "%s file creation"
+msgstr ""
+
+#: ../libs/post_processor.sh:141
+msgid "Re-encoding of %s into %s"
+msgstr ""
+
+#: ../libs/post_processor.sh:144
+msgid "The %s file has been decrypted as %s"
+msgstr ""
+
+#: ../libs/post_processor.sh:198
+msgid "Conversion to"
+msgstr ""
+
+#: ../libs/post_processor.sh:199
+msgid "File conversion"
+msgstr ""
+
+#: ../libs/post_processor.sh:210 ../libs/post_processor.sh:221
+msgid "Successful conversion"
+msgstr ""
+
+#: ../libs/post_processor.sh:211 ../libs/post_processor.sh:222
+msgid "Conversion failed"
 msgstr ""
 
 #: ../libs/utils.sh:135

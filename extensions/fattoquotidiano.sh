@@ -44,7 +44,7 @@ then
 	print_c 4 "Reindirizzamento: $url_in_file"
     fi
     
-    file_in=$(get_title "$html")
+    file_in=$(get_title "$html" | head -n1)
 
     end_extension
 fi

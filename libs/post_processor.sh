@@ -61,7 +61,7 @@ function post_m3u8 {
     			if url "$url_resume"
     			then
     		    	    wget -qO "$filename" "$url_resume" &&
-    		    		print_c 1 "Segmento $i recuperato" &&
+    		    		print_c 1 "$(gettext "Segment %s was recovered")" "$i" &&
     		    		break
     			else
     			    _log 24
@@ -74,7 +74,7 @@ function post_m3u8 {
     	    done
 
     	    print_header
-    	    header_box "Creazione del file ${fprefix%__M3U8__}.mp4"
+    	    header_box "$(gettext "%s file creation")" "${fprefix%__M3U8__}.mp4"
 
     	    if cat "${segments[@]}" > "${fprefix%__M3U8__}.ts" 2>/dev/null
     	    then
@@ -138,10 +138,10 @@ function post_process {
 	    key=$(head -n1 "$path_tmp"/"$line".tmp)
 	    iv=$(tail -n1 "$path_tmp"/"$line".tmp)
 
-	    print_c 4 "Ricodifica di $line in ${line%.MEGAenc}"
+	    print_c 4 "$(gettext "Re-encoding of %s into %s")" "$line" "${line%.MEGAenc}"
 	    openssl enc -d -aes-128-ctr -K $key -iv $iv -in "$line" -out "${line%.MEGAenc}" &&
 		rm -f "${path_tmp}/${line}.tmp" "$line" &&
-		print_c 1 "Il file $line è stato decrittato come ${line%.MEGAenc}"
+		print_c 1 "$(gettext "The %s file has been decrypted as %s")" "$line" "${line%.MEGAenc}"
 	fi
     done
 
@@ -195,8 +195,8 @@ function post_process {
 		    if [[ "$mime" =~ (audio|video) ]]
 		    then
 			print_header
-			header_box "Conversione in $format ($convert2format)"
-			print_c 4 "Conversione del file: $line"
+			header_box "$(gettext "Conversion to") $format ($convert2format)"
+			print_c 4 "$(gettext "File conversion"): $line"
 			[ "$this_mode" == "lite" ] && convert_params="-report -loglevel quiet"
 
 			if [ -e /cygdrive ]
@@ -207,20 +207,19 @@ function post_process {
 					    -y                                \
 					    "${line%.*}.$format"         &&
 				rm "$line"                               &&
-				print_c 1 "Conversione riuscita: ${line%.*}.$format" ||
-				    print_c 3 "Conversione NON riuscita: $line"
-			    
+				print_c 1 "$(gettext "Successful conversion"): %s" "${line%.*}.$format" ||
+				    print_c 3 "$(gettext "Conversion failed"): %s" "$line"
 			else
 			    (
-				nohup $convert2format                 \
-				    -i "$line"                        \
-				    -report                           \
-				    -aq 0                             \
-				    -y                                \
-				    "${line%.*}.$format" &>/dev/null     &&
-				    rm "$line"                           &&
-				    print_c 1 "Conversione riuscita: ${line%.*}.$format" ||
-					print_c 3 "Conversione NON riuscita: $line"
+				nohup $convert2format                   \
+				      -i "$line"                        \
+				      -report                           \
+				      -aq 0                             \
+				      -y                                \
+				      "${line%.*}.$format" &>/dev/null     &&
+				    rm "$line"                             &&
+				    print_c 1 "$(gettext "Successful conversion"): %s" "${line%.*}.$format" ||
+					print_c 3 "$(gettext "Conversion failed"): %s" "$line"
 			    ) &
 			    pid_ffmpeg=$!
 

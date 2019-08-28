@@ -47,7 +47,7 @@ function check_ip {
 	   command -v "${reconnecter%% *}" &>/dev/null
     then
 	noproxy
-	print_c 4 "\nAvvio programma di riconnessione del modem/router: $reconnecter\n"
+	print_c 4 "\n$(gettext "Starting modem/router reconnection program"): $reconnecter\n" 
 
 	if show_mode_in_tty "$this_mode" "$this_tty"
 	then
@@ -71,8 +71,8 @@ function check_ip {
 	       command -v "${reconnecter%% *}" &>/dev/null
 	then
 	    noproxy
-	    print_c 4 "\nAvvio programma di riconnessione del modem/router: $reconnecter\n"
-
+	    print_c 4 "\n$(gettext "Starting modem/router reconnection program"): $reconnecter\n"
+	    
 	    if show_mode_in_tty "$this_mode" "$this_tty"
 	    then
 		$reconnecter
@@ -171,20 +171,21 @@ function proxy_list {
 }
 
 function get_proxy_list {
+    get_language_prog
     wget -q -t 1 -T 20                              \
 	 --user-agent="$user_agent"                 \
 	 ${list_proxy_url[$proxy_server]}           \
 	 -O "$path_tmp/proxy_page.html"             \
 	 -o /dev/null
-
-    print_c 4 "Ricerca lista proxy $proxy_server: ${list_proxy_url[$proxy_server]}"
-
+    get_language
+    
+    print_c 4 "$(gettext "Proxy list search") %s: %s" "$proxy_server" "${list_proxy_url[$proxy_server]}" 
 
     if [ -s "$path_tmp/proxy_page.html" ]
     then
 	$proxy_server
     else
-	print_c 3 "Proxy non disponibili, riprovo più tardi"
+	print_c 3 "$(gettext "Proxy not available, please try again later")" 
 	break
     fi
 }
@@ -220,7 +221,7 @@ function check_speed {
     local num_speed type_speed speed
     local test_url="$1"
     
-    print_c 2 "\nTest velocità di download:"
+    print_c 2 "\n$(gettext "Download speed test"):" 
 
     i=0
     while (( i<3 ))
@@ -229,11 +230,13 @@ function check_speed {
 	#speed[$i]=$(wget -t 1 -T 60 -O /dev/null "http://indirizzo-ip.com/ip.php" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)' )
 	#speed[$i]=$(wget -t 1 -T $max_waiting -O /dev/null "$url_in" 2>&1 | grep '\([0-9.]\+ [KM]B/s\)' )
 
+	get_language_prog
 	wget -t 1 -T $max_waiting \
 	     --user-agent="$user_agent" \
 	     -O /dev/null "$test_url" \
 	     -o "$path_tmp"/speed-test-proxy
-
+	get_language
+	
 	speed[$i]=$(grep '\([0-9.]\+ [KM]B/s\)' "$path_tmp"/speed-test-proxy)
 	
 	if [ -n "${speed[$i]}" ]
@@ -267,7 +270,7 @@ function check_speed {
 
 	elif (( "${num_speed[i]}" >= 25 ))
 	then
-	    print_c 1 "Velocità di download sufficiente usando il proxy $http_proxy: ${num_speed[i]} KB/s"
+	    print_c 1 "$(gettext "Sufficient download speed using the proxy") $http_proxy: ${num_speed[i]} KB/s"
 	    echo "$http_proxy" > "$path_tmp"/proxy-active
 	    return 0
 	fi
@@ -280,19 +283,17 @@ function check_speed {
     
     if (( $maxspeed<$minspeed ))
     then
-    	print_c 3 "La massima velocità di download raggiunta usando il proxy è inferiore a quella minima richiesta ($minspeed KB/s)"
+    	print_c 3 "$(gettext "The maximum download speed achieved using the proxy is less than the minimum required") ($minspeed KB/s)"
 	rm -f "$path_tmp"/proxy-active
 	return 1
 
     else
-    	print_c 1 "Massima velocità di download raggiunta usando il proxy $http_proxy: $maxspeed KB/s"
+    	print_c 1 "$(gettext "Maximum download speed achieved using the proxy") $http_proxy: $maxspeed KB/s"
     	return 0
     fi 
 }
 
 function new_ip_proxy {
-    export LANG="$prog_lang"
-    export LANGUAGE="$prog_lang"
     local test_url
     
     rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl"
@@ -318,7 +319,7 @@ function new_ip_proxy {
     do
 	noproxy
 	unset proxy_address proxy_type
-	print_c 1 "\nAggiorna proxy (${proxy_types[*]// /, }):"
+	print_c 1 "\n$(gettext "Update proxy") (${proxy_types[*]// /, }):"
 	
 	if [ ! -s "$path_tmp/proxy_list.txt" ]
 	then
@@ -343,7 +344,7 @@ function new_ip_proxy {
 
 	elif [ ! -s "$path_tmp/proxy_list.txt" ]
 	then
-	    print_c 3 "Proxy attualmente non disponibile: tentativo con proxy disattivato"
+	    print_c 3 "$(gettext "Proxy currently unavailable: attempt with proxy disabled")"
 	    break
 	    
 	else
@@ -353,9 +354,7 @@ function new_ip_proxy {
     
     [ ! -s "$path_tmp/proxy_list.txt" ] && rm -f "$path_tmp/proxy_list.txt"
 
-    export LANG="$user_lang"
-    export LANGUAGE="$user_language"
-    print_c 4 "\nAvvio connessione: $url_in ..."
+    print_c 4 "\n$(gettext "Start connection"): $url_in ..."
 }
 
 
@@ -363,7 +362,7 @@ function set_temp_proxy {
     (( $# )) &&
 	echo $@ >> "$path_tmp"/proxy
     new_ip_proxy
-    print_c 4 "Attivato proxy temporaneo"
+    print_c 4 "$(gettext "Temporary proxy enabled")" #"Attivato proxy temporaneo"
     touch "$path_tmp"/temp-proxy
 }
 
@@ -372,7 +371,7 @@ function unset_temp_proxy {
     then
 	rm -f "$path_tmp"/temp-proxy "$path_tmp"/proxy
 	noproxy
-	print_c 4 "Disattivato proxy temporaneo"
+	print_c 4 "$(gettext "Temporary proxy disabled")" #"Disattivato proxy temporaneo"
     fi
 }
 
