@@ -44,16 +44,20 @@ function human_length (length_B) {
     }
 }
 
-function header (text, pattern, fgcolor, bgcolor,       max, pattern_line) {
+function header (text, pattern, fgcolor, bgcolor, border_text,      max, pattern_line) {
     max = 0
     if (length(text) > 0) {
 	text = " " text " "
 	max = length(text)
     }
+    if (length(border_text) > 0) {
+	border_text = " " border_text " "
+	max = max + length(border_text)
+    }
     for (h=0; h<(cols - max); h++) {
 	pattern_line = pattern_line pattern
     }
-    pattern_line = fgcolor bgcolor text pattern_line Color_Off
+    pattern_line = fgcolor bgcolor text pattern_line border_text Color_Off
     return pattern_line
 }
 
@@ -328,7 +332,7 @@ function display () {
 	result = show_downloads_lite()
     }
     else {
-	result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue)
+	result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue, "│ help: M-h")
 	result = result show_downloads()
     }
     printf("%s", result)
