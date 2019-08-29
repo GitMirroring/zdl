@@ -42,6 +42,7 @@ function newip_add_host {
 
 function check_ip {
     local ip="$1"
+    get_language
     
     if [ -f "$path_tmp/reconnect" ] &&
 	   command -v "${reconnecter%% *}" &>/dev/null
@@ -220,7 +221,7 @@ function check_speed {
     local minspeed=25
     local num_speed type_speed speed
     local test_url="$1"
-    
+    get_language
     print_c 2 "\n$(gettext "Download speed test"):" 
 
     i=0
@@ -295,7 +296,7 @@ function check_speed {
 
 function new_ip_proxy {
     local test_url
-    
+
     rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl"
 
     if [ -s "$path_tmp"/proxy ]
@@ -319,6 +320,7 @@ function new_ip_proxy {
     do
 	noproxy
 	unset proxy_address proxy_type
+	get_language
 	print_c 1 "\n$(gettext "Update proxy") (${proxy_types[*]// /, }):"
 	
 	if [ ! -s "$path_tmp/proxy_list.txt" ]
@@ -362,16 +364,18 @@ function set_temp_proxy {
     (( $# )) &&
 	echo $@ >> "$path_tmp"/proxy
     new_ip_proxy
-    print_c 4 "$(gettext "Temporary proxy enabled")" #"Attivato proxy temporaneo"
+    get_language
+    print_c 4 "$(gettext "Temporary proxy enabled")"
     touch "$path_tmp"/temp-proxy
 }
 
 function unset_temp_proxy {
     if [ -f "$path_tmp"/temp-proxy ]
     then
+	get_language
 	rm -f "$path_tmp"/temp-proxy "$path_tmp"/proxy
 	noproxy
-	print_c 4 "$(gettext "Temporary proxy disabled")" #"Disattivato proxy temporaneo"
+	print_c 4 "$(gettext "Temporary proxy disabled")" 
     fi
 }
 

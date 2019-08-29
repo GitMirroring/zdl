@@ -333,7 +333,7 @@ function display () {
     }
     else {
 	result = show_downloads()
-	if (length(result) > 0)
+	if (result ~ /File/)
 	    result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue, "│ help: M-h") result
     }
     printf("%s", result)
