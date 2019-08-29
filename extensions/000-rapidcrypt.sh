@@ -56,7 +56,7 @@ then
 	    url_rapidcrypt=$(grep -P 'Click [Tt]{1}o [Cc]{1}ontinue' <<< "$html")
 	    url_rapidcrypt="${url_rapidcrypt#*href=}"
 	    url_rapidcrypt="${url_rapidcrypt#[\'\"]}"
-	    url_rapidcrypt="${url_rapidcrypt%%[\'\"]*}"
+	    url_rapidcrypt="${url_rapidcrypt%%[\'\"\>]*}"
 	    
 	    if url "$url_rapidcrypt" &&
 		    [[ "$url_rapidcrypt" != "$url_in" ]]
