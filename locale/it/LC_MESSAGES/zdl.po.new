@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-28 17:27+0200\n"
+"POT-Creation-Date: 2019-08-29 18:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -367,105 +367,105 @@ msgstr ""
 msgid "Connecting"
 msgstr ""
 
-#: ../zdl.sh:440 ../ui/ui.awk:313
+#: ../zdl.sh:442 ../ui/ui.awk:313
 msgid "File URL"
 msgstr ""
 
-#: ../zdl.sh:723
+#: ../zdl.sh:725
 msgid "Temporary file deleted"
 msgstr ""
 
-#: ../zdl.sh:724
+#: ../zdl.sh:726
 msgid "Cleaning of temporary files not carried out (non-existent files)"
 msgstr ""
 
-#: ../zdl.sh:1007
+#: ../zdl.sh:1009
 msgid "The format conversion function depends on ffmpeg or avconv, not found"
 msgstr ""
 
-#: ../zdl.sh:1043
+#: ../zdl.sh:1045
 msgid "Started in daemon mode in %s"
 msgstr ""
 
-#: ../zdl.sh:1044 ../zdl.sh:1054 ../gui/gui.sh:261 ../gui/gui.sh:283
+#: ../zdl.sh:1046 ../zdl.sh:1056 ../gui/gui.sh:261 ../gui/gui.sh:283
 #: ../gui/gui.sh:287
 msgid "You can control it with:"
 msgstr ""
 
-#: ../zdl.sh:1053
+#: ../zdl.sh:1055
 msgid "An active instance of daemon mode already exists in %s"
 msgstr ""
 
-#: ../zdl.sh:1092 ../gui/gui.sh:1199
+#: ../zdl.sh:1094 ../gui/gui.sh:1199
 msgid "New socket started at the port"
 msgstr ""
 
-#: ../zdl.sh:1099 ../gui/gui.sh:1205
+#: ../zdl.sh:1101 ../gui/gui.sh:1205
 msgid "Socket already in use at the port"
 msgstr ""
 
-#: ../zdl.sh:1104
+#: ../zdl.sh:1106
 msgid "Socket not started at the port"
 msgstr ""
 
-#: ../zdl.sh:1310
+#: ../zdl.sh:1312
 msgid ""
 "Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = "
 "[NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
 msgstr ""
 
-#: ../zdl.sh:1333
+#: ../zdl.sh:1335
 msgid "HTTP proxy detected: %s"
 msgstr ""
 
-#: ../zdl.sh:1338
+#: ../zdl.sh:1340
 msgid "IP address: %s"
 msgstr ""
 
-#: ../zdl.sh:1341
+#: ../zdl.sh:1343
 msgid "IP address not detected"
 msgstr ""
 
-#: ../zdl.sh:1397
+#: ../zdl.sh:1399
 msgid "A file already exists with the same name as"
 msgstr ""
 
-#: ../zdl.sh:1404
+#: ../zdl.sh:1406
 #, sh-format
 msgid ""
 "The file list will be saved in $print_out\\n(you can also use it to "
 "communicate the files being downloaded to another program)\\n"
 msgstr ""
 
-#: ../zdl.sh:1443
+#: ../zdl.sh:1445
 msgid "Active proxy: %s\\n"
 msgstr ""
 
-#: ../zdl.sh:1446 ../zdl.sh:1450
+#: ../zdl.sh:1448 ../zdl.sh:1452
 msgid "%s: invalid argument\\n\\n"
 msgstr ""
 
-#: ../zdl.sh:1537
+#: ../zdl.sh:1539
 msgid "%s: invalid argument"
 msgstr ""
 
-#: ../zdl.sh:1553
+#: ../zdl.sh:1555
 msgid "Connection and extraction from:"
 msgstr ""
 
-#: ../zdl.sh:1614
+#: ../zdl.sh:1616
 msgid "The complete list of links is in links.txt"
 msgstr ""
 
-#: ../zdl.sh:1830
+#: ../zdl.sh:1832
 msgid "Download completed"
 msgstr ""
 
-#: ../zdl.sh:1846
+#: ../zdl.sh:1848
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr ""
 
-#: ../zdl.sh:1847
+#: ../zdl.sh:1849
 msgid "To read it, enter:"
 msgstr ""
 
@@ -1092,6 +1092,236 @@ msgstr ""
 
 #: ../libs/login.sh:87
 msgid "No account available"
+msgstr ""
+
+#: ../libs/log.sh:30
+#, sh-format
+msgid "$name_prog file log"
+msgstr ""
+
+#: ../libs/log.sh:46
+#, sh-format
+msgid ""
+"File$msg_file_in already present in $PWD: $url_in will not be processed."
+msgstr ""
+
+#: ../libs/log.sh:53
+#, sh-format
+msgid "File$msg_file_in not available, try again later ${errMsg}"
+msgstr ""
+
+#: ../libs/log.sh:55
+msgid "The file name is missing"
+msgstr ""
+
+#: ../libs/log.sh:59
+msgid "No valid url was found"
+msgstr ""
+
+#: ../libs/log.sh:63 ../libs/log.sh:84
+msgid "Incorrect link or file not available"
+msgstr ""
+
+#: ../libs/log.sh:68
+#, sh-format
+msgid ""
+"The$msg_file_in file exceeds the size allowed by the server for free download"
+msgstr ""
+
+#: ../libs/log.sh:72
+msgid "Connection interrupted: try again later"
+msgstr ""
+
+#: ../libs/log.sh:75
+#, sh-format
+msgid "File$msg_file_in too large for free space in $PWD on $dev"
+msgstr ""
+
+#: ../libs/log.sh:81
+#, sh-format
+msgid "File$msg_file_in already in download"
+msgstr ""
+
+#: ../libs/log.sh:85
+msgid ""
+"Error downloading the video HTML page. Check that the URL has been entered "
+"correctly or that the video is not private."
+msgstr ""
+
+#: ../libs/log.sh:89
+msgid "Title of HTML page not found. Check the URL"
+msgstr ""
+
+#: ../libs/log.sh:93
+msgid "Signature of video not found"
+msgstr ""
+
+#: ../libs/log.sh:96
+#, sh-format
+msgid "File$msg_file_in downloadable only by users \"Premium\" or registered"
+msgstr ""
+
+#: ../libs/log.sh:102
+#, sh-format
+msgid "It is not a valid URL for $name_prog"
+msgstr ""
+
+#: ../libs/log.sh:105
+msgid "URL not found"
+msgstr ""
+
+#: ../libs/log.sh:110
+#, sh-format
+msgid ""
+"The$msg_file_in file will not be downloaded, because it matches to the regex"
+msgstr ""
+
+#: ../libs/log.sh:113
+#, sh-format
+msgid ""
+"The$msg_file_in file will not be downloaded, because it does not match the "
+"regex"
+msgstr ""
+
+#: ../libs/log.sh:117
+msgid "The link will not be processed, because it matches to the regex"
+msgstr ""
+
+#: ../libs/log.sh:121
+msgid "The link will not be processed, because it does not matche to the regex"
+msgstr ""
+
+#: ../libs/log.sh:125
+#, sh-format
+msgid ""
+"File$msg_file_in still in transfer and not yet available: try again in a few "
+"hours"
+msgstr ""
+
+#: ../libs/log.sh:129
+#, sh-format
+msgid "Unsupported resume: download of the$msg_file_in file may end incomplete"
+msgstr ""
+
+#: ../libs/log.sh:132
+msgid "Unsupported download: user age control"
+msgstr ""
+
+#: ../libs/log.sh:136 ../libs/log.sh:191
+msgid "Unsupported download: install"
+msgstr ""
+
+#: ../libs/log.sh:140
+#, sh-format
+msgid "Download supported by youtube-dl, started but not managed by $PROG"
+msgstr ""
+
+#: ../libs/log.sh:144
+#, sh-format
+msgid ""
+"The $i segment is missing: recovery attempt with Wget extracting the URL "
+"from a temporary file"
+msgstr ""
+
+#: ../libs/log.sh:148
+#, sh-format
+msgid "Operation failed because $dep is not installed"
+msgstr ""
+
+#: ../libs/log.sh:152
+msgid ""
+"The operation could not be completed: the temporary file for segment "
+"recovery is missing"
+msgstr ""
+
+#: ../libs/log.sh:156
+#, sh-format
+msgid ""
+"Reached the download limit for your IP address or account (link: $url_in): "
+"try --proxy or --reconnect"
+msgstr ""
+
+#: ../libs/log.sh:160
+msgid ""
+"Connection to the IRC server failed: incorrect address or connection or file "
+"not available"
+msgstr ""
+
+#: ../libs/log.sh:166
+msgid ""
+"Another file is being downloaded from the same source, I will try again later"
+msgstr ""
+
+#: ../libs/log.sh:173
+#, sh-format
+msgid ""
+"File$msg_file_in not available, try again later: I delete it from the queue"
+msgstr ""
+
+#: ../libs/log.sh:177
+msgid "Internet connection not available: exit"
+msgstr ""
+
+#: ../libs/log.sh:180
+msgid "Service temporarily not supported: request a developer intervention"
+msgstr ""
+
+#: ../libs/log.sh:184
+msgid "Paused for"
+msgstr ""
+
+#: ../libs/log.sh:187
+msgid "Redirection"
+msgstr ""
+
+#: ../libs/log.sh:195
+msgid "Unsupported download: enter the captcha code using a web browser"
+msgstr ""
+
+#: ../libs/log.sh:199
+msgid ""
+"The service detects the use of AdBlock or software such as Kodi/XBMC/TV BOX "
+"(like ZigzagDownLoader)."
+msgstr ""
+
+#: ../libs/log.sh:200
+msgid ""
+"Currently, ZDL is not able to download the requested file, I remove the link "
+"from the queue."
+msgstr ""
+
+#: ../libs/log.sh:204
+msgid ""
+"Unsupported service: use the web browser to resolve the extraction of the "
+"file URL"
+msgstr ""
+
+#: ../libs/log.sh:208
+msgid ""
+"Your IP address has been banned by the server: the file cannot be reached "
+"via this link"
+msgstr ""
+
+#: ../libs/log.sh:212
+msgid "Unable to start the GUI: yad must be installed"
+msgstr ""
+
+#: ../libs/log.sh:215
+msgid "FFMpeg/AvConv is not configured for libxml2"
+msgstr ""
+
+#: ../libs/log.sh:219
+msgid "FFMpeg/AvConv is not installed"
+msgstr ""
+
+#: ../libs/log.sh:223
+msgid ""
+"Duration of the unrecorded Live Stream: repeat the programming (the link is "
+"deleted from the queue)"
+msgstr ""
+
+#: ../libs/log.sh:227
+msgid "Wait set to non-premium users, try again later"
 msgstr ""
 
 #: ../libs/post_processor.sh:64
