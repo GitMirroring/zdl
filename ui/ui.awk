@@ -332,8 +332,9 @@ function display () {
 	result = show_downloads_lite()
     }
     else {
-	result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue, "│ help: M-h")
-	result = result show_downloads()
+	result = show_downloads()
+	if (length(result) > 0)
+	    result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue, "│ help: M-h") result
     }
     printf("%s", result)
 }
