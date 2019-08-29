@@ -336,5 +336,6 @@ function display () {
 	if (result ~ /File/)
 	    result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue, "│ help: M-h") result
     }
-    printf("%s", result)
+    if (result)
+	printf("%s", result)
 }

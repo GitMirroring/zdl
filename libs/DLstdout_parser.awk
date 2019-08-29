@@ -269,8 +269,12 @@ function yellow_progress () {
 
 function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     ## eta, %, speed, speed type, length-saved (length-out)
-
-    if (dler == "Axel") {
+    if (downloader_out[i] ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
+	file_out[i] = ""
+	system("kill -9 " pid_out[i] " 2>/dev/null")
+	system("rm -f " FILENAME)
+    }
+    else if (dler == "Axel") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /(Too many redirects)/) {
 	    	code = code "wget_links[" wget_links_index "]=\"" url_out[i] "\"; "
@@ -336,7 +340,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		print percent_out[i] "\n" speed_out[i] "\n" speed_out_type[i] "\n" eta_out[i] "\n" length_saved[i] > ".zdl_tmp/"file_out[i]"_stdout.yellow"
 	}
 
-    } else if (dler == "DCC_Xfer") {
+    }
+    else if (dler == "DCC_Xfer") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
 		split(chunk[y], progress_elems, / /)
@@ -369,8 +374,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	}
 	else
 	    yellow_progress()
-
-    } else if (dler == "Aria2") {
+    }
+    else if (dler == "Aria2") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /(404 Not Found)/) {
 	    	progress_abort[i] = chunk[y]
@@ -446,9 +451,9 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    length_saved[i] = int((length_out[i] * percent_out[i]) / 100)
 	    if ((! no_check) && (percent_out[i] ~ /^[0-9]+$/) && (percent_out[i] > 0))
 		print percent_out[i] "\n" speed_out[i] "\n" speed_out_type[i] "\n" eta_out[i] "\n" length_saved[i] > ".zdl_tmp/"file_out[i]"_stdout.yellow"
-	}
-	
-    } else if (dler == "Wget") {
+	}	
+    }
+    else if (dler == "Wget") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /(saved|100%)/) {
 		progress_end[i] = chunk[y]
