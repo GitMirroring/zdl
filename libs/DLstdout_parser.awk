@@ -271,6 +271,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     ## eta, %, speed, speed type, length-saved (length-out)
     if (downloader_out[i] ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
 	file_out[i] = ""
+	url_out[i] = ""
 	system("kill -9 " pid_out[i] " 2>/dev/null")
 	system("rm -f " FILENAME)
     }
