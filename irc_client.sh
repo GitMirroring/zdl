@@ -373,9 +373,11 @@ function dcc_xfer {
 		
 		printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${ctcp[size]}" >>"$path_tmp/${file_in}_stdout.tmp"
 
-		if [[ "$(head -n2 "$path_tmp/${file_in}_stdout.tmp" |tail -n1)" =~ ^XDCC ]]
-		then
+		if [[ "$(head -n2 "$path_tmp/${file_in}_stdout.tmp" |tail -n1)" =~ ^XDCC ]] ||
+		       [[ "$file_in" =~ XDCC' ' ]]
+		then		    
 		    kill -9 "$pid_cat"
+		    rm -f "$path_tmp/${file_in}_stdout".*
 		fi
 		old_offset=$offset
 
