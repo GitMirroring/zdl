@@ -796,13 +796,13 @@ BEGIN {
     progress_data[++j%n] = $0
 
     if (FNR == 2) {
-	url_out[i] = $0
-	if (url_out[i] ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
-	    url_out[i] = ""
+	if ($0 ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
 	    # system("kill -9 " pid_out[i] " 2>/dev/null")
 	    system("rm -f " FILENAME)
 	    nextfile
 	}
+	else
+	    url_out[i] = $0
     }
     if (FNR == 3) {
 	dler = $0

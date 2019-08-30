@@ -349,6 +349,9 @@ function dcc_xfer {
 		    sleep 0.1
 		done
 		sed -r "s,____PID_IN____,$pid_cat,g" -i "$path_tmp/${file_in}_stdout.tmp"
+
+	    else
+		irc_quit
 	    fi
 
 	    this_mode=daemon
@@ -370,6 +373,10 @@ function dcc_xfer {
 		
 		printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${ctcp[size]}" >>"$path_tmp/${file_in}_stdout.tmp"
 
+		if [[ "$(sed -n 2p "$path_tmp/${file_in}_stdout.tmp")" =~ ^XDCC ]]
+		then
+		    kill -9 "$pid_cat"
+		fi
 		old_offset=$offset
 
 		## (offset - old_offset /1024) KB/s --> sleep 1 (ogni secondo)
