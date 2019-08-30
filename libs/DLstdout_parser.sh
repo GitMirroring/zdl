@@ -53,7 +53,7 @@ function data_stdout {
 	then
 	    for ((i=0; i<${#tmp_files[*]}; i++))
 	    do
-		if [[ "$(sed -n 3p ${tmp_files[$i]})" =~ ^(cURL|RTMPdump)$ ]]
+		if [[ "$(head -n3 ${tmp_files[$i]} | tail -n1)" =~ ^(cURL|RTMPdump)$ ]]
 		then
 		    tr "\r" "\n" < ${tmp_files[$i]} > ${tmp_files[i]}.newline
 		    tmp_files[$i]=${tmp_files[$i]}.newline

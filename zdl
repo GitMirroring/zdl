@@ -253,7 +253,7 @@ function main_loop {
 		nlines=$(wc -l < "$start_file")		
 		((nline > nlines)) && nline=1
 
-		url_in=$(sed -n ${nline}p < "$start_file")
+		url_in=$(head -n ${nline} "$start_file" |tail -n1)
 
 		if [ "$url_in_old" == "$url_in" ] &&
 		       ((nlines > 1))

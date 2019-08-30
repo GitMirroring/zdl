@@ -45,8 +45,9 @@ then
     
     for ((i=2; i<=$(wc -l <<< "${chunks_filecrypt[@]}"); i++))
     do
-	codes_filecrypt+=( $(sed -n ${i}p <<< "$chunks_filecrypt" |
-			   sed -r "s|^([^']+)'.+|\1|") )
+	codes_filecrypt+=( $(head -n ${i} <<< "$chunks_filecrypt" |
+				 tail -n1 |
+				 sed -r "s|^([^']+)'.+|\1|") )
     done
 
     if (( "${#codes_filecrypt[@]}" >0 ))

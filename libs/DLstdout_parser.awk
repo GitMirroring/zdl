@@ -797,8 +797,9 @@ BEGIN {
 
     if (FNR == 2) {
 	if ($0 ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
-	    # system("kill -9 " pid_out[i] " 2>/dev/null")
+	    system("kill -9 " pid_out[i] " 2>/dev/null")
 	    system("rm -f " FILENAME)
+	    i-- 
 	    nextfile
 	}
 	else
