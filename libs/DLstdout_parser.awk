@@ -269,13 +269,7 @@ function yellow_progress () {
 
 function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     ## eta, %, speed, speed type, length-saved (length-out)
-    if (downloader_out[i] ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
-	file_out[i] = ""
-	url_out[i] = ""
-	system("kill -9 " pid_out[i] " 2>/dev/null")
-	system("rm -f " FILENAME)
-    }
-    else if (dler == "Axel") {
+    if (dler == "Axel") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /(Too many redirects)/) {
 	    	code = code "wget_links[" wget_links_index "]=\"" url_out[i] "\"; "
@@ -803,7 +797,12 @@ BEGIN {
 
     if (FNR == 2) {
 	url_out[i] = $0
-
+	if (url_out[i] ~ /XDCC [0-9]+ [0-9]+ [0-9]+ XDCC/) {
+	    url_out[i] = ""
+	    # system("kill -9 " pid_out[i] " 2>/dev/null")
+	    system("rm -f " FILENAME)
+	    nextfile
+	}
     }
     if (FNR == 3) {
 	dler = $0
