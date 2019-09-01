@@ -30,13 +30,14 @@
 if [ "$url_in" != "${url_in//filecrypt.cc}" ]
 then
     unset redir_filecrypt location_filecrypt
-
+    get_language_prog
     html=$(wget -qO- \
 		"$url_in" \
 		--keep-session-cookies \
 		--save-cookies="$path_tmp"/cookies.zdl \
 		--user-agent="$user_agent" \
 		-o /dev/null)
+    get_language
     chunks_filecrypt=$(grep openLink <<< "$html" |
 			   tail -n1 |
 			   sed -r "s|openLink\('|\n|g")
@@ -73,7 +74,9 @@ then
 	    if url "$location_filecrypt"
 	    then
 		set_link + "$location_filecrypt"
-		print_c 4 "Redirezione: $location_filecrypt"
+		get_language
+		print_c 4 "$(gettext "Redirection"): $location_filecrypt"
+		get_language_prog
 		
 		url "$redir_filecrypt" || redir_filecrypt="$location_filecrypt"
 	    fi
@@ -84,7 +87,9 @@ then
 	    set_link - "$url_in"
 	    url_in="$redir_filecrypt"
 	    print_links_txt
-	    print_c 4 "Nuovo link da processare: $url_in"
+	    get_language
+	    print_c 4 "$(gettext "New link to process"): $url_in"
+	    get_language_prog
 	fi
     else
 	_log 36

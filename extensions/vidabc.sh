@@ -29,6 +29,7 @@
 
 if [ "$url_in" != "${url_in//'vidabc.'}" ]
 then
+    get_language_prog
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
 		--user-agent="Firefox"                           \
@@ -95,15 +96,17 @@ then
 	    
 	    if url "$url_in_file"
 	    then
+		get_language
 		case $mode_stream in
-		    h)			
-			print_c 1 "Disponibile il filmato HD"			
+		    h)
+			print_c 1 "$(gettext "HD movie is available")" #"Disponibile il filmato HD"			
 			;;		    
 		    n)
-		 	print_c 1 "Verrà scaricato il filmato con definizione \"normale\""
+		 	print_c 1 "$(gettext "The movie will be downloaded with \"normal\" definition")" #"Verrà scaricato il filmato con definizione \"normale\""
 			;;
 		esac
-
+		get_language_prog
+		
 		url_in_file="${url_in_file//https\:/http:}"
 		file_in="${url_in_file##*\/}"
 	    fi

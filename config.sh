@@ -277,6 +277,8 @@ function get_conf {
 
 function get_language {
     ## list: /usr/share/i18n/SUPPORTED
+    eval $(grep -oP 'language=[a-z]{2}' "$file_conf")
+    
     if [ -z "$language" ]
     then
 	language=en_US.UTF-8

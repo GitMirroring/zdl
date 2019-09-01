@@ -85,7 +85,10 @@ then
 	token=${token//*=}
 	token=${token//\"*/}
 	preurl_in_file=${url_in//\/dl/\/dl2}"/$token"
-	print_c 2 "Attendi circa 30 secondi:"
+	get_language
+	print_c 2 "$(gettext "Wait about 30 seconds"):"
+	get_language_prog
+	
 	k=`date +"%s"`
 	s=0
 	unset url_in_file

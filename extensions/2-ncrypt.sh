@@ -28,12 +28,14 @@
 if [ "$url_in" != "${url_in//'ncrypt.in/folder'}" ]
 then
     set_link - "$url_in"
+    get_language_prog
     html=$(curl "$url_in" |grep ".dlc")
     html="${html%.dlc\"*}.dlc"
     container_url="${html##*\"}"
     container_url="http://ncrypt.in${container_url}"
-    
-    print_c 1 "Analisi container DLC ..."
+    get_language
+    print_c 1 "$(gettext "DLC container analysis") ..."
+    get_language_prog	
     add_container $(wget -q -O- "$container_url")
     break_loop=true
 fi

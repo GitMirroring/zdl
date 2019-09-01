@@ -52,7 +52,9 @@ then
     
     if [ -z "$(grep -v deltabit "$path_tmp/links_loop.txt" &>/dev/null)" ]
     then
-    	print_c 1 "Cookies cancellati"
+	get_language
+    	print_c 1 "$(gettext "Cookies deleted")"
+	get_language_prog	
     	rm -rf "$path_tmp/cookies.zdl"           
     fi
     
@@ -96,7 +98,9 @@ then
 	    [ -n "$mode_stream_test" ] &&
 		mode_stream="$mode_stream_test"
 
-	    print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
+	    get_language
+	    print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
+	    get_language_prog
 	    
 	    deltabit_loops=0
 	    while ! url "$url_in_file" &&
@@ -125,12 +129,16 @@ then
 
 	    elif url "$url_in_file"
 	    then
-		print_c 1 "Disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+		get_language
+		print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}"
+		get_language_prog	
 		set_deltabit_definition $mode_stream
 		break
 
 	    else
-		print_c 3 "Non è disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+		get_language
+		print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}"
+		get_language_prog	
 		del_deltabit_definition $mode_stream
 	    fi
 	done

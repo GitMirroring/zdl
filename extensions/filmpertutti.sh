@@ -29,14 +29,16 @@
 
 if [[ "$url_in" =~ filmpertutti\. ]]
 then
+    get_language_prog
     urls_filmpertutti=( $(curl -s "$url_in" |
 			      grep -oP '[^"]+speedvideo[^"]+embed[^"]+') )
+    get_language
     for url_fpt in "${urls_filmpertutti[@]}"
     do
 	if url "$url_fpt"
 	then
 	    set_link + "$url_fpt"
-	    print_c 4 "Redirezione: $url_fpt"
+	    print_c 4 "$(gettext "Redirection"): $url_fpt"
 	fi
     done
     
@@ -44,7 +46,7 @@ then
     then
 	set_link - "$url_in"
 	url_in="${urls_filmpertutti[0]}"
-	print_c 4 "Nuovo link da processare: ${urls_filmpertutti[0]}"
+	print_c 4 "$(gettext "New link to process"): ${urls_filmpertutti[0]}"
 
     else
 	end_extension

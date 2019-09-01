@@ -30,6 +30,7 @@
 function get_fastshield {
     declare -n ref="$2"
     local url_fastshield="$1"
+    get_language_prog
     
     if [[ "$url_fastshield" =~ fastshield ]]
     then
@@ -40,7 +41,7 @@ function get_fastshield {
 	then
 	    get_by_cloudflare "$url_fastshield" html
 	fi		
-	
+
 	data_vcrypt=$(curl -v "${url_fastshield}" \
 	    		   -d 'go=go' \
 			   -b "$path_tmp/cookies2.zdl" \
@@ -66,6 +67,7 @@ function get_fastshield {
 
 if [[ "$url_in" =~ vcrypt\..+\/(fws)\/ ]]
 then
+    get_language_prog	
     html=$(curl -s \
     		-A "$user_agent" \
     		-c "$path_tmp"/cookies.zdl \
@@ -80,7 +82,8 @@ then
 	fi
 	if url "$vcrypt_link"
 	then
-	    print_c 4 "Reindirizzamento: $vcrypt_link"
+	    get_language
+	    print_c 4 "$(gettext "Redirection"): $vcrypt_link"
 	    set_link + "$vcrypt_link"
 	fi
 	
@@ -102,20 +105,24 @@ fi
 
 if [[ "$url_in" =~ vcrypt\..+\/(sb|wss|wsd|shield)\/ ]]
 then
+    get_language_prog	
     html=$(curl -s \
 		-A "$user_agent" \
 		-c "$path_tmp"/cookies.zdl \
 		"$url_in")
-
+    get_language
+    
     if [[ "$html" =~ 'The document has moved'.+href=\"([^\"]+) ]]
     then
 	vcrypt_relink="${BASH_REMATCH[1]}"
 	url "$vcrypt_relink" &&
 	    replace_url_in "$vcrypt_relink"
+	get_language_prog
 	html=$(curl -s \
 		    -A "$user_agent" \
 		    -c "$path_tmp"/cookies.zdl \
-		    "$url_in")	
+		    "$url_in")
+	get_language
     fi
     
     if [[ "$html" =~ refresh.+URL=([^\"]+) ]]
@@ -128,14 +135,14 @@ then
         vcrypt_cookie="${BASH_REMATCH[1]}"
 	vcrypt_cookie="__cfduid=$(grep __cfduid "$path_tmp"/cookies.zdl |cut -f7); ${vcrypt_cookie%%\;*}"
     fi
-    
+    get_language_prog	
     wget -SO /dev/null \
 	 --user-agent="$user_agent" \
 	 --header="Cookie: \"$vcrypt_cookie\"" \
 	 --header='TE: Trailers' \
 	 --header="Ugrade-Insecure-Requests: 1" \
 	 "$vcrypt_relink" -o "$path_tmp"/vcrypt-location.txt
-
+    get_language
     vcrypt_relink=$(grep Location "$path_tmp"/vcrypt-location.txt |
 			awk '{print $2}' | tail -n1)
 

@@ -33,16 +33,21 @@ then
     wget -SO OUT "$url_in" -o OUT.log
     link_parser "$url_in"
     backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
-
+    get_language
+    
     if url "$backin_url"
     then
-	print_c 4 "Redirezione: $backin_url"
+	print_c 4 "$(gettext "Redirection"): $backin_url"
 
 	if check_cloudflare "$backin_url"
 	then
+	    get_language_prog
 	    get_by_cloudflare "$backin_url" html
+	    get_language
 	else
+	    get_language_prog
 	    html=$(wget -o /dev/null -qO- "$backin_url")
+	    get_language
 	fi
 
 	file_in=$(get_title "$html")

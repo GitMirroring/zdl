@@ -52,17 +52,19 @@ then
     
     if [ -z "$(grep -v akvideo "$path_tmp/links_loop.txt" &>/dev/null)" ]
     then
-    	print_c 1 "Cookies cancellati"
+	get_language
+    	print_c 1 "$(gettext "Cookies deleted")"
     	rm -rf "$path_tmp/cookies.zdl"           
     fi
-    
+    get_language_prog
     html=$(wget -t1 -T$max_waiting                               \
     		"$url_in"                                        \
     		--user-agent="Firefox"                           \
     		--keep-session-cookies                           \
     		--save-cookies="$path_tmp/cookies.zdl"           \
     		-qO- -o /dev/null)
-
+    get_language
+    
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
     then
 	_log 3
@@ -101,7 +103,7 @@ then
 	    [ -n "$mode_stream_test" ] &&
 		mode_stream="$mode_stream_test"
 
-	    print_c 2 "Filmato con definizione ${movie_definition[$mode_stream]}..."
+	    print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
 	    
 	    akvideo_loops=0
 	    while ! url "$url_in_file" &&
@@ -109,10 +111,12 @@ then
 	    do
 		((akvideo_loops++))
 
+		get_language_prog
 		html2=$(wget -qO- -t1 -T$max_waiting           \
 			     "https://akvideo.stream/dl?op=download_orig&id=${id_akvideo}&mode=${mode_stream}&hash=${hash_akvideo}" \
 			     -o /dev/null)
-
+		get_language
+		
 		url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
 				     head -n1 |
 				     sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
@@ -136,12 +140,12 @@ then
 
 	    elif url "$url_in_file"
 	    then
-		print_c 1 "Disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+		print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
 		set_akvideo_definition $mode_stream
 		break
 
 	    else
-		print_c 3 "Non è disponibile il filmato con definizione ${movie_definition[$mode_stream]}"
+		print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
 		del_akvideo_definition $mode_stream
 	    fi
 	done

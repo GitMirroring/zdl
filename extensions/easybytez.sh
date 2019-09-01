@@ -35,6 +35,7 @@ then
     
     if [ "$login" == "1" ]
     then
+	get_language_prog
 	html=$(wget -qO- -t1 -T$max_waiting                   \
 		    --user-agent="$user_agent"                \
 		    --retry-connrefused                       \
@@ -42,13 +43,14 @@ then
 		    --save-cookies="$path_tmp"/cookies.zdl    \
 		    "http://www.easybytez.com/login.html"     \
 		    -o /dev/null)
-
+	get_language
+	
 	## post_data
 	input_hidden "$html"
 
 	## user, pass
 	host_login "easybytez"
-
+	get_language_prog
 	wget -q -t1 -T$max_waiting                                        \
      	     --user-agent="$user_agent"                                   \
 	     --retry-connrefused                                          \
@@ -59,10 +61,11 @@ then
 	     --post-data="${post_data}&login=${user}&password=${pass}"    \
 	     "http://www.easybytez.com"                                   \
 	     -o /dev/null
-	
+	get_language
 	unset post_data user pass
     fi
 
+    get_language_prog
     html=$(wget -qO- -t1 -T$max_waiting                    \
 		--user-agent="$user_agent"                 \
 		--retry-connrefused                        \
@@ -71,7 +74,8 @@ then
 		--save-cookies="$path_tmp"/cookies.zdl     \
 		"$url_in"                                  \
 		-o /dev/null)
-
+    get_language
+    
     file_in=$(grep '<span class="name">' <<< "$html")
     file_in="${file_in#*>}"
     file_in="${file_in%%<*}"
@@ -92,7 +96,7 @@ then
 
 	input_hidden "$html" # "$path_tmp/zdl.tmp"
 	post_data="${post_data}&method_free=Free Download"       
-	
+	get_language_prog	
 	html=$(wget -t 1 -T $max_waiting                             \
 		    --user-agent="$user_agent"                       \
 		    --load-cookies="$path_tmp"/cookies.zdl           \
@@ -100,7 +104,7 @@ then
 		    --save-cookies="$path_tmp"/cookies.zdl           \
 		    --post-data="${post_data}"                       \
 		    "$url_in" -qO- -o /dev/null) 
-
+	get_language
 	countdown=$(grep Wait <<< "$html" |
 			   sed -r 's|.+\">(.+)<\/span>.+<\/span.+|\1|')
 
@@ -114,7 +118,7 @@ then
 	then
 	    input_hidden "$html"
 	    post_data="${post_data%op=payments*}btn_download=Download File"
-	    
+	    get_language_prog
 	    html=$(wget -t 1 -T $max_waiting                                    \
 			--user-agent="$user_agent" -q                           \
 			--load-cookies="$path_tmp"/cookies.zdl                  \
@@ -122,7 +126,8 @@ then
 			--save-cookies="$path_tmp"/cookies.zdl                  \
 			--post-data="${post_data}"                              \
 			"$url_in" -qO- -o /dev/null)
-	    print_c 2 "\nAttendi:"
+	    get_language
+	    print_c 2 "\n$(gettext "Wait"):"
 	    countdown- "$countdown"
 	    redirect "$url_in"
 

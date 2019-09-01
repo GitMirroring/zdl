@@ -30,6 +30,7 @@
 
 if [[ "$url_in" =~ (ddl.to) ]]
 then
+    get_language_prog
     html=$(curl -A "$user_agent" \
 		-c "$path_tmp"/cookies0.zdl \
 		"$url_in")
@@ -39,7 +40,6 @@ then
 		    --save-cookies="$path_tmp"/cookies0.zdl  \
 		    "$url_in"                                \
 	    	    -o /dev/null)
-    
     input_hidden "$html"
 
     html=$(wget -qO- "$url_in"                          \
@@ -91,9 +91,10 @@ then
 
     if ! check_wget
     then
-    	print_c 3 "Superato il limite di banda imposto dal server:"
-    	print_c 1 "utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
-
+	get_language
+	print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
+	print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
+	get_language_prog	
     	set_temp_proxy
 
     elif data_stdout

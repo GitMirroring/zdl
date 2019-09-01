@@ -133,8 +133,9 @@ then
 
 	reurl=$(grep 'X-Jheberg-Location:' <<< "$reurl")
 	reurl="${reurl#*X-Jheberg-Location: }"
-
-	print_c 4 "Verifica per ${hosters[$index_hosters]}: ${url_jheberg}-$id"
+	get_language
+	print_c 4 "$(gettext "Checking") ${hosters[$index_hosters]}: ${url_jheberg}-$id"
+	get_language_prog
 	if url "$reurl"
 	then	   
 	    break	    

@@ -51,7 +51,9 @@ function decodejs_zinwa {
 
 if [ "$url_in" != "${url_in//'zinwa.'}" ]
 then
-    print_c 2 "Attendi...\n"
+    get_language
+    print_c 2 "$(gettext "Wait")...\n"
+    get_language_prog	
     html=$(wget -t 1 -T $max_waiting -q "$url_in" -O- -o /dev/null)
 
     if [ ! -z "$html" ]

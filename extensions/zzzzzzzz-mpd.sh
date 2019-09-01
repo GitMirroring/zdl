@@ -38,7 +38,7 @@ function post_mpd_genlink {
     else
     	url_mpd="$url_in"
     fi
-
+    get_language_prog
     files=$(curl "$url_mpd" |grep -vP '^#')
     baseurl="${url_mpd%\/*}"
 
@@ -76,7 +76,8 @@ then
     if url "$url_in_file" &&
 	    test -n "$file_in"
     then
-	print_c 1 "Rilevato link MPD: il file verrà scaricato con ffmpeg"
+	get_language
+	print_c 1 "$(gettext "%s link detected: the file will be downloaded using ffmpeg")" MPD
 	unset break_loop
 
     else

@@ -42,7 +42,7 @@ then
     host=$(grep -oP '[^.]+\.[^.]+$' <<< "$host")
     host="${host%%.*}"
 
-    print_c 2 "tubeoffline -> host: $host"
+    print_c 2 "TubeOffLine -> host: $host"
     
     html=$(wget -t1 -T 20 \
 		-qO- \

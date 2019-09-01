@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-29 17:57+0200\n"
+"POT-Creation-Date: 2019-09-01 19:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -410,7 +410,7 @@ msgstr "Link da processare:"
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:442 ../ui/ui.awk:313
+#: ../zdl.sh:442 ../ui/ui.awk:317
 msgid "File URL"
 msgstr "URL del file"
 
@@ -518,6 +518,87 @@ msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
+#: ../extensions/000-filecrypt.sh:76 ../extensions/000-vcrypt.sh:83
+#: ../extensions/backin.sh:39 ../extensions/fattoquotidiano.sh:37
+#: ../extensions/fattoquotidiano.sh:44 ../extensions/filmpertutti.sh:39
+#: ../extensions/wstream.sh:51 ../extensions/wstream.sh:82 ../libs/log.sh:187
+msgid "Redirection"
+msgstr "Redirezione"
+
+#: ../extensions/000-filecrypt.sh:87 ../extensions/filmpertutti.sh:47
+msgid "New link to process"
+msgstr "Nuovo link da processare"
+
+#: ../extensions/001-jheberg.sh:137
+msgid "Checking"
+msgstr "Verifica di"
+
+#: ../extensions/2-ncrypt.sh:36
+msgid "DLC container analysis"
+msgstr "Analisi del container DLC"
+
+#: ../extensions/akvideo.sh:55 ../extensions/deltabit.sh:55
+#: ../extensions/supervideo.sh:55
+msgid "Cookies deleted"
+msgstr "Cookie cancellati"
+
+#: ../extensions/akvideo.sh:139
+msgid "The movie with %s definition is available"
+msgstr "È disponibile il filmato con definizione %s"
+
+#: ../extensions/akvideo.sh:144
+msgid "The movie with %s definition is not available"
+msgstr "Non è disponibile il filmato con definizione %s"
+
+#: ../extensions/ddl.sh:94 ../extensions/wstream.sh:119
+msgid "The bandwidth limit set by the server has been exceeded"
+msgstr "Superato il limite di banda imposto dal server:"
+
+#: ../extensions/ddl.sh:95 ../extensions/wstream.sh:120
+msgid ""
+"a proxy will be used (to use more band, perhaps, you can change IP address "
+"by reconnecting the modem/router)"
+msgstr ""
+"Sarà utilizzato un proxy (per usare più banda, forse, puoi cambiare "
+"indirizzo IP riconnettendo il modem/router)"
+
+#: ../extensions/easybytez.sh:125 ../extensions/zinwa.sh:54
+msgid "Wait"
+msgstr "Attendi"
+
+#: ../extensions/katfile.sh:69 ../extensions/rockfile.sh:173
+#: ../extensions/subyshare.sh:62
+msgid "code not found"
+msgstr "codice non trovato"
+
+#: ../extensions/nowdownload.sh:88
+msgid "Wait about 30 seconds"
+msgstr "Attendi circa 30 secondi"
+
+#: ../extensions/rockfile.sh:200 ../extensions/subyshare.sh:91
+msgid ""
+"%s may have activated the captcha: in this case, resolve the steps required "
+"by the website first"
+msgstr ""
+"%s potrebbe aver attivato il captcha: in tal caso, risolvi prima i passaggi "
+"richiesti dal sito web"
+
+#: ../extensions/sockshare.sh:56
+msgid "%s failed to extract the URL of the file %s"
+msgstr "%s non è riuscito ad estrarre l'URL del file %s"
+
+#: ../extensions/vidabc.sh:100
+msgid "HD movie is available"
+msgstr "Filmato HD disponibile"
+
+#: ../extensions/vidabc.sh:103
+msgid "The movie will be downloaded with \"normal\" definition"
+msgstr "Il filmato sarà scaricato con definizione \"normale\""
+
+#: ../extensions/zzzzzzzz-m3u8.sh:79 ../extensions/zzzzzzzz-mpd.sh:79
+msgid "%s link detected: the file will be downloaded using ffmpeg"
+msgstr "Rilevato link %s: il file verrà scaricato con ffmpeg"
+
 #: ../gui/gui.sh:33
 msgid "Download directory"
 msgstr "Numero download:"
@@ -530,8 +611,8 @@ msgstr "Seleziona la directory di destinazione dei download:"
 msgid "Select"
 msgstr "Seleziona"
 
-#: ../gui/gui.sh:139 ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:231
-#: ../ui/ui.awk:256
+#: ../gui/gui.sh:139 ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:235
+#: ../ui/ui.awk:260
 msgid "wait"
 msgstr "attendi"
 
@@ -601,7 +682,7 @@ msgstr ""
 "Seleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere "
 "la funzione o fai doppio click su un download:"
 
-#: ../gui/gui.sh:591 ../gui/gui.sh:1675 ../ui/ui.awk:314
+#: ../gui/gui.sh:591 ../gui/gui.sh:1675 ../ui/ui.awk:318
 msgid "Length"
 msgstr "Grandezza"
 
@@ -1128,27 +1209,27 @@ msgstr ""
 msgid "Detected cloudflare"
 msgstr "Rilevato Cloudflare"
 
-#: ../libs/ip_changer.sh:50 ../libs/ip_changer.sh:74
+#: ../libs/ip_changer.sh:51 ../libs/ip_changer.sh:75
 msgid "Starting modem/router reconnection program"
 msgstr "Avvio programma di riconnessione del modem/router"
 
-#: ../libs/ip_changer.sh:182
+#: ../libs/ip_changer.sh:183
 msgid "Proxy list search"
 msgstr "Ricerca lista proxy"
 
-#: ../libs/ip_changer.sh:188
+#: ../libs/ip_changer.sh:189
 msgid "Proxy not available, please try again later"
 msgstr "Proxy non disponibili, riprovo più tardi"
 
-#: ../libs/ip_changer.sh:224
+#: ../libs/ip_changer.sh:225
 msgid "Download speed test"
 msgstr "Test velocità di download"
 
-#: ../libs/ip_changer.sh:273
+#: ../libs/ip_changer.sh:274
 msgid "Sufficient download speed using the proxy"
 msgstr "Velocità di download sufficiente usando il proxy"
 
-#: ../libs/ip_changer.sh:286
+#: ../libs/ip_changer.sh:287
 msgid ""
 "The maximum download speed achieved using the proxy is less than the minimum "
 "required"
@@ -1156,27 +1237,27 @@ msgstr ""
 "La massima velocità di download raggiunta usando il proxy è inferiore a "
 "quella minima richiesta"
 
-#: ../libs/ip_changer.sh:291
+#: ../libs/ip_changer.sh:292
 msgid "Maximum download speed achieved using the proxy"
 msgstr "Massima velocità di download raggiunta usando il proxy"
 
-#: ../libs/ip_changer.sh:322
+#: ../libs/ip_changer.sh:324
 msgid "Update proxy"
 msgstr "Aggiorna il proxy"
 
-#: ../libs/ip_changer.sh:347
+#: ../libs/ip_changer.sh:349
 msgid "Proxy currently unavailable: attempt with proxy disabled"
 msgstr "Proxy attualmente non disponibile: tentativo con proxy disattivato"
 
-#: ../libs/ip_changer.sh:357
+#: ../libs/ip_changer.sh:359
 msgid "Start connection"
 msgstr "Avvia connessione"
 
-#: ../libs/ip_changer.sh:365
+#: ../libs/ip_changer.sh:368
 msgid "Temporary proxy enabled"
 msgstr "Attivato proxy temporaneo"
 
-#: ../libs/ip_changer.sh:374
+#: ../libs/ip_changer.sh:378
 msgid "Temporary proxy disabled"
 msgstr "Disattivato proxy temporaneo"
 
@@ -1189,30 +1270,30 @@ msgstr "Nessun account disponibile"
 msgid "$name_prog file log"
 msgstr "File log di $name_prog"
 
-#: ../libs/log.sh:47
+#: ../libs/log.sh:46
 #, sh-format
 msgid ""
 "File$msg_file_in already present in $PWD: $url_in will not be processed."
 msgstr "File$msg_file_in già presente in $PWD: $url_in non verrà processato."
 
-#: ../libs/log.sh:55
+#: ../libs/log.sh:53
 #, sh-format
 msgid "File$msg_file_in not available, try again later ${errMsg}"
 msgstr "File$msg_file_in non disponibile, riprovo più tardi ${errMsg}"
 
-#: ../libs/log.sh:57
+#: ../libs/log.sh:55
 msgid "The file name is missing"
 msgstr "Manca il nome del file"
 
-#: ../libs/log.sh:61
+#: ../libs/log.sh:59
 msgid "No valid url was found"
 msgstr "Non è stato trovato un url valido"
 
-#: ../libs/log.sh:66 ../libs/log.sh:91
+#: ../libs/log.sh:63 ../libs/log.sh:84
 msgid "Incorrect link or file not available"
 msgstr "Link errato o file non disponibile"
 
-#: ../libs/log.sh:72
+#: ../libs/log.sh:68
 #, sh-format
 msgid ""
 "The$msg_file_in file exceeds the size allowed by the server for free download"
@@ -1220,21 +1301,21 @@ msgstr ""
 "Il file$msg_file_in supera la dimensione consentita dal server per il "
 "download gratuito"
 
-#: ../libs/log.sh:77
+#: ../libs/log.sh:72
 msgid "Connection interrupted: try again later"
 msgstr "Connessione interrotta: riprovo più tardi"
 
-#: ../libs/log.sh:81
+#: ../libs/log.sh:75
 #, sh-format
 msgid "File$msg_file_in too large for free space in $PWD on $dev"
 msgstr "File$msg_file_in troppo grande per lo spazio libero in $PWD su $dev"
 
-#: ../libs/log.sh:88
+#: ../libs/log.sh:81
 #, sh-format
 msgid "File$msg_file_in already in download"
 msgstr "File$msg_file_in già in download"
 
-#: ../libs/log.sh:92
+#: ../libs/log.sh:85
 msgid ""
 "Error downloading the video HTML page. Check that the URL has been entered "
 "correctly or that the video is not private."
@@ -1242,35 +1323,35 @@ msgstr ""
 "Errore nello scaricare la pagina HTML del video. Controllare che l'URL sia "
 "stato inserito correttamente o che il video non sia privato."
 
-#: ../libs/log.sh:98
+#: ../libs/log.sh:89
 msgid "Title of HTML page not found. Check the URL"
 msgstr "Titolo della pagina HTML non trovato. Controlla l'URL."
 
-#: ../libs/log.sh:103
+#: ../libs/log.sh:93
 msgid "Signature of video not found"
 msgstr "Firma del video non trovata"
 
-#: ../libs/log.sh:107
+#: ../libs/log.sh:96
 #, sh-format
 msgid "File$msg_file_in downloadable only by users \"Premium\" or registered"
 msgstr "File$msg_file_in scaricabile solo da utenti \"Premium\" o registrati"
 
-#: ../libs/log.sh:114
+#: ../libs/log.sh:102
 #, sh-format
 msgid "It is not a valid URL for $name_prog"
 msgstr "Non è un URL adatto per $name_prog"
 
-#: ../libs/log.sh:118
+#: ../libs/log.sh:105
 msgid "URL not found"
 msgstr "URL non trovato"
 
-#: ../libs/log.sh:124
+#: ../libs/log.sh:110
 #, sh-format
 msgid ""
 "The$msg_file_in file will not be downloaded, because it matches to the regex"
 msgstr "Il file$msg_file_in non sarà scaricato, perché corrisponde alla regex"
 
-#: ../libs/log.sh:128
+#: ../libs/log.sh:113
 #, sh-format
 msgid ""
 "The$msg_file_in file will not be downloaded, because it does not match the "
@@ -1278,15 +1359,15 @@ msgid ""
 msgstr ""
 "Il file$msg_file_in non sarà scaricato, perché non corrisponde alla regex"
 
-#: ../libs/log.sh:133
+#: ../libs/log.sh:117
 msgid "The link will not be processed, because it matches to the regex"
 msgstr "Il link non sarà processato, perché corrisponde alla regex"
 
-#: ../libs/log.sh:137
+#: ../libs/log.sh:121
 msgid "The link will not be processed, because it does not matche to the regex"
 msgstr "Il link non sarà processato, perché non corrisponde alla regex"
 
-#: ../libs/log.sh:142
+#: ../libs/log.sh:125
 #, sh-format
 msgid ""
 "File$msg_file_in still in transfer and not yet available: try again in a few "
@@ -1295,27 +1376,27 @@ msgstr ""
 "File$msg_file_in ancora in trasferimento e non ancora disponibile: riprova "
 "fra qualche ora"
 
-#: ../libs/log.sh:148
+#: ../libs/log.sh:129
 #, sh-format
 msgid "Unsupported resume: download of the$msg_file_in file may end incomplete"
 msgstr ""
 "resume non supportato: il download del file$msg_file_in potrebbe terminare "
 "incompleto"
 
-#: ../libs/log.sh:151
+#: ../libs/log.sh:132
 msgid "Unsupported download: user age control"
 msgstr "Download non supportato: controllo età utente"
 
-#: ../libs/log.sh:155 ../libs/log.sh:222
+#: ../libs/log.sh:136 ../libs/log.sh:191
 msgid "Unsupported download: install"
 msgstr "Download non supportato: installa"
 
-#: ../libs/log.sh:160
+#: ../libs/log.sh:140
 #, sh-format
 msgid "Download supported by youtube-dl, started but not managed by $PROG"
 msgstr "Download supportato da youtube-dl, avviato ma non gestito da $PROG"
 
-#: ../libs/log.sh:166
+#: ../libs/log.sh:144
 #, sh-format
 msgid ""
 "The $i segment is missing: recovery attempt with Wget extracting the URL "
@@ -1324,12 +1405,12 @@ msgstr ""
 "Manca il segmento $i: tentativo di recupero con Wget estraendo l'URL da un "
 "file temporaneo"
 
-#: ../libs/log.sh:171
+#: ../libs/log.sh:148
 #, sh-format
 msgid "Operation failed because $dep is not installed"
 msgstr "Operazione non riuscita perché $dep non è installato"
 
-#: ../libs/log.sh:176
+#: ../libs/log.sh:152
 msgid ""
 "The operation could not be completed: the temporary file for segment "
 "recovery is missing"
@@ -1337,7 +1418,7 @@ msgstr ""
 "Impossibile completare l'operazione: manca il file temporaneo per il "
 "recupero del segmento"
 
-#: ../libs/log.sh:181
+#: ../libs/log.sh:156
 #, sh-format
 msgid ""
 "Reached the download limit for your IP address or account (link: $url_in): "
@@ -1346,7 +1427,7 @@ msgstr ""
 "Raggiunto il limite di download per il tuo indirizzo IP o account (link: "
 "$url_in): prova --proxy o --reconnect"
 
-#: ../libs/log.sh:186
+#: ../libs/log.sh:160
 msgid ""
 "Connection to the IRC server failed: incorrect address or connection or file "
 "not available"
@@ -1354,12 +1435,12 @@ msgstr ""
 "Connessione al server IRC non riuscita: indirizzo errato o connessione o "
 "file non disponibili"
 
-#: ../libs/log.sh:193
+#: ../libs/log.sh:166
 msgid ""
 "Another file is being downloaded from the same source, I will try again later"
 msgstr "Un altro file è in scaricamento dalla stessa fonte, riprovo più tardi"
 
-#: ../libs/log.sh:201
+#: ../libs/log.sh:173
 #, sh-format
 msgid ""
 "File$msg_file_in not available, try again later: I delete it from the queue"
@@ -1367,30 +1448,26 @@ msgstr ""
 "File$msg_file_in non disponibile, riprova in un altro momento: lo cancello "
 "dalla coda"
 
-#: ../libs/log.sh:206
+#: ../libs/log.sh:177
 msgid "Internet connection not available: exit"
 msgstr "Connessione internet non disponibile: uscita"
 
-#: ../libs/log.sh:210
+#: ../libs/log.sh:180
 msgid "Service temporarily not supported: request a developer intervention"
 msgstr ""
 "Servizio momentaneamente non supportato: richiedi un intervento degli "
 "sviluppatori"
 
-#: ../libs/log.sh:215
+#: ../libs/log.sh:184
 msgid "Paused for"
 msgstr "In pausa per"
 
-#: ../libs/log.sh:218
-msgid "Redirection"
-msgstr "Redirezione"
-
-#: ../libs/log.sh:226
+#: ../libs/log.sh:195
 msgid "Unsupported download: enter the captcha code using a web browser"
 msgstr ""
 "Download non supportato: inserisci il codice captcha usando un browser web"
 
-#: ../libs/log.sh:232
+#: ../libs/log.sh:199
 msgid ""
 "The service detects the use of AdBlock or software such as Kodi/XBMC/TV BOX "
 "(like ZigzagDownLoader)."
@@ -1398,7 +1475,7 @@ msgstr ""
 "Il servizio rileva l'uso di AdBlock o di un software come Kodi/XBMC/TV BOX "
 "(come ZigzagDownLoader)."
 
-#: ../libs/log.sh:233
+#: ../libs/log.sh:200
 msgid ""
 "Currently, ZDL is not able to download the requested file, I remove the link "
 "from the queue."
@@ -1406,7 +1483,7 @@ msgstr ""
 "Attualmente, ZDL non è in grado di scaricare il file richiesto, tolgo il "
 "link dalla coda."
 
-#: ../libs/log.sh:238
+#: ../libs/log.sh:204
 msgid ""
 "Unsupported service: use the web browser to resolve the extraction of the "
 "file URL"
@@ -1414,7 +1491,7 @@ msgstr ""
 "Servizio non supportato: usa il web browser per risolvere l'estrazione "
 "dell'URL del file"
 
-#: ../libs/log.sh:243
+#: ../libs/log.sh:208
 msgid ""
 "Your IP address has been banned by the server: the file cannot be reached "
 "via this link"
@@ -1422,19 +1499,19 @@ msgstr ""
 "Il tuo indirizzo IP è stato bannato dal server: impossibile raggiungere il "
 "file attraverso questo link"
 
-#: ../libs/log.sh:248
+#: ../libs/log.sh:212
 msgid "Unable to start the GUI: yad must be installed"
 msgstr "Impossibile avviare la GUI: è necessario installare yad"
 
-#: ../libs/log.sh:252
+#: ../libs/log.sh:215
 msgid "FFMpeg/AvConv is not configured for libxml2"
 msgstr "FFMpeg/AvConv non è configurato per libxml2"
 
-#: ../libs/log.sh:256
+#: ../libs/log.sh:219
 msgid "FFMpeg/AvConv is not installed"
 msgstr "FFMpeg/AvConv non è installato"
 
-#: ../libs/log.sh:261
+#: ../libs/log.sh:223
 msgid ""
 "Duration of the unrecorded Live Stream: repeat the programming (the link is "
 "deleted from the queue)"
@@ -1442,7 +1519,7 @@ msgstr ""
 "Durata del Live Stream non registrata: ripetere la programmazione (il link è "
 "cancellato dalla coda)"
 
-#: ../libs/log.sh:265
+#: ../libs/log.sh:227
 msgid "Wait set to non-premium users, try again later"
 msgstr "Attesa imposta a utenti non premium, riprovo più tardi"
 
@@ -1855,34 +1932,34 @@ msgstr "<Invio> per continuare"
 msgid "<Return> to exit"
 msgstr "<Invio> per uscire"
 
-#: ../ui/ui.awk:72
+#: ../ui/ui.awk:76
 msgid "Download id:"
 msgstr "Numero download:"
 
-#: ../ui/ui.awk:77
+#: ../ui/ui.awk:81
 msgid " RTMP protocol"
 msgstr " protocollo RTMP"
 
-#: ../ui/ui.awk:94 ../ui/ui.awk:99
+#: ../ui/ui.awk:98 ../ui/ui.awk:103
 msgid "Status"
 msgstr "Stato"
 
-#: ../ui/ui.awk:94
+#: ../ui/ui.awk:98
 msgid "Download not active"
 msgstr "Download non attivo"
 
-#: ../ui/ui.awk:172
+#: ../ui/ui.awk:176
 msgid "(file size not specified by the server)"
 msgstr "(grandezza del file non specificata dal server)"
 
-#: ../ui/ui.awk:177
+#: ../ui/ui.awk:181
 msgid "killed"
 msgstr "terminato"
 
-#: ../ui/ui.awk:226
+#: ../ui/ui.awk:230
 msgid "completed"
 msgstr "completato"
 
-#: ../ui/ui.awk:238
+#: ../ui/ui.awk:242
 msgid "inactive"
 msgstr "non attivo"

@@ -76,7 +76,8 @@ then
     if url "$url_in_file" &&
 	    test -n "$file_in"
     then
-	print_c 1 "Rilevato link M3U8: il file verrà scaricato con ffmpeg"
+	get_language
+	print_c 1 "$(gettext "%s link detected: the file will be downloaded using ffmpeg")" M3U8
 	unset break_loop
 
     else

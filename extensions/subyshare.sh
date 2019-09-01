@@ -30,11 +30,13 @@
 
 if [ "$url_in" != "${url_in//'subyshare.'}" ]
 then
+    get_language_prog
     html=$(wget -t 1 -T $max_waiting                       \
 		--keep-session-cookies                     \
 		--save-cookies="$path_tmp"/cookies.zdl     \
 		--user-agent="$user_agent"                 \
 		-qO- "${url_in}" -o /dev/null)
+    get_language
     
     if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
     then
@@ -46,20 +48,20 @@ then
 	file_in="$postdata_fname"
 
 	post_data="${post_data%%referer*}referer=&method_free=Free Download"
-
+	get_language_prog	
 	html=$(wget -qO-                                        \
 		    --load-cookies="$path_tmp"/cookies.zdl      \
 		    --user-agent="$user_agent"                  \
 		    --post-data="$post_data"                    \
 		    "${url_in}" -o /dev/null)
-
+	get_language
 	code=$(pseudo_captcha "$html")
 
 	if [[ "$code" =~ ^[0-9]+$ ]]
 	then
 	    print_c 1 "Pseudo-captcha: $code"
 	else
-	    print_c 3 "Pseudo-captcha: codice non trovato"
+	    print_c 3 "Pseudo-captcha: $(gettext "code not found")"
 	fi
 	
 	unset post_data
@@ -88,6 +90,6 @@ then
 
     try_end=25
     [ -n "$premium" ] &&
-	print_c 2 "Subyshare potrebbe aver attivato il captcha: in tal caso, risolvi prima i passaggi richiesti dal sito web" ||
-	    end_extension
+	print_c 2 "$(gettext "%s may have activated the captcha: in this case, resolve the steps required by the website first")" Subyshare ||
+	    end_extension 
 fi

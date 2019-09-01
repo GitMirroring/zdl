@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-29 18:01+0200\n"
+"POT-Creation-Date: 2019-09-01 19:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -410,7 +410,7 @@ msgstr "Link da processare:"
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:442 ../ui/ui.awk:313
+#: ../zdl.sh:442 ../ui/ui.awk:317
 msgid "File URL"
 msgstr "URL del file"
 
@@ -518,6 +518,87 @@ msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
+#: ../extensions/000-filecrypt.sh:76 ../extensions/000-vcrypt.sh:83
+#: ../extensions/backin.sh:39 ../extensions/fattoquotidiano.sh:37
+#: ../extensions/fattoquotidiano.sh:44 ../extensions/filmpertutti.sh:39
+#: ../extensions/wstream.sh:51 ../extensions/wstream.sh:82 ../libs/log.sh:187
+msgid "Redirection"
+msgstr "Redirezione"
+
+#: ../extensions/000-filecrypt.sh:87 ../extensions/filmpertutti.sh:47
+msgid "New link to process"
+msgstr "Nuovo link da processare"
+
+#: ../extensions/001-jheberg.sh:137
+msgid "Checking"
+msgstr "Verifica di"
+
+#: ../extensions/2-ncrypt.sh:36
+msgid "DLC container analysis"
+msgstr "Analisi del container DLC"
+
+#: ../extensions/akvideo.sh:55 ../extensions/deltabit.sh:55
+#: ../extensions/supervideo.sh:55
+msgid "Cookies deleted"
+msgstr "Cookie cancellati"
+
+#: ../extensions/akvideo.sh:139
+msgid "The movie with %s definition is available"
+msgstr "È disponibile il filmato con definizione %s"
+
+#: ../extensions/akvideo.sh:144
+msgid "The movie with %s definition is not available"
+msgstr "Non è disponibile il filmato con definizione %s"
+
+#: ../extensions/ddl.sh:94 ../extensions/wstream.sh:119
+msgid "The bandwidth limit set by the server has been exceeded"
+msgstr "Superato il limite di banda imposto dal server:"
+
+#: ../extensions/ddl.sh:95 ../extensions/wstream.sh:120
+msgid ""
+"a proxy will be used (to use more band, perhaps, you can change IP address "
+"by reconnecting the modem/router)"
+msgstr ""
+"Sarà utilizzato un proxy (per usare più banda, forse, puoi cambiare "
+"indirizzo IP riconnettendo il modem/router)"
+
+#: ../extensions/easybytez.sh:125 ../extensions/zinwa.sh:54
+msgid "Wait"
+msgstr "Attendi"
+
+#: ../extensions/katfile.sh:69 ../extensions/rockfile.sh:173
+#: ../extensions/subyshare.sh:62
+msgid "code not found"
+msgstr "codice non trovato"
+
+#: ../extensions/nowdownload.sh:88
+msgid "Wait about 30 seconds"
+msgstr "Attendi circa 30 secondi"
+
+#: ../extensions/rockfile.sh:200 ../extensions/subyshare.sh:91
+msgid ""
+"%s may have activated the captcha: in this case, resolve the steps required "
+"by the website first"
+msgstr ""
+"%s potrebbe aver attivato il captcha: in tal caso, risolvi prima i passaggi "
+"richiesti dal sito web"
+
+#: ../extensions/sockshare.sh:56
+msgid "%s failed to extract the URL of the file %s"
+msgstr "%s non è riuscito ad estrarre l'URL del file %s"
+
+#: ../extensions/vidabc.sh:100
+msgid "HD movie is available"
+msgstr "Filmato HD disponibile"
+
+#: ../extensions/vidabc.sh:103
+msgid "The movie will be downloaded with \"normal\" definition"
+msgstr "Il filmato sarà scaricato con definizione \"normale\""
+
+#: ../extensions/zzzzzzzz-m3u8.sh:79 ../extensions/zzzzzzzz-mpd.sh:79
+msgid "%s link detected: the file will be downloaded using ffmpeg"
+msgstr "Rilevato link %s: il file verrà scaricato con ffmpeg"
+
 #: ../gui/gui.sh:33
 msgid "Download directory"
 msgstr "Numero download:"
@@ -530,8 +611,8 @@ msgstr "Seleziona la directory di destinazione dei download:"
 msgid "Select"
 msgstr "Seleziona"
 
-#: ../gui/gui.sh:139 ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:231
-#: ../ui/ui.awk:256
+#: ../gui/gui.sh:139 ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:235
+#: ../ui/ui.awk:260
 msgid "wait"
 msgstr "attendi"
 
@@ -601,7 +682,7 @@ msgstr ""
 "Seleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere "
 "la funzione o fai doppio click su un download:"
 
-#: ../gui/gui.sh:591 ../gui/gui.sh:1675 ../ui/ui.awk:314
+#: ../gui/gui.sh:591 ../gui/gui.sh:1675 ../ui/ui.awk:318
 msgid "Length"
 msgstr "Grandezza"
 
@@ -1128,27 +1209,27 @@ msgstr ""
 msgid "Detected cloudflare"
 msgstr "Rilevato Cloudflare"
 
-#: ../libs/ip_changer.sh:50 ../libs/ip_changer.sh:74
+#: ../libs/ip_changer.sh:51 ../libs/ip_changer.sh:75
 msgid "Starting modem/router reconnection program"
 msgstr "Avvio programma di riconnessione del modem/router"
 
-#: ../libs/ip_changer.sh:182
+#: ../libs/ip_changer.sh:183
 msgid "Proxy list search"
 msgstr "Ricerca lista proxy"
 
-#: ../libs/ip_changer.sh:188
+#: ../libs/ip_changer.sh:189
 msgid "Proxy not available, please try again later"
 msgstr "Proxy non disponibili, riprovo più tardi"
 
-#: ../libs/ip_changer.sh:224
+#: ../libs/ip_changer.sh:225
 msgid "Download speed test"
 msgstr "Test velocità di download"
 
-#: ../libs/ip_changer.sh:273
+#: ../libs/ip_changer.sh:274
 msgid "Sufficient download speed using the proxy"
 msgstr "Velocità di download sufficiente usando il proxy"
 
-#: ../libs/ip_changer.sh:286
+#: ../libs/ip_changer.sh:287
 msgid ""
 "The maximum download speed achieved using the proxy is less than the minimum "
 "required"
@@ -1156,27 +1237,27 @@ msgstr ""
 "La massima velocità di download raggiunta usando il proxy è inferiore a "
 "quella minima richiesta"
 
-#: ../libs/ip_changer.sh:291
+#: ../libs/ip_changer.sh:292
 msgid "Maximum download speed achieved using the proxy"
 msgstr "Massima velocità di download raggiunta usando il proxy"
 
-#: ../libs/ip_changer.sh:322
+#: ../libs/ip_changer.sh:324
 msgid "Update proxy"
 msgstr "Aggiorna il proxy"
 
-#: ../libs/ip_changer.sh:347
+#: ../libs/ip_changer.sh:349
 msgid "Proxy currently unavailable: attempt with proxy disabled"
 msgstr "Proxy attualmente non disponibile: tentativo con proxy disattivato"
 
-#: ../libs/ip_changer.sh:357
+#: ../libs/ip_changer.sh:359
 msgid "Start connection"
 msgstr "Avvia connessione"
 
-#: ../libs/ip_changer.sh:365
+#: ../libs/ip_changer.sh:368
 msgid "Temporary proxy enabled"
 msgstr "Attivato proxy temporaneo"
 
-#: ../libs/ip_changer.sh:374
+#: ../libs/ip_changer.sh:378
 msgid "Temporary proxy disabled"
 msgstr "Disattivato proxy temporaneo"
 
@@ -1380,10 +1461,6 @@ msgstr ""
 #: ../libs/log.sh:184
 msgid "Paused for"
 msgstr "In pausa per"
-
-#: ../libs/log.sh:187
-msgid "Redirection"
-msgstr "Redirezione"
 
 #: ../libs/log.sh:195
 msgid "Unsupported download: enter the captcha code using a web browser"
@@ -1855,34 +1932,34 @@ msgstr "<Invio> per continuare"
 msgid "<Return> to exit"
 msgstr "<Invio> per uscire"
 
-#: ../ui/ui.awk:72
+#: ../ui/ui.awk:76
 msgid "Download id:"
 msgstr "Numero download:"
 
-#: ../ui/ui.awk:77
+#: ../ui/ui.awk:81
 msgid " RTMP protocol"
 msgstr " protocollo RTMP"
 
-#: ../ui/ui.awk:94 ../ui/ui.awk:99
+#: ../ui/ui.awk:98 ../ui/ui.awk:103
 msgid "Status"
 msgstr "Stato"
 
-#: ../ui/ui.awk:94
+#: ../ui/ui.awk:98
 msgid "Download not active"
 msgstr "Download non attivo"
 
-#: ../ui/ui.awk:172
+#: ../ui/ui.awk:176
 msgid "(file size not specified by the server)"
 msgstr "(grandezza del file non specificata dal server)"
 
-#: ../ui/ui.awk:177
+#: ../ui/ui.awk:181
 msgid "killed"
 msgstr "terminato"
 
-#: ../ui/ui.awk:226
+#: ../ui/ui.awk:230
 msgid "completed"
 msgstr "completato"
 
-#: ../ui/ui.awk:238
+#: ../ui/ui.awk:242
 msgid "inactive"
 msgstr "non attivo"

@@ -32,13 +32,14 @@
 if [ "$url_in" != "${url_in//katfile\.}" ] &&
        [[ ! "$url_in" =~ ':8080' ]]
 then
+    get_language_prog
     html=$(wget -t1 -T$max_waiting                               \
 		"$url_in"                                        \
 		--user-agent="Firefox"                           \
 		--keep-session-cookies                           \
 		--save-cookies="$path_tmp/cookies.zdl"           \
 		-qO- -o /dev/null)
-    
+
     [ -z "$html" ] &&
 	command -v curl >/dev/null && 
 	html=$(curl "$url_in") 
@@ -55,7 +56,8 @@ then
 		    --post-data="$post_data"        \
 		    --load-cookies="$path_tmp/cookies.zdl"   \
 		    -qO- -o /dev/null)
-
+	get_language
+	
 	if [[ "$html" =~ 'to download bigger files' ]]
 	then
 	    _log 4
@@ -66,13 +68,14 @@ then
 	    then
 		print_c 1 "Pseudo-captcha: $code"
 	    else
-		print_c 3 "Pseudo-captcha: codice non trovato"
+		print_c 3 "Pseudo-captcha: $(gettext "code not found")"
 	    fi
 
 	    unset post_data
 	    input_hidden "$html"
 	    post_data+="&code=$code"
-
+	    get_language_prog
+	    
 	    html=$(wget "$url_in"                       \
 			--post-data="$post_data"        \
 			-qO- -o /dev/null)

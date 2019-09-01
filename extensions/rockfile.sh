@@ -170,8 +170,10 @@ then
 		fi
 
 	    else
-		print_c 3 "Pseudo-captcha: codice non trovato"
-
+		get_language
+		print_c 3 "Pseudo-captcha: $(gettext "code not found")"
+		get_language_prog
+		
 		if [[ "$html" =~ google.+recaptcha ]]
 		then
 		    url_in_timer=true
@@ -194,11 +196,12 @@ then
     then
 	file_in="${url_in_file##*\/}"
     fi
-    
+    get_language
     try_end=25
     [ -n "$premium" ] &&
-	print_c 2 "Rockfile potrebbe aver attivato il captcha: in tal caso, risolvi prima i passaggi richiesti dal sito web" ||
+	print_c 2 "$(gettext "%s may have activated the captcha: in this case, resolve the steps required by the website first")" Rockfile ||
 	    [ -n "$url_in_timer" ] ||
 	    end_extension
+    get_language_prog	
 fi
 

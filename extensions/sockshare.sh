@@ -31,6 +31,7 @@
 if [ "$url_in" != "${url_in//'sockshare.com/file/'}" ]
 then
     url_in="${url_in%\#}"
+    get_language_prog
     wget -q -t 5 -T $max_waiting --retry-connrefused --keep-session-cookies --save-cookies="$path_tmp/cookies.zdl" -O "$path_tmp/zdl.tmp" $url_in &>/dev/null
     test_putlocker=`cat "$path_tmp/zdl.tmp" | grep "File Does Not Exist"`
     
@@ -53,7 +54,10 @@ then
 	if [ -z "$url_in_file" ]
 	then
 	    set_link - "$url_in"
-	    print_c 3 "$url_in --> $name_prog non è riuscito ad estrarre l'URL del file $file_in" | tee -a $file_log
+	    get_language
+	    print_c 3 "$url_in --> $(gettext "%s failed to extract the URL of the file %s")" "$name_prog" "$file_in" |
+		tee -a $file_log
+	    get_language_prog	
 	    break_loop=true
 	fi
     else

@@ -30,18 +30,23 @@
 
 if [[ "$url_in" =~ ilfattoquotidiano ]]
 then
+    get_language_prog
     html=$(curl -s "$url_in")
     url_in_file=$(grep 'playlist: \[' <<< "$html" |
 			 sed -r 's|.+\":\"([^"]+\.m3u8)\".+|\1|g' |
 			 tr -d '\\' | head -n1)
-    print_c 4 "Reindirizzamento: $url_in_file"
+    get_language
+    print_c 4 "$(gettext "Redirection"): $url_in_file"
+    get_language_prog
     
     if url "$url_in_file"
     then
 	url_in_file=$(curl -s "$url_in_file" |
 			     grep http |
 			     head -n1)
-	print_c 4 "Reindirizzamento: $url_in_file"
+	get_language
+	print_c 4 "$(gettext "Redirection"): $url_in_file"
+    	get_language_prog
     fi
     
     file_in=$(get_title "$html" | head -n1)
