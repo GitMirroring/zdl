@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-01 19:31+0200\n"
+"POT-Creation-Date: 2019-09-03 00:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -518,14 +518,14 @@ msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
-#: ../extensions/000-filecrypt.sh:76 ../extensions/000-vcrypt.sh:83
-#: ../extensions/backin.sh:39 ../extensions/fattoquotidiano.sh:37
-#: ../extensions/fattoquotidiano.sh:44 ../extensions/filmpertutti.sh:39
-#: ../extensions/wstream.sh:51 ../extensions/wstream.sh:82 ../libs/log.sh:187
+#: ../extensions/000-filecrypt.sh:78 ../extensions/000-vcrypt.sh:86
+#: ../extensions/backin.sh:40 ../extensions/fattoquotidiano.sh:39
+#: ../extensions/fattoquotidiano.sh:48 ../extensions/filmpertutti.sh:41
+#: ../extensions/wstream.sh:52 ../extensions/wstream.sh:84 ../libs/log.sh:187
 msgid "Redirection"
 msgstr "Redirezione"
 
-#: ../extensions/000-filecrypt.sh:87 ../extensions/filmpertutti.sh:47
+#: ../extensions/000-filecrypt.sh:91 ../extensions/filmpertutti.sh:49
 msgid "New link to process"
 msgstr "Nuovo link da processare"
 
@@ -533,28 +533,28 @@ msgstr "Nuovo link da processare"
 msgid "Checking"
 msgstr "Verifica di"
 
-#: ../extensions/2-ncrypt.sh:36
+#: ../extensions/2-ncrypt.sh:37
 msgid "DLC container analysis"
 msgstr "Analisi del container DLC"
 
-#: ../extensions/akvideo.sh:55 ../extensions/deltabit.sh:55
-#: ../extensions/supervideo.sh:55
+#: ../extensions/akvideo.sh:56 ../extensions/deltabit.sh:56
+#: ../extensions/supervideo.sh:56
 msgid "Cookies deleted"
 msgstr "Cookie cancellati"
 
-#: ../extensions/akvideo.sh:139
+#: ../extensions/akvideo.sh:143
 msgid "The movie with %s definition is available"
 msgstr "È disponibile il filmato con definizione %s"
 
-#: ../extensions/akvideo.sh:144
+#: ../extensions/akvideo.sh:148
 msgid "The movie with %s definition is not available"
 msgstr "Non è disponibile il filmato con definizione %s"
 
-#: ../extensions/ddl.sh:94 ../extensions/wstream.sh:119
+#: ../extensions/ddl.sh:95 ../extensions/wstream.sh:123
 msgid "The bandwidth limit set by the server has been exceeded"
 msgstr "Superato il limite di banda imposto dal server:"
 
-#: ../extensions/ddl.sh:95 ../extensions/wstream.sh:120
+#: ../extensions/ddl.sh:96 ../extensions/wstream.sh:124
 msgid ""
 "a proxy will be used (to use more band, perhaps, you can change IP address "
 "by reconnecting the modem/router)"
@@ -562,20 +562,20 @@ msgstr ""
 "Sarà utilizzato un proxy (per usare più banda, forse, puoi cambiare "
 "indirizzo IP riconnettendo il modem/router)"
 
-#: ../extensions/easybytez.sh:125 ../extensions/zinwa.sh:54
+#: ../extensions/easybytez.sh:130 ../extensions/zinwa.sh:55
 msgid "Wait"
 msgstr "Attendi"
 
-#: ../extensions/katfile.sh:69 ../extensions/rockfile.sh:173
-#: ../extensions/subyshare.sh:62
+#: ../extensions/katfile.sh:71 ../extensions/rockfile.sh:174
+#: ../extensions/subyshare.sh:64
 msgid "code not found"
 msgstr "codice non trovato"
 
-#: ../extensions/nowdownload.sh:88
+#: ../extensions/nowdownload.sh:89
 msgid "Wait about 30 seconds"
 msgstr "Attendi circa 30 secondi"
 
-#: ../extensions/rockfile.sh:200 ../extensions/subyshare.sh:91
+#: ../extensions/rockfile.sh:202 ../extensions/subyshare.sh:93
 msgid ""
 "%s may have activated the captcha: in this case, resolve the steps required "
 "by the website first"
@@ -583,19 +583,19 @@ msgstr ""
 "%s potrebbe aver attivato il captcha: in tal caso, risolvi prima i passaggi "
 "richiesti dal sito web"
 
-#: ../extensions/sockshare.sh:56
+#: ../extensions/sockshare.sh:58
 msgid "%s failed to extract the URL of the file %s"
 msgstr "%s non è riuscito ad estrarre l'URL del file %s"
 
-#: ../extensions/vidabc.sh:100
+#: ../extensions/vidabc.sh:102
 msgid "HD movie is available"
 msgstr "Filmato HD disponibile"
 
-#: ../extensions/vidabc.sh:103
+#: ../extensions/vidabc.sh:105
 msgid "The movie will be downloaded with \"normal\" definition"
 msgstr "Il filmato sarà scaricato con definizione \"normale\""
 
-#: ../extensions/zzzzzzzz-m3u8.sh:79 ../extensions/zzzzzzzz-mpd.sh:79
+#: ../extensions/zzzzzzzz-m3u8.sh:80 ../extensions/zzzzzzzz-mpd.sh:80
 msgid "%s link detected: the file will be downloaded using ffmpeg"
 msgstr "Rilevato link %s: il file verrà scaricato con ffmpeg"
 
@@ -1963,3 +1963,6 @@ msgstr "completato"
 #: ../ui/ui.awk:242
 msgid "inactive"
 msgstr "non attivo"
+
+msgid "Audio/video definition"
+msgstr "Definizione audio/video"
