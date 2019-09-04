@@ -91,21 +91,22 @@ then
 				   -H "X-Requested-With: XMLHttpRequest" \
 				   "$wstream_url_req")
 		get_language
-		
+
 		if [[ "$url_in_file" =~ (Server problem.. please contact our support) ]]
 		then
 		    _log 3
 		    break
 
 		else
-		    url_in_file=$(grep "class='btndw" <<< "$url_in_file")
-		    url_in_file="${url_in_file#*btndw}"
+		    url_in_file=$(grep "class='buttonDownload" <<< "$url_in_file")
+		    url_in_file="${url_in_file##*buttonDownload}"
+		    url_in_file="${url_in_file#*href=\'}"
 		    url_in_file="${url_in_file#*href=\'}"
 		    url_in_file="${url_in_file%%\'*}"
+
 		    url "$url_in_file" && break
 		fi
 	    done
-
 	else
 	    _log 44
 	    continue
@@ -120,8 +121,8 @@ then
 	check_wget || {
 	    # echo "Elite" >> "$path_tmp"/proxy
 	    # echo "Anonymous" >> "$path_tmp"/proxy
-	    print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" #"Superato il limite di banda imposto dal server:"
-	    print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")" #"utilizzo un proxy (per usare più banda, forse, puoi cambiare indirizzo IP riconnettendo il modem/router)"
+	    print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
+	    print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
 	    
 	    set_temp_proxy
 	}
