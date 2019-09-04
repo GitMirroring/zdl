@@ -30,7 +30,6 @@
 
 if [[ "$url_in" =~ backin ]]
 then
-    wget -SO OUT "$url_in" -o OUT.log
     link_parser "$url_in"
     backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
     get_language

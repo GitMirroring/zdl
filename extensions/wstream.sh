@@ -49,7 +49,7 @@ then
     then
 	get_language
 	[ "$url_in" == "$wstream_link" ] ||
-	    print_c 4 "$(gettext "Redirection")): $url_in -> $wstream_link"
+	    print_c 4 "$(gettext "Redirection"): $url_in -> $wstream_link"
 
 	get_language_prog
 	html=$(wget -qO- \
