@@ -505,11 +505,11 @@ function print_links_txt {
 }
 
 function load_download_manager_gui {
-    while [ -f "$path_tmp"/load_download_manager_gui.lock ]
+    while [ -f "$path_tmp"/load_download_manager_gui_lock.$GUI_ID ]
     do
 	sleep 0.1
     done
-    touch "$path_tmp"/load_download_manager_gui.lock 
+    touch "$path_tmp"/load_download_manager_gui.lock.$GUI_ID
     
     local item length pid dler file percent link
     get_data_multiprogress &>/dev/null
@@ -553,7 +553,7 @@ function load_download_manager_gui {
 	printf "%s\n%s\n%s\n%s\n%s\n%s\n" \
 	       "$link" "$percent" "$file" "$length" "$dler" "$pid"	
     done
-    rm -f "$path_tmp"/load_download_manager_gui.lock 
+    rm -f "$path_tmp"/load_download_manager_gui.lock.$GUI_ID
 }
 
 function display_download_manager_gui {
@@ -562,7 +562,7 @@ function display_download_manager_gui {
     then
 	return 1
     fi
-    
+
     exec 33<&-
     exec 44<&-
     local waiting=15
