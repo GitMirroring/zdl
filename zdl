@@ -497,7 +497,7 @@ done
 # if [ "${stdin}" != "${stdin//'pipe:['}" ]
 if [ -p /dev/fd/0 ]
 then    
-    read pipe < /dev/fd/0
+    read -d '' pipe < /dev/fd/0
     exec 0<$(echo /dev/$(ps ax| grep ^[\ ]*$$ | awk "{print $ps_ax_tty}"))
     
     args+=( $pipe )

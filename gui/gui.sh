@@ -330,6 +330,11 @@ function new_yad_multiprogress {
 function quit_gui {
     kill_yad_multiprogress
     kill_pid_file "$exit_file"
+    local pid=$(get_pid_regex "yad\0--title=Console\0--image=.+${PWD//\//\\/}\\\n")
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+	kill -9 $pid
+    fi
     exit
 }
 
@@ -500,9 +505,13 @@ function print_links_txt {
 }
 
 function load_download_manager_gui {
+    while [ -f "$path_tmp"/load_download_manager_gui.lock ]
+    do
+	sleep 0.1
+    done
+    touch "$path_tmp"/load_download_manager_gui.lock 
+    
     local item length pid dler file percent link
-    declare -a items
-
     get_data_multiprogress &>/dev/null
 
     echo -e '\f'
@@ -540,24 +549,20 @@ function load_download_manager_gui {
 	else
 	    percent=0
 	fi
-	
-	items=(
-	    "$link"
-	    "$percent"
-	    "$file"
-	    "$length"
-	    "$dler"
-	    "$pid"
-	)
 
-    	for item in "${items[@]}"
-    	do
-    	    echo "$item"
-    	done
+	printf "%s\n%s\n%s\n%s\n%s\n%s\n" \
+	       "$link" "$percent" "$file" "$length" "$dler" "$pid"	
     done
+    rm -f "$path_tmp"/load_download_manager_gui.lock 
 }
 
 function display_download_manager_gui {
+    local pid=$(get_pid_regex "${yad_download_manager_result_file##*\/}")
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+	return 1
+    fi
+    
     exec 33<&-
     exec 44<&-
     local waiting=15
@@ -642,7 +647,7 @@ function display_download_manager_gui {
 	    esac
 	done 
     } &
-    local pid=$!
+    pid=$!
     
     while ! check_pid $pid
     do
@@ -652,20 +657,25 @@ function display_download_manager_gui {
     while :
     do
 	exe_button_result "$yad_download_manager_result_file" >$PIPE_03
-
-    	check_pid $pid || {
-	    break
-	}
-	sleep 0.2
+	if test ! -s "$exit_file"
+	then
+	    kill -9 $pid
+	    kill -9 $(get_pid_regex "${yad_download_manager_result_file##*\/}")
+	fi
+	check_pid $pid || break
+	sleep 0.1
     done &
     
     while :
     do
 	load_download_manager_gui >$PIPE_03
-	sleep $waiting
-    	check_pid $pid || {
-	    break
-	}
+	if test ! -s "$exit_file"
+	then
+	    kill -9 $pid
+	    kill -9 $(get_pid_regex "${yad_download_manager_result_file##*\/}")
+	fi
+	check_pid $pid || break
+    	sleep $waiting
     done &
 }
 
@@ -949,6 +959,12 @@ function display_livestream_gui {
 }
 
 function display_link_manager_gui {
+    local pid=$(get_pid_regex "${yad_link_manager_result_file##*\/}")
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+	return 1
+    fi
+    
     local IFS_old="$IFS"
 
     local msg
@@ -1111,7 +1127,7 @@ you can delete the previous one and create a new one or leave the previous one a
 	done
 	IFS="$IFS_old"
     } &
-    local pid=$!
+    pid=$!
     while ! check_pid $pid
     do
 	sleep 0.1
@@ -1120,9 +1136,12 @@ you can delete the previous one and create a new one or leave the previous one a
     while :
     do
 	exe_button_result "$yad_link_manager_result_file"
-    	check_pid $pid || {
-	    break
-	}
+	if test ! -s "$exit_file"
+	then
+	    kill -9 $pid
+	    kill -9 $(get_pid_regex "${yad_link_manager_result_file##*\/}")
+	fi
+	check_pid $pid || break
 	sleep 0.2
     done &
     
@@ -1350,6 +1369,12 @@ function display_multiprogress_gui {
 
 
 function display_console_gui {
+    local pid=$(get_pid_regex "yad\0--title=Console\0--image=.+${PWD//\//\\/}\\\n")
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+	return 1
+    fi
+
     if [ -n "$1" ]
     then
 	declare -n ref="$1"

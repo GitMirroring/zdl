@@ -24,6 +24,14 @@
 # zoninoz@inventati.org
 #
 
+function check_value_in_array {
+    local value="$1"
+    shift
+    declare -a array=( "$@" )
+    grep -q --line-regexp "$value" < <(printf "%s\n" "${array[@]}") &&
+	return 0 || return 1
+}
+
 function get_mime {
     file -b --mime-type "$1"
 }

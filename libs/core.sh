@@ -34,6 +34,10 @@ function check_pid {
     return 1
 }
 
+function get_pid_regex {
+    awk "/$1/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/*/cmdline
+}
+
 function check_instance_daemon {
     unset daemon_pid
 
