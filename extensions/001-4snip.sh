@@ -29,13 +29,8 @@
 
 if [[ "$url_in" =~ 4snip\.pw ]]
 then
-    id_4snip=$(grep "name='url' value='" <<< "$url_4snip")
-    id_4snip="${id_4snip##*value=\'}"
-    id_4snip="${id_4snip%%\'*}"
-
     if [[ "$url_in" =~ out_encoded ]]
     then
-	echo "url_in: $url_in"
 	html=$(curl -s \
 		    -A "$user_agent" \
 		    "$url_in" \
@@ -44,15 +39,11 @@ then
 	url_action_4snip=$(grep action <<< "$html")
 	url_action_4snip="${url_action_4snip#*action=\'\.\.\/}"
 	url_action_4snip="${url_in%out_encoded*}${url_action_4snip%%\'*}"
-
-    else
-	url_action_4snip="${url_in//\/out\//'/outlink/'}"
-    fi
-
-
-
-    if [[ ! "$url_action_4snip" =~ outlink ]]
-    then
+	
+	id_4snip=$(grep "name='url' value='" <<< "$html")
+	id_4snip="${id_4snip##*value=\'}"
+	id_4snip="${id_4snip%%\'*}"
+	
 	html=$(curl -v \
 		    -b "$path_tmp"/cookies.zdl \
 		    -e "$url_in" \
@@ -61,15 +52,20 @@ then
 		    -A "$user_agent" \
 		    -d "url=$id_4snip" \
 		    "$url_action_4snip" 2>&1)
-    
+
 	url_action_4snip=$(grep action <<< "$html")
 	url_action_4snip="${url_action_4snip#*action=\'\.\.\/}"
 	url_action_4snip="${url_in%out_encoded*}${url_action_4snip%%\'*}"   
+
+	id_4snip=$(grep "name='url' value='" <<< "$html")
+	id_4snip="${id_4snip##*value=\'}"
+	id_4snip="${id_4snip%%\'*}"
+    else
+	url_action_4snip="${url_in//\/out\//'/outlink/'}"
     fi
-    
+
     url_4snip=$(curl -v \
 		     -b "$path_tmp"/cookies.zdl \
-		     -e "$url_in" \
 		     -H "TE: Trailers" \
 		     -H "Upgrade-Insecure-Requests: 1" \
 		     -A "$user_agent" \
