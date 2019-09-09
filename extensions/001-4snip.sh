@@ -29,7 +29,7 @@
 
 if [[ "$url_in" =~ 4snip\.pw ]]
 then
-    if [[ "$url_in" =~ out_encoded ]]
+    if [[ "$url_in" =~ \/(out_encoded|decode)\/ ]]
     then
 	html=$(curl -s \
 		    -A "$user_agent" \
@@ -38,8 +38,16 @@ then
 
 	url_action_4snip=$(grep action <<< "$html")
 	url_action_4snip="${url_action_4snip#*action=\'\.\.\/}"
-	url_action_4snip="${url_in%out_encoded*}${url_action_4snip%%\'*}"
-	
+
+	if [[ "$url_in" =~ \/out_encoded\/ ]]
+	then 
+	    url_action_4snip="${url_in%out_encoded*}${url_action_4snip%%\'*}"
+	    
+	elif [[ "$url_in" =~ \/decode\/ ]]
+	then
+	    url_action_4snip="${url_in%decode*}${url_action_4snip%%\'*}"
+	fi
+
 	id_4snip=$(grep "name='url' value='" <<< "$html")
 	id_4snip="${id_4snip##*value=\'}"
 	id_4snip="${id_4snip%%\'*}"
@@ -55,11 +63,20 @@ then
 
 	url_action_4snip=$(grep action <<< "$html")
 	url_action_4snip="${url_action_4snip#*action=\'\.\.\/}"
-	url_action_4snip="${url_in%out_encoded*}${url_action_4snip%%\'*}"   
+
+	if [[ "$url_in" =~ \/out_encoded\/ ]]
+	then 
+	    url_action_4snip="${url_in%out_encoded*}${url_action_4snip%%\'*}"
+	    
+	elif [[ "$url_in" =~ \/decode\/ ]]
+	then
+	    url_action_4snip="${url_in%decode*}${url_action_4snip%%\'*}"
+	fi
 
 	id_4snip=$(grep "name='url' value='" <<< "$html")
 	id_4snip="${id_4snip##*value=\'}"
 	id_4snip="${id_4snip%%\'*}"
+
     else
 	url_action_4snip="${url_in//\/out\//'/outlink/'}"
     fi
@@ -70,7 +87,8 @@ then
 		     -H "Upgrade-Insecure-Requests: 1" \
 		     -A "$user_agent" \
 		     -d "url=$id_4snip" \
-		     "$url_action_4snip" 2>&1)    
+		     "$url_action_4snip" 2>&1)
+
     url_4snip=$(grep 'ocation:' <<< "$url_4snip" |
 		    awk '{print $3}')
     url_4snip=$(trim "$url_4snip")

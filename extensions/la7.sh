@@ -31,18 +31,17 @@
 if [[ "$url_in" =~ la7\.it ]]
 then
     html=$(curl -s "$url_in")
+
     file_in=$(grep -P 'title\s*:' <<< "$html")
     file_in="${file_in#*\"}"
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"
-    
+
     url_in_file=$(grep -oP "[^\']+\.m3u8[^\']*" <<< "$html")
 
-    if [ -z "$url_in_file" ]
-    then
-	url_in_file=$(grep -oP '[^\"]+\.m3u8[^\"]*' <<< "$html")
-    fi
-
+    url "$url_in_file" ||
+	url_in_file=$(grep -oP "[^\"]+\.m3u8[^\"]*" <<< "$html")
+    
     if [ -n "$url_in_file" ] &&
 	   ! url "$url_in_file"
     then
@@ -78,6 +77,7 @@ then
 
     elif [ -n "$file_in" ]
     then
+#	youtubedl_m3u8="$url_in"
 	file_in+=_scaricato_il_$(date +%Y-%m-%d)_alle_$(date +%H-%M-%S)
     fi
     
