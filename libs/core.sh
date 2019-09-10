@@ -406,8 +406,7 @@ function check_link {
 
     check_livestream_link_time "$link" &&
 	! check_livestream_link_start "$link" &&
-	ret=1 &&
-	echo 3
+	ret=1
 
     return $ret
 }
