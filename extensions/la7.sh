@@ -30,7 +30,13 @@
 
 if [[ "$url_in" =~ la7\.it ]]
 then
-    html=$(curl -s "$url_in")
+    html=$(curl -s \
+		-H 'Connection: keep-alive' \
+		-H 'TE: Trailers' \
+		-H 'Upgrade-Insecure-Requests: 1' \
+		-A "$user_agent" \
+		-c "$path_tmp"/cookies.zdl \
+		"$url_in")
 
     file_in=$(grep -P 'title\s*:' <<< "$html")
     file_in="${file_in#*\"}"
@@ -41,15 +47,35 @@ then
 
     url "$url_in_file" ||
 	url_in_file=$(grep -oP "[^\"]+\.m3u8[^\"]*" <<< "$html")
+
+    # link_parser "$url_in_file"
+
+    # curl -v \
+    # 	 -H "Accept: */*" \
+    # 	 -H "Accept-Encoding: gzip, deflate, br" \
+    # 	 -H "Accept-Language: it,en-US;q=0.7,en;q=0.3" \
+    # 	 -H "Cache-Control: max-age=0" \
+    # 	 -H "Connection: keep-alive" \
+    # 	 -H "Host: $parser_domain" \
+    # 	 -H "Origin: https://www.la7.it" \
+    # 	 -H "Referer: $url_in" \
+    # 	 -A "$user_agent" \
+    # 	 -c "$path_tmp"/cookies.zdl \
+    # 	 "$url_in_file" 2>&1 >OUT
+	 
+    if url "$url_in_file"
+    then
+	url_in_file="https://vodpkg.iltrovatore.it/local/hls/,${url_in_file#*\,}"
+	url_in_file="${url_in_file//csmil/urlset}"
     
-    if [ -n "$url_in_file" ] &&
+    elif [ -n "$url_in_file" ] &&
 	   ! url "$url_in_file"
     then
-#	url_in_file="${url_in_file#*\'m3u8\'\ \:\ \'}"
+	url_in_file="${url_in_file#*\'m3u8\'\ \:\ \'}"
 	url_in_file="${url_in_file#*\'m3u8\'}"
 	url_in_file="${url_in_file%%\'*}"
 
-#	url_in_file="${url_in_file#*\"m3u8\"\ \:\ \"}"
+	url_in_file="${url_in_file#*\"m3u8\"\ \:\ \"}"
 	url_in_file="${url_in_file#*\"}"
 	url_in_file="${url_in_file%%\"*}"
 
@@ -77,7 +103,6 @@ then
 
     elif [ -n "$file_in" ]
     then
-#	youtubedl_m3u8="$url_in"
 	file_in+=_scaricato_il_$(date +%Y-%m-%d)_alle_$(date +%H-%M-%S)
     fi
     
