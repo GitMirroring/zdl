@@ -27,6 +27,40 @@
 ## zdl-extension types: download
 ## zdl-extension name: ddl.to
 
+function check_instance_ddlto {
+    local path \
+	  old_path="$PWD" \
+	  paths="$HOME"/.zdl/zdl.d/"paths.txt" \
+	  res=1 \
+	  link
+
+    while read path
+    do	
+	if [ -s "$path"/"$path_tmp"/ddlto_link.txt ]
+	then
+	    cd "$path"
+	    read link < "$path_tmp"/ddlto_link.txt
+
+	    if data_stdout
+	    then
+    		for ((i=0; i<${#url_out[@]}; i++))
+    		do
+    		    if [ "${url_out[i]}" == "$link" ] &&
+    			   check_pid "${pid_out[i]}"
+    		    then
+			res=0
+    			break
+    		    fi
+    		done
+	    fi
+	fi
+	[ "$res" == 0 ] && break
+	
+    done < <(awk '!($0 in a){a[$0]; print}' "$paths")
+
+    cd "$old_path"
+    return $res
+}
 
 if [[ "$url_in" =~ (ddl.to) ]]
 then
@@ -97,17 +131,22 @@ then
 	get_language_prog	
     	set_temp_proxy
 
-    elif data_stdout
+    # elif data_stdout
+    # then
+    # 	for ((i=0; i<${#url_out[@]}; i++))
+    # 	do
+    # 	    if [[ "${url_out[i]}" =~ (ddl.to) ]] &&
+    # 		   check_pid "${pid_out[i]}"
+    # 	    then
+    # 		set_temp_proxy
+    # 		break
+    # 	    fi
+    # 	done
+    elif check_instance_ddlto
     then
-	for ((i=0; i<${#url_out[@]}; i++))
-	do
-	    if [[ "${url_out[i]}" =~ (ddl.to) ]] &&
-		   check_pid "${pid_out[i]}"
-	    then
-		set_temp_proxy
-		break
-	    fi
-	done
+	set_temp_proxy
+    else
+	echo "$url_in" > "$path_tmp"/ddlto_link.txt
     fi
 
     end_extension
