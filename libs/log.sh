@@ -192,7 +192,7 @@ $(gettext "Error downloading the video HTML page. Check that the URL has been en
 	    set_link - "$url_in"
 	    ;;
 	36)
-	    msg="$url_in --> $(gettext "Unsupported download: enter the captcha code using a web browser")" #
+	    msg="$url_in --> $(gettext "Unsupported download: enter the captcha code using a web browser")"
 	    set_link - "$url_in"
 	    ;;
 	37)

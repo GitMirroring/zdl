@@ -360,3 +360,9 @@ then
     replace_url_in "$url_vcrypt" ||
 	_log 2
 fi
+
+if [[ "$url_in" =~ vcrypt\..+\/shieldcheck\/ ]]
+then
+    unset break_loop
+    _log 36
+fi

@@ -666,25 +666,18 @@ function check_playlist {
     return 0
 }
 
-function get_paths_json {
-    declare -n ref=$1
-    local path pid
-    local old_path="$PWD"
-    ref='['
-
-    while read path
-    do
-	cd "$path"
-	if check_instance_prog || check_instance_daemon
-	then
-	    ref+="\"$path\","
-	fi
-
-    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
-
-    cd "$old_path"
-    ref="${ref%\,}]"
-}
+## sostituita con funzione più efficiente in libs/core.sh:
+#
+# function get_paths_json {
+#     declare -n ref=$1
+#     local path
+#     ref='['
+#     while read path
+#     do
+# 	ref+="\"$path\","
+#     done < <(get_instance_paths)
+#     ref="${ref%\,}]"
+# }
 
 function stop_console_webui {
     local flag_file="$1"
