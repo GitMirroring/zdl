@@ -35,7 +35,7 @@ function check_pid {
 }
 
 function get_pid_regex {
-    awk "/$1/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/*/cmdline
+    awk "BEGINFILE{if (ERRNO != \"\") nextfile} /$1/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/*/cmdline
 }
 
 function check_instance_daemon {
