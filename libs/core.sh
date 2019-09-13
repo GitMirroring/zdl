@@ -57,7 +57,7 @@ function get_instance_paths {
 
 function get_paths_json {
     declare -n ref=$1
-    ref=$(awk 'BEGIN{json="["} BEGINFILE{if (ERRNO != "") nextfile} /[\/\0]{1}zdl\0/ { match(FILENAME, /[0-9]+/, matched); "cat /proc/" matched[0] "/environ" | getline environ; match ( environ, /PWD=[^\0]+/, pwd); if (!(pwd[0] in paths)){ paths[pwd[0]]; if (json == "[") { json = json "\"" substr(pwd[0],5) "\"" } else { json = json ",\"" substr(pwd[0],5) "\"" }}} END{ print json "]" }' /proc/[0-9]*/cmdline)
+    ref=$(awk 'BEGIN{json="["} BEGINFILE{if (ERRNO != "") nextfile} /[\/\0]{1}zdl\0/ { match(FILENAME, /[0-9]+/, matched); "cat /proc/" matched[0] "/environ" | getline environ; match( environ, /PWD=[^\0]+/, pwd); if (!(pwd[0] in paths) && (pwd[0] != "")){ paths[pwd[0]]; if (json == "[") { json = json "\"" substr(pwd[0],5) "\"" } else { json = json ",\"" substr(pwd[0],5) "\"" }}} END{ print json "]" }' /proc/[0-9]*/cmdline)
 }
 
 function check_instance_daemon {
