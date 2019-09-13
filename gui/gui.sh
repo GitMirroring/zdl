@@ -514,7 +514,7 @@ function load_download_manager_gui {
     local item length pid dler file percent link
     get_data_multiprogress &>/dev/null
 
-    echo -e '\f'
+    echo -e "\f"
     for ((i=1; i<="${#url_out_gui[@]}"; i++))
     do
 	link="${url_out_gui[i]}"
@@ -551,8 +551,9 @@ function load_download_manager_gui {
 	fi
 
 	printf "%s\n%s\n%s\n%s\n%s\n%s\n" \
-	       "$link" "$percent" "$file" "$length" "$dler" "$pid"	
+	      "$link" "$percent" "$file" "$length" "$dler" "$pid"
     done
+
     rm -f "$path_tmp"/load_download_manager_gui.lock.$GUI_ID
 }
 
@@ -564,18 +565,12 @@ function display_download_manager_gui {
     fi
 
     exec 33<&-
-    exec 44<&-
     local waiting=15
     
     export PIPE_03=/tmp/yadpipe03.$GUI_ID
     test -e $PIPE_03 && rm -f $PIPE_03
     mkfifo $PIPE_03
     exec 33<> $PIPE_03
-
-    export PIPE_04=/tmp/yadpipe04.$GUI_ID
-    test -e $PIPE_04 && rm -f $PIPE_04
-    mkfifo $PIPE_04
-    exec 44<> $PIPE_04
 
     local text="${TEXT}\n\n$(gettext "Select one or more downloads (Ctrl + Click) and press the button to choose the function or double click on a download:")"
     
@@ -584,6 +579,8 @@ function display_download_manager_gui {
 	while :
 	do
 	    load_download_manager_gui >$PIPE_03
+	    touch "$path_tmp"/start_display_download_lock.$GUI_ID
+	    
 	    res=($(yad --list --grid-lines=hor \
 		       --multiple \
 		       --title="Downloads" \
@@ -668,7 +665,14 @@ function display_download_manager_gui {
     
     while :
     do
+	if [ -f "$path_tmp"/start_display_download_lock.$GUI_ID ]
+	then
+	    sleep 5
+	    rm -f "$path_tmp"/start_display_download_lock.$GUI_ID
+	fi
+
 	load_download_manager_gui >$PIPE_03
+
 	if test ! -s "$exit_file"
 	then
 	    kill -9 $pid

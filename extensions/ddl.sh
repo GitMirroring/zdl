@@ -123,31 +123,16 @@ then
 	fi
     done
 
-    if ! check_wget
+    if ! check_wget ||
+	    check_instance_ddlto
     then
 	get_language
 	print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
 	print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
 	get_language_prog	
     	set_temp_proxy
-
-    # elif data_stdout
-    # then
-    # 	for ((i=0; i<${#url_out[@]}; i++))
-    # 	do
-    # 	    if [[ "${url_out[i]}" =~ (ddl.to) ]] &&
-    # 		   check_pid "${pid_out[i]}"
-    # 	    then
-    # 		set_temp_proxy
-    # 		break
-    # 	    fi
-    # 	done
-    elif check_instance_ddlto
-    then
-	set_temp_proxy
     else
 	echo "$url_in" > "$path_tmp"/ddlto_link.txt
     fi
-
     end_extension
 fi
