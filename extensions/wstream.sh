@@ -59,6 +59,7 @@ then
 		    --user-agent="$user_agent" \
 		    "$wstream_link")
 	get_language
+
 	##### per ora è solo client, quindi è commentato:
 	## countdown- 6
 
@@ -83,13 +84,14 @@ then
 		wstream_url_req="$proto://video.wstream.video/$wstream_req"
 		print_c 4 "$(gettext "Redirection"): $wstream_link -> $wstream_url_req"
 		get_language_prog
-		url_in_file=$(curl -s \
-				   -b "$path_tmp"/cookies.zdl \
-				   -A "$user_agent" \
-				   -H "Referer: $wstream_link" \
-				   -H "TE: Trailers" \
-				   -H "X-Requested-With: XMLHttpRequest" \
-				   "$wstream_url_req")
+		
+		html=$(curl -s \
+			    -b "$path_tmp"/cookies.zdl \
+			    -A "$user_agent" \
+			    -H "Referer: $wstream_link" \
+			    -H "TE: Trailers" \
+			    -H "X-Requested-With: XMLHttpRequest" \
+			    "$wstream_url_req")
 		get_language
 
 		if [[ "$url_in_file" =~ (Server problem.. please contact our support) ]]
@@ -98,7 +100,13 @@ then
 		    break
 
 		else
-		    url_in_file=$(grep "class='buttonDownload" <<< "$url_in_file")
+		    url_in_file=$(grep "class='buttonDownload" <<< "$html")
+
+		    if [ -z "$url_in_file" ]
+		    then
+			url_in_file=$(grep "class='bbkkff" <<< "$html")
+		    fi
+
 		    url_in_file="${url_in_file##*buttonDownload}"
 		    url_in_file="${url_in_file#*href=\'}"
 		    url_in_file="${url_in_file#*href=\'}"
