@@ -143,6 +143,7 @@ then
 	print_c 4 "$(gettext "File URL"): $url_in_file"
 	_log 44
 	break_loop=true
+	continue
     fi
     
     end_extension
