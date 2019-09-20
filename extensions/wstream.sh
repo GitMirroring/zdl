@@ -100,7 +100,6 @@ then
 		    break
 
 		else
-		    echo "$html" >OUT.$(date +%s)
 		    url_in_file=$(grep "class='buttonDownload" <<< "$html")
 
 		    if [ -z "$url_in_file" ]
