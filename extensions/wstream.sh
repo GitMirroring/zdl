@@ -117,7 +117,7 @@ then
 	    done
 	else
 	    _log 44
-	    continue
+	    break_loop=true
 	fi
 
 	if url "$url_in_file" &&
