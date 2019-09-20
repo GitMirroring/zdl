@@ -667,8 +667,6 @@ function check_in_file { 	## return --> no_download=1 / download=0
     return 1
 }
 
-
-
 function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizioni
     if [ -f "$1" ]
     then
