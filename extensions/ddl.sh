@@ -141,9 +141,11 @@ then
 
     elif ! check_wget ## https://
     then
+	get_language
     	print_c 4 "$(gettext "File URL"): $url_in_file"
 	print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded")" 
 	break_loop=true
+	get_language_prog	
     	continue
     fi
     

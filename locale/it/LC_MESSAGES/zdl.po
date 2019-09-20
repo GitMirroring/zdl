@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 17:13+0200\n"
+"POT-Creation-Date: 2019-09-20 18:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -410,7 +410,7 @@ msgstr "Link da processare:"
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:442 ../ui/ui.awk:317
+#: ../zdl.sh:442 ../extensions/ddl.sh:144 ../ui/ui.awk:317
 msgid "File URL"
 msgstr "URL del file"
 
@@ -551,12 +551,12 @@ msgstr "È disponibile il filmato con definizione %s"
 msgid "The movie with %s definition is not available"
 msgstr "Non è disponibile il filmato con definizione %s"
 
-#: ../extensions/ddl.sh:133 ../extensions/ddl.sh:144
-#: ../extensions/wstream.sh:132
+#: ../extensions/ddl.sh:134 ../extensions/ddl.sh:145
+#: ../extensions/wstream.sh:133
 msgid "The bandwidth limit set by the server has been exceeded"
 msgstr "Superato il limite di banda imposto dal server"
 
-#: ../extensions/ddl.sh:134 ../extensions/wstream.sh:133
+#: ../extensions/ddl.sh:135 ../extensions/wstream.sh:134
 msgid ""
 "a proxy will be used (to use more band, perhaps, you can change IP address "
 "by reconnecting the modem/router)"
@@ -1966,5 +1966,5 @@ msgstr "completato"
 msgid "inactive"
 msgstr "non attivo"
 
-msgid "Audio/video definition"
-msgstr "Definizione audio/video"
+#~ msgid "Audio/video definition"
+#~ msgstr "Definizione audio/video"

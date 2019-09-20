@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 17:13+0200\n"
+"POT-Creation-Date: 2019-09-20 18:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -367,7 +367,7 @@ msgstr ""
 msgid "Connecting"
 msgstr ""
 
-#: ../zdl.sh:442 ../ui/ui.awk:317
+#: ../zdl.sh:442 ../extensions/ddl.sh:144 ../ui/ui.awk:317
 msgid "File URL"
 msgstr ""
 
@@ -502,12 +502,12 @@ msgstr ""
 msgid "The movie with %s definition is not available"
 msgstr ""
 
-#: ../extensions/ddl.sh:133 ../extensions/ddl.sh:144
-#: ../extensions/wstream.sh:132
+#: ../extensions/ddl.sh:134 ../extensions/ddl.sh:145
+#: ../extensions/wstream.sh:133
 msgid "The bandwidth limit set by the server has been exceeded"
 msgstr ""
 
-#: ../extensions/ddl.sh:134 ../extensions/wstream.sh:133
+#: ../extensions/ddl.sh:135 ../extensions/wstream.sh:134
 msgid ""
 "a proxy will be used (to use more band, perhaps, you can change IP address "
 "by reconnecting the modem/router)"
