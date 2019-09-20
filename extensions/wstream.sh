@@ -94,7 +94,7 @@ then
 			    "$wstream_url_req")
 		get_language
 
-		if [[ "$url_in_file" =~ (Server problem.. please contact our support) ]]
+		if [[ "$html" =~ (Server problem.. please contact our support) ]]
 		then
 		    _log 3
 		    break
