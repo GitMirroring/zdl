@@ -123,6 +123,7 @@ then
 	fi
     done
 
+
     if url "$url_in_file" &&
 	    [[ "$url_in_file" =~ ^http\: ]]
     then
@@ -140,10 +141,10 @@ then
 
     elif ! check_wget ## https://
     then
-	print_c 4 "$(gettext "File URL"): $url_in_file"
-	_log 44
+    	print_c 4 "$(gettext "File URL"): $url_in_file"
+	print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded")" 
 	break_loop=true
-	continue
+    	continue
     fi
     
     end_extension

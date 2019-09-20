@@ -100,6 +100,7 @@ then
 		    break
 
 		else
+		    echo "$html" >OUT.$(date +%s)
 		    url_in_file=$(grep "class='buttonDownload" <<< "$html")
 
 		    if [ -z "$url_in_file" ]
@@ -117,7 +118,6 @@ then
 	    done
 	else
 	    _log 44
-	    break_loop=true
 	    continue
 	fi
 
