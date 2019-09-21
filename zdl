@@ -571,6 +571,31 @@ then
     done
 fi
 
+if [ "${args[*]}" == "${args[*]//--silent}" ] &&
+       [ "${args[*]}" == "${args[*]//--stream}" ]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [ -d "${args[i]}" ]
+	then
+	    BASE_DIR="$PWD/"
+	    cd "${args[i]}"
+	    unset args[i]
+	fi
+    done
+fi
+
+for ((i=0; i<=$max_args; i++))
+do
+    if [ -d "${args[i]}" ]
+    then
+	BASE_DIR="$PWD/"
+	cd "${args[i]}"
+	unset args[i]
+    fi
+done
+
+
 add_path4server "$(realpath "$PWD")"
 mkdir -p "$path_tmp"
 echo > "$gui_log"
@@ -698,22 +723,6 @@ then
     done
 fi
     
-
-
-if [ "${args[*]}" == "${args[*]//--silent}" ] &&
-       [ "${args[*]}" == "${args[*]//--stream}" ]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [ -d "${args[i]}" ]
-	then
-	    BASE_DIR="$PWD/"
-	    cd "${args[i]}"
-	    unset args[i]
-	fi
-    done
-fi
-
 if [ "${args[*]}" != "${args[*]//--clean}" ]
 then
     for ((i=0; i<=$max_args; i++))

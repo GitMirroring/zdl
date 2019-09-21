@@ -52,12 +52,12 @@ function check_pid_regex {
 }
 
 function get_instance_paths {
-    awk 'BEGINFILE{if (ERRNO != "") nextfile} /[\/\0]{1}zdl\0/{match(FILENAME, /[0-9]+/, matched); "cat /proc/" matched[0] "/environ" | getline environ; match(environ,/PWD=[^\0]+/,pwd); if(!(pwd[0] in paths)){paths[pwd[0]]; print substr(pwd[0],5)}}' /proc/[0-9]*/cmdline
+    awk 'BEGINFILE{if (ERRNO != "") nextfile} /[\/\0]{1}zdl\0/{ split($0, cmdline, "\0"); for(i=0; i<length(cmdline); i++){if (system("test -d \""cmdline[i]"\"")==0){newdir = cmdline[i]; match(FILENAME, /[0-9]+/, matched); c = "cat /proc/" matched[0] "/environ"; c | getline environ; close(c); match(environ,/PWD=[^\0]+/,pwd); if(!(pwd[0] in paths)){paths[pwd[0]]; base = substr(pwd[0],5); if (system("test -d " base "/" newdir)==0){ print base "/" newdir } else { print base }} }}}' /proc/[0-9]*/cmdline
 }
 
 function get_paths_json {
     declare -n ref=$1
-    ref=$(awk 'BEGIN{json="["} BEGINFILE{if (ERRNO != "") nextfile} /[\/\0]{1}zdl\0/ { match(FILENAME, /[0-9]+/, matched); "cat /proc/" matched[0] "/environ" | getline environ; match( environ, /PWD=[^\0]+/, pwd); if (!(pwd[0] in paths) && (pwd[0] != "")){ paths[pwd[0]]; if (json == "[") { json = json "\"" substr(pwd[0],5) "\"" } else { json = json ",\"" substr(pwd[0],5) "\"" }}} END{ print json "]" }' /proc/[0-9]*/cmdline)
+    ref=$(awk 'BEGIN{json="["} BEGINFILE{if (ERRNO != "") nextfile} /[\/\0]{1}zdl\0/ { split($0, cmdline, "\0"); for(i=0; i<length(cmdline); i++){if (system("test -d \""cmdline[i]"\"")==0){newdir = cmdline[i]; match(FILENAME, /[0-9]+/, matched); c = "cat /proc/" matched[0] "/environ"; c | getline environ; close(c); match( environ, /PWD=[^\0]+/, pwd); if (!(pwd[0] in paths) && (pwd[0] != "")){ paths[pwd[0]]; base = substr(pwd[0],5); if (system("test -d " base "/" newdir)==0){ dir = base "/" newdir } else { dir = base }; if (json == "[") { json = json "\"" dir "\"" } else { json = json ",\"" dir "\"" }}}}} END{ print json "]" }' /proc/[0-9]*/cmdline)
 }
 
 function check_instance_daemon {
@@ -1500,8 +1500,8 @@ function add_path4server {
 	    mv "$path_server"/paths.txt.new "$path_server"/paths.txt
 
 	else
-	    rm -f "$path_server"/paths.txt.new
-	    echo >"$path_server"/paths.txt
+	    rm -f "$path_server"/paths.txt.new "$path_server"/paths.txt
+	    touch "$path_server"/paths.txt
 	fi
     fi
 }
