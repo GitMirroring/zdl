@@ -57,26 +57,23 @@ if (ERRNO != "") nextfile
 } 
 /[\/\0]{1}zdl\0/{ 
     split($0, cmdline, "\0"); 
-    for(i=0; i<length(cmdline); i++){
-        if (system("test -d \""cmdline[i]"\"")==0){
-            newdir = cmdline[i]; 
-            match(FILENAME, /[0-9]+/, matched); 
-            c = "cat /proc/" matched[0] "/environ"; 
-            c | getline environ; 
-            close(c); 
-            match(environ,/\0PWD=[^\0]+/,pwd); 
-            if(!(pwd[0] in paths)){
-                paths[pwd[0]]; 
-                base = substr(pwd[0],6); 
-                if (system("test -d " base "/" newdir)==0){ 
-                    d = system("realpath " base "/" newdir); 
-                    print d; 
-                } else if (system("test -d " base)==0) { 
-                    print base 
-                }
-            } 
+    match(FILENAME, /[0-9]+/, matched); 
+    c = "cat /proc/" matched[0] "/environ"; 
+    c | getline environ; 
+    close(c); 
+    match(environ,/\0PWD=[^\0]+/,pwd); 
+    if(!(pwd[0] in paths)){
+        paths[pwd[0]]; 
+        base = substr(pwd[0],6); 
+        for(i=0; i<length(cmdline); i++){
+            if (cmdline[i] != "" && system("test -d \"" base "/" cmdline[i]"\"")==0){
+                "realpath \"" base "/" cmdline[i] "\"" |getline dir; 
+                break;
+            }	  
         }
-    }
+        if (dir == "") dir = base;	 
+        print dir 
+    } 
 }' /proc/[0-9]*/cmdline
 }
 
@@ -90,34 +87,27 @@ BEGINFILE{
 } 
 /[\/\0]{1}zdl\0/ { 
     split($0, cmdline, "\0"); 
-    for(i=0; i<length(cmdline); i++){
-        if (system("test -d \""cmdline[i]"\"")==0){
-            newdir = cmdline[i]; 
-            match(FILENAME, /[0-9]+/, matched); 
-            c = "cat /proc/" matched[0] "/environ"; 
-            c | getline environ;     
-            close(c); 
-            match( environ, /\0PWD=[^\0]+/, pwd ); 
-            if (!(pwd[0] in paths) && (pwd[0] != "")){ 
-                paths[pwd[0]]; 
-                base = substr(pwd[0],6); 
-                if (system("test -d " base "/" newdir)==0){ 
-                    dir = system("realpath " base "/" newdir)
-                    if (json == "[") { 
-                        json = json "\"" dir "\"" 
-                    } else { 
-                        json = json ",\"" dir "\"" 
-                    }
-                } else if (system("test -d " base)==0){ 
-                    dir = base 
-                    if (json == "[") { 
-                        json = json "\"" dir "\"" 
-                    } else { 
-                        json = json ",\"" dir "\"" 
-                    }
-                }; 
+    match(FILENAME, /[0-9]+/, matched); 
+    c = "cat /proc/" matched[0] "/environ"; 
+    c | getline environ;     
+    close(c); 
+    match( environ, /\0PWD=[^\0]+/, pwd ); 
+    if (!(pwd[0] in paths) && (pwd[0] != "")){ 
+        paths[pwd[0]]; 
+        base = substr(pwd[0],6); 
+        for(i=0; i<length(cmdline); i++){
+            if (cmdline[i] != "" && system("test -d \"" base "/" cmdline[i] "\"")==0){
+                "realpath \"" base "/" cmdline[i] "\"" |getline dir;
+                break;
             }
         }
+        if (dir == "") dir = base;	 
+        if (json == "[") { 
+            json = json "\"" dir "\"";
+        } else { 
+            json = json ",\"" dir "\""; 
+        }
+        dir = "";
     }
 } 
 END{ 
