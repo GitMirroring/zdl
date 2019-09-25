@@ -108,6 +108,7 @@ $(gettext "Error downloading the video HTML page. Check that the URL has been en
 	    ;;
 	13)
 	    msg="$url_in --> $(eval_gettext "The\$msg_file_in file will not be downloaded, because it matches to the regex"): $no_file_regex"
+	    set_link - "$url_in"
 	    ;;
 	14)
 	    msg="$url_in --> $(eval_gettext "The\$msg_file_in file will not be downloaded, because it does not match the regex"): $file_regex"
