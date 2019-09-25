@@ -413,7 +413,7 @@ function main_loop {
 
 		if [ -z "$file_filtered" ]
 		then
-		    file_filter "$url_in"
+		    file_filter "$file_in"
 		else
 		    unset file_filtered
 		fi
@@ -431,7 +431,8 @@ function main_loop {
 		#### DOWNLOAD ####
 		if [ -z "$premium" ] &&                                                 
 		       check_in_file &&                                                         
-		       check_freespace
+		       check_freespace &&
+		       file_filter "$file_in"
 		then
 		    check_dler_forcing
 

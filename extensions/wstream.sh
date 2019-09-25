@@ -66,6 +66,8 @@ then
 	file_in=$(get_title "$html" |head -n1)
 	file_in="${file_in#Download Free }"
 
+	file_filter "$file_in"
+	    
 	#### 
 	# for wstream_exp in downloadlink dwn
 	# do
