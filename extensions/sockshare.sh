@@ -44,7 +44,8 @@ then
 	file_in=`cat "$path_tmp/zdl.tmp" |grep ' | Sockshare</title>'`
 	file_in="${file_in#*'title>'}"
 	file_in="${file_in%' | Sockshare</title>'*}"
-
+	file_filter "$file_in"
+	
 	wget -p -t 1 -T $max_waiting --load-cookies="$path_tmp/cookies.zdl" --save-cookies="$path_tmp/cookies.zdl" --post-data="$post_data" "${url_in}" -O "$path_tmp"/zdl2.tmp &>/dev/null
 
 	url_in_file=`cat "$path_tmp"/zdl2.tmp | grep download_file_link`

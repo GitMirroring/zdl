@@ -30,7 +30,8 @@
 
 
 
-if [ "$url_in" != "${url_in//'http://portalevideo.unimi.it'}" ]; then
+if [ "$url_in" != "${url_in//'http://portalevideo.unimi.it'}" ]
+then
     url_in_HD="${url_in//def=L/def=H}"
     wget "$url_in_HD" -O "$path_tmp"/zdl.tmp -q
     url_in_file=$(cat "$path_tmp"/zdl.tmp 2>/dev/null |grep "mp4")

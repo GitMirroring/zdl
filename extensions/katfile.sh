@@ -50,6 +50,7 @@ then
 
     else
 	input_hidden "$html"
+	file_filter "$file_in"
 	post_data+="&method_free=Slow Download Speed"
 
 	html=$(wget "$url_in"                       \

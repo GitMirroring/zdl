@@ -42,6 +42,7 @@ then
     elif [ -n "$html" ]
     then
 	input_hidden "$html"
+	file_filter "$file_in"
 	post_data="${post_data}&method_free=Free Download"
 	
 	html=$(wget -qO-                                        \

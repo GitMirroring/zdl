@@ -39,6 +39,7 @@ then
     file_in="${url_in%\?*}"
     file_in="${file_in##*\/}"
     sanitize_file_in
+    file_filter "$file_in"
     
     headers=(-H "Referer: dropbox.com")
     

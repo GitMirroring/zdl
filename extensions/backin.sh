@@ -51,6 +51,8 @@ then
 
 	file_in=$(get_title "$html")
 	file_in="${file_in#Streaming }"
+	file_filter "$file_in"
+	
 	url_in_file=$(unpack "$html")
 	url_in_file="${url_in_file#*file\:\"}"
 	url_in_file="${url_in_file%%\"*}"

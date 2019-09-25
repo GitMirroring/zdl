@@ -37,7 +37,8 @@ then
 		 "$url_in" -o /dev/null)
 
     input_hidden "$html"
-
+    file_filter "$file_in"
+    
     html_packed=$(wget -qO-                                                   \
 	 	       --user-agent="$user_agent"                             \
 		       --load-cookies="$path_tmp/cookies.zdl"                 \

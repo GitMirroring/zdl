@@ -90,7 +90,7 @@ then
     do
 	file_in=$(grep 'dfilename' <<< "$html" |
 		      sed -r 's|.+>([^<]+)<.+|\1|g')
-
+	file_filter "$file_in"
 	url_in_file=$(grep 'Click here to download' <<< "$html")
 	url_in_file="${url_in_file%\"*}"
 	url_in_file="${url_in_file##*\"}"

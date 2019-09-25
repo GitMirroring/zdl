@@ -49,6 +49,7 @@ then
 
     html=$(curl -s "$url_in")
     file_in=$(get_title "$html")
+    file_filter "$file_in"
     url_in_file=$(youtube-dl --get-url "$url_in")
     
     end_extension

@@ -37,7 +37,8 @@ then
 
     input_hidden "$html"
     post_data="${post_data}&imhuman=Proceed to video"
-
+    file_filter "$file_in"
+    
     countdown- 8
     html=$(curl -s \
 		-b "$path_tmp"/cookies.zdl \

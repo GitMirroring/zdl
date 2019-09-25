@@ -51,6 +51,7 @@ then
 	    get_location "$url_in" url_in_file
 	    file_in="${url_in_file##*\/}"
 	    file_in="${file_in%\?*}"
+	    file_filter "$file_in"
 	else
 	    extension_openload "$url_in"
 	fi

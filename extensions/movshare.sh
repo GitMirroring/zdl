@@ -49,6 +49,7 @@ then
 	    if [[ "$html" =~ (Continue to the video) ]]
 	    then
 		input_hidden "$html"
+		file_filter "$file_in"
 		post_data+="&submit=submit"
 		
 		html=$(wget -t 1 -T $max_waiting                     \
@@ -73,6 +74,7 @@ then
 		
 		[ "$file_in" == Untitled ] &&
 		    file_in=${file_in}-${url_in##*\/}
+		file_filter "$file_in"
 		
 		url_in_file=$(grep "source" <<< "$html" |
 				     head -n1 |
@@ -113,10 +115,10 @@ then
 			    file_in=$(grep "Title:" "$path_tmp"/zdl2.tmp)
 			    file_in="${file_in%<*}"
 			    file_in=$(trim "${file_in##*>}")
-
 			    
 			    [ "$file_in" == Untitled ] &&
 				file_in=${file_in}-${url_in##*\/}
+			    file_filter "$file_in"
 			fi
 		    fi
 		fi

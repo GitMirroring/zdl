@@ -36,7 +36,8 @@ then
 	   --save-cookies="$path_tmp"/cookies.zdl   \
 	   --keep-session-cookies -o /dev/null)
     input_hidden "$html"
-
+    file_filter "$file_in"
+    
     html=$(wget -qO-                               \
 	 "$url_in"                                 \
 	 --post-data="${post_data}&method_free= "  \

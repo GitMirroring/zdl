@@ -40,7 +40,8 @@ then
 	else
 	    input_hidden "$html"
 	fi
-
+	file_filter "$file_in"
+	
 	link_parser "$url_in"
 	parser_path="${parser_path%%\/*}"
 	url_packed="${parser_proto}${parser_domain}/embed-${parser_path%.html*}-607x360.html"

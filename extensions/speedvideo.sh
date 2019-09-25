@@ -48,6 +48,7 @@ then
 		   "$url_in")
 
 	input_hidden "$htm"
+	file_filter "$file_in"
 	post_data+="&imhuman=Proceed to video"
     fi
 

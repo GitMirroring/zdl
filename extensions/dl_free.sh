@@ -39,7 +39,7 @@ then
     file_in=$(curl -s "$url_in" |
 		  grep Fichier | tail -n1 |
 		  sed -r 's|.+\">([^<>]+)<\/span.+|\1|g')
-    
+    file_filter "$file_in"    
     
     url_in_file=$(curl -c "$path_tmp"/cookies.zdl \
      		       -d "file=/${url_in##*\/}&send=Valider+et+télécharger+le+fichier" \

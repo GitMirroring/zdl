@@ -64,7 +64,8 @@ then
     elif [ -n "$html" ]
     then
 	input_hidden "$html"
-
+	file_filter "$file_in"
+	
 	method_free=$(grep -P 'method_.*free.+freeDownload' <<< "$html" |
 			  sed -r 's|.+(method_.*free)\".+|\1|g' |
 			  tr -d '\r')
@@ -131,7 +132,8 @@ then
 
 		unset post_data
 		input_hidden "$html"
-
+		file_filter "$file_in"
+		
 		post_data="${post_data##*'(&'}&code=$code"
 		post_data="${post_data//'&down_script=1'}"
 

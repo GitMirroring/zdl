@@ -50,7 +50,8 @@ then
     fi
     
     file_in=$(get_title "$html" | head -n1)
-
+    file_filter "$file_in"
+    
     end_extension
 fi
 									   

@@ -46,7 +46,8 @@ then
     then
 	input_hidden "$html"
 	file_in="$postdata_fname"
-
+	file_filter "$file_in"
+	
 	post_data="${post_data%%referer*}referer=&method_free=Free Download"
 	get_language_prog	
 	html=$(wget -qO-                                        \

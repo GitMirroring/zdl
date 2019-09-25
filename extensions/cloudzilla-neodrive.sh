@@ -38,7 +38,7 @@ then
 
     if [ -n "$file_in" ]
     then
-
+	file_filter "$file_in"
 	##############
 	## cloudzilla
 	##############

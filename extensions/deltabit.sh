@@ -90,7 +90,8 @@ then
 
 	## file_in:
 	input_hidden "$html"
-						       
+	file_filter "$file_in"
+	
 	for mode_stream in $o n l
 	do
 	    get_deltabit_definition mode_stream_test

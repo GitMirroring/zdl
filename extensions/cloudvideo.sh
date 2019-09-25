@@ -35,7 +35,8 @@ then
 
     file_in=$(get_title "$html")
     file_in="${file_in#Watch\ }"
-
+    file_filter "$file_in"
+    
     url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
     downwait_extra=20
     

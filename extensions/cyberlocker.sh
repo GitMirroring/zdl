@@ -58,6 +58,7 @@ then
 	file_in=$(grep '<h2>Download File' "$path_tmp/zdl.tmp")
 	file_in="${file_in#*<h2>Download File }"
 	file_in="${file_in%</h2>*}"
+	file_filter "$file_in"
     fi
     
     wget -t 1 -T $max_waiting                         \
@@ -69,6 +70,7 @@ then
     
     unset post_data
     input_hidden "$path_tmp/zdl2.tmp"
+    file_filter "$file_in"
     post_data="${post_data//'op=login&'}"
     post_data="${post_data//'redirect=&'}"
     post_data="${post_data%&op=register_save*}"

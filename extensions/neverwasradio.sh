@@ -44,6 +44,6 @@ then
     url_in_file="${url_in_file//\\}"
 
     file_in="${url_in_file##*\/}"
-
+    
     end_extension
 fi

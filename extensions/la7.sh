@@ -42,7 +42,8 @@ then
     file_in="${file_in#*\"}"
     file_in="${file_in%\"*}"
     file_in="${file_in//\//-}"
-
+    file_filter "$file_in"
+    
     url_in_file=$(grep -oP "[^\']+\.m3u8[^\']*" <<< "$html")
 
     url "$url_in_file" ||

@@ -95,7 +95,8 @@ then
 
 	## file_in:
 	input_hidden "$html"
-						       
+	file_filter "$file_in"
+	
 	for mode_stream in $o h n l
 	do
 	    get_akvideo_definition mode_stream_test

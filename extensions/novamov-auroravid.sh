@@ -49,6 +49,7 @@ then
 	    if [[ "$html" =~ (Continue to the video) ]]
 	    then
 		input_hidden "$html"
+		file_filter "$file_in"
 		
 		html=$(wget -t 1 -T $max_waiting                     \
 			    "$url_in"                                \
@@ -67,7 +68,8 @@ then
 		file_in=$(get_title "$html")
 		file_in="${file_in#Watch}"
 		file_in=$(trim "${file_in%'|'*}")
-
+		file_filter "$file_in"
+		
 		url_in_file=$(grep "source" <<< "$html" |
 				     head -n1 |
 				     sed -r 's|.+\"([^"]+)\".+|\1|g')

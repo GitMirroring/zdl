@@ -31,6 +31,7 @@ if [[ "$url_in" =~ facebook.com.+\/videos\/ ]]
 then
     fb_data=$(youtube-dl -f best --get-url --get-filename "$url_in")
     file_in=$(tail -n1 <<< "$fb_data")
+    file_filter "$file_in"
     url_in_file=$(head -n1 <<< "$fb_data")
     
     end_extension

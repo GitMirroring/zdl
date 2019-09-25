@@ -47,7 +47,8 @@ then
 	
 	## post_data
 	input_hidden "$html"
-
+	file_filter "$file_in"
+	
 	## user, pass
 	host_login "easybytez"
 	get_language_prog
@@ -79,6 +80,7 @@ then
     file_in=$(grep '<span class="name">' <<< "$html")
     file_in="${file_in#*>}"
     file_in="${file_in%%<*}"
+    file_filter "$file_in"
     url_in_file="${url_in}"
 
     exceeded_msg="You have reached the download-limit"
@@ -95,6 +97,7 @@ then
 	    check_ip "easybytez"
 
 	input_hidden "$html" # "$path_tmp/zdl.tmp"
+	file_filter "$file_in"
 	post_data="${post_data}&method_free=Free Download"       
 	get_language_prog	
 	html=$(wget -t 1 -T $max_waiting                             \
@@ -117,6 +120,7 @@ then
 	       [[ ! "$html" =~ ($exceeded_msg) ]]
 	then
 	    input_hidden "$html"
+	    file_filter "$file_in"
 	    post_data="${post_data%op=payments*}btn_download=Download File"
 	    get_language_prog
 	    html=$(wget -t 1 -T $max_waiting                                    \

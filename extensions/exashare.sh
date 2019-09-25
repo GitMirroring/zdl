@@ -37,7 +37,8 @@ then
 		-o /dev/null)
 
     input_hidden "$html"
-
+    file_filter "$file_in"
+    
     countdown- $(grep 'countdown_str" style' <<< "$html" |
 			sed -r 's|.+>([0-9]+)<.+|\1|g' )
     
@@ -50,7 +51,8 @@ then
 			 sed -r 's|[^"]+"([^"]+)"[^"]+|\1|g')
 
     file_in="${file_in}.${url_in_file##*.}"
-
+    file_filter "$file_in"
+    
     if ! url "$url_in_file" ||
 	    [ -z "$file_in" ]
     then

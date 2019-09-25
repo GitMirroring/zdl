@@ -43,7 +43,8 @@ then
 
     input_hidden "$html"
     post_data+="&imhuman=Proceed to video"
-
+    file_filter "$file_in"
+    
     url_action=$(grep -P 'POST.+action' <<< "$html" |
 			sed -r 's|.+action=\"([^"]+)\".+|\1|g')
 

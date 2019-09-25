@@ -43,6 +43,7 @@ then
 			 sed -r 's|[^>]+>([^<]+)<.+|\1|g')
 	file_in="${file_in#Watch }"
 	
+	file_filter "$file_in"
 	end_extension
     fi
 fi

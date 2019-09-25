@@ -33,6 +33,7 @@ then
     dailymotion_data=$(youtube-dl --get-url --get-filename "$url_in")
 
     file_in=$(tail -n1 <<< "$dailymotion_data")
+    file_filter "$file_in"
     url_in_file=$(head -n1 <<< "$dailymotion_data")
     
     end_extension

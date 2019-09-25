@@ -548,6 +548,7 @@ function grep_urls {
 }
 
 function file_filter {
+    [ -z "$1" ] && return 0
     ## opzioni filtro
     filtered=true
     if [ -n "$no_file_regex" ] &&
