@@ -776,11 +776,6 @@ function display_file_gui {
     local title="$2"
     local text="$3"
     
-    declare -a uri_opts=(
-	--show-uri
-	--uri-color=blue 
-    )
-
     exec 88<&-
     
     export PIPE_088=/tmp/yadpipe088.$GUI_ID
@@ -800,7 +795,9 @@ function display_file_gui {
 		    --text="$text" \
 		    --text-info \
 		    --tail \
-		    "${uri_opts[@]}" \
+		    --wrap \
+		    --show-uri \
+		    --uri-color=blue \
 		    --listen \
 		    --filename="$filename" \
 		    --button="$(gettext "Delete the file")!gtk-delete":"bash -c \"echo -e '\f' >'$filename'; rm '$filename'\"" \
@@ -1399,6 +1396,10 @@ function display_console_gui {
 		--text-info \
 		--show-uri \
 		--uri-color=blue \
+		--back=black \
+		--fore=white \
+		--show-cursor \
+		--wrap \
 		--tail \
 		"${YAD_ZDL[@]}" \
 		--button="$(gettext "Clean")!gtk-refresh":"bash -c \"echo -e '\f' >'$gui_log'\"" \
