@@ -776,6 +776,11 @@ function display_file_gui {
     local title="$2"
     local text="$3"
     
+    declare -a uri_opts=(
+	--show-uri
+	--uri-color=blue 
+    )
+
     exec 88<&-
     
     export PIPE_088=/tmp/yadpipe088.$GUI_ID
