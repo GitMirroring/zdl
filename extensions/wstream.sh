@@ -60,6 +60,17 @@ then
 		    "$wstream_link")
 	get_language
 
+	input_hidden "$html"
+	if [[ "$post_data" =~ forcecaptcha ]]
+	then
+	    html=$(wget -qO- \
+			-o /dev/null \
+			--post-data="$post_data" \
+			--keep-session-cookies \
+			--save-cookies="$path_tmp"/cookies.zdl \
+			--user-agent="$user_agent" \
+			"$wstream_link")	    
+	fi
 	##### per ora è solo client, quindi è commentato:
 	## countdown- 6
 
@@ -102,15 +113,8 @@ then
 		    break
 
 		else
-		    url_in_file=$(grep "class='buttonDownload" <<< "$html")
-
-		    if [ -z "$url_in_file" ]
-		    then
-			url_in_file=$(grep "class='bbkkff" <<< "$html")
-		    fi
-
-		    url_in_file="${url_in_file##*buttonDownload}"
-		    url_in_file="${url_in_file#*href=\'}"
+		    url_in_file=$(grep "class='bbkkff" <<< "$html")
+		    url_in_file="${url_in_file#*bbkkff}"
 		    url_in_file="${url_in_file#*href=\'}"
 		    url_in_file="${url_in_file%%\'*}"
 
