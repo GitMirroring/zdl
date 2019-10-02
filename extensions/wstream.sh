@@ -61,8 +61,14 @@ then
 	get_language
 
 	input_hidden "$html"
-	if [[ "$post_data" =~ forcecaptcha ]]
+
+	if [[ "$html" =~ forcecaptcha ]]
 	then
+	    if [[ "$html" =~ (form\ autocomplete\=\'off\') ]]
+	    then
+		[[ "$html" =~ '>'([^>]+)'</span>' ]] &&
+		    post_data="forcecaptcha=${BASH_REMATCH[1]}"
+	    fi
 	    html=$(wget -qO- \
 			-o /dev/null \
 			--post-data="$post_data" \
@@ -71,6 +77,7 @@ then
 			--user-agent="$user_agent" \
 			"$wstream_link")	    
 	fi
+	
 	##### per ora è solo client, quindi è commentato:
 	## countdown- 6
 
@@ -87,7 +94,7 @@ then
 	# done
 	## sostituisce il codice commentato sopra:
 	wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/')
-
+	
 	if [[ ! "$html" =~ (Siamo spiacenti ma come utente non premium puoi scaricare solamente 2 file ogni ora\.\<br\>\<br\>\<br\>\<h1\>\<a href\=\'https\:\/\/wstream\.video\/premium\.html\'\> Per favore diventa nostro supporter \<\/\a>\<\/h1\>) ]] &&
 	       [ -n "$wstream_req" ]
 	then
