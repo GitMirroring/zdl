@@ -77,7 +77,7 @@ then
 			--user-agent="$user_agent" \
 			"$wstream_link")	    
 	fi
-	
+
 	##### per ora è solo client, quindi è commentato:
 	## countdown- 6
 
@@ -93,7 +93,7 @@ then
 	#     [ -n "$wstream_req" ] && break
 	# done
 	## sostituisce il codice commentato sopra:
-	wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/')
+	wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/' |tail -n1)
 	
 	if [[ ! "$html" =~ (Siamo spiacenti ma come utente non premium puoi scaricare solamente 2 file ogni ora\.\<br\>\<br\>\<br\>\<h1\>\<a href\=\'https\:\/\/wstream\.video\/premium\.html\'\> Per favore diventa nostro supporter \<\/\a>\<\/h1\>) ]] &&
 	       [ -n "$wstream_req" ]
