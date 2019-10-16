@@ -62,12 +62,20 @@ then
 
 	input_hidden "$html"
 
-	if [[ "$html" =~ forcecaptcha ]]
+	if [[ "$html" =~ (forcecaptcha|form\ autocomplete\=\'off\') ]]
 	then
 	    if [[ "$html" =~ (form\ autocomplete\=\'off\') ]]
 	    then
-		[[ "$html" =~ '>'([^>]+)'</span>' ]] &&
+		if [[ "$html" =~ '>'([^>]+)'</span>' ]]
+		then
 		    post_data="forcecaptcha=${BASH_REMATCH[1]}"
+		else
+		    recaptcha_name=$(grep -P "form autocomplete='off'" -A1 <<< "$html" |
+				     tail -n1)
+		    recaptcha_value=$(sed -r "s|.+>\ *([^<\ ]+)\ *<.+|\1|g" <<< "$recaptcha_name")
+		    recaptcha_name=$(sed -r "s|.+name='([^']+)'.+|\1|g" <<< "$recaptcha_name")
+		    post_data="${recaptcha_name}=${recaptcha_value}"
+		fi
 	    fi
 	    html=$(wget -qO- \
 			-o /dev/null \
