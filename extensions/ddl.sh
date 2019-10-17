@@ -86,7 +86,9 @@ then
 
     unset post_data    
 
-    while [ -n "$html" ]
+    ddlto_loops=0
+    while [ -n "$html" ] &&
+	      (( ddlto_loops < 5 ))
     do
 	file_in=$(grep 'dfilename' <<< "$html" |
 		      sed -r 's|.+>([^<]+)<.+|\1|g')
@@ -121,8 +123,9 @@ then
 			    "$url_in"                                \
 	    		    -o /dev/null)
 	fi
+	((ddlto_loops++))
     done
-
+    (( ddlto_loops >= 5 )) && _log 36
 
     if url "$url_in_file" &&
 	    [[ "$url_in_file" =~ ^http\: ]]
