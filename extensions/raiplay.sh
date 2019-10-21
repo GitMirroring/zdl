@@ -76,19 +76,20 @@ then
 	json_subtitle="${raiplay_subtitle##*\"subtitle\":\"}"
 	json_subtitle=$(trim "${json_subtitle%%\"*}")
 
-	if [ -n "$json_name" ]
-	then
-	    file_in="$json_name"
+	# if [ -n "$json_name" ]
+	# then
+	#     file_in="$json_name"
 
-	    if [ -n "$json_subtitle" ]
-	    then
-		file_in="$file_in - $json_subtitle"
-	    fi
+	#     if [ -n "$json_subtitle" ]
+	#     then
+	# 	file_in="$file_in - $json_subtitle"
+	#     fi
 	    
-	else
-	    file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
-	fi
-	file_in="${file_in#Film\: }"
+	# else
+	file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
+
+	# fi
+	#file_in="${file_in#Film\: }"
 
 	url_raiplay=$(grep data-video-url <<< "$html" |
 			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')

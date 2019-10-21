@@ -109,20 +109,21 @@ then
 	    code_ddl=$(pseudo_captcha "$html")
 	    print_c 4 "Pseudo-captcha: $code_ddl"
 	    
-	    post_data="${post_data%\&*}&code=${code_ddl}"
-
-	    html=$(curl "$url_in" \
+	    post_data="${post_data%\&*}&adblock_detected=0&code=${code_ddl}"
+	    
+	    html=$(curl -v "$url_in" \
+			-H 'Connection: keep-alive' \
 			-b "$path_tmp"/cookies.zdl  \
+			-H "Referer: $url_in" \
+			-H 'Upgrade-Insecure-Requests: 1' \
 			-A "$user_agent" \
-			-d "$post_data")
+			-d "$post_data" 2>&1)
 
-	    [ -z "$html" ] &&
-		html=$(wget -qO- --user-agent="$user_agent"          \
-			    --load-cookies="$path_tmp"/cookies.zdl   \
-			    --post-data="$post_data"                 \
-			    "$url_in"                                \
-	    		    -o /dev/null)
+	    url_in_file=$(grep Location <<< "$html" | head -n1 | awk '{print $3}')
+	    url_in_file=$(trim "$url_in_file")
+	    url "$url_in_file" && break
 	fi
+	
 	((ddlto_loops++))
     done
     (( ddlto_loops >= 5 )) && _log 36
