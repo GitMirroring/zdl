@@ -121,7 +121,11 @@ then
 
 	    url_in_file=$(grep Location <<< "$html" | head -n1 | awk '{print $3}')
 	    url_in_file=$(trim "$url_in_file")
-	    url "$url_in_file" && break
+	    if url "$url_in_file"
+	    then
+		file_in="${url_in_file##*\/}"
+		break
+	    fi
 	fi
 	
 	((ddlto_loops++))

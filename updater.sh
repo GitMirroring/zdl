@@ -363,7 +363,7 @@ function update {
 	if [ -d "$dir" ]
 	then
 	    try mkdir -p /usr/local/share/locale/"${dir##*\/}"/LC_MESSAGES/
-	    sudo install "$dir"/LC_MESSAGES/zdl.mo /usr/local/share/locale/"${dir##*\/}"/LC_MESSAGES/
+	    try install "$dir"/LC_MESSAGES/zdl.mo /usr/local/share/locale/"${dir##*\/}"/LC_MESSAGES/
 	fi
     done
 
