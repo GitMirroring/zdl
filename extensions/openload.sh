@@ -36,6 +36,21 @@ then
     # 	url "$new_link_openload" &&
     # 	    replace_url_in "$new_link_openload"
     # fi
+
+    if [[ "$url_in" =~ openloads\. ]]
+    then
+	ol_url_in=$(curl -q "$url_in" |grep Download| head -n1)
+	ol_url_in="${ol_url_in#*\"}"
+	ol_url_in="${ol_url_in%%\"*}"
+	
+	if url "$ol_url_in"
+	then
+	    ol_url_in=$(curl -q "$ol_url_in" |grep 'meta="og:url"'| sed -r 's|.+content=\"([^"]+)\".+|\1|g')
+
+	    url "$ol_url_in" &&
+		replace_url_in "$ol_url_in"
+	fi
+    fi
     
     if command -v youtube-dl &>/dev/null
     then
