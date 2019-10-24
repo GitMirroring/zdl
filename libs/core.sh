@@ -88,7 +88,7 @@ BEGINFILE{
 /[\/\0]{1}zdl\0/ { 
     split($0, cmdline, "\0"); 
     match(FILENAME, /[0-9]+/, matched); 
-    c = "cat /proc/" matched[0] "/environ"; 
+    c = "tr -d \"\\n\" < /proc/" matched[0] "/environ"; 
     c | getline environ;     
     close(c); 
     match( environ, /\0PWD=[^\0]+/, pwd ); 
