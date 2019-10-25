@@ -61,6 +61,7 @@
 * Il comando ZDL::@*Sintassi, opzioni e altri argomenti@*
 * Servizi streaming/hosting::@*Estensioni di ZDL e consigli pratici@*
 * Installazione e aggiornamento::@*Per GNU/Linux e Microsoft Windows/Cygwin@*
+* Perché questo programma::@*Il senso di una sperimentazione continua a ZIGZAG@*
 @end macro
 
 @macro menuUso
@@ -208,28 +209,46 @@
 @c @man{3}
 
 @c @ifman @unnumberedsec DESCRIZIONE
-@emph{ZigzagDownLoader} gestisce gli scaricamenti di alcuni downloader come @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} o @emph{cURL}. Inoltre, può estrarre l'URL dei file da scaricare da servizi di file hosting e video streaming, scaricare TORRENT e richiedere e ricevere file via IRC/XDCC, senza alcuna interazione via CHAT. Estende @emph{Conkeror}, @emph{XXXTerm/Xombrero}, @emph{Firefox} (attraverso l'estensione @emph{Flashgot}) e @emph{Microsoft Windows} (tramite @emph{Cygwin}). Tramite l'estensione @emph{External Application Button}, ZDL può essere integrato in @emph{Firefox}, @emph{Chrome/Chromium} e @emph{Opera}. Il programma dispone, inoltre, di un server per generare socket TCP, diverse interfacce web e API, per il controllo remoto e in rete, e di una interfaccia grafica.
+@emph{ZigzagDownLoader} è un download manager:
+@itemize @minus
+@item
+dotato di interfacce utente a linea di comando (@emph{CLI}), per terminale (@emph{TUI}), grafiche (@emph{GUI}) e per applicazioni internet e web (@emph{Web-UI});
+@item
+gestisce gli scaricamenti di alcuni downloader come @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} o @emph{cURL}, utilizzandone le potenzialità (per esempio, l'accelerazione dei download);
+@item
+estrae l'URL dei file da scaricare da servizi di file hosting e video streaming;
+@item
+scarica i @emph{TORRENT};
+@item
+richiede automaticamente e scarica file via @emph{IRC/XDCC}, senza alcuna interazione umana via chat;
+@item
+scarica filmati @emph{LIVE} da alcune reti televisive
+@item
+estende i browser web, come @emph{Conkeror}, @emph{XXXTerm/Xombrero} e @emph{Firefox};
+@item
+l'estensione @emph{External Application Button} integra ZDL in @emph{Firefox} (anche @emph{Flashgot}), @emph{Chrome/Chromium} e @emph{Opera};
+@item
+usando @emph{Cygwin}, funziona anche in @emph{Microsoft Windows} (interfacce CLI e TUI, anche da @emph{Firefox} + @emph{Flashgot} di Windows).
+@end itemize
+
+Il server e le interfacce web, per il controllo remoto e in rete, ne fanno uno strumento utile per un @emph{Network Attached Storage} (@emph{NAS}). Le interfacce sono @emph{responsive} e adatte a diversi dispositivi. In particolare, possono essere usate anche come telecomando per l'avvio di file multimediali già scaricati o in via di scaricamento, usando un browser web su dispositivi mobili.
+
+Inoltre, le interfacce Web (@emph{Web-UI}) e grafica (@emph{GUI}) permettono la ricerca e la selezione, rapide e intuitive, dei @emph{file via XDCC}, senza dover compiere alcuna operazione IRC/chat.
+Tutte le interfacce permettono la programmazione delle registrazioni @emph{live-tv}.
+
+Ma ZDL è anche molto altro, perché può essere:
+@itemize @minus
+@item
+combinato con altri programmi o inserito in uno script, come strumento di lavoro
+@item
+esteso dall'utente, che può sviluppare nuove estensioni adatte ai propri scopi
+@item
+un sistema poliglotta, utilizzando diversi interpreti (per PHP, Javascript, Python, Perl, Awk...) e strumenti della Bash
+@end itemize
+
+ZigzagDownLoader è un programma "zigzag": non è solo un programma, è un laboratorio e un sistema aperto a nuove invenzioni.
+
 @c @end man
-
-@unnumbered Perché questo programma
-ZigzagDownLoader è un gestore di download estensibile, robusto ed interamente controllabile con un terminale o, attraverso socket, con un'interfaccia web adatta anche al formato di uno smartphone (@emph{--socket}, @emph{--web-ui}). Può essere integrato ai più diffusi web browser (@emph{Firefox}, @emph{Chrome/Chromium} e @emph{Opera}) e al desktop, utilizzando l'estensione @emph{External Application Button} e una pratica interfaccia grafica (@emph{--gui} e @emph{--path-gui}).
-È nato come script specifico per la Bash e si è trasformato in un gestore per downloader come @emph{Wget}, @emph{Axel} ed @emph{Aria2} (downloader predefinito), estendendosi a servizi di video streaming e file hosting e integrandosi con altre applicazioni. Oggi ZigzagDownLoader è anche un downloader per @emph{IRC/XDCC}: l'intero processo di scaricamento e recupero è automatico e non richiede alcuna interazione via CHAT. Inoltre, grazie all'adozione di Aria2, ZigzagDownLoader gestisce anche i @emph{TORRENT}.
-
-ZigzagDownLoader è molte cose: un @emph{server/client TCP} utile per un @emph{NAS}, un @emph{comando per il terminale}, un @emph{downloader/download manager} alternativo e @emph{intelligente} per il browser, un'@emph{applicazione grafica} per il desktop... tutto questo contemporaneamente e altro ancora.
-
-Nonostante i suoi limiti strutturali, il linguaggio della @emph{Bash} si è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso nella gestione dei processi di altri programmi. Una progressiva efficienza è stata raggiunta attraverso lo sviluppo di script @emph{monolitici} nel linguaggio di @emph{Awk} (@emph{Gawk}). Il software include, inoltre, interpreti di altri linguaggi (attualmente: @emph{node.js} e @emph{php}, necessari al trattamento dei link di alcuni servizi), fornendo un supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per certi versi, un esempio complesso di @emph{programmazione poliglotta}.
-
-@unnumberedsubsec Almeno quattro direttrici di sviluppo
-L'esecuzione dei downloader può richiedere assistenza: la connessione può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i nomi dei file scaricati possono non essere intelligibili o coincidere con altri di file già salvati, ecc. 
-@emph{In primo luogo}, ZigzagDownLoader serve ad automatizzare la gestione ed il recupero dei download o a semplificarne eventuali interventi manuali. ZDL è pensato, soprattutto, per il download @emph{accelerato} di grossi file e per il recupero del loro @emph{URL} a partire da informazioni disponibili nel web o fornite dall'utente. 
-
-@emph{In secondo luogo}, la gestione automatica è estesa a servizi di file hosting, video streaming, torrent e irc/xdcc: ZDL si sostituisce all'utente nelle operazioni inutili e noiose, riducendole all'unico atto di avvio del programma.
-
-@emph{Un terzo obiettivo} del progetto ZDL consiste nel fornire nuove articolazioni e modalità d'uso, allo scopo di costruire interazioni fra programmi e di rendere possibile un'automazione potenzialmente illimitata. 
-La gestione dei download può essere controllata da terminali distinti in modalità diverse. Per esempio, ZDL può essere avviato in modalità @emph{demone} e controllato in modalità @emph{interattiva}. Anche l'avvio @emph{predefinito} del programma offre diversi modi di interazione e di output. ZDL, inoltre, può essere integrato e collegato con altri programmi. 
-
-@emph{Infine}, una peculiarità del progetto ZDL consiste nella ricerca di efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash ne rende possibile l'esecuzione su hardware di limitate capacità e su sistemi operativi differenti. Pensato per @emph{GNU/Linux}, ZDL è interamente funzionante anche su @emph{Windows} tramite @emph{Cygwin} (NB: perdendo molto in termini di efficienza). È tecnicamente possibile estenderne l'uso su altri sistemi operativi che supportano la Bash (per esempio @emph{MacOSX}).
-
 
 @unnumbered Software Libero
 ZDL è software libero, rilasciato con licenza GPL (General Public License): @url{http://www.gnu.org/licenses/gpl.html}
@@ -268,7 +287,7 @@ ZDL è software libero, rilasciato con licenza GPL (General Public License): @ur
 ZDL è un programma per la Bash, scritto prevalentemente con il linguaggio della Bash. Di seguito, l'esposizione sintetica della sintassi, delle opzioni e degli altri argomenti del comando @command{zdl}. Per maggiori informazioni, consulta le sezioni specializzate. ZDL è predisposto per il completamento automatico degli argomenti (usare il tasto @kbd{<Tab>}).
 @c @man{1}
 @c @ifman @unnumberedsec NOME
-@c @ifman @command{zdl} - CLI download manager per @emph{GNU/Linux} e @emph{Microsoft Windows + Cygwin}.
+@c @ifman @command{zdl} - CLI/TUI/GUI/Web-UI download manager per @emph{GNU/Linux} e @emph{Microsoft Windows + Cygwin}.
 
 @c @ifman @unnumberedsec SINTASSI
 @c @end man
@@ -626,7 +645,7 @@ Per ogni servizio o link, nel caso in cui Aria2 non dovesse riuscire a connetter
 @node Avviare ZDL,Arrestare ZDL,Servizi streaming/hosting,Top
 @htmlstart
 
-@unnumbered Modalità di avvio
+@unnumbered Modalità di avvio (CLI/TUI)
 
 @c @man{14}
 @c @ifman @unnumberedsubsec Avvio
@@ -1153,7 +1172,7 @@ dello script @command{zdl-xterm}: è sufficiente premere @kbd{invio}.
 
 @htmlend
 
-@node Installazione e aggiornamento,Tags,zdl-xterm e XXXTerm/Xombrero,Top
+@node Installazione e aggiornamento,Perché questo programma,zdl-xterm e XXXTerm/Xombrero,Top
 @htmlstart
 @unnumbered Installazione e aggiornamento di ZDL
 ZDL si installa automaticamente con uno script per la @emph{Bash}.
@@ -1240,6 +1259,31 @@ L'aggiornamento manuale può essere forzato aggiungendo l'opzione
 È disponibile uno script di disinstallazione: @url{http://download-mirror.savannah.gnu.org/releases/zdl/uninstall_zdl.sh}.
 
 @htmlend
+
+@node Perché questo programma,Tags,Installazione e aggiornamento,Top
+@htmlstart
+
+@unnumbered Perché questo programma
+ZigzagDownLoader è un gestore di download estensibile, robusto ed interamente controllabile con un terminale o, attraverso socket, con un'interfaccia web adatta anche al formato di uno smartphone (@emph{--socket}, @emph{--web-ui}). Può essere integrato ai più diffusi web browser (@emph{Firefox}, @emph{Chrome/Chromium} e @emph{Opera}) e al desktop, utilizzando l'estensione @emph{External Application Button} e una pratica interfaccia grafica (@emph{--gui} e @emph{--path-gui}).
+È nato come script specifico per la Bash e si è trasformato in un gestore per downloader come @emph{Wget}, @emph{Axel} ed @emph{Aria2} (downloader predefinito), estendendosi a servizi di video streaming e file hosting e integrandosi con altre applicazioni. Oggi ZigzagDownLoader è anche un downloader per @emph{IRC/XDCC}: l'intero processo di scaricamento e recupero è automatico e non richiede alcuna interazione via CHAT. Inoltre, grazie all'adozione di Aria2, ZigzagDownLoader gestisce anche i @emph{TORRENT}.
+
+ZigzagDownLoader è molte cose: un @emph{server/client TCP} utile per un @emph{NAS}, un @emph{comando per il terminale}, un @emph{downloader/download manager} alternativo e @emph{intelligente} per il browser, un'@emph{applicazione grafica} per il desktop... tutto questo contemporaneamente e altro ancora.
+
+Nonostante i suoi limiti strutturali, il linguaggio della @emph{Bash} si è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso nella gestione dei processi di altri programmi. Una progressiva efficienza è stata raggiunta attraverso lo sviluppo di script @emph{monolitici} nel linguaggio di @emph{Awk} (@emph{Gawk}). Il software include, inoltre, interpreti di altri linguaggi (attualmente: @emph{node.js} e @emph{php}, necessari al trattamento dei link di alcuni servizi), fornendo un supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per certi versi, un esempio complesso di @emph{programmazione poliglotta}.
+
+@unnumberedsubsec Almeno quattro direttrici di sviluppo
+L'esecuzione dei downloader può richiedere assistenza: la connessione può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i nomi dei file scaricati possono non essere intelligibili o coincidere con altri di file già salvati, ecc. 
+@emph{In primo luogo}, ZigzagDownLoader serve ad automatizzare la gestione ed il recupero dei download o a semplificarne eventuali interventi manuali. ZDL è pensato, soprattutto, per il download @emph{accelerato} di grossi file e per il recupero del loro @emph{URL} a partire da informazioni disponibili nel web o fornite dall'utente. 
+
+@emph{In secondo luogo}, la gestione automatica è estesa a servizi di file hosting, video streaming, torrent e irc/xdcc: ZDL si sostituisce all'utente nelle operazioni inutili e noiose, riducendole all'unico atto di avvio del programma.
+
+@emph{Un terzo obiettivo} del progetto ZDL consiste nel fornire nuove articolazioni e modalità d'uso, allo scopo di costruire interazioni fra programmi e di rendere possibile un'automazione potenzialmente illimitata. 
+La gestione dei download può essere controllata da terminali distinti in modalità diverse. Per esempio, ZDL può essere avviato in modalità @emph{demone} e controllato in modalità @emph{interattiva}. Anche l'avvio @emph{predefinito} del programma offre diversi modi di interazione e di output. ZDL, inoltre, può essere integrato e collegato con altri programmi. 
+
+@emph{Infine}, una peculiarità del progetto ZDL consiste nella ricerca di efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash ne rende possibile l'esecuzione su hardware di limitate capacità e su sistemi operativi differenti. Pensato per @emph{GNU/Linux}, ZDL è interamente funzionante anche su @emph{Windows} tramite @emph{Cygwin} (NB: perdendo molto in termini di efficienza). È tecnicamente possibile estenderne l'uso su altri sistemi operativi che supportano la Bash (per esempio @emph{MacOSX}).
+
+@htmlend
+
 
 @node Tags,Copying,Installazione e aggiornamento,Top
 @htmlstart
