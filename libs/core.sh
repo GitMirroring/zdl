@@ -87,6 +87,9 @@ BEGINFILE{
 } 
 /[\/\0]{1}zdl\0/ { 
     split($0, cmdline, "\0"); 
+    for(i=0; i<length(cmdline); i++){
+        if(cmdline[i] == "--web-ui") nextfile
+    } 
     match(FILENAME, /[0-9]+/, matched); 
     c = "tr -d \"\\n\" < /proc/" matched[0] "/environ"; 
     c | getline environ;     
