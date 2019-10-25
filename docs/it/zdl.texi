@@ -1285,7 +1285,7 @@ La gestione dei download può essere controllata da terminali distinti in modali
 @htmlend
 
 
-@node Tags,Copying,Installazione e aggiornamento,Top
+@node Tags,Copying,Perché questo programma,Top
 @htmlstart
 @unnumbered Tags/indici analitici
 @unnumberedsec Indice analitico generale
