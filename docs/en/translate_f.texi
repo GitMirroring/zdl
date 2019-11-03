@@ -1,4 +1,4 @@
-\input texinfo @c -*- texinfo-*-
+\input texinfo @c - * - texinfo - * -
 @c %**start of header
 @setfilename zdl.info
 @settitle ZigzagDownLoader (ZDL)
@@ -11,17 +11,17 @@
 
  ZigzagDownLoader (ZDL)
  
- This program is free software: you can redistribute it and/or modify it 
- under the terms of the GNU General Public License as published 
- by the Free Software Foundation; either version 3 of the License, 
+ This program is free software: you can redistribute it and / or modify it
+ under the terms of the GNU General Public License as published
+ by the Free Software Foundation; either version 3 of the License,
  or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License 
- along with this program. If not, see http://www.gnu.org/licenses/. 
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see http://www.gnu.org/licenses/.
  
  Copyright @copyright{} 2011
  Gianluca Zoni <@email{zoninoz@@inventati.org}>
@@ -49,7 +49,7 @@
 @insertcopying
 @end titlepage
 @end ifinfo
-@c @@@@@@@@@@@@@ MACROS @@@@@@@@@@@@@@@@@@@@@@@@@@
+@c @@@@@@@@@@@ MACROS @@@@@@@@@@@@@@@@@
 
 
 @macro menuZdl
@@ -58,21 +58,21 @@
 @end html
 @end ifhtml
 * Home:Top. ZigzagDownLoader@*
-* Il comando ZDL::@*Sintassi, opzioni e altri argomenti@*
-* Servizi streaming/hosting::@*Estensioni di ZDL e consigli pratici@*
-* Installazione e aggiornamento::@*Per GNU/Linux e Microsoft Windows/Cygwin@*
-* Perché questo programma::@*Il senso di una sperimentazione continua a ZIGZAG@*
+* The ZDL::@*Command synopsis, options and other arguments@*
+* Streaming/hosting services::@*ZDL extensions and practical tips@*
+* Installation and update::@*For GNU/Linux and Microsoft Windows/Cygwin@*
+* Why this program::@*The sense of continuous ZIGZAG experimentation@*
 @end macro
 
-@macro menuUso
+@macro menuUse
 @ifhtml
 @html
 @end html
 @end ifhtml
-* Avviare ZDL::@*Modalità di esecuzione del programma e avvio dei download@*
-* Arrestare ZDL::@*Modalità di arresto del programma@*
-* Controllare i download::@*Modalità di controllo dei processi avviati, in coda o sospesi@*
-* Manuali d'uso::@*Documentazione disponibile per ZDL@*
+* Start ZDL::@*How to run the program and start downloads@*
+* Stop ZDL::@*Program shutdown mode@*
+* Check the downloads::@*How to control the processes started, queued or suspended@*
+* User manuals::@*Documentation available for ZDL@*
 @end macro
 
 @macro menuTools
@@ -80,13 +80,13 @@
 @html
 @end html
 @end ifhtml
-* Modi::@*Predefinito, Lite, Interattivo, Demone@*
-* Readline::@*La riga di comando di ZDL@*
-* Editor::@*Editor integrato, per modificare la coda di download@*
-* Omonimie::@*Gestione dei file omonimi e recupero dei download interrotti@*
-* IRC/XDCC::@*Scaricamento file via chat attraverso comandi XDCC@*
-* Torrent::@*Scaricamento dei torrent con Aria2: URL magnet oppure file torrent@*
-* Filtri::@*Filtri per l'estrazione e la selezione di file e URL@*
+* Modes::@*Default, Lite, Interactive, Daemon@*
+* Readline::@*The ZDL command line@*
+* Editor::@*Integrated editor, to change the download queue@*
+* Homonymy::@*Management of homonymous files and recovery of interrupted downloads@*
+* IRC/XDCC::@*Downloading files via IRC-chat/XDCC commands@*
+* Torrent::@*Downloading torrents with Aria2: URL magnet or torrent file@*
+* Filters::@*Filters for extracting and selecting files and URLs@*
 @end macro
 
 @macro menuExt
@@ -94,22 +94,22 @@
 @html
 @end html
 @end ifhtml
-* Creare nuove estensioni::@*Estensioni Bash di ZDL personalizzate e per nuovi servizi@*
-* Software consigliati e dipendenze::@*Programmi utili a ZDL@*
-* Conkeror::@*Comando @command{zdl} per il browser@*
-* zdl-xterm e XXXTerm/Xombrero::@*Uno script per collegare ZDL ad altri programmi@*
+* Create new extensions::@*Custom ZDL and new service Bash extensions@*
+* Recommended software and dependencies::@*Useful programs for ZDL@*
+* Conkeror::@*Command @command{zdl} for the browser@*
+* zdl-xterm and XXXTerm/Xombrero::@*A script to connect ZDL to other programs@*
 @end macro
 
 @macro menuDev
 @itemize
 @item
-@uref{https://joindiaspora.com/tags/zdl,,Aggiornamenti in Diaspora*}
+@uref{https://joindiaspora.com/tags/zdl,,Updates in Diaspora*}
 @item
-@uref{https://savannah.nongnu.org/projects/zdl,,Progetto di sviluppo in Savannah/GNU}
+@uref{https://savannah.nongnu.org/projects/zdl,,Sevannah/GNU development project}
 @item
-@uref{http://download-mirror.savannah.gnu.org/releases/zdl/,,Pacchetti rilasciati di ZDL}
+@uref{http://download-mirror.savannah.gnu.org/releases/zdl/,, Release packages of ZDL}
 @item
-@uref{http://git.savannah.gnu.org/cgit/zdl.git,,Repository Git (controllo versione sorgenti)}
+@uref{http://git.savannah.gnu.org/cgit/zdl.git,,Repository Git (source version check)}
 @end itemize
 @end macro
 
@@ -118,11 +118,11 @@
 @html
 @end html
 @end ifhtml
-* Tags::Indici analitici@*
+* Tags::Analytical indices@*
 
-* Copying::Autori e Licenza@*
+* Copying::Authors and License@*
 
-* Contatti::Per assistenza o per partecipare
+* Contacts::For assistance or to participate
 @end macro
 
 @macro htmlstart
@@ -145,21 +145,21 @@
 @end menu
 </div>
 <br>
-@b{Come si usa ZDL}
+@b{How to use ZDL}
 <div class="nav">
 @menu
 @menuUso
 @end menu
 </div>
 <br>
-@b{Strumenti e funzioni}
+@b{Tools and functions}
 <div class="nav">
 @menu
 @menuTools
 @end menu
 </div>
 <br>
-@b{Espandere ZDL}
+@b{Expanding ZDL}
 <div class="nav">
 @menu
 @menuExt
@@ -174,7 +174,7 @@
 @macro htmlend
 @ifhtml
 @html
-<br><br>
+<br>
 </div>
 <div class="footer">
 <div class="contentfooter">
@@ -183,7 +183,7 @@
 @end menu
 </div>
 <div class="contentfooter">
-@b{Progetto ZDL}
+@b {ZDL Project}
 @menu
 @menuDev
 @end menu
@@ -194,82 +194,82 @@
 @end ifhtml
 @end macro
 
-@c @@@@@@@@@@@@@ end MACROS @@@@@@@@@@@@@@@@@@@@@@@@@@
+@c @@@@@@@@@@@@ end MACROS @@@@@@@@@@@@@@@@@@@@@@@@
 
 @ifhtml
-@node Top,Il comando ZDL, ,
+@node Top,The ZDL command, ,
 @end ifhtml
 @ifinfo
-@node Top,Il comando ZDL, ,(dir)
+@node Top,The ZDL command, ,(dir)
 @end ifinfo
 @htmlstart
 @top ZigzagDownLoader (ZDL)
-@cindex perché zdl
+@cindex why zdl
 
 @c @man{3}
 
-@c @ifman @unnumberedsec DESCRIZIONE
-@emph{ZigzagDownLoader} è un download manager:
+@c @ifman @unnumberedsec DESCRIPTION
+@emph{ZigzagDownLoader} is a download manager:
 @itemize @minus
 @item
-dotato di interfacce utente a linea di comando (@emph{CLI}), per terminale (@emph{TUI}), grafiche (@emph{GUI}) e per applicazioni internet e web (@emph{Web-UI});
+equipped with command line user interfaces (@emph{CLI}), for terminals (@emph{TUI}), graphics (@emph{GUI}) and for internet and web applications (@emph{Web-UI});
 @item
-gestisce gli scaricamenti di alcuni downloader come @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} o @emph{cURL}, utilizzandone le potenzialità (per esempio, l'accelerazione dei download);
+handles downloads of some downloaders such as @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} or @emph{cURL}, using its potential (for example, download acceleration);
 @item
-estrae l'URL dei file da scaricare da servizi di file hosting e video streaming;
+extracts the URL of the files to be downloaded from file hosting and video streaming services;
 @item
-scarica i @emph{TORRENT};
+downloads @emph{TORRENT};
 @item
-richiede automaticamente e scarica file via @emph{IRC/XDCC}, senza alcuna interazione umana via chat;
+automatically requests and downloads files via @emph{IRC/XDCC}, without any human interaction via chat;
 @item
-scarica filmati @emph{LIVE} da alcune reti televisive
+downloads movies @emph{LIVE} from some television networks
 @item
-estende i browser web, come @emph{Conkeror}, @emph{XXXTerm/Xombrero} e @emph{Firefox};
+extends web browsers, such as @emph{Conkeror}, @emph{XXXTerm/Xombrero} and, using @emph{Flashgot}), @emph{Firefox};
 @item
-l'estensione @emph{External Application Button} integra ZDL in @emph{Firefox} (anche @emph{Flashgot}), @emph{Chrome/Chromium} e @emph{Opera};
+the @emph{External Application Button} extension integrates ZDL into @emph{Firefox}, @emph{Chrome/Chromium} and @emph{Opera};
 @item
-usando @emph{Cygwin}, funziona anche in @emph{Microsoft Windows} (interfacce CLI e TUI, anche da @emph{Firefox} + @emph{Flashgot} di Windows).
+using @emph{Cygwin}, it also works in @emph{Microsoft Windows} (CLI and TUI interfaces, also from @emph{Firefox} + @emph{Flashgot} of Windows).
 @end itemize
 
-Il server e le interfacce web, per il controllo remoto e in rete, ne fanno uno strumento utile per un @emph{Network Attached Storage} (@emph{NAS}). Le interfacce sono @emph{responsive} e adatte a diversi dispositivi. In particolare, possono essere usate anche come telecomando per l'avvio di file multimediali già scaricati o in via di scaricamento, usando un browser web su dispositivi mobili.
+The server and web interfaces, for remote and network control, make it a useful tool for a @emph{Network Attached Storage} (@emph{NAS}). The interfaces are @emph{responsive} and suitable for different devices. In particular, they can also be used as a remote control for launching multimedia files already downloaded or being downloaded, using a web browser on mobile devices.
 
-Inoltre, le interfacce Web (@emph{Web-UI}) e grafica (@emph{GUI}) permettono la ricerca e la selezione, rapide e intuitive, dei @emph{file via XDCC}, senza dover compiere alcuna operazione IRC/chat.
-Tutte le interfacce permettono la programmazione delle registrazioni @emph{live-tv}.
+Furthermore, the Web interfaces (@emph{Web-UI}) and graphics (@emph{GUI}) allow the quick and intuitive search and selection of @emph{files via XDCC}, without having to perform any IRC/chat.
+All interfaces allow @emph{live-tv} recordings to be programmed.
 
-Ma ZDL è anche molto altro, perché può essere:
+But ZDL is also much more, because it can be:
 @itemize @minus
 @item
-combinato con altri programmi o inserito in uno script, come strumento di lavoro
+combined with other programs or inserted into a script, as a work tool
 @item
-esteso dall'utente, che può sviluppare nuove estensioni adatte ai propri scopi
+extended by the user, who can develop new extensions suitable for their purposes
 @item
-un sistema poliglotta, utilizzando diversi interpreti (per PHP, Javascript, Python, Perl, Awk...) e strumenti della Bash
+a polyglot system, using different interpreters (for PHP, Javascript, Python, Perl, Awk ...) and Bash tools
 @end itemize
 
-ZigzagDownLoader è un programma "zigzag": non è solo un programma, è un laboratorio e un sistema aperto a nuove invenzioni.
+ZigzagDownLoader is a "zigzag" program: it is not just a program, it is a laboratory and a system open to new inventions.
 
 @c @end man
 
-@unnumbered Software Libero
-ZDL è software libero, rilasciato con licenza GPL (General Public License): @url{http://www.gnu.org/licenses/gpl.html}
+@unnumbered Free Software
+ZDL is free software, released under the GPL (General Public License): @url{http://www.gnu.org/licenses/gpl.html}
 
 @ref{Copying}.
 
-@unnumbered Installa ZDL
-@ref{Installazione e aggiornamento}
+@unnumbered Install ZDL
+@ref{Installation and update}
 
 @ifinfo
 @menu
 @emph{ZDL}
 @menuZdl
 
-@emph{Come si usa ZDL}
+@emph{How to use ZDL}
 @menuUso
 
-@emph{Strumenti e funzioni}
+@emph{Tools and functions}
 @menuTools
 
-@emph{Espandere ZDL}
+@emph{Expand ZDL}
 @menuExt
 
 @menuFooter
@@ -278,154 +278,154 @@ ZDL è software libero, rilasciato con licenza GPL (General Public License): @ur
 
 @htmlend
 
-@node Il comando ZDL,Servizi streaming/hosting,Top,Top
+@node The ZDL command, Streaming / hosting services, Top, Top
 
 @htmlstart
-@unnumbered Il comando ZDL
-@cindex comando zdl
+@unnumbered The ZDL command
+@cindex command zdl
 
-ZDL è un programma per la Bash, scritto prevalentemente con il linguaggio della Bash. Di seguito, l'esposizione sintetica della sintassi, delle opzioni e degli altri argomenti del comando @command{zdl}. Per maggiori informazioni, consulta le sezioni specializzate. ZDL è predisposto per il completamento automatico degli argomenti (usare il tasto @kbd{<Tab>}).
+ZDL is a Bash program, written mainly with the Bash language. Below is a summary of the synopsis, options and other arguments of the command @command{zdl}. For more information, consult the specialized sections. ZDL is prepared for the automatic completion of the arguments (use the @kbd{<Tab>} key).
 @c @man{1}
-@c @ifman @unnumberedsec NOME
-@c @ifman @command{zdl} - CLI/TUI/GUI/Web-UI download manager per @emph{GNU/Linux} e @emph{Microsoft Windows + Cygwin}.
+@c @ifman @unnumberedsec NAME
+@c @ifman @command{zdl} - CLI/TUI/GUI/Web-UI download manager for @emph{GNU/Linux} and @emph{Microsoft Windows + Cygwin}.
 
-@c @ifman @unnumberedsec SINTASSI
+@c @ifman @unnumberedsec SYNOPSIS
 @c @end man
 
-@cindex sintassi
-@unnumberedsec Sintassi
+@cindex synopsis
+@unnumberedsec Synopsis
 
 @c @man{2}
-@command{zdl [@emph{OPZIONI}] [@emph{file} ...] [@emph{link} ...] [@emph{directory}] }
-@c @end man 
+@command{zdl [@emph{OPTIONS}] [@emph{file} ...] [@emph{link} ...] [@emph{directory}]}
+@c @end man
 
-@cindex argomenti
-@unnumberedsec Argomenti
+@cindex arguments
+@unnumberedsec Arguments
 @c @man{4}
-@c @ifman @unnumberedsubsec Argomenti
-L'ordine delle opzioni e degli altri argomenti non è importante:
+@c @ifman @unnumberedsubsec Arguments
+The order of options and other arguments is not important:
 
 @table @emph
 @item file
-Nomi dei file da cui estrarre i @emph{link}. I file devono essere testuali oppure container DLC o file TORRENT, questi ultimi contrassegnati rispettivamente dalle estensioni @emph{.dlc} e @emph{.torrent} (ZDL processa comunque i @emph{link} in memoria nella @emph{directory} e quelli in input)
+File names from which to extract the @emph{link}. The files must be text or DLC containers or TORRENT files, the latter marked by the extensions @emph{.dlc} and @emph{.torrent} respectively (ZDL processes the @emph{links} in memory in the @emph{directory} and those in input)
 
 @item link
-URL dei file oppure delle pagine web dei servizi di hosting, streaming o di reindirizzamento (se omessi, ZDL processa quelli in memoria nella @emph{directory} e nei @emph{file}). Per scaricare via @emph{IRC/XDCC}, il link deve avere la seguente forma (porta non necessaria se è 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL accetta anche i link di @emph{xWeasel}, con protocollo @code{xdcc://}.
+URL of files or web pages of hosting, streaming or redirection services (if omitted, ZDL processes those in memory in @emph{directory} and in @emph{files}). To download via @emph{IRC/XDCC}, the link must have the following form (port not necessary if it is 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL also accepts links to @emph{xWeasel}, with protocol @code{xdcc://}.
 
 
 @item directory
-Directory di avvio di ZDL e di destinazione dei download (se omessa, è quella corrente)
+ZDL start directory and download destination (if omitted, it is the current one)
 
 @end table
 @c @end man
-@cindex opzioni
-@unnumberedsubsec Opzioni
+@cindex options
+@unnumberedsubsec Options
 @c @man{5}
-@c @ifman @unnumberedsec OPZIONI
-Le opzioni brevi non seguite da valori possono essere contratte: 
-@option{-ufmd} equivale a @option{-u} @option{-f} @option{-m} @option{-d}
+@c @ifman @unnumberedsec OPTIONS
+Short options not followed by values​can be contracted:
+@option{-ufmd} is equivalent to @option{-u} @option{-f} @option{-m} @option{-d}
 
 @table @option
 @item -h, --help
-Help di @emph{ZigzagDownLoader (ZDL)}
+@emph{ZigzagDownLoader (ZDL)} help
 
 @item --list-extensions
-Elenco delle estensioni di @emph{ZigzagDownLoader (ZDL)}
+@emph{ZigzagDownLoader (ZDL)} extensions list
 
 @item --aria2
-Scarica con @emph{Aria2}
+Download using @emph{Aria2}
 
 @item --axel
-Scarica con @emph{Axel}
+Download using @emph{Axel}
 
-@item --wget                  
-Scarica con @emph{Wget}
+@item --wget
+Download using @emph{Wget}
 
-@item -m [@emph{numero}], --max-downloads[=@emph{numero}]
-Download parallelo. È possibile indicare il numero massimo di download da effettuare contemporaneamente 
+@item -m [@emph{number}], --max-downloads[=@emph{number}]
+Parallel download. You can specify the maximum number of downloads to be made simultaneously
 
 @item --login
-Utilizza eventuali account registrati per i servizi abilitati (configurare ZDL)
+Use any registered accounts for the enabled services (configure ZDL)
 
 @item -u, --update
-Aggiorna ZDL
+Update ZDL
 
 @item -f, --force
-Forza l'aggiornamento manuale di ZDL
+Force manual update of ZDL
 
 
 @item --clean
-Cancella eventuali file temporanei dalla directory di destinazione, prima di effettuare il download 
+Delete any temporary files in the destination directory before downloading
 
 @item -d, --daemon
-Avvia ZDL in modalità @emph{demone} (può essere controllato attraverso l'interfaccia interattiva) 
+Start ZDL in @emph{daemon} mode (can be controlled with the interactive interface)
 
 @item -i, --interactive
-Avvia l'interfaccia interattiva di ZDL per i download che hanno come destinazione la directory attuale. I download gestiti possono essere attivi o registrati nei file temporanei della directory
+Launch the interactive ZDL interface for downloads that target the current directory. Managed downloads can be active or recorded in temporary directory files
 
 @item -l, --lite
-Avvia ZDL in modalità in standard output @emph{lite} (sono validi i comandi della modalità in @emph{standard output}). Può essere configurata come modalità di avvio predefinita.
+Start ZDL in standard output mode @emph{lite} (mode commands in @emph{standard output} are valid). It can be configured as the default boot mode.
 
-@item --out=@emph{programma}|@emph{file}
-Restituisce in output i nomi dei file dei download completati, in due modi alternativi: 
+@item --out=@emph{program}|@emph{file}
+Output the names of completed download files, in two alternative ways:
 
 @table @emph
-@item programma
-programma che può "aprire" il file scaricato
+@item program
+program that can "open" the downloaded file
 
 @item file
-file testuale in cui sono registrati i nomi dei file
+text file in which file names are recorded
 @end table
 
 @item --live
-Permette di selezionare canali per il download della diretta di alcune televisioni in "live stream''
+It allows to select channels for the download of live broadcasts of some televisions in "live stream"
 
 @item --mp3
 @itemx --flac
-Convertono i file (anche da video in audio) in @acronym{MP3} oppure in @acronym{FLAC}: dipendono da @emph{FFMpeg/AVConv}
+Convert files (even from video to audio) into @acronym{MP3} or into @acronym{FLAC}: they depend on @emph{FFMpeg/AVConv}
                                 
 @item --ip
-Scrive l'indirizzo IP attuale, prima di effettuare altre operazioni
+Write the current IP address before performing any other operations
 
 @item --reconnect
-Forza la riconnessione del modem al termine di ogni download, utilizzando uno script/comando/programma (configurare ZDL)
+Force the modem to reconnect at the end of each download, using a script/command/program (configure ZDL)
 
 
 @item -r, --resume
-Recupera o riscarica file parzialmente scaricati. Agisce in caso di omonimia fra file (leggi il manuale). Può essere configurato come comportamento predefinito
+Recover or download partially downloaded files. It acts in case of homonymy between files (read the manual). It can be configured as the default behavior
 
 @item --no-complete
-Cancella i file temporanei dei download completati
+Clear temporary files of completed downloads
 
-@item  --no-stop
-Avvio senza interruzioni: salta l'eventuale aggiornamento automatico (che richiede l'immissione della password) o la richiesta di immettere nuovi link. L'input da tastiera è comunque disponibile
+@item --no-stop
+Start without interruption: skip any automatic update (which requires entering the password) or request to enter new links. Keyboard input is still available
 
 @end table
 
 @c @end man
-@unnumberedsubsubsec Interfaccia grafica (GUI):
+@unnumberedsubsubsec Graphical user interface (GUI):
 @c @man{6}
-@c @ifman @unnumberedsubsec Interfaccia grafica (GUI):
+@c @ifman @unnumberedsubsec Graphical user interface (GUI):
 @table @option
 @item -g, --gui
-Avvia l'interfaccia grafica nella directory corrente o in quella eventualmente inserita fra gli argomenti, attivando automaticamente zdl --daemon come "core", se ancora non è stato attivato zdl
+Start the graphical interface in the current directory or in the directory inserted among the arguments, automatically activating zdl --daemon as "core", if zdl has not yet been activated
 
 @item --path-gui
-Prima di avviare zdl, apre una finestra per la selezione della directory di destinazione, se non è indicata fra gli argomenti del comando (utile se "zdl --gui" è avviato da un'icona del desktop o da un'estensione del browser web, come "External Application Button")
+Before starting zdl, it opens a window for selecting the destination directory, if it is not indicated among the command arguments (useful if "zdl --gui" is started by a desktop icon or a web browser extension, as "External Application Button")
 
 @end table
 
 @c @end man
-@unnumberedsubsubsec Socket e interfacce utente:
+@unnumberedsubsubsec Sockets and user interfaces:
 @c @man{6}
-@c @ifman @unnumberedsubsec Socket e interfacce utente:
+@c @ifman @unnumberedsubsec Sockets and user interfaces:
 @table @option
-@item -s [@emph{porta}], --socket[=@emph{porta}]
-Avvia il programma collegandolo a un socket. Se non indicata, la porta è quella predefinita.
+@item -s [@emph{port}], --socket[=@emph{port}]
+Start the program by connecting it to a socket. If not indicated, the port is the default one.
 
 @item --web-ui
-Interfaccia utente web.
-Avvia il programma in modalità demone nella directory corrente o, eventualmente, in quella passata come argomento, un socket alla porta predefinita o, se occupata da un'altra applicazione, alla prima porta libera e il browser predefinito all'indirizzo dell'interfaccia utente.
+Web user interface.
+Start the program in daemon mode in the current directory or, possibly, in the one passed as an argument, a socket at the default port or, if occupied by another application, at the first free port and the default browser at the user interface address.
 
 @end table
 
@@ -435,20 +435,20 @@ Avvia il programma in modalità demone nella directory corrente o, eventualmente
 @c @ifman @unnumberedsubsec IRC/XDCC:
 @table @option
 @item -x, --xdcc
-Avvia l'inserimento interattivo di tre dati:
+Start the interactive insertion of three data:
 
 @enumerate
 @item
-l'host del server IRC (@emph{HOST})
+the IRC server host (@emph{HOST})
 
 @item
-il canale a cui connettersi (@emph{CHAN})
+the channel to connect to (@emph{CHAN})
 
 @item
-il messaggio privato (@emph{PRIVMSG}) che contiene il comando @command{XDCC SEND}
+the private message (@emph{PRIVMSG}) containing the command @command{XDCC SEND}
 @end enumerate
 
-Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare opzioni, inserendo le informazioni nel link, che deve avere la forma seguente (porta non necessaria se è 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL accetta anche i link di @emph{xWeasel}, con protocollo @code{xdcc://}
+The download via IRC/XDCC can be done, alternatively and without using options, by entering the information in the link, which must have the following form (port not necessary if it is 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL also accepts links of @emph{xWeasel}, with protocol @code{xdcc://}
 
 @end table
 
@@ -459,131 +459,131 @@ Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare 
 @c @ifman @unnumberedsubsec Torrent:
 @table @option
 @item -T @emph{file}, --torrent-file=@emph{file}
-File torrent per Aria2: può non avere estensione .torrent
+Torrent file for Aria2: may not have a .torrent extension
 
-@item --tcp-port=@emph{porta}
-@itemx --udp-port=@emph{porta}
-Porte TCP e UDP aperte: verificare le impostazioni del router
+@item --tcp-port=@emph{port}
+@itemx --udp-port=@emph{port}
+Open TCP and UDP ports: check the router settings
 
 @end table
 
 @c @end man
-@unnumberedsubsubsec Filtri:
+@unnumberedsubsubsec Filters:
 @c @man{9}
-@c @ifman @unnumberedsubsec Filtri:
+@c @ifman @unnumberedsubsec Filters:
 @table @option
-@item --scrape-url=@emph{URL pagina web}
-Estrae gli URL (i link) dalla pagina web indicata e li accoda all'elenco registrato
+@item --scrape-url=@emph{Web page URL}
+Extract URLs (links) from the indicated web page and append them to the registered list
 
 @item --scrape-url
-Estrae gli URL (i link) dalle pagina web indicate come @emph{link}
+Extract URLs (links) from web pages indicated as @emph{link}
 
 @item --url=@emph{regex}
-Processa solo gli URL (i link) che corrispondono alla REGEX
+Process only the URLs (the links) that correspond to the REGEX
 
 @item --no-url=@emph{regex}
-Non processa gli URL (i link) che corrispondono alla REGEX
+It does not process the URLs (links) that correspond to the REGEX
 
 @item --file=@emph{regex}
-Scarica solo file il cui nome corrisponde alla REGEX
+Download only files whose name corresponds to the REGEX
 
 @item --no-file=@emph{regex}
-Non scarica i file il cui nome corrisponde alla REGEX
+It does not download files whose name corresponds to REGEX
 
 @item --no-rev
-Non scarica i file con estensione '.rev'
+Do not download files with '.rev' extension
 
 @item --no-sub
-Non scarica i file il cui nome contiene la stringa 'sub' (in lettere maiuscole e minuscole), scarta i file video sottotitolati.
+It does not download files whose name contains the string 'sub' (in upper and lower case), it discards the subtitled video files.
 
 @end table
 
 @c @end man
-@unnumberedsubsubsec Avvio con un editor:
+@unnumberedsubsubsec Starting with an editor:
 @c @man{10}
-@c @ifman @unnumberedsubsec Avvio con un editor:
+@c @ifman @unnumberedsubsec Starting with an editor:
 @table @option
 @item -e, --editor
-sostituisce l'interfaccia di ingresso di ZDL con l'editor predefinito dal sistema oppure con quello configurato per ZDL con @command{zdl -c}
+replaces the ZDL input interface with the system default editor or with the one configured for ZDL with @command{zdl -c}
 @item --emacs, --emacs-nw
-usa Emacs o la sua versione solo testo/non grafica
+use Emacs or its plain text/non-graphic version
 @item --jed
-usa Jed, un piccolo editor in stile Emacs
+use Jed, a small Emacs-style editor
 @item --jupp
-usa Jupp
+use Jupp
 @item --mcedit
-usa l'editor di Midnight Commander
+use the Midnight Commander editor
 @item --mg
-usa Mg, un micro editor in stile Emacs
+use Mg, an Emacs-style micro editor
 @item --nano
-usa l'editor Nano
+use the Nano editor
 @item --vi, --vim
-usa l'editor Vi o Vim
+use the Vi or Vim editor
 @item --zile
-usa Zile, un micro editor GNU in stile Emacs
+use Zile, a GNU Emacs-style micro editor
 
 @end table
 
 @c @end man
-@unnumberedsubsubsec Avvio con Proxy:
+@unnumberedsubsubsec Starting with Proxy:
 @c @man{11}
-@c @ifman @unnumberedsubsec Avvio con proxy:
+@c @ifman @unnumberedsubsec Starting with proxy:
 @table @option
 
 @item --proxy
-Avvia ZDL attivando un proxy automaticamente (il tipo di proxy predefinito è Transparent) 
+Start ZDL by activating a proxy automatically (the default proxy type is Transparent)
 
 @item --proxy=t|a|e
-Avvia ZDL attivando un proxy del tipo definito dall'utente:
+Start ZDL by activating a proxy of the user-defined type:
 
 @itemize @w{}
-@item 
+@item
 @option{t} = Transparent
 
-@item 
+@item
 @option{a} = Anonymous
 
 @item
 @option{e} = Elite
 @end itemize
-	
-@item --proxy=@emph{IP}:@emph{PORTA}
-Avvia ZDL attivando il proxy indicato dall'utente, per l'intera durata del download (il proxy viene sostituito automaticamente solo per i link dei servizi abilitati che necessitano di un nuovo indirizzo IP) 
+
+@item --proxy=@emph{IP}:@emph{PORT}
+Start ZDL by activating the proxy indicated by the user, for the entire duration of the download (the proxy is automatically replaced only for the links of the enabled services that need a new IP address)
 
 @end table
 
 @c @end man
-@unnumberedsubsubsec Configurazione:
+@unnumberedsubsubsec Configuration:
 
 @c @man{12}
-@c @ifman @unnumberedsubsec Configurazione:
+@c @ifman @unnumberedsubsec Configuration:
 @table @option
 
-@item -c, --configure		
-Interfaccia di configurazione di ZDL, permette anche di salvare eventuali account dei servizi di hosting
+@item -c, --configure
+Configuration interface of ZDL, also allows you to save any hosting service accounts
 
-@item --stream [@emph{parametri}] [--noXterm]
-Per scaricare lo stream incorporando ZDL in nuovi script, il modello generico dei parametri per le componenti aggiuntive (rispettare l'ordine): 
+@item --stream [@emph{parameters}] [--noXterm]
+To download the stream by incorporating ZDL in new scripts, the generic model of the parameters for the additional components (comply with the order):
 
 @end table
 @c @end man
 
 @htmlend
 
-@node Servizi streaming/hosting,Avviare ZDL,Il comando ZDL,Top
+@node Streaming/hosting services,Start ZDL,The ZDL command,Top
 @htmlstart
 
-@unnumbered Scaricare da servizi di @emph{video streaming} e di @emph{file hosting}
+@unnumbered Download from @emph{video streaming} and @emph{file hosting} services
 
 @c @man{13}
-@c @ifman @unnumberedsec PANORAMICA
-@c @ifman @unnumberedsubsec Servizi
-ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream video (da Youtube, Nowvideo, Dailymotion...) per mezzo di estensioni dei browser, ed i file condivisi attraverso i seguenti servizi di hosting e di streaming, direttamente dal link (bypassando il player delle pagine web):
+@c @ifman @unnumberedsec OVERVIEW
+@c @ifman @unnumberedsubsec Services
+ZDL is enabled for downloading from any kind of valid link, including the video stream (from Youtube, Nowvideo, Dailymotion ...) by means of browser extensions, and files shared through the following hosting and streaming services, directly from the link (bypassing the web page player):
 
 @table @emph
 @cindex streaming
 @cindex video
-@item @b{Video in streaming saltando il player del browser:}
+@item @b{Streaming video skipping browser player:}
 __STREAMING__
 @cindex download
 @cindex file hosting
@@ -595,119 +595,118 @@ __DOWNLOAD__
 __LIVESTREAM__
 @cindex generated
 @cindex captcha
-@item @b{Link generati dal web (anche dopo captcha):}
-__GENERATED__ ed altri servizi
+@item @b{Links generated by the web (even after captcha):}
+__GENERATED__ and other services
 @cindex short links
 @item @b{Short links:}
 __SHORTLINKS__
 
-@item @b{Tutti i file scaricabili con le seguenti estensioni dei browser:}
-@emph{Flashgot} di @emph{Firefox/Iceweasel/Icecat}, funzione @kbd{M-x zdl} di @emph{Conkeror} e script @command{zdl-xterm} (@emph{XXXTerm/Xombrero} e altri)
+@item @b{All downloadable files with the following browser extensions:}
+@emph{Flashgot} of @emph{Firefox/Iceweasel/Icecat}, @kbd{M-x zdl} function of @emph{Conkeror} and script @command{zdl-xterm} (@emph{XXXTerm/Xombrero} and others)
 
-@item @b{Tutti i file scaricabili con i seguenti programmi:}
+@item @b{All files downloadable with the following programs:}
 __PROGRAMS__
 @end table
 
 @c @end man
 
-@unnumberedsec Altre informazioni utili.
+@unnumberedsec Other useful information.
 
-Per i servizi di hosting seguenti è consigliato estendere il limite massimo di download
-(aggiungere l'opzione @option{-m} alle istruzioni sopra elencate, 
-eventualmente indicando il massimo numero di download da effettuare in contemporanea)
-per procedere con il download in parallelo, eventualmente attraverso
-l'uso di proxy:
+For the following hosting services it is recommended to extend the maximum download limit
+(add the @option{-m} option to the instructions listed above,
+possibly indicating the maximum number of downloads to be made simultaneously
+to proceed with the download in parallel, also through
+the use of proxies
 
-Molti server non permettono il recupero di download interrotti e il download parallelo.
-Per questi servizi ZDL usa Wget.
+Many servers do not allow recovery of interrupted downloads and parallel downloading.
+For these services ZDL uses Wget.
 
-Alcuni servizi richiedono l'uso di RTMPDump (in sua mancanza, ma con limitazioni, di cURL)
+Some services require the use of RTMPDump (in its absence, but with limitations, of cURL)
 
-Gli altri servizi sono abilitati in modo predefinito per Aria2. 
+The other services are enabled by default for Aria2.
 
-Per scaricare da Sharpfile, Depositfiles e da altri servizi,
-attualmente è necessario utilizzare il browser web per risolvere il
-captcha, generare il link ed avviare il download attraverso le componenti
-aggiuntive compatibili dei browser oppure con ZDL avviato dal terminale.
+To download from Sharpfile, Depositfiles and other services,
+currently it is necessary to use the web browser to solve the
+captcha, generate the link and start the download through the browsers adds-on or with the ZDL booted from the terminal.
 
-L'opzione @option{--login} attiva il login automatico nel caso la
-configurazione di ZDL comprenda uno o più account per l'uso di un
-servizio di hosting. In particolare, la registrazione di molti account
-per Easybytez non solo permette il download di file di grandezza fino
-a 600 MB, ma consente anche lo scaricamento in parallelo di più file
-senza l'uso di proxy (in questo caso è necessario specificare anche
-@option{-m} oppure @option{--max-downloads=}). Per configurare l'uso di account: @command{zdl [-c|--configure]}
+The @option{--login} option enables automatic login in the event of the
+ZDL configuration includes one or more accounts for the use of a
+hosting service. In particular, the registration of many accounts
+for Easybytez not only allows the download of files up to size
+at 600MB, but also allows multiple files to be downloaded in parallel
+without the use of proxies (in this case it is also necessary to specify
+@option{-m} or @option{--max-downloads=}). To configure the use of accounts: @command{zdl [-c|--configure]}
 
-Per ogni servizio o link, nel caso in cui Aria2 non dovesse riuscire a connettersi si consiglia di provare ad usare Axel o Wget.
+For each service or link, should Aria2 fail to connect, try using Axel or Wget.
 
 @htmlend
 
-@node Avviare ZDL,Arrestare ZDL,Servizi streaming/hosting,Top
+@node Start ZDL,Stop ZDL,Streaming/hosting services,Top
 @htmlstart
 
-@unnumbered Modalità di avvio (CLI/TUI)
+@unnumbered Startup mode (CLI/TUI)
 
 @c @man{14}
-@c @ifman @unnumberedsubsec Avvio
-ZDL può essere avviato in diversi modi:
+@c @ifman @unnumberedsubsec Start
+ZDL can be started in different ways:
 
 @table @emph
-@item @b{A) Per immettere link e avviare nuovi download:}
+@item @b{A) To enter links and start new downloads:}
 
 @enumerate
 @item
-generando automaticamente la lista dei link per il download:
+automatically generating the list of download links:
 
 @itemize @minus
 @item
-apri un terminale ed entra nella directory che dovrà contenere i file scaricati
+open a terminal and enter the directory that will contain the downloaded files
 
 @item
-avvia ZDL digitando il comando seguito da eventuali opzioni 
-
-@item 
-copia i link dei file da scaricare e incollali nel terminale (vai a capo dopo ogni link)
+start ZDL by typing the command followed by any options
 
 @item
-digita @kbd{M-x} (@kbd{M}, il tasto @emph{Meta}, è @kbd{<Alt>}, @kbd{<Ctrl>} o @kbd{<Esc>})
+copy the links of the files to download and paste them in the terminal (go to the top after each link)
+
+@item
+type @kbd {M-x} (@kbd {M}, the @emph {Meta} key, is @kbd {<Alt>}, @kbd {<Ctrl>} or @kbd {<Esc>})
 
 @end itemize
 
 @item
-Utilizzando uno o più file preparati con un editor di testi (andare a capo dopo ogni link) e raggiungibili dalla directory di destinazione (indica un path valido):
+Using one or more files prepared with a text editor (wrapping after each link) and reachable from the destination directory (indicates a valid path):
 @itemize @minus
 @item
-apri un terminale ed entra nella directory che dovrà contenere i file scaricati (in alternativa, puoi indicare a @emph{ZDL} la directory di lavoro)
+open a terminal and enter the directory that will contain the downloaded files (alternatively, you can indicate to @emph {ZDL} the working directory)
 
 @item
-digita il comando @command{zdl} seguito dai nomi dei file che contengono la lista dei link: @command{zdl} @emph{path/file ...} 
+type the command @command {zdl} followed by the names of the files containing the list of links: @command {zdl} @emph {path / file ...}
 @end itemize
 
 @item
-Indicando direttamente a ZDL i link da processare (se link validi dovessero essere dichiarati non validi, prova con il modo @emph{1}):
-@command{zdl} @emph{link ...}
+By indicating directly to ZDL the links to be processed (if valid links were to be declared invalid, try @emph {1}):
+@command {zdl} @emph {link ...}
 
 @item
-Dal browser web, attraverso l'uso di componenti aggiuntive (@emph{Flashgot} per @emph{Firefox}, lo script @command{zdl-xterm}, il comando @command{zdl} di Conkeror, ...), allo scopo di catturare e salvare lo stream di un video o un altro file di qualsiasi tipo. 
+From the web browser, through the use of additional components (@emph {Flashgot} for @emph {Firefox}, the @command script {zdl-xterm}, the @command command {zdl} by Conkeror, ...), to the purpose of capturing and saving the stream of a video or another file of any type.
 
 @item
-In modalità "demone" (anche dalla modalità interattiva)
+In "daemon" mode (also from interactive mode)
 
 @item
-Usando un editor, con l'opzione @option{-e} o altre più specifiche (per esempio, @option{--emacs-nw})
+Using an editor, with the option @option {-e} or other more specific (for example, @option {- emacs-nw})
 @end enumerate
 
-I file, la directory di lavoro e i link possono essere immessi in qualsiasi ordine. Tutti i link degli input sono salvati nel file @file{links.txt}, nella directory di destinazione. 
+Files, working directory and links can be entered in any order. All input links are saved in the file @file {links.txt}, in the destination directory.
 
-@item @b{B) Per gestire download già avviati nelle modalità "non interattiva" e "demone":}
-avviando la modalità interattiva in due modi:
+@item @b {B) To manage downloads already started in "non-interactive" and "daemon" mode:}
+by starting the interactive mode in two ways:
 
 @enumerate
 @item
-in console dalla directory di destinazione dei download, con il comando @command{zdl -i} oppure @command{zdl --interactive}
+in console from the download destination directory, with the command @command {zdl -i} or @command {zdl --interactive}
 
 @item
-nella modalità "non interattiva" (standard), digitando il tasto @kbd{i}
+in "non-interactive" (standard) mode, by typing the @kbd {i} key
 @end enumerate
 @end table
 
@@ -715,29 +714,29 @@ nella modalità "non interattiva" (standard), digitando il tasto @kbd{i}
 @c @end man
 @htmlend
 
-@node Arrestare ZDL,Controllare i download,Avviare ZDL,Top
+@node Stop ZDL, Check downloads, Start ZDL, Top
 @htmlstart
 
-@unnumbered Modalità di arresto
+@unnumbered Stop mode
 
-@c @man{15}
-@c @ifman @unnumberedsubsec Arresto
-ZDL può essere fermato in diversi modi:
+@c @man {15}
+@c @ifman @unnumberedsubsec Stop
+ZDL can be stopped in different ways:
 @itemize
-@item 
-Se i download sono gestiti dalla modalità "non interattiva"/standard:
+@item
+If the downloads are managed by the "non-interactive" / standard mode:
 
 @enumerate
 @item
-digitando @kbd{M-k} (in questo caso saranno interrotti tutti i download avviati da ZDL nella directory di destinazione specificata o in quella corrente)
+typing @kbd {M-k} (in this case all downloads started by ZDL in the specified destination directory or in the current one will be interrupted)
 
 @item
-digitando @kbd{M-q} (tutti i download già avviati nella directory corrente non saranno interrotti, ma non verranno più gestiti da ZDL fino ad una nuova istanza @emph{standard} oppure @emph{demone} del programma)
+typing @kbd {M-q} (all downloads already started in the current directory will not be interrupted, but will no longer be managed by ZDL until a new instance @emph {standard} or @emph {demon} of the program)
 @end enumerate
 
-@item 
-Se i download sono gestiti dalla modalità "demone": 
-attraverso la modalità interattiva @command{zdl -i} avviata nella directory gestita dal demone, digitando il tasto di uscita "Quit" (in maiuscolo, cioè con @kbd{Shift-q}): @kbd{Q} (in questo caso i download avviati nella directory non sarano interrotti, ma non verranno gestiti da ZDL a meno che non sia riavviato per gestire gli stessi download)
+@item
+If the downloads are managed by the "demon" mode:
+through the interactive mode @command {zdl -i} started in the directory managed by the daemon, by typing the "Quit" exit key (capitalized, that is, with @kbd {Shift-q}): @kbd {Q} (in this case the downloads started in the directory will not be interrupted, but will not be managed by ZDL unless it is restarted to manage the same downloads)
 @end itemize
 
 
@@ -745,107 +744,107 @@ attraverso la modalità interattiva @command{zdl -i} avviata nella directory ges
 
 @htmlend
 
-@node Controllare i download,Manuali d'uso,Arrestare ZDL,Top
+@node Check the downloads, User manuals, Stop ZDL, Top
 @htmlstart
-@unnumbered Controllare i download: recupero, eliminazione, arresto, riavvio...
+@unnumbered Check downloads: recovery, deletion, shutdown, reboot ...
 
-I download possono essere controllati in modalità diverse in base al tipo di operazione da effettuare.
-L'avvio da terminale permette l'esecuzione delle operazioni elencate nella presentazione del comando: @ref{Il comando ZDL}. Poiché ZDL può essere chiuso senza interrompere i download, questa modalità di controllo può essere adottata in ogni momento, a esecuzione già avviata. Per @emph{chiudere senza interrompere i download}:
+Downloads can be controlled in different ways depending on the type of operation to be performed.
+Starting from the terminal allows the operations listed in the command presentation to be executed: @ref {The ZDL command}. Since ZDL can be closed without interrupting downloads, this control mode can be adopted at any time, once execution has started. For @emph {close without interrupting downloads}:
 @itemize @minus
 @item
-se avviato in modalità standard, digitare @kbd{M-q} (tasti @kbd{<Alt>+<q>})
+if started in standard mode, type @kbd {M-q} (@kbd {<Alt> + <q>} keys)
 @item
-da modalità interattiva, digitare @kbd{Q} (tasti @kbd{<Shift>+<q>})
+from interactive mode, type @kbd {Q} (@kbd {<Shift> + <q>} keys)
 @end itemize
 
-Una volta @emph{chiuso} (o anche @emph{ucciso} interrompendo i download), ZDL può essere riavviato utilizzando nuove opzioni.
+Once @emph {closed} (or even @emph {killed} interrupting downloads), ZDL can be restarted using new options.
 
-@unnumberedsubsec Un esempio, partendo da un problema pratico: aggiungere opzioni a download avviati dal browser. 
+@unnumberedsubsec An example, starting from a practical problem: add options to downloads started by the browser.
 @table @emph
-@item Problema:
-voglio scaricare dei file da Easybytez usando @emph{Flashgot}, ma voglio
-anche usare le opzioni @option{--login}, @option{--max-downloads=} e @option{--clean}, che non sono
-impostate di default. Come posso utilizzare queste funzioni aggiuntive
-usando il browser (con @emph{Flashgot}), se queste possono essere attivate
-solo dal terminale?
+@item Problem:
+I want to download files from Easybytez using @emph {Flashgot}, but I want to
+also use the options @option {- login}, @option {- max-downloads =} and @option {- clean}, which are not
+set by default. How can I use these additional features
+using the browser (with @emph {Flashgot}), if these can be activated
+only from the terminal?
 
-@item Soluzione:
+@item Solution:
 @itemize @minus
 @item
-avvio zdl in un terminale, dalla directory di destinazione,
-    utilizzando tutte le opzioni di cui ho bisogno:
-    		  @command{zdl -m --login --clean}
+start zdl in a terminal, from the destination directory,
+    using all the options I need:
+    @command {zdl -m --login --clean}
 @item
-usando @emph{Firefox}, clicco con il tasto destro del mouse sui link dei
-    file da scaricare e avvio il download con @emph{Flashgot}: il download
-    non viene effettuato subito e i link vengono registrati da zdl per
-    essere processati da un'altra istanza attiva del programma (quella
-    nel terminale)
+using @emph {Firefox}, I click with the right mouse button on the links of
+    download file and start the download with @emph {Flashgot}: download
+    it is not carried out immediately and the links are registered by zdl for
+    be processed by another active instance of the program (that one
+    in the terminal)
 @item
-quando ho finito di registrare i link, torno al terminale e, senza
-    scrivere nulla, digito @kbd{M-x}
+when I finished recording the links, I go back to the terminal and, without
+    write anything, type @kbd {M-x}
 @end itemize
 @end table
 
-@*@*
-@unnumberedsubsec Controllo manuale dei download.
-ZDL processa i @emph{link} registrati, generando per ciascuno un file temporaneo da cui può estrarre informazioni sul file da scaricare e sul download in corso, intattivo o completato. Grazie a tali informazioni, è possibile il controllo dei processi di download, sia automaticamente da parte di ZDL, sia manualmente da parte dell'utente.
+@ * @ *
+@unnumberedsubsec Manual control of downloads.
+ZDL processes the registered @emph {links}, generating for each a temporary file from which it can extract information about the file to be downloaded and the download in progress, intact or completed. Thanks to this information, it is possible to control the download processes, either automatically by ZDL, or manually by the user.
 
-I download di ZDL possono essere controllati manualmente attraverso la modalità interattiva, che può essere attivata da quella standard digitando @kbd{M-i} (tasti @kbd{<Alt>+<i>}) o da un qualsiasi terminale @emph{Bash} dalla stessa directory di download, utilizzando l'opzione @option{-i|--interactive}. Se non è attiva alcuna istanza di avvio e gestione automatica dei download, dall'interfaccia interattiva è possibile avviare la modalità @emph{demone}, che agisce in background come @emph{server} ed è indipendente dal terminale di avvio. Per gestire i download e la stessa chiusura di ZDL in modalità demone, è comunque necessario utilizzare l'interfaccia interattiva, che ha funzione di @emph{client}.@*
-I comandi sono elencati nella stessa interfaccia interattiva: è possibile modificare il numero massimo di download (da 1 a 9, digitando i tasti dei numeri, o illimitati, digitando il tasto @kbd{m}), il tipo di downloader da utilizzare (Axel o Wget, digitando @emph{a} o @emph{w}), avviare l'editor predefinito per modificare l'elenco dei link da processare (tasto @emph{e}), selezionare con @emph{s} i download in gestione per @emph{riavviarli} (ZDL interrompe il download in corso e processa quello successivo fino al termine della lista registrata, poi ricomincia dal primo e così via), @emph{terminarli} in modo definitivo senza cancellare i file finora scaricati o @emph{eliminarli} completamente. Per queste ultime tre operazioni è possibile selezionare più download alla volta, indicandone i numeri identificativi separandoli con spazi.
+ZDL downloads can be controlled manually through the interactive mode, which can be activated from the standard one by entering @kbd {Mi} (@kbd {<Alt> + <i>} keys) or from any @emph {Bash} terminal from the same download directory, using the @option {-i | --interactive} option. If there is no start-up instance and automatic management of downloads, from the interactive interface it is possible to start the @emph {demon} mode, which acts in the background as @emph {server} and is independent of the startup terminal. To manage the downloads and the closing of ZDL in daemon mode, it is still necessary to use the interactive interface, which acts as @emph {client}. @ *
+The commands are listed in the same interactive interface: it is possible to modify the maximum number of downloads (from 1 to 9, by typing the number keys, or unlimited, by typing the key @kbd {m}), the type of downloader to use (Axel o Wget, by typing @emph {a} or @emph {w}), start the default editor to edit the list of links to be processed (@emph {e} key), select with @emph {s} the downloads in management for @emph {restart them} (ZDL interrupts the current download and processes the next one until the end of the registered list, then restarts from the first and so on), @emph {terminate} them definitively without deleting the files downloaded so far or @ emph {eliminate them} completely. For these last three operations it is possible to select several downloads at a time, indicating the identification numbers separating them with spaces.
 
-@unnumberedsubsec Controllo manuale dei download ancora da processare.
-In mancanza dei file temporanei relativi a @emph{link} non ancora processati, è possibile intervenire manualmente utilizzando un @emph{editor} (@ref{Editor}).
+@unnumberedsubsec Manual control of downloads still to be processed.
+In the absence of temporary files related to @emph {link} not yet processed, it is possible to intervene manually using an @emph {editor} (@ref {Editor}).
 
 @htmlend
 
-@node Manuali d'uso,Modi,Controllare i download,Top
+@node User manuals, Ways, Check downloads, Top
 @htmlstart
-@unnumbered Manuali d'uso
-Documentazione attualmente disponibile:
+@unnumbered User manuals
+Documentation currently available:
 @itemize @bullet
 @item
-ipertesto online: @url{http://nongnu.org/zdl}
+online hypertext: @url {http://nongnu.org/zdl}
 @item
-ipertesto in formato @emph{info}, consultabile con il comando @command{info zdl} (per migliorarne la navigazione, si consigliano @command{pinfo} oppure @command{emacs})
+hypertext in @emph {info} format, which can be consulted with the @command command {info zdl} (to improve navigation, we recommend @command {pinfo} or @command {emacs})
 @item
-pagina di manuale in stile UNIX: @command{man zdl}
+UNIX-style manual page: @command {man zdl}
 @end itemize
 
 @htmlend
 
 
 
-@node Modi,Readline,Manuali d'uso,Top
+@node Modes, Readline, User manuals, Top
 @htmlstart
 
 @unnumbered Modi
-ZDL può essere utilizzato in diverse modalità:
+ZDL can be used in different ways:
 
-@unnumberedsec Modalità in standard output (predefinita e @emph{lite}: @option{-l, --lite}).
-Sono disponibili due diverse @emph{modalità in standard output}: quella predefinita, che informa puntualmente l'utente di ogni operazione compiuta, comunicando i dati rilevanti dei download in corso e quella @emph{lite}, estremamente compatta nella rappresentazione dei download e @emph{silente} rispetto ai processi di estrazione e analisi. La seconda modalità può essere avviata con l'opzione @option{-l} (@option{--lite}) oppure configurata come @emph{predefinita} attraverso l'interfaccia di configurazione: @command{zdl [-c|--configure]}. È particolarmente indicata per l'utente che usa ZDL come downloader alternativo per il browser, per esempio attraverso l'estensione @emph{Flashgot}.
-@*
-Le @emph{modalità in standard output} sono dotate di una @ref{Readline} e accettano i seguenti comandi, espressi in combinazioni di tasti:
+@unnumberedsec Standard output mode (default and @emph {lite}: @option {-l, --lite}).
+Two different @emph {standard output modes} are available: the default one, which punctually informs the user of each operation performed, communicating the relevant data of the downloads in progress and the @emph {lite}, extremely compact in the representation of the downloads and @emph {silent} with respect to extraction and analysis processes. The second mode can be started with the option @option {-l} (@option {- lite}) or configured as @emph {default} through the configuration interface: @command {zdl [-c | - configure]}. It is particularly suitable for the user who uses ZDL as an alternative browser downloader, for example through the @emph {Flashgot} extension.
+@ *
+The @emph {standard output modes} are equipped with a @ref {Readline} and accept the following commands, expressed in key combinations:
 
 @table @kbd
 @item M-i
-avvia la @emph{modalità interattiva}. Lo standard output del terminale viene ceduto ad un'altra modalità, senza però sospendere le attività della modalità precedente, che procedono silenti.
+start @emph {interactive mode}. The standard output of the terminal is transferred to another mode, without however suspending the activities of the previous mode, which proceed silently.
 @item M-e
-avvia l'editor predefinito (@ref{Editor}). Come per il comando precedente, le attività non sono sospese mentre si utilizza un editor per manipolare la lista dei link da processare.
+start the default editor (@ref {Editor}). As for the previous command, the activities are not suspended while using an editor to manipulate the list of links to be processed.
 @item M-c
-cancella le informazioni (file temporanei) dei download completati.
+clears information (temporary files) of completed downloads.
 @item M-q
-permette l'uscita da ZDL senza l'interruzione dei downloader, che continuano a registrare dati utili per un eventuale riavvio di ZDL: i download possono essere controllati attraverso le funzioni della @emph{modalità interattiva} ma, in caso di interruzioni, devono essere processati dalle modalità @emph{in standard output} oppure @emph{demone}.
+allows the exit from ZDL without interrupting the downloaders, which continue to record useful data for a possible restart of ZDL: downloads can be controlled through the functions of @emph {interactive mode} but, in the event of interruptions, they must be processed by @emph {in standard output} or @emph {demon} mode.
 @item M-k
-uccide tutti i processi avviati nella directory, senza cancellare i file temporanei.
+kills all processes started in the directory, without deleting temporary files.
 @end table
 
-@unnumberedsec Modalità interattiva (@option{-i, --interactive}).
-Permette il controllo manuale dei download (@ref{Controllare i download}) ed altre operazioni, descritte nella stessa interfaccia. @emph{Non processa i link} ed è solo un @emph{client}: per l'avvio dei download è necessario eseguire un'istanza @emph{server} di ZDL, come quelle @emph{in standard output} oppure @emph{demone}. Quest'ultima può essere avviata dalla stessa modalità interattiva.
-@*
-Questa modalità d'uso è quella che fornisce più informazioni sullo @emph{stato} dei download. La sua schermata è aggiornata automaticamente ogni 15 secondi o manualmente digitando un tasto qualsiasi.
+@unnumberedsec Interactive mode (@option {-i, --interactive}).
+Allows manual control of downloads (@ref {Check downloads}) and other operations, described in the same interface. @emph {It does not process links} and it is only a @emph {client}: to start the download it is necessary to run an instance @emph {server} of ZDL, like those @emph {in standard output} or @emph {demon}. The latter can be started from the same interactive mode.
+@ *
+This mode of use is the one that provides more information on the @emph {state} of downloads. Its screen is automatically updated every 15 seconds or manually by typing any key.
 
-@unnumberedsec Modalità demone (@option{-d, --daemon}).
+@unnumberedsec Daemon mode (@option {-d, --daemon}).
 Gestisce silenziosamente tutti i processi riferiti a una directory e può essere controllato manualmente attraverso la @emph{modalità interattiva}. È indipendente dal terminale in uso, che può essere chiuso senza conseguenze. È, in senso pieno, la modalità @emph{server} di ZDL: la modalità demone è sempre in attesa di nuovi link da processare e termina solo per intervento dell'utente, attraverso l'interfaccia interattiva. La modalità demone consuma meno risorse rispetto alle altre modalità.
 
 @htmlend
@@ -1119,7 +1118,7 @@ avvia ZDL in un terminale xterm oppure, se è stata selezionata
 
 ZDL può essere avviato da XXXTerm/Xombrero e da altri software attraverso
 lo script @file{/usr/local/bin/zdl-xterm}, che
-può essere avviato da qualunque applicazione e da un terminale. È
+può essere avviato da qualunque applicazione e da un terminale. IS
 stato pensato per rendere possibile l'avvio di ZDL in contesti diversi
 da quelli previsti dal programma. In particolare, XXXTerm può avviare
 uno script bash, utilizzando il comando @command{:run_script},

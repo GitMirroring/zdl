@@ -26,7 +26,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
 
 INFO-DIR-SECTION Network Applications
 START-INFO-DIR-ENTRY
-* ZigzagDownLoader: (zdl). Download manager per Wget, Axel, cURL e RTMPDump. Ha estensioni per servizi di file hosting e video streaming.
+* ZigzagDownLoader: (zdl). Download manager for Wget, Axel, cURL and RTMPDump. It has extensions for file hosting and video streaming services.
 END-INFO-DIR-ENTRY
 
 
@@ -35,87 +35,58 @@ File: zdl.info,  Node: Top,  Next: Il comando ZDL,  Up: (dir)
 ZigzagDownLoader (ZDL)
 **********************
 
-(versione inglese) _ZigzagDownLoader_ gestisce gli scaricamenti di
-alcuni downloader come _Aria2_, _Axel_, _Wget_, _RTMPDump_ o _cURL_.
-Inoltre, può estrarre l'URL dei file da scaricare da servizi di file
-hosting e video streaming, scaricare TORRENT e richiedere e ricevere
-file via IRC/XDCC, senza alcuna interazione via CHAT. Estende
-_Conkeror_, _XXXTerm/Xombrero_, _Firefox_ (attraverso l'estensione
-_Flashgot_) e _Microsoft Windows_ (tramite _Cygwin_). Tramite
-l'estensione _External Application Button_, ZDL può essere integrato in
-_Firefox_, _Chrome/Chromium_ e _Opera_. Il programma dispone, inoltre,
-di un server per generare socket TCP, diverse interfacce web e API, per
-il controllo remoto e in rete, e di una interfaccia grafica.
+_ZigzagDownLoader_ è un download manager:
+   - dotato di interfacce utente a linea di comando (_CLI_), per
+     terminale (_TUI_), grafiche (_GUI_) e per applicazioni internet e
+     web (_Web-UI_);
 
-Perché questo programma
-************************
+   - gestisce gli scaricamenti di alcuni downloader come _Aria2_,
+     _Axel_, _Wget_, _RTMPDump_ o _cURL_, utilizzandone le potenzialità
+     (per esempio, l'accelerazione dei download);
 
-ZigzagDownLoader è un gestore di download estensibile, robusto ed
-interamente controllabile con un terminale o, attraverso socket, con
-un'interfaccia web adatta anche al formato di uno smartphone
-(_-socket_, _-web-ui_). Può essere integrato ai più diffusi web browser
-(_Firefox_, _Chrome/Chromium_ e _Opera_) e al desktop, utilizzando
-l'estensione _External Application Button_ e una pratica interfaccia
-grafica (_-gui_ e _-path-gui_).  È nato come script specifico per la
-Bash e si è trasformato in un gestore per downloader come _Wget_,
-_Axel_ ed _Aria2_ (downloader predefinito), estendendosi a servizi di
-video streaming e file hosting e integrandosi con altre applicazioni.
-Oggi ZigzagDownLoader è anche un downloader per _IRC/XDCC_: l'intero
-processo di scaricamento e recupero è automatico e non richiede alcuna
-interazione via CHAT. Inoltre, grazie all'adozione di Aria2,
-ZigzagDownLoader gestisce anche i _TORRENT_.
+   - estrae l'URL dei file da scaricare da servizi di file hosting e
+     video streaming;
 
-   ZigzagDownLoader è molte cose: un _server/client TCP_ utile per un
-_NAS_, un _comando per il terminale_, un _downloader/download manager_
-alternativo e _intelligente_ per il browser, un'_applicazione grafica_
-per il desktop... tutto questo contemporaneamente e altro ancora.
+   - scarica i _TORRENT_;
 
-   Nonostante i suoi limiti strutturali, il linguaggio della _Bash_ si
-è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso
-nella gestione dei processi di altri programmi. Una progressiva
-efficienza è stata raggiunta attraverso lo sviluppo di script
-_monolitici_ nel linguaggio di _Awk_ (_Gawk_). Il software include,
-inoltre, interpreti di altri linguaggi (attualmente: _node.js_ e _php_,
-necessari al trattamento dei link di alcuni servizi), fornendo un
-supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per
-certi versi, un esempio complesso di _programmazione poliglotta_.
+   - richiede automaticamente e scarica file via _IRC/XDCC_, senza
+     alcuna interazione umana via chat;
 
-Almeno quattro direttrici di sviluppo
--------------------------------------
+   - scarica filmati _LIVE_ da alcune reti televisive
 
-L'esecuzione dei downloader può richiedere assistenza: la connessione
-può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i
-nomi dei file scaricati possono non essere intelligibili o coincidere
-con altri di file già salvati, ecc.  _In primo luogo_, ZigzagDownLoader
-serve ad automatizzare la gestione ed il recupero dei download o a
-semplificarne eventuali interventi manuali. ZDL è pensato, soprattutto,
-per il download _accelerato_ di grossi file e per il recupero del loro
-_URL_ a partire da informazioni disponibili nel web o fornite
-dall'utente.
+   - estende i browser web, come _Conkeror_, _XXXTerm/Xombrero_ e
+     _Firefox_;
 
-   _In secondo luogo_, la gestione automatica è estesa a servizi di
-file hosting, video streaming, torrent e irc/xdcc: ZDL si sostituisce
-all'utente nelle operazioni inutili e noiose, riducendole all'unico
-atto di avvio del programma.
+   - l'estensione _External Application Button_ integra ZDL in
+     _Firefox_ (anche _Flashgot_), _Chrome/Chromium_ e _Opera_;
 
-   _Un terzo obiettivo_ del progetto ZDL consiste nel fornire nuove
-articolazioni e modalità d'uso, allo scopo di costruire interazioni fra
-programmi e di rendere possibile un'automazione potenzialmente
-illimitata.  La gestione dei download può essere controllata da
-terminali distinti in modalità diverse. Per esempio, ZDL può essere
-avviato in modalità _demone_ e controllato in modalità _interattiva_.
-Anche l'avvio _predefinito_ del programma offre diversi modi di
-interazione e di output. ZDL, inoltre, può essere integrato e collegato
-con altri programmi.
+   - usando _Cygwin_, funziona anche in _Microsoft Windows_ (interfacce
+     CLI e TUI, anche da _Firefox_ + _Flashgot_ di Windows).
 
-   _Infine_, una peculiarità del progetto ZDL consiste nella ricerca di
-efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash
-ne rende possibile l'esecuzione su hardware di limitate capacità e su
-sistemi operativi differenti. Pensato per _GNU/Linux_, ZDL è
-interamente funzionante anche su _Windows_ tramite _Cygwin_ (NB:
-perdendo molto in termini di efficienza). È tecnicamente possibile
-estenderne l'uso su altri sistemi operativi che supportano la Bash (per
-esempio _MacOSX_).
+   Il server e le interfacce web, per il controllo remoto e in rete, ne
+fanno uno strumento utile per un _Network Attached Storage_ (_NAS_). Le
+interfacce sono _responsive_ e adatte a diversi dispositivi. In
+particolare, possono essere usate anche come telecomando per l'avvio di
+file multimediali già scaricati o in via di scaricamento, usando un
+browser web su dispositivi mobili.
+
+   Inoltre, le interfacce Web (_Web-UI_) e grafica (_GUI_) permettono
+la ricerca e la selezione, rapide e intuitive, dei _file via XDCC_,
+senza dover compiere alcuna operazione IRC/chat.  Tutte le interfacce
+permettono la programmazione delle registrazioni _live-tv_.
+
+   Ma ZDL è anche molto altro, perché può essere:
+   - combinato con altri programmi o inserito in uno script, come
+     strumento di lavoro
+
+   - esteso dall'utente, che può sviluppare nuove estensioni adatte ai
+     propri scopi
+
+   - un sistema poliglotta, utilizzando diversi interpreti (per PHP,
+     Javascript, Python, Perl, Awk...) e strumenti della Bash
+
+   ZigzagDownLoader è un programma "zigzag": non è solo un programma, è
+un laboratorio e un sistema aperto a nuove invenzioni.
 
 Software Libero
 ***************
@@ -143,6 +114,9 @@ Estensioni di ZDL e consigli pratici
 
 * Installazione e aggiornamento::
 Per GNU/Linux e Microsoft Windows/Cygwin
+
+* Perché questo programma::
+Il senso di una sperimentazione continua a ZIGZAG
 
 
 _Come si usa ZDL_
@@ -520,23 +494,24 @@ _Video in streaming saltando il player del browser:_
      (HD), Dailymotion, Deltabit (HD), Dplay (HD), Exashare, Facebook,
      Fastvideo, Flashx.tv, Flix555, IDoWatch, IlFattoQuotidiano, La7
      (HD), Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla),
-     NeverWasRadio, Nowvideo, Openload(s), Portalevideo.unimi.it,
-     Putstream, RaiPlay (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com
-     (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango,
-     Streamin, Supervideo (HD), Thevideo, TubeOffLine.com (tutti i
-     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
-     in streaming di tipo .mpd, Verystream, VidABC, Vidce, Videowood,
-     Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK
-     (HD), Woof, WStream (HD), Youtube, Zinwa (RTMP) 
+     NeverWasRadio, Nowvideo, Onlystream, Openload(s),
+     Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
+     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
+     Speedvideo (HD), Streamango, Streamin, Supervideo (HD), Thevideo,
+     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
+     tipo .m3u8, Tutti i video in streaming di tipo .mpd, Verystream,
+     VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto,
+     Vidtome, Vimeo (HD), VK (HD), Woof, WStream (HD), Youtube, Zinwa
+     (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, Cyberlocker, ddl.to, Deltabit (HD),
      dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg
      (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
-     Nowdownload, Openload(s), Ozofiles, Pastebin, Rockfile, Sockshare
-     (HD), Subyshare, Supervideo (HD), TubeOffLine.com (tutti i
-     servizi), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza,
-     WStream (HD) 
+     Nowdownload, Onlystream, Openload(s), Ozofiles, Pastebin,
+     Rockfile, Sockshare (HD), Subyshare, Supervideo (HD),
+     TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
+     Uppit, Uptobox, Vidoza, WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -568,14 +543,13 @@ Per i servizi di hosting seguenti è consigliato estendere il limite
 massimo di download (aggiungere l'opzione `-m' alle istruzioni sopra
 elencate, eventualmente indicando il massimo numero di download da
 effettuare in contemporanea) per procedere con il download in
-parallelo, eventualmente attraverso l'uso di proxy: Easybytez e
-Mediafire
+parallelo, eventualmente attraverso l'uso di proxy:
 
    Molti server non permettono il recupero di download interrotti e il
 download parallelo.  Per questi servizi ZDL usa Wget.
 
-   I servizi seguenti richiedono l'uso di RTMPDump (in sua mancanza, ma
-con limitazioni, di cURL): Zinwa, Vidhappy, Videopremium e Streamin.
+   Alcuni servizi richiedono l'uso di RTMPDump (in sua mancanza, ma con
+limitazioni, di cURL)
 
    Gli altri servizi sono abilitati in modo predefinito per Aria2.
 
@@ -600,8 +574,8 @@ a connettersi si consiglia di provare ad usare Axel o Wget.
 
 File: zdl.info,  Node: Avviare ZDL,  Next: Arrestare ZDL,  Prev: Servizi streaming/hosting,  Up: Top
 
-Modalità di avvio
-******************
+Modalità di avvio (CLI/TUI)
+****************************
 
 ZDL può essere avviato in diversi modi:
 
@@ -1208,7 +1182,7 @@ prompt di `:run_script' con il campo già occupato dal nome dello script
 `zdl-xterm': è sufficiente premere `invio'.
 
 
-File: zdl.info,  Node: Installazione e aggiornamento,  Next: Tags,  Prev: zdl-xterm e XXXTerm/Xombrero,  Up: Top
+File: zdl.info,  Node: Installazione e aggiornamento,  Next: Perché questo programma,  Prev: zdl-xterm e XXXTerm/Xombrero,  Up: Top
 
 Installazione e aggiornamento di ZDL
 ************************************
@@ -1295,7 +1269,80 @@ Disinstallare ZDL
 `http://download-mirror.savannah.gnu.org/releases/zdl/uninstall_zdl.sh'.
 
 
-File: zdl.info,  Node: Tags,  Next: Copying,  Prev: Installazione e aggiornamento,  Up: Top
+File: zdl.info,  Node: Perché questo programma,  Next: Tags,  Prev: Installazione e aggiornamento,  Up: Top
+
+Perché questo programma
+************************
+
+ZigzagDownLoader è un gestore di download estensibile, robusto ed
+interamente controllabile con un terminale o, attraverso socket, con
+un'interfaccia web adatta anche al formato di uno smartphone
+(_-socket_, _-web-ui_). Può essere integrato ai più diffusi web browser
+(_Firefox_, _Chrome/Chromium_ e _Opera_) e al desktop, utilizzando
+l'estensione _External Application Button_ e una pratica interfaccia
+grafica (_-gui_ e _-path-gui_).  È nato come script specifico per la
+Bash e si è trasformato in un gestore per downloader come _Wget_,
+_Axel_ ed _Aria2_ (downloader predefinito), estendendosi a servizi di
+video streaming e file hosting e integrandosi con altre applicazioni.
+Oggi ZigzagDownLoader è anche un downloader per _IRC/XDCC_: l'intero
+processo di scaricamento e recupero è automatico e non richiede alcuna
+interazione via CHAT. Inoltre, grazie all'adozione di Aria2,
+ZigzagDownLoader gestisce anche i _TORRENT_.
+
+   ZigzagDownLoader è molte cose: un _server/client TCP_ utile per un
+_NAS_, un _comando per il terminale_, un _downloader/download manager_
+alternativo e _intelligente_ per il browser, un'_applicazione grafica_
+per il desktop... tutto questo contemporaneamente e altro ancora.
+
+   Nonostante i suoi limiti strutturali, il linguaggio della _Bash_ si
+è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso
+nella gestione dei processi di altri programmi. Una progressiva
+efficienza è stata raggiunta attraverso lo sviluppo di script
+_monolitici_ nel linguaggio di _Awk_ (_Gawk_). Il software include,
+inoltre, interpreti di altri linguaggi (attualmente: _node.js_ e _php_,
+necessari al trattamento dei link di alcuni servizi), fornendo un
+supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per
+certi versi, un esempio complesso di _programmazione poliglotta_.
+
+Almeno quattro direttrici di sviluppo
+-------------------------------------
+
+L'esecuzione dei downloader può richiedere assistenza: la connessione
+può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i
+nomi dei file scaricati possono non essere intelligibili o coincidere
+con altri di file già salvati, ecc.  _In primo luogo_, ZigzagDownLoader
+serve ad automatizzare la gestione ed il recupero dei download o a
+semplificarne eventuali interventi manuali. ZDL è pensato, soprattutto,
+per il download _accelerato_ di grossi file e per il recupero del loro
+_URL_ a partire da informazioni disponibili nel web o fornite
+dall'utente.
+
+   _In secondo luogo_, la gestione automatica è estesa a servizi di
+file hosting, video streaming, torrent e irc/xdcc: ZDL si sostituisce
+all'utente nelle operazioni inutili e noiose, riducendole all'unico
+atto di avvio del programma.
+
+   _Un terzo obiettivo_ del progetto ZDL consiste nel fornire nuove
+articolazioni e modalità d'uso, allo scopo di costruire interazioni fra
+programmi e di rendere possibile un'automazione potenzialmente
+illimitata.  La gestione dei download può essere controllata da
+terminali distinti in modalità diverse. Per esempio, ZDL può essere
+avviato in modalità _demone_ e controllato in modalità _interattiva_.
+Anche l'avvio _predefinito_ del programma offre diversi modi di
+interazione e di output. ZDL, inoltre, può essere integrato e collegato
+con altri programmi.
+
+   _Infine_, una peculiarità del progetto ZDL consiste nella ricerca di
+efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash
+ne rende possibile l'esecuzione su hardware di limitate capacità e su
+sistemi operativi differenti. Pensato per _GNU/Linux_, ZDL è
+interamente funzionante anche su _Windows_ tramite _Cygwin_ (NB:
+perdendo molto in termini di efficienza). È tecnicamente possibile
+estenderne l'uso su altri sistemi operativi che supportano la Bash (per
+esempio _MacOSX_).
+
+
+File: zdl.info,  Node: Tags,  Next: Copying,  Prev: Perché questo programma,  Up: Top
 
 Tags/indici analitici
 *********************
@@ -1308,20 +1355,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 38)
+                                                               (line 39)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
-                                                               (line 24)
+                                                               (line 25)
 * file hosting:                          Servizi streaming/hosting.
-                                                               (line 24)
+                                                               (line 25)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 38)
+                                                               (line 39)
 * live:                                  Servizi streaming/hosting.
-                                                               (line 33)
+                                                               (line 34)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 42)
+                                                               (line 43)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1425,28 +1472,29 @@ _zdl-devel - Lista di sviluppo_:
 
 
 Tag Table:
-Node: Top1185
-Node: Il comando ZDL7508
-Node: Servizi streaming/hosting15851
-Node: Avviare ZDL20289
-Node: Arrestare ZDL22725
-Node: Controllare i download23830
-Node: Manuali d'uso28121
-Node: Modi28537
-Node: Readline31803
-Node: Editor33355
-Node: Omonimie34580
-Node: IRC/XDCC36115
-Node: Torrent37805
-Node: Filtri38689
-Node: Creare nuove estensioni39010
-Node: Software consigliati e dipendenze40785
-Node: Conkeror42238
-Node: zdl-xterm e XXXTerm/Xombrero43262
-Node: Installazione e aggiornamento45186
-Node: Tags48481
-Node: Copying52639
-Node: Contatti53689
+Node: Top1191
+Node: Il comando ZDL5187
+Node: Servizi streaming/hosting13530
+Node: Avviare ZDL17928
+Node: Arrestare ZDL20384
+Node: Controllare i download21489
+Node: Manuali d'uso25780
+Node: Modi26196
+Node: Readline29462
+Node: Editor31014
+Node: Omonimie32239
+Node: IRC/XDCC33774
+Node: Torrent35464
+Node: Filtri36348
+Node: Creare nuove estensioni36669
+Node: Software consigliati e dipendenze38444
+Node: Conkeror39897
+Node: zdl-xterm e XXXTerm/Xombrero40921
+Node: Installazione e aggiornamento42845
+Node: Perché questo programma46160
+Node: Tags50106
+Node: Copying54259
+Node: Contatti55309
 
 End Tag Table
 

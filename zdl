@@ -119,10 +119,10 @@ function update_updater {
 		    # tail -f "$gui_log" |
 		    # 	sed -r 's|^|#|' | tee -a test-log.txt |
 		    # 	yad --progress \
-		    # 	    --pulsate \
-		    # 	    --enable-log \
-		    # 	    --log-expanded \
-		    # 	    "${YAD_ZDL[@]}" &
+		        # 	    --pulsate \
+		        # 	    --enable-log \
+		        # 	    --log-expanded \
+		        # 	    "${YAD_ZDL[@]}" &
 		    display_console_gui pid_console_gui
 		    ;;
 		0)
@@ -202,8 +202,8 @@ function main_loop {
     clean_livestream
     
     if [ "$this_mode" == "daemon" ] &&
-	     [ ! -s "$path_tmp"/links_loop.txt ] &&
-	     [ -z "$lite_mode" ] 
+	   [ ! -s "$path_tmp"/links_loop.txt ] &&
+	   [ -z "$lite_mode" ] 
     then
     	start_file="$path_tmp"/links_loop.txt
 	post_process
@@ -217,7 +217,7 @@ function main_loop {
 	do
 	    test -f "$path_tmp"/max-dl &&
 		read max_dl < "$path_tmp"/max-dl
-    
+            
 	    [ -n "$max_dl" ] &&
 		((max_dl < 1)) &&
 		zero_dl 
@@ -374,8 +374,8 @@ function main_loop {
 
 		if [ -z "$file_in" ] || [ -z "$url_in_file" ]
 		then
-		 
-		## streaming downloader
+		    
+		    ## streaming downloader
 		    items=( $(ls "$path_tmp"/filename_* 2>/dev/null) )
 		    for item in ${items[*]}
 		    do
@@ -392,7 +392,7 @@ function main_loop {
 		    done
 		    
 
-		## universal downloader
+		    ## universal downloader
 		    if [ -z "$file_in" ] && ! url "$url_in_file"
 		    then
 			file_in="${url_in##*'/'}"
@@ -646,7 +646,7 @@ then
     done
     unset autoupdate
 fi    
-       
+
 if [ "${args[*]}" != "${args[*]//--update}" ] ||
        [ "${args[*]}" != "${args[*]//-u}" ]
 then
@@ -723,7 +723,7 @@ then
 	fi
     done
 fi
-    
+
 if [ "${args[*]}" != "${args[*]//--clean}" ]
 then
     for ((i=0; i<=$max_args; i++))
@@ -881,8 +881,8 @@ then
     do
 	if [ "${args[i]}" == "--stream" ]
 	then 
-	## zdl --stream [URL] [FNAME] [FOLDER] [CFILE] [COOKIE] [REFERER]
-	## zdl --stream [URL] [FNAME] --noXterm
+	    ## zdl --stream [URL] [FNAME] [FOLDER] [CFILE] [COOKIE] [REFERER]
+	    ## zdl --stream [URL] [FNAME] --noXterm
 	    unset args[i]
 	    if [ -z "$DISPLAY" ]
 	    then
@@ -1185,7 +1185,7 @@ if ! check_instance_prog &&
 then
     rm -f "$path_tmp"/reconnect "$path_tmp"/proxy*
 fi
-    
+
 
 
 
@@ -1380,7 +1380,7 @@ then
 	if [[ "${args[i]}" =~ ^'--'(aria2|axel|wget)$ ]]
 	then 
 	    unset args[i]
-	    	    
+	    
 	    set_downloader $(tr [:lower:] [:upper:] <<< ${BASH_REMATCH[1]:0:1})${BASH_REMATCH[1]:1}
 	fi
     done
@@ -1716,8 +1716,8 @@ then
 fi
 
 if check_instance_daemon &&
-    ( [ "$already_daemon" == true ] || [ "$this_mode" != daemon ] ) ||
-	check_instance_prog	    
+        ( [ "$already_daemon" == true ] || [ "$this_mode" != daemon ] ) ||
+	    check_instance_prog	    
 then
     redirect_links
 
@@ -1836,15 +1836,15 @@ then
 
     [ "$test_pid" == "$pid_prog" ] &&
 	! check_start_file &&
-	{
-	    print_header
-	    separator-
-	    print_c 1 "$(gettext "Download completed")" 
-	    separator-
-	    print_header
-	    
-	    rm -rf "$path_tmp"
-	}
+        {
+            print_header
+            separator-
+            print_c 1 "$(gettext "Download completed")" 
+            separator-
+            print_header
+            
+            rm -rf "$path_tmp"
+        }
 else
     kill_downloads
 fi

@@ -616,12 +616,12 @@ Per i servizi di hosting seguenti è consigliato estendere il limite massimo di 
 (aggiungere l'opzione @option{-m} alle istruzioni sopra elencate, 
 eventualmente indicando il massimo numero di download da effettuare in contemporanea)
 per procedere con il download in parallelo, eventualmente attraverso
-l'uso di proxy:
+l'uso di proxy: Easybytez e Mediafire
 
 Molti server non permettono il recupero di download interrotti e il download parallelo.
 Per questi servizi ZDL usa Wget.
 
-Alcuni servizi richiedono l'uso di RTMPDump (in sua mancanza, ma con limitazioni, di cURL)
+I servizi seguenti richiedono l'uso di RTMPDump (in sua mancanza, ma con limitazioni, di cURL): Zinwa, Vidhappy, Videopremium e Streamin.
 
 Gli altri servizi sono abilitati in modo predefinito per Aria2. 
 

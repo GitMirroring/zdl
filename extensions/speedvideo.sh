@@ -86,7 +86,7 @@ then
 	fi
 
 	get_location "$url_speedvideo" url_in_file
-	
+
 	if ! url "$url_in_file" 
 	then
 	    linkfile=$(grep 'base64_decode' <<< "$html"   |
