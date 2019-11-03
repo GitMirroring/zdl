@@ -44,11 +44,18 @@ then
     file_in="${file_in//\//-}"
     file_filter "$file_in"
     
-    url_in_file=$(grep -oP "[^\']+\.m3u8[^\']*" <<< "$html")
+    url_in_file=$(grep -oP "[^\']+\.m3u8[^\']*" <<< "$html" |
+                          head -n1 |
+                          grep -oP "[^\"]+\.m3u8[^\"]*")
+
 
     url "$url_in_file" ||
-	url_in_file=$(grep -oP "[^\"]+\.m3u8[^\"]*" <<< "$html")
+	url_in_file=$(grep -oP "[^\"]+\.m3u8[^\"]*" <<< "$html" |
+                          head -n1 |
+                          grep -oP "[^\"]+\.m3u8[^\"]*")
 
+    url_in_file="${url_in_file//index./index_1.}"
+    
     # link_parser "$url_in_file"
 
     # curl -v \
@@ -64,7 +71,8 @@ then
     # 	 -c "$path_tmp"/cookies.zdl \
     # 	 "$url_in_file" 2>&1 >OUT
 	 
-    if url "$url_in_file"
+    if url "$url_in_file" &&
+            [[ "$url_in_file" =~ csmil ]]
     then
 	url_in_file="https://vodpkg.iltrovatore.it/local/hls/,${url_in_file#*\,}"
 	url_in_file="${url_in_file//csmil/urlset}"
