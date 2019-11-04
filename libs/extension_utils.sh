@@ -1228,9 +1228,13 @@ function clean_livestream {
 }
 
 function check_linksloop_livestream {
+    local oIFS="$IFS"
+    
     if [ -s "$path_tmp"/links_loop.txt ]
     then
-	declare -a list=( $(cat "$path_tmp"/links_loop.txt) )
+	declare -a list=()
+        read -d '' -a list < "$path_tmp"/links_loop.txt
+        
 	local line start_time i gui_alive
 	
 	for line in "${list[@]}"
@@ -1281,6 +1285,31 @@ function check_linksloop_livestream {
 	    fi
 	done
     fi
+    IFS="$oIFS"
+}
+
+function check_linksloop_livestream_lite {
+    local oIFS="$IFS"
+    
+    if [ -s "$path_tmp"/links_loop.txt ]
+    then
+        declare -a list=()
+        read -d '' -a list < "$path_tmp"/links_loop.txt
+        
+        local line start_time i gui_alive
+        
+        for line in "${list[@]}"
+        do
+            if check_livestream "$line" &&
+                    [ -s "$path_tmp"/livestream_time.txt ] &&
+                    check_livestream_link_time "$line"  
+            then
+                get_livestream_start_time "$line" start_time
+                run_livestream_timer "$line" "$start_time"
+            fi
+        done
+    fi
+    IFS="$oIFS"
 }
 
 function check_livestream_twice {

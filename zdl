@@ -237,7 +237,11 @@ function main_loop {
 		fi
 	    done
 	    unset gui_instance_pid
-	    
+
+            if [ "$gui_alive" != true ]
+            then
+                check_linksloop_livestream_lite
+            fi
 	    show_downloads
 	    
 	    if check_in_loop
