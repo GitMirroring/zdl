@@ -38,18 +38,34 @@ then
 	# file_in=$(tail -n1 <<< "${raiplay_data_livestream}")
 
 	## estrazione funzionante:
-	html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)
-	url_raiplay=$(grep data-video-url <<< "$html" |
-			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
-	
-	url_in_file=$(get_location "$url_raiplay")
+	#html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)
+	#url_raiplay=$(grep data-video-url <<< "$html" |			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
 
+        raiplay_json=$(curl -s "${url_in%\#*}.json")
+        raiplay_url="${raiplay_json#*content_url\": \"}"
+        raiplay_url="${raiplay_url%%\"*}"
+
+        get_language_prog
+	url_in_file=$(get_location "$raiplay_url")
+        get_language
+        
+        if ! url "$url_in_file"
+        then
+            get_language_prog
+            url_in_file=$(wget -SO- "$raiplay_url" 2>&1 |
+                              grep ocation)
+            get_language
+        fi
 	get_livestream_start_time "$url_in" rai_start_time
 
 	get_livestream_duration_time "$url_in" rai_duration_time
 	rai_start_time="${rai_start_time//\:tomorrow}"
 	
-	file_in=$(get_title "$html")_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}
+	#file_in=$(get_title "$html")_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}
+        file_in="${raiplay_json#*\"name\":\"}"
+        file_in="${file_in%%\"*}"
+        sanitize_file_in
+        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}
 
 	if [ -n "$rai_duration_time" ]
 	then
@@ -61,81 +77,94 @@ then
 		    _log 43
 	fi
 	
-    else       
-	html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
+    else
+        raiplay_json=$(curl -s "${url_in//html/json}")
+        raiplay_url="${raiplay_json#*content_url\": \"}"
+        raiplay_url="${raiplay_url%%\"*}"
+        
+        if url "$raiplay_url"
+        then
+            raiplay_url=$(get_location "$raiplay_url")
+            url_in_file=$(curl -v "$raiplay_url" |tail -n1)
+        fi
 
-	raiplay_subtitle=$(grep vodJson <<< "$html")
-	raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
-	raiplay_subtitle="${raiplay_subtitle%%';</script>'*}"
+        file_in="${raiplay_json#*name\": \"}"
+        file_in="${file_in%%\"*}"
+        
+	# html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
 
-	#### non sicuro: serve una sandbox
-	## file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
+	# raiplay_subtitle=$(grep vodJson <<< "$html")
+	# raiplay_subtitle="${raiplay_subtitle#*'vodJson='}"
+	# raiplay_subtitle="${raiplay_subtitle%%';</script>'*}"
 
-	json_name="${raiplay_subtitle##*\"name\":\"}"
-	json_name=$(trim "${json_name%%\"*}")
-	json_subtitle="${raiplay_subtitle##*\"subtitle\":\"}"
-	json_subtitle=$(trim "${json_subtitle%%\"*}")
+	# #### non sicuro: serve una sandbox
+	# ## file_in=$(nodejs -e "var json = $raiplay_subtitle; console.log(json.name + ' - ' + json.subtitle);")
 
-	# if [ -n "$json_name" ]
+	# json_name="${raiplay_subtitle##*\"name\":\"}"
+	# json_name=$(trim "${json_name%%\"*}")
+	# json_subtitle="${raiplay_subtitle##*\"subtitle\":\"}"
+	# json_subtitle=$(trim "${json_subtitle%%\"*}")
+
+	# # if [ -n "$json_name" ]
+	# # then
+	# #     file_in="$json_name"
+
+	# #     if [ -n "$json_subtitle" ]
+	# #     then
+	# # 	file_in="$file_in - $json_subtitle"
+	# #     fi
+	    
+	# # else
+	# file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
+
+	# # fi
+	# #file_in="${file_in#Film\: }"
+
+	# url_raiplay=$(grep data-video-url <<< "$html" |
+	# 		  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
+
+	# if url "$url_raiplay"
 	# then
-	#     file_in="$json_name"
-
-	#     if [ -n "$json_subtitle" ]
+	#     url_raiplay_location=$(get_location "$url_raiplay")
+	#     if url "$url_raiplay_location"
 	#     then
-	# 	file_in="$file_in - $json_subtitle"
+	# 	url_raiplay="$url_raiplay_location"
+
+	#     elif [ -n "$ffmpeg" ]
+	#     then
+	# 	url_raiplay_mpd=$(curl "$url_raiplay")
+	# 	url_raiplay_mpd="${url_raiplay_mpd//\(/%28}"
+	# 	url_raiplay_mpd="${url_raiplay_mpd//\)/%29}"
+
+	# 	url "$url_raiplay_mpd" &&
+	# 	    print_c 4 "URL estratto: $url_raiplay_mpd"
+
+	# 	if url "$url_raiplay_mpd" && 
+	# 		[[ "$url_raiplay_mpd" =~ (\.mpd) ]] &&
+	# 		$ffmpeg -buildconf | grep libxml2 &>/dev/null
+	# 	then
+	# 	    url_in_file="$url_raiplay_mpd"
+
+	# 	else
+	# 	    _log 41
+	# 	fi
+
+	#     else
+	# 	_log 42
 	#     fi
-	    
 	# else
-	file_in=$(get_title "$html" | tr -d '\n' | tr -d '\r')
-
+	#     url_raiplay=$(grep contentUrl <<< "$html" |
+	# 		      sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
 	# fi
-	#file_in="${file_in#Film\: }"
-
-	url_raiplay=$(grep data-video-url <<< "$html" |
-			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
-
-	if url "$url_raiplay"
-	then
-	    url_raiplay_location=$(get_location "$url_raiplay")
-	    if url "$url_raiplay_location"
-	    then
-		url_raiplay="$url_raiplay_location"
-
-	    elif [ -n "$ffmpeg" ]
-	    then
-		url_raiplay_mpd=$(curl "$url_raiplay")
-		url_raiplay_mpd="${url_raiplay_mpd//\(/%28}"
-		url_raiplay_mpd="${url_raiplay_mpd//\)/%29}"
-
-		url "$url_raiplay_mpd" &&
-		    print_c 4 "URL estratto: $url_raiplay_mpd"
-
-		if url "$url_raiplay_mpd" && 
-			[[ "$url_raiplay_mpd" =~ (\.mpd) ]] &&
-			$ffmpeg -buildconf | grep libxml2 &>/dev/null
-		then
-		    url_in_file="$url_raiplay_mpd"
-
-		else
-		    _log 41
-		fi
-
-	    else
-		_log 42
-	    fi
-	else
-	    url_raiplay=$(grep contentUrl <<< "$html" |
-			      sed -r 's|.+contentUrl\"\:\"([^"]+)\".+|\1|g')
-	fi
-	if ! url "$url_in_file"
-	then
-    	    url_in_file=$(wget -qO- "$url_raiplay" \
-    			       --user-agent="$user_agent" \
-    			       --save-cookies="$path_tmp/cookies.zdl" \
-    			       -o /dev/null)
+	# if ! url "$url_in_file"
+	# then
+    	#     url_in_file=$(wget -qO- "$url_raiplay" \
+    	# 		       --user-agent="$user_agent" \
+    	# 		       --save-cookies="$path_tmp/cookies.zdl" \
+    	# 		       -o /dev/null)
 	    
-    	    url_in_file=$(tail -n1 <<< "$url_in_file")
-	fi	
+    	#     url_in_file=$(tail -n1 <<< "$url_in_file")
+	# fi	
     fi
         
     downwait_extra=20
