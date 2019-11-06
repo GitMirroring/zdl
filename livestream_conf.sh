@@ -39,6 +39,7 @@ live_streaming_chan=(
     "Rai Yoyo"
     "Rai Gulp"
     "Rai Storia"
+    "Rai Play"
 )
 
 live_streaming_url=(
@@ -56,4 +57,5 @@ live_streaming_url=(
     https://www.raiplay.it/dirette/raiyoyo
     https://www.raiplay.it/dirette/raigulp
     https://www.raiplay.it/dirette/raistoria
+    https://www.raiplay.it/dirette/raiplay
 )
