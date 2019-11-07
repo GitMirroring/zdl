@@ -32,129 +32,151 @@ if [[ "$url_in" =~ wstream\. ]]
 then
     if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
     then
-    	wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
-    	wstream_link="${wstream_link//\/video\//\/}"
-    	wstream_link="${wstream_link//https/http}"
-	
+        wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
+        wstream_link="${wstream_link//\/video\//\/}"
+        wstream_link="${wstream_link//https/http}"
+        
     elif [[ "$url_in" =~ download\.wstream ]]
     then
-	wstream_link="${url_in//\/\/download.wstream/\/\/video.wstream}"
-	wstream_link="$wstream_link"
+        wstream_link="${url_in//\/\/download.wstream/\/\/video.wstream}"
+        wstream_link="$wstream_link"
 
     else
-	wstream_link="$url_in"
+        wstream_link="$url_in"
     fi
 
     if url "$wstream_link"
     then
-	get_language
-	[ "$url_in" == "$wstream_link" ] ||
-	    print_c 4 "$(gettext "Redirection"): $url_in -> $wstream_link"
+        get_language
+        [ "$url_in" == "$wstream_link" ] ||
+            print_c 4 "$(gettext "Redirection"): $url_in -> $wstream_link"
 
-	get_language_prog
-	html=$(wget -qO- \
-		    -o /dev/null \
-		    --keep-session-cookies \
-		    --save-cookies="$path_tmp"/cookies.zdl \
-		    --user-agent="$user_agent" \
-		    "$wstream_link")
-	get_language
+        get_language_prog
+        html=$(wget -qO- \
+                    -o /dev/null \
+                    --keep-session-cookies \
+                    --save-cookies="$path_tmp"/cookies.zdl \
+                    --user-agent="$user_agent" \
+                    "$wstream_link")
+        get_language
 
-	input_hidden "$html"
+        input_hidden "$html"
 
-	if [[ "$html" =~ (forcecaptcha|form\ autocomplete\=\'off\') ]]
-	then
-	    if [[ "$html" =~ (form\ autocomplete\=\'off\') ]]
-	    then
-		if [[ "$html" =~ '>'([^>]+)'</span>' ]]
-		then
-		    post_data="forcecaptcha=${BASH_REMATCH[1]}"
-		else
-		    recaptcha_name=$(grep -P "form autocomplete='off'" -A1 <<< "$html" |
-				     tail -n1)
-		    recaptcha_value=$(sed -r "s|.+>\ *([^<\ ]+)\ *<.+|\1|g" <<< "$recaptcha_name")
-		    recaptcha_name=$(sed -r "s|.+name='([^']+)'.+|\1|g" <<< "$recaptcha_name")
-		    post_data="${recaptcha_name}=${recaptcha_value}"
-		fi
-	    fi
-	    html=$(wget -qO- \
-			-o /dev/null \
-			--post-data="$post_data" \
-			--keep-session-cookies \
-			--save-cookies="$path_tmp"/cookies.zdl \
-			--user-agent="$user_agent" \
-			"$wstream_link")	    
-	fi
+        if [[ "$html" =~ (forcecaptcha|form.*autocomplete\=\'off\') ]]
+        then
+            if [[ "$html" =~ (form.*autocomplete\=\'off\') ]]
+            then
+                if [[ "$html" =~ '>'([^>]+)'</span>' ]]
+                then
+                    post_data="forcecaptcha=${BASH_REMATCH[1]}"
 
-	##### per ora è solo client, quindi è commentato:
-	## countdown- 6
+                elif [[ "$html" =~ (imgdc\.php\?txt\=[0-9]+) ]]
+                then
+                    captcha_url="${BASH_REMATCH[1]}"
 
-	file_in=$(get_title "$html" |head -n1)
-	file_in="${file_in#Download Free }"
+                    wget https://video.wstream.video/"$captcha_url" \
+                         -O "$path_tmp"/wstream_captcha.png \
+                         -o /dev/null
+                    
+                    recaptcha_name=$(grep -P "input type='text'" <<< "$html")
+                    recaptcha_name=$(sed -r "s|.+name='([^']+)'.+|\1|g" <<< "$recaptcha_name")                   
+                    recaptcha_value=$(simple_captcha "$path_tmp"/wstream_captcha.png)
+                    print_c 4 "Captcha: $recaptcha_value"
 
-	file_filter "$file_in"
-	    
-	#### 
-	# for wstream_exp in downloadlink dwn
-	# do
-	#     wstream_req=$(grep -oP "$wstream_exp.php?[^\"]+" <<< "$html")
-	#     [ -n "$wstream_req" ] && break
-	# done
-	## sostituisce il codice commentato sopra:
-	wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/' |tail -n1)
-	
-	if [[ ! "$html" =~ (Siamo spiacenti ma come utente non premium puoi scaricare solamente 2 file ogni ora\.\<br\>\<br\>\<br\>\<h1\>\<a href\=\'https\:\/\/wstream\.video\/premium\.html\'\> Per favore diventa nostro supporter \<\/\a>\<\/h1\>) ]] &&
-	       [ -n "$wstream_req" ]
-	then
-	    for proto in http https
-	    do
-		#wstream_url_req="$proto://download.wstream.video/$wstream_req"
-		wstream_url_req="$proto://video.wstream.video/$wstream_req"
-		print_c 4 "$(gettext "Redirection"): $wstream_link -> $wstream_url_req"
-		get_language_prog
-		
-		html=$(curl -s \
-			    -b "$path_tmp"/cookies.zdl \
-			    -A "$user_agent" \
-			    -H "Referer: $wstream_link" \
-			    -H "TE: Trailers" \
-			    -H "X-Requested-With: XMLHttpRequest" \
-			    "$wstream_url_req")
-		get_language
+                else
+                    recaptcha_name=$(grep -P "form autocomplete='off'" -A1 <<< "$html" |
+                                     tail -n1)
+                    recaptcha_value=$(sed -r "s|.+>\ *([^<\ ]+)\ *<.+|\1|g" <<< "$recaptcha_name")
+                    recaptcha_name=$(sed -r "s|.+name='([^']+)'.+|\1|g" <<< "$recaptcha_name")
+                fi
+                post_data="${recaptcha_name}=${recaptcha_value}"
 
-		if [[ "$html" =~ (Server problem.. please contact our support) ]]
-		then
-		    _log 3
-		    break
+            fi
+            html=$(wget -qO- \
+                        -o /dev/null \
+                        --post-data="$post_data" \
+                        --keep-session-cookies \
+                        --save-cookies="$path_tmp"/cookies.zdl \
+                        --user-agent="$user_agent" \
+                        "$wstream_link")            
+        fi
 
-		else
-		    url_in_file=$(grep "class='bbkkff" <<< "$html")
-		    url_in_file="${url_in_file#*bbkkff}"
-		    url_in_file="${url_in_file#*href=\'}"
-		    url_in_file="${url_in_file%%\'*}"
+        ##### per ora è solo client, quindi è commentato:
+        countdown- 6
 
-		    url "$url_in_file" && break
-		fi
-	    done
-	else
-	    _log 44
-	    continue
-	fi
+        file_in=$(get_title "$html" |head -n1)
+        file_in="${file_in#Download Free }"
 
-	if url "$url_in_file" &&
-		test -z "$file_in"
-	then
-	    file_in="${url_in_file##*\/}"
-	fi
+        file_filter "$file_in"
+            
+        #### 
+        # for wstream_exp in downloadlink dwn
+        # do
+        #     wstream_req=$(grep -oP "$wstream_exp.php?[^\"]+" <<< "$html")
+        #     [ -n "$wstream_req" ] && break
+        # done
+        ## sostituisce il codice commentato sopra:
+        wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/' |tail -n1)
+        
+        if [[ ! "$html" =~ (Siamo spiacenti ma come utente non premium puoi scaricare solamente 2 file ogni ora\.\<br\>\<br\>\<br\>\<h1\>\<a href\=\'https\:\/\/wstream\.video\/premium\.html\'\> Per favore diventa nostro supporter \<\/\a>\<\/h1\>) ]] &&
+               [ -n "$wstream_req" ]
+        then
+            for proto in https http
+            do
+                #wstream_url_req="$proto://download.wstream.video/$wstream_req"
+                wstream_url_req="$proto://video.wstream.video/$wstream_req"
+                print_c 4 "$(gettext "Redirection"): $wstream_link -> $wstream_url_req"
+                get_language_prog
+                
+                __cfduid=$(tail -n1 "$path_tmp"/cookies.zdl | sed -r 's|.+\t(.+)$|\1|g')
 
-	check_wget || {
-	    # echo "Elite" >> "$path_tmp"/proxy
-	    # echo "Anonymous" >> "$path_tmp"/proxy
-	    print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
-	    print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
-	    
-	    set_temp_proxy
-	}
+                html=$(curl -v \
+                            -H 'Accept: */*' \
+                            -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3' \
+                            -H 'Cache-Control: no-cache' \
+                            -H 'Connection: keep-alive' \
+                            -H "Cookie: __cfduid=$__cfduid; dw=1" \
+                            -A "$user_agent" \
+                            -H 'Pragma: no-cache' \
+                            -H "Referer: $wstream_link" \
+                            -H "TE: Trailers" \
+                            -H "X-Requested-With: XMLHttpRequest" \
+                            "$wstream_url_req" 2>&1)
+                get_language
+
+                if [[ "$html" =~ (Server problem.. please contact our support) ]]
+                then
+                    _log 3
+                    break
+
+                else
+                    url_in_file=$(grep "class='bbkkff" <<< "$html")
+                    url_in_file="${url_in_file#*bbkkff}"
+                    url_in_file="${url_in_file#*href=\'}"
+                    url_in_file="${url_in_file%%\'*}"
+
+                    url "$url_in_file" && break
+                fi
+            done
+        else
+            _log 44
+            continue
+        fi
+
+        if url "$url_in_file" &&
+                test -z "$file_in"
+        then
+            file_in="${url_in_file##*\/}"
+        fi
+
+        check_wget || {
+            # echo "Elite" >> "$path_tmp"/proxy
+            # echo "Anonymous" >> "$path_tmp"/proxy
+            print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
+            print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
+            
+            set_temp_proxy
+        }
     fi
 
     end_extension
