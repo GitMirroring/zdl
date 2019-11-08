@@ -1,0 +1,264 @@
+ZigzagDownLoader (ZDL)
+
+Use (the order of the topics is not important):
+  zdl [OPTIONS] [FILE_1 FILE_2 ...] [LINK_1 LINK_2 ...] [DIR]
+
+         FILE_n                Names of the files from which to extract the LINKS.
+                               The files must be textual
+                               or DLC container or TORRENT file,
+                               the latter marked respectively
+                               from the extensions .dlc and .torrent
+                               ($PROG still processes the LINKS in memory
+                               in the DIR and those in input)
+
+         LINK_n                URL of files or web pages
+                               hosting, streaming services
+                               or redirection (if omitted,
+                               $PROG processes those in memory
+                               in the DIR and in the FILE).
+                               To download via IRC/XDCC, the link
+                               must have the following form (port
+                               not necessary if it is 6667):
+                                 irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]
+
+                               ZDL also accepts xWeasel links
+                               (with protocol xdcc://)
+
+         DIR                   $PROG startup directory
+                               and destination for downloads
+                               (if omitted, it is the current one)
+
+
+OPTIONS
+  Short options not followed by values can be contracted:
+  '-ufmd' is equivalent to '-u -f -m -d'
+
+
+  -h,  --help ZigzagDownLoader help ($PROG)
+
+       --list-extensions       List of extensions of $ PROG
+
+       --aria2                 Download with Aria2
+       --wget                  Download with Wget
+       --axel                  Download with Axel
+
+  -m [N], --max-downloads = [NUMBER]
+                               Maximum number of downloads to be made
+                               simultaneously:
+                                 0 = pause
+                                 >0 = parallel download limit
+                                 no number = no limit
+
+       --login                 Use any registered accounts for
+                               the enabled services (configure ${PROG})
+
+  -u,  --update                Update $PROG
+  -f,  --force                 Forces manual updating of $PROG
+
+       --clean                 Delete any temporary files from
+                               destination directory, before making
+                               the download
+
+  -i,  --interactive           Launch the interactive ZDL interface for
+                               the downloads targeting
+                               current directory. Managed downloads can
+                               be active or registered in temporary files
+                               of the directory
+
+  -d,  --daemon                Start ZDL in \"daemon\" mode (can be
+                               controlled through the interactive interface)
+
+  -l,  --lite                  Start ZDL in \"lite\" standard output mode
+                               (the \"standard output\" mode commands are valid)
+
+       --out=<PROG|FILE>       Returns the file names of
+                               completed downloads, in two alternative ways:
+                                 PROG: program that can open the file
+                                       downloaded
+                                 FILE: text file in which file names are registered
+                                       
+       --live                  Allows you to select channels for download
+                               live broadcast of some televisions in live stream
+
+       --mp3                   Convert files (even from video to audio)
+       --flac                  in MP3 or FLAC: depends on FFMpeg/AVConv
+
+       --ip                    Write the current IP address, before
+                               perform other operations
+
+       --reconnect             Forces the modem to reconnect on completion
+                               of each download, using
+                               a script/command/program (configure ${PROG})
+
+  -r,  --resume                Recover or download partially downloaded files.
+                               It acts in case of homonymy between files (read the manual).
+                               It can be configured as the default behavior.
+
+       --no-complete           Delete temporary files of completed downloads
+
+       --no-stop               Start without interruption: skip any automatic 
+                               update (which requires entry of the password) or
+                               request to enter new links. Keyboard input
+                               is still available
+
+
+Graphical user interface (GUI):
+  -g,  --gui                   Start the graphical interface in the current directory or
+                               in that eventually inserted between the arguments,
+                               automatically activating 'zdl --daemon' as a core
+                               if you have not yet activated zdl
+
+       --path-gui              Before starting zdl, opens a selection window
+                               of the destination directory, if it is not indicated
+                               between the command arguments (useful if 'zdl --gui'
+                               is started from a desktop icon or extension
+                               web browser, such as 'External Application Button')
+
+
+Sockets and user interfaces:
+  -s [port], --socket[=port]
+                               Start the program by connecting it to a socket.
+                               If not indicated, the port is the default one.
+
+  --web-ui
+                               Web user interface. Start:
+                               - the program in daemon mode in the current directory or,
+                                 eventually, in the one inserted as an argument,
+
+                               - a socket at the default port or, if used
+                                 by another application, to the first free port
+
+                               - the default browser at the user interface address.
+
+
+IRC / XDCC:
+  -x,  --xdcc                  Start the interactive insertion of three data:
+                               1) the host of the IRC server (HOST)
+                               2) the channel to connect to (CHAN)
+                               3) the private message (PRIVMSG) that contains
+                                  the XDCC SEND command
+
+                               Download via IRC/XDCC can be done,
+                               alternatively and without using options, by entering the
+                               information in the link, which must have the
+                               following form (port not necessary if it is 6667):
+                                  irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]
+
+
+Torrent (Aria2):
+  -T <FILE>, --torrent-file=<FILE>      Torrent files for Aria2:
+                                        may not have a '.torrent' extension
+
+       --tcp-port=<NUM>        Open TCP and UDP ports:
+       --udp-port=<NUM>        check the router settings
+
+
+filters:
+       --scrape-url=<URL>      Extract URLs/links from the indicated web page 
+                               and add them to the registered list
+
+       --scrape-url            Extracts the URLs (links) from the indicated web pages
+                               as LINK
+
+       --url=<REGEX>           Process only the URLs (links) that match
+                               to REGEX
+
+       --no-url=<REGEX>        Does not process the URLs (links) that match
+                               to REGEX
+
+       --file=<REGEX>          Download only files whose name corresponds to the REGEX
+
+       --no-file=<REGEX>       It does not download the files whose name corresponds to the REGEX
+
+       --no-rev                Do not download files with '.rev' extension
+
+       --no-sub                Does not download files whose name contains strings
+                               'Sub' or 'sub' (for subtitled video files)
+
+
+Link editor (can be used at any time with Meta-e):
+replaces the initial interface for entering links
+
+  -e,  --editor                Editor default (can be configured with 'zdl -c')
+
+       --emacs, --emacs-nw     Emacs and its '-nw' version (without graphics)
+       --jed                   small GNU Emacs style editor
+       --jupp                  Jupp
+       --mcedit                Midnight Commander Editor
+       --mg                    micro editor in GNU Emacs style
+       --nano                  Nano
+       --vi, --vim             Vi and Vim
+       --zile                  micro editor in GNU Emacs style
+
+
+Start with proxy:
+       --proxy                 Start ZDL by activating a proxy
+                               automatically (the type of default proxy
+                               is Transparent)
+
+       --proxy=<t|a|e>         Start ZDL by activating a type proxy
+                               user defined:
+                                 t = Transparent
+                                 a = Anonymous
+                                 e = Elite
+
+       --proxy=<IP:PORT>       Start ZDL by activating the indicated proxy
+                               to the user, for the entire duration of the
+                               download (the proxy is automatically replaced
+                               only for links to enabled services that need
+                               a new IP address)
+
+
+Configuration:
+  -c,  --configure             ZDL configuration interface,
+                               also allows you to save any
+                               hosting services account
+
+
+To download the stream by embedding ${PROG} in new scripts,
+the generic model of the parameters for the additional components (comply with the order):
+       --stream [PARAMETERS] [--noXterm]
+
+
+SERVICES
+______ Streaming video skipping the browser player:
+$streaming
+
+______ File hosting:
+$hosting
+
+______ Live stream:
+$livestream
+
+______ Links generated by the web (even after captcha):
+$generated
+
+______ Short links:
+$shortlinks
+
+______ All files downloadable with the following programs:
+$programs
+
+______ All files downloadable with the following browser extensions:
+'Flashgot' and 'External Application Button' for Firefox/Iceweasel/Icecat/Chrome/Chromium,
+Conkeror 'M-x zdl' function and script 'zdl-xterm' (XXXTerm/Xombrero and others)
+
+
+DOCUMENTATION
+  - hypertext in info format, available with: 'info zdl'
+  - hypertext in html format: http://nongnu.org/zdl
+  - Unix-style manual page: 'man zdl'
+
+
+COPYING
+  ZDL is released under the GPL license (General Public License, v.3 and above).
+
+
+For information and to collaborate on the project:
+  - http://nongnu.org/zdl
+  - https://savannah.nongnu.org/projects/zdl
+  - https://joindiaspora.com/tags/zdl
+
+Gianluca Zoni (zoninoz)
+http://inventati.org/zoninoz
+
