@@ -792,7 +792,7 @@ quando ho finito di registrare i link, torno al terminale e, senza
 ZDL processa i @emph{link} registrati, generando per ciascuno un file temporaneo da cui può estrarre informazioni sul file da scaricare e sul download in corso, intattivo o completato. Grazie a tali informazioni, è possibile il controllo dei processi di download, sia automaticamente da parte di ZDL, sia manualmente da parte dell'utente.
 
 I download di ZDL possono essere controllati manualmente attraverso la modalità interattiva, che può essere attivata da quella standard digitando @kbd{M-i} (tasti @kbd{<Alt>+<i>}) o da un qualsiasi terminale @emph{Bash} dalla stessa directory di download, utilizzando l'opzione @option{-i|--interactive}. Se non è attiva alcuna istanza di avvio e gestione automatica dei download, dall'interfaccia interattiva è possibile avviare la modalità @emph{demone}, che agisce in background come @emph{server} ed è indipendente dal terminale di avvio. Per gestire i download e la stessa chiusura di ZDL in modalità demone, è comunque necessario utilizzare l'interfaccia interattiva, che ha funzione di @emph{client}.@*
-I comandi sono elencati nella stessa interfaccia interattiva: è possibile modificare il numero massimo di download (da 1 a 9, digitando i tasti dei numeri, o illimitati, digitando il tasto @kbd{m}), il tipo di downloader da utilizzare (Axel o Wget, digitando @emph{a} o @emph{w}), avviare l'editor predefinito per modificare l'elenco dei link da processare (tasto @emph{e}), selezionare con @emph{s} i download in gestione per @emph{riavviarli} (ZDL interrompe il download in corso e processa quello successivo fino al termine della lista registrata, poi ricomincia dal primo e così via), @emph{terminarli} in modo definitivo senza cancellare i file finora scaricati o @emph{eliminarli} completamente. Per queste ultime tre operazioni è possibile selezionare più download alla volta, indicandone i numeri identificativi separandoli con spazi.
+I comandi sono elencati nella stessa interfaccia interattiva: è possibile modificare il numero massimo di download (da @kbd{1} a @kbd{9}, digitando i tasti dei numeri, o illimitati, digitando il tasto @kbd{m} o in pausa digitando @kbd{0}), il tipo di downloader da utilizzare (Axel o Wget, digitando @emph{a} o @emph{w} o @emph{A}), avviare l'editor predefinito per modificare l'elenco dei link da processare (tasto @emph{e}), selezionare con @emph{s} i download in gestione per @emph{riavviarli} (ZDL interrompe il download in corso e processa quello successivo fino al termine della lista registrata, poi ricomincia dal primo e così via) o @emph{eliminarli} completamente. Per queste ultime tre operazioni è possibile selezionare più download alla volta, indicandone i numeri identificativi separandoli con spazi.
 
 @unnumberedsubsec Controllo manuale dei download ancora da processare.
 In mancanza dei file temporanei relativi a @emph{link} non ancora processati, è possibile intervenire manualmente utilizzando un @emph{editor} (@ref{Editor}).
@@ -835,7 +835,7 @@ avvia l'editor predefinito (@ref{Editor}). Come per il comando precedente, le at
 @item M-c
 cancella le informazioni (file temporanei) dei download completati.
 @item M-q
-permette l'uscita da ZDL senza l'interruzione dei downloader, che continuano a registrare dati utili per un eventuale riavvio di ZDL: i download possono essere controllati attraverso le funzioni della @emph{modalità interattiva} ma, in caso di interruzioni, devono essere processati dalle modalità @emph{in standard output} oppure @emph{demone}.
+permette l'uscita da ZDL senza l'interruzione dei downloader, che continuano a registrare dati utili per un eventuale riavvio di ZDL: i download possono essere controllati attraverso le funzioni della @emph{modalità interattiva} ma, in caso di interruzioni, devono essere processati dalle modalità @emph{standard output} oppure @emph{demone} oppure tramite @emph{GUI} o @emph{WebUI}.
 @item M-k
 uccide tutti i processi avviati nella directory, senza cancellare i file temporanei.
 @end table
@@ -846,7 +846,7 @@ Permette il controllo manuale dei download (@ref{Controllare i download}) ed alt
 Questa modalità d'uso è quella che fornisce più informazioni sullo @emph{stato} dei download. La sua schermata è aggiornata automaticamente ogni 15 secondi o manualmente digitando un tasto qualsiasi.
 
 @unnumberedsec Modalità demone (@option{-d, --daemon}).
-Gestisce silenziosamente tutti i processi riferiti a una directory e può essere controllato manualmente attraverso la @emph{modalità interattiva}. È indipendente dal terminale in uso, che può essere chiuso senza conseguenze. È, in senso pieno, la modalità @emph{server} di ZDL: la modalità demone è sempre in attesa di nuovi link da processare e termina solo per intervento dell'utente, attraverso l'interfaccia interattiva. La modalità demone consuma meno risorse rispetto alle altre modalità.
+Gestisce silenziosamente tutti i processi riferiti a una directory e può essere controllato manualmente attraverso la @emph{modalità interattiva}. È indipendente dal terminale in uso, che può essere chiuso senza conseguenze. È, in senso pieno, la modalità @emph{server} di ZDL: la modalità demone è sempre in attesa di nuovi link da processare e termina solo per intervento dell'utente, attraverso un'interfaccia interattiva. La modalità demone consuma meno risorse rispetto alle altre modalità.
 
 @htmlend
 
@@ -889,7 +889,7 @@ Nel caso in cui, in presenza di file omonimi, non esistono file temporanei dei l
 @item @emph{predefinito}
 non sovrascrive il file omonimo, ma rinomina il nuovo file nel modo seguente: inserisce, fra il nome e l'estensione, una stringa composta da @code{__BIS__} e da un segmento dell'URL del link, opportunamente abbreviato e ricodificato. La stringa aggiuntiva aumenta la probabilità che non si ripeta un problema di omonimia, anche in mancanza dei file temporanei di processi di download precedenti. In ogni caso, la coda di download cancella automaticamente eventuali ripetizioni dello stesso link.
 @item @option{-r|--resume}
-l'uso di questa opzione comporta la sovrascrittura del file omonimo. In mancanza di file temporanei riferiti al link da processare, anche il download con Axel sovrascrive comunque il file dall'inizio. Questa opzione può essere configurata come comportamento predefinito (@command{zdl [-c|--configure]}).
+l'uso di questa opzione comporta la sovrascrittura del file omonimo. In mancanza di file temporanei riferiti al link da processare, anche il download con Axel o Aria2 sovrascrive comunque il file dall'inizio. Questa opzione può essere configurata come comportamento predefinito (@command{zdl [-c|--configure]}).
 @end table
 @*@*
 
@@ -920,7 +920,7 @@ il messaggio privato (@emph{PRIVMSG}) che contiene il comando @command{XDCC SEND
 Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare opzioni, inserendo le informazioni direttamente nel link, che deve avere la forma qui sopra
 
 @item @code{xdcc://...LINK DI XWEASEL...}
-ZigzagDownLoader converte automaticamente e utilizza i link di xWeasel, che comprendono tutte le informazioni necessarie. Gli utenti che fanno uso di Firefox/Iceweasel/Icecat, attraverso questi link, possono scaricare i file direttamente dalle pagine web con un click del mouse, grazie all'estensione Flashgot, adattata anche per ZDL. Altri browser possono scaricare i file con la stessa immediatezza utilizzando altre funzioni (in altre sezioni: @ref{Conkeror}, @ref{zdl-xterm e XXXTerm/Xombrero})
+ZigzagDownLoader converte automaticamente e utilizza i link di xWeasel, che comprendono tutte le informazioni necessarie. Gli utenti che fanno uso di Firefox/Iceweasel/Icecat/Chrome/Chromium, attraverso questi link, possono scaricare i file direttamente dalle pagine web con un click del mouse, grazie alle estensioni, adattata anche per ZDL. Altri browser possono scaricare i file con la stessa immediatezza utilizzando altre funzioni (in altre sezioni: @ref{Conkeror}, @ref{zdl-xterm e XXXTerm/Xombrero})
 
 @end table
 @htmlend
@@ -1054,6 +1054,14 @@ Almeno un editor qualsiasi (qui solo alcuni suggerimenti) per poter modificare i
 @pindex icecat
 @item Firefox/Iceweasel/Icecat
 Attraverso l'estensione @emph{Flashgot}
+
+@pindex firefox
+@pindex iceweasel
+@pindex icecat
+@pindex chrome
+@pindex chromium
+@item Firefox/Iceweasel/Icecat/Chrome/Chromium
+Attraverso l'estensione @emph{External Application Button}
 
 @pindex xxxterm
 @pindex xombrero
@@ -1280,7 +1288,7 @@ L'esecuzione dei downloader può richiedere assistenza: la connessione può inte
 @emph{Un terzo obiettivo} del progetto ZDL consiste nel fornire nuove articolazioni e modalità d'uso, allo scopo di costruire interazioni fra programmi e di rendere possibile un'automazione potenzialmente illimitata. 
 La gestione dei download può essere controllata da terminali distinti in modalità diverse. Per esempio, ZDL può essere avviato in modalità @emph{demone} e controllato in modalità @emph{interattiva}. Anche l'avvio @emph{predefinito} del programma offre diversi modi di interazione e di output. ZDL, inoltre, può essere integrato e collegato con altri programmi. 
 
-@emph{Infine}, una peculiarità del progetto ZDL consiste nella ricerca di efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash ne rende possibile l'esecuzione su hardware di limitate capacità e su sistemi operativi differenti. Pensato per @emph{GNU/Linux}, ZDL è interamente funzionante anche su @emph{Windows} tramite @emph{Cygwin} (NB: perdendo molto in termini di efficienza). È tecnicamente possibile estenderne l'uso su altri sistemi operativi che supportano la Bash (per esempio @emph{MacOSX}).
+@emph{Infine}, una peculiarità del progetto ZDL consiste nella ricerca di efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash ne rende possibile l'esecuzione su hardware di limitate capacità e su sistemi operativi differenti. Pensato per @emph{GNU/Linux}, ZDL è funzionante anche su @emph{Windows} tramite @emph{Cygwin}. È tecnicamente possibile estenderne l'uso su altri sistemi operativi che supportano la Bash (per esempio @emph{MacOSX}).
 
 @htmlend
 

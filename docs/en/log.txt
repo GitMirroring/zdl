@@ -1,0 +1,7 @@
+/home/zoninoz/zdl-git/code/docs/en//zdl.texi:573: Prev field of node `Streaming/hosting services' not pointed to.
+/home/zoninoz/zdl-git/code/docs/en//zdl.texi:281: This node (The ZDL command) has the bad Next.
+/home/zoninoz/zdl-git/code/docs/en//zdl.texi:281: Next reference to nonexistent node `Streaming / hosting services' (perhaps incorrect sectioning?).
+/home/zoninoz/zdl-git/code/docs/en//zdl.texi:203: Node `Top' lacks menu item for `The ZDL command' despite being its Up target.
+/home/zoninoz/zdl-git/code/docs/en//zdl.texi:842: Cross reference to nonexistent node `Check downloads' (perhaps incorrect sectioning?).
+/home/zoninoz/zdl-git/code/docs/en//zdl.texi:269: Menu reference to nonexistent node `The ZDL' (perhaps incorrect sectioning?).
+makeinfo: Removing output file `/home/zoninoz/zdl-git/code/docs/en/zdl.info' due to errors; use --force to preserve.

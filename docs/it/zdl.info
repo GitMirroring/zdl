@@ -516,7 +516,7 @@ _File hosting:_
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
      Rai Sport+ HD, Rai Movie, Rai Premium, Rai Yoyo, Rai Gulp, Rai
-     Storia 
+     Storia, Rai Play 
 
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
@@ -724,17 +724,17 @@ avviare la modalità _demone_, che agisce in background come _server_ ed
 stessa chiusura di ZDL in modalità demone, è comunque necessario
 utilizzare l'interfaccia interattiva, che ha funzione di _client_.
 I comandi sono elencati nella stessa interfaccia interattiva: è
-possibile modificare il numero massimo di download (da 1 a 9, digitando
-i tasti dei numeri, o illimitati, digitando il tasto `m'), il tipo di
-downloader da utilizzare (Axel o Wget, digitando _a_ o _w_), avviare
-l'editor predefinito per modificare l'elenco dei link da processare
-(tasto _e_), selezionare con _s_ i download in gestione per
-_riavviarli_ (ZDL interrompe il download in corso e processa quello
-successivo fino al termine della lista registrata, poi ricomincia dal
-primo e così via), _terminarli_ in modo definitivo senza cancellare i
-file finora scaricati o _eliminarli_ completamente. Per queste ultime
-tre operazioni è possibile selezionare più download alla volta,
-indicandone i numeri identificativi separandoli con spazi.
+possibile modificare il numero massimo di download (da `1' a `9',
+digitando i tasti dei numeri, o illimitati, digitando il tasto `m' o in
+pausa digitando `0'), il tipo di downloader da utilizzare (Axel o Wget,
+digitando _a_ o _w_ o _A_), avviare l'editor predefinito per modificare
+l'elenco dei link da processare (tasto _e_), selezionare con _s_ i
+download in gestione per _riavviarli_ (ZDL interrompe il download in
+corso e processa quello successivo fino al termine della lista
+registrata, poi ricomincia dal primo e così via) o _eliminarli_
+completamente. Per queste ultime tre operazioni è possibile selezionare
+più download alla volta, indicandone i numeri identificativi
+separandoli con spazi.
 
 Controllo manuale dei download ancora da processare.
 ----------------------------------------------------
@@ -800,8 +800,8 @@ accettano i seguenti comandi, espressi in combinazioni di tasti:
      continuano a registrare dati utili per un eventuale riavvio di
      ZDL: i download possono essere controllati attraverso le funzioni
      della _modalità interattiva_ ma, in caso di interruzioni, devono
-     essere processati dalle modalità _in standard output_ oppure
-     _demone_.
+     essere processati dalle modalità _standard output_ oppure _demone_
+     oppure tramite _GUI_ o _WebUI_.
 
 `M-k'
      uccide tutti i processi avviati nella directory, senza cancellare
@@ -828,7 +828,7 @@ può essere controllato manualmente attraverso la _modalità
 interattiva_. È indipendente dal terminale in uso, che può essere
 chiuso senza conseguenze. È, in senso pieno, la modalità _server_ di
 ZDL: la modalità demone è sempre in attesa di nuovi link da processare
-e termina solo per intervento dell'utente, attraverso l'interfaccia
+e termina solo per intervento dell'utente, attraverso un'interfaccia
 interattiva. La modalità demone consuma meno risorse rispetto alle
 altre modalità.
 
@@ -913,9 +913,10 @@ alternativi:
 ``-r|--resume''
      l'uso di questa opzione comporta la sovrascrittura del file
      omonimo. In mancanza di file temporanei riferiti al link da
-     processare, anche il download con Axel sovrascrive comunque il
-     file dall'inizio. Questa opzione può essere configurata come
-     comportamento predefinito (`zdl [-c|--configure]').
+     processare, anche il download con Axel o Aria2 sovrascrive
+     comunque il file dall'inizio. Questa opzione può essere
+     configurata come comportamento predefinito (`zdl
+     [-c|--configure]').
 
 
 File: zdl.info,  Node: IRC/XDCC,  Next: Torrent,  Prev: Omonimie,  Up: Top
@@ -951,9 +952,9 @@ xdcc) può avvenire in diversi modi:
 ``xdcc://...LINK DI XWEASEL...''
      ZigzagDownLoader converte automaticamente e utilizza i link di
      xWeasel, che comprendono tutte le informazioni necessarie. Gli
-     utenti che fanno uso di Firefox/Iceweasel/Icecat, attraverso
-     questi link, possono scaricare i file direttamente dalle pagine
-     web con un click del mouse, grazie all'estensione Flashgot,
+     utenti che fanno uso di Firefox/Iceweasel/Icecat/Chrome/Chromium,
+     attraverso questi link, possono scaricare i file direttamente
+     dalle pagine web con un click del mouse, grazie alle estensioni,
      adattata anche per ZDL. Altri browser possono scaricare i file con
      la stessa immediatezza utilizzando altre funzioni (in altre
      sezioni: *note Conkeror::, *note zdl-xterm e XXXTerm/Xombrero::)
@@ -1082,6 +1083,9 @@ ZDL estende:
 
 _Firefox/Iceweasel/Icecat_
      Attraverso l'estensione _Flashgot_
+
+_Firefox/Iceweasel/Icecat/Chrome/Chromium_
+     Attraverso l'estensione _External Application Button_
 
 _XXXTerm/Xombrero_
      Script `zdl-xterm' in `/usr/local/bin'
@@ -1337,10 +1341,9 @@ con altri programmi.
 efficienza e portabilità: l'impiego degli strumenti forniti dalla Bash
 ne rende possibile l'esecuzione su hardware di limitate capacità e su
 sistemi operativi differenti. Pensato per _GNU/Linux_, ZDL è
-interamente funzionante anche su _Windows_ tramite _Cygwin_ (NB:
-perdendo molto in termini di efficienza). È tecnicamente possibile
-estenderne l'uso su altri sistemi operativi che supportano la Bash (per
-esempio _MacOSX_).
+funzionante anche su _Windows_ tramite _Cygwin_. È tecnicamente
+possibile estenderne l'uso su altri sistemi operativi che supportano la
+Bash (per esempio _MacOSX_).
 
 
 File: zdl.info,  Node: Tags,  Next: Copying,  Prev: Perché questo programma,  Up: Top
@@ -1388,8 +1391,12 @@ Indice dei programmi
                                                                (line 12)
 * axel:                                  Software consigliati e dipendenze.
                                                                (line  9)
+* chrome:                                Software consigliati e dipendenze.
+                                                               (line 49)
+* chromium:                              Software consigliati e dipendenze.
+                                                               (line 49)
 * conkeror:                              Software consigliati e dipendenze.
-                                                               (line 52)
+                                                               (line 55)
 * editor:                                Software consigliati e dipendenze.
                                                                (line 31)
 * ffmpeg:                                Software consigliati e dipendenze.
@@ -1407,11 +1414,11 @@ Indice dei programmi
 * rtmpdump:                              Software consigliati e dipendenze.
                                                                (line 15)
 * xombrero:                              Software consigliati e dipendenze.
-                                                               (line 49)
+                                                               (line 52)
 * xterm:                                 Software consigliati e dipendenze.
                                                                (line 18)
 * xxxterm:                               Software consigliati e dipendenze.
-                                                               (line 49)
+                                                               (line 52)
 * youtube-dl:                            Software consigliati e dipendenze.
                                                                (line 24)
 
@@ -1476,26 +1483,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5181
 Node: Servizi streaming/hosting13524
-Node: Avviare ZDL17991
-Node: Arrestare ZDL20447
-Node: Controllare i download21552
-Node: Manuali d'uso25843
-Node: Modi26259
+Node: Avviare ZDL18001
+Node: Arrestare ZDL20457
+Node: Controllare i download21562
+Node: Manuali d'uso25814
+Node: Modi26230
 Node: Readline29525
 Node: Editor31077
 Node: Omonimie32302
-Node: IRC/XDCC33837
-Node: Torrent35527
-Node: Filtri36411
-Node: Creare nuove estensioni36732
-Node: Software consigliati e dipendenze38507
-Node: Conkeror39960
-Node: zdl-xterm e XXXTerm/Xombrero40984
-Node: Installazione e aggiornamento42908
-Node: Perché questo programma46223
-Node: Tags50169
-Node: Copying54322
-Node: Contatti55372
+Node: IRC/XDCC33850
+Node: Torrent35548
+Node: Filtri36432
+Node: Creare nuove estensioni36753
+Node: Software consigliati e dipendenze38528
+Node: Conkeror40084
+Node: zdl-xterm e XXXTerm/Xombrero41108
+Node: Installazione e aggiornamento43032
+Node: Perché questo programma46347
+Node: Tags50235
+Node: Copying54686
+Node: Contatti55736
 
 End Tag Table
 
