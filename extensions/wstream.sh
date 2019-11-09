@@ -30,6 +30,19 @@
 
 if [[ "$url_in" =~ wstream\. ]] 
 then
+    if [[ "$url_in" =~ fastredirect ]]
+    then
+        location=$(curl -v "$url_in" 2>&1 |grep ocation|awk '(NR == 2){print $3}')
+        location=$(trim "$location")
+        url "$location" &&
+            replace_url_in "$location"
+        html=$(wget -SO- "$url_in" -o /dev/null)
+        input_hidden "$html"
+        post_data="${post_data##*=}"
+
+        replace_url_in="https://video.wstream.video/$post_data"
+    fi
+    
     if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
     then
         wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
