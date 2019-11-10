@@ -40,9 +40,14 @@ then
         input_hidden "$html"
         post_data="${post_data##*=}"
 
-        replace_url_in="https://video.wstream.video/$post_data"
+        replace_url_in "https://video.wstream.video/$post_data"
     fi
-    
+
+    if [[ "$url_in" =~ file_code ]]
+    then
+        replace_url_in "${url_in//'video.php?file_code='}"
+    fi
+       
     if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
     then
         wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"

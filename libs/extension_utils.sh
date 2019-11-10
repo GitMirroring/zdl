@@ -1360,3 +1360,23 @@ function tag_link { ## 1=link 2=name_variable_to_assign_link
         echo "${url}#$tag"
     fi
 }
+
+function open_relink {
+
+    if [ -d "$path_usr/extensions/" ]
+    then
+	shopt -s nullglob		    
+	for srcfile in "$path_usr"/extensions/[0-9]*.sh
+	do
+	    if [ -f "$srcfile" ]
+	    then
+		source "$srcfile"
+                #echo "$url_in" >/dev/tty1
+	    fi
+	done
+    	shopt -u nullglob
+    fi
+
+    #echo "url: $url_in"
+    $browser "$url_in"
+}

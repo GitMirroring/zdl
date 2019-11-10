@@ -540,6 +540,24 @@ then
     done
 fi
 
+if [[ "${args[@]}" =~ \-\-open\-relink ]]
+then
+    init
+    for ((i=0; i<=$max_args; i++))
+    do
+        if [[ "${args[i]}" =~ \-\-open\-relink\=[\"\']*(http.+)[\"\']*$ ]]
+        then
+            mkdir -p "$HOME"/tmp
+            cd "$HOME"/tmp
+            url_in="${BASH_REMATCH[1]}"
+            break
+        fi
+    done
+    open_relink
+    exit
+fi
+
+
 #### PATH:
 
 for ((i=0; i<"${#args[@]}"; i++)) 
