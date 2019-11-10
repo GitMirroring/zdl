@@ -52,8 +52,8 @@ then
     then
         wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
         wstream_link="${wstream_link//\/video\//\/}"
-        wstream_link="${wstream_link//https/http}"
-        
+        #wstream_link="${wstream_link//https/http}"
+
     elif [[ "$url_in" =~ download\.wstream ]]
     then
         wstream_link="${url_in//\/\/download.wstream/\/\/video.wstream}"
@@ -188,6 +188,8 @@ then
         then
             file_in="${url_in_file##*\/}"
         fi
+
+        [[ "$url_in_file" =~ premium\.html ]] && _log 2
 
         check_wget || {
             # echo "Elite" >> "$path_tmp"/proxy
