@@ -45,7 +45,8 @@ _ZigzagDownLoader_ è un download manager:
      (per esempio, l'accelerazione dei download);
 
    - estrae l'URL dei file da scaricare da servizi di file hosting e
-     video streaming;
+     video streaming, facendo uso anche delle estensioni (o
+     _estrattori_) di `youtube-dl'
 
    - scarica i _TORRENT_;
 
@@ -952,12 +953,13 @@ xdcc) può avvenire in diversi modi:
 ``xdcc://...LINK DI XWEASEL...''
      ZigzagDownLoader converte automaticamente e utilizza i link di
      xWeasel, che comprendono tutte le informazioni necessarie. Gli
-     utenti che fanno uso di Firefox/Iceweasel/Icecat/Chrome/Chromium,
-     attraverso questi link, possono scaricare i file direttamente
-     dalle pagine web con un click del mouse, grazie alle estensioni,
-     adattata anche per ZDL. Altri browser possono scaricare i file con
-     la stessa immediatezza utilizzando altre funzioni (in altre
-     sezioni: *note Conkeror::, *note zdl-xterm e XXXTerm/Xombrero::)
+     utenti che fanno uso di
+     Firefox/Iceweasel/Icecat/Chrome/Chromium/Opera, attraverso questi
+     link, possono scaricare i file direttamente dalle pagine web con
+     un click del mouse, grazie alle estensioni, adattata anche per
+     ZDL. Altri browser possono scaricare i file con la stessa
+     immediatezza utilizzando altre funzioni (in altre sezioni: *note
+     Conkeror::, *note zdl-xterm e XXXTerm/Xombrero::)
 
 
 
@@ -1084,7 +1086,7 @@ ZDL estende:
 _Firefox/Iceweasel/Icecat_
      Attraverso l'estensione _Flashgot_
 
-_Firefox/Iceweasel/Icecat/Chrome/Chromium_
+_Firefox/Iceweasel/Icecat/Chrome/Chromium/Opera_
      Attraverso l'estensione _External Application Button_
 
 _XXXTerm/Xombrero_
@@ -1409,6 +1411,8 @@ Indice dei programmi
                                                                (line 46)
 * iceweasel:                             Software consigliati e dipendenze.
                                                                (line 46)
+* opera:                                 Software consigliati e dipendenze.
+                                                               (line 49)
 * pinfo:                                 Software consigliati e dipendenze.
                                                                (line 27)
 * rtmpdump:                              Software consigliati e dipendenze.
@@ -1481,28 +1485,28 @@ _zdl-devel - Lista di sviluppo_:
 
 Tag Table:
 Node: Top1185
-Node: Il comando ZDL5181
-Node: Servizi streaming/hosting13524
-Node: Avviare ZDL18001
-Node: Arrestare ZDL20457
-Node: Controllare i download21562
-Node: Manuali d'uso25814
-Node: Modi26230
-Node: Readline29525
-Node: Editor31077
-Node: Omonimie32302
-Node: IRC/XDCC33850
-Node: Torrent35548
-Node: Filtri36432
-Node: Creare nuove estensioni36753
-Node: Software consigliati e dipendenze38528
-Node: Conkeror40084
-Node: zdl-xterm e XXXTerm/Xombrero41108
-Node: Installazione e aggiornamento43032
-Node: Perché questo programma46347
-Node: Tags50235
-Node: Copying54686
-Node: Contatti55736
+Node: Il comando ZDL5254
+Node: Servizi streaming/hosting13597
+Node: Avviare ZDL18074
+Node: Arrestare ZDL20530
+Node: Controllare i download21635
+Node: Manuali d'uso25887
+Node: Modi26303
+Node: Readline29598
+Node: Editor31150
+Node: Omonimie32375
+Node: IRC/XDCC33923
+Node: Torrent35632
+Node: Filtri36516
+Node: Creare nuove estensioni36837
+Node: Software consigliati e dipendenze38612
+Node: Conkeror40174
+Node: zdl-xterm e XXXTerm/Xombrero41198
+Node: Installazione e aggiornamento43122
+Node: Perché questo programma46437
+Node: Tags50325
+Node: Copying54925
+Node: Contatti55975
 
 End Tag Table
 

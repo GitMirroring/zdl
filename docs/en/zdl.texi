@@ -217,7 +217,7 @@ equipped with command line user interfaces (@emph{CLI}), for terminals (@emph{TU
 @item
 handles downloads of some downloaders such as @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} or @emph{cURL}, using its potential (for example, download acceleration);
 @item
-extracts the URL of the files to be downloaded from file hosting and video streaming services;
+extracts the URL of the files to be downloaded from file hosting and video streaming services, also using @command{youtube-dl} extensions (or @emph{extractors});
 @item
 downloads @emph{TORRENT};
 @item
@@ -920,7 +920,7 @@ the private message (@emph{PRIVMSG}) containing the command @command{XDCC SEND}
 Download via IRC/XDCC can be done, alternatively and without using options, by entering the information directly into the link, which must take the form above
 
 @item @code{xdcc://...LINK OF XWEASEL ...}
-ZigzagDownLoader automatically converts and uses xWeasel links, which include all the necessary information. Users who use Firefox/Iceweasel/Icecat/Chrome/Chromium, through these links, can download files directly from web pages with a click of the mouse, thanks to the extensions, also adapted for ZDL. Other browsers can download files with the same immediacy using other functions (in other sections: @ref{Conkeror}, @ref{zdl-xterm and XXXTerm/Xombrero})
+ZigzagDownLoader automatically converts and uses xWeasel links, which include all the necessary information. Users who use Firefox/Iceweasel/Icecat/Chrome/Chromium/Opera, through these links, can download files directly from web pages with a click of the mouse, thanks to the extensions, also adapted for ZDL. Other browsers can download files with the same immediacy using other functions (in other sections: @ref{Conkeror}, @ref{zdl-xterm and XXXTerm/Xombrero})
 
 @end table
 @htmlend
@@ -1060,7 +1060,8 @@ Through the extension @emph{Flashgot}
 @pindex icecat
 @pindex chrome
 @pindex chromium
-@item Firefox/Iceweasel/Icecat/Chrome/Chromium
+@pindex opera
+@item Firefox/Iceweasel/Icecat/Chrome/Chromium/Opera
 Through the extension @emph{External Application Button}
 
 @pindex xxxterm

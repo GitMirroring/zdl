@@ -216,7 +216,7 @@ dotato di interfacce utente a linea di comando (@emph{CLI}), per terminale (@emp
 @item
 gestisce gli scaricamenti di alcuni downloader come @emph{Aria2}, @emph{Axel}, @emph{Wget}, @emph{RTMPDump} o @emph{cURL}, utilizzandone le potenzialità (per esempio, l'accelerazione dei download);
 @item
-estrae l'URL dei file da scaricare da servizi di file hosting e video streaming;
+estrae l'URL dei file da scaricare da servizi di file hosting e video streaming, facendo uso anche delle estensioni (o @emph{estrattori}) di @command{youtube-dl}
 @item
 scarica i @emph{TORRENT};
 @item
@@ -920,7 +920,7 @@ il messaggio privato (@emph{PRIVMSG}) che contiene il comando @command{XDCC SEND
 Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare opzioni, inserendo le informazioni direttamente nel link, che deve avere la forma qui sopra
 
 @item @code{xdcc://...LINK DI XWEASEL...}
-ZigzagDownLoader converte automaticamente e utilizza i link di xWeasel, che comprendono tutte le informazioni necessarie. Gli utenti che fanno uso di Firefox/Iceweasel/Icecat/Chrome/Chromium, attraverso questi link, possono scaricare i file direttamente dalle pagine web con un click del mouse, grazie alle estensioni, adattata anche per ZDL. Altri browser possono scaricare i file con la stessa immediatezza utilizzando altre funzioni (in altre sezioni: @ref{Conkeror}, @ref{zdl-xterm e XXXTerm/Xombrero})
+ZigzagDownLoader converte automaticamente e utilizza i link di xWeasel, che comprendono tutte le informazioni necessarie. Gli utenti che fanno uso di Firefox/Iceweasel/Icecat/Chrome/Chromium/Opera, attraverso questi link, possono scaricare i file direttamente dalle pagine web con un click del mouse, grazie alle estensioni, adattata anche per ZDL. Altri browser possono scaricare i file con la stessa immediatezza utilizzando altre funzioni (in altre sezioni: @ref{Conkeror}, @ref{zdl-xterm e XXXTerm/Xombrero})
 
 @end table
 @htmlend
@@ -1060,7 +1060,8 @@ Attraverso l'estensione @emph{Flashgot}
 @pindex icecat
 @pindex chrome
 @pindex chromium
-@item Firefox/Iceweasel/Icecat/Chrome/Chromium
+@pindex opera
+@item Firefox/Iceweasel/Icecat/Chrome/Chromium/Opera
 Attraverso l'estensione @emph{External Application Button}
 
 @pindex xxxterm
