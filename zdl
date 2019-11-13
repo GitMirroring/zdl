@@ -25,6 +25,8 @@
 #
 #set -x
 
+set +o history
+
 path_usr="/usr/local/share/zdl"
 
 source "$path_usr"/source_all.sh
@@ -1888,5 +1890,6 @@ then
     xterm_stop
 fi
 
+set -o history
 echo -en "\e[0m\e[J"
 kill %? &>/dev/null

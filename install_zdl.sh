@@ -24,6 +24,8 @@
 # zoninoz@inventati.org
 #
 
+set +o history
+
 TEXTDOMAINDIR=/usr/local/share/locale
 TEXTDOMAIN=zdl
 export TEXTDOMAINDIR

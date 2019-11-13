@@ -23,6 +23,7 @@
 # http://inventati.org/zoninoz
 # zoninoz@inventati.org
 #
+set +o history
 
 ## Axel - Cygwin
 function install_axel-cygwin {
@@ -99,6 +100,8 @@ function try {
                     --text="$(gettext "The root user password is required.\nRepeat the ZDL update using the terminal.")" \
                     --image="dialog-error" \
                     "${YAD_ZDL[@]}"
+                
+                set -o history
                 exit 1
             fi
             su -c "${cmdline[@]}" || (
@@ -147,7 +150,7 @@ For more information on Axel: http://alioth.debian.org/projects/axel/
             1) install_pk $dep ;;
             2) install_src $dep ;;
             3) break ;;
-            4) exit 1 ;;
+            4) set -o history; exit 1 ;;
         esac
     done
 }
@@ -316,6 +319,7 @@ function update {
     if ! try mv -f zdl zdl-xterm zdl-sockets $BIN
     then
         print_c 3 "$BIN: $(gettext "failed. Please try again")"
+        set -o history
         exit 1
     else
         print_c 1 "$BIN: $(gettext "saved successfully")"
@@ -372,6 +376,7 @@ function update {
     if [ $? != 0 ]
     then
         print_c 3 "$SHARE: $(gettext "failed. Please try again")"
+        set -o history
         exit 1
     else
         print_c 1 "$SHARE: $(gettext "saved successfully")"
@@ -617,7 +622,7 @@ EXTENSIONS:
     echo "$remote_version" >"$path_conf"/version
     
     print_c 1 "$(gettext "Successfully completed")"
-
+    
     if [ -z "$installer_zdl" ]
     then
         if [ "$real_mode" == gui ]
@@ -644,10 +649,12 @@ EXTENSIONS:
                     run_gui &>/dev/null &
                     disown
 
+                    set -o history                    
                     exit
                     ;;
                 1)
                     kill -9 $pid_console_gui
+                    set -o history
                     exit 1
                     ;;
             esac
@@ -656,8 +663,10 @@ EXTENSIONS:
             pause
             cd $dir_dest
             $prog "${args[@]}"
+            
+            set -o history
             exit
         fi
     fi
-        
+    set -o history
 }
