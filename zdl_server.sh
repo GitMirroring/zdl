@@ -371,7 +371,7 @@ function send_json {
 		break
 	    fi
 
-	    ((counter<2)) &&
+	    ((counter<3)) &&
 		((counter++))
 	fi
 	sleep 2
