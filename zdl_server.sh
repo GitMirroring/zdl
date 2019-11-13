@@ -1932,7 +1932,7 @@ function http_server {
 	    then
 		cookie="$(clean_data "${line[*]}")"
 		check_session_cookie "$cookie" && logged_on=true
-
+                
 	    elif [[ "$(clean_data "${line[*]}")" =~ 'Accept-Language' ]]
 	    then
 		user_accept_language=true
@@ -1949,14 +1949,15 @@ function http_server {
 	    if [ -n "$connection_test" ] &&
 		   [ -n "$user_accept_language" ]
 	    then
-		if [ "$user_agent" != firefox-old ]
+		if [ -z "$logged_on" ] && [ "$user_agent" != firefox-old ]
 		then
 		    read new_line
+                    [[ "$new_line" =~ Referer ]] && read new_line
 		    cookie="$(clean_data "$new_line")"
 		    check_session_cookie "$cookie" && logged_on=true
 		fi
 
-		if [ -z "$logged_on" ] &&
+                if [ -z "$logged_on" ] &&
 		       [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
 		       [[ ! "$file_output" =~ login.*\.html\? ]]
 		then
