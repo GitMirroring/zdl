@@ -67,8 +67,8 @@ touch "$server_data".$socket_port
 touch "$path_server"/playlist
 
 #### HTTP:
-declare -i DEBUG=1
-declare -i VERBOSE=1
+declare -i DEBUG=0
+declare -i VERBOSE=0
 declare -a REQUEST_HEADERS
 declare    REQUEST_URI=""
 declare -a HTTP_RESPONSE=(
@@ -1925,14 +1925,16 @@ function check_session_cookie {
 
 function http_server {
     local cookie
-    declare -a headers=()
 
     case $http_method in
 	GET)
+            #echo "header: ${line[*]}" >>zdl_server_$id.log
             while read header
             do
+                #echo "header: $header" >>zdl_server_$id.log
                 if [ "$header" == "$(code2char 13)" ] 
                 then
+                    #echo "--------------" >>zdl_server_$id.log
                     break
 
                 elif [[ "$header" =~ 'Cookie' ]]
@@ -1992,6 +1994,7 @@ function http_server {
     return 0
 }
 
+#id=$$
 
 ## MAIN:
 while read -a line
@@ -2003,12 +2006,14 @@ do
 	    unset GET_DATA file_output
 	    http_method=GET
 	    start_timeout=$(date +%s)
-
+            #echo "header: ${line[*]}" >>zdl_server_$id.log
 	    get_file_output file_output "${line[1]}"
 
+            #echo "out: ${file_output}" >>zdl_server_$id.log
 	    if [[ "${line[1]}" =~ '?' ]]
 	    then
 	    	GET_DATA="$(clean_data "${line[1]#*\?}")"
+                #echo "get-data: ${GET_DATA}" >>zdl_server_$id.log
 	    fi
 	    ;;
 
