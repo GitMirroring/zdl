@@ -67,8 +67,8 @@ touch "$server_data".$socket_port
 touch "$path_server"/playlist
 
 #### HTTP:
-declare -i DEBUG=0
-declare -i VERBOSE=0
+declare -i DEBUG=1
+declare -i VERBOSE=1
 declare -a REQUEST_HEADERS
 declare    REQUEST_URI=""
 declare -a HTTP_RESPONSE=(
@@ -1925,60 +1925,44 @@ function check_session_cookie {
 
 function http_server {
     local cookie
+    declare -a headers=()
 
     case $http_method in
 	GET)
-            if [[ "${line[*]}" =~ 'Cookie' ]]
-	    then
-		cookie="$(clean_data "${line[*]}")"
-		check_session_cookie "$cookie" && logged_on=true
-                
-	    elif [[ "$(clean_data "${line[*]}")" =~ 'Accept-Language' ]]
-	    then
-		user_accept_language=true
+            while read header
+            do
+                if [ "$header" == "$(code2char 13)" ] 
+                then
+                    break
 
-	    elif [[ "$(clean_data "${line[*]}")" =~ 'Connection' ]]
+                elif [[ "$header" =~ 'Cookie' ]]
+	        then
+		    cookie="$(clean_data "$header")"
+		    check_session_cookie "$cookie" && logged_on=true
+                fi
+            done
+            
+            if [ -z "$logged_on" ] &&
+		   [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
+		   [[ ! "$file_output" =~ login.*\.html\? ]]
 	    then
-		connection_test=true
-
-	    elif [[ "$(clean_data "${line[*]}")" =~ 'Firefox/'([1-5]{1}[0-9]{1}|60|61|62|ESR) ]]
-	    then
-		user_agent=firefox-old
+		send_login
 	    fi
 
-	    if [ -n "$connection_test" ] &&
-		   [ -n "$user_accept_language" ]
+	    if [ -n "$GET_DATA" ]
 	    then
-		if [ -z "$logged_on" ] && [ "$user_agent" != firefox-old ]
-		then
-		    read new_line
-                    [[ "$new_line" =~ Referer ]] && read new_line
-		    cookie="$(clean_data "$new_line")"
-		    check_session_cookie "$cookie" && logged_on=true
-		fi
+		run_data "$GET_DATA"
+	    fi
 
-                if [ -z "$logged_on" ] &&
-		       [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
-		       [[ ! "$file_output" =~ login.*\.html\? ]]
-		then
-		    send_login
-		fi
-
-		if [ -n "$GET_DATA" ]
-		then
-		    run_data "$GET_DATA"
-		fi
-
-		if [ -f "$file_output" ]
-		then
-		    [[ "$file_output" =~ "$server_data" ]] &&
-			create_json
-
-		    serve_file "$file_output"
-
-		else
-		    exit
-		fi
+	    if [ -f "$file_output" ]
+	    then
+		[[ "$file_output" =~ "$server_data" ]] &&
+		    create_json
+                
+		serve_file "$file_output"
+                
+	    else
+		exit
 	    fi
 	    ;;
 

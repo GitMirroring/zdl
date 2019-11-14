@@ -110,6 +110,7 @@ function base36 {
 }
 
 function split {
+    local oIFS="$IFS"
     if [[ "$2" ]]
     then
 	IFS="$2"
@@ -117,7 +118,7 @@ function split {
 	for i in ${splitted[*]}
 	do echo $i
 	done
-	unset IFS
+	IFS="$oIFS"
 
     else
 	sed -r "s|(.{1})|\1\n|g" <<< "$1" 2>/dev/null
