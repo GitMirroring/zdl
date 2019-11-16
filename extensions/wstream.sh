@@ -34,25 +34,35 @@ then
     then
         location=$(curl -v "$url_in" 2>&1 |grep ocation|awk '(NR == 2){print $3}')
         location=$(trim "$location")
+
         url "$location" &&
             replace_url_in "$location"
+
         html=$(wget -SO- "$url_in" -o /dev/null)
         input_hidden "$html"
         post_data="${post_data##*=}"
-
-        replace_url_in "https://video.wstream.video/$post_data"
+            
+        if [ -n "$post_data" ]
+        then
+            replace_url_in "https://video.wstream.video/$post_data"
+        fi
     fi
 
     if [[ "$url_in" =~ file_code ]]
     then
-        replace_url_in "${url_in//'video.php?file_code='}"
+        wstream_link="${url_in//'video.php?file_code='}"
     fi
        
     if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
     then
-        wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
-        wstream_link="${wstream_link//\/video\//\/}"
-        #wstream_link="${wstream_link//https/http}"
+        if [[ "$url_in" =~ \/wstream\/ ]]
+        then
+            wstream_link="${url_in//\/\/wstream/\/\/download.wstream}"
+            wstream_link="${wstream_link//\/video\//\/}"
+            #wstream_link="${wstream_link//https/http}"
+        else
+            wstream_link="${url_in//\/\/wstream/\/\/video.wstream}"
+        fi
 
     elif [[ "$url_in" =~ download\.wstream ]]
     then
@@ -135,7 +145,7 @@ then
         # done
         ## sostituisce il codice commentato sopra:
         wstream_req=$(grep -oP "[^\"\']+.php\?[^\"\']+" <<< "$html" | grep -v '\/' |tail -n1)
-        
+
         if [[ ! "$html" =~ (Siamo spiacenti ma come utente non premium puoi scaricare solamente 2 file ogni ora\.\<br\>\<br\>\<br\>\<h1\>\<a href\=\'https\:\/\/wstream\.video\/premium\.html\'\> Per favore diventa nostro supporter \<\/\a>\<\/h1\>) ]] &&
                [ -n "$wstream_req" ] &&
                [[ ! "$wstream_req" =~ imgx ]] &&
@@ -171,8 +181,19 @@ then
 
                 else
                     url_in_file=$(grep "class='bbkkff" <<< "$html")
-                    url_in_file="${url_in_file#*bbkkff}"
-                    url_in_file="${url_in_file#*href=\'}"
+
+                    while :
+                    do
+                        url_in_file_old="${url_in_file}"
+                        url_in_file="${url_in_file#*bbkkff}"
+                        url_in_file="${url_in_file#*href=\'}"
+                        if [[ ! "$url_in_file" =~ ^(\'|https\:\/\/www\.(demolandia|sample-videos)) ]] ||
+                               [ "$url_in_file" == "$url_in_file_old" ]
+                        then
+                            break
+                        fi
+
+                    done
                     url_in_file="${url_in_file%%\'*}"
 
                     url "$url_in_file" && break
@@ -187,6 +208,16 @@ then
                 test -z "$file_in"
         then
             file_in="${url_in_file##*\/}"
+
+        elif url "$url_in_file" &&
+                [[ ! "$file_in" =~ "${url_in_file##*.}"$ ]]
+        then
+            wstream_file_ext="${url_in_file##*.}"
+            if [ -n "$wstream_file_ext" ] &&
+                   ! url "$wstream_file_ext"
+            then
+                file_in="$file_in".$wstream_file_ext
+            fi
         fi
 
         [[ "$url_in_file" =~ premium\.html ]] && _log 2
