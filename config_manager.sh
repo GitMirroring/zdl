@@ -45,7 +45,7 @@ function check_read {
 	echo -e "$res"
 	input_text input
 	
-	if [[ "$input" =~ (sì|yes) ]]
+	if [ "$input" == "$(gettext "yes")" ]
 	then
 	    return 0
 
@@ -160,7 +160,7 @@ function configure {
 		printf "${BYellow}$(gettext "Do you really want to reset the socket account? You can reset it from the web interface (yes|*)"):${Color_Off}\n"
 		input_text opt
 		
-		if [[ "$opt" =~ (yes|sì) ]]
+		if [ "$opt" == "$(gettext "yes")" ]
 		then
 		    rm -f "$path_conf"/.socket-account
 		fi

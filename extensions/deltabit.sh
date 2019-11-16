@@ -53,7 +53,8 @@ then
     if [ -z "$(grep -v deltabit "$path_tmp/links_loop.txt" &>/dev/null)" ]
     then
 	get_language
-    	print_c 1 "$(gettext "Cookies deleted")"
+        dbmsg_0="$(gettext "Cookies deleted")"
+    	print_c 1 "$dbmsg_0"
 	get_language_prog	
     	rm -rf "$path_tmp/cookies.zdl"           
     fi
@@ -100,7 +101,8 @@ then
 		mode_stream="$mode_stream_test"
 
 	    get_language
-	    print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
+            dbmsg_1="$(gettext "Audio/video definition")"
+	    print_c 2 "$dbmsg_1: ${movie_definition[$mode_stream]}"
 	    get_language_prog
 	    
 	    deltabit_loops=0
@@ -131,14 +133,16 @@ then
 	    elif url "$url_in_file"
 	    then
 		get_language
-		print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}"
+                sbmsg_2="$(gettext "The movie with %s definition is available")"
+		print_c 1 "$dbmsg_2" "${movie_definition[$mode_stream]}"
 		get_language_prog	
 		set_deltabit_definition $mode_stream
 		break
 
 	    else
 		get_language
-		print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}"
+                dbmsg_2="$(gettext "The movie with %s definition is not available")"
+		print_c 3 "$dbmsg_2" "${movie_definition[$mode_stream]}"
 		get_language_prog	
 		del_deltabit_definition $mode_stream
 	    fi

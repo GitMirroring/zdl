@@ -53,7 +53,8 @@ then
     if [ -z "$(grep -v akvideo "$path_tmp/links_loop.txt" &>/dev/null)" ]
     then
 	get_language
-    	print_c 1 "$(gettext "Cookies deleted")"
+        avmsg_0="$(gettext "Cookies deleted")"
+    	print_c 1 "$avmsg_0"
     	rm -rf "$path_tmp/cookies.zdl"           
     fi
     get_language_prog
@@ -104,7 +105,8 @@ then
 	    [ -n "$mode_stream_test" ] &&
 		mode_stream="$mode_stream_test"
 
-	    print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
+            avmsg_1="$(gettext "Audio/video definition")"
+	    print_c 2 "$avmsg_1: ${movie_definition[$mode_stream]}"
 	    
 	    akvideo_loops=0
 	    while ! url "$url_in_file" &&
@@ -141,12 +143,14 @@ then
 
 	    elif url "$url_in_file"
 	    then
-		print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
+                avmsg_2="$(gettext "The movie with %s definition is available")"
+		print_c 1 "$avmsg_2" "${movie_definition[$mode_stream]}" 
 		set_akvideo_definition $mode_stream
 		break
 
 	    else
-		print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
+                avmsg_2="$(gettext "The movie with %s definition is not available")"
+		print_c 3 "$avmsg_2" "${movie_definition[$mode_stream]}" 
 		del_akvideo_definition $mode_stream
 	    fi
 	done

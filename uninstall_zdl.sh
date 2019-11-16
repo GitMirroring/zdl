@@ -32,7 +32,7 @@ export TEXTDOMAIN
 source /usr/bin/gettext.sh
 
 function usage {
-    echo "Uso: ./uninstall_zdl.sh [--purge] [-h|--help]"
+    echo "$(gettext Usage): ./uninstall_zdl.sh [--purge] [-h|--help]"
 }
 
 function try {
@@ -55,13 +55,13 @@ PROG=ZigzagDownLoader
 prog=zdl
 BIN="/usr/local/bin"
 SHARE="/usr/local/share/zdl"
-success="Disinstallazione completata"
-failure="Disinstallazione non riuscita"
+success="$(gettext "Uninstall complete")" #success="$(gettext "Disinstallazione completata")"
+failure="$(gettext "Uninstall failed")" #failure="$(gettext "Disinstallazione non riuscita")"
 path_conf="$HOME/.$prog"
 
 option=$1
 
-echo -e "\e[1mDisinstallazione di $PROG\e[0m\n"
+echo -e "\e[1m$(gettext "Uninstalling") $PROG\e[0m\n" #echo -e "\e[1m$(gettext "Disinstallazione di") $PROG\e[0m\n"
 
 if [ "$option" == "--help" ] ||
        [ "$option" == "-h" ]
@@ -70,9 +70,9 @@ then
     exit
 
 else
-    read -p "Vuoi davvero disinstallare ZigzagDownLoader? [sì|*]" result
+    read -p "$(gettext "Do you really want to uninstall ZigzagDownLoader?") [$(gettext "yes")|*]" result #    read -p "$(gettext "Vuoi davvero disinstallare ZigzagDownLoader?") [$(gettext "sì")|*]" result
     
-    if [ "$result" == "sì" ]
+    if [ "$result" == "$(gettext "yes")" ]
     then
 	if [ "$option" == "--purge" ]
 	then

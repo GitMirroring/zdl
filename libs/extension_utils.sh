@@ -562,7 +562,7 @@ function extension_mega {
         file_in="${file_in#*\"n\"\:\"}"
         file_in="${file_in%%\"*}".MEGAenc
         sanitize_file_in
-        
+
         if [ -z "$url_in_file" ] ||
                [ -z "$file_in" ]
         then

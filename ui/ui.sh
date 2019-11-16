@@ -820,7 +820,7 @@ function display_set_livestream {
 	    print_c 2 "$(gettext "Do you want to create a new schedule, deleting the previous one? [yes|*]")"
 	    read -e opt
 	    
-	    if [[ "$opt" =~ ^(sì|yes)$ ]]
+	    if [ "$opt" == "$(gettext "yes")" ]
 	    then
 		remove_livestream_link_start "$link"
 		
@@ -858,7 +858,7 @@ function display_set_livestream {
     print_c 2 "$(gettext "Do you want to register right away? [yes|*]")"
     read -e opt
 
-    if [[ "$opt" =~ ^(sì|yes)$ ]]
+    if [ "$opt" == "$(gettext "yes")" ]
     then
 	h=$(date +%H)
 	m=$(date +%M)
