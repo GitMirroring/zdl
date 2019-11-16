@@ -1,9 +1,9 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Sat Nov 16 16:49:24 2019" "GNU" "User Commands"
+.TH "ZigzagDownLoader (ZDL)" "1" "Sat Nov 16 16:53:32 2019" "GNU" "User Commands"
 .SH NAME\	
 \fBzdl\fP - CLI/TUI/GUI/Web-UI download manager for \fIGNU/Linux\fP and \fIMicrosoft Windows + Cygwin\fP.\
 
-
-.SH SYNOPSIS\	
+\
+.SH SYNOPSIS	
 \fBzdl [\fP\fIOPTIONS\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB]\fP
 
 \
@@ -93,8 +93,8 @@ ZDL start directory and download destination (if omitted, it is the current one)
 
 .RS -5
 
-
-.SH OPTIONS\	
+\
+.SH OPTIONS	
 Short options not followed by values​can be contracted:
 \fB-ufmd\fP is equivalent to \fB-u\fP \fB-f\fP \fB-m\fP \fB-d\fP
 
@@ -376,8 +376,8 @@ It does not download files whose name contains the string 'sub' (in upper and lo
 .RS -5
 
 
-
-.SS Starting with an editor:\	
+\
+.SS Starting with an editor:	
 
 .RS 5
 
@@ -422,8 +422,8 @@ use Zile, a GNU Emacs-style micro editor
 .RS -5
 
 
-
-.SS Starting with proxy:\	
+\
+.SS Starting with proxy:	
 
 .RS 5
 
@@ -486,8 +486,8 @@ To download the stream by incorporating ZDL in new scripts, the generic model of
 
 \
 .SH OVERVIEW	
-
-.SS Services\	
+\
+.SS Services	
 ZDL is enabled for downloading from any kind of valid link, including the video stream (from Youtube, Nowvideo, Dailymotion \&...) by means of browser extensions, and files shared through the following hosting and streaming services, directly from the link (bypassing the web page player):
 
 
@@ -536,8 +536,8 @@ Aria2 (anche torrent), Axel, cURL, RTMPDump, Wget, youtube-dl (comando per elenc
 .RS -5
 
 
-
-.SS Start\	
+\
+.SS Start	
 ZDL can be started in different ways:
 
 
@@ -554,9 +554,8 @@ ZDL can be started in different ways:
 .IP "\fI1.\fP" 3
 automatically generating the list of download links:
 
-
-.RS 5
-
+.RS 0
+.IP "\fI1.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 open a terminal and enter the directory that will contain the downloaded files
@@ -580,9 +579,8 @@ type \fBM-x\fP (\fBM\fP, the \fIMeta\fP key, is \fB<Alt>\fP, \fB<Ctrl>\fP or \fB
 .RS 0
 .IP "\fI2.\fP" 3
 Using one or more files prepared with a text editor (wrapping after each link) and reachable from the destination directory (indicate a valid path):
-
-.RS 5
-
+.RS 0
+.IP "\fI2.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 open a terminal and enter the directory that will contain the downloaded files (alternatively, you can indicate to \fIZDL\fP the working directory)
@@ -639,8 +637,8 @@ in "non-interactive" (standard) mode, by typing the \fBi\fP key
 
 
 
-
-.SS Stop\	
+\
+.SS Stop	
 ZDL can be stopped in different ways:
 
 .RS 5
@@ -672,8 +670,8 @@ through the interactive mode \fBzdl -i\fP started in the directory managed by th
 
 
 
-\
-.SS Recommended software and dependencies	
+
+.SS Recommended software and dependencies\	
 
 .RS 5
 
