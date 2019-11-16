@@ -32,8 +32,6 @@ END-INFO-DIR-ENTRY
 
 File: zdl.info,  Node: Top,  Next: Il comando ZDL,  Up: (dir)
 
-   <a href="http://nongnu.org/zdl/en">English version</a>
-
 ZigzagDownLoader (ZDL)
 **********************
 
@@ -1374,7 +1372,7 @@ Indice analitico generale
 * live:                                  Servizi streaming/hosting.
                                                                (line 34)
 * opzioni:                               Il comando ZDL.       (line 42)
-* perché zdl:                            Top.                  (line  8)
+* perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
                                                                (line 43)
 * sintassi:                              Il comando ZDL.       (line 13)
@@ -1487,28 +1485,28 @@ _zdl-devel - Lista di sviluppo_:
 
 Tag Table:
 Node: Top1185
-Node: Il comando ZDL5313
-Node: Servizi streaming/hosting13656
-Node: Avviare ZDL18133
-Node: Arrestare ZDL20589
-Node: Controllare i download21694
-Node: Manuali d'uso25946
-Node: Modi26362
-Node: Readline29657
-Node: Editor31209
-Node: Omonimie32434
-Node: IRC/XDCC33982
-Node: Torrent35691
-Node: Filtri36575
-Node: Creare nuove estensioni36896
-Node: Software consigliati e dipendenze38671
-Node: Conkeror40233
-Node: zdl-xterm e XXXTerm/Xombrero41257
-Node: Installazione e aggiornamento43181
-Node: Perché questo programma46496
-Node: Tags50384
-Node: Copying54984
-Node: Contatti56034
+Node: Il comando ZDL5254
+Node: Servizi streaming/hosting13597
+Node: Avviare ZDL18074
+Node: Arrestare ZDL20530
+Node: Controllare i download21635
+Node: Manuali d'uso25887
+Node: Modi26303
+Node: Readline29598
+Node: Editor31150
+Node: Omonimie32375
+Node: IRC/XDCC33923
+Node: Torrent35632
+Node: Filtri36516
+Node: Creare nuove estensioni36837
+Node: Software consigliati e dipendenze38612
+Node: Conkeror40174
+Node: zdl-xterm e XXXTerm/Xombrero41198
+Node: Installazione e aggiornamento43122
+Node: Perché questo programma46437
+Node: Tags50325
+Node: Copying54925
+Node: Contatti55975
 
 End Tag Table
 

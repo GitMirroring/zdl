@@ -199,11 +199,13 @@
 @ifhtml
 @node Top,Il comando ZDL, ,
 @end ifhtml
+@html
+<a href="http://nongnu.org/zdl/en">English version</a>
+@end html
 @ifinfo
 @node Top,Il comando ZDL, ,(dir)
 @end ifinfo
 @htmlstart
-<a href="http://nongnu.org/zdl/en">English version</a>
 @top ZigzagDownLoader (ZDL)
 @cindex perché zdl
 
