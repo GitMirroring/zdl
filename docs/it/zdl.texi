@@ -167,7 +167,8 @@
 </div>
 </div>
 <div class="content">
-<a href="http://nongnu.org/zdl/en">English version</a>
+<a href="http://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en/en-us.png" alt="English version"</a>
+<a href="http://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it/it-it.png" alt="Versione italiana"</a>
 @end html
 @end ifhtml
 @end macro
