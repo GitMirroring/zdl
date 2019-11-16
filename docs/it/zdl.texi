@@ -190,6 +190,7 @@
 </div>
 </div>
 </div>
+<a href="http://nongnu.org/zdl/en">English version</a>
 @end html
 @end ifhtml
 @end macro
