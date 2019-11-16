@@ -132,7 +132,6 @@
 <div class="header"></div>
 </a>
 <div class="container">
-<a href="http://nongnu.org/zdl/en">English version</a>
 <div class="left">
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
@@ -168,6 +167,7 @@
 </div>
 </div>
 <div class="content">
+<a href="http://nongnu.org/zdl/en">English version</a>
 @end html
 @end ifhtml
 @end macro
