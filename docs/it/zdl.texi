@@ -190,7 +190,6 @@
 </div>
 </div>
 </div>
-<a href="http://nongnu.org/zdl/en">English version</a>
 @end html
 @end ifhtml
 @end macro
@@ -204,6 +203,7 @@
 @node Top,Il comando ZDL, ,(dir)
 @end ifinfo
 @htmlstart
+<a href="http://nongnu.org/zdl/en">English version</a>
 @top ZigzagDownLoader (ZDL)
 @cindex perché zdl
 
