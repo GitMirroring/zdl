@@ -50,7 +50,7 @@ then
 
     if [[ "$url_in" =~ file_code ]]
     then
-        wstream_link="${url_in//'video.php?file_code='}"
+        replace_url_in "${url_in//'video.php?file_code='}"
     fi
        
     if [[ "$url_in" =~ http[s]*://[w.]*wstream ]]
@@ -160,7 +160,7 @@ then
                 
                 __cfduid=$(tail -n1 "$path_tmp"/cookies.zdl | sed -r 's|.+\t(.+)$|\1|g')
 
-                html=$(curl -v \
+                html=$(curl -s \
                             -H 'Accept: */*' \
                             -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3' \
                             -H 'Cache-Control: no-cache' \
@@ -171,7 +171,7 @@ then
                             -H "Referer: $wstream_link" \
                             -H "TE: Trailers" \
                             -H "X-Requested-With: XMLHttpRequest" \
-                            "$wstream_url_req" 2>&1)
+                            "$wstream_url_req")
                 get_language
 
                 if [[ "$html" =~ (Server problem.. please contact our support) ]]
