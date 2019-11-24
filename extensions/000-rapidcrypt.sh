@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//rapidcrypt.net}" ]
 then
-    if [[ "$url_in" =~ \/wstm\/ ]]
+    if [[ "$url_in" =~ \/(wstm|mixd)\/ ]]
     then
 	rapidcrypt_relink=$(curl -s "$url_in" |
 				awk '/Download File/{match($0,/href="([^"]+)"/,matched); print matched[1]}')

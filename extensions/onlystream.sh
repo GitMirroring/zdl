@@ -70,90 +70,99 @@ then
         fi
     fi
 
-    # if ! url "$url_in_file" ||
-    #          [ -z "$file_in" ] 
-    # then
-    #     ###############
-    #     html=$(curl "$url_in")
-    #     download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
+    if ! url "$url_in_file" ||
+            [ -z "$file_in" ] 
+    then
 
-    #     hash_onlystream="${download_video%\'*}"
-    #     hash_onlystream="${hash_onlystream##*\'}"
+        html=$(curl "$url_in")
+        url_in_file=$(grep 'player.updateSrc' <<< "$html")
+        url_in_file="${url_in_file#*\"}"
+        url_in_file="${url_in_file%%\"*}"
 
-    #     id_onlystream="${download_video#*download_video\(\'}"
-    #     id_onlystream="${id_onlystream%%\'*}"
+        file_in=$(get_title "$html")
+        
+        # download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
-    #     declare -A movie_definition
-    #     movie_definition=(
-    #         ['o']="Original"
-    #         ['h']="High"
-    #         ['n']="Normal"
-    #         ['l']="Low"
-    #     )
+        # hash_onlystream="${download_video%\'*}"
+        # hash_onlystream="${hash_onlystream##*\'}"
 
-    #     grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
-    #         o=o
+        # id_onlystream="${download_video#*download_video\(\'}"
+        # id_onlystream="${id_onlystream%%\'*}"
 
-    #     ## file_in:
-    #     input_hidden "$html"
-    #     file_filter "$file_in"
+        # declare -A movie_definition
+        # movie_definition=(
+        #     ['o']="Original"
+        #     ['h']="High"
+        #     ['n']="Normal"
+        #     ['l']="Low"
+        # )
+
+        # grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
+        #     o=o
+
+        # ## file_in:
+        # input_hidden "$html"
+        # file_filter "$file_in"
 	
-    #     for mode_stream in $o h n l
-    #     do
-    #         get_onlystream_definition mode_stream_test
+        # for mode_stream in $o h n l
+        # do
+        #     get_onlystream_definition mode_stream_test
 
-    #         [ -n "$mode_stream_test" ] &&
-    #     	mode_stream="$mode_stream_test"
+        #     [ -n "$mode_stream_test" ] &&
+        # 	mode_stream="$mode_stream_test"
 
-    #         print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
+        #     print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
 	    
-    #         onlystream_loops=0
-    #         while ! url "$url_in_file" &&
-    #     	    ((onlystream_loops < 2))
-    #         do
-    #     	((onlystream_loops++))
+        #     onlystream_loops=0
+        #     while ! url "$url_in_file" &&
+        # 	    ((onlystream_loops < 2))
+        #     do
+        # 	((onlystream_loops++))
 
-    #     	get_language_prog
-    #     	html2=$(wget -qO- -t1 -T$max_waiting           \
-    #     		     "https://onlystream.tv/dl?op=download_orig&id=${id_onlystream}&mode=${mode_stream}&hash=${hash_onlystream}" \
-    #     		     -o /dev/null)
-    #     	get_language
+        # 	get_language_prog
+        # 	html2=$(curl           \
+        # 		     "https://onlystream.tv/dl?op=view&id=${id_onlystream}&mode=${mode_stream}&hash=${hash_onlystream}" \
+        # 		     -o /dev/null)
+        # 	# html2=$(wget -qO- -t1 -T$max_waiting           \
+        # 	# 	     "https://onlystream.tv/dl?op=download_orig&id=${id_onlystream}&mode=${mode_stream}&hash=${hash_onlystream}" \
+        # 	# 	     -o /dev/null)
+        # 	get_language
 		
-    #     	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
-    #     			     head -n1 |
-    #     			     sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+        # 	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
+        # 			  head -n1 |
+        # 			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
 
-    #     	! url "$url_in_file" &&
-    #     	    url_in_file=$(grep 'Direct Download' <<< "$html2" |
-    #     				 sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+        # 	! url "$url_in_file" &&
+        # 	    url_in_file=$(grep 'Direct Download' <<< "$html2" |
+        # 			      sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
 
-    #     	((onlystream_loops < 2)) && sleep 1
-    #         done
+        # 	((onlystream_loops < 2)) && sleep 1
+        #     done
 
-    #         if ! url "$url_in_file" &&
-    #     	    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
-    #         then
-    #     	url_in_timer=$((${BASH_REMATCH[1]} * 60))
-    #     	set_link_timer "$url_in" $url_in_timer
-    #     	_log 33 $url_in_timer
+        #     if ! url "$url_in_file" &&
+        # 	    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
+        #     then
+        # 	url_in_timer=$((${BASH_REMATCH[1]} * 60))
+        # 	set_link_timer "$url_in" $url_in_timer
+        # 	_log 33 $url_in_timer
 
-    #     	add_onlystream_definition $mode_stream
-    #     	break
+        # 	add_onlystream_definition $mode_stream
+        # 	break
 
-    #         elif url "$url_in_file"
-    #         then
-    #     	print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
-    #     	set_onlystream_definition $mode_stream
-    #     	break
+        #     elif url "$url_in_file"
+        #     then
+        # 	print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
+        # 	set_onlystream_definition $mode_stream
+        # 	break
 
-    #         else
-    #     	print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
-    #     	del_onlystream_definition $mode_stream
-    #         fi
-    #     done
+        #     else
+        # 	print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
+        # 	del_onlystream_definition $mode_stream
+        #     fi
+        # done
 
-        ################
-    #    fi
+        
+    fi
     
     end_extension
 fi
