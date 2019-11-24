@@ -57,7 +57,8 @@ then
 	    url_rapidcrypt="${url_rapidcrypt#*href=}"
 	    url_rapidcrypt="${url_rapidcrypt#[\'\"]}"
 	    url_rapidcrypt="${url_rapidcrypt%%[\'\"\>]*}"
-	    
+            url_rapidcrypt=$(sanitize_url "$url_rapidcrypt")
+
 	    if url "$url_rapidcrypt" &&
 		    [[ "$url_rapidcrypt" != "$url_in" ]]
 	    then

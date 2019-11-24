@@ -60,7 +60,7 @@ then
     then
         html=$(curl "$url_in")
 
-        if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
+        if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
         then
 	    _log 3
             
