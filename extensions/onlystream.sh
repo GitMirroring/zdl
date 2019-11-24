@@ -59,7 +59,7 @@ then
             [ -z "$file_in" ] 
     then
         html=$(curl "$url_in")
-        
+
         if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exits) ]]
         then
 	    _log 3

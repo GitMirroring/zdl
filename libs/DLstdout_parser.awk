@@ -738,7 +738,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     array_out(length_saved[i], "length_saved")
     array_out(percent_out[i], "percent_out")
     array_out(length_out[i], "length_out")
-
+        
     if (! no_check)
 	check_stdout()
     

@@ -148,7 +148,7 @@ then
 
         if [[ ! "$html" =~ (Siamo spiacenti ma come utente non premium puoi scaricare solamente 2 file ogni ora\.\<br\>\<br\>\<br\>\<h1\>\<a href\=\'https\:\/\/wstream\.video\/premium\.html\'\> Per favore diventa nostro supporter \<\/\a>\<\/h1\>) ]] &&
                [ -n "$wstream_req" ] &&
-               [[ ! "$wstream_req" =~ imgx ]] &&
+               [[ ! "$wstream_req" =~ (imgx|imgdc) ]] &&
                [[ "${recaptcha_value}" =~ ([0-9]{6}) ]]
         then
             for proto in https http
