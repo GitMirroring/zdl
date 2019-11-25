@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/bin/bash
 #
 # ZigzagDownLoader (ZDL)
 # 
@@ -24,30 +24,31 @@
 # zoninoz@inventati.org
 #
 
-## ZDL add-on
-## zdl-extension types: streaming
-## zdl-extension name: Portalevideo.unimi.it
+## zdl-extension types: shortlinks
+## zdl-extension name: stayonline
 
-if [[ "$url_in" =~ portalevideo\.unimi\.it ]]
+if [ "$url_in" != "${url_in//stayonline.}" ]
 then
-    html=$(curl -s "$url_in")
-    file_in=$(grep fontAsap <<< "$html" |
-                  head -n1 |
-                  sed -r 's|<[^>]+>|_|g')
-    file_in=$(tr -d '\t' <<< "$file_in")
-    file_in="${file_in//__/_}"
-    file_in="${file_in##_}"
-    file_in="${file_in%Alta risoluzione attiva*}"
-    file_in="${file_in%%_}"
-    file_in="${file_in//\//-}"
-    
-    [ -n "$file_in" ] &&
-        file_in="${file_in}_portalevideo-unimi-it"
+    html=$(curl -s \
+                -c "$path_tmp"/cookies.zdl \
+                "$url_in")
 
-    sanitize_file_in
-    
-    url_in_file=$(grep '<video' <<< "$html" |
-                      sed -r 's|.+source\ src=\"([^"]+)\".+|\1|')    
+    stayonline_id="${url_in%\/}"
+    stayonline_id="${stayonline_id##*\/}"
 
-    end_extension
+    stayonline_url=$(curl -s \
+                          -b "$path_tmp"/cookies.zdl \
+                          -d "id=$stayonline_id" \
+                          "https://stayonline.pro/ajax/linkView.php" |
+                         awk '/value/{match($2, /\"(.+)\"/, matched); gsub(/\\/,"",matched[1]); print matched[1] }')
+
+    if url "$stayonline_url"
+    then
+        replace_url_in "$stayonline_url"
+
+    else
+        _log 2
+    fi
 fi
+
+

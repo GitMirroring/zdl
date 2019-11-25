@@ -493,26 +493,24 @@ player delle pagine web):
 _Video in streaming saltando il player del browser:_
      Akvideo (HD), Auroravid/Novamov, Backin, Biqle (HD), Cloudvideo
      (HD), Dailymotion, Deltabit (HD), Dplay (HD), Exashare, Facebook,
-     Fastvideo, Flashx.tv, Flix555, IDoWatch, IlFattoQuotidiano, La7
-     (HD), Metacafe, Movshare/Wholecloud, Neodrive (ex Cloudzilla),
-     NeverWasRadio, Nowvideo, Onlystream, Openload(s),
-     Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
-     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
-     Speedvideo (HD), Streamango, Streamin, Supervideo (HD), Thevideo,
-     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
-     tipo .m3u8, Tutti i video in streaming di tipo .mpd, Verystream,
+     Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD),
+     Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo,
+     Onlystream, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
+     Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare
+     (HD), Speedvideo (HD), Streamango, Streamin, Supervideo (HD),
+     Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in
+     streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd,
      VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto,
-     Vidtome, Vimeo (HD), VK (HD), Woof, WStream (HD), Youtube, Zinwa
-     (RTMP) 
+     Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
-     Akvideo (HD), Clicknupload, Cyberlocker, ddl.to, Deltabit (HD),
+     Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
      dl.free.fr, Dropbox, Easybytez, Go4Up (multi-link), Jheberg
-     (multi-link), Katfile, Mediafire, Mega, MultiUp (multi-link),
-     Nowdownload, Onlystream, Openload(s), Ozofiles, Pastebin,
-     Rockfile, Sockshare (HD), Subyshare, Supervideo (HD),
-     TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
-     Uppit, Uptobox, Vidoza, WStream (HD) 
+     (multi-link), Katfile, Mediafire, Mega, MixDrop, MultiUp
+     (multi-link), Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare
+     (HD), Subyshare, Supervideo (HD), TubeOffLine.com (tutti i
+     servizi), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza,
+     WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -526,8 +524,8 @@ _Link generati dal web (anche dopo captcha):_
 _Short links:_
      4snip.pw, altadefinizione01, bc.vc, cb01, cinemalibero,
      Filecrypt.cc, filmpertutti, hd4me.net, link4.me, linkhub, linkup,
-     Masklink, q.gs, Rapidcrypt, sapolatsu, Shortlink, swzz.xyz,
-     thouth.net, vaussneim.net, vcrypt
+     Masklink, q.gs, Rapidcrypt, sapolatsu, Shortlink, stayonline,
+     swzz.xyz, thouth.net, vaussneim.net, vcrypt
 
 _Tutti i file scaricabili con le seguenti estensioni dei browser:_
      _Flashgot_ di _Firefox/Iceweasel/Icecat_, funzione `M-x zdl' di
@@ -1361,20 +1359,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 39)
+                                                               (line 37)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
-                                                               (line 25)
+                                                               (line 23)
 * file hosting:                          Servizi streaming/hosting.
-                                                               (line 25)
+                                                               (line 23)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 39)
+                                                               (line 37)
 * live:                                  Servizi streaming/hosting.
-                                                               (line 34)
+                                                               (line 32)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 43)
+                                                               (line 41)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1487,26 +1485,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18074
-Node: Arrestare ZDL20530
-Node: Controllare i download21635
-Node: Manuali d'uso25887
-Node: Modi26303
-Node: Readline29598
-Node: Editor31150
-Node: Omonimie32375
-Node: IRC/XDCC33923
-Node: Torrent35632
-Node: Filtri36516
-Node: Creare nuove estensioni36837
-Node: Software consigliati e dipendenze38612
-Node: Conkeror40174
-Node: zdl-xterm e XXXTerm/Xombrero41198
-Node: Installazione e aggiornamento43122
-Node: Perché questo programma46437
-Node: Tags50325
-Node: Copying54925
-Node: Contatti55975
+Node: Avviare ZDL17999
+Node: Arrestare ZDL20455
+Node: Controllare i download21560
+Node: Manuali d'uso25812
+Node: Modi26228
+Node: Readline29523
+Node: Editor31075
+Node: Omonimie32300
+Node: IRC/XDCC33848
+Node: Torrent35557
+Node: Filtri36441
+Node: Creare nuove estensioni36762
+Node: Software consigliati e dipendenze38537
+Node: Conkeror40099
+Node: zdl-xterm e XXXTerm/Xombrero41123
+Node: Installazione e aggiornamento43047
+Node: Perché questo programma46362
+Node: Tags50250
+Node: Copying54850
+Node: Contatti55900
 
 End Tag Table
 

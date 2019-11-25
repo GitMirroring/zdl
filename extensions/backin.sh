@@ -27,6 +27,20 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Backin
 
+function check_backin {
+    if data_stdout
+    then    
+        for ((i=0; i<${#url_out[@]}; i++))
+        do
+            if check_pid "${pid_out[i]}" &&
+                    [[ "${url_out[i]}" =~ backin ]]
+            then
+                return 1
+            fi
+        done
+    fi    
+    return 0    
+}
 
 if [[ "$url_in" =~ backin ]]
 then
@@ -56,6 +70,17 @@ then
 	url_in_file=$(unpack "$html")
 	url_in_file="${url_in_file#*file\:\"}"
 	url_in_file="${url_in_file%%\"*}"
+
+        if ! check_wget ||
+                ! check_backin
+        then
+            # echo "Elite" >> "$path_tmp"/proxy
+            # echo "Anonymous" >> "$path_tmp"/proxy
+            print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
+            print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
+            
+            set_temp_proxy
+        fi
     fi
     end_extension
 fi
