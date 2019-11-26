@@ -35,13 +35,17 @@ then
 
     html=$(curl "$url_in")
 
-    url_in_file=$(grep sources <<< "$html")
-    url_in_file="${url_in_file#*\"}"
-    url_in_file="${url_in_file%%\"*}"
-    
-    file_in=$(grep '<h4' <<< "$html")
-    file_in="${file_in#*\>}"
-
+    if [[ "$html" =~ (Video\ is\ processing\ now) ]]
+    then
+        _log 17
+    else
+        url_in_file=$(grep sources <<< "$html")
+        url_in_file="${url_in_file#*\"}"
+        url_in_file="${url_in_file%%\"*}"
+        
+        file_in=$(grep '<h4' <<< "$html")
+        file_in="${file_in#*\>}"
+    fi
     end_extension
 fi
 
