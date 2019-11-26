@@ -29,6 +29,9 @@
 
 if [[ "$url_in" =~ mixdrop\. ]]
 then
+    [[ "$url_in" =~ \/e\/ ]] &&
+        replace_url_in "${url_in//\/e\///f/}"
+    
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \
