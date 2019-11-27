@@ -30,6 +30,11 @@
     
 if [[ "$url_in" =~ nowvideo\. ]]
 then
+    if [[ "$url_in" =~ fastredirect ]]
+    then
+        replace_url_in "${url_in//'api/fastredirect/streaming.php?file_real='/play/}"
+    fi
+
     html=$(curl -s \
 		-c "$path_tmp"/cookies.zdl \
 		"$url_in")
