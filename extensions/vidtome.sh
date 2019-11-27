@@ -29,6 +29,11 @@
 
 if [[ "$url_in" =~ (vidtome\.) ]]
 then
+    if [[ "$url_in" =~ fastredirect ]]
+    then
+        replace_url_in "$(get_location "${url_in}")"
+    fi
+    
     html=$(curl -s "$url_in")
 
     countdown- 5
