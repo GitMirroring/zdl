@@ -762,7 +762,7 @@ function get_by_cloudflare {
     local post_action="$proto$domain"$(grep 'action=' <<< "$result" |
                             tail -n1 |
                             sed -r 's|.+action=\"([^"]+)\".+|\1|g')
-    post_action=$(sanitize_url "$post_action")
+    #post_action=$(sanitize_url "$post_action")
     
     local get_data="${post_action#*\?}"
     
@@ -772,7 +772,7 @@ function get_by_cloudflare {
     #post_data=$(head -n5 <<< "$post_data"| tail -n4 | tr '\n' '&')
 
     post_data="${post_data%\&}"
-    post_data=$(urlencode_query "$post_data")
+    #post_data=$(urlencode_query "$post_data")
     local content_length=${#post_data} #$(( ${#get_data} + ${#post_data} )) #$((${#post_data} + 696))
     
     local cookie=$(grep 'COOKIE' -A1 <<< "$result" | tail -n1)
@@ -787,8 +787,8 @@ function get_by_cloudflare {
 # LENGTH: $content_length
 # "
 #     echo \--------------------------------------------------------------------
-    #                   -H "Content-Length: ${content_length}" \
-        #                  -H 'Content-Type: application/x-www-form-urlencoded' \
+    #                   
+        #                  
     result=$(curl -v \
                   -H "Host: $domain" \
                   -A "$user_agent" \
@@ -796,12 +796,15 @@ function get_by_cloudflare {
                   -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3'                                   \
                   -H 'Accept-Encoding: gzip, deflate, br'                                         \
                   -H "Referer: $url_in" \
+                  -H 'Content-Type: application/x-www-form-urlencoded' \
+                  -H "Content-Length: ${content_length}" \
                   -H 'Connection: keep-alive' \
                   -H "Cookie: $cookie" \
                   -H 'Upgrade-Insecure-Requests: 1' \
                   -H 'TE: Trailers' \
                   "${post_action}" \
                   -d "$post_data" \
+                  -D "$path_tmp/header.zdl"   \
                   2>&1)
 
     # result=$(wget -SO- \

@@ -44,9 +44,15 @@ function install_axel-cygwin {
 function install_phpcomposer {
     cd /tmp
     try php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    try php -r "if (hash_file('SHA384', 'composer-setup.php') === '92102166af5abdb03f49ce52a40591073a7b859a86e8ff13338cf7db58a19f7844fbc0bb79b2773bf30791e935dbd938') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-    try php composer-setup.php --install-dir=/usr/local/bin/ --filename=composer
-    try php -r "unlink('composer-setup.php');"
+
+    if [ -f composer-setup.php ]
+    then
+        local signature=$(curl -s https://composer.github.io/installer.sig)
+        try php -r "if (hash_file('SHA384', 'composer-setup.php') === '$signature') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+
+        try php composer-setup.php --install-dir=/usr/local/bin/ --filename=composer
+        try php -r "unlink('composer-setup.php');"
+    fi
     cd -
 }
 
@@ -308,8 +314,6 @@ function update {
         cygdrive="${cygdrive#*cygdrive\/}"
         cygdrive="${cygdrive%%\/*}"
         [ -z "$cygdrive" ] && cygdrive="C"
-
-        
     fi
     # update_zdl-wise
 
@@ -549,7 +553,7 @@ EXTENSIONS:
         deps['axel']=axel
         deps['node']=nodejs
         deps['php']=php-cli
-        # deps['cmp']=diffutils
+        ## deps['cmp']=diffutils
         deps['socat']=socat
         deps['gawk']=gawk
         deps['rlwrap']=rlwrap
@@ -568,6 +572,7 @@ EXTENSIONS:
         deps['ffmpeg']=ffmpeg
         deps['convert']=imagemagick
         deps['tesseract']=tesseract-ocr
+        deps['composer']=composer
         ## php-mbstring
         
         command -v X &>/dev/null &&
@@ -585,6 +590,10 @@ EXTENSIONS:
             fi
         done
 
+        ## cloudflare:
+        hash composer 2>/dev/null || install_phpcomposer
+        composer require kyranrana/cloudflare-bypass
+        
         try mkdir -p "$HOME"/.local/share/applications/
 
         if [ -f "$HOME"/.local/share/applications/zdl-web-ui.desktop ]     

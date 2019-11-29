@@ -45,31 +45,32 @@ function check_backin {
 if [[ "$url_in" =~ backin ]]
 then
     link_parser "$url_in"
-    backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
+    #backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
+    backin_url="$parser_proto$parser_domain/s/streams.php?s=$parser_path"
     get_language
     
     if url "$backin_url"
     then
-	print_c 4 "$(gettext "Redirection"): $backin_url"
+        print_c 4 "$(gettext "Redirection"): $backin_url"
 
-	if check_cloudflare "$backin_url"
-	then
-	    get_language_prog
-	    get_by_cloudflare "$backin_url" html
-	    get_language
-	else
-	    get_language_prog
-	    html=$(wget -o /dev/null -qO- "$backin_url")
-	    get_language
-	fi
+        if check_cloudflare "$backin_url"
+        then
+            get_language_prog
+            get_by_cloudflare "$backin_url" html
+            get_language
+        else
+            get_language_prog
+            html=$(wget -o /dev/null -qO- "$backin_url")
+            get_language
+        fi
 
-	file_in=$(get_title "$html")
-	file_in="${file_in#Streaming }"
-	file_filter "$file_in"
-	
-	url_in_file=$(unpack "$html")
-	url_in_file="${url_in_file#*file\:\"}"
-	url_in_file="${url_in_file%%\"*}"
+        file_in=$(get_title "$html")
+        file_in="${file_in#Streaming }"
+        file_filter "$file_in"
+        
+        url_in_file=$(unpack "$html")
+        url_in_file="${url_in_file#*file\:\"}"
+        url_in_file="${url_in_file%%\"*}"
 
         if ! check_wget ||
                 ! check_backin
