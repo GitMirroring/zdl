@@ -7,7 +7,7 @@ $stream_cf_wrapper = new CFStream(array(
     'max_retries'   => 5,                       // How many times to try and get clearance?
     'cache'         => true,                   // Enable caching?
     'cache_path'    => '/tmp', // __DIR__ . '/cache',      // Where to cache cookies? (Default: system tmp directory)
-    'verbose'       => true                     // Enable verbose? (Good for debugging issues - doesn't effect context)
+    'verbose'       => false                     // Enable verbose? (Good for debugging issues - doesn't effect context)
 ));
 
 $host = $argv[1];

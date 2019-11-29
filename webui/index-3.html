@@ -21,7 +21,7 @@
     <div class="header"><a class="logo" href="">ZDL web UI</a></div>
     <div class="loader"><div class="donut"></div></div>
     <div class="wrapper">
-        <div id="tabs">
+        <div id="tabs" class="tabs-container">
             <ul>
                 <li><a data-i18n="tab-1-name" href="#tabs-1">Downloads</a></li>
                 <li><a data-i18n="tab-2-name" href="#tabs-2">Manage downloads</a></li>
@@ -502,16 +502,16 @@
 
             <!-- TAB 9 - Info -->
             <div id="tabs-9">
-                <h4 data-i18n="tab-9-title">ZigzagDownLoader (ZDL) documentation</h4>
-                <p data-i18n="tab-9-text">The user manual is available in various forms, accessible from the terminal or from a web browser.</p>
-                <p data-i18n="tab-9-links">Some useful links:</p>
+                <h4 data-i18n="tab-9-doc">ZigzagDownLoader (ZDL) documentation</h4>
+                <p data-i18n="tab-9-doc-text">The user manual is available in various forms, accessible from the terminal or from a web browser.</p>
+                <p data-i18n="tab-9-doc-links">Some useful links:</p>
                 <ul class="info">
-                    <li><a data-i18n="tab-9-link-site" href="http://nongnu.org/zdl" target="_blank">Official site of ZigzagDownLoader</a></li>
-                    <li><a data-i18n="tab-9-link-diaspora" href="https://joindiaspora.com/tags/zdl" target="_blank">Updates in Diaspora*</a></li>
-                    <li><a data-i18n="tab-9-link-savannah" href="https://savannah.nongnu.org/projects/zdl" target="_blank">Development project on Savannah/GNU</a></li>
-                    <li><a data-i18n="tab-9-link-packages" href="http://download-mirror.savannah.gnu.org/releases/zdl/" target="_blank">ZDL packages released</a></li>
-                    <li><a data-i18n="tab-9-link-git" href="http://git.savannah.gnu.org/cgit/zdl.git" target="_blank">Git repository (source version check)</a></li>
-                    <li><a data-i18n="tab-9-link-report" href="https://savannah.nongnu.org/bugs/?func=additem&group=zdl" target="_blank">Send a message or report a bug</a></li>
+                    <li><a data-i18n="tab-9-doc-site" href="http://nongnu.org/zdl" target="_blank">Official site of ZigzagDownLoader</a></li>
+                    <li><a data-i18n="tab-9-doc-diaspora" href="https://joindiaspora.com/tags/zdl" target="_blank">Updates in Diaspora*</a></li>
+                    <li><a data-i18n="tab-9-doc-savannah" href="https://savannah.nongnu.org/projects/zdl" target="_blank">Development project on Savannah/GNU</a></li>
+                    <li><a data-i18n="tab-9-doc-packages" href="http://download-mirror.savannah.gnu.org/releases/zdl/" target="_blank">ZDL packages released</a></li>
+                    <li><a data-i18n="tab-9-doc-git" href="http://git.savannah.gnu.org/cgit/zdl.git" target="_blank">Git repository (source version check)</a></li>
+                    <li><a data-i18n="tab-9-doc-report" href="https://savannah.nongnu.org/bugs/?func=additem&group=zdl" target="_blank">Send a message or report a bug</a></li>
                 </ul>
                 <div class="local-info">
                     <strong>Localization:</strong>
@@ -562,6 +562,7 @@
     <script src="js/i18n/jquery.i18n.language.js"></script>
     <script src="js/globalize.js"></script>
     <script src="js/globalize.culture.it.js"></script>
+    <script src="js/progress.ring.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 
     <script>

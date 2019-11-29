@@ -81,7 +81,7 @@ class ZDL {
         return this.request( `cmd=get-free-space&path=${this.path}` );
     }
 
-	getLinks() {
+    getLinks() {
         return this.request( `cmd=get-links&path=${this.path}` );
     }
 
@@ -181,7 +181,7 @@ class ZDL {
         return this.request( `cmd=set-livestream&path=${path}&link=${link}&start=${start}&duration=${duration}` );
     }
 
-    createAccount(user, pwd) {
+    createAccount( user, pwd ) {
         return this.request( `cmd=create-account&user=${user}&pass=${pwd}` );
     }
 

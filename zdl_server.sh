@@ -381,7 +381,7 @@ function send_json {
     ## per debug:
     # cp "$server_data".$socket_port.diff "$server_data".$socket_port.old
     ####
-    
+
     cp "$server_data".$socket_port "$server_data".$socket_port.diff
 
     rm -rf "$path_server"/clean-complete.$socket_port
@@ -1739,6 +1739,17 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    echo "$sockets" > "$file_output"
 	    ;;
 
+    run-terminal-emulator)
+        "$path_usr"/ttyd -o "$path_usr"/webui_updater.sh &
+        ;;
+
+    kill-terminal-emulator)
+        ## ttyd viene chiuso automaticamente quando si disconnette (alla fine dello script digitando Enter)
+        ## Questo è necessario nel caso in cui si chiuda il box senza che lo script abbia terminato
+        ps -ef | grep 'ttyd' | grep -v grep | awk '{print $2}' | xargs -r kill -9
+        #pkill 'ttyd'
+        ;;
+
 	run-zdl)
 	    for ((i=1; i<${#line[@]}; i++))
 	    do
@@ -1932,7 +1943,7 @@ function http_server {
             while read header
             do
                 #echo "header: $header" >>zdl_server_$id.log
-                if [ "$header" == "$(code2char 13)" ] 
+                if [ "$header" == "$(code2char 13)" ]
                 then
                     #echo "--------------" >>zdl_server_$id.log
                     break
@@ -1943,7 +1954,7 @@ function http_server {
 		    check_session_cookie "$cookie" && logged_on=true
                 fi
             done
-            
+
             if [ -z "$logged_on" ] &&
 		   [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
 		   [[ ! "$file_output" =~ login.*\.html\? ]]
@@ -1960,9 +1971,9 @@ function http_server {
 	    then
 		[[ "$file_output" =~ "$server_data" ]] &&
 		    create_json
-                
+
 		serve_file "$file_output"
-                
+
 	    else
 		exit
 	    fi

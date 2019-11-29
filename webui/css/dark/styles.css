@@ -81,7 +81,7 @@ h4.subtitle {
   margin: 0 15px 0 0;
 }
 
-.downloads {
+.download {
   overflow: hidden;
 }
 
@@ -529,17 +529,6 @@ fieldset {
   text-align: center;
 }
 
-.shutdown {
-  font-size: 14px;
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  line-height: 20px;
-  letter-spacing: 1px;
-}
-
 .align-right {
   text-align: right;
 }
@@ -695,7 +684,6 @@ fieldset {
 table.dataTable thead th {
   background: #383D43;
   font-weight: bold !important;
-  border-color: #555 !important;
 }
 
 table.dataTable tr td {
@@ -704,6 +692,22 @@ table.dataTable tr td {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Exit animation */
+.ring-container {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}
+
+.tabs-container {
+  transition: transform 3s 0s;
+  transform: translateY(0);
+}
+
+.exit .tabs-container {
+  transform: translateY(-100vw);
 }
 
 /* Simple responsive */

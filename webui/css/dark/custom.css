@@ -103,6 +103,13 @@ https://savannah.nongnu.org/projects/zdl */
   color: #eee !important;
 }
 
+/* Button action done */
+.button-action-done {
+  border: 1px solid #3f4757 !important;
+  background: #3f4757 !important;
+  color: #ccc !important;
+}
+
 /* Custom tooltip red background */
 .tooltip-custom-red {
   background: #d00;

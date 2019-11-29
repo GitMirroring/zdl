@@ -25,15 +25,14 @@
  *	DOWNLOADS :: Tab 1
  */
 var downloads = {
-    // Delete progressbar and Info of completed download
+    // Delete progressbar of completed downloads
     clean: function () {
         myZDL.cleanCompleted().then( function () {
             var uibar;
-            $( ".progressbar" ).each( function () {
+            $( ".download" ).each( function () {
                 uibar = $( this ).find( ".ui-progressbar" );
                 if ( uibar.attr( "aria-valuenow" ) === "100" ) {
                     client.remove( "list", uibar.attr( "id" ).substring( 4 ) );
-                    $( this ).next( ".toggle" ).remove();
                     $( this ).remove();
                 }
             } );
@@ -63,7 +62,7 @@ var downloads = {
                 utils.log( "client-init-error", e, true );
             } );
         }
-	    utils.switchToTab( 1 );
+        utils.switchToTab( 1 );
     },
 
     // Add file downloaded to the playlist
@@ -78,7 +77,12 @@ var downloads = {
             } else {
                 utils.addToPlaylist( filePath );
                 utils.log( "playlist-file-added", filePath );
-                utils.switchToTab( 3 );
+                elem.button( "option", {
+            		label: $.i18n( "button-playlist-added" ),
+            		classes: {
+                		"ui-button": "ui-corner-all button-action-done"
+            		}
+        		} );
             }
         } );
     },
@@ -91,15 +95,13 @@ var downloads = {
         } );
     },
 
-    // Delete download progress bar and info
+    // Delete download
     delete: function ( elem ) {
         var path = elem.data( "path" ),
             link = elem.data( "link" ),
-            fileName = elem.data( "file" ),
-            toggle = elem.closest( ".toggle" );
+            fileName = elem.data( "file" );
         myZDL.deleteLink( encodeURIComponent( link ), path ).then( function () {
-            toggle.prev().remove();
-            toggle.remove();
+            elem.closest( ".download" ).remove();
             if ( client.exist( "active", fileName ) ) {
                 client.remove( "active", fileName );
             }
@@ -168,7 +170,7 @@ var manage = {
 
     // Toggle view of links in the queue
     toggleLinks: function ( elem ) {
-        $( "#" +elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
+        $( "#" + elem.data( "toggle" ) ).toggle( "blind", null, 500, function () {
             if ( $( this ).is( ":visible" ) ) {
                 elem.button( "option", "label", $.i18n( "button-close" ) );
                 var textArea = $( this ).children( "textarea" );
@@ -190,16 +192,10 @@ var manage = {
         var links = elem.prev().val();
         if ( links ) {
             var splitted = links.split( "\n" ),
-                pattern,
                 pass = true;
-            $.each( splitted, function ( index, link ) {
-                if ( /^https?:\/\//i.test( link ) ) {
-                    pattern = "URL";
-                } else {
-                    pattern = "irc";
-                }
-                if ( !utils.validateInput( link, "URL" ) ) {
-                    utils.log( "links-edited-incorrect", link, true );
+            $.each( splitted, function ( index, item ) {
+                if ( !utils.validateInput( item, "URL" ) ) {
+                    utils.log( "links-edited-incorrect", item, true );
                     pass = false;
                 }
             } );
@@ -393,10 +389,10 @@ var xdcc = {
                                 i + 1,
                                 o.name,
                                 o.length,
-				o.server,
-				o.channel,
-				o.bot,
-				o.slot,
+                                o.server,
+                                o.channel,
+                                o.bot,
+                                o.slot,
                                 o.gets,
                                 "<button data-i18n='button-send' class='button xdcc-search-send'>" + send + "</button>"
                             ] ).draw( false );
@@ -434,7 +430,7 @@ var xdcc = {
             disabled: true,
             icon: "ui-icon-check",
             classes: {
-                "ui-button": "ui-corner-all ui-link-sent"
+                "ui-button": "ui-corner-all button-action-done"
             }
         } );
         myZDL.addXdcc( xdccreq ).then( function ( res ) {
@@ -568,7 +564,7 @@ var livestream = {
     set: function () {
         var channel = null;
         $( ".livestream-channels > input" ).each( function () {
-            if ( $( this ).prop( "checked" ) )  {
+            if ( $( this ).prop( "checked" ) ) {
                 channel = $( this ).val();
             }
         } );
@@ -583,7 +579,7 @@ var livestream = {
             myZDL.setLivestream( myZDL.path, channel, start, duration ).then( function ( res ) {
                 var response = res.trim();
                 if ( response ) {
-                    var sched = channels[channel] + " | " + start + " | " + duration;
+                    var sched = channels[ channel ] + " | " + start + " | " + duration;
                     utils.log( "livestream-scheduled", sched );
                 } else {
                     utils.log( "livestream-scheduled-failure", null, true );
@@ -604,7 +600,7 @@ var livestream = {
             if ( elem.length ) {
                 downloads.delete( elem );
             }
-            utils.log( "livestream-delete", channels[ link.slice(0, link.lastIndexOf("#")) ] );
+            utils.log( "livestream-delete", channels[ link.slice( 0, link.lastIndexOf( "#" ) ) ] );
         } );
     }
 };
@@ -626,7 +622,7 @@ var sockets = {
         } );
     },
 
-    // Open webui to a new server port or kill running socket
+    // Open a webui to a new socket address or kill running socket
     manage: function ( elem ) {
         var port = elem.text();
         if ( elem.parent().hasClass( "sockets-go" ) ) {
@@ -637,8 +633,7 @@ var sockets = {
                 utils.log( "socket-killed", port );
                 if ( port === document.location.port ) {
                     window.setTimeout( function () {
-                        //window.location.href = window.location.pathname;
-                        $("body").empty().append("<p class='centered'>ZDL web UI is turned off. See you later :)</p>");
+                        $( "body" ).empty().append( "<p class='centered'>ZDL web UI is turned off. See you later :)</p>" );
                     }, 2000 );
                 }
             } );
@@ -685,7 +680,6 @@ var config = {
             utils.localizeHard();
             client.tableInit( val );
             client.set( "locale", val );
-            localStorage.setItem( "ZDLlanguage", val );
             utils.log( "set-language", val.toUpperCase() );
         } );
     },
@@ -763,8 +757,6 @@ var zdlconsole = {
         if ( path === $( "#console-path" ).val() ) {
             myZDL.getConsoleLog( path, loop ).then( function ( res ) {
                 var content = textArea.val() + res;
-                    //response = res.replace(/^\s*[0-9\s]+(.*)$/gm, "$1"); // remove counters
-                //response = response.replace(/^(Link da processare:)/gm, "\n$1"); // add empty line as block divider
                 textArea.val( content ).animate( {
                     scrollTop: textArea.prop( "scrollHeight" ) - textArea.height()
                 }, 1000 );
@@ -775,7 +767,7 @@ var zdlconsole = {
 
     // Clean the download log
     cleanDownloadLog( elem ) {
-        elem.prev().val("");
+        elem.prev().val( "" );
     },
 
     // Stop the download log flow
@@ -784,8 +776,8 @@ var zdlconsole = {
         if ( path.val() ) {
             path.val( "" );
             myZDL.stopConsoleLog().then( function () {
-                $( "#console-path-select option" ).first().prop("selected", true);
-    			$( "#console-path-select" ).selectmenu( "refresh" );
+                $( "#console-path-select option" ).first().prop( "selected", true );
+                $( "#console-path-select" ).selectmenu( "refresh" );
                 utils.log( "console-download-log-stop" );
             } );
         }
@@ -810,12 +802,12 @@ var info = {
                 var textArea = $( this ).children( "textarea" ),
                     lang = client.get( "locale" ),
                     read = $.get( "webui-" + lang + ".txt" );
-                read.done( function( res ) {
-                    textArea.val( res );
-                } )
-                .fail( function () {
-                    utils.log( "webui-info-error" );
-                } );
+                read.done( function ( res ) {
+                        textArea.val( res );
+                    } )
+                    .fail( function () {
+                        utils.log( "webui-info-error" );
+                    } );
             } else {
                 elem.button( "option", "label", $.i18n( "button-open" ) );
             }
@@ -831,28 +823,24 @@ var exit = {
     shutdown: function ( elem ) {
         elem.button( "option", {
             classes: {
-                "ui-button": "ui-corner-all ui-state-exiting"
+                "ui-button": "ui-corner-all button-state-exiting"
             },
             disabled: true
         } );
         myZDL.exitAll().then( function () {
-            var count = 5,
-                countdown = setInterval( function () {
-                    elem.button( "option", "label", count );
-                    count = count - 1;
-                    if ( count < 0 ) {
-                        clearInterval( countdown );
-                        //window.location.href = window.location.pathname;
-                        $( ".wrapper" ).replaceWith("<p data-i18n='[html]zdl-shutdown' class='shutdown'>All ZDL instances have been closed.<br>The server is stopped.</p>");
-                        $( ".shutdown" ).i18n();
-                    }
-                }, 500 );
+            var wrapper = $( ".wrapper" ).addClass( "exit" ),
+                lang = client.get( "locale" );
+            setTimeout( function () {
+                wrapper.prepend( "<div class='ring-container'><progress-ring stroke='6' radius='100' progress='100'></progress-ring></div>" ).hide().fadeIn(2000);
+                animateRing( lang );
+            }, 400 );
+            console.log( "ZDL web UI closed" );
         } );
     }
 };
 
 /**
- *	COMMON :: Methods for multiple elements
+ *	COMMON
  */
 var common = {
     /*
@@ -1137,7 +1125,7 @@ var utils = {
             n = 1;
         $.each( data, function ( index, item ) {
             n += index;
-            dataChannels[item.url] = item.chan;
+            dataChannels[ item.url ] = item.chan;
             channels += "<label for='" + id + n + "'>" + item.chan + "</label><input class='radio-stream' type='radio' name='channel-radio' id='" + id + n + "' value='" + item.url + "'>";
         } );
         $( ".livestream-channels" ).append( channels );
@@ -1152,16 +1140,15 @@ var utils = {
         } else {
             counters = client.getCount();
         }
-        $( "#counters .total" ).text( counters[0] );
-        $( "#counters .active" ).text( counters[1] );
-        $( "#counters .completed" ).text( counters[0] - counters[1] );
+        $( "#counters .total" ).text( counters[ 0 ] );
+        $( "#counters .active" ).text( counters[ 1 ] );
+        $( "#counters .completed" ).text( counters[ 0 ] - counters[ 1 ] );
     },
 
-    /* Check and delete download progressbar removed by external action */
+    /* Check and delete a download progressbar removed by an external action */
     checkBars: function ( links ) {
         var bars = client.get( "list" ),
             barId,
-            progress,
             link,
             file;
         $.each( bars, function ( index, item ) {
@@ -1169,11 +1156,9 @@ var utils = {
             file = barId.children( ".label" ).text();
             link = $( "#info-" + item + " button:last-child" ).data( "link" );
             if ( link && !links.includes( link ) ) {
-                progress = barId.closest( '.progressbar' );
-                progress.next( ".toggle" ).remove();
-                progress.remove();
-				client.remove( "list", item );
-				utils.updateCounters();
+                barId.closest( ".download" ).remove();
+                client.remove( "list", item );
+                utils.updateCounters();
                 utils.log( "progressbar-inexistent-deleted", file );
             }
         } );

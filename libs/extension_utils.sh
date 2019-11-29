@@ -749,13 +749,80 @@ function check_cloudflare {
 }
 
 function get_by_cloudflare {
-    local url_in="$1"
+    local url_in="$1" result
     declare -n ref="$2"
     local post_data="$3"
     local domain="${url_in#*\/\/}"
     domain="${domain%%\/*}"
+    local proto="${url_in%${domain}*}"
+    
+    result=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" "$post_data")
+#echo RES: "$result"
+#    echo \--------------------------------------------------------------------
+    local post_action="$proto$domain"$(grep 'action=' <<< "$result" |
+                            tail -n1 |
+                            sed -r 's|.+action=\"([^"]+)\".+|\1|g')
+    post_action=$(sanitize_url "$post_action")
+    
+    local get_data="${post_action#*\?}"
+    
+    local post_data=$(grep 'POST-DATA:' <<< "$result" -A4)
+#    echo -e "ALL: ------------------\n\n$post_data"
+    post_data=$(tail -n4 <<< "$post_data"| tr '\n' '&')
+    #post_data=$(head -n5 <<< "$post_data"| tail -n4 | tr '\n' '&')
 
-    ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" "$post_data")
+    post_data="${post_data%\&}"
+    post_data=$(urlencode_query "$post_data")
+    local content_length=${#post_data} #$(( ${#get_data} + ${#post_data} )) #$((${#post_data} + 696))
+    
+    local cookie=$(grep 'COOKIE' -A1 <<< "$result" | tail -n1)
+    cookie="${cookie//Name=}"
+    cookie="${cookie//'; Value='/=}"
+    cookie="${cookie%';'}"
+    
+#    echo -e "
+# ACTION: $post_action
+# DATA: $post_data
+# COOKIE: $cookie
+# LENGTH: $content_length
+# "
+#     echo \--------------------------------------------------------------------
+    #                   -H "Content-Length: ${content_length}" \
+        #                  -H 'Content-Type: application/x-www-form-urlencoded' \
+    result=$(curl -v \
+                  -H "Host: $domain" \
+                  -A "$user_agent" \
+                  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'    \
+                  -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3'                                   \
+                  -H 'Accept-Encoding: gzip, deflate, br'                                         \
+                  -H "Referer: $url_in" \
+                  -H 'Connection: keep-alive' \
+                  -H "Cookie: $cookie" \
+                  -H 'Upgrade-Insecure-Requests: 1' \
+                  -H 'TE: Trailers' \
+                  "${post_action}" \
+                  -d "$post_data" \
+                  2>&1)
+
+    # result=$(wget -SO- \
+    #               "$post_action" \
+    #               --header="Host: $domain" \
+    #               --user-agent="$user_agent" \
+    #               --header='Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
+    #               --header='Accept-Encoding: "gzip, deflate, br"'                                         \
+    #               --header='Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
+    #               --header="Referer: $url_in" \
+    #               --header='Content-Type: application/x-www-form-urlencoded' \
+    #               --header='Connection: keep-alive' \
+    #               --header="Cookie: $cookie" \
+    #               --header='Upgrade-Insecure-Requests: 1' \
+    #               --header='TE: Trailers' \
+    #               --keep-session-cookies \
+    #               --save-cookies="$path_tmp"/cookies.zdl \
+    #               --post-data="$post_data" 2>&1)
+
+    ref="$result"
+    
     return
     
     # curl                                                                                  \
@@ -851,7 +918,7 @@ function get_location_by_cloudflare {
     local location_chunk
     domain="${url_in#*\/\/}"
     domain="${domain%%\/*}"
-
+php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" 
     ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" |
               grep '__LOCATION__:' |
               tail -n1 |

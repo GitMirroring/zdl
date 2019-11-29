@@ -28,7 +28,7 @@ class CFBypass
         /* IUAM page should have the following strings:
          * - jschl_vc, jschl_answer, pass, /cdn-cgi/l/chk_jschl
          */ 
-        $required_fields = [ "s", "jschl_vc", "jschl_answer", "pass"];
+        $required_fields = [ "r", "jschl_vc", "jschl_answer", "pass"];
 
         foreach ( $required_fields as $field ) {
             if ( strpos( $content, $field ) === false )
@@ -44,12 +44,12 @@ class CFBypass
      * 
      * @access public
      * @param string $uri  URL components
-     * @param string $s S code.
+     * @param string $r R code.
      * @param string $jschl_vc  JSCHL VC value
      * @param string $pass  Pass value
      * @param string $jschl_answer  JSCHL answer value
      */
-    public static function assemble( $uri, $s, $jschl_vc, $pass, $jschl_answer ) {
+    public static function assemble( $uri, $r, $jschl_vc, $pass, $jschl_answer ) {
         $query = [];
     
         if (isset( $uri['query'] ))
@@ -62,7 +62,7 @@ class CFBypass
             // add user params and cf params.
             http_build_query(array_merge( 
             [
-                's'                 => $s, 
+                'r'                 => $r, 
                 'jschl_vc'          => $jschl_vc,
                 'pass'              => $pass, 
                 'jschl_answer'      => $jschl_answer             
@@ -99,10 +99,11 @@ class CFBypass
 
 
         try {
-
-            // -- 2. Extract "s", "jschl_vc" and "pass" input values.
-
-            $s          = self::getInputValue( $iuam, 's' );
+            // z0n1n0z: "r" sostituisce "s"
+            
+            // -- 2. Extract "r", "jschl_vc" and "pass" input values.
+            
+            $r          = self::getInputValue( $iuam, 'r' );
             $jschl_vc   = self::getInputValue( $iuam, 'jschl_vc' );
             $pass       = self::getInputValue( $iuam, 'pass' );
 
@@ -110,10 +111,16 @@ class CFBypass
                 throw new \ErrorException("Unable to fetch \"jschl_vc\" and \"pass\" parameters!");
             }
 
+            // z0n1n0z
+            printf( "IUAM:\n\n%s\n\nPOST-DATA:\n", $iuam );
+            printf( "r=%s\n", $r );
+            printf( "jschl_vc=%s\n", $jschl_vc );
+            printf( "pass=%s\n", $pass );
+
             // Debug
             if ($verbose_mode) {
                 Logger::info("CFBypass 2. Fetching parameters...");
-                Logger::info(sprintf( "\t\ts:\t%s", $s ));
+                Logger::info(sprintf( "\t\tr:\t%s", $r ));
                 Logger::info(sprintf( "\t\tjschl_vc:\t%s", $jschl_vc ));
                 Logger::info(sprintf( "\t\tpass:\t\t%s", $pass ));
             }
@@ -126,13 +133,18 @@ class CFBypass
 
             $jschl_answer = self::getJschlAnswer( $iuam ) + mb_strlen( $uri['host'] );
 
+
+            // z0n1n0z
+            printf( "jschl_answer=%s\n", $jschl_answer );
+
+
             // Debug
             if ($verbose_mode) {
                 Logger::info("CFBypass 3. Calculating JS challenge answer...");
                 Logger::info(sprintf( "\t\tjschl_answer:\t%s", $jschl_answer ));
             }
         
-            return array( $s, $jschl_vc, $pass, $jschl_answer );
+            return array( $r, $jschl_vc, $pass, $jschl_answer );
 
         } catch( Exception $ex ) {
 

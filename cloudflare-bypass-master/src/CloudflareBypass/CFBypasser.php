@@ -124,6 +124,9 @@ class CFBypasser {
                     throw new \ErrorException('The cookie named "__cfduid" does not exist!');
                 }
 
+                // z0n1n0z
+                printf( "\nCOOKIE\n%s\n", $cfduid_cookie );
+                
                 // Debug
                 if ($config['verbose_mode']) {
                     Logger::info(sprintf( "%s 3.2. (try: %s  first_attempt: %s) __cfduid cookie is: %s", $type, $try_counter, $first_attempt, $cfduid_cookie ));

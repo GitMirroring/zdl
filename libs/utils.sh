@@ -80,6 +80,27 @@ function urlencode {
     echo -n "$text"
 }
 
+function urlencode_query {
+    local var val t i text
+    declare -a char=( '+' '/' '=' ' ' )
+    declare -a encoded=( '%2B' '%2F' '%3D' '%20' )
+    declare -a text_splitted=( $(split "$1" '&') )
+
+    for t in "${text_splitted[@]}"
+    do
+        var="${t%%\=*}"
+        val="${t#*\=}"
+        [ -n "$text" ] && text+="&"
+        
+        for i in $(seq 0 $(( ${#char[*]}-1 )) )
+        do
+	    val="${val//${char[$i]}/${encoded[$i]}}"
+        done
+        text+="${var}=${val}"
+    done
+    echo "${text%\&}"
+}
+
 function add_container {
     local new
     unset new
@@ -114,7 +135,7 @@ function split {
     if [[ "$2" ]]
     then
 	IFS="$2"
-	splitted=($1)
+	declare -a splitted=($1)
 	for i in ${splitted[*]}
 	do echo $i
 	done
@@ -126,17 +147,18 @@ function split {
 }
 
 function obfuscate {
-    local obfs
+    local obfs res
     for i in $(split "$1")
     do
 	 obfs+=$(char2code "$i")
     done
-    obfs=$(( obfs + obfs - RANDOM * RANDOM + $(date +%s) ))
+    obfs=$(( (obfs + obfs - RANDOM) * RANDOM + $(date +%s) ))
 
     for i in $(split "$obfs")
     do
-	code2char "10$i"
+	res+=$(code2char "10$i")
     done
+    printf "%s" "$res"
 }
 
 function countdown+ {

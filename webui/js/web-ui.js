@@ -594,7 +594,7 @@ var getStatus = function (repeat, op) {
 };
 
 var displayPaths = function (paths) {
-    if (paths.length >0) {
+    if (paths[0]) {
 	var spec = {
             value: "",
             options: paths
@@ -603,10 +603,6 @@ var displayPaths = function (paths) {
 	displayInputSelect(spec, "active-paths-manager", "changePath");
 	spec.key = "active-path-console";
 	displayInputSelect(spec, "active-paths-console", "displayConsole");
-    }
-    else {
-	document.getElementById("active-paths-manager").innerHTML = "<div style=\"padding: 0.5em 0.7em;\">Nessuna istanza attiva</div>";
-	document.getElementById("active-paths-console").innerHTML = "<div style=\"padding: 0.5em 0.7em;\">Nessuna istanza attiva</div>";
     }
 }
 
