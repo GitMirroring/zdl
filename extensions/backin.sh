@@ -83,16 +83,16 @@ then
         url_in_file="${url_in_file#*src\:\"}"
         url_in_file="${url_in_file%%\"*}"
 
-        if ! check_wget ||
-                ! check_backin
-        then
-            # echo "Elite" >> "$path_tmp"/proxy
-            # echo "Anonymous" >> "$path_tmp"/proxy
-            print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
-            print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
+        # if ! check_wget ||
+        #         ! check_backin
+        # then
+        #     # echo "Elite" >> "$path_tmp"/proxy
+        #     # echo "Anonymous" >> "$path_tmp"/proxy
+        #     print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
+        #     print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
             
-            set_temp_proxy
-        fi
+        #     set_temp_proxy
+        # fi
     fi
     end_extension
 fi
