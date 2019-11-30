@@ -29,35 +29,33 @@
 
 if [ "$url_in" != "${url_in//'rockfile.'}" ]
 then
+    unset post_data
     rm -f "$path_tmp"/cookies*.zdl "$path_tmp"/headers*.zdl 
     domain_rockfile="rockfile.co"
 
-    if [[ ! "$url_in" =~ \/f\/ ]]
-    then
-	if check_cloudflare "$url_in"
-	then
-	    #get_location_by_cloudflare "$url_in" rockfile_location
-            get_by_cloudflare "$url_in" rockfile_location 
-	else
-	    get_location "$url_in" rockfile_location
-	fi
-#echo "loc: $rockfile_location"
-	if url "$rockfile_location"
-	then
-	    replace_url_in "$rockfile_location"
-	fi
-    fi
-#echo "url_in: $url_in"    
     if check_cloudflare "$url_in"
     then
 	get_by_cloudflare "$url_in" html
+        if [[ ! "$url_in" =~ \/f\/ ]]
+        then
+            rockfile_location=$(tail -n1 <<< "$html")
+            url "$rockfile_location" &&
+                replace_url_in "$rockfile_location"
+        fi
+
     else
-	html=$(curl -s \
+        if [[ ! "$url_in" =~ \/f\/ ]]
+        then
+	    get_location "$url_in" rockfile_location
+	    url "$rockfile_location" &&
+	        replace_url_in "$rockfile_location"
+        fi
+        html=$(curl -s \
 		    -A "$user_agent" \
 		    -c "$path_tmp"/cookies.zdl \
 		    "$url_in")
-    fi
-#echo "html: $html"
+    fi    
+    
     if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
     then
 	_log 3
@@ -76,6 +74,7 @@ then
 	if check_cloudflare "$url_in"
 	then
 	    get_by_cloudflare "$url_in" html "$post_data"
+
 	else
 	    html=$(curl -v                                                                              \
 		    -A "$user_agent"                                                                \

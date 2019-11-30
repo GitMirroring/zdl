@@ -590,6 +590,8 @@ EXTENSIONS:
             fi
         done
 
+        hash youtube-dl 2>/dev/null && try youtube-dl -U
+        
         ## cloudflare:
         # hash composer 2>/dev/null || install_phpcomposer
         # composer require kyranrana/cloudflare-bypass

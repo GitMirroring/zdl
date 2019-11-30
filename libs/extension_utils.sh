@@ -687,39 +687,6 @@ function get_location { # 1=url 2=variable_to_new_url
     fi
 }
 
-function get_jschl_answer {
-    local page="$1"
-    local domain="$2"
-
-    sed -r 's|setTimeout|//|g' -i "$page"
-    sed -r 's|\}, 4000|//|g' -i "$page"
-
-    sed -r 's|b\(function|//|g' -i "$page"
-    ##sed -r 's|\ \(function|//|g' -i "$page"
-    sed -r 's|b = function|//|g' -i "$page"
-
-    ##sed -r 's|\}\)\(\)|//|g' -i "$page"
-    sed -r 's|\}\,\ false|//|g' -i "$page"
-
-    sed -r 's|var\ a\ \=\ document|//|g' -i "$page"
-    sed -r 's|var\ a\ \=\ function|//|g' -i "$page"
-
-    sed -r "s|^\s*t.+|t = '$domain';|g" -i "$page"
-    sed -r 's|f.submit|//|g' -i "$page"
-
-    # sed -r "s|'; 121'||g" -i "$page"
-
-    # sed -r 's|a\ \=\ document|//|g' -i "$page"
-    # sed -r 's|a.value|a|g' -i "$page"
-    
-    # sed -r 's|<\/head>||g' -i "$page"
-    # sed -r 's|<body>||g' -i "$page"
-    # sed -r 's|<\/style>|</style></head><body>|g' -i "$page"
-    # sed -r 's|^[ ]+\;||g' -i "$page"
-
-    jschl_answer=$($(command -v phantomjs 2>/dev/null) "$path_usr"/extensions/cloudflare.js "$page")
-}
-
 function check_cloudflare {
     local target="$1"
     local html
@@ -756,270 +723,25 @@ function get_by_cloudflare {
     domain="${domain%%\/*}"
     local proto="${url_in%${domain}*}"
     
-    result=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" "$post_data")
-#echo RES: "$result"
-#    echo \--------------------------------------------------------------------
-    local post_action="$proto$domain"$(grep 'action=' <<< "$result" |
-                            tail -n1 |
-                            sed -r 's|.+action=\"([^"]+)\".+|\1|g')
-    #post_action=$(sanitize_url "$post_action")
-    
-    local get_data="${post_action#*\?}"
-    
-    local post_data=$(grep 'POST-DATA:' <<< "$result" -A4)
-#    echo -e "ALL: ------------------\n\n$post_data"
-    post_data=$(tail -n4 <<< "$post_data"| tr '\n' '&')
-    #post_data=$(head -n5 <<< "$post_data"| tail -n4 | tr '\n' '&')
-
-    post_data="${post_data%\&}"
-    #post_data=$(urlencode_query "$post_data")
-    local content_length=${#post_data} #$(( ${#get_data} + ${#post_data} )) #$((${#post_data} + 696))
-    
-    local cookie=$(grep 'COOKIE' -A1 <<< "$result" | tail -n1)
-    cookie="${cookie//Name=}"
-    cookie="${cookie//'; Value='/=}"
-    cookie="${cookie%';'}"
-    
-#    echo -e "
-# ACTION: $post_action
-# DATA: $post_data
-# COOKIE: $cookie
-# LENGTH: $content_length
-# "
-#     echo \--------------------------------------------------------------------
-    #                   
-        #                  
-    result=$(curl -v \
-                  -H "Host: $domain" \
-                  -A "$user_agent" \
-                  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'    \
-                  -H 'Accept-Language: it,en-US;q=0.7,en;q=0.3'                                   \
-                  -H 'Accept-Encoding: gzip, deflate, br'                                         \
-                  -H "Referer: $url_in" \
-                  -H 'Content-Type: application/x-www-form-urlencoded' \
-                  -H "Content-Length: ${content_length}" \
-                  -H 'Connection: keep-alive' \
-                  -H "Cookie: $cookie" \
-                  -H 'Upgrade-Insecure-Requests: 1' \
-                  -H 'TE: Trailers' \
-                  "${post_action}" \
-                  -d "$post_data" \
-                  -D "$path_tmp/header.zdl"   \
-                  2>&1)
-
-    # result=$(wget -SO- \
-    #               "$post_action" \
-    #               --header="Host: $domain" \
-    #               --user-agent="$user_agent" \
-    #               --header='Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
-    #               --header='Accept-Encoding: "gzip, deflate, br"'                                         \
-    #               --header='Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-    #               --header="Referer: $url_in" \
-    #               --header='Content-Type: application/x-www-form-urlencoded' \
-    #               --header='Connection: keep-alive' \
-    #               --header="Cookie: $cookie" \
-    #               --header='Upgrade-Insecure-Requests: 1' \
-    #               --header='TE: Trailers' \
-    #               --keep-session-cookies \
-    #               --save-cookies="$path_tmp"/cookies.zdl \
-    #               --post-data="$post_data" 2>&1)
-
+    result=$(php "$path_usr"/extensions/cloudflare-bypass.php "$url_in" "$post_data")
     ref="$result"
     
     return
-    
-    # curl                                                                                  \
-    #   -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
-    #   -H 'Accept-Encoding: "gzip, deflate, br"'                                         \
-    #   -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-    #   -H 'Connection: "keep-alive"'                                                     \
-    #   -H "Host: $domain" \
-    #   -H "Referer: $url_in" \
-    #   -H "Upgrade-Insecure-Requests: 1"                                                 \
-    #   -A "$user_agent"                                                                  \
-    #    "$url_in" > "$path_tmp"/cloudflare.html
-
-    # # curl                                                                                  \
-    # #         -A "$user_agent"                                                                  \
-    # #         -c "$path_tmp/cookies.zdl"                                                        \
-    # #         -D "$path_tmp/header.zdl"                                                         \
-    # #         -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
-    # #         -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-    # #         -H 'Accept-Encoding: "gzip, deflate"'                                             \
-    # #         -H 'DNT: "1"'                                                                     \
-    # #         -H 'Connection: "keep-alive"'                                                     \
-    # #         "$url_in" > "$path_tmp"/cloudflare.html
-
-    # if ! command -v phantomjs &>/dev/null
-    # then
-    #   _log 35
-
-    # else
-    #   get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
-        
-    #   input_hidden "$path_tmp"/cloudflare.html
-
-    #   get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
-
-    #   cookie_cloudflare=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
-
-    #   countdown- 6
-
-    #   for proto in http https
-    #   do
-    #       curl                                                                                \
-    #           -A "$user_agent"                                                                \
-    #           -c "$path_tmp/cookies.zdl"                                                      \
-    #           -D "$path_tmp/header2.zdl"                                                      \
-    #           -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    #           -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-    #           -H 'Accept-Encoding: "gzip, deflate"'                                           \
-    #           -H "Referer: \"$url_in\""                                                       \
-    #           -H "Cookie: \"${cookie_cloudflare}\""                                           \
-    #           -H 'DNT: "1"'                                                                   \
-    #           -H 'Connection: "keep-alive"'                                                   \
-    #           -H 'Upgrade-Insecure-Requests: "1"'                                             \
-    #           -d "$get_data"                                                                  \
-    #           -G                                                                              \
-    #           "$proto://$domain/cdn-cgi/l/chk_jschl" >"$path_tmp"/cloudflare-output.html
-
-    #       grep -s jschl_answer "$path_tmp"/cloudflare-output.html ||
-    #           break
-               
-    #   done
-        
-
-    #   cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
-    #                              cut -d' ' -f2 |
-    #                              tr '\n' ' ')
-    #   cookie_cloudflare="${cookie_cloudflare%';'*}"
-
-    #   ref=$(curl -v                                                                              \
-    #              -A "$user_agent"                                                                \
-    #              -b "$path_tmp/cookies.zdl"                                                      \
-    #              -c "$path_tmp/cookies2.zdl"                                                     \
-    #              -D "$path_tmp/header2.zdl"                                                      \
-    #              -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    #              -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-    #              -H 'Accept-Encoding: "gzip, deflate"'                                           \
-    #              -H "Referer: \"$url_in\""                                                       \
-    #              -H 'DNT: "1"'                                                                   \
-    #              -H 'Connection: "keep-alive"'                                                   \
-    #              -H 'Upgrade-Insecure-Requests: "1"'                                             \
-    #              "${url_in}" 2>&1)
-        
-    #   cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
-    #                              cut -d' ' -f2 |
-    #                              tr '\n' ' ')
-    #   cookie_cloudflare="${cookie_cloudflare%';'*}"
-    # fi
 }
 
 function get_location_by_cloudflare {
-    local url_in="$1"
+    local url_in="$1" result
     declare -n ref="$2"
-    local location_chunk
-    domain="${url_in#*\/\/}"
+    local post_data="$3"
+    local domain="${url_in#*\/\/}"
     domain="${domain%%\/*}"
-php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" 
-    ref=$(php "$path_usr"/extensions/cloudflare-bypass.php "$domain" "$url_in" |
-              grep '__LOCATION__:' |
-              tail -n1 |
-              awk '{print $2}'
-       )
-    return
+    local proto="${url_in%${domain}*}"
     
-    # curl                                                                                  \
-    #   -A "$user_agent"                                                                  \
-    #   -c "$path_tmp/cookies.zdl"                                                        \
-    #   -D "$path_tmp/header.zdl"                                                         \
-    #   -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
-    #   -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-    #   -H 'Accept-Encoding: "gzip, deflate"'                                             \
-    #   -H 'DNT: "1"'                                                                     \
-    #   -H 'Connection: "keep-alive"'                                                     \
-    #   "$url_in" > "$path_tmp"/cloudflare.html
-    # # curl                                                                                  \
-    # #         -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'    \
-    # #         -H 'Accept-Encoding: "gzip, deflate"'                                             \
-    # #         -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                   \
-    # #         -H 'Connection: "keep-alive"'                                                     \
-    # #         -H "Host: \"$domain\""                                                            \
-    # #         -H "Referer: \"$url_in\""                                                         \
-    # #         -H "Upgrade-Insecure-Requests: 1"                                                 \
-    # #         -A "$user_agent"                                                                  \
-    # #         -c "$path_tmp/cookies.zdl"                                                        \
-    # #         -D "$path_tmp/header.zdl"                                                         \
-    # #         -H 'DNT: "1"'                                                                     \
-    # #         "$url_in" > "$path_tmp"/cloudflare.html
-
-    # if ! command -v phantomjs &>/dev/null
-    # then
-    #   _log 35
-
-    # else
-    #   get_jschl_answer "$path_tmp"/cloudflare.html "$domain"
-        
-    #   input_hidden "$path_tmp"/cloudflare.html
-
-    #   get_data="${post_data%\&*}&jschl_answer=$jschl_answer"
-    #   cookie_cloudflare=$(awk '/cfduid/{print $6 "=" $7}' "$path_tmp/cookies.zdl")
-
-    #   countdown- 6
-
-    #   for proto in http https
-    #   do
-    #       curl                                                                                \
-    #           -A "$user_agent"                                                                \
-    #           -c "$path_tmp/cookies.zdl"                                                      \
-    #           -D "$path_tmp/header2.zdl"                                                      \
-    #           -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    #           -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-    #           -H 'Accept-Encoding: "gzip, deflate"'                                           \
-    #           -H "Referer: \"$url_in\""                                                       \
-    #           -H "Cookie: \"${cookie_cloudflare}\""                                           \
-    #           -H 'DNT: "1"'                                                                   \
-    #           -H 'Connection: "keep-alive"'                                                   \
-    #           -H 'Upgrade-Insecure-Requests: "1"'                                             \
-    #           -d "$get_data"                                                                  \
-    #           -G                                                                              \
-    #           "http://$domain/cdn-cgi/l/chk_jschl" >/dev/null
-            
-    #       grep -s jschl_answer "$path_tmp"/cloudflare-output.html ||
-    #           break       
-    #   done
-
-    #   cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
-    #                              cut -d' ' -f2 |
-    #                              tr '\n' ' ')
-    #   cookie_cloudflare="${cookie_cloudflare%';'*}"
-
-    #   ref=$(curl -v                                                                              \
-    #              -A "$user_agent"                                                                \
-    #              -b "$path_tmp/cookies.zdl"                                                      \
-    #              -c "$path_tmp/cookies2.zdl"                                                     \
-    #              -D "$path_tmp/header2.zdl"                                                      \
-    #              -H 'Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"'  \
-    #              -H 'Accept-Language: "it,en-US;q=0.7,en;q=0.3"'                                 \
-    #              -H 'Accept-Encoding: "gzip, deflate"'                                           \
-    #              -H "Referer: \"$url_in\""                                                       \
-    #              -H 'DNT: "1"'                                                                   \
-    #              -H 'Connection: "keep-alive"'                                                   \
-    #              -H 'Upgrade-Insecure-Requests: "1"'                                             \
-    #              "${url_in}" 2>&1 |
-    #             awk '/ocation.+http/{print $3}')
-
-    #   ref=$(trim "$ref")
-        
-    #   cookie_cloudflare=$(grep Set-Cookie "$path_tmp/header2.zdl" |
-    #                              cut -d' ' -f2 |
-    #                              tr '\n' ' ')
-    #   cookie_cloudflare="${cookie_cloudflare%';'*}"
-
-    #   url "$ref" ||
-    #           return 1
-        
-    # fi
+    result=$(php "$path_usr"/extensions/cloudflare-bypass.php "$url_in" "$post_data")
+    result=$(tail -n1 <<< "$result")
+    ref="$result"
+    
+    return
 }
 
 function update_tubeoffline {
@@ -1435,16 +1157,16 @@ function open_relink {
 
     if [ -d "$path_usr/extensions/" ]
     then
-	shopt -s nullglob		    
-	for srcfile in "$path_usr"/extensions/[0-9]*.sh
-	do
-	    if [ -f "$srcfile" ]
-	    then
-		source "$srcfile"
+        shopt -s nullglob                   
+        for srcfile in "$path_usr"/extensions/[0-9]*.sh
+        do
+            if [ -f "$srcfile" ]
+            then
+                source "$srcfile"
                 #echo "$url_in" >/dev/tty1
-	    fi
-	done
-    	shopt -u nullglob
+            fi
+        done
+        shopt -u nullglob
     fi
 
     #echo "url: $url_in"

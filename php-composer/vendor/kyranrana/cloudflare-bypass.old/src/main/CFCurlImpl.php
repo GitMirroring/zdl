@@ -115,7 +115,7 @@ class CFCurlImpl implements CFCurl
             $this->logger->enable($uamOptions->isVerbose());
 
             if (!$this->checkForCorrectHeaders($info['request_header'])) {
-                throw new \ErrorException("cURL handle does not contain correct headers (user-agent, accept, accept-language, upgrade-insecure-requests)");
+                throw new \ErrorException("cURL handle does not contain correct headers (user-agent, accept, accept-language)");
             }
         }
 
@@ -146,15 +146,14 @@ class CFCurlImpl implements CFCurl
         $pageAttributes = new UAMPageAttributes($scheme, $host, $page);
         $formParams     = $pageAttributes->getFormParams();
 
-        $this->logger->info(sprintf("UAM (retry: %s) -> (r param: %s)", $retry, $formParams->getR()));
+        $this->logger->info(sprintf("UAM (retry: %s) -> (s param: %s)", $retry, $formParams->getS()));
         $this->logger->info(sprintf("UAM (retry: %s) -> (jschl_vc param: %s)", $retry, $formParams->getJschlVc()));
         $this->logger->info(sprintf("UAM (retry: %s) -> (pass param: %s)", $retry, $formParams->getPass()));
         $this->logger->info(sprintf("UAM (retry: %s) -> (jschl_answer param: %s)", $retry, $formParams->getJschlAnswer()));
 
         curl_setopt($curlHandle, CURLOPT_URL, $this->uamPage->getClearanceUrl($pageAttributes));
         curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $pageAttributes->getFormParams()->getQueryString());
+        curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, "GET");
 
         $clearancePage    = $this->exec($curlHandle, $uamOptions, $retry + 1, true);
         $clearanceCookies = curl_getinfo($curlHandle, CURLINFO_COOKIELIST);

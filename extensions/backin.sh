@@ -45,10 +45,9 @@ function check_backin {
 if [[ "$url_in" =~ backin ]]
 then
     link_parser "$url_in"
-    #backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
-    backin_url="$parser_proto$parser_domain/s/streams.php?s=$parser_path"
+    backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
     get_language
-    
+
     if url "$backin_url"
     then
         print_c 4 "$(gettext "Redirection"): $backin_url"
@@ -57,6 +56,18 @@ then
         then
             get_language_prog
             get_by_cloudflare "$backin_url" html
+
+            backin_location=$(tail -n1 <<< "$html")
+            url "$backin_location" &&
+                replace_url_in "$backin_location"
+
+            input_hidden "$html"
+            get_by_cloudflare "$url_in" html "$post_data"
+
+            backin_cookies=$(head -n20 <<< "$html" |
+                                 grep -P '(__cfduid|cf_clearance)' |
+                                 sed -r 's|.+=> (.+)$|\1|g')
+            echo -e "$backin_cookies" > "$path_tmp"/cookies.zdl
             get_language
         else
             get_language_prog
@@ -68,8 +79,8 @@ then
         file_in="${file_in#Streaming }"
         file_filter "$file_in"
         
-        url_in_file=$(unpack "$html")
-        url_in_file="${url_in_file#*file\:\"}"
+        url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+        url_in_file="${url_in_file#*src\:\"}"
         url_in_file="${url_in_file%%\"*}"
 
         if ! check_wget ||
