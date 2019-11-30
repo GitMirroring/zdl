@@ -572,7 +572,7 @@ EXTENSIONS:
         deps['ffmpeg']=ffmpeg
         deps['convert']=imagemagick
         deps['tesseract']=tesseract-ocr
-        deps['composer']=composer
+        ## deps['composer']=composer
         ## php-mbstring
         
         command -v X &>/dev/null &&
@@ -591,8 +591,8 @@ EXTENSIONS:
         done
 
         ## cloudflare:
-        hash composer 2>/dev/null || install_phpcomposer
-        composer require kyranrana/cloudflare-bypass
+        # hash composer 2>/dev/null || install_phpcomposer
+        # composer require kyranrana/cloudflare-bypass
         
         try mkdir -p "$HOME"/.local/share/applications/
 
