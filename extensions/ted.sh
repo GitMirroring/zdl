@@ -25,7 +25,7 @@
 #
 ## ZDL add-on
 ## zdl-extension types: streaming
-## zdl-extension name: TED (+ srt)
+## zdl-extension name: TED (+sub)
 
 
 if [[ "$url_in" =~ ted\. ]]

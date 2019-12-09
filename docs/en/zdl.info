@@ -491,11 +491,12 @@ _Streaming video skipping browser player:_
      Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo,
      Onlystream, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
      Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare
-     (HD), Speedvideo (HD), Streamango, Streamin, Supervideo (HD),
-     Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in
-     streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd,
-     VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto,
-     Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     (HD), Speedvideo (HD), Streamango, Streamin, Supervideo (HD), TED
+     (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
+     in streaming di tipo .m3u8, Tutti i video in streaming di tipo
+     .mpd, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza,
+     Vidto, Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa
+     (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -1328,19 +1329,19 @@ General index
 
 * arguments:                             The ZDL command.      (line 17)
 * captcha:                               Streaming/hosting services.
-                                                               (line 37)
+                                                               (line 38)
 * command zdl:                           The ZDL command.      (line  6)
 * download:                              Streaming/hosting services.
-                                                               (line 23)
+                                                               (line 24)
 * file hosting:                          Streaming/hosting services.
-                                                               (line 23)
+                                                               (line 24)
 * generated:                             Streaming/hosting services.
-                                                               (line 37)
+                                                               (line 38)
 * live:                                  Streaming/hosting services.
-                                                               (line 32)
+                                                               (line 33)
 * options:                               The ZDL command.      (line 40)
 * short links:                           Streaming/hosting services.
-                                                               (line 41)
+                                                               (line 42)
 * streaming:                             Streaming/hosting services.
                                                                (line 12)
 * synopsis:                              The ZDL command.      (line 12)
@@ -1454,26 +1455,26 @@ Tag Table:
 Node: Top1193
 Node: The ZDL command5078
 Node: Streaming/hosting services12936
-Node: Start ZDL17125
-Node: Stop ZDL19458
-Node: Check the downloads20493
-Node: User manuals24534
-Node: Modes24927
-Node: Readline27962
-Node: Editor29417
-Node: Homonymy30575
-Node: IRC/XDCC32084
-Node: Torrent33720
-Node: Filters34544
-Node: Create new extensions34832
-Node: Recommended software and dependencies36538
-Node: Conkeror38034
-Node: zdl-xterm and XXXTerm/Xombrero39016
-Node: Installation and update40887
-Node: Why this program43900
-Node: Tags47590
-Node: Copying52217
-Node: Contacts53295
+Node: Start ZDL17142
+Node: Stop ZDL19475
+Node: Check the downloads20510
+Node: User manuals24551
+Node: Modes24944
+Node: Readline27979
+Node: Editor29434
+Node: Homonymy30592
+Node: IRC/XDCC32101
+Node: Torrent33737
+Node: Filters34561
+Node: Create new extensions34849
+Node: Recommended software and dependencies36555
+Node: Conkeror38051
+Node: zdl-xterm and XXXTerm/Xombrero39033
+Node: Installation and update40904
+Node: Why this program43917
+Node: Tags47607
+Node: Copying52234
+Node: Contacts53312
 
 End Tag Table
 

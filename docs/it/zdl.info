@@ -497,11 +497,12 @@ _Video in streaming saltando il player del browser:_
      Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo,
      Onlystream, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
      Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare
-     (HD), Speedvideo (HD), Streamango, Streamin, Supervideo (HD),
-     Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in
-     streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd,
-     VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto,
-     Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     (HD), Speedvideo (HD), Streamango, Streamin, Supervideo (HD), TED
+     (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
+     in streaming di tipo .m3u8, Tutti i video in streaming di tipo
+     .mpd, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza,
+     Vidto, Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa
+     (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -1359,20 +1360,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 37)
+                                                               (line 38)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
-                                                               (line 23)
+                                                               (line 24)
 * file hosting:                          Servizi streaming/hosting.
-                                                               (line 23)
+                                                               (line 24)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 37)
+                                                               (line 38)
 * live:                                  Servizi streaming/hosting.
-                                                               (line 32)
+                                                               (line 33)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 41)
+                                                               (line 42)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1485,26 +1486,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL17999
-Node: Arrestare ZDL20455
-Node: Controllare i download21560
-Node: Manuali d'uso25812
-Node: Modi26228
-Node: Readline29523
-Node: Editor31075
-Node: Omonimie32300
-Node: IRC/XDCC33848
-Node: Torrent35557
-Node: Filtri36441
-Node: Creare nuove estensioni36762
-Node: Software consigliati e dipendenze38537
-Node: Conkeror40099
-Node: zdl-xterm e XXXTerm/Xombrero41123
-Node: Installazione e aggiornamento43047
-Node: Perché questo programma46362
-Node: Tags50250
-Node: Copying54850
-Node: Contatti55900
+Node: Avviare ZDL18016
+Node: Arrestare ZDL20472
+Node: Controllare i download21577
+Node: Manuali d'uso25829
+Node: Modi26245
+Node: Readline29540
+Node: Editor31092
+Node: Omonimie32317
+Node: IRC/XDCC33865
+Node: Torrent35574
+Node: Filtri36458
+Node: Creare nuove estensioni36779
+Node: Software consigliati e dipendenze38554
+Node: Conkeror40116
+Node: zdl-xterm e XXXTerm/Xombrero41140
+Node: Installazione e aggiornamento43064
+Node: Perché questo programma46379
+Node: Tags50267
+Node: Copying54867
+Node: Contatti55917
 
 End Tag Table
 
