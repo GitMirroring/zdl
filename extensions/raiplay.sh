@@ -78,6 +78,17 @@ then
 	fi
 	
     else
+        if [[ "$url_in" =~ \/programmi\/ ]]
+        then
+            raiplay_item_path=$(curl -s "${url_in}.json")
+            raiplay_item_path="${raiplay_item_path#*\"first_item_path\" \: \"}"
+            raiplay_item_path="${raiplay_item_path%%\"*}"
+            test -n "${raiplay_item_path}" &&
+                raiplay_item_path="https://www.raiplay.it${raiplay_item_path}"
+
+            url "${raiplay_item_path}" &&
+                replace_url_in "${raiplay_item_path}"
+        fi
         raiplay_json=$(curl -s "${url_in//html/json}")
         raiplay_url="${raiplay_json#*content_url\": \"}"
         raiplay_url="${raiplay_url%%\"*}"
