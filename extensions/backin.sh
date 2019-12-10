@@ -45,7 +45,8 @@ function check_backin {
 if [[ "$url_in" =~ backin ]]
 then
     link_parser "$url_in"
-    backin_url="$parser_proto$parser_domain/s/generating.php?code=$parser_path"
+    # backin_url="$parser_proto$parser_domain/s/generating.php?code=${parser_path##*\/}"
+    backin_url="$url_in"
     get_language
 
     if url "$backin_url"
@@ -62,6 +63,7 @@ then
                 replace_url_in "$backin_location"
 
             input_hidden "$html"
+            [[ "$post_data" =~ \=1$ ]] && post_data="${post_data%1}"0
             get_by_cloudflare "$url_in" html "$post_data"
 
             backin_cookies=$(head -n20 <<< "$html" |
@@ -78,21 +80,38 @@ then
         file_in=$(get_title "$html")
         file_in="${file_in#Streaming }"
         file_filter "$file_in"
-        
-        url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
-        url_in_file="${url_in_file#*src\:\"}"
-        url_in_file="${url_in_file%%\"*}"
 
-        # if ! check_wget ||
-        #         ! check_backin
-        # then
-        #     # echo "Elite" >> "$path_tmp"/proxy
-        #     # echo "Anonymous" >> "$path_tmp"/proxy
-        #     print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
-        #     print_c 1 "$(gettext "a proxy will be used (to use more band, perhaps, you can change IP address by reconnecting the modem/router)")"
+        if grep -q 'p,a,c,k,e,d' <<< "$html"
+        then
+            url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+            url_in_file="${url_in_file#*src\:\"}"
+            url_in_file="${url_in_file%%\"*}"
+
+        else
+            backin_url=http://backin.net$(grep 'top.location.href' <<< "$html" |
+                             tail -n1 |
+                             sed -r 's|.+\"([^"]+)\".+|\1|g')
+
+            url "$backin_url" &&
+                replace_url_in "$backin_url"
             
-        #     set_temp_proxy
-        # fi
+            input_hidden "$html"
+            [[ "$post_data" =~ \=1$ ]] && post_data="${post_data%1}"0
+            get_by_cloudflare "$url_in" html "$post_data"
+
+            backin_cookies=$(head -n20 <<< "$html" |
+                                 grep -P '(__cfduid|cf_clearance)' |
+                                 sed -r 's|.+=> (.+)$|\1|g')
+            echo -e "$backin_cookies" > "$path_tmp"/cookies.zdl
+            get_language
+
+            if grep -q 'p,a,c,k,e,d' <<< "$html"
+            then
+                url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+                url_in_file="${url_in_file#*src\:\"}"
+                url_in_file="${url_in_file%%\"*}"
+            fi                    
+        fi
     fi
     end_extension
 fi

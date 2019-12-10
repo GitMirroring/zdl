@@ -76,8 +76,9 @@ then
 			   head -n10 |
 			   tail -n1 |
 	     		   sed -r 's|.+\"([^"]+)\".+|\1|g')
-	
-	if grep 'label: "HD"' <<< "$html" >/dev/null
+
+	if ! url "$url_speedvideo" &&
+                grep 'label: "HD"' <<< "$html" >/dev/null
 	then
 	    url_speedvideo=$(grep 'label: "HD"' -B 1 <<< "$html" |
 			      head -n1)
@@ -98,7 +99,7 @@ then
 	    
 
 	    url_in_file=$(base64_decode "$linkfile"     \
-					$(grep "$var2" <<< "$html"                |
+					$(grep "$var2" <<< "$html"             |
 				    	      head -n1                         |
 				    	      sed -r 's|.+ ([^ ]+)\;$|\1|g') )
 
