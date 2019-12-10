@@ -58,8 +58,14 @@ then
     if ! url "$url_in_file" ||
             [ -z "$file_in" ] 
     then
-        html=$(curl "$url_in")
-
+        if check_cloudflare "$url_in"
+        then
+            get_by_cloudflare "$url_in" html
+            
+        else
+            html=$(curl "$url_in")
+        fi
+        
         if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
         then
 	    _log 3
@@ -73,8 +79,6 @@ then
     if ! url "$url_in_file" ||
             [ -z "$file_in" ] 
     then
-
-        html=$(curl "$url_in")
         url_in_file=$(grep 'player.updateSrc' <<< "$html")
         url_in_file="${url_in_file#*\"}"
         url_in_file="${url_in_file%%\"*}"
