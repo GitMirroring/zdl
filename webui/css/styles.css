@@ -692,6 +692,23 @@ table.dataTable td.centered {
   transform: translateY(-100vw);
 }
 
+/* ZDL dialog */
+.zdl-dialog .notice {
+  color: #333;
+  font-size: 15px;
+  line-height: 20px;
+  padding: 10px !important;
+}
+
+.zdl-dialog .notice>span {
+  font-weight: bold;
+  color: #000;
+}
+
+.zdl-dialog .events-container {
+  background: none !important;
+}
+
 /* Simple responsive */
 @media (max-width: 1360px) {
   .toggle>.browse>.path.editable {

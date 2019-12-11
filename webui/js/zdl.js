@@ -189,6 +189,10 @@ class ZDL {
         this.request( "cmd=reset-account" );
     }
 
+    checkVersion() {
+        return this.request( "cmd=check-version" );
+    }
+
     startSocket( port ) {
         return this.request( `cmd=run-server&port=${port}` );
     }

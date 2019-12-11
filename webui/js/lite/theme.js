@@ -1323,9 +1323,9 @@ window.theme.fn = {
                         $( this )
                             .removeClass( 'closed' );
 
-                        // Add Mobile Menu Opened Class
+                        // Add Mobile Menu Open Class
                         $( 'html' )
-                            .addClass( 'mobile-menu-opened' );
+                            .addClass( 'mobile-menu-open' );
 
                         $( '.header-body' )
                             .animate( {
@@ -1350,7 +1350,7 @@ window.theme.fn = {
 
                         // Remove Mobile Menu Opened Class
                         $( 'html' )
-                            .removeClass( 'mobile-menu-opened' );
+                            .removeClass( 'mobile-menu-open' );
 
                         $( '.header-body' )
                             .animate( {

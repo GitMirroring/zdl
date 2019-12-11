@@ -753,7 +753,13 @@ var zdlconsole = {
 
     // Display the download log flow
     getDownloadLog( path, loop ) {
-        var textArea = $( "#download-log" );
+        var inDialog = $( "#log-dialog" ).prop( "checked" ),
+            textArea;
+        if ( inDialog ) {
+            textArea = $( "#dialog-download-log" );
+        } else {
+            textArea = $( "#download-log" );
+        }
         if ( path === $( "#console-path" ).val() ) {
             myZDL.getConsoleLog( path, loop ).then( function ( res ) {
                 var content = textArea.val() + res;
@@ -999,7 +1005,8 @@ var utils = {
                 time = to2( date.getHours() ) + ":" + to2( date.getMinutes() ) + ":" + to2( date.getSeconds() ),
                 row = "row",
                 msg,
-                node;
+                node,
+                dialog = client.get( "dialog" );
 
             if ( param ) {
                 msg = $.i18n( key, param );
@@ -1013,7 +1020,11 @@ var utils = {
             }
 
             node = "<div class='" + row + "'><div class='time'>" + time + "</div><div>" + msg + "</div></div>";
-            $( "#events" ).prepend( node );
+            if ( dialog.open && dialog.service === "events" ) {
+                $( "#dialog #dialog-events" ).prepend( node );
+            } else {
+                $( "#events" ).prepend( node );
+            }
         }
     },
 

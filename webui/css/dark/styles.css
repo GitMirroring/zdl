@@ -70,6 +70,10 @@ h4.subtitle {
   display: none;
 }
 
+.counters>dl {
+  font-size: 1.1em;
+}
+
 .counters>dl>dt {
   font-weight: bold;
   display: inline-block;
@@ -675,6 +679,10 @@ fieldset {
   background-image: url("images/ui-icons_777620_256x240.png") !important;
 }
 
+.ui-dialog {
+  background: #333;
+}
+
 /* DataTable */
 .table-container {
   width: 100%;
@@ -708,6 +716,23 @@ table.dataTable tr td {
 
 .exit .tabs-container {
   transform: translateY(-100vw);
+}
+
+/* ZDL dialog */
+.zdl-dialog .notice {
+  color: #888;
+  font-size: 15px;
+  line-height: 20px;
+  padding: 10px !important;
+}
+
+.zdl-dialog .notice>span {
+  font-weight: bold;
+  color: #fff;
+}
+
+.zdl-dialog .events-container {
+  background: none !important;
 }
 
 /* Simple responsive */

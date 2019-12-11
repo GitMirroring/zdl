@@ -118,3 +118,9 @@ https://savannah.nongnu.org/projects/zdl */
   border-radius: 5px !important;
   box-shadow: 0 0 5px 2px #555;
 }
+
+/* Dialog bar color */
+.ui-dialog-titlebar {
+  background: #222;
+  color: #eee;
+}

@@ -27,6 +27,10 @@ var client = ( function () {
         active: [],
         running: true,
         log: "all",
+        dialog: {
+            open: false,
+            service: "none"
+        },
         table: {},
         locale: "en",
         audio: "mp3",
@@ -194,6 +198,51 @@ var client = ( function () {
         }
     }
 
+    /* Toggle log/events in a box */
+    function dialogToggle() {
+        var checked = $( this ).prop( "checked" ),
+            markup,
+            title,
+            service;
+        if ( $( this ).is( "#events-dialog" ) ) {
+            markup = `<div class="events-container">
+                 <div id="dialog-events" class="events"></div></div>`;
+            title = $.i18n( "tab-8-label-webui-events" );
+            service = "events";
+        } else {
+            markup = `<div class="log-container">
+                 <textarea id="dialog-download-log" readonly></textarea></div>`;
+            title = "Download log";
+            service = "log";
+        }
+        if ( checked ) {
+            if ( data.dialog.open ) {
+                $( this ).prop( "checked", false ).checkboxradio( "refresh" );
+                utils.log( "dialog-already-open", null, true );
+            } else {
+                data.dialog = {
+                    open: true,
+                    service: service
+                };
+                var dialog = $( "#dialog" ).empty().append( markup );
+                dialog.dialog( "option", {
+                    title: title,
+                    width: 600
+                } );
+                dialog.dialog( "open" );
+                utils.log( "dialog-logging-start" );
+            }
+        } else {
+            data.dialog = {
+                open: false,
+                service: "none"
+            };
+            $( "#dialog" ).dialog( "close" );
+            $( this ).blur();
+            utils.log( "dialog-logging-stop" );
+        }
+    }
+
     /* Toggle audio format */
     function audioFormat() {
         data.audio = $( this ).val();
@@ -332,8 +381,8 @@ var client = ( function () {
                             </div>
                         `;
                         download = $( downloadMarkup ).prependTo( "#downloads" );
-                        download.find(" .button" ).button().i18n();
-                        download.find(" .toggle .button:last-child" ).attr( "title", $.i18n( "delete-download-tooltip" ) ).tooltip( {
+                        download.find( " .button" ).button().i18n();
+                        download.find( " .toggle .button:last-child" ).attr( "title", $.i18n( "delete-download-tooltip" ) ).tooltip( {
                             position: {
                                 my: "left bottom",
                                 at: "right top-5",
@@ -428,6 +477,19 @@ var client = ( function () {
     function showUI() {
         $( ".loader" ).hide();
         $( ".wrapper" ).show();
+        // Check if zdl is outdated
+        myZDL.checkVersion().then( function ( res ) {
+            if ( res.trim() === "outdated" ) {
+                var msg = $.i18n( "dialog-update-msg" ),
+                    dialog = $( "#dialog" ).append( `<div class="notice">${msg}</div>` );
+                dialog.dialog( "option", {
+                    title: $.i18n( "dialog-update-title" ),
+                    width: 400
+                } );
+                dialog.dialog( "open" );
+                console.log( "Running an outdated version of ZDL" );
+            }
+        } );
         console.log( "ZDL web UI started" );
     }
 
@@ -482,14 +544,35 @@ var client = ( function () {
                     selectMenuHandler( e.target.id, data.item.value );
                 }
             } );
-            //$( "input[type='checkbox'], input[type='radio']" ).checkboxradio();
             $( "#console-only-errors" ).checkboxradio().change( loggingToggle );
+            $( ".console-in-dialog" ).checkboxradio().change( dialogToggle );
             $( ".input-editable" ).checkboxradio().change( editableToggle );
             $( ".radio-audio" ).checkboxradio( {
                 icon: false
             } ).change( audioFormat );
             $( "#tomorrow-time" ).checkboxradio();
             $( "#tabs" ).on( "click", ".button", buttonHandler );
+            $( "#dialog" ).dialog( {
+                autoOpen: false,
+                show: {
+                    effect: "blind",
+                    duration: 800
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 800
+                },
+                close: function ( event, ui ) {
+                    if ( data.dialog.open ) {
+                        data.dialog = {
+                            open: false,
+                            service: "none"
+                        };
+                        $( ".console-in-dialog" ).prop( "checked", false ).checkboxradio( "refresh" ).blur();
+                        utils.log( "dialog-logging-stop" );
+                    }
+                }
+            } );
 
             $( "#edit-links-delete" ).attr( "title", $.i18n( "delete-queue-tooltip" ) ).tooltip( {
                 position: {

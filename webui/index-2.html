@@ -474,11 +474,13 @@
 
             <!-- TAB 8 - Console -->
             <div id="tabs-8">
-                <h4 data-i18n="tab-8-title">Recording of events and errors</h4>
+                <h4 data-i18n="tab-8-title">Recording log, events and errors</h4>
                 <h4 class="subtitle">Download Log</h4>
                 <div class="inline-group">
                     <div data-i18n="tab-8-label-path-sel" class="label">Select active path:</div>
                     <select id="console-path-select" class="selectmenu"></select>
+                    <label data-i18n="radio-dialog-label" for="log-dialog">Open window</label>
+                    <input type="checkbox" name="log-dialog" id="log-dialog" class="console-in-dialog">
                 </div>
                 <div class="inline-group">
                     <div data-i18n="tab-8-label-log-path" class="label">Path log:</div>
@@ -489,10 +491,12 @@
                     <button data-i18n="button-clean" id="download-log-clean" class="button">Clean</button>
                     <button data-i18n="button-stop" id="download-log-stop" class="button">Stop</button>
                 </div>
-                <h4 data-i18n="tab-8-label-webui-events" class="subtitle">WebUI events and errors</h4>
+                <h4 data-i18n="tab-8-label-webui-events" class="subtitle">Events and errors</h4>
                 <div class="inline-group">
                     <label data-i18n="radio-log-label" for="console-only-errors">Records only errors</label>
                     <input type="checkbox" name="console-only-errors" id="console-only-errors">
+                    <label data-i18n="radio-dialog-label" for="events-dialog">Open window</label>
+                    <input type="checkbox" name="events-dialog" id="events-dialog" class="console-in-dialog">
                 </div>
                 <div class="events-container ui-widget-content ui-corner-all">
                     <div id="events" class="events"></div>
@@ -543,6 +547,7 @@
             </div>
         </div>
         <div class="footer"><span class="fa fa-bolt"></span> ZigzagDownLoader</div>
+        <div id="dialog" class="zdl-dialog"></div>
     </div>
 
     <script src="js/jquery.min.js"></script>
