@@ -37,10 +37,20 @@ then
     do
         if url "$pianosolo_url"
         then
+            test -z "$pianosolo_redir" &&
+                pianosolo_redir="$pianosolo_url"
+            
             set_link + "$pianosolo_url"
             get_language
             print_c 4 "$(gettext "Redirection"): $url_in -> $pianosolo_url"
             get_language_prog
+
+            if [ "$pianosolo_redir" != "$url_in" ]
+            then
+                echo "url: $pianosolo_redir"
+                set_link - "$url_in"
+                url_in="$pianosolo_redir"
+            fi
                 
         else
             _log 2
@@ -48,11 +58,6 @@ then
         
     done <<< "$pianosolo_urls"
 
-    if url "$pianosolo_url"
-    then
-        set_link - "$url_in"
-        url_in="$pianosolo_url"
-        unset pianosolo_url
-    fi
+    unset pianosolo_redir pianosolo_urls pianosolo_url
 fi
 
