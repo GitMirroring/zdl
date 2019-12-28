@@ -29,11 +29,30 @@
 
 if [[ "$url_in" =~ pianosolo\.it ]]
 then
-    pianosolo_url=$(curl -s "$url_in" |
-                        grep -oP '[^"]+youtube.com\\/watch[^"]+' |
-                        tr -d '\\')
+    pianosolo_urls=$(curl -s "$url_in" |
+                         grep -oP '[^"]+youtube.com\\/watch[^"]+' |
+                         tr -d '\\')
 
-    url "$pianosolo_url" &&
-        replace_url_in "$pianosolo_url" ||
+    while read pianosolo_url
+    do
+        if url "$pianosolo_url"
+        then
+            set_link + "$pianosolo_url"
+            get_language
+            print_c 4 "$(gettext "Redirection"): $url_in -> $pianosolo_url"
+            get_language_prog
+                
+        else
             _log 2
+        fi
+        
+    done <<< "$pianosolo_urls"
+
+    if url "$pianosolo_url"
+    then
+        set_link - "$url_in"
+        url_in="$pianosolo_url"
+        unset pianosolo_url
+    fi
 fi
+
