@@ -495,14 +495,14 @@ _Video in streaming saltando il player del browser:_
      (HD), Dailymotion, Deltabit (HD), Dplay (HD), Exashare, Facebook,
      Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD),
      Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo,
-     Onlystream, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
-     Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare
-     (HD), Speedvideo (HD), Streamango, Streamin, Supervideo (HD), TED
-     (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
-     in streaming di tipo .m3u8, Tutti i video in streaming di tipo
-     .mpd, VidABC, Vidce, Videowood, Vidhappy (RTMP), Vidlox, Vidoza,
-     Vidto, Vidtome, Vimeo (HD), VK (HD), WStream (HD), Youtube, Zinwa
-     (RTMP) 
+     Onlystream, pianosolo.it, Portalevideo.unimi.it, Putstream,
+     RaiPlay (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD),
+     Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, Streamin,
+     Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
+     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
+     in streaming di tipo .mpd, VidABC, Vidce, Videowood, Vidhappy
+     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
+     WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -525,8 +525,8 @@ _Link generati dal web (anche dopo captcha):_
 _Short links:_
      4snip.pw, altadefinizione01, bc.vc, cb01, cinemalibero,
      Filecrypt.cc, filmpertutti, hd4me.net, link4.me, linkhub, linkup,
-     Masklink, q.gs, Rapidcrypt, sapolatsu, Shortlink, stayonline,
-     swzz.xyz, thouth.net, vaussneim.net, vcrypt
+     Masklink, pianosolo.it, q.gs, Rapidcrypt, sapolatsu, Shortlink,
+     stayonline, swzz.xyz, thouth.net, vaussneim.net, vcrypt
 
 _Tutti i file scaricabili con le seguenti estensioni dei browser:_
      _Flashgot_ di _Firefox/Iceweasel/Icecat_, funzione `M-x zdl' di
@@ -1486,26 +1486,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18016
-Node: Arrestare ZDL20472
-Node: Controllare i download21577
-Node: Manuali d'uso25829
-Node: Modi26245
-Node: Readline29540
-Node: Editor31092
-Node: Omonimie32317
-Node: IRC/XDCC33865
-Node: Torrent35574
-Node: Filtri36458
-Node: Creare nuove estensioni36779
-Node: Software consigliati e dipendenze38554
-Node: Conkeror40116
-Node: zdl-xterm e XXXTerm/Xombrero41140
-Node: Installazione e aggiornamento43064
-Node: Perché questo programma46379
-Node: Tags50267
-Node: Copying54867
-Node: Contatti55917
+Node: Avviare ZDL18044
+Node: Arrestare ZDL20500
+Node: Controllare i download21605
+Node: Manuali d'uso25857
+Node: Modi26273
+Node: Readline29568
+Node: Editor31120
+Node: Omonimie32345
+Node: IRC/XDCC33893
+Node: Torrent35602
+Node: Filtri36486
+Node: Creare nuove estensioni36807
+Node: Software consigliati e dipendenze38582
+Node: Conkeror40144
+Node: zdl-xterm e XXXTerm/Xombrero41168
+Node: Installazione e aggiornamento43092
+Node: Perché questo programma46407
+Node: Tags50295
+Node: Copying54895
+Node: Contatti55945
 
 End Tag Table
 
