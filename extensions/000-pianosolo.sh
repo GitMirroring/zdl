@@ -33,6 +33,8 @@ then
                          grep -oP '[^"]+youtube.com\\/watch[^"]+' |
                          tr -d '\\')
 
+    url_in_old="$url_in"
+    
     while read pianosolo_url
     do
         if url "$pianosolo_url"
@@ -42,7 +44,7 @@ then
             
             set_link + "$pianosolo_url"
             get_language
-            print_c 4 "$(gettext "Redirection"): $url_in -> $pianosolo_url"
+            print_c 4 "$(gettext "Redirection"): $url_in_old -> $pianosolo_url"
             get_language_prog
 
             if [ "$pianosolo_redir" != "$url_in" ]
@@ -57,6 +59,6 @@ then
         
     done <<< "$pianosolo_urls"
 
-    unset pianosolo_redir pianosolo_urls pianosolo_url
+    unset pianosolo_redir pianosolo_urls pianosolo_url url_in_old
 fi
 
