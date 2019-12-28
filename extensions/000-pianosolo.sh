@@ -47,7 +47,6 @@ then
 
             if [ "$pianosolo_redir" != "$url_in" ]
             then
-                echo "url: $pianosolo_redir"
                 set_link - "$url_in"
                 url_in="$pianosolo_redir"
             fi
