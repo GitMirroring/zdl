@@ -590,7 +590,7 @@ EXTENSIONS:
             fi
         done
 
-        hash youtube-dl 2>/dev/null && try youtube-dl -U
+        hash youtube-dl 2>/dev/null && try youtube-dl -U &>/dev/null
         
         ## cloudflare:
         # hash composer 2>/dev/null || install_phpcomposer
