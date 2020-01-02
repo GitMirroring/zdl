@@ -31,7 +31,7 @@
 if [[ "$url_in" =~ dplay\. ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
-
+    
     dplayJSON=$(grep 'JSON.parse' <<< "$html")
     dplayJSON=${dplayJSON#*\"}
     dplayJSON=${dplayJSON%\"*}
@@ -49,9 +49,8 @@ then
 	url_in_file=$(sed -r "s|[^/]+m3u8|$__in_file|g" <<< "$url_in_file") 
     fi
     
-    file_in="${url_in%\/*}"
-    file_in="${file_in##*\/}"
-    file_filter "$file_in"
+    # file_in="${url_in%\/*}"
+    # file_in="${file_in##*\/}"
     
     if ! url "$url_in_file"
     then
@@ -61,15 +60,18 @@ then
 				"$url_in" \
 				2>/dev/null)
 	
-	file_in=$(tail -n1 <<< "$dplay_data")
-	file_in="${file_in%.mp4}"
-	file_filter "$file_in"
+	# file_in=$(tail -n1 <<< "$dplay_data")
+	# file_in="${file_in%.mp4}"
+
 	url_in_file=$(head -n1 <<< "$dplay_data")
 
 	## problema permessi, usiamo `youtube-dl --hls-prefer-ffmpeg`:
 	youtubedl_m3u8="$url_in"
     fi
-    
+
+    file_in="$(get_title "$html" | sed -r 's/\ \|\ Dplay\ *$//g')$(grep episode-season-title -A2 <<< "$html" | tail -n1 | sed -r 's|^\ *||g')"
+    file_filter "$file_in"
+
     end_extension
 fi
 									   
