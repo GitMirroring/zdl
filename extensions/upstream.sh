@@ -48,12 +48,14 @@ function get_upstream_definition {
 
 if [[ "$url_in" =~ upstream\. ]]
 then
-    if command -v youtube-dl &>/dev/null
-    then
-        html=$(youtube-dl --get-url --get-filename "$url_in")
-	url_in_file=$(head -n1 <<< "$html")
-	file_in=$(tail -n1 <<< "$html")
-    fi
+    ## funziona ma non serve:
+    #
+    # if command -v youtube-dl &>/dev/null
+    # then
+    #     html=$(youtube-dl --get-url --get-filename "$url_in")
+    #     url_in_file=$(head -n1 <<< "$html")
+    #     file_in=$(tail -n1 <<< "$html")
+    # fi
 
     if ! url "$url_in_file" ||
             [ -z "$file_in" ] 
@@ -79,11 +81,12 @@ then
     if ! url "$url_in_file" ||
             [ -z "$file_in" ] 
     then
-        url_in_file=$(grep 'player.updateSrc' <<< "$html")
+        url_in_file=$(grep -oP 'sources\:\ \[\{file\:\"[^"]+' <<< "$html")
         url_in_file="${url_in_file#*\"}"
         url_in_file="${url_in_file%%\"*}"
 
         file_in=$(get_title "$html")
+        file_in="${file_in#Watch }"
         
         # download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
