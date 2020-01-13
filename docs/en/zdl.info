@@ -494,9 +494,9 @@ _Streaming video skipping browser player:_
      Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, Streamin,
      Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
      servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
-     in streaming di tipo .mpd, VidABC, Vidce, Videowood, Vidhappy
-     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     WStream (HD), Youtube, Zinwa (RTMP) 
+     in streaming di tipo .mpd, Upstream, VidABC, Vidce, Videowood,
+     Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK
+     (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -504,8 +504,8 @@ _File hosting:_
      (multi-link), Katfile, Mediafire, Mega, MixDrop, MultiUp
      (multi-link), Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare
      (HD), Subyshare, Supervideo (HD), TubeOffLine.com (tutti i
-     servizi), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza,
-     WStream (HD) 
+     servizi), Tusfiles, Uload, Uploadshub, Uppit, Upstream, Uptobox,
+     Vidoza, WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1455,26 +1455,26 @@ Tag Table:
 Node: Top1193
 Node: The ZDL command5078
 Node: Streaming/hosting services12936
-Node: Start ZDL17170
-Node: Stop ZDL19503
-Node: Check the downloads20538
-Node: User manuals24579
-Node: Modes24972
-Node: Readline28007
-Node: Editor29462
-Node: Homonymy30620
-Node: IRC/XDCC32129
-Node: Torrent33765
-Node: Filters34589
-Node: Create new extensions34877
-Node: Recommended software and dependencies36583
-Node: Conkeror38079
-Node: zdl-xterm and XXXTerm/Xombrero39061
-Node: Installation and update40932
-Node: Why this program43945
-Node: Tags47635
-Node: Copying52262
-Node: Contacts53340
+Node: Start ZDL17190
+Node: Stop ZDL19523
+Node: Check the downloads20558
+Node: User manuals24599
+Node: Modes24992
+Node: Readline28027
+Node: Editor29482
+Node: Homonymy30640
+Node: IRC/XDCC32149
+Node: Torrent33785
+Node: Filters34609
+Node: Create new extensions34897
+Node: Recommended software and dependencies36603
+Node: Conkeror38099
+Node: zdl-xterm and XXXTerm/Xombrero39081
+Node: Installation and update40952
+Node: Why this program43965
+Node: Tags47655
+Node: Copying52282
+Node: Contacts53360
 
 End Tag Table
 

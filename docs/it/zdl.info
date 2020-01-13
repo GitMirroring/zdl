@@ -500,9 +500,9 @@ _Video in streaming saltando il player del browser:_
      Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, Streamin,
      Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
      servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
-     in streaming di tipo .mpd, VidABC, Vidce, Videowood, Vidhappy
-     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     WStream (HD), Youtube, Zinwa (RTMP) 
+     in streaming di tipo .mpd, Upstream, VidABC, Vidce, Videowood,
+     Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK
+     (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -510,8 +510,8 @@ _File hosting:_
      (multi-link), Katfile, Mediafire, Mega, MixDrop, MultiUp
      (multi-link), Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare
      (HD), Subyshare, Supervideo (HD), TubeOffLine.com (tutti i
-     servizi), Tusfiles, Uload, Uploadshub, Uppit, Uptobox, Vidoza,
-     WStream (HD) 
+     servizi), Tusfiles, Uload, Uploadshub, Uppit, Upstream, Uptobox,
+     Vidoza, WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1486,26 +1486,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18044
-Node: Arrestare ZDL20500
-Node: Controllare i download21605
-Node: Manuali d'uso25857
-Node: Modi26273
-Node: Readline29568
-Node: Editor31120
-Node: Omonimie32345
-Node: IRC/XDCC33893
-Node: Torrent35602
-Node: Filtri36486
-Node: Creare nuove estensioni36807
-Node: Software consigliati e dipendenze38582
-Node: Conkeror40144
-Node: zdl-xterm e XXXTerm/Xombrero41168
-Node: Installazione e aggiornamento43092
-Node: Perché questo programma46407
-Node: Tags50295
-Node: Copying54895
-Node: Contatti55945
+Node: Avviare ZDL18064
+Node: Arrestare ZDL20520
+Node: Controllare i download21625
+Node: Manuali d'uso25877
+Node: Modi26293
+Node: Readline29588
+Node: Editor31140
+Node: Omonimie32365
+Node: IRC/XDCC33913
+Node: Torrent35622
+Node: Filtri36506
+Node: Creare nuove estensioni36827
+Node: Software consigliati e dipendenze38602
+Node: Conkeror40164
+Node: zdl-xterm e XXXTerm/Xombrero41188
+Node: Installazione e aggiornamento43112
+Node: Perché questo programma46427
+Node: Tags50315
+Node: Copying54915
+Node: Contatti55965
 
 End Tag Table
 
