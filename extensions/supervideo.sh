@@ -168,9 +168,15 @@ if [[ "$url_in" =~ supervideo ]]
 then
     
     html=$(curl -s "${url_in//embed-}")
-    url_in_file=$(grep sources <<< "$html" |
-                      sed -r 's|[^"]+\"([^"]+).+|\1|')
-    file_in=$(grep '<h2' <<< "$html" |head -n1)
-    file_in="${file_in#*<h2>}"
+
+    if grep -q 'Video is processing now' <<< "$html"
+    then
+        _log 17
+    else
+        url_in_file=$(grep sources <<< "$html" |
+                          sed -r 's|[^"]+\"([^"]+).+|\1|')
+        file_in=$(grep '<h2' <<< "$html" |head -n1)
+        file_in="${file_in#*<h2>}"
+    fi
     end_extension
 fi
