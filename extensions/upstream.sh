@@ -45,37 +45,20 @@ function get_upstream_definition {
     fi
 }
 
-
 if [[ "$url_in" =~ upstream\. ]]
 then
-    ## funziona ma non serve:
-    #
-    # if command -v youtube-dl &>/dev/null
-    # then
-    #     html=$(youtube-dl --get-url --get-filename "$url_in")
-    #     url_in_file=$(head -n1 <<< "$html")
-    #     file_in=$(tail -n1 <<< "$html")
-    # fi
-
-    if ! url "$url_in_file" ||
-            [ -z "$file_in" ] 
+    if check_cloudflare "$url_in"
     then
-        if check_cloudflare "$url_in"
-        then
-            get_by_cloudflare "$url_in" html
-            
-        else
-            html=$(curl "$url_in")
-        fi
+        get_by_cloudflare "$url_in" html
+    fi
+
+    if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
+    then
+	_log 3
         
-        if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
-        then
-	    _log 3
-            
-        elif [[ "$html" =~ (Video is processing now) ]]
-        then
-	    _log 17
-        fi
+    elif [[ "$html" =~ (Video is processing now) ]]
+    then
+	_log 17
     fi
 
     if ! url "$url_in_file" ||
@@ -170,7 +153,17 @@ then
 
         
     fi
-    
+
+    if hash youtube-dl &>/dev/null && (
+            ! url "$url_in_file" ||
+                [ -z "$file_in" ]
+        )
+    then
+        html=$(youtube-dl --get-url --get-filename "$url_in")
+        url_in_file=$(head -n1 <<< "$html")
+        file_in=$(tail -n1 <<< "$html")
+    fi
+
     end_extension
 fi
 

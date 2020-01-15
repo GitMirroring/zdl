@@ -689,13 +689,13 @@ function get_location { # 1=url 2=variable_to_new_url
 
 function check_cloudflare {
     local target="$1"
-    local html
+    html
 
     if url "$target"
     then
         html=$(curl -s                   \
                     -A "$user_agent"     \
-                    "$target" )
+                    "$target")
 
     elif [ -f "$target" ]
     then
