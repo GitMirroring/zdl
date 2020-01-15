@@ -27,6 +27,19 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Youtube
 
+if [[ "$url_in" =~ youtube\.com\/playlist ]]
+then
+    html=$(curl -s "$url_in")
+    while read yt_link
+    do
+        if url "$yt_link"
+        then
+            set_link + "$yt_link" && print_c 4 "$(gettext "Redirection"): $yt_link"
+            [[ "$url_in" =~ youtube.com\/playlist ]] && replace_url_in "$yt_link"
+        fi
+    done < <(awk '/data-video-id/{match($0, /data-video-id=\"([^"]+)\"/,m); if(m[1]) print "https://www.youtube.com/watch?v=" m[1]}' <<< "$html")
+fi
+
 if [ "$url_in" != "${url_in//'youtube.com/watch'}" ]
 then
     html=$(curl -v "$url_in")
