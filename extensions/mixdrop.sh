@@ -29,30 +29,28 @@
 
 if [[ "$url_in" =~ mixdrop\. ]]
 then
-    [[ "$url_in" =~ \/e\/ ]] &&
-        replace_url_in "${url_in//\/e\///f/}"
-    
+    [[ "$url_in" =~ \/f\/ ]] &&
+        replace_url_in "${url_in//\/f\///e/}"
+
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \
                 -H 'Upgrade-Insecure-Requests: 1' \
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
-    file_in=$(get_title "$html")
-    file_in="${file_in#* \-\ Watch\ }"
     
-    url_in_file=$(curl -v \
-                       -A "$user_agent" \
-                       -b "$path_tmp"/cookies.zdl \
-                       -H 'X-Requested-With: XMLHttpRequest' \
-                       -H 'Connection: keep-alive' \
-                       -H 'TE: Trailers' \
-                       -d 'csrf&a=genticket' \
-                       "${url_in}")
-    url_in_file="${url_in_file%\"*}"
-    url_in_file="${url_in_file##*\"}"
-    url_in_file="${url_in_file//\\}"
-    
+    file_in=$(grep title <<< "$html")
+    file_in="${file_in%</a>*}"
+    file_in="${file_in##*>}"
+
+    url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+
+    if [[ "$url_in_file" =~ MDCore\.furl\=\" ]]
+    then
+        url_in_file="http:${url_in_file#*furl=\"}"
+        url_in_file="${url_in_file%%\"*}"
+    fi
+   
     end_extension
 fi
 
