@@ -67,7 +67,7 @@ then
     else
         html=$(wget -t1 -T$max_waiting                               \
     		    "$url_in"                                        \
-    		    --user-agent="Firefox"                           \
+    		    --user-agent="$user_agent"                       \
     		    --keep-session-cookies                           \
     		    --save-cookies="$path_tmp/cookies.zdl"           \
     		    -qO- -o /dev/null)
@@ -84,107 +84,108 @@ then
 	
     else
         file_in=$(get_title "$html")
+        file_in="${file_in#Watch }"
         
-        if grep -q 'p,a,c,k,e,d' <<< "$html"
-        then
-            url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
-            url_in_file="${url_in_file#*src\:\"}"
-            url_in_file="${url_in_file%%\"*}"
-        fi
-        
-	# download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
+        # if grep -q 'p,a,c,k,e,d' <<< "$html"
+        # then
+        #     url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n2 |tail -n1)")
+        #     url_in_file="${url_in_file#*\"}"
+        #     url_in_file="${url_in_file%%\"*}"
+        # fi
 
-	# hash_akvideo="${download_video%\'*}"
-	# hash_akvideo="${hash_akvideo##*\'}"
+	download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
-	# id_akvideo="${download_video#*download_video\(\'}"
-	# id_akvideo="${id_akvideo%%\'*}"
+	hash_akvideo="${download_video%\'*}"
+	hash_akvideo="${hash_akvideo##*\'}"
 
-	# declare -A movie_definition
-	# movie_definition=(
-	#     ['o']="Original"
-	#     ['h']="High"
-	#     ['n']="Normal"
-	#     ['l']="Low"
-	# )
+	id_akvideo="${download_video#*download_video\(\'}"
+	id_akvideo="${id_akvideo%%\'*}"
 
-	# grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
-	#     o=o
+	declare -A movie_definition
+	movie_definition=(
+	    ['o']="Original"
+	    ['h']="High"
+	    ['n']="Normal"
+	    ['l']="Low"
+	)
 
-	# ## file_in:
-	# input_hidden "$html"
-	# file_filter "$file_in"
+	grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
+	    o=o
+
+	## file_in:
+	input_hidden "$html"
+	file_filter "$file_in"
 	
-	# for mode_stream in $o h n l
-	# do
-	#     get_akvideo_definition mode_stream_test
+	for mode_stream in $o h n l
+	do
+	    get_akvideo_definition mode_stream_test
 
-	#     [ -n "$mode_stream_test" ] &&
-	# 	mode_stream="$mode_stream_test"
+	    [ -n "$mode_stream_test" ] &&
+		mode_stream="$mode_stream_test"
 
-        #     avmsg_1="$(gettext "Audio/video definition")"
-	#     print_c 2 "$avmsg_1: ${movie_definition[$mode_stream]}"
+            avmsg_1="$(gettext "Audio/video definition")"
+	    print_c 2 "$avmsg_1: ${movie_definition[$mode_stream]}"
 	    
-	#     akvideo_loops=0
-	#     while ! url "$url_in_file" &&
-	# 	    ((akvideo_loops < 2))
-	#     do
-	# 	((akvideo_loops++))
+	    akvideo_loops=0
+	    while ! url "$url_in_file" &&
+		    ((akvideo_loops < 2))
+	    do
+		((akvideo_loops++))
 
-	# 	get_language_prog
-	# 	html2=$(wget -qO- -t1 -T$max_waiting           \
-	# 		     "https://akvideo.stream/dl?op=download_orig&id=${id_akvideo}&mode=${mode_stream}&hash=${hash_akvideo}" \
-	# 		     -o /dev/null)
-	# 	get_language
+		get_language_prog
+		html2=$(wget -qO- -t1 -T$max_waiting           \
+			     "https://akvideo.stream/dl?op=download_orig&id=${id_akvideo}&mode=${mode_stream}&hash=${hash_akvideo}" \
+			     -o /dev/null)
+		get_language
 		
-	# 	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
-	# 			     head -n1 |
-	# 			     sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+		url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
+				     head -n1 |
+				     sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
 
-	# 	! url "$url_in_file" &&
-	# 	    url_in_file=$(grep 'Direct Download' <<< "$html2" |
-	# 				 sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+		! url "$url_in_file" &&
+		    url_in_file=$(grep 'Direct Download' <<< "$html2" |
+					 sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
 
-	# 	((akvideo_loops < 2)) && sleep 1
-	#     done
+		((akvideo_loops < 2)) && sleep 1
+	    done
 
-	#     if ! url "$url_in_file" &&
-	# 	    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
-	#     then
-	# 	url_in_timer=$((${BASH_REMATCH[1]} * 60))
-	# 	set_link_timer "$url_in" $url_in_timer
-	# 	_log 33 $url_in_timer
+	    if ! url "$url_in_file" &&
+		    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
+	    then
+		url_in_timer=$((${BASH_REMATCH[1]} * 60))
+		set_link_timer "$url_in" $url_in_timer
+		_log 33 $url_in_timer
 
-	# 	add_akvideo_definition $mode_stream
-	# 	break
+		add_akvideo_definition $mode_stream
+		break
 
-	#     elif url "$url_in_file"
-	#     then
-        #         avmsg_2="$(gettext "The movie with %s definition is available")"
-	# 	print_c 1 "$avmsg_2" "${movie_definition[$mode_stream]}" 
-	# 	set_akvideo_definition $mode_stream
-	# 	break
+	    elif url "$url_in_file"
+	    then
+                avmsg_2="$(gettext "The movie with %s definition is available")"
+		print_c 1 "$avmsg_2" "${movie_definition[$mode_stream]}" 
+		set_akvideo_definition $mode_stream
+		break
 
-	#     else
-        #         avmsg_2="$(gettext "The movie with %s definition is not available")"
-	# 	print_c 3 "$avmsg_2" "${movie_definition[$mode_stream]}" 
-	# 	del_akvideo_definition $mode_stream
-	#     fi
-	# done
-	
-	# if url "$url_in_file"
-	# then
-	#     url_in_file="${url_in_file//https\:/http:}"
+	    else
+                avmsg_2="$(gettext "The movie with %s definition is not available")"
+		print_c 3 "$avmsg_2" "${movie_definition[$mode_stream]}" 
+		del_akvideo_definition $mode_stream
+	    fi
+	done
 
-	#     if [ -z "$file_in" ]
-	#     then
-	# 	file_in="${url_in_file##*\/}"
-	# 	file_in="${file_in%\&file_id=*}"
-	#     fi
-	#     wget --spider "$url_in_file" -q ||
-	# 	set_temp_proxy
+	if url "$url_in_file"
+	then
+	    url_in_file="${url_in_file//https\:/http:}"
 
-	# fi
+	    if [ -z "$file_in" ]
+	    then
+		file_in="${url_in_file##*\/}"
+		file_in="${file_in%\&file_id=*}"
+	    fi
+	    # wget --spider "$url_in_file" -q ||
+	    #     set_temp_proxy
+
+	fi
 	
 	# [ -z "$url_in_timer" ] &&
 	#     end_extension ||

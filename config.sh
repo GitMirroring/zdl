@@ -589,6 +589,7 @@ no_check_links=(
     ^irc\:
     \.dfiles\.
     \.m3u8
+    akvideo
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
@@ -602,6 +603,7 @@ no_check_ext=(
     ^irc\:
     \.dfiles\.
     \.m3u8
+    akvideo
 )
 
 source $path_usr/livestream_conf.sh

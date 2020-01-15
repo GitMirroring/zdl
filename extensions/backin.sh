@@ -83,8 +83,8 @@ then
 
         if grep -q 'p,a,c,k,e,d' <<< "$html"
         then
-            url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
-            url_in_file="${url_in_file#*src\:\"}"
+            url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n2 |tail -n1)")
+            url_in_file="${url_in_file#*file\:\"}"
             url_in_file="${url_in_file%%\"*}"
 
         else
@@ -107,8 +107,8 @@ then
 
             if grep -q 'p,a,c,k,e,d' <<< "$html"
             then
-                url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
-                url_in_file="${url_in_file#*src\:\"}"
+                url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n2 |tail -n1)")
+                url_in_file="${url_in_file#*file\:\"}"
                 url_in_file="${url_in_file%%\"*}"
             fi                    
         fi
