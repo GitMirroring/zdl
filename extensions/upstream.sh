@@ -54,104 +54,97 @@ then
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
     then
-	_log 3
-        
-    elif [[ "$html" =~ (Video is processing now) ]]
-    then
-	_log 17
+	_log 3        
     fi
 
     if ! url "$url_in_file" ||
             [ -z "$file_in" ] 
     then
+        download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
+
+        hash_upstream="${download_video%\'*}"
+        hash_upstream="${hash_upstream##*\'}"
+
+        id_upstream="${download_video#*download_video\(\'}"
+        id_upstream="${id_upstream%%\'*}"
+
+        declare -A movie_definition
+        movie_definition=(
+            ['o']="Original"
+            ['h']="High"
+            ['n']="Normal"
+            ['l']="Low"
+        )
+
+        grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
+            o=o
+
+        for mode_stream in $o h n l
+        do
+            get_upstream_definition mode_stream_test
+
+            [ -n "$mode_stream_test" ] &&
+        	mode_stream="$mode_stream_test"
+
+            print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
+	    
+            upstream_loops=0
+            while ! url "$url_in_file" &&
+        	    ((upstream_loops < 2))
+            do
+        	((upstream_loops++))
+
+        	get_language_prog
+        	html2=$(wget -qO- -t1 -T$max_waiting           \
+        		     "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
+        		     -o /dev/null)
+        	get_language
+
+        	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
+        			  head -n1 |
+        			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+
+        	! url "$url_in_file" &&
+        	    url_in_file=$(grep 'Direct Download' <<< "$html2" |
+        			      sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+
+        	((upstream_loops < 2)) && sleep 1
+            done
+
+            if ! url "$url_in_file" &&
+        	    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
+            then
+        	url_in_timer=$((${BASH_REMATCH[1]} * 60))
+        	set_link_timer "$url_in" $url_in_timer
+        	_log 33 $url_in_timer
+
+        	add_upstream_definition $mode_stream
+        	break
+
+            elif url "$url_in_file"
+            then
+        	print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
+        	set_upstream_definition $mode_stream
+        	break
+
+            else
+        	print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
+        	del_upstream_definition $mode_stream
+            fi
+        done
+    fi
+    
+    if ! url "$url_in_file" 
+    then
         url_in_file=$(grep -oP 'sources\:\ \[\{file\:\"[^"]+' <<< "$html")
         url_in_file="${url_in_file#*\"}"
         url_in_file="${url_in_file%%\"*}"
-
+    fi
+    
+    if [ -z "$file_in" ]
+    then
         file_in=$(get_title "$html")
         file_in="${file_in#Watch }"
-        
-        # download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
-
-        # hash_upstream="${download_video%\'*}"
-        # hash_upstream="${hash_upstream##*\'}"
-
-        # id_upstream="${download_video#*download_video\(\'}"
-        # id_upstream="${id_upstream%%\'*}"
-
-        # declare -A movie_definition
-        # movie_definition=(
-        #     ['o']="Original"
-        #     ['h']="High"
-        #     ['n']="Normal"
-        #     ['l']="Low"
-        # )
-
-        # grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
-        #     o=o
-
-        # ## file_in:
-        # input_hidden "$html"
-        # file_filter "$file_in"
-	
-        # for mode_stream in $o h n l
-        # do
-        #     get_upstream_definition mode_stream_test
-
-        #     [ -n "$mode_stream_test" ] &&
-        # 	mode_stream="$mode_stream_test"
-
-        #     print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
-	    
-        #     upstream_loops=0
-        #     while ! url "$url_in_file" &&
-        # 	    ((upstream_loops < 2))
-        #     do
-        # 	((upstream_loops++))
-
-        # 	get_language_prog
-        # 	html2=$(curl           \
-        # 		     "https://upstream.tv/dl?op=view&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
-        # 		     -o /dev/null)
-        # 	# html2=$(wget -qO- -t1 -T$max_waiting           \
-        # 	# 	     "https://upstream.tv/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
-        # 	# 	     -o /dev/null)
-        # 	get_language
-		
-        # 	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
-        # 			  head -n1 |
-        # 			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
-
-        # 	! url "$url_in_file" &&
-        # 	    url_in_file=$(grep 'Direct Download' <<< "$html2" |
-        # 			      sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
-
-        # 	((upstream_loops < 2)) && sleep 1
-        #     done
-
-        #     if ! url "$url_in_file" &&
-        # 	    [[ "$html2" =~ 'have to wait '([0-9]+) ]]
-        #     then
-        # 	url_in_timer=$((${BASH_REMATCH[1]} * 60))
-        # 	set_link_timer "$url_in" $url_in_timer
-        # 	_log 33 $url_in_timer
-
-        # 	add_upstream_definition $mode_stream
-        # 	break
-
-        #     elif url "$url_in_file"
-        #     then
-        # 	print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
-        # 	set_upstream_definition $mode_stream
-        # 	break
-
-        #     else
-        # 	print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
-        # 	del_upstream_definition $mode_stream
-        #     fi
-        # done
-
-        
     fi
 
     if hash youtube-dl &>/dev/null && (
@@ -164,6 +157,8 @@ then
         file_in=$(tail -n1 <<< "$html")
     fi
 
+    ! url "$url_in_file" && [[ "$html" =~ (Video is processing now) ]] && _log 17
+    
     end_extension
 fi
 
