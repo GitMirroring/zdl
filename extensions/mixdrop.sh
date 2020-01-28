@@ -38,16 +38,23 @@ then
                 -H 'Upgrade-Insecure-Requests: 1' \
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
-    
+
     file_in=$(grep title <<< "$html")
     file_in="${file_in%</a>*}"
     file_in="${file_in##*>}"
 
-    url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+    unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
-    if [[ "$url_in_file" =~ MDCore\.furl\=\" ]]
+    if [[ "$unpacked" =~ MDCore\.furl\=\" ]]
     then
-        url_in_file="http:${url_in_file#*furl=\"}"
+        url_in_file="http:${unpacked#*furl=\"}"
+        url_in_file="${url_in_file%%\"*}"
+    fi
+    
+    if ! url "$url_in_file" &&
+            [[ "$unpacked" =~ MDCore\.wurl\=\" ]]
+    then
+        url_in_file="http:${unpacked#*wurl=\"}"
         url_in_file="${url_in_file%%\"*}"
     fi
    
