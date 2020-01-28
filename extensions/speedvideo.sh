@@ -68,8 +68,8 @@ then
 
     elif [[ "${htm}${html}" =~ 'Video is '(processing|transfer on streaming server)' now' ]]
     then
-	_log 17
-	
+        _log 17
+        	
     elif [ -n "$html" ]
     then
 	url_speedvideo=$(grep 'var url_speedvideoBackup' <<< "$html" |

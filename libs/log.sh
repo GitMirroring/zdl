@@ -124,7 +124,7 @@ $(gettext "Error downloading the video HTML page. Check that the URL has been en
 	    ;;
 	17)
 	    msg="$url_in --> $(eval_gettext "File\$msg_file_in still in transfer and not yet available: try again in a few hours")"
-	    set_link - "$url_in"
+	    # set_link - "$url_in"
 	    ;;
 	18)
 	    msg="$url_in --> $(eval_gettext "Unsupported resume: download of the\$msg_file_in file may end incomplete")"
