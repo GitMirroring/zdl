@@ -29,15 +29,26 @@
 
 
 if [[ "$url_in" =~ cloudvideo\. ]]
-then
+then    
     html=$(curl -s "$url_in" \
 		-c "$path_tmp"/cookies.zdl)
-
+    url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
     file_in=$(get_title "$html")
     file_in="${file_in#Watch\ }"
     file_filter "$file_in"
-    
-    url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
+
+    if ! url "$url_in_file"
+    then
+        input_hidden "$html"
+
+        html=$(curl -s "$url_in" \
+                    -A "$user_agnet" \
+                    -d "$post_data" \
+		    -c "$path_tmp"/cookies.zdl)
+
+        url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
+    fi
+
     downwait_extra=20
     
     end_extension
