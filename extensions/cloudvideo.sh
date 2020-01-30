@@ -49,7 +49,7 @@ then
         url_in_file=$(grep -oP '[^"]+\.m3u8' <<< "$html")
     fi
 
-    downwait_extra=20
+    #downwait_extra=20
     
     end_extension
 fi
