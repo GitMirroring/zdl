@@ -448,7 +448,7 @@ function init {
 ## news:
 TAG1='## NEW: ...ARIA2!'
 TAG2='## ARIA2: già chiesto'
-XDCC_EU_SEARCHKEY_URL="http://www.xdcc.eu/search.php?searchkey="
+XDCC_EU_SEARCHKEY_URL="https://www.xdcc.eu/search.php?searchkey="
 
 function set_default_configure_values {
     # configuration keys        --   default values      --         description for config-manager
