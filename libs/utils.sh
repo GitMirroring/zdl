@@ -280,15 +280,29 @@ function scrape_url {
     fi
 }
 
+function check_ext {
+    local file_ext="$1"
+    file_ext=".${filename##*.}"
+    
+    if grep -qP "^${file_ext}\s" $path_usr/mimetypes.txt
+    then
+        return 0
+
+    else
+        return 1
+    fi
+}
 
 function set_ext {
     local filename="$1"
     local ext item
-
-    if [[ "$url_in_file" =~ \.iso$ ]]
+    local url_ext=".${url_in_file##*.}"
+    url_ext="${url_ext%%\?*}"    
+    
+    if grep -qP "^${url_ext}\s" $path_usr/mimetypes.txt
     then
-	echo iso
-	return 0
+        echo "${url_ext}"
+        return 0
     fi
     
     for item in "$filename" "$url_in_file"
@@ -463,7 +477,8 @@ function sanitize_file_in {
     file_in=$(trim "$file_in")
 
     if ! dler_type "no-check-ext" "$url_in" &&
-	    [[ ! "$url_in_file" =~ \.m3u8 ]]
+	    [[ ! "$url_in_file" =~ \.m3u8 ]] &&
+            ! check_ext "$file_in"
     then
 	ext=$(set_ext "$file_in")
 
@@ -472,7 +487,7 @@ function sanitize_file_in {
 	       [[ "$url_in_file" =~ (\.flv|\.mp4|\.mp3|\.mkv|\.avi)$ ]]
 	then
 	    ext=${BASH_REMATCH[1]}
-	fi
+	fi               
 	
 	file_in="${file_in%$ext}$ext"
     fi
