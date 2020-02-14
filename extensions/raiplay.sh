@@ -42,6 +42,18 @@ then
 	#url_raiplay=$(grep data-video-url <<< "$html" |			  sed -r 's|.+data-video-url=\"([^"]+)\".+|\1|g')
 
         raiplay_json=$(curl -s "${url_in%\#*}.json")
+
+        if [[ ! "$raiplay_json" =~ content_url ]] &&
+               [[ "$raiplay_json" =~ first_item_path ]]
+        then
+            raiplay_url="${raiplay_json#*first_item_path \": \"}"
+            raiplay_url="https://www.raiplay.it${raiplay_url%%\"*}"
+            raiplay_json=$(curl -s \
+                                -c "$path_tmp"/cookies.zdl \
+                                -A "$user_agent" \
+                                "$raiplay_url")
+        fi
+        
         raiplay_url="${raiplay_json#*content_url\": \"}"
         raiplay_url="${raiplay_url%%\"*}"
 
