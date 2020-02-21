@@ -33,6 +33,8 @@ then
     rm -f "$path_tmp"/cookies*.zdl "$path_tmp"/headers*.zdl 
     domain_rockfile="rockfile.co"
 
+#    referer="$url_in"
+    
     if check_cloudflare "$url_in"
     then
 	get_by_cloudflare "$url_in" html
@@ -55,6 +57,9 @@ then
 		    -c "$path_tmp"/cookies.zdl \
 		    "$url_in")
     fi    
+
+#    echo -e ".rockfile.co\tTRUE\t/\tFALSE\t$(date +%s)\t_gali\tfreeDownload" |tee -a /tmp/cookies.txt
+
     
     if [[ "$html" =~ (File Deleted|file was deleted|File [nN]{1}ot [fF]{1}ound) ]]
     then
@@ -71,12 +76,12 @@ then
 	
 	post_data="${post_data##*document.write\(\&}&${method_free}=Free Download"
 
-	if check_cloudflare "$url_in"
+        if check_cloudflare "$url_in"
 	then
 	    get_by_cloudflare "$url_in" html "$post_data"
 
 	else
-	    html=$(curl -v                                                                              \
+	    html=$(curl -v                                                                          \
 		    -A "$user_agent"                                                                \
 		    -b "$path_tmp"/cookies2.zdl                                                     \
 		    -c "$path_tmp/cookies3.zdl"                                                     \

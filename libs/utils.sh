@@ -248,9 +248,9 @@ function scrape_url {
 
 	if [ -n "$html" ]
 	then
-	    html=$(tr "\t\r\n'" '   "' <<< "$html"                        | 
+	    html=$(tr "\t\r\n'" '   "' <<< "$html"            | 
 	     	       grep -Po 'href[\ ]*=[\ ]*[^<>\ #]+'    |
-		       grep -Pv "href[\ ]*=[\ ]*[\"\']*\/" |
+		       grep -Pv "href[\ ]*=[\ ]*[\"\']*\/"    |
 		       sed -r "s|href=[\"\']*([^\"]+)[\"\']*.*$|\1|g" 2>/dev/null)
 	else
 	    return 1

@@ -42,7 +42,8 @@ function check_backin {
     return 0    
 }
 
-if [[ "$url_in" =~ backin ]]
+if [[ "$url_in" =~ backin ]] &&
+       [[ ! "$url_in" =~ \/d\/ ]]
 then
     link_parser "$url_in"
     # backin_url="$parser_proto$parser_domain/s/generating.php?code=${parser_path##*\/}"
@@ -60,6 +61,7 @@ then
 
             backin_location=$(tail -n1 <<< "$html")
             url "$backin_location" &&
+                [[ ! "$backin_location" =~ backin\.net$ ]] &&
                 replace_url_in "$backin_location"
 
             input_hidden "$html"

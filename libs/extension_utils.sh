@@ -688,8 +688,7 @@ function get_location { # 1=url 2=variable_to_new_url
 }
 
 function check_cloudflare {
-    local target="$1"
-    html
+    local target="$1" html
 
     if url "$target"
     then
@@ -708,7 +707,7 @@ function check_cloudflare {
 
     if grep jschl_answer <<< "$html" &>/dev/null
     then
-        print_c 2 "$(gettext "Detected cloudflare")" 
+        print_c 2 "$(gettext "Detected Cloudflare")" 
         return 0
     else
         return 1

@@ -26,8 +26,8 @@ if ($argv[2] !== '') {
 $ch = curl_init($url);
 
 // Want to cache clearance cookies ?
-//curl_setopt($ch, CURLOPT_COOKIEJAR, "cookies.txt");
-//curl_setopt($ch, CURLOPT_COOKIEFILE, "/tmp/cookies.zdl");
+curl_setopt($ch, CURLOPT_COOKIEJAR, "/tmp/cookies.txt");
+curl_setopt($ch, CURLOPT_COOKIEFILE, "/tmp/cookies.txt");
 
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -37,7 +37,10 @@ curl_setopt($ch, CURLOPT_HTTPHEADER,
                 "Upgrade-Insecure-Requests: 1",
                 "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
                 "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-                "Accept-Language: en-US,en;q=0.9"
+                "Accept-Language: en-US,en;q=0.9",
+                "Connection: keep-alive",
+                "Upgrade-Insecure-Requests: 1",
+                "TE: Trailers"
             ));
 if (isset($post_data)) {
     curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
@@ -52,7 +55,7 @@ $cfOptions->setVerbose(true);
 
 try {
     // Want to get clearance cookies ?
-    //print_r ( curl_getinfo($ch, CURLINFO_COOKIELIST) );
+    print_r ( curl_getinfo($ch, CURLINFO_COOKIELIST) );
 
     echo $cfCurl->exec($ch, $cfOptions); 
     echo curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
