@@ -50,6 +50,9 @@ then
     if check_cloudflare "$url_in"
     then
         get_by_cloudflare "$url_in" html
+
+    else
+        html=$(curl -s "$url_in")
     fi
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
@@ -99,7 +102,7 @@ then
         		     "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
         		     -o /dev/null)
         	get_language
-
+                
         	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
         			  head -n1 |
         			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
@@ -133,7 +136,7 @@ then
             fi
         done
     fi
-    
+
     if ! url "$url_in_file" 
     then
         url_in_file=$(grep -oP 'sources\:\ \[\{file\:\"[^"]+' <<< "$html")
