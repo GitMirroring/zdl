@@ -58,12 +58,34 @@ then
     	rm -rf "$path_tmp/cookies.zdl"           
     fi
 
+    [[ "$url_in" =~ \.php\?file_code\= ]] && replace_url_in "${url_in//\.php\?file_code\=/\/}"
+    
     get_language_prog
 
     if check_cloudflare "$url_in"
     then
         get_by_cloudflare "$url_in" html
 
+        # if [[ "$html" =~ (Captcha page is not supported) ]]
+        # then
+        #     post_data=$(grep -P '\(r\sparam\:' -A3 <<< "$html" | head -n4)
+        #     post_data="${post_data//\[INFO\] UAM \(retry\: 0\) \-\> \(}"
+        #     post_data="${post_data// param\: /=}"
+        #     post_data="${post_data//\)/\&}"
+        #     post_data=$(tr -d '\n' <<< "${post_data%\&}")
+            
+        #     echo "post: $post_data"
+        #     curl -v \
+        #          -A "$user_agent" \
+        #          -b /tmp/cookies.txt \
+        #          -c "$path_tmp"/cookies.zdl \
+        #          -d "$post_data" \
+        #          -H "Connection: keep-alive" \
+        #          -H "Upgrade-Insecure-Requests: 1" \
+        #          -H "TE: Trailers" \
+        #          "$url_in" 2>&1
+        # fi
+        
     else
         html=$(wget -t1 -T$max_waiting                               \
     		    "$url_in"                                        \

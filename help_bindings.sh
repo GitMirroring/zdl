@@ -51,7 +51,7 @@ Color_Off="\033[0m${Foreground}${Background}" #\033[40m"
 read downloader_in < .zdl_tmp/downloader
 
 this_mode=help
-fclear
+clear
 header_z
 standard_box help
 

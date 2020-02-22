@@ -33,11 +33,12 @@ then
     # url_in_file=$(head -n1 <<< "$html")
     # file_in=$(tail -n1 <<< "$html")
 
-    html=$(curl "$url_in")
+    html=$(curl -s "$url_in")
 
     if [[ "$html" =~ (Video\ is\ processing\ now) ]]
     then
         _log 17
+
     else
         url_in_file=$(grep sources <<< "$html")
         url_in_file="${url_in_file#*\"}"

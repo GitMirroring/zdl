@@ -225,8 +225,8 @@ function separator- {
 }
 
 function fclear {
-    if [ -z "$already_clean" ] &&
-	   show_mode_in_tty "$this_mode" "$this_tty"
+    if [ "$1" == help ] ||
+           ( [ -z "$already_clean" ] && show_mode_in_tty "$this_mode" "$this_tty" )
     then
 	echo -ne "\033c${Color_Off}\033[J"
 

@@ -242,10 +242,10 @@ function standard_box {
 	echo -e ""
 
     elif [ "$1" == help ] &&
-	   [ -z "$binding" ]
+	     [ -z "$binding" ]
     then
 	echo -en "${BBlue}       │${Color_Off}"
-	pause
+	pause force
 
     elif [ "$this_mode" != "lite" ] &&
 	   [ -z "$binding" ]
@@ -398,7 +398,13 @@ function change_mode {
 	    ;;
 
 	'help')
-	    $path_usr/help_bindings.sh
+            clear
+            zdl --help-bindings
+            # clear
+            # header_z help
+            # standard_box help
+
+            #$path_usr/help_bindings.sh
 	    ;;
     esac
     

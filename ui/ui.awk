@@ -151,7 +151,7 @@ function show_downloads_lite () {
 	if (length(downloader)<5)
 	    downloader = downloader ":"
 
-	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +2) "\n"
+	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +2) " \n"
     }
     
     if (no_clear != "no-clear") clean_lite()
