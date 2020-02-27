@@ -1755,20 +1755,6 @@ then
     fi
 fi
 
-function check_xdcc_links {
-    local link
-    test -s "$start_file" &&
-        while read link
-        do
-            if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$link"
-            then
-                display_xdcc_eu_gui "${link##*=}"
-            fi
-            
-        done < "$start_file"
-}
-
-check_xdcc_links
 
 if check_instance_daemon &&
         ( [ "$already_daemon" == true ] || [ "$this_mode" != daemon ] ) ||
@@ -1787,6 +1773,7 @@ fi
 
 reset_exit
 
+check_xdcc_links
 check_linksloop_livestream
 
 if [ "$this_mode" == "daemon" ]

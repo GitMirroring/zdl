@@ -1139,6 +1139,19 @@ function check_livestream_twice {
     fi
 }
 
+function check_xdcc_links {
+    local link
+    test -s "$start_file" &&
+        while read link
+        do
+            if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$link"
+            then
+                display_xdcc_eu_gui "${link##*=}"
+            fi
+            
+        done < "$start_file"
+}
+
 function tag_link { ## 1=link 2=name_variable_to_assign_link
     local url="$1"
     local tag=$(date +%s)
@@ -1153,7 +1166,6 @@ function tag_link { ## 1=link 2=name_variable_to_assign_link
 }
 
 function open_relink {
-
     if [ -d "$path_usr/extensions/" ]
     then
         shopt -s nullglob                   

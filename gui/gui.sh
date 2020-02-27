@@ -1656,6 +1656,13 @@ function main {
 
 
 function display_xdcc_eu_gui {
+    TEXTDOMAINDIR=/usr/local/share/locale
+    TEXTDOMAIN=zdl
+    export TEXTDOMAINDIR
+    export TEXTDOMAIN
+
+    get_language
+
     path_usr="/usr/local/share/zdl"
     ICON="$path_usr"/gui/icon-32x32.png
     TEXT="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD"
