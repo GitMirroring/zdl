@@ -345,10 +345,10 @@ function set_line_in_file { 	#### usage:
 		then
 		    echo "$item" >> "$file_target"
 
-		    if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$item"
-		    then
-			display_xdcc_eu_gui "${item##*=}"
-		    fi
+		    # if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$item"
+		    # then
+		    #     display_xdcc_eu_gui "${item##*=}"
+		    # fi
 		    result=0
 
 		else

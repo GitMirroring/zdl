@@ -95,6 +95,7 @@ then
                              sed -r 's|.+\"([^"]+)\".+|\1|g')
 
             url "$backin_url" &&
+                [[ ! "$backin_url" =~ backin\.net$ ]] &&
                 replace_url_in "$backin_url"
             
             input_hidden "$html"

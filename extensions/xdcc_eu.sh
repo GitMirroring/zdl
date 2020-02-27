@@ -28,7 +28,7 @@
 ## zdl-extension name: www.xdcc.eu
 
 if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$url_in"
-then
+then    
     display_xdcc_eu_gui "${url_in#*=}"
     break_loop=true
 fi

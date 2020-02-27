@@ -1666,7 +1666,6 @@ function display_xdcc_eu_gui {
 	--borders=5
     )
 
-    local pid
     test -f "$path_tmp"/xdcc_eu_lock &&
 	read pid < "$path_tmp"/xdcc_eu_lock
     local xdcc_eu_searchkey="$1"
@@ -1677,10 +1676,9 @@ function display_xdcc_eu_gui {
     local IFS_old="$IFS"
     IFS=' '
 
-    if ( [[ "$pid" =~ ^[0-9]+$ ]] && check_pid $pid ) ||
-	   [ -z "${link_xdcc_eu[0]}" ]
+    if       [ -z "${link_xdcc_eu[0]}" ]
     then
-	local msg="$(gettext "<b>No links found</b> corresponding to the following search keys:") $xdcc_eu_searchkey"
+        local msg="$(gettext "<b>No links found</b> corresponding to the following search keys:") $xdcc_eu_searchkey"
 	yad --center \
 	    --title="$(gettext "Warning!")" \
 	    --window-icon="$ICON" \
@@ -1698,32 +1696,28 @@ function display_xdcc_eu_gui {
 	data_xdcc_eu+=( FALSE "${file_xdcc_eu[i]}" "${length_xdcc_eu[i]}" "${link_xdcc_eu[i]}" )
     done
 
-    {
-	declare -a res
-	res=($(yad --list --checklist --multiple \
-		   --separator=' ' \
-		   --title="$(gettext "Search in www.XDCC.eu:")" \
-		   --text="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD\n\n$(gettext "Select the links found by xdcc.eu:")" \
-    		   --width=1200 --height=300 \
-    		   --image-on-top --image="$IMAGE2" \
-		   "${YAD_ZDL[@]}" \
-		   --column ":CHK" --column "File" --column "$(gettext "Length")" --column "Link" \
-		   "${data_xdcc_eu[@]}" 2>/dev/null))
 
-	if [ "$?" == 0 ] &&
-	       (( ${#res[@]}>0 ))
-	then	    
-	    for ((i=3; i<${#res[@]}; i=i+4))
-	    do
-		set_link + "${res[i]}"
-	    done
-	fi
-	set_link - "$xdcc_eu_search_link"
-	print_links_txt
-	sleep 5
-    } &
-    pid=$!
-    echo $pid > "$path_tmp"/xdcc_eu_lock
+    declare -a res
+    res=($(yad --list --checklist --multiple \
+	       --separator=' ' \
+	       --title="$(gettext "Search in www.XDCC.eu:")" \
+	       --text="<b>ZigzagDownLoader</b>\n\n<b>Path:</b> $PWD\n\n$(gettext "Select the links found by xdcc.eu:")" \
+    	       --width=1200 --height=300 \
+    	       --image-on-top --image="$IMAGE2" \
+	       "${YAD_ZDL[@]}" \
+	       --column ":CHK" --column "File" --column "$(gettext "Length")" --column "Link" \
+	       "${data_xdcc_eu[@]}" 2>/dev/null))
+
+    if [ "$?" == 0 ] &&
+	   (( ${#res[@]}>0 ))
+    then	    
+	for ((i=3; i<${#res[@]}; i=i+4))
+	do
+	    set_link + "${res[i]}"
+	done
+    fi
+    set_link - "$xdcc_eu_search_link"
+    print_links_txt
 
     IFS="$IFS_old"
 }
