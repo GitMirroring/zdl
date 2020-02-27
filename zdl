@@ -1757,14 +1757,15 @@ fi
 
 function check_xdcc_links {
     local link
-    while read link
-    do
-        if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$link"
-        then
-            display_xdcc_eu_gui "${link##*=}"
-        fi
-        
-    done < "$start_file"
+    test -s "$start_file" &&
+        while read link
+        do
+            if grep -q "${XDCC_EU_SEARCHKEY_URL}" <<< "$link"
+            then
+                display_xdcc_eu_gui "${link##*=}"
+            fi
+            
+        done < "$start_file"
 }
 
 check_xdcc_links
