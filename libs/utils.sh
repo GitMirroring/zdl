@@ -230,7 +230,7 @@ function make_index {
 }
 
 function scrape_url {
-    url_page="$1"
+    url_page="$1" 
     
     if url "$url_page"
     then
