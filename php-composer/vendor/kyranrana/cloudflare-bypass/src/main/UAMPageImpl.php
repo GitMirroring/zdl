@@ -14,9 +14,9 @@ class UAMPageImpl extends UAMPage
 {
     public function getClearanceUrl(UAMPageAttributes $pageAttributes): string
     {
-        return sprintf("%s://%s%s",
+        return sprintf("%s://%s/cdn-cgi/l/chk_jschl?%s",
             $pageAttributes->getProtocol(),
             $pageAttributes->getHost(),
-            $pageAttributes->getFormParams()->getAction());
+            $pageAttributes->getFormParams()->getQueryString());
     }
 }

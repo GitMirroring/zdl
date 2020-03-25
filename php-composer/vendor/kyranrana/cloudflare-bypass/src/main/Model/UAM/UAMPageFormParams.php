@@ -29,18 +29,11 @@ class UAMPageFormParams
     {
         $page = $pageAttributes->getPage();
 
-        preg_match('/name="r" value="([^"]*)"/', $page, $sMatches);
+        preg_match('/name="s" value="([^"]+)"/', $page, $sMatches);
         preg_match('/name="jschl_vc" value="([^"]+)"/', $page, $jschlVcMatches);
         preg_match('/name="pass" value="([^"]+)"/', $page, $passMatches);
-        preg_match('/action="([^"]+)"/', $page, $urlMatches);
 
-        return new UAMPageFormParams(
-            $sMatches[1],
-            $jschlVcMatches[1],
-            $passMatches[1],
-            self::getJschlAnswerFromPage($pageAttributes),
-            $urlMatches[1]
-        );
+        return new UAMPageFormParams($sMatches[1], $jschlVcMatches[1], $passMatches[1], self::getJschlAnswerFromPage($pageAttributes));
     }
 
     /**
@@ -70,11 +63,11 @@ class UAMPageFormParams
     // -------------------------------------------------------------------------------------------------------
 
     /**
-     * R param
+     * S param
      *
-     * @var string $r
+     * @var string $s
      */
-    private $r;
+    private $s;
 
     /**
      * JSCHL VC param
@@ -97,40 +90,22 @@ class UAMPageFormParams
      */
     private $jschlAnswer;
 
-    /**
-     * FORM ACTION param
-     *
-     * @var string $action
-     */
-    private $action;
-
-    public function __construct(string $r, string $jschlVc, string $pass, string $jschlAnswer, string $action)
+    public function __construct(string $s, string $jschlVc, string $pass, string $jschlAnswer)
     {
-        $this->r                = $r;
+        $this->s                = $s;
         $this->jschlVc          = $jschlVc;
         $this->pass             = $pass;
         $this->jschlAnswer      = $jschlAnswer;
-        $this->action           = $action;
     }
 
     /**
-     * Gets R param
+     * Gets S param
      *
-     * @return string R param
+     * @return string S param
      */
-    public function getR(): string
+    public function getS(): string
     {
-        return $this->r;
-    }
-
-    /**
-     * Gets form action param
-     *
-     * @return string form action param
-     */
-    public function getAction(): string
-    {
-        return $this->action;
+        return $this->s;
     }
 
     /**
@@ -171,7 +146,7 @@ class UAMPageFormParams
     public function getQueryString(): string
     {
         return http_build_query([
-            'r'             => $this->getR(),
+            's'             => $this->getS(),
             'jschl_vc'      => $this->getJschlVc(),
             'pass'          => $this->getPass(),
             'jschl_answer'  => $this->getJschlAnswer()
