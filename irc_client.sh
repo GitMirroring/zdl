@@ -523,11 +523,12 @@ function irc_client {
 	    check_irc_command "$irc_cmd" "$txt"
 
 
-	done <&3
+	done <&3 &
 	irc_pid=$!
 	add_pid_url "$irc_pid" "$url_in" "irc-pids"
 	echo "$irc_pid" >>"$path_tmp/external-dl_pids.txt"
 
+        wait "$irc_pid"
 	return 0
 
     else
