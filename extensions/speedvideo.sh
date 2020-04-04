@@ -86,7 +86,10 @@ then
 	    url_speedvideo="${url_speedvideo%\'*}"
 	fi
 
-	get_location "$url_speedvideo" url_in_file
+        ## lento:
+	##get_location "$url_speedvideo" url_in_file
+        url_in_file=$(curl -v "$url_speedvideo" 2>&1 | grep location:)
+        url_in_file=$(trim "${url_in_file##* }")
 
 	if ! url "$url_in_file" 
 	then
@@ -112,6 +115,8 @@ then
 	[ -n "$file_in" ] && url "$url_in_file" &&
 	    file_in="${file_in##.}.${url_in_file##*.}"
 
-	end_extension
+        file_in="${file_in%%.mp4}".mp4
+
+        end_extension
     fi
 fi

@@ -590,6 +590,7 @@ no_check_links=(
     \.dfiles\.
     \.m3u8
     akvideo
+    speedvideo
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
@@ -604,6 +605,7 @@ no_check_ext=(
     \.dfiles\.
     \.m3u8
     akvideo
+    speedvideo
 )
 
 source $path_usr/livestream_conf.sh
