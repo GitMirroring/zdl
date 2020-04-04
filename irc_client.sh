@@ -516,12 +516,11 @@ function irc_client {
 	    join_xdcc_send "$line"
 	    
 	    ## per ricerche e debug:
-	    #print_c 3 "$line"
+	    # print_c 4 "$line"
 
 	    check_line_regex "$line"
 
 	    check_irc_command "$irc_cmd" "$txt"
-
 
 	done <&3 &
 	irc_pid=$!

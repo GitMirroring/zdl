@@ -43,6 +43,11 @@ then
     file_in="${file_in%</a>*}"
     file_in="${file_in##*>}"
 
+    if [ -z "$file_in" ]
+    then
+        file_in=$(get_title "$html")
+    fi
+
     unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
     if [[ "$unpacked" =~ MDCore\.furl\=\" ]]
@@ -61,7 +66,12 @@ then
         url_in_file="http:${unpacked#*wurl=\"}"
         url_in_file="${url_in_file%%\"*}"
     fi
-   
+
+    if [ -z "$file_in" ]
+    then
+        file_in="mixdrop-${url_in##*\/}"
+    fi
+    
     end_extension
 fi
 
