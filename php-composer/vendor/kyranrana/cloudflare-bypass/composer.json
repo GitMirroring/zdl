@@ -3,7 +3,6 @@
   "description": "A library for helping bypass the cloudflare UAM page.",
   "type": "library",
   "license": "MIT",
-  "version": "3.3.0",
   "authors": [
     {
       "name": "Kyran Rana",
@@ -11,12 +10,14 @@
     }
   ],
   "require": {
-    "php": "^7.0",
-    "myclabs/php-enum": "^1.6.6",
-    "KyranRana/simple-javascript-compilation": "^0.3.1",
+    "php": "^7.2",
+    "kyranrana/simple-javascript-compilation": "^0.3.1",
     "ext-curl": "*",
     "ext-json": "*",
     "ext-bcmath": "*"
+  },
+  "scripts": {
+    "phpunit": "phpunit"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.5.5"

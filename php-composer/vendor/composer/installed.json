@@ -60,17 +60,17 @@
     },
     {
         "name": "kyranrana/cloudflare-bypass",
-        "version": "3.3.0",
-        "version_normalized": "3.3.0.0",
+        "version": "3.4.0",
+        "version_normalized": "3.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/KyranRana/cloudflare-bypass.git",
-            "reference": "8700b7b70f103c3398951967ffe831619038bc00"
+            "reference": "522b11853c61af38a5c9dbdbd20e9b99db9091ca"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/KyranRana/cloudflare-bypass/zipball/8700b7b70f103c3398951967ffe831619038bc00",
-            "reference": "8700b7b70f103c3398951967ffe831619038bc00",
+            "url": "https://api.github.com/repos/KyranRana/cloudflare-bypass/zipball/522b11853c61af38a5c9dbdbd20e9b99db9091ca",
+            "reference": "522b11853c61af38a5c9dbdbd20e9b99db9091ca",
             "shasum": ""
         },
         "require": {
@@ -78,13 +78,12 @@
             "ext-curl": "*",
             "ext-json": "*",
             "kyranrana/simple-javascript-compilation": "^0.3.1",
-            "myclabs/php-enum": "^1.6.6",
-            "php": "^7.0"
+            "php": "^7.2"
         },
         "require-dev": {
             "phpunit/phpunit": "^6.5.5"
         },
-        "time": "2019-09-17T21:54:46+00:00",
+        "time": "2020-03-24T20:16:19+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

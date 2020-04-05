@@ -1,6 +1,6 @@
 # Cloudflare Bypass
 
-[![CircleCI](https://circleci.com/gh/KyranRana/cloudflare-bypass.svg?style=svg)](https://circleci.com/gh/KyranRana/cloudflare-bypass)
+[![CI](https://github.com/KyranRana/cloudflare-bypass/workflows/CI/badge.svg)](https://github.com/jaymoulin/cloudflare-bypass/actions?query=workflow%3ACI)
 
 A new and improved PHP library which bypasses the Cloudflare IUAM page using cURL.
 
