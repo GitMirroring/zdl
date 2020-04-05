@@ -52,7 +52,7 @@ then
 
     if url "$backin_url"
     then
-        print_c 4 "$(gettext "Redirection"): $backin_url"
+        #print_c 4 "$(gettext "Redirection"): $backin_url"
 
         if check_cloudflare "$backin_url"
         then
@@ -81,6 +81,9 @@ then
 
         file_in=$(get_title "$html")
         file_in="${file_in#Streaming }"
+        file_in="${file_in#Download }"
+        file_in="${file_in%mp4}"
+        file_in="${file_in%\.}"
         file_filter "$file_in"
 
         if grep -q 'p,a,c,k,e,d' <<< "$html"
@@ -94,13 +97,9 @@ then
                              tail -n1 |
                              sed -r 's|.+\"([^"]+)\".+|\1|g')
 
-            url "$backin_url" &&
-                [[ ! "$backin_url" =~ backin\.net$ ]] &&
-                replace_url_in "$backin_url"
-            
             input_hidden "$html"
             [[ "$post_data" =~ \=1$ ]] && post_data="${post_data%1}"0
-            get_by_cloudflare "$url_in" html "$post_data"
+            get_by_cloudflare "$backin_url" html "$post_data"
 
             backin_cookies=$(head -n20 <<< "$html" |
                                  grep -P '(__cfduid|cf_clearance)' |
