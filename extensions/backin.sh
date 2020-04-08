@@ -78,7 +78,7 @@ then
             html=$(wget -o /dev/null -qO- "$backin_url")
             get_language
         fi
-
+        
         file_in=$(get_title "$html")
         file_in="${file_in#Streaming }"
         file_in="${file_in#Download }"
@@ -110,8 +110,15 @@ then
             if grep -q 'p,a,c,k,e,d' <<< "$html"
             then
                 url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n2 |tail -n1)")
-                url_in_file="${url_in_file#*file\:\"}"
+
+                if grep -q 'file:' <<< "$url_in_file"
+                then
+                    url_in_file="${url_in_file#*file\:\"}"
+                else
+                    url_in_file="${url_in_file#*\"src\"value=\"}"
+                fi
                 url_in_file="${url_in_file%%\"*}"
+
             fi                    
         fi
     fi
