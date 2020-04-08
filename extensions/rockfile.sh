@@ -74,7 +74,7 @@ then
 			  sed -r 's|.+(method_.*free)\".+|\1|g' |
 			  tr -d '\r')
 	
-	post_data="${post_data##*document.write\(\&}&${method_free}=Free Download"
+	post_data="${post_data##*document.write\(\&}&${method_free}=Free+Download"
 
         if check_cloudflare "$url_in"
 	then

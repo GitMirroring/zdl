@@ -29,6 +29,9 @@
 
 if [ "$url_in" != "${url_in//stayonline.}" ]
 then
+    [[ "$url_in" =~ http\:\/\/ ]] &&
+        replace_url_in "${url_in//http/https}"
+    
     html=$(curl -s \
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
@@ -39,8 +42,13 @@ then
     stayonline_url=$(curl -s \
                           -b "$path_tmp"/cookies.zdl \
                           -d "id=$stayonline_id" \
-                          "https://stayonline.pro/ajax/linkView.php" |
-                         awk '/value/{match($2, /\"(.+)\"/, matched); gsub(/\\/,"",matched[1]); print matched[1] }')
+                          -A "$user_agent" \
+                          -H "Connection: keep-alice" \
+                          -H "X-Requested-With: XMLHttpRequest" \
+                          -H "TE: Trailers" \
+                          "https://stayonline.pro/ajax/linkView.php")
+
+    stayonline_url=$(awk '/value/{match($2, /\"(.+)\"/, matched); gsub(/\\/,"",matched[1]); print matched[1] }' <<< "$stayonline_url")
 
     if url "$stayonline_url"
     then
