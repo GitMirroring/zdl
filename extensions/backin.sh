@@ -118,9 +118,9 @@ then
                     url_in_file="${url_in_file#*\"src\"value=\"}"
                 fi
                 url_in_file="${url_in_file%%\"*}"
-
             fi                    
         fi
     fi
+
     end_extension
 fi

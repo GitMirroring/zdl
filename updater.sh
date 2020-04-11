@@ -95,6 +95,11 @@ function update_zdl-conkeror {
 
 function try {
     cmdline=( "$@" )
+
+    if ! hash "${cmdline[0]}" &>/dev/null
+    then
+        return 1
+    fi
     
     if ! "${cmdline[@]}" 2>/dev/null 
     then        
@@ -560,7 +565,14 @@ EXTENSIONS:
         deps['setterm']=util-linux
         deps['fuser']=psmisc    
         deps['openssl']=openssl
-        deps['desktop-file-install']=desktop-file-utils
+
+        if [ -n "$XDG_CURRENT_DESKTOP" ] ||
+               [ -n "$(ls /usr/share/xsessions/*.desktop 2>/dev/null)" ] ||
+               ( hash dpkg &>/dev/null && dpkg -l *desktop &>/dev/null ) 
+        then
+            deps['desktop-file-install']=desktop-file-utils
+        fi
+        
         deps['curl']=curl
         deps['phantomjs']=phantomjs
         deps['yad']=yad
