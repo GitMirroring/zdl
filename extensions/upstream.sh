@@ -52,7 +52,8 @@ then
         get_by_cloudflare "$url_in" html
 
     else
-        html=$(curl -s "$url_in")
+        html=$(curl -s "$url_in" \
+                    -c "$path_tmp/cookies.zdl")
     fi
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
@@ -100,9 +101,11 @@ then
         	get_language_prog
         	html2=$(wget -qO- -t1 -T$max_waiting           \
         		     "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
+                             --user-agent="$user_agent" \
+                             --load-cookies="$path_tmp/cookies.zdl" \
         		     -o /dev/null)
         	get_language
-                
+
         	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
         			  head -n1 |
         			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
