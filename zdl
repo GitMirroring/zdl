@@ -339,7 +339,7 @@ function main_loop {
 		    rm -f "$path_tmp/redirect"
 		fi
 		###################
-
+                                
 		try_end=$try_end_default
 		## extensions
 		if [ -d "$path_usr/extensions/" ]
@@ -396,8 +396,7 @@ function main_loop {
 			    break
 			fi
 		    done
-		    
-
+		                        
 		    ## universal downloader
 		    if [ -z "$file_in" ] && ! url "$url_in_file"
 		    then
@@ -542,6 +541,50 @@ then
     done
 fi
 
+
+if [[ "${args[@]}" =~ \-\-get\-title ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+        if [[ "${args[i]}" =~ \-\-get\-title=[\"\']*(http.+)[\"\']*$ ]]
+        then
+            url_in_title="${BASH_REMATCH[1]}"
+            
+            if [ -z "$file_in" ] &&
+                   url "$url_in_title"
+            then
+                html=$(curl -s "$url_in_title")
+                file_in=$(get_title "$html")
+                sanitize_file_in
+            fi
+
+            unset args[i]
+            break
+        fi
+    done
+fi
+
+if [[ "${args[@]}" =~ \-\-set\-title ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+        if [[ "${args[i]}" =~ \-\-set\-title=[\"\']*(.+)[\"\']*$ ]]
+        then
+            file_in_title="${BASH_REMATCH[1]}"
+            
+            if [ -z "$file_in" ] &&
+                   [ -n "$file_in_title" ]
+            then
+                file_in="$file_in_title"
+                sanitize_file_in
+            fi
+
+            unset args[i]
+            break
+        fi
+    done
+fi
+
 if [[ "${args[@]}" =~ \-\-open\-relink ]]
 then
     init
@@ -558,6 +601,7 @@ then
     open_relink
     exit
 fi
+
 
 
 #### PATH:
@@ -945,8 +989,9 @@ then
 		unset file_in
 		
 	    else
-		file_in="$test_dir_3"
-		if [ "$test_dir_4" != "--noXterm" ] &&
+                [ -n "$test_dir_3" ] &&	file_in="${test_dir_3#--set-title=}"
+
+                if [ "$test_dir_4" != "--noXterm" ] &&
 		       [ -d "$test_dir_4" ]
 		then
 		    directory="$test_dir_4"
@@ -1002,7 +1047,11 @@ then
 	    echo -e "$cookie" > "$path_tmp/flashgot_cookie.zdl"
 
 	    url_in="${url_in%'#20%'}"
-	    echo "$url_in" > "${path_tmp}/filename_${file_in}.txt"
+
+            [ "$file_in" == undefined ] && unset file_in
+
+            [ -n "${file_in}" ] &&
+	        echo "$url_in" > "${path_tmp}/filename_${file_in}.txt"
 	    
 	    if [ "$4" == "--noXterm" ] ||
 		   [ -e "/cygdrive" ]
