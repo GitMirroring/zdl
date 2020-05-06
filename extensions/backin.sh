@@ -46,7 +46,7 @@ if [[ "$url_in" =~ backin ]] &&
        [[ ! "$url_in" =~ \/d\/ ]]
 then
     link_parser "$url_in"
-    # backin_url="$parser_proto$parser_domain/s/generating.php?code=${parser_path##*\/}"
+    #backin_url="$parser_proto$parser_domain/s/generating.php?code=${parser_path##*\/}"
     backin_url="$url_in"
     get_language
 

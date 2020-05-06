@@ -31,12 +31,12 @@
 if [[ "$url_in" =~ dplay\. ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
-    
+
     dplayJSON=$(grep 'JSON.parse' <<< "$html")
     dplayJSON=${dplayJSON#*\"}
     dplayJSON=${dplayJSON%\"*}
     dplayJSON=$(echo -e "$dplayJSON" | tr -d '\')
-    
+
     url_in_file=$(nodejs -e "var json = $dplayJSON; console.log(json.data.attributes.streaming.hls.url)")
     __in_file=$(curl -s "$url_in_file" |tail -n1)
 
@@ -51,11 +51,11 @@ then
     
     # file_in="${url_in%\/*}"
     # file_in="${file_in##*\/}"
-    
+
     if ! url "$url_in_file"
     then
 	dplay_data=$(youtube-dl --get-url \
-				--get-file \
+				--get-filename \
 				--cookies "$path_tmp"/cookies.zdl \
 				"$url_in" \
 				2>/dev/null)
@@ -68,7 +68,7 @@ then
 	## problema permessi, usiamo `youtube-dl --hls-prefer-ffmpeg`:
 	youtubedl_m3u8="$url_in"
     fi
-
+echo "url: $url_in_file"    
     file_in="$(get_title "$html" | sed -r 's/\ \|\ Dplay\ *$//g')$(grep episode-season-title -A2 <<< "$html" | tail -n1 | sed -r 's|^\ *||g')"
     file_filter "$file_in"
 

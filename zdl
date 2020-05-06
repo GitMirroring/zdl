@@ -542,48 +542,48 @@ then
 fi
 
 
-if [[ "${args[@]}" =~ \-\-get\-title ]]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-        if [[ "${args[i]}" =~ \-\-get\-title=[\"\']*(http.+)[\"\']*$ ]]
-        then
-            url_in_title="${BASH_REMATCH[1]}"
+# if [[ "${args[@]}" =~ \-\-get\-title ]]
+# then
+#     for ((i=0; i<=$max_args; i++))
+#     do
+#         if [[ "${args[i]}" =~ \-\-get\-title=[\"\']*(http.+)[\"\']*$ ]]
+#         then
+#             url_in_title="${BASH_REMATCH[1]}"
             
-            if [ -z "$file_in" ] &&
-                   url "$url_in_title"
-            then
-                html=$(curl -s "$url_in_title")
-                file_in=$(get_title "$html")
-                sanitize_file_in
-            fi
+#             if [ -z "$file_in" ] &&
+#                    url "$url_in_title"
+#             then
+#                 html=$(curl -s "$url_in_title")
+#                 file_in=$(get_title "$html")
+#                 sanitize_file_in
+#             fi
 
-            unset args[i]
-            break
-        fi
-    done
-fi
+#             unset args[i]
+#             break
+#         fi
+#     done
+# fi
 
-if [[ "${args[@]}" =~ \-\-set\-title ]]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-        if [[ "${args[i]}" =~ \-\-set\-title=[\"\']*(.+)[\"\']*$ ]]
-        then
-            file_in_title="${BASH_REMATCH[1]}"
-            
-            if [ -z "$file_in" ] &&
-                   [ -n "$file_in_title" ]
-            then
-                file_in="$file_in_title"
-                sanitize_file_in
-            fi
+# if [[ "${args[@]}" =~ \-\-set\-title ]]
+# then
+#     for ((i=0; i<=$max_args; i++))
+#     do
+#         if [[ "${args[i]}" =~ \-\-set\-title=[\"\']*(.+)[\"\']*$ ]]
+#         then
+#             file_in_title="${BASH_REMATCH[1]}"
 
-            unset args[i]
-            break
-        fi
-    done
-fi
+#             if [ -z "$file_in" ] &&
+#                    [ -n "$file_in_title" ]
+#             then
+#                 file_in="$file_in_title"
+#                 sanitize_file_in
+#             fi
+
+#             unset args[i]
+#             break
+#         fi
+#     done
+# fi
 
 if [[ "${args[@]}" =~ \-\-open\-relink ]]
 then
@@ -972,7 +972,7 @@ then
 	    then
 		export DISPLAY=":0"
 	    fi
-	    
+	    echo $@ >>/dev/tty2
 	    url_in="$2"
 	    url_in="${url_in// /20%}"	    
 	    test_dir_3="$3"
@@ -1009,10 +1009,19 @@ then
 	    file_in="${file_in// /_}"
 	    file_in="${file_in##*/}"
 	    file_in="${file_in::240}"
-	    cfile="$5"
-	    cookie="$6"
-	    referer="$7"
 
+            if [ -d "$4" ]
+            then
+	        cfile="$5"
+	        cookie="$6"
+	        referer="$7"
+
+            elif [ -n "$4" ] &&
+                     [[ ! "$4" =~ ^\-\- ]]
+            then
+                cookie="$4"
+            fi
+            
 	    if [ "$url_in" != "${url_in//nowvideo.}" ] &&
 		   [ ! -e "/cygdrive" ]
 	    then
@@ -1044,15 +1053,23 @@ then
 	    then
 		cat "$cfile" >> "$path_tmp/flashgot_cfile.zdl"
 	    fi
-	    echo -e "$cookie" > "$path_tmp/flashgot_cookie.zdl"
 
+            if [ -n "$cookie" ]
+            then
+	        echo -e "$cookie" >> "$path_tmp/flashgot_cookie.zdl"
+                echo -e "$cookie" >> "$path_tmp/cookies.zdl"
+            fi
+            
 	    url_in="${url_in%'#20%'}"
 
             [ "$file_in" == undefined ] && unset file_in
 
-            [ -n "${file_in}" ] &&
+            if [ -n "${file_in}" ]
+            then
+                sanitize_file_in
 	        echo "$url_in" > "${path_tmp}/filename_${file_in}.txt"
-	    
+	    fi
+            
 	    if [ "$4" == "--noXterm" ] ||
 		   [ -e "/cygdrive" ]
 	    then
