@@ -972,7 +972,7 @@ then
 	    then
 		export DISPLAY=":0"
 	    fi
-	    echo $@ >>/dev/tty2
+
 	    url_in="$2"
 	    url_in="${url_in// /20%}"	    
 	    test_dir_3="$3"
