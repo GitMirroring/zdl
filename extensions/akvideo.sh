@@ -114,7 +114,8 @@ then
         #     url_in_file="${url_in_file#*\"}"
         #     url_in_file="${url_in_file%%\"*}"
         # fi
-
+#         echo "$html"
+# echo "url: $url_in_file"
 	download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
 	hash_akvideo="${download_video%\'*}"
@@ -159,7 +160,7 @@ then
 			     "https://akvideo.stream/dl?op=download_orig&id=${id_akvideo}&mode=${mode_stream}&hash=${hash_akvideo}" \
 			     -o /dev/null)
 		get_language
-		
+
 		url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
 				     head -n1 |
 				     sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')

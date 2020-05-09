@@ -68,7 +68,7 @@ then
 	## problema permessi, usiamo `youtube-dl --hls-prefer-ffmpeg`:
 	youtubedl_m3u8="$url_in"
     fi
-echo "url: $url_in_file"    
+
     file_in="$(get_title "$html" | sed -r 's/\ \|\ Dplay\ *$//g')$(grep episode-season-title -A2 <<< "$html" | tail -n1 | sed -r 's|^\ *||g')"
     file_filter "$file_in"
 
