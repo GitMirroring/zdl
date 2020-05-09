@@ -32,31 +32,30 @@ if [[ "$url_in" =~ dplay\. ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
 
-    dplayJSON=$(grep 'JSON.parse' <<< "$html")
-    dplayJSON=${dplayJSON#*\"}
-    dplayJSON=${dplayJSON%\"*}
-    dplayJSON=$(echo -e "$dplayJSON" | tr -d '\')
+    # dplayJSON=$(grep 'JSON.parse' <<< "$html")
+    # dplayJSON=${dplayJSON#*\"}
+    # dplayJSON=${dplayJSON%\"*}
+    # dplayJSON=$(echo -e "$dplayJSON" | tr -d '\')
 
-    url_in_file=$(nodejs -e "var json = $dplayJSON; console.log(json.data.attributes.streaming.hls.url)")
-    __in_file=$(curl -s "$url_in_file" |tail -n1)
+    # url_in_file=$(nodejs -e "var json = $dplayJSON; console.log(json.data.attributes.streaming.hls.url)")
+    # __in_file=$(curl -s "$url_in_file" |tail -n1)
 
-    if grep -q URI <<< "$__in_file"
-    then
-	unset url_in_file file_in
-	_log 32
+    # if grep -q URI <<< "$__in_file"
+    # then
+    #     unset url_in_file file_in
+    #     _log 32
 	
-    else 
-	url_in_file=$(sed -r "s|[^/]+m3u8|$__in_file|g" <<< "$url_in_file") 
-    fi
+    # else 
+    #     url_in_file=$(sed -r "s|[^/]+m3u8|$__in_file|g" <<< "$url_in_file") 
+    # fi
     
-    # file_in="${url_in%\/*}"
-    # file_in="${file_in##*\/}"
+    ## file_in="${url_in%\/*}"
+    ## file_in="${file_in##*\/}"
 
     if ! url "$url_in_file"
     then
 	dplay_data=$(youtube-dl --get-url \
 				--get-filename \
-				--cookies "$path_tmp"/cookies.zdl \
 				"$url_in" \
 				2>/dev/null)
 	
