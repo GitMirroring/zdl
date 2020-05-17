@@ -129,7 +129,9 @@ then
 		url_in_file="http://${url_in_file}"
 	fi
 	
-	[ -n "$file_in" ] && url "$url_in_file" &&
+	[ -n "$file_in" ] &&
+            url "$url_in_file" &&
+            [[ ! "$file_in" =~ ${url_in_file##*.}$ ]] &&
 	    file_in="${file_in##.}.${url_in_file##*.}"
 
         file_in="${file_in%%.mp4}".mp4
