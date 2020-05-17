@@ -44,7 +44,7 @@ then
     if [[ ! "$url_in" =~ embed ]]
     then
 	htm=$(curl -A "$user_agent" \
-		   -c "$path_tmp"/cookies0.zdl \
+		   -c "$path_tmp"/cookies.zdl \
 		   "$url_in")
 
 	input_hidden "$htm"
@@ -54,12 +54,12 @@ then
 
     html=$(wget -qO- "${url_in//http\:/https:}"         \
 		--user-agent="$user_agent"              \
-		--load-cookies="$path_tmp"/cookies0.zdl \
+		--load-cookies="$path_tmp"/cookies.zdl \
 		--keep-session-cookies                  \
-		--save-cookies="$path_tmp"/cookies.zdl  \
+		--save-cookies="$path_tmp"/cookies2.zdl  \
 		--post-data="$post_data"                \
 		-o /dev/null)
-
+    cat "$path_tmp"/cookies2.zdl >> "$path_tmp"/cookies.zdl  
     unset post_data    
 
     if [[ "${htm}${html}" =~ 'File Not Found' ]] 
@@ -91,6 +91,23 @@ then
         url_in_file=$(curl -v "$url_speedvideo" 2>&1 | grep location:)
         url_in_file=$(trim "${url_in_file##* }")
 
+        if ! url "$url_in_file" 
+	then
+            for def in H N Lq ''
+            do
+                linkfile=$(grep "var linkfileBackup${def} =" <<< "$html")
+
+                [ -z "$linkfile" ] && continue
+
+                linkfile="${linkfile#*\"}"
+                linkfile="${linkfile%\"*}"
+
+                get_location "$linkfile" url_in_file
+
+                url "$url_in_file" && break
+            done
+        fi
+        
 	if ! url "$url_in_file" 
 	then
 	    linkfile=$(grep 'base64_decode' <<< "$html"   |
