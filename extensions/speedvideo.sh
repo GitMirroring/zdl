@@ -35,33 +35,54 @@ then
 
     if [[ "$url_in" =~ embed ]]
     then
-	url_embed="${url_in//'embed-'}"
-	url_embed="${url_embed//http\:/https:}"
+        url_embed="${url_in//'embed-'}"
+        url_embed="${url_embed//http\:/https:}"
 
-	replace_url_in "${url_embed%'-'*}"
+        html_not_embed=$(curl "${url_embed%'-'*}")
+        # replace_url_in "${url_embed%'-'*}"
+    else
+        html_not_embed=$(curl "$url_in")
     fi
+    input_hidden "$html_not_embed"
+    file_filter "$file_in"
 
+    # if [[ ! "$url_in" =~ embed ]]
+    # then
+    #     htm=$(curl -A "$user_agent" \
+    #     	   -c "$path_tmp"/cookies.zdl \
+    #     	   "$url_in")
+
+    #     input_hidden "$htm"
+    #     file_filter "$file_in"
+    #     post_data+="&imhuman=Proceed to video"
+    # fi
+
+    # html=$(wget -qO- "${url_in//http\:/https:}"         \
+    #     	--user-agent="$user_agent"              \
+    #     	--load-cookies="$path_tmp"/cookies.zdl \
+    #     	--keep-session-cookies                  \
+    #     	--save-cookies="$path_tmp"/cookies2.zdl  \
+    #     	--post-data="$post_data"                \
+    #     	-o /dev/null)
+    # cat "$path_tmp"/cookies2.zdl >> "$path_tmp"/cookies.zdl  
+    # unset post_data    
+
+    
     if [[ ! "$url_in" =~ embed ]]
     then
-	htm=$(curl -A "$user_agent" \
-		   -c "$path_tmp"/cookies.zdl \
-		   "$url_in")
+        link_parser "$url_in"
+	parser_path="${parser_path%%\/*}"
+	url_in_embed="https://$parser_domain/embed-${parser_path%\/*}-607x360.html"
 
-	input_hidden "$htm"
-	file_filter "$file_in"
-	post_data+="&imhuman=Proceed to video"
+        url "$url_in_embed" &&
+            replace_url_in "$url_in_embed"
     fi
 
-    html=$(wget -qO- "${url_in//http\:/https:}"         \
-		--user-agent="$user_agent"              \
-		--load-cookies="$path_tmp"/cookies.zdl \
-		--keep-session-cookies                  \
-		--save-cookies="$path_tmp"/cookies2.zdl  \
-		--post-data="$post_data"                \
-		-o /dev/null)
-    cat "$path_tmp"/cookies2.zdl >> "$path_tmp"/cookies.zdl  
-    unset post_data    
-
+    html=$(curl "$url_in" \
+                -A "$user_agent" \
+                -c "$path_tmp"/cookies.zdl)
+    
+    
     if [[ "${htm}${html}" =~ 'File Not Found' ]] 
     then
 	_log 3
@@ -72,27 +93,28 @@ then
         	
     elif [ -n "$html" ]
     then
-	url_speedvideo=$(grep 'var url_speedvideoBackup' <<< "$html" |
-			   head -n10 |
-			   tail -n1 |
-	     		   sed -r 's|.+\"([^"]+)\".+|\1|g')
+	# url_speedvideo=$(grep 'var url_speedvideoBackup' <<< "$html" |
+	# 		   head -n10 |
+	# 		   tail -n1 |
+	#      		   sed -r 's|.+\"([^"]+)\".+|\1|g')
 
-	if ! url "$url_speedvideo" &&
-                grep 'label: "HD"' <<< "$html" >/dev/null
-	then
-	    url_speedvideo=$(grep 'label: "HD"' -B 1 <<< "$html" |
-			      head -n1)
-	    url_speedvideo="${url_speedvideo#*\'}"
-	    url_speedvideo="${url_speedvideo%\'*}"
-	fi
+	# if ! url "$url_speedvideo" &&
+        #         grep 'label: "HD"' <<< "$html" >/dev/null
+	# then
+	#     url_speedvideo=$(grep 'label: "HD"' -B 1 <<< "$html" |
+	# 		      head -n1)
+	#     url_speedvideo="${url_speedvideo#*\'}"
+	#     url_speedvideo="${url_speedvideo%\'*}"
+	# fi
 
-        ## lento:
-	##get_location "$url_speedvideo" url_in_file
-        url_in_file=$(curl -v "$url_speedvideo" 2>&1 | grep location:)
-        url_in_file=$(trim "${url_in_file##* }")
+        # #### lento:
+	# ## get_location "$url_speedvideo" url_in_file
+        # url_in_file=$(curl -v "$url_speedvideo" 2>&1 | grep location:)
+        # url_in_file=$(trim "${url_in_file##* }")
 
         if ! url "$url_in_file" 
 	then
+            get_language_prog
             for def in H N Lq ''
             do
                 linkfile=$(grep "var linkfileBackup${def} =" <<< "$html")
@@ -102,17 +124,23 @@ then
                 linkfile="${linkfile#*\"}"
                 linkfile="${linkfile%\"*}"
 
-                get_location "$linkfile" url_in_file
+                ## get_location "$linkfile" url_in_file
+                url_in_file=$(curl -v "$linkfile" \
+                                   -c "$path_tmp/cookies.zdl" \
+                                   -A "$user_agent" 2>&1 |
+                                  grep ocation:)
+                url_in_file=$(trim "${url_in_file##* }")
 
                 url "$url_in_file" && break
             done
+            get_language
         fi
         
 	if ! url "$url_in_file" 
 	then
 	    linkfile=$(grep 'base64_decode' <<< "$html"   |
-			   tail -n1                          |
-			   sed -r 's|.+\"([^"]+)\".+|\1|g')
+	        	   tail -n1                          |
+	        	   sed -r 's|.+\"([^"]+)\".+|\1|g')
 
 	    var2=$(grep base64_decode <<< "$html" |
 			  sed -r 's|.+ ([^ ]+)\)\;$|\1|g' | head -n1)
