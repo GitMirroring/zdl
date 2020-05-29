@@ -490,14 +490,14 @@ _Streaming video skipping browser player:_
      (HD), Exashare, Facebook, Fastvideo, Flashx.tv, IDoWatch,
      IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex Cloudzilla),
      NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
-     Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
-     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
-     Speedvideo (HD), Streamango, Streamin, Supervideo (HD), TED
-     (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
-     in streaming di tipo .m3u8, Tutti i video in streaming di tipo
-     .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy
-     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     WStream (HD), Youtube, Zinwa (RTMP) 
+     Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
+     (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Supervideo
+     (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi),
+     Tutti i video in streaming di tipo .m3u8, Tutti i video in
+     streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
+     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
+     (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -1456,26 +1456,26 @@ Tag Table:
 Node: Top1193
 Node: The ZDL command5078
 Node: Streaming/hosting services12936
-Node: Start ZDL17251
-Node: Stop ZDL19584
-Node: Check the downloads20619
-Node: User manuals24660
-Node: Modes25053
-Node: Readline28088
-Node: Editor29543
-Node: Homonymy30701
-Node: IRC/XDCC32210
-Node: Torrent33846
-Node: Filters34670
-Node: Create new extensions34958
-Node: Recommended software and dependencies36664
-Node: Conkeror38160
-Node: zdl-xterm and XXXTerm/Xombrero39142
-Node: Installation and update41013
-Node: Why this program44026
-Node: Tags47716
-Node: Copying52343
-Node: Contacts53421
+Node: Start ZDL17274
+Node: Stop ZDL19607
+Node: Check the downloads20642
+Node: User manuals24683
+Node: Modes25076
+Node: Readline28111
+Node: Editor29566
+Node: Homonymy30724
+Node: IRC/XDCC32233
+Node: Torrent33869
+Node: Filters34693
+Node: Create new extensions34981
+Node: Recommended software and dependencies36687
+Node: Conkeror38183
+Node: zdl-xterm and XXXTerm/Xombrero39165
+Node: Installation and update41036
+Node: Why this program44049
+Node: Tags47739
+Node: Copying52366
+Node: Contacts53444
 
 End Tag Table
 

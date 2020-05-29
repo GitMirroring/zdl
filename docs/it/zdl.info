@@ -496,14 +496,14 @@ _Video in streaming saltando il player del browser:_
      (HD), Exashare, Facebook, Fastvideo, Flashx.tv, IDoWatch,
      IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex Cloudzilla),
      NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
-     Portalevideo.unimi.it, Putstream, RaiPlay (HD), Rapidvideo.tv,
-     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
-     Speedvideo (HD), Streamango, Streamin, Supervideo (HD), TED
-     (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
-     in streaming di tipo .m3u8, Tutti i video in streaming di tipo
-     .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy
-     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     WStream (HD), Youtube, Zinwa (RTMP) 
+     Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
+     (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Supervideo
+     (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi),
+     Tutti i video in streaming di tipo .m3u8, Tutti i video in
+     streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
+     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
+     (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
@@ -1487,26 +1487,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18125
-Node: Arrestare ZDL20581
-Node: Controllare i download21686
-Node: Manuali d'uso25938
-Node: Modi26354
-Node: Readline29649
-Node: Editor31201
-Node: Omonimie32426
-Node: IRC/XDCC33974
-Node: Torrent35683
-Node: Filtri36567
-Node: Creare nuove estensioni36888
-Node: Software consigliati e dipendenze38663
-Node: Conkeror40225
-Node: zdl-xterm e XXXTerm/Xombrero41249
-Node: Installazione e aggiornamento43173
-Node: Perché questo programma46488
-Node: Tags50376
-Node: Copying54976
-Node: Contatti56026
+Node: Avviare ZDL18148
+Node: Arrestare ZDL20604
+Node: Controllare i download21709
+Node: Manuali d'uso25961
+Node: Modi26377
+Node: Readline29672
+Node: Editor31224
+Node: Omonimie32449
+Node: IRC/XDCC33997
+Node: Torrent35706
+Node: Filtri36590
+Node: Creare nuove estensioni36911
+Node: Software consigliati e dipendenze38686
+Node: Conkeror40248
+Node: zdl-xterm e XXXTerm/Xombrero41272
+Node: Installazione e aggiornamento43196
+Node: Perché questo programma46511
+Node: Tags50399
+Node: Copying54999
+Node: Contatti56049
 
 End Tag Table
 
