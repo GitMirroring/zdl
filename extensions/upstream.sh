@@ -99,11 +99,10 @@ then
         	((upstream_loops++))
 
         	get_language_prog
-        	html2=$(wget -qO- -t1 -T$max_waiting           \
+        	html2=$(curl -s \
         		     "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
-                             --user-agent="$user_agent" \
-                             --load-cookies="$path_tmp/cookies.zdl" \
-        		     -o /dev/null)
+                             -A "$user_agent" \
+                             -b "$path_tmp/cookies.zdl")
         	get_language
 
         	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
