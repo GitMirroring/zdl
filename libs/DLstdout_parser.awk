@@ -283,9 +283,9 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    	progress_end[i] = chunk[y]
 	    	break
 	    } 
-	    if (chunk[y] ~ /\%.+KB\/s.+/) {
+	    if (chunk[y] ~ /%.+KB\/s.+/) {
 		progress_line = chunk[y]
-		split(progress_line, progress_elems, /[\ ]*[\%]*[K]*/)
+		split(progress_line, progress_elems, /[ ]*[%]*[K]*/)
 		percent_out[i] = progress_elems[2]
 		if (percent_out[i] == "]") percent_out[i] = 100
 		var_temp = progress_elems[length(progress_elems)-1]
@@ -379,11 +379,11 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (((chunk[y] ~ "download completed") || (chunk[y] ~ "SEED")) && (! exists(file_out[i]".aria2"))) {
 	    	progress_end[i] = chunk[y]
 	    } 
-	    if (chunk[y] ~ /\%/) {
+	    if (chunk[y] ~ /%/) {
 		progress_line = chunk[y]
 
 		if (! progress_end[i]) {
-		    split(progress_line, progress_elems, /[(]*[\%]*[:]*[K]*[\]]*/)
+		    split(progress_line, progress_elems, /[(]*[%]*[:]*[K]*[\]]*/)
 		    percent_out[i] = int(progress_elems[2])
 		
 		    match(progress_line, /DL:([0-9.]+)Mi/, matched)
@@ -497,7 +497,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    system("rm -f .zdl_tmp/"file_out[i]"_stdout.* " file_out[i] " " file_out[i] ".st")
 	}
 	else if (progress_line) {
-	    split(progress_line, progress_elems, /[\ ]*[\%]*/)
+	    split(progress_line, progress_elems, /[ ]*[%]*/)
 	    percent_out[i] = progress_elems[length(progress_elems)-3]
 	    speed_out[i] = progress_elems[length(progress_elems)-1]
 	    eta_out[i] = progress_elems[length(progress_elems)]
@@ -557,7 +557,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    cmd | getline this_time
 	    close(cmd)
 	    elapsed_time = this_time - start_time
-	    split(progress_line, progress_elems, /[\ ]*[\%]*[\(]*/)
+	    split(progress_line, progress_elems, /[ ]*[%]*[\(]*/)
 	    percent_out[i] = int(progress_elems[length(progress_elems)-1])
 	    if (percent_out[i] > 0) {
 		eta_out[i] = int((elapsed_time * 100 / percent_out[i]) - elapsed_time)
@@ -575,13 +575,13 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     else if (dler == "cURL") {
 	for (y=n; y>0; y--) {
 
-	    if (chunk[y] ~ /[\ ]+[0-9]+[k]*k$/) {
+	    if (chunk[y] ~ /[ ]+[0-9]+[k]*k$/) {
 	    	progress_line = chunk[y]
 	    	break
 	    }
 	}
         if (progress_line) {
-	    split(progress_line, progress_elems, /[\ ]+/)
+	    split(progress_line, progress_elems, /[ ]+/)
 	    speed_out[i] = progress_elems[length(progress_elems)]
 
 	    if (speed_out[i] ~ /k$/) {
@@ -628,7 +628,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		progress_line = chunk[y]
 				
 		if (!time_out[i]) {
-		    match(progress_line, /time=\s*([^\ ]+)\s*/, matched)
+		    match(progress_line, /time=\s*([^ ]+)\s*/, matched)
 		    time_out[i] = int( get_ffmpeg_seconds(matched[1]) )
 		}
 	    }
@@ -642,7 +642,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    cmd = "cat .zdl_tmp/livestream_time.txt"
 	    while (cmd | getline line) {
 		if (line ~ url_out[i]) {
-		    match(line, /\:[0-9]{2}\s{1}([0-9:.]+)$/, matched)
+		    match(line, /:[0-9]{2}\s{1}([0-9:.]+)$/, matched)
 		    duration_out[i] = int( get_ffmpeg_seconds(matched[1]) )
 		    break
 		}
@@ -839,7 +839,7 @@ BEGIN {
     if ($0 ~ /Length:/ && dler == "Wget") {
 	length_out[i] = $2
     }
-    if ($0 ~ /File\ size:/ && dler == "Axel") {
+    if ($0 ~ /File\ssize:/ && dler == "Axel") {
 	length_out[i] = $3
     }
     if ($0 ~ /errorCode=8/ && dler == "Aria2") {

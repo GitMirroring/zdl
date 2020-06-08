@@ -54,6 +54,12 @@ then
     else
         html=$(curl -s "$url_in" \
                     -c "$path_tmp/cookies.zdl")
+
+        [ -s "$html" ] &&
+            html=$(wget -qO- -o /dev/null \
+                        "$url_in" \
+                        --keep-session-cookies \
+                        --save-cookies="$path_tmp/cookies.zdl")
     fi
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
@@ -112,6 +118,7 @@ then
         	! url "$url_in_file" &&
         	    url_in_file=$(grep 'Direct Download' <<< "$html2" |
         			      sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
+                url_in_file=$(sanitize_url "$url_in_file")
 
         	((upstream_loops < 2)) && sleep 1
             done

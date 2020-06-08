@@ -99,7 +99,7 @@ function show_downloads_extended () {
 	    }
 	} else {
 	    progress_bar = make_progress()
-	    gsub(/\ *$/,"", progress_bar)
+	    gsub(/ *$/,"", progress_bar)
 	    code = code BBlue _"Status" ": " diff_bar_color progress_bar Color_Off "\n"
 	}
 	code = code "\n"
