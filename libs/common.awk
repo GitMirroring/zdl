@@ -63,24 +63,6 @@ function check_irc_pid () {
     return 0
 }
 
-function exists(file,   line) {
-    if (file) {
-	if ((getline line < file) > 0 ) {
-	    close(file)
-	    return 1
-	}
-    }
-    return 0
-}
-
-function size_file (filename) {
-    ## in bytes
-    c = "stat -c '%s' "filename" 2>/dev/null"
-    c | getline result
-    close(c)
-    return result
-}
-
 function bash_array (name, i, value) {
     return name"["i"]=\""value"\"; "
 }
@@ -119,4 +101,33 @@ function add_line (line, file) {
 
 function set_awk2bash_cmd (cmd) {
     print cmd >>".zdl_tmp/awk2bash_commands"
+}
+
+function is_dir (dir) {
+    return !system("test -d \"" dir "\"")
+}
+
+function exists(file,   line) {
+    if (file) {
+	if ((getline line < file) > 0 ) {
+	    close(file)
+	    return 1
+	}
+    }
+    return 0
+}
+
+function size_file (filename) {
+    ## in bytes
+    c = "stat -c '%s' \"" filename "\" 2>/dev/null"
+    c | getline result
+    close(c)
+    return result
+}
+
+function size_dir (dir) {
+    c = "du -cb \"" dir "\" 2>/dev/null | tail -n1 | cut -d ' ' -f1"
+    c | getline result
+    close(c)
+    return result    
 }

@@ -412,6 +412,24 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 
 	}
 
+        if (length_out[i] == 0) {
+            if (exists(".zdl_tmp/" file_out[i] "_filename_torrent.txt"))
+                file_out_test = cat(".zdl_tmp/" file_out[i] "_filename_torrent.txt")
+
+            if (is_dir( file_out[i] )) {
+                length_out[i] = size_dir( file_out[i] )
+            }
+            else if (exists( file_out[i] )) {
+                length_out[i] = size_file( file_out[i] )
+            }
+            else if (is_dir( file_out_test )) {
+                length_out[i] = size_dir( file_out_test )
+            }
+            else if (exists( file_out_test )) {
+                length_out[i] = size_file( file_out_test ) 
+            }
+        }
+        
 	if (progress_end[i]) {
 	    rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 
