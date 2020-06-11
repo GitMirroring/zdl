@@ -50,7 +50,5 @@ then
 	length_in=$(sed -r 's|.+&xl=([^\&]+)&.+|\1|' <<< "$(urldecode "$url_in")")
     fi
 
-    file_in_torrent="$file_in"
     sanitize_file_in
-    echo "${file_in_torrent//+/ }" > "$path_tmp"/"$file_in"_filename_torrent.txt
 fi
