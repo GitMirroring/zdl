@@ -298,6 +298,7 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 		[ -n "$udp_port" ] &&
 		    opts+=( '--enable-dht=true' "--dht-listen-port=$udp_port" )
 
+                opts+=( "--seed-time=0" )
                 fileout=( -d "$file_in" )
                 
 	    elif [ -n "$file_in" ]
