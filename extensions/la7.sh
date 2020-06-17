@@ -56,21 +56,6 @@ then
 
     url_in_file="${url_in_file//index./index_1.}"
     
-    # link_parser "$url_in_file"
-
-    # curl -v \
-    # 	 -H "Accept: */*" \
-    # 	 -H "Accept-Encoding: gzip, deflate, br" \
-    # 	 -H "Accept-Language: it,en-US;q=0.7,en;q=0.3" \
-    # 	 -H "Cache-Control: max-age=0" \
-    # 	 -H "Connection: keep-alive" \
-    # 	 -H "Host: $parser_domain" \
-    # 	 -H "Origin: https://www.la7.it" \
-    # 	 -H "Referer: $url_in" \
-    # 	 -A "$user_agent" \
-    # 	 -c "$path_tmp"/cookies.zdl \
-    # 	 "$url_in_file" 2>&1 >OUT
-	 
     if url "$url_in_file" &&
             [[ "$url_in_file" =~ csmil ]]
     then

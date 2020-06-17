@@ -48,6 +48,20 @@ then
         file_in=$(get_title "$html")
     fi
 
+    mixdrop_iframe_url=$(grep iframe <<< "$html")
+    mixdrop_iframe_url="${mixdrop_iframe_url#*src=\"}"
+    mixdrop_iframe_url="${mixdrop_iframe_url%%\"*}"
+    [ -n "$mixdrop_iframe_url" ] &&
+        [[ ! "$mixdrop_iframe_url" =~ http ]] &&
+        mixdrop_iframe_url="https:$mixdrop_iframe_url"
+
+    html=$(curl -s \
+                -A "$user_agent" \
+                -H 'Connection: keep-alive' \
+                -H 'Upgrade-Insecure-Requests: 1' \
+                -c "$path_tmp"/cookies.zdl \
+                "$mixdrop_iframe_url")
+    
     unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
     if [[ "$unpacked" =~ MDCore\.furl\=\" ]]
