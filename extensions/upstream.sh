@@ -86,6 +86,7 @@ then
             ['l']="Low"
         )
 
+        unset o
         grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
             o=o
 
@@ -109,6 +110,12 @@ then
         		     "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
                              -A "$user_agent" \
                              -b "$path_tmp/cookies.zdl")
+                [ -n "$html2" ] ||
+        	    html2=$(wget -qO- -o /dev/null \
+        		         "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
+                                 --user-agent="$user_agent" \
+                                 --load-cookies="$path_tmp/cookies.zdl")
+                    
         	get_language
 
         	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
