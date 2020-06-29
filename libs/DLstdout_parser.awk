@@ -689,7 +689,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		length_out[i] = int(100 * length_saved[i] / percent_out[i])
 	    }
 	    else {
-		length_out[ix] = "unspecified"
+		length_out[i] = "unspecified"
 	    }
 	    
 	    if (int(speed_out[i]) != 0 && int(speed_out[i]) > 0) {
