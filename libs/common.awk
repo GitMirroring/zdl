@@ -126,7 +126,7 @@ function size_file (filename) {
 }
 
 function size_dir (dir) {
-    c = "du -cb \"" dir "\" 2>/dev/null | tail -n1 | cut -d ' ' -f1"
+    c = "du -cb \"" dir "\" 2>/dev/null | tail -n1 | cut -f1"
     c | getline result
     close(c)
     return result    

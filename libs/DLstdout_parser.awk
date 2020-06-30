@@ -46,7 +46,11 @@ function delete_notify_complete_inexistent (K, line) {
 
 function delete_tmp_complete_inexistent (K, line) {
     for (K=0; K<length(percent_out); K++) {
-	if ((percent_out[K] == 100) && (! exists(file_out[K]) && (! exists(file_out[K] ".part")))) {
+	if ((percent_out[K] == 100) &&
+            (! exists(file_out[K]) &&
+             (((url_out[K] ~ /^magnet/) || exists(url_out[K])) && (! is_dir(file_out[K]))) &&
+             (! exists(file_out[K] ".part"))))
+        {
 	    system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
 	    cmd = "sed -i -r 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
 	    cmd | getline
@@ -420,7 +424,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
                 length_out[i] = size_file( file_out[i] )
             }
         }
-        
+
 	if (progress_end[i]) {
 	    rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 
@@ -455,7 +459,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    length_saved[i] = int((length_out[i] * percent_out[i]) / 100)
 	    if ((! no_check) && (percent_out[i] ~ /^[0-9]+$/) && (percent_out[i] > 0))
 		print percent_out[i] "\n" speed_out[i] "\n" speed_out_type[i] "\n" eta_out[i] "\n" length_saved[i] > ".zdl_tmp/"file_out[i]"_stdout.yellow"
-	}	
+	}
     }
     else if (dler == "Wget") {
 	for (y=n; y>0; y--) {
