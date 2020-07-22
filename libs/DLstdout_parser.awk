@@ -59,6 +59,7 @@ function delete_tmp_complete_inexistent (K, line) {
 	    cmd | getline
 	    close(cmd)
 	}
+#        system("cp .zdl_tmp/" file_out[K] "_stdout.tmp .zdl_tmp/" file_out[K] "_stdout.yellow")
     }
 }
 
@@ -913,6 +914,6 @@ END {
     display_notify_complete()
     delete_tmp_complete_inexistent()
     delete_notify_complete_inexistent()    
-
+    
     print code 
 }

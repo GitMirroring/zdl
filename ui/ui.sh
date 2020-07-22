@@ -571,7 +571,25 @@ function interactive {
 			    then
 				for i in ${inputs[*]}
 				do
-				    playing_files+=( "${file_out[$i]}" )
+                                    if [ -f "${file_out[$i]}" ]
+                                    then
+				        playing_files+=( "${file_out[$i]}" )
+
+                                    elif [ -d "${file_out[$i]}" ]
+                                    then
+                                        while read item
+                                        do
+                                            if [ -f "${file_out[$i]}"/"$item" ] &&
+                                                   [[ ! "${file_out[$i]}"/"$item" =~ \.(aria2)$ ]]
+                                            then
+				                playing_files+=( "${file_out[$i]}"/"$item" )
+                                                
+                                            elif [ -d "${file_out[$i]}"/"$item" ]
+                                            then
+                                                playing_files+=( "${file_out[$i]}"/"$item"/* )
+                                            fi          
+                                        done < <(ls -1 "${file_out[$i]}")
+                                    fi
 				done
 
 				nohup $player "${playing_files[@]}" &>/dev/null &

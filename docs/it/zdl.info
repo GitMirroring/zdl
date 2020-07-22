@@ -491,11 +491,11 @@ servizi di hosting e di streaming, direttamente dal link (bypassando il
 player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
-     Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD),
-     Cloudvideo (HD), Dailymotion, Deltabit (HD), Dplay (HD), EasyLoad
-     (HD), Exashare, Facebook, Fastvideo, Flashx.tv, IDoWatch,
-     IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex Cloudzilla),
-     NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
+     Akvideo (HD), Aparat (HD), Auroravid/Novamov, Backin, Backin,
+     Biqle (HD), Cloudvideo (HD), Dailymotion, Deltabit (HD), Dplay
+     (HD), EasyLoad (HD), Exashare, Facebook, Fastvideo, Flashx.tv,
+     IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex
+     Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
      Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
      Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Supervideo
@@ -506,13 +506,13 @@ _Video in streaming saltando il player del browser:_
      (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
-     Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
-     dl.free.fr, Dropbox, Easybytez, EasyLoad (HD), Go4Up (multi-link),
-     Jheberg (multi-link), Katfile, Mediafire, Mega, MixDrop, MultiUp
-     (multi-link), Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare
-     (HD), Subyshare, Supervideo (HD), TubeOffLine.com (tutti i
-     servizi), Tusfiles, Uload, Uploadshub, Uppit, Upstream, Uptobox,
-     Vidoza, WStream (HD) 
+     Akvideo (HD), Aparat (HD), Clicknupload, ClipWatching, ddl.to,
+     Deltabit (HD), dl.free.fr, Dropbox, Easybytez, EasyLoad (HD),
+     Go4Up (multi-link), Jheberg (multi-link), Katfile, Mediafire,
+     Mega, MixDrop, MultiUp (multi-link), Onlystream, Ozofiles,
+     Pastebin, Rockfile, Sockshare (HD), Subyshare, Supervideo (HD),
+     TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
+     Uppit, Upstream, Uptobox, Vidoza, WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1487,26 +1487,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18148
-Node: Arrestare ZDL20604
-Node: Controllare i download21709
-Node: Manuali d'uso25961
-Node: Modi26377
-Node: Readline29672
-Node: Editor31224
-Node: Omonimie32449
-Node: IRC/XDCC33997
-Node: Torrent35706
-Node: Filtri36590
-Node: Creare nuove estensioni36911
-Node: Software consigliati e dipendenze38686
-Node: Conkeror40248
-Node: zdl-xterm e XXXTerm/Xombrero41272
-Node: Installazione e aggiornamento43196
-Node: Perché questo programma46511
-Node: Tags50399
-Node: Copying54999
-Node: Contatti56049
+Node: Avviare ZDL18174
+Node: Arrestare ZDL20630
+Node: Controllare i download21735
+Node: Manuali d'uso25987
+Node: Modi26403
+Node: Readline29698
+Node: Editor31250
+Node: Omonimie32475
+Node: IRC/XDCC34023
+Node: Torrent35732
+Node: Filtri36616
+Node: Creare nuove estensioni36937
+Node: Software consigliati e dipendenze38712
+Node: Conkeror40274
+Node: zdl-xterm e XXXTerm/Xombrero41298
+Node: Installazione e aggiornamento43222
+Node: Perché questo programma46537
+Node: Tags50425
+Node: Copying55025
+Node: Contatti56075
 
 End Tag Table
 
