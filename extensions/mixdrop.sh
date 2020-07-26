@@ -58,9 +58,9 @@ then
         mixdrop_iframe_url="${mixdrop_iframe_url%%\"*}"
         [ -n "$mixdrop_iframe_url" ] &&
             [[ ! "$mixdrop_iframe_url" =~ http ]] &&
-            mixdrop_iframe_url="https:$mixdrop_iframe_url"
+            mixdrop_iframe_url="https:${mixdrop_iframe_url#https:}"
     fi
-    
+
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \

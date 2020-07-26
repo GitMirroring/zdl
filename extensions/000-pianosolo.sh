@@ -37,6 +37,11 @@ then
     
     while read pianosolo_url
     do
+        if [[ "$pianosolo_url" =~ http\:\/\/youtube ]]
+        then
+            pianosolo_url="${pianosolo_url//'http://'/https://www.}"
+        fi
+        
         if url "$pianosolo_url"
         then
             test -z "$pianosolo_redir" &&
