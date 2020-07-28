@@ -39,15 +39,21 @@ then
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
 
-    file_in=$(grep title <<< "$html")
-    file_in="${file_in%</a>*}"
-    file_in="${file_in##*>}"
-
     if [ -z "$file_in" ]
     then
         file_in=$(get_title "$html")
     fi
 
+    if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
+    then
+        mixdrop_chunk="${BASH_REMATCH[1]}"
+
+        if [ -n "${mixdrop_chunk}" ]
+        then
+            html=$(curl -s "https://mixdrop.co${mixdrop_chunk}")
+        fi
+    fi
+    
     if grep -q 'p,a,c,k,e,d' <<< "$html"
     then
         mixdrop_iframe_url="$url_in"
@@ -59,14 +65,18 @@ then
         [ -n "$mixdrop_iframe_url" ] &&
             [[ ! "$mixdrop_iframe_url" =~ http ]] &&
             mixdrop_iframe_url="https:${mixdrop_iframe_url#https:}"
+        
+        html=$(curl -s \
+                    -A "$user_agent" \
+                    -H 'Connection: keep-alive' \
+                    -H 'Upgrade-Insecure-Requests: 1' \
+                    -c "$path_tmp"/cookies.zdl \
+                    "$mixdrop_iframe_url")
     fi
 
-    html=$(curl -s \
-                -A "$user_agent" \
-                -H 'Connection: keep-alive' \
-                -H 'Upgrade-Insecure-Requests: 1' \
-                -c "$path_tmp"/cookies.zdl \
-                "$mixdrop_iframe_url")
+    file_in=$(grep title <<< "$html")
+    file_in="${file_in%</a>*}"
+    file_in="${file_in##*>}"
 
     unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
