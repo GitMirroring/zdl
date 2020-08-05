@@ -62,10 +62,11 @@ then
         mixdrop_iframe_url=$(grep iframe <<< "$html")
         mixdrop_iframe_url="${mixdrop_iframe_url#*src=\"}"
         mixdrop_iframe_url="${mixdrop_iframe_url%%\"*}"
+
         [ -n "$mixdrop_iframe_url" ] &&
             [[ ! "$mixdrop_iframe_url" =~ http ]] &&
             mixdrop_iframe_url="https:${mixdrop_iframe_url#https:}"
-        
+
         html=$(curl -s \
                     -A "$user_agent" \
                     -H 'Connection: keep-alive' \
@@ -74,6 +75,16 @@ then
                     "$mixdrop_iframe_url")
     fi
 
+    if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
+    then
+        mixdrop_chunk="${BASH_REMATCH[1]}"
+
+        if [ -n "${mixdrop_chunk}" ]
+        then
+            html=$(curl -s "https://mixdrop.co${mixdrop_chunk}")
+        fi
+    fi
+    
     file_in=$(grep title <<< "$html")
     file_in="${file_in%</a>*}"
     file_in="${file_in##*>}"
