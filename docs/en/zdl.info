@@ -492,10 +492,10 @@ _Streaming video skipping browser player:_
      Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
      Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
-     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Supervideo
-     (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi),
-     Tutti i video in streaming di tipo .m3u8, Tutti i video in
-     streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, StreamTape,
+     Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
+     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
+     in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
      Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
      (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
@@ -1456,26 +1456,26 @@ Tag Table:
 Node: Top1193
 Node: The ZDL command5078
 Node: Streaming/hosting services12936
-Node: Start ZDL17300
-Node: Stop ZDL19633
-Node: Check the downloads20668
-Node: User manuals24709
-Node: Modes25102
-Node: Readline28137
-Node: Editor29592
-Node: Homonymy30750
-Node: IRC/XDCC32259
-Node: Torrent33895
-Node: Filters34719
-Node: Create new extensions35007
-Node: Recommended software and dependencies36713
-Node: Conkeror38209
-Node: zdl-xterm and XXXTerm/Xombrero39191
-Node: Installation and update41062
-Node: Why this program44075
-Node: Tags47765
-Node: Copying52392
-Node: Contacts53470
+Node: Start ZDL17312
+Node: Stop ZDL19645
+Node: Check the downloads20680
+Node: User manuals24721
+Node: Modes25114
+Node: Readline28149
+Node: Editor29604
+Node: Homonymy30762
+Node: IRC/XDCC32271
+Node: Torrent33907
+Node: Filters34731
+Node: Create new extensions35019
+Node: Recommended software and dependencies36725
+Node: Conkeror38221
+Node: zdl-xterm and XXXTerm/Xombrero39203
+Node: Installation and update41074
+Node: Why this program44087
+Node: Tags47777
+Node: Copying52404
+Node: Contacts53482
 
 End Tag Table
 

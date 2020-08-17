@@ -498,10 +498,10 @@ _Video in streaming saltando il player del browser:_
      Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
      Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
-     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Supervideo
-     (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi),
-     Tutti i video in streaming di tipo .m3u8, Tutti i video in
-     streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, StreamTape,
+     Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
+     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
+     in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
      Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
      (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
@@ -1487,26 +1487,26 @@ Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
 Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18174
-Node: Arrestare ZDL20630
-Node: Controllare i download21735
-Node: Manuali d'uso25987
-Node: Modi26403
-Node: Readline29698
-Node: Editor31250
-Node: Omonimie32475
-Node: IRC/XDCC34023
-Node: Torrent35732
-Node: Filtri36616
-Node: Creare nuove estensioni36937
-Node: Software consigliati e dipendenze38712
-Node: Conkeror40274
-Node: zdl-xterm e XXXTerm/Xombrero41298
-Node: Installazione e aggiornamento43222
-Node: Perché questo programma46537
-Node: Tags50425
-Node: Copying55025
-Node: Contatti56075
+Node: Avviare ZDL18186
+Node: Arrestare ZDL20642
+Node: Controllare i download21747
+Node: Manuali d'uso25999
+Node: Modi26415
+Node: Readline29710
+Node: Editor31262
+Node: Omonimie32487
+Node: IRC/XDCC34035
+Node: Torrent35744
+Node: Filtri36628
+Node: Creare nuove estensioni36949
+Node: Software consigliati e dipendenze38724
+Node: Conkeror40286
+Node: zdl-xterm e XXXTerm/Xombrero41310
+Node: Installazione e aggiornamento43234
+Node: Perché questo programma46549
+Node: Tags50437
+Node: Copying55037
+Node: Contatti56087
 
 End Tag Table
 
