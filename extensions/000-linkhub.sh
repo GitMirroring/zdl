@@ -40,23 +40,29 @@ function get_linkhub {
     print_c 4 "$(gettext "Redirection"): ${parser_proto}${parser_domain}/${html#*\/}"
     html=$(curl "${parser_proto}${parser_domain}/${html#*\/}")
     
-    links+=( $(grep -P 'href.+target=\"_blank\" title=\"' <<< "$html" |
-    		   sed -r 's|.+>([^<]+)<\/a>|\1|g')
-	   )
+    if [[ "$html" =~ text-url ]]
+    then
+        newlink_first=$(grep text-url -A1 <<<  "$html" | tail -n1 | sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
 
-    for newlink in "${links[@]}"
-    do
-	newlink=$(trim "$newlink")
-	if url "$newlink"
-	then
-	    print_c 4 "$(gettext "Redirection"): $newlink"
-	    set_link + "$newlink"
-	    if [ -z "$newlink_first" ]
+    else    
+        links+=( $(grep -P 'href.+target=\"_blank\" title=\"' <<< "$html" |
+    		   sed -r 's|.+>([^<]+)<\/a>|\1|g')
+	       )
+
+        for newlink in "${links[@]}"
+        do
+	    newlink=$(trim "$newlink")
+	    if url "$newlink"
 	    then
-		newlink_first="$newlink"
+	        print_c 4 "$(gettext "Redirection"): $newlink"
+	        set_link + "$newlink"
+	        if [ -z "$newlink_first" ]
+	        then
+		    newlink_first="$newlink"
+	        fi
 	    fi
-	fi
-    done
+        done
+    fi
 
     if url "$newlink_first"
     then
