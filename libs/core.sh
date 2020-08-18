@@ -408,6 +408,7 @@ function set_link {
 	if [ "$op" == "+" ]
 	then
 	    link="${link%'#20\x'}"
+            #link=$(sanitize_url "$link")
 	    #clean_livestream 
 	    #check_linksloop_livestream 
 	    check_livestream_twice "$link"

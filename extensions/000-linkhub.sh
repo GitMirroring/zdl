@@ -42,7 +42,11 @@ function get_linkhub {
     
     if [[ "$html" =~ text-url ]]
     then
-        newlink_first=$(grep text-url -A1 <<<  "$html" | tail -n1 | sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
+        newlink_first=$(grep text-url -A1 <<<  "$html" |
+                            tail -n1 |
+                            sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
+
+        newlink_first=$(sanitize_url "$newlink_first")
 
     else    
         links+=( $(grep -P 'href.+target=\"_blank\" title=\"' <<< "$html" |
