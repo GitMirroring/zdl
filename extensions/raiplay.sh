@@ -92,13 +92,20 @@ then
                 replace_url_in "${raiplay_item_path}"
         fi
         raiplay_json=$(curl -s "${url_in//html/json}")
+
         raiplay_url="${raiplay_json#*content_url\": \"}"
         raiplay_url="${raiplay_url%%\"*}"
         
         if url "$raiplay_url"
         then
             raiplay_url=$(get_location "$raiplay_url")
-            url_in_file=$(curl -v "$raiplay_url" |tail -n1)
+
+            if url "$raiplay_url"
+            then
+                url_in_file=$(curl -v "$raiplay_url" |tail -n1)
+            else
+                _log 45
+            fi
         fi
 
         file_in="${raiplay_json#*name\": \"}"

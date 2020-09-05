@@ -228,6 +228,11 @@ $(gettext "Currently, ZDL is not able to download the requested file, I remove t
 	    msg="$url_in --> $(gettext "Wait set to non-premium users, try again later")" 
 	    no_filelog=true
 	    ;;
+        45)
+	    msg="$url_in --> $(gettext "The video file is DRM protected and not playable on Linux")"
+            set_link - "$url_in"
+	    ;;
+
     esac
     
     if [ -z "$break_loop" ] 
