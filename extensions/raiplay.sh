@@ -91,13 +91,14 @@ then
             url "${raiplay_item_path}" &&
                 replace_url_in "${raiplay_item_path}"
         fi
-        raiplay_json=$(curl -s "${url_in//html/json}")
+        raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
 
         raiplay_url="${raiplay_json#*content_url\": \"}"
         raiplay_url="${raiplay_url%%\"*}"
         
         if url "$raiplay_url"
         then
+            countdown- 120
             raiplay_url=$(get_location "$raiplay_url")
 
             if url "$raiplay_url"

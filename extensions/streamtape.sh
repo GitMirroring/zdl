@@ -32,8 +32,7 @@ if [[ "$url_in" =~ streamtape\. ]]
 then
     html=$(curl -s "$url_in")
 
-    
-    url_in_file=$(grep videolink <<< "$html")
+    url_in_file=$(grep 'id="videolink"' <<< "$html")
     url_in_file="${url_in_file%<*}"
     url_in_file="${url_in_file##*>}"
     [[ "$url_in_file" =~ ^http ]] ||
