@@ -57,7 +57,7 @@ function update_updater {
     [[ ! "$local_version" =~ ^(-1|[0-9]+)$ ]] &&
 	local_version='-1'
 
-    updater_log=$(tempfile)
+    updater_log=$(mktemp)
     
     if ((local_version < remote_version)) ||
 	   [ "$force_update" == true ]

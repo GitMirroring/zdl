@@ -414,7 +414,7 @@ function edit_links_gui {
 	declare -a links
 	local matched text
 
-	local start_file_tmp=$(tempfile)
+	local start_file_tmp=$(mktemp)
 	if [ -s "$start_file" ]
 	then
 	    cp "$start_file" "$start_file_tmp"

@@ -92,7 +92,7 @@ function pseudo_captcha { ## modello d'uso in ../extensions/rockfile.sh
 }
 
 function simple_captcha {
-    local fout=$(tempfile) out
+    local fout=$(mktemp) out
 
     for degree in $(seq 5 20)
     do    
