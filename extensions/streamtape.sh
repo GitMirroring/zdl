@@ -31,13 +31,17 @@
 if [[ "$url_in" =~ streamtape\. ]]
 then
     html=$(curl -s "$url_in")
+    url_in_file=$(grep -P 'videolink.+innerHTML' <<< "$html")
+    url_in_file="${url_in_file#*= \"}"
+    url_in_file="${url_in_file%%\"*}"
 
-    url_in_file=$(grep 'id="videolink"' <<< "$html")
-    url_in_file="${url_in_file%<*}"
-    url_in_file="${url_in_file##*>}"
+    # url_in_file=$(grep 'id="videolink"' <<< "$html")
+    # url_in_file="${url_in_file%<*}"
+    # url_in_file="${url_in_file##*>}"
     [[ "$url_in_file" =~ ^http ]] ||
             url_in_file="https:${url_in_file}"
 
+    get_location "$url_in_file" url_in_file
     file_in=$(get_title "$html")
 
     end_extension

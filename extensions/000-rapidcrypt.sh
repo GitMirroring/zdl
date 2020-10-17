@@ -31,13 +31,27 @@ if [ "$url_in" != "${url_in//rapidcrypt.net}" ]
 then
     if [[ "$url_in" =~ \/(wstm|mixd)\/ ]]
     then
-	rapidcrypt_relink=$(curl -s "$url_in" |
-				awk '/Download File/{match($0,/href="([^"]+)"/,matched); print matched[1]}')
-	
-	url "$rapidcrypt_relink" &&
-	    replace_url_in "$rapidcrypt_relink" ||
-		_log 2
-	
+	html=$(curl -s "$url_in")
+
+	if grep -q 'Download File' <<< "$html"
+        then
+            rapidcrypt_relink=$(awk '/Download File/{match($0,/href="([^"]+)"/,matched); print matched[1]}' <<< "$html")
+
+        elif grep -q 'push_button blue' <<< "$html"
+        then
+            rapidcrypt_relink=$(grep 'push_button blue' <<< "$html")
+            rapidcrypt_relink="${rapidcrypt_relink#*'href='}"
+            rapidcrypt_relink="${rapidcrypt_relink%%\>*}"
+        fi
+
+        if url "$rapidcrypt_relink"
+        then
+            replace_url_in "$rapidcrypt_relink"
+            
+        else
+	    _log 2
+	fi
+        
     else
 	for i in 0 1
 	do
