@@ -547,14 +547,18 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
 		pid_in=$!
 
-	    elif [ "$youtubedl_m3u8" == "$url_in" ]
+	    elif [ "$youtubedl_m3u8" == "$url_in" ] ||
+                     [ "$youtubedl_m3u8" == "$url_in_file" ]
 	    then
 		# --external-downloader $ffmpeg \
 		# --external-downloader-args "-loglevel info" \
+                file_in="${file_in%.???}"
+                file_in="${file_in%.mp4}"
+                file_in="${file_in}.mp4"
 		nohup youtube-dl \
 		      -f best \
 		      --hls-prefer-ffmpeg \
-		      "$url_in" -o "$file_in" 2>&1 | 
+		      "$youtubedl_m3u8" -o "${file_in}" 2>&1 | 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
 		pid_in=$!

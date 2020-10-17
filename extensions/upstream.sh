@@ -53,14 +53,19 @@ then
 
     else
         html=$(curl -s "$url_in" \
+                    -A "$user_agent" \
                     -c "$path_tmp/cookies.zdl")
 
-        [ -s "$html" ] &&
+        [ -z "$html" ] &&
             html=$(wget -qO- -o /dev/null \
                         "$url_in" \
+                        --user-agent="$user_agent" \
                         --keep-session-cookies \
                         --save-cookies="$path_tmp/cookies.zdl")
     fi
+
+    # url_in_file=$(unpack "$html" |
+    #                   sed -r 's|.+sources:\[\{file:\"([^"]+)\".+|\1|')
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
     then
@@ -70,14 +75,6 @@ then
     if ! url "$url_in_file" ||
             [ -z "$file_in" ] 
     then
-        download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
-
-        hash_upstream="${download_video%\'*}"
-        hash_upstream="${hash_upstream##*\'}"
-
-        id_upstream="${download_video#*download_video\(\'}"
-        id_upstream="${id_upstream%%\'*}"
-
         declare -A movie_definition
         movie_definition=(
             ['o']="Original"
@@ -85,11 +82,36 @@ then
             ['n']="Normal"
             ['l']="Low"
         )
+            
+        if grep -q download_video <<< "$html"
+        then
+            download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
-        unset o
-        grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
-            o=o
+            hash_upstream="${download_video%\'*}"
+            hash_upstream="${hash_upstream##*\'}"
+            
+            id_upstream="${download_video#*download_video\(\'}"
+            id_upstream="${id_upstream%%\'*}"
+            
+            unset o
+            grep -P "download_video.+','o','.+Original" <<< "$html" &>/dev/null &&
+                o=o
+            
+        elif grep -q redirect_vid <<< "$html"
+        then
+            redirect_vid=$(grep -P 'redirect_vid' <<< "$html" |head -n1)
 
+            hash_upstream="${redirect_vid%\'*}"
+            hash_upstream="${hash_upstream##*\'}"
+            
+            id_upstream="${redirect_vid#*redirect_vid\(\'}"
+            id_upstream="${id_upstream%%\'*}"
+            
+            unset o
+            grep -P "redirect_vid.+','o','.+Original" <<< "$html" &>/dev/null &&
+                o=o
+        fi
+        
         for mode_stream in $o h n l
         do
             get_upstream_definition mode_stream_test
@@ -109,15 +131,20 @@ then
         	html2=$(curl -s \
         		     "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
                              -A "$user_agent" \
-                             -b "$path_tmp/cookies.zdl")
+                             -b "$path_tmp/cookies.zdl" \
+                             -c "$path_tmp/cookies2.zdl")
+
                 [ -n "$html2" ] ||
         	    html2=$(wget -qO- -o /dev/null \
         		         "https://upstream.to/dl?op=download_orig&id=${id_upstream}&mode=${mode_stream}&hash=${hash_upstream}" \
                                  --user-agent="$user_agent" \
-                                 --load-cookies="$path_tmp/cookies.zdl")
-                    
+                                 --load-cookies="$path_tmp/cookies.zdl" \
+                                 --save-cookies="$path_tmp/cookies2.zdl")
+                cat "$path_tmp/cookies2.zdl" >> "$path_tmp/cookies.zdl"
+
         	get_language
 
+                grep 'iframe' <<< "$html2" 
         	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
         			  head -n1 |
         			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
@@ -153,12 +180,12 @@ then
         done
     fi
 
-    if ! url "$url_in_file" 
-    then
-        url_in_file=$(grep -oP 'sources\:\ \[\{file\:\"[^"]+' <<< "$html")
-        url_in_file="${url_in_file#*\"}"
-        url_in_file="${url_in_file%%\"*}"
-    fi
+    # if ! url "$url_in_file" 
+    # then
+    #     url_in_file=$(grep -oP 'sources\:\ \[\{file\:\"[^"]+' <<< "$html")
+    #     url_in_file="${url_in_file#*\"}"
+    #     url_in_file="${url_in_file%%\"*}"
+    # fi
     
     if [ -z "$file_in" ]
     then
@@ -180,4 +207,3 @@ then
     
     end_extension
 fi
-

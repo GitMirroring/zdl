@@ -91,28 +91,33 @@ then
             url "${raiplay_item_path}" &&
                 replace_url_in "${raiplay_item_path}"
         fi
+      
         raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
 
         raiplay_url="${raiplay_json#*content_url\": \"}"
         raiplay_url="${raiplay_url%%\"*}"
-        
+
+        url_in_file="$raiplay_url"
+        youtubedl_m3u8="$url_in_file"
+
         if url "$raiplay_url"
         then
-            countdown- 120
+            #countdown- 120
             raiplay_url=$(get_location "$raiplay_url")
 
-            if url "$raiplay_url"
+            if ! url "$raiplay_url"
             then
-                url_in_file=$(curl -v "$raiplay_url" |tail -n1)
-            else
+                unset youtubedl_m3u8
                 _log 45
+            #else
+                #     url_in_file=$(curl -v "$raiplay_url" |tail -n1)
             fi
         fi
 
         file_in="${raiplay_json#*name\": \"}"
         file_in="${file_in%%\"*}"
     fi
-        
+
     downwait_extra=20
 
     end_extension
