@@ -155,7 +155,7 @@ then
 
     if ! url "$url_in_file" 
     then
-        url_in_file=$(grep -oP 'sources\:\ \[\{file\:\"[^"]+' <<< "$html")
+        url_in_file=$(grep 'sources:' <<< "$html")
         url_in_file="${url_in_file#*\"}"
         url_in_file="${url_in_file%%\"*}"
     fi
