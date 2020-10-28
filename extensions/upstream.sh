@@ -53,19 +53,44 @@ then
 
     else
         html=$(curl -s "$url_in" \
-                    -A "$user_agent" \
+                    -A "Mozilla/5.0 (X11; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0" \
+                    -H "Upgrade-Insecure-Requests: 1" \
+                    -H "TE: Trailers" \
                     -c "$path_tmp/cookies.zdl")
 
-        [ -z "$html" ] &&
+        if [ -z "$html" ] ||
+               [[ "$html" =~ (500 error) ]]
+        then 
             html=$(wget -qO- -o /dev/null \
                         "$url_in" \
                         --user-agent="$user_agent" \
                         --keep-session-cookies \
                         --save-cookies="$path_tmp/cookies.zdl")
+        # else
+        #     echo CURL
+        fi
     fi
+    # # cp "$path_tmp/cookies.zdl" "cookies.zdl"
 
-    # url_in_file=$(unpack "$html" |
+    # # unpack "$(grep 'p,a,c,k,e,r' <<< $html)" |grep urlset
+    
+    # # grep 'p,a,c,k,e,d' <<< $html
+
+    # # echo
+    
+    # # unpack "$(grep 'p,a,c,k,e,d' <<< $html)"
+
+    # # echo
+    
+    # url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< $html)" |
     #                   sed -r 's|.+sources:\[\{file:\"([^"]+)\".+|\1|')
+    # # echo "$url_in_file" |tee -a urls.txt
+
+    # url_in_file="${url_in_file//,}"
+    # url_in_file="${url_in_file%.urlset*}"
+    # url_in_file="${url_in_file}/index-v1-a1.m3u8"
+    # echo "$url_in_file"
+    # curl "$url_in_file"
 
     if [[ "$html" =~ (The file was deleted|File Not Found|File doesn\'t exists) ]]
     then
@@ -144,7 +169,6 @@ then
 
         	get_language
 
-                grep 'iframe' <<< "$html2" 
         	url_in_file=$(grep -B1 'Direct Download' <<< "$html2" |
         			  head -n1 |
         			  sed -r 's|[^f]+href=\"([^"]+)\".+|\1|g')
@@ -169,7 +193,7 @@ then
 
             elif url "$url_in_file"
             then
-        	print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
+        	print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}"
         	set_upstream_definition $mode_stream
         	break
 
@@ -186,6 +210,8 @@ then
     #     url_in_file="${url_in_file#*\"}"
     #     url_in_file="${url_in_file%%\"*}"
     # fi
+
+ 
     
     if [ -z "$file_in" ]
     then
@@ -204,6 +230,15 @@ then
     fi
 
     ! url "$url_in_file" && [[ "$html" =~ (Video is processing now) ]] && _log 17
-    
+
+    echo > "$path_tmp/test-upstream.txt"
+    wget -S --spider "$url_in_file" -o "$path_tmp/test-upstream.txt"
+
+    if grep -qP 'Content-Type: text/html' "$path_tmp/test-upstream.txt"
+    then
+        unset url_in_file
+        _log 38
+    fi
+
     end_extension
 fi
