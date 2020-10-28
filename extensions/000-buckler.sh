@@ -31,6 +31,15 @@ if [[ "$url_in" =~ buckler\. ]]
 then
     buckler_url=$(get_location "$url_in")
 
+    if ! url "$buckler_url"
+    then
+        buckler_url=$(wget -qO- "$url_in" |
+                          grep -P 'redirect.+Continue')
+        buckler_url="${buckler_url%\"Continue*}"
+        buckler_url="${buckler_url%\"*}"
+        buckler_url="${buckler_url##*\"}"
+    fi
+    
     url "$buckler_url" &&
 	replace_url_in "$buckler_url" ||
 	    _log 2
