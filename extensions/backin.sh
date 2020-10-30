@@ -45,6 +45,14 @@ function check_backin {
 if [[ "$url_in" =~ backin ]] &&
        [[ ! "$url_in" =~ \/d\/ ]]
 then
+    if [[ "$url_in" =~ \/fastid.+ ]]
+    then
+        new_url_backin=$(get_location "$url_in")
+        url "$new_url_backin" &&
+            replace_url_in "$new_url_backin" ||
+                _log 2
+    fi
+    
     if [[ "$url_in" =~ \/stream\-.+ ]]
     then
         backin_url_stream="$url_in"
