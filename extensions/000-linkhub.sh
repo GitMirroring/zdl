@@ -39,7 +39,7 @@ function get_linkhub {
     link_parser "$link"
     print_c 4 "$(gettext "Redirection"): ${parser_proto}${parser_domain}/${html#*\/}"
     html=$(curl "${parser_proto}${parser_domain}/${html#*\/}")
-    
+
     if [[ "$html" =~ text-url ]]
     then
         newlink_first=$(grep text-url -A1 <<<  "$html" |
@@ -48,7 +48,6 @@ function get_linkhub {
 
         newlink_first=$(sanitize_url "$newlink_first")
 
-    else    
         links+=( $(grep -P 'href.+target=\"_blank\" title=\"' <<< "$html" |
     		   sed -r 's|.+>([^<]+)<\/a>|\1|g')
 	       )
