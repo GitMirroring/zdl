@@ -1775,205 +1775,206 @@ fi
 
 
 #### READLINE
-
-if [ -z "$start_file" ]
-then
-    start_file="$path_tmp/links_loop.txt"
-    if ! check_instance_prog
+{
+    if [ -z "$start_file" ]
     then
-	echo "$pid_prog" > "$path_tmp/.pid.zdl"
-    fi
+        start_file="$path_tmp/links_loop.txt"
+        if ! check_instance_prog
+        then
+	    echo "$pid_prog" > "$path_tmp/.pid.zdl"
+        fi
 
-    if [ -z "$from_editor" ] &&
-	   [ "$no_stop" != true ]
-    then
-	if [ "$this_mode" != "daemon" ]
-	then
-	    [ "$live_streaming" != true ] &&
-		binding=true
-	    standard_box
-	    bindings
-	    
-	    if [ "$live_streaming" == true ]
+        if [ -z "$from_editor" ] &&
+	       [ "$no_stop" != true ]
+        then
+	    if [ "$this_mode" != "daemon" ]
 	    then
-		display_set_livestream
-		
-	    else		
-		readline_links
-		
-		post_readline=true
-		
-		bind -x "\"\ex\":\"\"" 2>/dev/null
-		bind -x "\"\C-x\":\"\"" 2>/dev/null
+	        [ "$live_streaming" != true ] &&
+		    binding=true
+	        standard_box
+	        bindings
+	        
+	        if [ "$live_streaming" == true ]
+	        then
+		    display_set_livestream
+		    
+	        else		
+		    readline_links
+		    
+		    post_readline=true
+		    
+		    bind -x "\"\ex\":\"\"" 2>/dev/null
+		    bind -x "\"\C-x\":\"\"" 2>/dev/null
+	        fi
 	    fi
-	fi
-    fi
-    
-    if [ -f "$start_file" ]
-    then
-	clean_file "$start_file"
-	echo >> links.txt 2>/dev/null
-	date >> links.txt 2>/dev/null
-	cat "$start_file" >> links.txt 2>/dev/null
-	
-    else
-	rm -f "$path_tmp/rewriting"
-    fi
-fi
-
-
-if check_instance_daemon &&
-        ( [ "$already_daemon" == true ] || [ "$this_mode" != daemon ] ) ||
-	    check_instance_prog	    
-then
-    redirect_links
-
-else
-    echo "$pid_prog" > "$path_tmp/.pid.zdl"
-fi
-
-
-[ -f "$path_tmp/downloader" ] ||    
-    echo "$downloader_in" > "$path_tmp/downloader"
-
-
-reset_exit
-
-check_xdcc_links
-check_linksloop_livestream
-
-if [ "$this_mode" == "daemon" ]
-then
-    while true
-    do
-	main_loop &>/dev/null || break
-	test -s "$path_tmp"/links_loop.txt &&
-	    clean_livestream
-    done 
-
-else    
-    if [ "$lite_mode" == true ] ||
-	   [ "$this_mode" == lite ]
-    then
-	lite_mode=true
-	this_mode=daemon
-	start_mode_in_tty "lite" "${this_tty}" 
-    fi
-    
-    rm -f "$path_tmp/stop-binding"     
-
-    echo "$COLUMNS" > "$path_tmp"/columns
-    (
-	if [[ "$this_mode" =~ ^(daemon|lite)$ ]]
-	then
-	    main_loop &>/dev/null 
-	else
-	    main_loop 2>/dev/null 
-	fi
-    ) &
-    disown
-    loops_pid=$!
-    
-    [ "$lite_mode" == true ] &&
-	this_mode=lite
-
-    cursor off
-
-    ## sblocca read_binding, che non si temporizza con "-e" (serve un numero intero: perché?)
-    bindings
-    read -t 0.1
-
-    #set -m
-    
-    [ "$this_mode" == "lite" ] && fclear
-
-
-    while check_pid $loops_pid ||
-	    [ -s "$path_tmp/links_loop.txt" ] 
-    do
-	echo "$COLUMNS" > "$path_tmp"/columns
-	
-	if [ "$this_mode" == "lite" ]
-	then	    
-	    show_downloads_lite
-	    read_binding
+        fi
+        
+        if [ -f "$start_file" ]
+        then
+	    clean_file "$start_file"
+	    echo >> links.txt 2>/dev/null
+	    date >> links.txt 2>/dev/null
+	    cat "$start_file" >> links.txt 2>/dev/null
 	    
-	else
-	    read_binding
-	    #jobs -l >jobs-list-$(date +%s)
-	fi
-
-	if [ -f "$path_tmp"/stop-binding ]
-	then
-	    rm "$path_tmp"/stop-binding
-	    break
-	fi
-	
-    done 2>/dev/null 
-    
-    if [ "$lite_mode" == true ]
-    then
-	show_downloads_lite no-clear
+        else
+	    rm -f "$path_tmp/rewriting"
+        fi
     fi
-fi 
 
-noproxy
 
-wait $loops_pid
+    if check_instance_daemon &&
+            ( [ "$already_daemon" == true ] || [ "$this_mode" != daemon ] ) ||
+	        check_instance_prog	    
+    then
+        redirect_links
 
-[ "$lite_mode" == true ] &&
-    {
-	this_mode=stdout
-	unset lite_mode
-	start_mode_in_tty "stdout" "${this_tty}"	
-    }
+    else
+        echo "$pid_prog" > "$path_tmp/.pid.zdl"
+    fi
 
-post_process
 
-if [ -n "${pipe_out[*]}" ] && [ "$pipe_done" != 1 ]
-then
-    data_stdout
-    pipe_files
-fi
+    [ -f "$path_tmp/downloader" ] ||    
+        echo "$downloader_in" > "$path_tmp/downloader"
 
-if ! get_exit &&
-	! check_instance_gui
-then
-    [ -f "$path_tmp"/.pid.zdl ] &&
-	read test_pid < "$path_tmp"/.pid.zdl
 
-    [ "$test_pid" == "$pid_prog" ] &&
-	! check_start_file &&
+    reset_exit
+
+    check_xdcc_links
+    check_linksloop_livestream
+
+    if [ "$this_mode" == "daemon" ]
+    then
+        while true
+        do
+	    main_loop &>/dev/null || break
+	    test -s "$path_tmp"/links_loop.txt &&
+	        clean_livestream
+        done 
+
+    else    
+        if [ "$lite_mode" == true ] ||
+	       [ "$this_mode" == lite ]
+        then
+	    lite_mode=true
+	    this_mode=daemon
+	    start_mode_in_tty "lite" "${this_tty}" 
+        fi
+        
+        rm -f "$path_tmp/stop-binding"     
+
+        echo "$COLUMNS" > "$path_tmp"/columns
+        (
+	    if [[ "$this_mode" =~ ^(daemon|lite)$ ]]
+	    then
+	        main_loop &>/dev/null 
+	    else
+	        main_loop 2>/dev/null 
+	    fi
+        ) &
+        disown
+        loops_pid=$!
+        
+        [ "$lite_mode" == true ] &&
+	    this_mode=lite
+
+        cursor off
+
+        ## sblocca read_binding, che non si temporizza con "-e" (serve un numero intero: perché?)
+        bindings
+        read -t 0.1
+
+        #set -m
+        
+        [ "$this_mode" == "lite" ] && fclear
+
+
+        while check_pid $loops_pid ||
+	        [ -s "$path_tmp/links_loop.txt" ] 
+        do
+	    echo "$COLUMNS" > "$path_tmp"/columns
+	    
+	    if [ "$this_mode" == "lite" ]
+	    then	    
+	        show_downloads_lite
+	        read_binding
+	        
+	    else
+	        read_binding
+	        #jobs -l >jobs-list-$(date +%s)
+	    fi
+
+	    if [ -f "$path_tmp"/stop-binding ]
+	    then
+	        rm "$path_tmp"/stop-binding
+	        break
+	    fi
+	    
+        done #2>/dev/null 
+        
+        if [ "$lite_mode" == true ]
+        then
+	    show_downloads_lite no-clear
+        fi
+    fi 
+
+    noproxy
+
+    wait $loops_pid
+
+    [ "$lite_mode" == true ] &&
         {
-            print_header
-            separator-
-            print_c 1 "$(gettext "Download completed")" 
-            separator-
-            print_header
-            
-            rm -rf "$path_tmp"
+	    this_mode=stdout
+	    unset lite_mode
+	    start_mode_in_tty "stdout" "${this_tty}"	
         }
-else
-    kill_downloads
-fi
 
-stty sane
-cursor on
+    post_process
 
-if [ -f "$file_log" ]
-then
-    print_c 0 ""
-    print_c 3 "\n$(gettext "In %s there is a file that contains a list of operations of %s.")" "$PWD" "$PROG"
-    print_c 4 "$(gettext "To read it, enter:")"
-    print_c 0 "${Bold}cat $PWD/$file_log${Color_Off}\n"
-fi
+    if [ -n "${pipe_out[*]}" ] && [ "$pipe_done" != 1 ]
+    then
+        data_stdout
+        pipe_files
+    fi
+
+    if ! get_exit &&
+	    ! check_instance_gui
+    then
+        [ -f "$path_tmp"/.pid.zdl ] &&
+	    read test_pid < "$path_tmp"/.pid.zdl
+
+        [ "$test_pid" == "$pid_prog" ] &&
+	    ! check_start_file &&
+            {
+                print_header
+                separator-
+                print_c 1 "$(gettext "Download completed")" 
+                separator-
+                print_header
+                
+                rm -rf "$path_tmp"
+            }
+    else
+        kill_downloads
+    fi
+
+    stty sane
+    cursor on
+
+    if [ -f "$file_log" ]
+    then
+        print_c 0 ""
+        print_c 3 "\n$(gettext "In %s there is a file that contains a list of operations of %s.")" "$PWD" "$PROG"
+        print_c 4 "$(gettext "To read it, enter:")"
+        print_c 0 "${Bold}cat $PWD/$file_log${Color_Off}\n"
+    fi
 
 
-if [ "$xterm_stop_checked" == "true" ]
-then
-    xterm_stop
-fi
+    if [ "$xterm_stop_checked" == "true" ]
+    then
+        xterm_stop
+    fi
 
-set -o history
-echo -en "\e[0m\e[J"
-kill %? &>/dev/null
+    set -o history
+    echo -en "\e[0m\e[J"
+    kill %? &>/dev/null
+} 2>/dev/null
