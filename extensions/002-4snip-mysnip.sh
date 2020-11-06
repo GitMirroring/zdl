@@ -25,7 +25,7 @@
 #
 
 ## zdl-extension types: shortlinks
-## zdl-extension name: 4snip.pw | mysnip.xyz
+## zdl-extension name: 4snip.pw, mysnip.xyz
 
 if [[ "$url_in" =~ (4snip\.pw|mysnip\.) ]]
 then
