@@ -56,7 +56,7 @@ _ZigzagDownLoader_ is a download manager:
    - downloads movies _LIVE_ from some television networks
 
    - extends web browsers, such as _Conkeror_, _XXXTerm/Xombrero_ and,
-     using _Flashgot_), _Firefox_;
+     using _Flashgot_, _Firefox_;
 
    - the _External Application Button_ extension integrates ZDL into
      _Firefox_, _Chrome/Chromium_ and _Opera_;
@@ -1455,28 +1455,28 @@ _zdl-devel - Development list_:
 
 Tag Table:
 Node: Top1193
-Node: The ZDL command5078
-Node: Streaming/hosting services12936
-Node: Start ZDL17350
-Node: Stop ZDL19683
-Node: Check the downloads20718
-Node: User manuals24759
-Node: Modes25152
-Node: Readline28187
-Node: Editor29642
-Node: Homonymy30800
-Node: IRC/XDCC32309
-Node: Torrent33945
-Node: Filters34769
-Node: Create new extensions35057
-Node: Recommended software and dependencies36763
-Node: Conkeror38259
-Node: zdl-xterm and XXXTerm/Xombrero39241
-Node: Installation and update41112
-Node: Why this program44125
-Node: Tags47815
-Node: Copying52442
-Node: Contacts53520
+Node: The ZDL command5077
+Node: Streaming/hosting services12935
+Node: Start ZDL17349
+Node: Stop ZDL19682
+Node: Check the downloads20717
+Node: User manuals24758
+Node: Modes25151
+Node: Readline28186
+Node: Editor29641
+Node: Homonymy30799
+Node: IRC/XDCC32308
+Node: Torrent33944
+Node: Filters34768
+Node: Create new extensions35056
+Node: Recommended software and dependencies36762
+Node: Conkeror38258
+Node: zdl-xterm and XXXTerm/Xombrero39240
+Node: Installation and update41111
+Node: Why this program44124
+Node: Tags47814
+Node: Copying52441
+Node: Contacts53519
 
 End Tag Table
 

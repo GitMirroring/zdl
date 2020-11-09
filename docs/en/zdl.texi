@@ -227,7 +227,7 @@ automatically requests and downloads files via @emph{IRC/XDCC}, without any huma
 @item
 downloads movies @emph{LIVE} from some television networks
 @item
-extends web browsers, such as @emph{Conkeror}, @emph{XXXTerm/Xombrero} and, using @emph{Flashgot}), @emph{Firefox};
+extends web browsers, such as @emph{Conkeror}, @emph{XXXTerm/Xombrero} and, using @emph{Flashgot}, @emph{Firefox};
 @item
 the @emph{External Application Button} extension integrates ZDL into @emph{Firefox}, @emph{Chrome/Chromium} and @emph{Opera};
 @item
