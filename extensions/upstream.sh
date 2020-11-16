@@ -53,8 +53,10 @@ then
 
     else
         html=$(curl -s "$url_in" \
-                    -A "Mozilla/5.0 (X11; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0" \
+                    -A "$user_agent" \
+                    -H "Connection: keep-alive" \
                     -H "Upgrade-Insecure-Requests: 1" \
+                    -H "Cache-Control: max-age=0" \
                     -H "TE: Trailers" \
                     -c "$path_tmp/cookies.zdl")
 
@@ -74,16 +76,16 @@ then
 
     # # unpack "$(grep 'p,a,c,k,e,r' <<< $html)" |grep urlset
     
-    # # grep 'p,a,c,k,e,d' <<< $html
+    #curl -v -A Firefox "$url_in" | grep 'p,a,c,k,e,d'
+
+    #echo
+    
+    #unpack "$(grep 'p,a,c,k,e,d' <<< "$html")"
 
     # # echo
     
-    # # unpack "$(grep 'p,a,c,k,e,d' <<< $html)"
-
-    # # echo
-    
-    # url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< $html)" |
-    #                   sed -r 's|.+sources:\[\{file:\"([^"]+)\".+|\1|')
+    #url_in_file=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html")" |
+    #                  sed -r 's|.+sources:\[\{file:\"([^"]+)\".+|\1|')
     # # echo "$url_in_file" |tee -a urls.txt
 
     # url_in_file="${url_in_file//,}"
@@ -107,7 +109,7 @@ then
             ['n']="Normal"
             ['l']="Low"
         )
-            
+
         if grep -q download_video <<< "$html"
         then
             download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
