@@ -252,7 +252,7 @@ function get_proxy {
 
 function del_proxy {
     local proxy_address="$1"
-#    local proxy_type="$2"
+
     if [ -s "$path_tmp/proxy_list.txt" ]
     then
 	grep -v "${proxy_address}" "$path_tmp/proxy_list.txt" >"$path_tmp/proxy_list.temp"
@@ -378,7 +378,7 @@ function new_ip_proxy {
 	export https_proxy="$http_proxy"
 	print_c 0 "Proxy: $http_proxy ($proxy_type)\n"
 	
-	del_proxy "$proxy_address" #"$proxy_type"
+	del_proxy "$proxy_address"
 
  	url "$url_in" &&
 	    [[ "$url_in" =~ ^http ]] &&
