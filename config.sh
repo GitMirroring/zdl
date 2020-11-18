@@ -515,9 +515,10 @@ source "$file_conf"
 
 declare -A list_proxy_url
 ## elenco chiavi proxy_server: proxy_list, ip_adress
-proxy_server='ip_adress'
+proxy_server='proxyscrape'
 list_proxy_url['ip_adress']="https://www.ip-adress.com/proxy_list/" ###"http://zoninoz.hol.es"  ### 
 list_proxy_url['proxy_list']="http://proxy-list.org/en/index.php"
+list_proxy_url['proxyscrape']="https://www.proxyscrape.com/free-proxy-list"
 
 #user_agent="Mozilla/5.0 (X11; Linux x36_64; rv:10.0.7) Gecko/20100101 Firefox/10.0.7 Iceweasel/10.0.7"
 #user_agent="Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"

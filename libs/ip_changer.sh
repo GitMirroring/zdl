@@ -122,10 +122,53 @@ function unset_proxy {
 }
 
 ## servizi che offrono liste di proxy
+function proxyscrape {
+    unset http_proxy https_proxy
+    if [[ "$url_in" =~ ^https ]] ||
+           ( url "$url_in_file" && [[ "$url_in_file" =~ ^https ]] )
+    then
+        yes_no=yes
+    else
+        yes_no=no
+    fi
+
+    if [ -n "${proxy_types[*]}" ] &&
+           (( ${#proxy_types[*]} == 1 ))
+    then
+        proxy_type="${proxy_types[0]}"
+        
+    elif [ -z "${proxy_types[*]}" ] ||
+             (( ${#proxy_types[*]} == 0 ))
+    then
+        proxy_type=Transparent
+        
+    else
+        proxy_type=All
+    fi
+    
+    get_language_prog
+    wget "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=${yes_no}&anonymity=${proxy_type}&simplified=true" \
+         -qO- \
+         -o /dev/null |
+        tr -d '\r' |
+        sed -r "s|(.+)|\1:$proxy_type|g" > "$path_tmp/proxy_list.txt" 
+    get_language
+    
+    [ -s "$path_tmp/proxy_list.txt" ] && return 0 || return 1
+}
+
 function ip_adress {
     local proxy_regex
     ## ip-adress.com
 
+    get_language_prog
+    wget -q -t 1 -T 20                              \
+	 --user-agent="$user_agent"                 \
+	 ${list_proxy_url[$proxy_server]}           \
+	 -O "$path_tmp/proxy_page.html"             \
+	 -o /dev/null
+    get_language
+    
     for proxy_type in ${proxy_types[*]}
     do
 	case "$proxy_type" in
@@ -150,6 +193,13 @@ function ip_adress {
 function proxy_list {
     #### attualmente non ancora integrata nel più recente sistema
     ## proxy-list.org
+    get_language_prog
+    wget -q -t 1 -T 20                              \
+	 --user-agent="$user_agent"                 \
+	 ${list_proxy_url[$proxy_server]}           \
+	 -O "$path_tmp/proxy_page.html"             \
+	 -o /dev/null
+    get_language
     
     for proxy_type in ${proxy_types[*]}
     do
@@ -171,21 +221,12 @@ function proxy_list {
     # proxy="${proxy%<*}"
 }
 
-function get_proxy_list {
-    get_language_prog
-    wget -q -t 1 -T 20                              \
-	 --user-agent="$user_agent"                 \
-	 ${list_proxy_url[$proxy_server]}           \
-	 -O "$path_tmp/proxy_page.html"             \
-	 -o /dev/null
-    get_language
-    
+function get_proxy_list {    
     print_c 4 "$(gettext "Proxy list search") %s: %s" "$proxy_server" "${list_proxy_url[$proxy_server]}" 
 
-    if [ -s "$path_tmp/proxy_page.html" ]
+    $proxy_server
+    if [ ! -s "$path_tmp/proxy_list.txt" ]
     then
-	$proxy_server
-    else
 	print_c 3 "$(gettext "Proxy not available, please try again later")" 
 	break
     fi
@@ -194,6 +235,8 @@ function get_proxy_list {
 function get_proxy {
     declare -n ref_address="$1"
     declare -n ref_type="$2"
+
+    [ -s "$path_tmp/proxy_list.txt" ] || return 1
     
     local max=$(wc -l < "$path_tmp/proxy_list.txt")
     local proxy_line=$(head -n1 "$path_tmp/proxy_list.txt")
@@ -201,16 +244,18 @@ function get_proxy {
     [[ "$proxy_line" =~ Anonymous ]] && ref_type="Anonymous"
     [[ "$proxy_line" =~ Transparent ]] && ref_type="Transparent"
     [[ "$proxy_line" =~ Elite ]] && ref_type="Elite"
+
+    [ -z "${ref_type}" ] && ref_type=All
     
     ref_address="${proxy_line%:${ref_type}*}"
 }
 
 function del_proxy {
     local proxy_address="$1"
-    local proxy_type="$2"
+#    local proxy_type="$2"
     if [ -s "$path_tmp/proxy_list.txt" ]
     then
-	grep -v "${proxy_address}:${proxy_type}" "$path_tmp/proxy_list.txt" >"$path_tmp/proxy_list.temp"
+	grep -v "${proxy_address}" "$path_tmp/proxy_list.txt" >"$path_tmp/proxy_list.temp"
 	mv "$path_tmp/proxy_list.temp" "$path_tmp/proxy_list.txt"
     fi
 }
@@ -297,7 +342,7 @@ function check_speed {
 function new_ip_proxy {
     local test_url
 
-    rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl"
+    rm -f "$path_tmp/proxy.tmp" "$path_tmp/cookies.zdl" "$path_tmp/proxy_list.txt" 
 
     if [ -s "$path_tmp"/proxy ]
     then
@@ -322,20 +367,20 @@ function new_ip_proxy {
 	unset proxy_address proxy_type
 	get_language
 	print_c 1 "\n$(gettext "Update proxy") (${proxy_types[*]// /, }):"
-	
+
 	if [ ! -s "$path_tmp/proxy_list.txt" ]
 	then
 	    get_proxy_list
 	fi
 	get_proxy proxy_address proxy_type
-	
+        
 	export http_proxy="$proxy_address"
-	export https_proxy=$http_proxy
+	export https_proxy="$http_proxy"
 	print_c 0 "Proxy: $http_proxy ($proxy_type)\n"
 	
-	del_proxy "$proxy_address" "$proxy_type"
+	del_proxy "$proxy_address" #"$proxy_type"
 
-	url "$url_in" &&
+ 	url "$url_in" &&
 	    [[ "$url_in" =~ ^http ]] &&
 	    test_url="$url_in" ||
 		test_url="$ip_server_url"
