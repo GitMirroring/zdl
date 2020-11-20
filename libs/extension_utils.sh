@@ -537,6 +537,7 @@ function run_megadl {
 	      -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"    \
 	      +bdc -fg grey -bg black -title "MegaDL in $PWD"            \
 	      -e "/bin/bash -i -c \"echo -e \\\"$msg1\n\\\"; megadl \\\"$link\\\"; echo -e \\\"$msg2\\\"; read\"" &
+        print_c 1 'Downloading with "megadl" from "megatools" package'
         return 0
     else
         print_c 3 'To download from Mega, install the "megatools" package'
