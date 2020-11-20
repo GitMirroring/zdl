@@ -31,4 +31,5 @@
 
 url "$url_in_file" &&
     test -n "$file_in" ||
-	extension_mega "$url_in"
+	extension_mega "$url_in" ||
+        run_megadl "$url_in"

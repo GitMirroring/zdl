@@ -319,15 +319,19 @@ function header_dl {
     fi
 }
 
+function pause_msg {
+    	echo
+	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to continue")"
+	print_c 0 ""
+}
+
 function pause {
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	    [ "$1" == "force" ]                  ||
 	    [ "$redir_lnx" == true ]             ||
 	    [ -n "$redirected_link" ]
     then
-	echo
-	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to continue")"
-	print_c 0 ""
+        pause_msg
 	cursor off
 	read -e
 	cursor on

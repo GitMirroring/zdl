@@ -524,6 +524,26 @@ function extension_uptobox {
     return 0
 }
 
+function run_megadl {
+    local link="$1"
+    _log 3
+
+    if hash megadl
+    then
+        get_language
+        local msg1=$(header_dl 'ZigzagDownLoader --> MegaDL (megatools package):')
+        local msg2=$(pause_msg)
+        xterm -tn "xterm-256color"                                       \
+	      -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"    \
+	      +bdc -fg grey -bg black -title "MegaDL in $PWD"            \
+	      -e "/bin/bash -i -c \"echo -e \\\"$msg1\n\\\"; megadl \\\"$link\\\"; echo -e \\\"$msg2\\\"; read\"" &
+        return 0
+    else
+        print_c 3 'To download from Mega, install the "megatools" package'
+        return 1
+    fi
+}
+
 function extension_mega {
     local url_in="$1"
     
@@ -545,6 +565,8 @@ function extension_mega {
 
         json_data=$(wget -qO- --post-data='[{"a":"g","g":1,"p":"'$id'"}]' https://eu.api.mega.co.nz/cs -o /dev/null)
 
+        [ "$json_data" == '[-2]' ] && return 1
+            
         url_in_file="${json_data%\"*}"
         url_in_file="${url_in_file##*\"}"
         
