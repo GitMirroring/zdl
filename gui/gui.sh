@@ -358,9 +358,9 @@ function exe_button_result {
     then
 	read -a cmd < "$yad_button_result_file"
 
-        echo >>zdl.log
-        date >>zdl.log
-        cat "$yad_button_result_file" >>zdl.log
+        # echo >>zdl.log
+        # date >>zdl.log
+        # cat "$yad_button_result_file" >>zdl.log
 
         rm "$yad_button_result_file"
 
