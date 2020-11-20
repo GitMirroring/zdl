@@ -357,9 +357,14 @@ function exe_button_result {
     if [ -s "$yad_button_result_file" ]
     then
 	read -a cmd < "$yad_button_result_file"
-	rm "$yad_button_result_file"
 
-	eval "${cmd[@]}"
+        echo >>zdl.log
+        date >>zdl.log
+        cat "$yad_button_result_file" >>zdl.log
+
+        rm "$yad_button_result_file"
+
+        eval "${cmd[@]}" &>>zdl.log
     fi
 }
 
@@ -559,10 +564,10 @@ function load_download_manager_gui {
 
 function display_download_manager_gui {
     local pid=$(get_pid_regex "${yad_download_manager_result_file##*\/}")
-    if [[ "$pid" =~ ^[0-9]+$ ]]
-    then
-	return 1
-    fi
+    # if [[ "$pid" =~ ^[0-9]+$ ]]
+    # then
+    #     return 1
+    # fi
 
     exec 33<&-
     local waiting=15
@@ -966,10 +971,10 @@ function display_livestream_gui {
 
 function display_link_manager_gui {
     local pid=$(get_pid_regex "${yad_link_manager_result_file##*\/}")
-    if [[ "$pid" =~ ^[0-9]+$ ]]
-    then
-	return 1
-    fi
+    # if [[ "$pid" =~ ^[0-9]+$ ]]
+    # then
+    #     return 1
+    # fi
     
     local IFS_old="$IFS"
 
@@ -1153,6 +1158,7 @@ you can delete the previous one and create a new one or leave the previous one a
     
     IFS="$IFS_old"
 }
+
 
 function display_sockets_gui {
     declare -a socket_ports
@@ -1347,7 +1353,7 @@ function display_multiprogress_gui {
 	sleep 0.3
 	    
 	exe_button_result "$yad_multiprogress_result_file"
-	    
+
     done 2>/dev/null |
 	yad --multi-progress \
 	    --align=right \
@@ -1357,8 +1363,8 @@ function display_multiprogress_gui {
 	    --image-on-top \
 	    --text="$TEXT" \
 	    --buttons-layout=center \
-	    --button="Links!gtk-connect!Gestisci i link:bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
-	    --button="Downloads!browser-download!$(gettext "Manage downloads"):bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
+            --button="Links!gtk-connect!Gestisci i link":"bash -c \"echo display_link_manager_gui >'$yad_multiprogress_result_file'\"" \
+            --button="Downloads!browser-download!$(gettext "Manage downloads")":"bash -c \"echo display_download_manager_gui >'$yad_multiprogress_result_file'\"" \
 	    --button="$(gettext "Options")!gtk-properties!$(gettext "Change the download control options"):bash -c \"echo 'display_multiprogress_opts' > '$yad_multiprogress_result_file'\"" \
 	    --button="$(gettext "ZDL console")!dialog-information!$(gettext "Follow the download manager operations") (ZDL core)":"bash -c \"echo display_console_gui pid_console >'$yad_multiprogress_result_file'\"" \
 	    --button="$(gettext "Start/Stop ZDL core")!gtk-execute!$(gettext "Start/Stop the download manager") (ZDL core)":"bash -c \"echo toggle_daemon_gui >'$yad_multiprogress_result_file'\"" \
