@@ -563,11 +563,12 @@ function load_download_manager_gui {
 }
 
 function display_download_manager_gui {
-    local pid=$(get_pid_regex "${yad_download_manager_result_file##*\/}")
-    # if [[ "$pid" =~ ^[0-9]+$ ]]
-    # then
-    #     return 1
-    # fi
+    local pid=$(get_pid_regex "yad\0--list\0--grid-lines=hor\0--multiple\0--title=Downloads\0.+\\\n")
+    
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+        return 1
+    fi
 
     exec 33<&-
     local waiting=15
@@ -662,7 +663,7 @@ function display_download_manager_gui {
 	if test ! -s "$exit_file"
 	then
 	    kill -9 $pid
-	    kill -9 $(get_pid_regex "${yad_download_manager_result_file##*\/}")
+	    kill -9 $(get_pid_regex "yad\0--list\0--grid-lines=hor\0--multiple\0--title=Downloads\0.+\\\n")
 	fi
 	check_pid $pid || break
 	sleep 0.1
@@ -681,7 +682,7 @@ function display_download_manager_gui {
 	if test ! -s "$exit_file"
 	then
 	    kill -9 $pid
-	    kill -9 $(get_pid_regex "${yad_download_manager_result_file##*\/}")
+	    kill -9 $(get_pid_regex "yad\0--list\0--grid-lines=hor\0--multiple\0--title=Downloads\0.+\\\n")
 	fi
 	check_pid $pid || break
     	sleep $waiting
@@ -970,11 +971,16 @@ function display_livestream_gui {
 }
 
 function display_link_manager_gui {
-    local pid=$(get_pid_regex "${yad_link_manager_result_file##*\/}")
-    # if [[ "$pid" =~ ^[0-9]+$ ]]
-    # then
-    #     return 1
-    # fi
+    local pid=$(get_pid_regex "yad\0--form\0--columns=1\0--title=Links\0--image=.+\\\n")
+
+    echo >>zdl.log
+    date >>zdl.log
+    echo "$pid" >>zdl.log
+    
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+        return 1
+    fi
     
     local IFS_old="$IFS"
 
@@ -1150,7 +1156,7 @@ you can delete the previous one and create a new one or leave the previous one a
 	if test ! -s "$exit_file"
 	then
 	    kill -9 $pid
-	    kill -9 $(get_pid_regex "${yad_link_manager_result_file##*\/}")
+	    kill -9 $(get_pid_regex "yad\0--form\0--columns=1\0--title=Links\0--image=.+\\\n") 
 	fi
 	check_pid $pid || break
 	sleep 0.2
