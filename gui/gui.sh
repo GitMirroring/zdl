@@ -357,14 +357,9 @@ function exe_button_result {
     if [ -s "$yad_button_result_file" ]
     then
 	read -a cmd < "$yad_button_result_file"
-
-        # echo >>zdl.log
-        # date >>zdl.log
-        # cat "$yad_button_result_file" >>zdl.log
-
         rm "$yad_button_result_file"
 
-        eval "${cmd[@]}" &>>zdl.log
+        eval "${cmd[@]}"
     fi
 }
 
@@ -415,6 +410,14 @@ function display_link_error_gui {
 }
 
 function edit_links_gui {
+    local title="Editor links"
+    local pid=$(get_pid_regex "yad\0--title=$title\0--image=.+\\\n")
+
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+        return 1
+    fi
+
     {
 	declare -a links
 	local matched text
@@ -427,7 +430,7 @@ function edit_links_gui {
 	
 	text="$TEXT\n\n$(gettext "Edit the list of links to start downloading:")\n$(gettext "head to each link (the spaces between the lines and around the links will be ignored)")\n"	
 	links=(
-	    $(yad --title="Editor links" \
+	    $(yad --title="$title" \
 		  --image="gtk-execute" \
 		  --text="$text" \
 		  --text-info \
@@ -563,8 +566,7 @@ function load_download_manager_gui {
 }
 
 function display_download_manager_gui {
-    local pid=$(get_pid_regex "yad\0--list\0--grid-lines=hor\0--multiple\0--title=Downloads\0.+\\\n")
-    
+    local pid=$(get_pid_regex "yad\0--list\0--grid-lines=hor\0--multiple\0--title=Downloads\0.+\\\n")    
     if [[ "$pid" =~ ^[0-9]+$ ]]
     then
         return 1
@@ -972,11 +974,6 @@ function display_livestream_gui {
 
 function display_link_manager_gui {
     local pid=$(get_pid_regex "yad\0--form\0--columns=1\0--title=Links\0--image=.+\\\n")
-
-    echo >>zdl.log
-    date >>zdl.log
-    echo "$pid" >>zdl.log
-    
     if [[ "$pid" =~ ^[0-9]+$ ]]
     then
         return 1
@@ -1167,6 +1164,13 @@ you can delete the previous one and create a new one or leave the previous one a
 
 
 function display_sockets_gui {
+    local title="Sockets"
+    local pid=$(get_pid_regex "yad\0--form\0--title=$title\0.+\\\n")    
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+        return 1
+    fi
+
     declare -a socket_ports
     local port
     while read port
@@ -1176,7 +1180,6 @@ function display_sockets_gui {
     done < "$path_server"/socket-ports
 
     local text="${TEXT}\n\n$(gettext "Enable or disable TCP connections:")\n$(gettext "enter a free port")\n\n"
-    local title="Sockets"
     local msg_img msg_server
 
     local default_port=8080
@@ -1288,6 +1291,15 @@ function display_sockets_gui {
 }
 
 function display_multiprogress_opts {
+    local title="$(gettext "Options")"
+    local text="$TEXT\n\n"
+    local pid=$(get_pid_regex "yad\0--title=$title\0--text=.+\0--form\0--separator=.+")
+    
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+	return 1
+    fi
+
     declare -a dlers=( Aria2 Wget Axel )
     local dler
     read dler < "$path_tmp"/downloader
@@ -1295,17 +1307,16 @@ function display_multiprogress_opts {
     local downloaders="${dler}!"
     downloaders+=$(tr ' ' '!' <<< "${dlers[*]}")
 
-    local max_dl
+    local max_dl format
     test -f "$path_tmp"/max-dl && read max_dl < "$path_tmp"/max-dl
     max_dl+="!0..20"
-  
-    local text="$TEXT\n\n" format
+    
     test -f "$path_tmp"/format-post_processor &&
 	read format < "$path_tmp"/format-post_processor
     [[ "$format" =~ ^(flac|mp3)$ ]] && format="${BASH_REMATCH[1]}!"
     
     {
-	res=($(yad --title="$(gettext "Options")" \
+	res=($(yad --title="$title" \
     		   --text="$text" \
     		   --form \
     		   --separator=' ' \
@@ -1444,13 +1455,21 @@ function display_console_gui {
 }
 
 function display_configure_gui {
+    local title="$(gettext "Configuration")"
+    local pid=$(get_pid_regex "yad\0--title=$title\0--text=.+\\\n")
+
+    if [[ "$pid" =~ ^[0-9]+$ ]]
+    then
+        return 1
+    fi
+
     local res i ret OIFS="$IFS"
     IFS="€"
     {
 	source "$file_conf"
 
 	## local locale_code_list=$(awk '/\.UTF-8/{opts = opts "!" $1; }END{print opts}' /usr/share/i18n/SUPPORTED)
-	res=($(yad --title="$(gettext "Configuration")" \
+	res=($(yad --title="$title" \
 		   --text="${TEXT}\n\n$(gettext "Manage ZDL configuration")" \
 		   --form \
 		   --align=right \
