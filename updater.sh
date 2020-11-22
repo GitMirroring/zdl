@@ -565,6 +565,7 @@ EXTENSIONS:
         deps['setterm']=util-linux
         deps['fuser']=psmisc    
         deps['openssl']=openssl
+        deps['screen']=screen
 
         if [ -n "$XDG_CURRENT_DESKTOP" ] ||
                [ -n "$(ls /usr/share/xsessions/*.desktop 2>/dev/null)" ] ||

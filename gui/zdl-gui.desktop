@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment[it]=
 Comment=
-Exec=zdl --gui --path-gui
+Exec=screen -d -m zdl --gui --path-gui
 GenericName[it]=ZigzagDownLoader --gui
 GenericName=ZigzagDownLoader --gui
 Icon=/usr/local/share/zdl/gui/icon-32x32.png
