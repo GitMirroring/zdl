@@ -382,6 +382,10 @@ OPTIONS
   -l,  --lite                  Start ZDL in \"lite\" standard output mode
                                (the \"standard output\" mode commands are valid)
 
+       --open-relink=<LINK>    ZDL processes links up to the last URL reachable 
+                               starting from LINK, then opens this URL using 
+                               the configured web browser
+                               
        --out=<PROG|FILE>       Returns the file names of
                                completed downloads, in two alternative ways:
                                  PROG: program that can open the file
