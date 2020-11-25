@@ -275,6 +275,11 @@ Le opzioni brevi non seguite da valori possono essere contratte:
      comandi della modalità in _standard output_). Può essere
      configurata come modalità di avvio predefinita.
 
+`--open-relink=_link_'
+     Processa i collegamenti fino all'ultimo URL raggiungibile a
+     partire da _link_, poi apre tale URL usando il browser web
+     configurato
+
 `--out=_programma_|_file_'
      Restituisce in output i nomi dei file dei download completati, in
      due modi alternativi:
@@ -1487,27 +1492,27 @@ _zdl-devel - Lista di sviluppo_:
 Tag Table:
 Node: Top1185
 Node: Il comando ZDL5254
-Node: Servizi streaming/hosting13597
-Node: Avviare ZDL18224
-Node: Arrestare ZDL20680
-Node: Controllare i download21785
-Node: Manuali d'uso26037
-Node: Modi26453
-Node: Readline29748
-Node: Editor31300
-Node: Omonimie32525
-Node: IRC/XDCC34073
-Node: Torrent35782
-Node: Filtri36666
-Node: Creare nuove estensioni36987
-Node: Software consigliati e dipendenze38762
-Node: Conkeror40324
-Node: zdl-xterm e XXXTerm/Xombrero41348
-Node: Installazione e aggiornamento43272
-Node: Perché questo programma46587
-Node: Tags50475
-Node: Copying55075
-Node: Contatti56125
+Node: Servizi streaming/hosting13767
+Node: Avviare ZDL18394
+Node: Arrestare ZDL20850
+Node: Controllare i download21955
+Node: Manuali d'uso26207
+Node: Modi26623
+Node: Readline29918
+Node: Editor31470
+Node: Omonimie32695
+Node: IRC/XDCC34243
+Node: Torrent35952
+Node: Filtri36836
+Node: Creare nuove estensioni37157
+Node: Software consigliati e dipendenze38932
+Node: Conkeror40494
+Node: zdl-xterm e XXXTerm/Xombrero41518
+Node: Installazione e aggiornamento43442
+Node: Perché questo programma46757
+Node: Tags50645
+Node: Copying55245
+Node: Contatti56295
 
 End Tag Table
 

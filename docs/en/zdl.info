@@ -273,6 +273,10 @@ equivalent to `-u' `-f' `-m' `-d'
      _standard output_ are valid). It can be configured as the default
      boot mode.
 
+`--open-relink=_link_'
+     ZDL processes links up to the last URL reachable starting from
+     _link_, then opens this URL using the configured web browser
+
 `--out=_program_|_file_'
      Output the names of completed download files, in two alternative
      ways:
@@ -1456,27 +1460,27 @@ _zdl-devel - Development list_:
 Tag Table:
 Node: Top1193
 Node: The ZDL command5077
-Node: Streaming/hosting services12935
-Node: Start ZDL17349
-Node: Stop ZDL19682
-Node: Check the downloads20717
-Node: User manuals24758
-Node: Modes25151
-Node: Readline28186
-Node: Editor29641
-Node: Homonymy30799
-Node: IRC/XDCC32308
-Node: Torrent33944
-Node: Filters34768
-Node: Create new extensions35056
-Node: Recommended software and dependencies36762
-Node: Conkeror38258
-Node: zdl-xterm and XXXTerm/Xombrero39240
-Node: Installation and update41111
-Node: Why this program44124
-Node: Tags47814
-Node: Copying52441
-Node: Contacts53519
+Node: Streaming/hosting services13093
+Node: Start ZDL17507
+Node: Stop ZDL19840
+Node: Check the downloads20875
+Node: User manuals24916
+Node: Modes25309
+Node: Readline28344
+Node: Editor29799
+Node: Homonymy30957
+Node: IRC/XDCC32466
+Node: Torrent34102
+Node: Filters34926
+Node: Create new extensions35214
+Node: Recommended software and dependencies36920
+Node: Conkeror38416
+Node: zdl-xterm and XXXTerm/Xombrero39398
+Node: Installation and update41269
+Node: Why this program44282
+Node: Tags47972
+Node: Copying52599
+Node: Contacts53677
 
 End Tag Table
 

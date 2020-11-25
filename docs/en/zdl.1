@@ -1,13 +1,13 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Mon Nov  9 02:51:16 2020" "GNU" "User Commands"
+.TH "ZigzagDownLoader (ZDL)" "1" "Wed Nov 25 16:35:37 2020" "GNU" "User Commands"
 .SH NAME\	
 \fBzdl\fP - CLI/TUI/GUI/Web-UI download manager for \fIGNU/Linux\fP and \fIMicrosoft Windows + Cygwin\fP.\
 
-\
-.SH SYNOPSIS	
+
+.SH SYNOPSIS\	
 \fBzdl [\fP\fIOPTIONS\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB]\fP
 
-\
-.SH DESCRIPTION	
+
+.SH DESCRIPTION\	
 \fIZigzagDownLoader\fP is a download manager:
 
 .RS 5
@@ -67,8 +67,8 @@ a polyglot system, using different interpreters (for PHP, Javascript, Python, Pe
 
 ZigzagDownLoader is a "zigzag" program: it is not just a program, it is a laboratory and a system open to new inventions.
 
-
-.SS Arguments\	
+\
+.SS Arguments	
 The order of options and other arguments is not important:
 
 
@@ -168,6 +168,11 @@ Launch the interactive ZDL interface for downloads that target the current direc
 Start ZDL in standard output mode \fIlite\fP (mode commands in \fIstandard output\fP are valid)\&. It can be configured as the default boot mode.
 
 .RS -5
+\fB--open-relink=\fP\fIlink\fP\fB\fP
+.RS 5
+ZDL processes links up to the last URL reachable starting from \fIlink\fP, then opens this URL using the configured web browser
+
+.RS -5
 \fB--out=\fP\fIprogram\fP\fB|\fP\fIfile\fP\fB\fP
 .RS 5
 Output the names of completed download files, in two alternative ways:
@@ -231,8 +236,8 @@ Start without interruption: skip any automatic update (which requires entering t
 .RS -5
 
 
-\
-.SS Graphical user interface (GUI):	
+
+.SS Graphical user interface (GUI):\	
 
 .RS 5
 
@@ -250,8 +255,8 @@ Before starting zdl, it opens a window for selecting the destination directory, 
 .RS -5
 
 
-\
-.SS Sockets and user interfaces:	
+
+.SS Sockets and user interfaces:\	
 
 .RS 5
 
@@ -270,8 +275,8 @@ Start the program in daemon mode in the current directory or, possibly, in the o
 .RS -5
 
 
-
-.SS IRC/XDCC:\	
+\
+.SS IRC/XDCC:	
 
 .RS 5
 
@@ -422,8 +427,8 @@ use Zile, a GNU Emacs-style micro editor
 .RS -5
 
 
-\
-.SS Starting with proxy:	
+
+.SS Starting with proxy:\	
 
 .RS 5
 
@@ -465,8 +470,8 @@ Start ZDL by activating the proxy indicated by the user, for the entire duration
 .RS -5
 
 
-\
-.SS Configuration:	
+
+.SS Configuration:\	
 
 .RS 5
 
@@ -484,8 +489,8 @@ To download the stream by incorporating ZDL in new scripts, the generic model of
 
 .RS -5
 
-\
-.SH OVERVIEW	
+
+.SH OVERVIEW\	
 \
 .SS Services	
 ZDL is enabled for downloading from any kind of valid link, including the video stream (from Youtube, Nowvideo, Dailymotion \&...) by means of browser extensions, and files shared through the following hosting and streaming services, directly from the link (bypassing the web page player):
@@ -536,8 +541,8 @@ Aria2 (anche torrent), Axel, cURL, RTMPDump, Wget, youtube-dl (comando per elenc
 .RS -5
 
 
-
-.SS Start\	
+\
+.SS Start	
 ZDL can be started in different ways:
 
 

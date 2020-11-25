@@ -110,6 +110,10 @@ OPZIONI
                                (sono validi i comandi della modalità 
                                \"standard output\") 
 
+       --open-relink=<LINK>    Processa i collegamenti fino all'ultimo URL 
+                               raggiungibile a partire da LINK, poi apre tale URL 
+                               usando il browser web configurato
+
        --out=<PROG|FILE>       Restituisce in output i nomi dei file 
                                dei download completati, in due modi alternativi:
                                  PROG: programma che può \"aprire\" il file 

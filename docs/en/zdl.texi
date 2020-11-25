@@ -369,6 +369,9 @@ Launch the interactive ZDL interface for downloads that target the current direc
 @item -l, --lite
 Start ZDL in standard output mode @emph{lite} (mode commands in @emph{standard output} are valid). It can be configured as the default boot mode.
 
+@item --open-relink=@emph{link}
+ZDL processes links up to the last URL reachable starting from @emph{link}, then opens this URL using the configured web browser
+
 @item --out=@emph{program}|@emph{file}
 Output the names of completed download files, in two alternative ways:
 

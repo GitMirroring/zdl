@@ -370,6 +370,9 @@ Avvia l'interfaccia interattiva di ZDL per i download che hanno come destinazion
 @item -l, --lite
 Avvia ZDL in modalità in standard output @emph{lite} (sono validi i comandi della modalità in @emph{standard output}). Può essere configurata come modalità di avvio predefinita.
 
+@item --open-relink=@emph{link}
+Processa i collegamenti fino all'ultimo URL raggiungibile a partire da @emph{link}, poi apre tale URL usando il browser web configurato
+
 @item --out=@emph{programma}|@emph{file}
 Restituisce in output i nomi dei file dei download completati, in due modi alternativi: 
 
