@@ -29,13 +29,8 @@
 
 if [ "$url_in" != "${url_in//hd4me.net}" ]
 then
-    url_hd4me="https://mega.nz/#${url_in#*\?}"
-
-    if [[ "$url_hd4me" =~ \/\# ]]
-    then
-        url_hd4me="${url_hd4me//'!'/'#'}"
-        url_hd4me="${url_hd4me//'/#'//}"
-    fi
+    url_hd4me="https://mega.nz/file/${url_in#*'?!'}"
+    url_hd4me="${url_hd4me//'!'/'#'}"
     
     url "$url_hd4me" &&
 	replace_url_in "$url_hd4me" || _log 2 
