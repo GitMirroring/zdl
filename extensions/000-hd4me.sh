@@ -29,8 +29,15 @@
 
 if [ "$url_in" != "${url_in//hd4me.net}" ]
 then
-    url_hd4me="https://mega.nz/file/${url_in#*'?!'}"
-    url_hd4me="${url_hd4me//'!'/'#'}"
+    if [[ "$url_in" =~ file\/ ]]
+    then
+        url_hd4me="https://mega.nz/#${url_in#*\?}"
+        url_hd4me="${url_hd4me//'!'/'#'}"
+        url_hd4me="${url_hd4me//'/#'//}"
+    else
+        url_hd4me="https://mega.nz/file/${url_in#*'?!'}"
+        url_hd4me="${url_hd4me//'!'/'#'}"
+    fi
     
     url "$url_hd4me" &&
 	replace_url_in "$url_hd4me" || _log 2 
