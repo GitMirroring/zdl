@@ -401,7 +401,7 @@ function new_ip_proxy {
     
     [ ! -s "$path_tmp/proxy_list.txt" ] && rm -f "$path_tmp/proxy_list.txt"
 
-    print_c 4 "\n$(gettext "Start connection"): $url_in ..."
+    print_c 4 "\n$(gettext "Start connection"): $url_in ...\n\n"
 }
 
 
