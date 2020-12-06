@@ -726,16 +726,9 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    if (url_in == url_out[i]) bash_var("url_in", "")
-	    length_saved[i] = size_file(file_out[i])
+	    length_saved[i] = size_dir(file_out[i])
 	    percent_out[i] = 100
-
-	    ## conversione formato --mp3|--flac:
-	    # if ((format_out != "") &&
-	    # 	(!exists(file_out[i]))) {
-	    #     match(file_out[i], /(.+)\.[^\.]+$/, matched)
-	    #     if (exists(matched[1] "." format_out))
-	    #         file_out[i] = matched[1] "." format_out
-	    # }
+            system("rm -f " file_out_encoded[i])
 	}
 	else if (progress_line) {
 	    cmd = "date +%s"

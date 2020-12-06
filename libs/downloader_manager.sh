@@ -366,7 +366,9 @@ $aria2_parts" >"$path_tmp/${file_in}_stdout.tmp"
                 --debug api
                 --path "$file_in"
             )
-            mkdir "$file_in"
+            [ -f "$file_in" ] &&
+                rm -f "$file_in"
+            mkdir -p "$file_in"
 
             stdbuf -oL -eL                                   \
 		   megadl                                    \
