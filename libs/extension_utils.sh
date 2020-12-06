@@ -548,7 +548,6 @@ function run_megadl {
 function extension_mega {
     local url_in="$1"
     
-    
     if [[ "$url_in" =~ (^https\:\/\/mega\.co\.nz\/|^https\:\/\/mega\.nz\/) ]]
     then
         [ "$url_in" == "${url_in//mega.co.nz/mega.nz}" ] ||

@@ -29,7 +29,36 @@
 ## zdl-extension types: download
 ## zdl-extension name: Mega
 
-url "$url_in_file" &&
-    test -n "$file_in" ||
-	extension_mega "$url_in" ||
-        run_megadl "$url_in"
+#####################################
+# url "$url_in_file" &&
+#     test -n "$file_in" ||
+# 	extension_mega "$url_in" ||
+#         run_megadl "$url_in"
+#####################################
+
+if [[ "$url_in" =~ (^https\:\/\/mega\.co\.nz\/|^https\:\/\/mega\.nz\/) ]]
+then
+    if hash megadl 2>/dev/null
+    then
+        downloader_in=MegaDL
+        url_in_file="$url_in"
+        test_tmp=$(mktemp)
+        megadl --debug api \
+               "$url_in" &> "$test_tmp" & pid=$!
+        
+        while [[ ! "$(cat "$test_tmp")" =~ \% ]]
+        do
+            sleep 0.1
+        done
+        kill -9 $pid
+        
+        file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
+        file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
+        length_in=$(awk '{match($0, /"s":\s(.+),/, matched); if (matched[1]) print matched[1]}' $test_tmp)
+        
+    else
+        print_c 3 "$(gettext 'To download from Mega, install the "megatools" package')"
+    fi
+    
+    end_extension
+fi

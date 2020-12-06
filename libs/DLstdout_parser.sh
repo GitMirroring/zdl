@@ -28,7 +28,8 @@ function data_stdout {
     shopt -s nullglob
     shopt -s dotglob
     rm -f "$path_tmp"/._stdout.tmp
-    tmp_files=( "$path_tmp"/?*_stdout.tmp )
+    #    tmp_files=( "$path_tmp"/?*_stdout.tmp )
+    tmp_files=( $(awk '/_stdout.tmp/{print "'"$path_tmp/"'"$0}' < <(ls -a "$path_tmp")) )
     shopt -u nullglob
     shopt -u dotglob
     unset pid_alive pid_out file_out url_out percent_out length_saved length_out no_check

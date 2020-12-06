@@ -122,6 +122,8 @@ function show_downloads () {
 	    downloader = "xdcc"
 	else if (downloader_out[i] == "FFMpeg")
 	    downloader = "FFMp"
+	else if (downloader_out[i] == "MegaDL")
+	    downloader = "Mega"
 	else
 	    downloader = downloader_out[i]
 
@@ -145,6 +147,8 @@ function show_downloads_lite () {
 	    downloader = "xdcc"
 	else if (downloader_out[i] == "FFMpeg")
 	    downloader = "FFMp"
+	else if (downloader_out[i] == "MegaDL")
+	    downloader = "Mega"
 	else
 	    downloader = downloader_out[i]
 

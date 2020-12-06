@@ -593,6 +593,7 @@ no_check_links=(
     \.m3u8
     akvideo
     speedvideo
+    'mega.(co|nz)'
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
@@ -625,6 +626,7 @@ path_axel=$(command -v axel 2>/dev/null)
 path_aria2=$(command -v aria2c 2>/dev/null)
 path_wget=$(command -v wget 2>/dev/null)
 path_rtmpdump=$(command -v rtmpdump 2>/dev/null)
+path_megadl=$(command -v megadl 2>/dev/null)
 path_ffmpeg=$(command -v ffmpeg 2>/dev/null || command -v avconv 2>/dev/null)
 
 ## NODEJS:
@@ -653,8 +655,3 @@ export OPENSSL_CONF=/etc/ssl/
 
 command -v avconv &>/dev/null && ffmpeg="avconv"
 command -v ffmpeg &>/dev/null && ffmpeg="ffmpeg"
-
-
-
-
-

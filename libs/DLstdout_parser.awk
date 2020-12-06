@@ -588,7 +588,6 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     }
     else if (dler == "cURL") {
 	for (y=n; y>0; y--) {
-
 	    if (chunk[y] ~ /[ ]+[0-9]+[k]*k$/) {
 	    	progress_line = chunk[y]
 	    	break
@@ -711,7 +710,54 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	if (!length_out[i])
 	    length_out[i] = length_saved[i] ##"unspecified"
     }
+    else if (dler == "MegaDL") {
+	for (y=n; y>0; y--) {
+	    if (chunk[y] ~ "^Downloaded ") {
+		progress_end[i] = chunk[y]
+		break
+	    }
+            if (chunk[y] ~ /[%]+.+byte/) {
+		progress_line = chunk[y]
+		break
+	    }
+	}
 
+	if (progress_end[i]) {
+	    if (! no_check)
+		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
+	    if (url_in == url_out[i]) bash_var("url_in", "")
+	    length_saved[i] = size_file(file_out[i])
+	    percent_out[i] = 100
+
+	    ## conversione formato --mp3|--flac:
+	    # if ((format_out != "") &&
+	    # 	(!exists(file_out[i]))) {
+	    #     match(file_out[i], /(.+)\.[^\.]+$/, matched)
+	    #     if (exists(matched[1] "." format_out))
+	    #         file_out[i] = matched[1] "." format_out
+	    # }
+	}
+	else if (progress_line) {
+	    cmd = "date +%s"
+	    cmd | getline this_time
+	    close(cmd)
+	    elapsed_time = this_time - start_time
+	    split(progress_line, progress_elems, /([:\(\)]{1}|\s\-\s|byte|%|\(|\))/)
+	    percent_out[i] = int(progress_elems[2])
+
+	    if (percent_out[i] > 0) {
+		eta_out[i] = int((elapsed_time * 100 / percent_out[i]) - elapsed_time)
+		eta_out[i] = seconds_to_human(eta_out[i])
+		length_saved[i] = size_file(file_out[i] "/" file_out_encoded[i])
+		if (! length_saved[i]) length_saved[i] = 0
+                split(progress_elems[8], speed_elems, /[^0-9.,a-zA-Z\/]+/)
+		speed_out[i] = speed_elems[1]
+		speed_out_type[i] = speed_elems[2] 
+	    }
+	    if (! pid_alive[i] && length_saved[i] < length_out[i])
+		system("rm -f " file_out[i])
+	}
+    }
     
     if (! speed_out[i]) speed_out[i] = 0
     if (! speed_out_type[i]) speed_out_type[i] = "KB/s"
@@ -730,7 +776,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     array_out(pid_prog_out[i], "pid_prog_out")
     array_out(file_out[i], "file_out")
 	    
-    if (downloader_out[i] ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg/) {
+    if (downloader_out[i] ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg|MegaDL/) {
 	array_out(url_out_file[i], "url_out_file")
     }
     else if (downloader_out[i] ~ /RTMPDump|cURL/) {
@@ -831,7 +877,7 @@ BEGIN {
 	if (dler ~ /Aria2|Axel/) yellow_progress()
     }
     if (FNR == 6) {
-	if (dler ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg/) {
+	if (dler ~ /DCC_Xfer|Aria2|Axel|Wget|youtube-dl|FFMpeg|MegaDL/) {
 	    url_out_file[i] = $0
 	}
 	else if (dler ~ /RTMPDump|cURL/) {
@@ -846,9 +892,18 @@ BEGIN {
 	    axel_parts_out[i] = $0
 	    aria2_parts_out[i] = $0
 	}
+        else if (dler ~ /MegaDL/) {
+            file_out_encoded[i] = $0
+        }
     }
-    if (FNR == 8) start_time = $0
-
+    if (FNR == 8) {        
+        start_time = $0
+    }
+    if (FNR == 9) {        
+        if  (dler ~ /MegaDL/) {
+            length_out[i] = $0
+        }
+    }
 
     if ($0 ~ /Length:/ && dler == "Wget") {
 	length_out[i] = $2
@@ -914,6 +969,7 @@ END {
     display_notify_complete()
     delete_tmp_complete_inexistent()
     delete_notify_complete_inexistent()    
-    
+
     print code 
 }
+

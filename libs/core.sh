@@ -589,6 +589,8 @@ function check_in_file { 	## return --> no_download=1 / download=0
 	unset no_newip
     fi
 
+    [ "$downloader_in" == MegaDL ] && return 0
+    
     if [ -n "$file_in" ]
     then
 	length_saved_in=0

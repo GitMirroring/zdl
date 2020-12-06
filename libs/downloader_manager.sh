@@ -288,7 +288,6 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 	;;
 
 	Aria2)
-
 	    if [[ "$url_in_file" =~ ^(magnet:) ]] ||
 		   [ -f "$url_in_file" ]
 	    then
@@ -362,6 +361,32 @@ $url_in_file
 $aria2_parts" >"$path_tmp/${file_in}_stdout.tmp"
 	    ;;
 
+        MegaDL)
+            opts=(
+                --debug api
+                --path "$file_in"
+            )
+            mkdir "$file_in"
+
+            stdbuf -oL -eL                                   \
+		   megadl                                    \
+		   "${opts[@]}"                              \
+		   "$url_in_file"   2>&1 |
+                stdbuf -i0 -o0 -e0 tr -d "\r" &>>"$path_tmp/${file_in}_stdout.tmp" &
+
+	    pid_in=$!    
+            
+	    echo -e "${pid_in}
+$url_in
+MegaDL
+${pid_prog}
+$file_in
+$url_in_file
+$file_in_encoded
+$(date +%s)
+$length_in" >"$path_tmp/${file_in}_stdout.tmp"            
+            ;;
+        
 	Axel)
 	    [ -n "$file_in" ] &&
 		fileout+=( -o "$file_in" )
