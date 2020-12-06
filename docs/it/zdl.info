@@ -26,7 +26,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
 
 INFO-DIR-SECTION Network Applications
 START-INFO-DIR-ENTRY
-* ZigzagDownLoader: (zdl). Download manager per Wget, Axel, cURL e RTMPDump. Ha estensioni per servizi di file hosting e video streaming.
+* ZigzagDownLoader: (zdl). Download manager per Aria2, Wget, Axel, cURL, MegaDL (megatools), youtube-dl, RTMPDump e downloader XDCC. Ha estensioni per servizi di file hosting e video streaming.
 END-INFO-DIR-ENTRY
 
 
@@ -1070,6 +1070,10 @@ _Flashgot_
 _youtube-dl_
      Script in python che amplia e potenzia le estensioni di ZDL
 
+_megatools_
+     Il pacchetto _megatools_ fornisce il downloader _megadl_ per
+     scaricare dal servizio _Mega_
+
 _pinfo_
      Programma in stile _lynx_ per sfogliare i file _info_: migliore di
      _info_ ed esteticamente più simile a ZDL
@@ -1400,35 +1404,37 @@ Indice dei programmi
 * axel:                                  Software consigliati e dipendenze.
                                                                (line  9)
 * chrome:                                Software consigliati e dipendenze.
-                                                               (line 49)
+                                                               (line 53)
 * chromium:                              Software consigliati e dipendenze.
-                                                               (line 49)
+                                                               (line 53)
 * conkeror:                              Software consigliati e dipendenze.
-                                                               (line 55)
+                                                               (line 59)
 * editor:                                Software consigliati e dipendenze.
-                                                               (line 31)
+                                                               (line 35)
 * ffmpeg:                                Software consigliati e dipendenze.
                                                                (line 12)
 * firefox:                               Software consigliati e dipendenze.
-                                                               (line 46)
+                                                               (line 50)
 * flashgot:                              Software consigliati e dipendenze.
                                                                (line 21)
 * icecat:                                Software consigliati e dipendenze.
-                                                               (line 46)
+                                                               (line 50)
 * iceweasel:                             Software consigliati e dipendenze.
-                                                               (line 46)
-* opera:                                 Software consigliati e dipendenze.
-                                                               (line 49)
-* pinfo:                                 Software consigliati e dipendenze.
+                                                               (line 50)
+* megatools:                             Software consigliati e dipendenze.
                                                                (line 27)
+* opera:                                 Software consigliati e dipendenze.
+                                                               (line 53)
+* pinfo:                                 Software consigliati e dipendenze.
+                                                               (line 31)
 * rtmpdump:                              Software consigliati e dipendenze.
                                                                (line 15)
 * xombrero:                              Software consigliati e dipendenze.
-                                                               (line 52)
+                                                               (line 56)
 * xterm:                                 Software consigliati e dipendenze.
                                                                (line 18)
 * xxxterm:                               Software consigliati e dipendenze.
-                                                               (line 52)
+                                                               (line 56)
 * youtube-dl:                            Software consigliati e dipendenze.
                                                                (line 24)
 
@@ -1490,29 +1496,29 @@ _zdl-devel - Lista di sviluppo_:
 
 
 Tag Table:
-Node: Top1185
-Node: Il comando ZDL5254
-Node: Servizi streaming/hosting13767
-Node: Avviare ZDL18394
-Node: Arrestare ZDL20850
-Node: Controllare i download21955
-Node: Manuali d'uso26207
-Node: Modi26623
-Node: Readline29918
-Node: Editor31470
-Node: Omonimie32695
-Node: IRC/XDCC34243
-Node: Torrent35952
-Node: Filtri36836
-Node: Creare nuove estensioni37157
-Node: Software consigliati e dipendenze38932
-Node: Conkeror40494
-Node: zdl-xterm e XXXTerm/Xombrero41518
-Node: Installazione e aggiornamento43442
-Node: Perché questo programma46757
-Node: Tags50645
-Node: Copying55245
-Node: Contatti56295
+Node: Top1241
+Node: Il comando ZDL5310
+Node: Servizi streaming/hosting13823
+Node: Avviare ZDL18450
+Node: Arrestare ZDL20906
+Node: Controllare i download22011
+Node: Manuali d'uso26263
+Node: Modi26679
+Node: Readline29974
+Node: Editor31526
+Node: Omonimie32751
+Node: IRC/XDCC34299
+Node: Torrent36008
+Node: Filtri36892
+Node: Creare nuove estensioni37213
+Node: Software consigliati e dipendenze38988
+Node: Conkeror40664
+Node: zdl-xterm e XXXTerm/Xombrero41688
+Node: Installazione e aggiornamento43612
+Node: Perché questo programma46927
+Node: Tags50815
+Node: Copying55564
+Node: Contatti56614
 
 End Tag Table
 

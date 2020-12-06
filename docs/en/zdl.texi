@@ -38,7 +38,7 @@
 
 @dircategory Network Applications
 @direntry
-* ZigzagDownLoader: (zdl). Download manager for Wget, Axel, cURL and RTMPDump. It has extensions for file hosting and video streaming services.
+* ZigzagDownLoader: (zdl). Download manager for Aria2, Wget, Axel, cURL, MegaDL (megatools), youtube-dl, RTMPDump and XDCC downloader. It has extensions for file hosting and video streaming services.
 @end direntry
 
 @ifinfo
@@ -1033,6 +1033,10 @@ Firefox extension/Iceweasel/Icecat
 @pindex youtube-dl
 @item youtube-dl
 Python script that expands and extends the ZDL extensions
+
+@pindex megatools
+@item megatools
+The @emph{megatools} package provides the @emph{megadl} downloader to download from the @emph{Mega} service
 
 @pindex pinfo
 @item pinfo

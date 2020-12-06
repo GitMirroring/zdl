@@ -26,7 +26,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
 
 INFO-DIR-SECTION Network Applications
 START-INFO-DIR-ENTRY
-* ZigzagDownLoader: (zdl). Download manager for Wget, Axel, cURL and RTMPDump. It has extensions for file hosting and video streaming services.
+* ZigzagDownLoader: (zdl). Download manager for Aria2, Wget, Axel, cURL, MegaDL (megatools), youtube-dl, RTMPDump and XDCC downloader. It has extensions for file hosting and video streaming services.
 END-INFO-DIR-ENTRY
 
 
@@ -1047,6 +1047,10 @@ _Flashgot_
 _youtube-dl_
      Python script that expands and extends the ZDL extensions
 
+_megatools_
+     The _megatools_ package provides the _megadl_ downloader to
+     download from the _Mega_ service
+
 _pinfo_
      _lynx_-style program to browse _info_ files: better than _info_
      and more aesthetically similar to ZDL
@@ -1368,35 +1372,37 @@ Index of programs
 * axel:                                  Recommended software and dependencies.
                                                                (line  9)
 * chrome:                                Recommended software and dependencies.
-                                                               (line 48)
+                                                               (line 52)
 * chromium:                              Recommended software and dependencies.
-                                                               (line 48)
+                                                               (line 52)
 * conkeror:                              Recommended software and dependencies.
-                                                               (line 54)
+                                                               (line 58)
 * editor:                                Recommended software and dependencies.
-                                                               (line 31)
+                                                               (line 35)
 * ffmpeg:                                Recommended software and dependencies.
                                                                (line 12)
 * firefox:                               Recommended software and dependencies.
-                                                               (line 45)
+                                                               (line 49)
 * flashgot:                              Recommended software and dependencies.
                                                                (line 21)
 * icecat:                                Recommended software and dependencies.
-                                                               (line 45)
+                                                               (line 49)
 * iceweasel:                             Recommended software and dependencies.
-                                                               (line 45)
-* opera:                                 Recommended software and dependencies.
-                                                               (line 48)
-* pinfo:                                 Recommended software and dependencies.
+                                                               (line 49)
+* megatools:                             Recommended software and dependencies.
                                                                (line 27)
+* opera:                                 Recommended software and dependencies.
+                                                               (line 52)
+* pinfo:                                 Recommended software and dependencies.
+                                                               (line 31)
 * rtmpdump:                              Recommended software and dependencies.
                                                                (line 15)
 * xombrero:                              Recommended software and dependencies.
-                                                               (line 51)
+                                                               (line 55)
 * xterm:                                 Recommended software and dependencies.
                                                                (line 18)
 * xxxterm:                               Recommended software and dependencies.
-                                                               (line 51)
+                                                               (line 55)
 * youtube-dl:                            Recommended software and dependencies.
                                                                (line 24)
 
@@ -1458,29 +1464,29 @@ _zdl-devel - Development list_:
 
 
 Tag Table:
-Node: Top1193
-Node: The ZDL command5077
-Node: Streaming/hosting services13093
-Node: Start ZDL17507
-Node: Stop ZDL19840
-Node: Check the downloads20875
-Node: User manuals24916
-Node: Modes25309
-Node: Readline28344
-Node: Editor29799
-Node: Homonymy30957
-Node: IRC/XDCC32466
-Node: Torrent34102
-Node: Filters34926
-Node: Create new extensions35214
-Node: Recommended software and dependencies36920
-Node: Conkeror38416
-Node: zdl-xterm and XXXTerm/Xombrero39398
-Node: Installation and update41269
-Node: Why this program44282
-Node: Tags47972
-Node: Copying52599
-Node: Contacts53677
+Node: Top1249
+Node: The ZDL command5133
+Node: Streaming/hosting services13149
+Node: Start ZDL17563
+Node: Stop ZDL19896
+Node: Check the downloads20931
+Node: User manuals24972
+Node: Modes25365
+Node: Readline28400
+Node: Editor29855
+Node: Homonymy31013
+Node: IRC/XDCC32522
+Node: Torrent34158
+Node: Filters34982
+Node: Create new extensions35270
+Node: Recommended software and dependencies36976
+Node: Conkeror38588
+Node: zdl-xterm and XXXTerm/Xombrero39570
+Node: Installation and update41441
+Node: Why this program44454
+Node: Tags48144
+Node: Copying52924
+Node: Contacts54002
 
 End Tag Table
 
