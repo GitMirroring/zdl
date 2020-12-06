@@ -51,7 +51,9 @@ function delete_tmp_complete_inexistent (K, line) {
              (((url_out[K] ~ /^magnet/) || exists(url_out[K])) && (! is_dir(file_out[K]))) &&
              (! exists(file_out[K] ".part"))))
         {
-	    system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
+	    #system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
+            rm_file(".zdl_tmp/"file_out[K]"_stdout.*")
+            
 	    cmd = "sed -i -r 's|" file_out[K] "||g' .zdl_tmp/notify_list.txt"
 	    cmd | getline
 	    close(cmd)
@@ -143,10 +145,15 @@ function check_stdout () {
     }
 
     if ((percent_out[i] == 0) && (! check_pid(pid_out[i]))) {
-	system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp")
-	if (error_code[i] == 8) {
-	    system("rm -f " file_out[i] " " file_out[i] ".aria2")
-	    delete error_code[i]
+	#system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp")
+        rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+
+        if (error_code[i] == 8) {
+	    #system("rm -f " file_out[i] " " file_out[i] ".aria2")
+            rm_file(file_out[i])
+            rm_file(file_out[i] ".aria2")
+
+            delete error_code[i]
 	}
     }
 
@@ -216,7 +223,10 @@ function check_stdout () {
 		 ! length_saved[i] &&
 		 length_saved[i]>0 ) ||
 		progress_end[i]) {
-		system("rm -f .zdl_tmp/" file_out[i] "_stdout.* .zdl_tmp/" file_out[i] ".MEGAenc_stdout.*")
+		#system("rm -f .zdl_tmp/" file_out[i] "_stdout.* .zdl_tmp/" file_out[i] ".MEGAenc_stdout.*")
+                rm_file(".zdl_tmp/" file_out[i] "_stdout.*")
+                rm_file(".zdl_tmp/" file_out[i] ".MEGAenc_stdout.*")
+                
 		if (exists(".zdl_tmp/notify_list.txt")) {
 		    cmd = "sed -i -r 's|" file_out[i] "||g' .zdl_tmp/notify_list.txt"
 		    cmd | getline
@@ -326,7 +336,11 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    bash_var("url_in", "")
 	    percent_out[i] = 0
 	    code = code "_log 3 \"" url_out[i] "\"; "
-	    system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp " file_out[i] " " file_out[i] ".st " file_out[i] ".aria2")
+	    #system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp " file_out[i] " " file_out[i] ".st " file_out[i] ".aria2")
+            rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+            rm_file(file_out[i])
+            rm_file(file_out[i] ".st")
+            rm_file(file_out[i] ".aria2")
 	}
 	else if ((speed_out[i] > 0) && (speed_out[i] ~ /^[0-9]+$/)) {
 	    speed_out_type[i] = "KB/s"
@@ -453,7 +467,11 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    bash_var("url_in", "")
 	    percent_out[i] = 0
 	    code = code "_log 3 \"" url_out[i] "\"; "
-	    system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp " file_out[i] " " file_out[i] ".aria2 " file_out[i] ".st")
+	    #system("rm -f .zdl_tmp/"file_out[i]"_stdout.tmp " file_out[i] " " file_out[i] ".aria2 " file_out[i] ".st")
+            rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+            rm_file(file_out[i])
+            rm_file(file_out[i] ".st")
+            rm_file(file_out[i] ".aria2")
 	}
 	else if ((speed_out[i] > 0) && (speed_out[i] ~ /^[0-9]+$/)) {
 	    speed_out_type[i] = "KB/s"
@@ -508,7 +526,11 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    bash_var("url_in", "")
 	    percent_out[i] = 0
 	    code = code "_log 3 \"" url_out[i] "\"; "
-	    system("rm -f .zdl_tmp/"file_out[i]"_stdout.* " file_out[i] " " file_out[i] ".st")
+	    #system("rm -f .zdl_tmp/"file_out[i]"_stdout.* " file_out[i] " " file_out[i] ".st")
+            rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+            rm_file(file_out[i])
+            rm_file(file_out[i] ".st")
+            rm_file(file_out[i] ".aria2")
 	}
 	else if (progress_line) {
 	    split(progress_line, progress_elems, /[ ]*[%]*/)
@@ -581,8 +603,13 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		speed_out[i] = (length_saved[i] / 1024) / elapsed_time
 		speed_out_type[i] = "KB/s"
 	    }
-	    if (! pid_alive[i] && length_saved[i] < length_out[i])
-		system("rm -f " file_out[i])
+	    if (! pid_alive[i] && length_saved[i] < length_out[i]) {
+		#system("rm -f " file_out[i])
+                rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+                rm_file(file_out[i])
+                rm_file(file_out[i] ".st")
+                rm_file(file_out[i] ".aria2")
+            }
 	}
 
     }
@@ -728,7 +755,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_dir(file_out[i])
 	    percent_out[i] = 100
-            system("rm -f " file_out_encoded[i])
+            rm_file(file_out_encoded[i])
 	}
 	else if (progress_line) {
 	    cmd = "date +%s"
@@ -747,8 +774,13 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		speed_out[i] = speed_elems[1]
 		speed_out_type[i] = speed_elems[2] 
 	    }
-	    if (! pid_alive[i] && length_saved[i] < length_out[i])
-		system("rm -f " file_out[i])
+	    # if (! pid_alive[i] && length_saved[i] < length_out[i]) {
+	    #     #system("rm -f " file_out[i])
+            #     rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+            #     rm_file(file_out[i])
+            #     rm_file(file_out[i] ".st")
+            #     rm_file(file_out[i] ".aria2")
+            # }
 	}
     }
     
@@ -892,9 +924,14 @@ BEGIN {
     if (FNR == 8) {        
         start_time = $0
     }
-    if (FNR == 9) {        
-        if  (dler ~ /MegaDL/) {
+    if  (dler ~ /MegaDL/) {
+        if (FNR == 9)
             length_out[i] = $0
+
+        if ($0 ~ /"g":\s"/) {
+            match($0, /"g":\s"(.+)"/, matched)
+            if (matched[1])
+                url_out_file[i] = matched[1]
         }
     }
 
@@ -951,7 +988,11 @@ END {
 		if ((url_out[I] == url_out[J]) &&
 		    (file_out[I] != file_out[J]) &&
 		    (check_pid(pid_out[I]))) {
-		    system("rm -f .zdl_tmp/"file_out[J]"_stdout.tmp " file_out[J] " " file_out[J] ".st " file_out[J] ".aria2")
+		    #system("rm -f .zdl_tmp/"file_out[J]"_stdout.tmp " file_out[J] " " file_out[J] ".st " file_out[J] ".aria2")
+                    rm_file(".zdl_tmp/"file_out[J]"_stdout.tmp")
+                    rm_file(file_out[J])
+                    rm_file(file_out[J] ".st")
+                    rm_file(file_out[J] ".aria2")
 		}
 	    }
 	}

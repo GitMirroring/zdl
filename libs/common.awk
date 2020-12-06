@@ -91,6 +91,11 @@ function cat (file,      c, line) {
     }
 }
 
+function rm_file (file) {
+    if (file !~ /^[.]+$/)
+        system("rm -fr " file)
+}
+
 function rm_line (line, file) {
     print "set_line_in_file - \"" line "\" \"" file "\"; " >>".zdl_tmp/awk2bash_commands"
 }

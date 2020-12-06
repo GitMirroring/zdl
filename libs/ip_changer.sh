@@ -57,6 +57,7 @@ function check_ip {
 	else
 	    $reconnecter &>/dev/null
 	fi
+        countdown- 5
 
 	rm -rf "$path_tmp/links_timer.txt" "$path_tmp/cookies.zdl"
 	
