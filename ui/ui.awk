@@ -68,7 +68,8 @@ function separator () {
 function show_downloads_extended () {
     for (i=0; i<length(pid_out); i++) {
 	length_H = human_length(length_out[i])
-	speed = int(speed_out[i]) speed_out_type[i]
+	#speed = int(speed_out[i]) speed_out_type[i]
+        speed = speed_out[i] speed_out_type[i]
 	
 	if (exists(file_out[i]))
 	    length_saved[i] = size_file(file_out[i])
@@ -110,7 +111,9 @@ function show_downloads_extended () {
 function show_downloads () {
     for (i=0; i<length(pid_out); i++) {
 	code = code BBlue "File: " Color_Off file_out[i] BBlue "\nLink: " Color_Off url_out[i] "\n"
-	speed = int(speed_out[i]) speed_out_type[i]
+	#speed = int(speed_out[i]) speed_out_type[i]
+        speed = speed_out[i] speed_out_type[i]
+        
 	if (exists(file_out[i]))
 	    length_saved[i] = size_file(file_out[i])
 	    
@@ -153,9 +156,9 @@ function show_downloads_lite () {
 	    downloader = downloader_out[i]
 
 	if (length(downloader)<5)
-	    downloader = downloader ":"
+	    downloader = " " downloader #":"
 
-	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +2) " \n"
+	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +3) " \n"
     }
     
     if (no_clear != "no-clear") clean_lite()
@@ -251,7 +254,9 @@ function make_progress (size_bar, progress_bar, progress) {
 
 	    diff_bar_color = BGreen
 	    bar_color = On_Green 
-	    speed = int(speed_out[i]) speed_out_type[i]
+	    #speed = int(speed_out[i]) speed_out_type[i]
+            speed = speed_out[i] speed_out_type[i]
+            
 	    if (eta_out[i])
 		eta = eta_out[i]
 	    
@@ -306,7 +311,8 @@ function make_progress (size_bar, progress_bar, progress) {
     
     if (! progress) {
 	if (! info) {
-	    info = sprintf("%-5s" Color_Off BBlue "%-9s" Color_Off "%-12s", int(percent_out[i]) "%", speed, eta)
+#	    info = sprintf("%-5s" Color_Off BBlue "%-9s" Color_Off "%-12s", int(percent_out[i]) "%", speed, eta)
+            info = sprintf("%-5s" Color_Off BBlue "%-12s" Color_Off "%-9s", int(percent_out[i]) "%", speed, eta)
 	}
 	progress = progress_bar Color_Off diff_bar_color " " info
 	length_info[i] = length(info)

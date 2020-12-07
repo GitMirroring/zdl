@@ -275,7 +275,8 @@ function yellow_progress () {
     else {
 	percent_out[i] = 0
 	speed_out[i] = 0
-	speed_out_type[i] = "KB/s"
+	#speed_out_type[i] = "KB/s"
+        speed_out_type[i] = "K/s"
 	## mancano ancora (secondi):
 	eta_out[i] = ""
 	length_saved[i] = 0
@@ -343,7 +344,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
             rm_file(file_out[i] ".aria2")
 	}
 	else if ((speed_out[i] > 0) && (speed_out[i] ~ /^[0-9]+$/)) {
-	    speed_out_type[i] = "KB/s"
+	    # speed_out_type[i] = "KB/s"
+            speed_out_type[i] = "K/s"
 	    ## mancano ancora:
 	    if (int(speed_out[i]) != 0 && int(speed_out[i]) > 0) {
 		eta_out[i] = int(((length_out[i] / 1024) * (100 - percent_out[i]) / 100) / int(speed_out[i]))
@@ -362,7 +364,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		length_saved[i] = int(progress_elems[2])
 		old_saved[i] = int(progress_elems[3])
 		length_out[i] = int(progress_elems[4])
-		speed_out_type[i] = "KB/s"
+		#speed_out_type[i] = "KB/s"
+                speed_out_type[i] = "K/s"
 		break
 	    }
 	}
@@ -474,7 +477,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
             rm_file(file_out[i] ".aria2")
 	}
 	else if ((speed_out[i] > 0) && (speed_out[i] ~ /^[0-9]+$/)) {
-	    speed_out_type[i] = "KB/s"
+	    #speed_out_type[i] = "KB/s"
+            speed_out_type[i] = "K/s"
 	    length_saved[i] = int((length_out[i] * percent_out[i]) / 100)
 	    if ((! no_check) && (percent_out[i] ~ /^[0-9]+$/) && (percent_out[i] > 0))
 		print percent_out[i] "\n" speed_out[i] "\n" speed_out_type[i] "\n" eta_out[i] "\n" length_saved[i] > ".zdl_tmp/"file_out[i]"_stdout.yellow"
@@ -538,8 +542,10 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    speed_out[i] = progress_elems[length(progress_elems)-1]
 	    eta_out[i] = progress_elems[length(progress_elems)]
 	    if (speed_out[i] ~ /B/) speed_out_type[i]="B/s"
-	    if (speed_out[i] ~ /K/) speed_out_type[i]="KB/s"
-	    if (speed_out[i] ~ /M/) speed_out_type[i]="MB/s"
+	    # if (speed_out[i] ~ /K/) speed_out_type[i]="KB/s"
+	    # if (speed_out[i] ~ /M/) speed_out_type[i]="MB/s"
+	    if (speed_out[i] ~ /K/) speed_out_type[i]="K/s"
+	    if (speed_out[i] ~ /M/) speed_out_type[i]="M/s"
 	    sub(/[BKM]/, "", speed_out[i])
 	    length_saved[i] = size_file(file_out[i])
 	    if (! length_saved[i]) length_saved[i] = 0
@@ -553,7 +559,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    ## giallo: sostituire ciò che segue con un sistema di recupero dati precedenti (barra di colore giallo)
 	    percent_out[i] = 0
 	    speed_out[i] = 0
-	    speed_out_type[i] = "KB/s"
+	    #speed_out_type[i] = "KB/s"
+            speed_out_type[i] = "K/s"
             ## mancano ancora (secondi):
 	    eta_out[i] = ""
 	    length_saved[i] = 0
@@ -601,7 +608,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		length_saved[i] = size_file(file_out[i])
 		if (! length_saved[i]) length_saved[i] = 0
 		speed_out[i] = (length_saved[i] / 1024) / elapsed_time
-		speed_out_type[i] = "KB/s"
+		#speed_out_type[i] = "KB/s"
+                speed_out_type[i] = "K/s"
 	    }
 	    if (! pid_alive[i] && length_saved[i] < length_out[i]) {
 		#system("rm -f " file_out[i])
@@ -625,7 +633,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    speed_out[i] = progress_elems[length(progress_elems)]
 
 	    if (speed_out[i] ~ /k$/) {
-		speed_out_type[i] = "KB/s"
+		# speed_out_type[i] = "KB/s"
+                speed_out_type[i] = "K/s"
 		sub(/k$/, "", speed_out[i])
 	    }
 	    else {
@@ -638,7 +647,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	}
 	else {
 	    speed_out[i] = 0
-	    speed_out_type[i] = "KB/s"
+	    #speed_out_type[i] = "KB/s"
+            speed_out_type[i] = "K/s"
 	}
 	length_saved[i] = size_file(file_out[i])
 
@@ -660,7 +670,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		    match(progress_line, /bitrate=\s*(.+)kbits/, bitrate)
 		    match(progress_line, /speed=\s*(.+)x/, speed)
 		    speed_out[i] = int( (bitrate[1] / 8) * speed[1] )
-		    speed_out_type[i] = "KB/s"
+		    # speed_out_type[i] = "KB/s"
+                    speed_out_type[i] = "K/s"
 		}
 	    }
 
@@ -772,7 +783,14 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		if (! length_saved[i]) length_saved[i] = 0
                 split(progress_elems[8], speed_elems, /[^0-9.,a-zA-Z\/]+/)
 		speed_out[i] = speed_elems[1]
-		speed_out_type[i] = speed_elems[2] 
+		speed_out_type[i] = speed_elems[2]
+
+                # if (speed_out_type[i] ~ /K/) speed_out_type[i]="KB/s"
+                # else if (speed_out_type[i] ~ /M/) speed_out_type[i]="MB/s"
+                # else if (speed_out_type[i] ~ /B/) speed_out_type[i]="B/s"
+                if (speed_out_type[i] ~ /K/) speed_out_type[i]="K/s"
+                else if (speed_out_type[i] ~ /M/) speed_out_type[i]="M/s"
+                else if (speed_out_type[i] ~ /B/) speed_out_type[i]="B/s"
 	    }
 	    # if (! pid_alive[i] && length_saved[i] < length_out[i]) {
 	    #     #system("rm -f " file_out[i])
@@ -785,7 +803,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     }
     
     if (! speed_out[i]) speed_out[i] = 0
-    if (! speed_out_type[i]) speed_out_type[i] = "KB/s"
+    if (! speed_out_type[i]) speed_out_type[i] = "K/s" #speed_out_type[i] = "KB/s"
     if (! length_saved[i]) length_saved[i] = 0
     if (! percent_out[i]) percent_out[i] = 0
 
