@@ -772,7 +772,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
                 system("mv " file_out[i] "enc/" file_out[i] " .")
                 system("rm -rf " file_out[i] "enc")
             }
-            #rm_file(file_out_encoded[i])
+            rm_file(file_out_encoded[i])
 	}
 	else if (progress_line) {
 	    cmd = "date +%s"
