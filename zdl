@@ -1798,9 +1798,12 @@ fi
 	        then
 		    display_set_livestream
 		    
-	        else		
+	        else
+                    # stty sane
+                    # cursor on
+
 		    readline_links
-		    
+
 		    post_readline=true
 		    
 		    bind -x "\"\ex\":\"\"" 2>/dev/null

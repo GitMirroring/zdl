@@ -287,20 +287,21 @@ function readline_links {
     ## bind -x "\"\C-l\":\"\"" 2>/dev/null
     bind -x "\"\C-x\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
     bind -x "\"\ex\":\"unset binding; print_c 1 '${msg_end_input}'; return\"" 2>/dev/null
-
     cursor on
     
     while :
     do
 	trap_sigint
+        #stty echo
+        bindings
 	read -e link
+
 	link=$(sanitize_url "$link")
 
 	[ -n "$link" ] &&
 	    set_link + "$link"
 	unset break_loop
     done
-    
 }
 
 
@@ -329,7 +330,6 @@ function bindings {
 
     elif [ "$this_mode" == "lite" ]
     then
-
 	trap_sigint return
     fi
     
