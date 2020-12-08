@@ -30,6 +30,22 @@ function tty () {
     return t
 }
 
+function get_command_pid (command, args, pid) {
+    gsub(/\s/, "\\0", args)
+    gsub(/\//, "\\/", args)
+    gsub(/\./, "\\.", args)
+    gsub(/\-/, "\\-", args)
+    test_string = command "\\0" args 
+    print "test_string: " test_string >> "PIDAWK"
+    
+    c = "awk '/" test_string "/{print FILENAME}' /proc/*/cmdline"
+    c | getline proc_pid_cmdline
+    close(c)
+
+    match(proc_pid_cmdline, /\/([0-9]+)\//, matched)
+    pid = matched[1]
+    print pid
+}
 
 function check_instance_daemon () {
     pid = $1

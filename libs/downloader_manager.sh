@@ -376,7 +376,7 @@ $aria2_parts" >"$path_tmp/${file_in}_stdout.tmp"
 		   "$url_in_file"   2>&1 |
                 stdbuf -i0 -o0 -e0 tr -d "\r" &>>"$path_tmp/${file_in}_stdout.tmp" &
 
-	    pid_in=$!    
+            get_command_pid pid_in megadl "${opts[@]}" 
             
 	    echo -e "${pid_in}
 $url_in
@@ -573,7 +573,8 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
 		pid_in=$!
-
+                #get_command_pid pid_in megadl "${opts[@]}"
+                
 	    elif [ "$youtubedl_m3u8" == "$url_in" ] ||
                      [ "$youtubedl_m3u8" == "$url_in_file" ]
 	    then

@@ -766,7 +766,12 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_dir(file_out[i])
 	    percent_out[i] = 100
-            rm_file(file_out_encoded[i])
+            if (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) {
+                system("mv " file_out[i] " " file_out[i] "enc")
+                system("mv " file_out[i] "enc/" file_out[i] " .")
+                system("rm -rf " file_out[i] "enc")
+            }
+            #rm_file(file_out_encoded[i])
 	}
 	else if (progress_line) {
 	    cmd = "date +%s"
@@ -951,6 +956,7 @@ BEGIN {
             if (matched[1])
                 url_out_file[i] = matched[1]
         }
+        #pid_out[i] = get_command_pid("megadl", "--debug api --path " file_out[i] " " url_out[i])
     }
 
     if ($0 ~ /Length:/ && dler == "Wget") {

@@ -44,15 +44,18 @@ then
         url_in_file="$url_in"
         test_tmp=$(mktemp)
         megadl --debug api \
-               "$url_in" &> "$test_tmp" & pid=$!
+               "$url_in" &> "$test_tmp" &
+        pid_mega=$!
         
-        while [[ ! "$(cat "$test_tmp")" =~ \% ]]
+        while [[ ! "$(cat "$test_tmp")" =~ '%' ]]
         do
             sleep 0.1
         done
-        kill -9 $pid
+        kill $pid_mega 
         
         file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
+        rm -f "$file_in_encoded"
+        
         file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
         length_in=$(awk '{match($0, /"s":\s(.+),/, matched); if (matched[1]) print matched[1]}' $test_tmp)
         
