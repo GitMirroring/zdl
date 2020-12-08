@@ -715,7 +715,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	if (!lengh_saved[i])
 	    length_saved[i] = size_file(file_out[i] ".part")
 	
-	if (progress_end[i]) {
+	if ((progress_end[i]) || (exists(file_out[i]))) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    

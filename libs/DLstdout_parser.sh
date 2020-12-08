@@ -29,7 +29,7 @@ function data_stdout {
     shopt -s dotglob
     rm -f "$path_tmp"/._stdout.tmp
     #    tmp_files=( "$path_tmp"/?*_stdout.tmp )
-    tmp_files=( $(awk '/_stdout.tmp/{print "'"$path_tmp/"'"$0}' < <(ls -a "$path_tmp")) )
+    tmp_files=( $(awk '/_stdout.tmp$/{print "'"$path_tmp/"'"$0}' < <(ls -a "$path_tmp")) )
     shopt -u nullglob
     shopt -u dotglob
     unset pid_alive pid_out file_out url_out percent_out length_saved length_out no_check
@@ -50,7 +50,7 @@ function data_stdout {
     
     if (( ${#tmp_files[*]}>0 ))
     then
-	if [[ "$(head -n3 ${tmp_files[@]})" =~ (cURL|RTMPdump) ]]
+	if [[ "$(head -n3 ${tmp_files[@]}*)" =~ (cURL|RTMPdump) ]]
 	then
 	    for ((i=0; i<${#tmp_files[*]}; i++))
 	    do
@@ -59,6 +59,14 @@ function data_stdout {
 		    tr "\r" "\n" < ${tmp_files[$i]} > ${tmp_files[i]}.newline
 		    tmp_files[$i]=${tmp_files[$i]}.newline
 		fi
+                # if [[ "$(head -n3 ${tmp_files[$i]}.head | tail -n1)" =~ ^(FFMpeg)$ ]]
+                # then
+                #     cp ${tmp_files[$i]}.head ${tmp_files[$i]}.newout
+                #     stdbuf -i0 -o0 -e0 tr '\r' '\n' < ${tmp_files[i]} |
+	    	#         stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> ${tmp_files[i]}.newout
+		#     tmp_files[$i]=${tmp_files[$i]}.newout
+                # fi
+
 	    done
 	fi
 

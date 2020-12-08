@@ -35,21 +35,21 @@ function check_pid {
 }
 
 function get_pid_regex {
-    awk "BEGINFILE{if (ERRNO != \"\") nextfile} /$1/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/*/cmdline
+    awk "BEGINFILE{if (ERRNO != \"\") nextfile} /$@/&&!/awk/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/*/cmdline
 }
 
-function get_command_pid {
-    local test_string
-    declare -a args=( "$@" )
-    declare -n pid="${args[0]}"
+# function get_command_pid {
+#     local test_string
+#     declare -a args=( "$@" )
+#     declare -n pid="${args[0]}"
     
-    for i in $(seq 1 $((${#args[@]} -1)))
-    do
-        test_string+="${args[$i]}\\0"
-    done
+#     for i in $(seq 1 $((${#args[@]} -1)))
+#     do
+#         test_string+="${args[$i]}\\0"
+#     done
 
-    pid=$(get_pid_regex "$test_string")
-} 
+#     pid=$(get_pid_regex "$test_string")
+# } 
 
 function check_pid_regex {
     local PID="$1" \
