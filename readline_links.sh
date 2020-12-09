@@ -25,7 +25,7 @@
 #
 #set -x
 
-set +o history
+#set +o history
 
 file_log=zdl_log.txt
 path_usr="/usr/local/share/zdl"
