@@ -1799,12 +1799,17 @@ fi
 		    display_set_livestream
 		    
 	        else
-                    # stty sane
-                    # cursor on
+                    #stty sane
+                    #cursor on
 
-                    #readline_links
-		    $path_usr/readline_links.sh 2>&1
+                    readline_links 2>&1
+		    # $path_usr/readline_links.sh 2>&1
+                    # case "$?" in
+                    #     1) bindings_quit;;
+                    #     2) bindings_kill;;
+                    # esac
 
+                    unset binding
 		    post_readline=true
 		    
 		    bind -x "\"\ex\":\"\"" 2>/dev/null

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 #
 # ZigzagDownLoader (ZDL)
 # 
@@ -25,12 +25,21 @@
 #
 #set -x
 
-#set +o history
+set +o history
 
 file_log=zdl_log.txt
 path_usr="/usr/local/share/zdl"
 source "$path_usr"/source_all.sh
 
 trap_sigint
-bindings
+bindings readline_links
+        
+bind -x "\"\C-q\":\"exit 1\"" 2>/dev/null
+bind -x "\"\C-k\":\"exit 2\"" 2>/dev/null
+
+bind -x "\"\eq\":\"exit 1\"" 2>/dev/null
+bind -x "\"\ek\":\"exit 2\"" 2>/dev/null
+
+# read -e prova
+# echo $prova
 readline_links
