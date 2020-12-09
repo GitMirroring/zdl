@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/bin/bash 
 #
 # ZigzagDownLoader (ZDL)
 # 
@@ -291,10 +291,11 @@ function readline_links {
     
     while :
     do
-	trap_sigint
-        #stty echo
-        bindings
+       	trap_sigint
+        stty echo
+        #bindings
 	read -e link
+        #input_text_bindings link
 
 	link=$(sanitize_url "$link")
 
@@ -422,7 +423,7 @@ function change_mode {
 	echo -en "$change_out"
 	trap_sigint
 	
-	[ -n "$binding" ] &&
+	[ -z "$post_readline" ] &&
 	    command -v setterm &>/dev/null &&
 	    setterm -cursor on
 
@@ -713,6 +714,27 @@ function input_text {
 
     else
 	ref=$(rlwrap -o cat)
+    fi
+    
+    stty $sttyset
+    cursor off
+}
+
+function input_text_bindings {
+    declare -n ref="$1"
+    local sttyset
+    
+    cursor on
+    sttyset=$(stty -a|tail -n4)
+    stty sane
+    bindings
+    
+    if [ "$2" == array ]
+    then	
+	ref=( $(readline-editor -o cat) )
+
+    else
+	ref=$(readline-editor -o cat)
     fi
     
     stty $sttyset

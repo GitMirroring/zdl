@@ -805,7 +805,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
             #     rm_file(file_out[i] ".st")
             #     rm_file(file_out[i] ".aria2")
             # }
-	}
+	}        
     }
     
     if (! speed_out[i]) speed_out[i] = 0
@@ -840,6 +840,13 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 
     #speed_out[i] = int(speed_out[i])
     percent_out[i] = int(percent_out[i])
+
+    # if ((percent_out[i] == 100) && (downloader_out[i] == "MegaDL") &&
+    #     is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) {
+    #     system("mv " file_out[i] " " file_out[i] "enc")
+    #     system("mv " file_out[i] "enc/" file_out[i] " .")
+    #     system("rm -rf " file_out[i] "enc")
+    # }
 
     array_out(speed_out[i], "speed_out")
     array_out(speed_out_type[i], "speed_out_type")

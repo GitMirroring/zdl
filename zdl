@@ -1802,7 +1802,8 @@ fi
                     # stty sane
                     # cursor on
 
-		    readline_links
+                    #readline_links
+		    $path_usr/readline_links.sh 2>&1
 
 		    post_readline=true
 		    
