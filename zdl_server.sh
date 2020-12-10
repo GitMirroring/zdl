@@ -1357,7 +1357,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			then
 			    kill -9 "${pid_out[j]}" &>/dev/null
 
-			    rm -f "${file_out[j]}"         \
+			    rm -rf "${file_out[j]}"        \
 			       "${file_out[j]}".st         \
 			       "${file_out[j]}".aria2      \
 			       "${file_out[j]}".zdl        \
@@ -1437,7 +1437,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    if test -s "${line[2]}" &&
 		    ( [ "${line[2]}" == "links.txt" ] || [ "${line[2]}" == "zdl_log.txt" ] )
 	    then
-		rm -f "${line[2]}"
+		rm -rf "${line[2]}"
 	    fi
 	    ;;
 
