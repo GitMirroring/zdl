@@ -292,14 +292,8 @@ function readline_links {
     while :
     do
        	trap_sigint
-        ## echo on
-	#echo -en "\033[?0;0;0c"
-        ## echo off
-	#echo -en "\033[?30;30;30c"
 
 	read -e link
-        #input_text_bindings link
-
 	link=$(sanitize_url "$link")
 
 	[ -n "$link" ] &&
@@ -431,8 +425,7 @@ function change_mode {
 	    ;;
 	
 	editor)
-	    $editor "$path_tmp"/links_loop.txt
-	    clean_file "$start_file"
+	    "$editor" "$start_file"
 	    ;;
     
 	info)
@@ -470,10 +463,10 @@ function change_mode {
 	echo -en "$change_out"
 	trap_sigint
 	
-	( [ -n "$binding" ] || [ -z "$post_readline" ] ) &&
+	( [ -n "$binding" ] && [ -z "$post_readline" ] ) &&
 	    command -v setterm &>/dev/null &&
 	    setterm -cursor on
-
+        
     elif [ "$this_mode" == "lite" ]
     then
 	header_lite
@@ -591,7 +584,7 @@ function interactive {
 				       [ ! -f "${file_out[$i]}.zdl" ] &&
 				       [ "${percent_out[i]}" != 100 ]
 				then
-				    rm -f "${file_out[$i]}" 
+				    rm -rf "${file_out[$i]}" 
 				fi
 			    done
 			    ;;
@@ -604,9 +597,9 @@ function interactive {
 				kill_url "${url_out[$i]}" 'irc-pids'
 				
 				kill -9 ${pid_out[$i]} &>/dev/null
-				rm -f "${file_out[$i]}" \
-				   "${file_out[$i]}.st" \
-				   "${file_out[$i]}.zdl" \
+				rm -rf "${file_out[$i]}"   \
+				   "${file_out[$i]}.st"    \
+				   "${file_out[$i]}.zdl"   \
 				   "${file_out[$i]}.aria2" \
 				   "$path_tmp"/"${file_out[$i]}_stdout.tmp" \
 				   "$path_tmp"/"${file_out[$i]}.MEGAenc_stdout.tmp"
@@ -761,27 +754,6 @@ function input_text {
 
     else
 	ref=$(rlwrap -o cat)
-    fi
-    
-    stty $sttyset
-    cursor off
-}
-
-function input_text_bindings {
-    declare -n ref="$1"
-    local sttyset
-    
-    cursor on
-    sttyset=$(stty -a|tail -n4)
-    stty sane
-    bindings
-    
-    if [ "$2" == array ]
-    then	
-	ref=( $(readline-editor -o cat) )
-
-    else
-	ref=$(readline-editor -o cat)
     fi
     
     stty $sttyset

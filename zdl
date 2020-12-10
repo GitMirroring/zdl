@@ -1799,9 +1799,6 @@ fi
 		    display_set_livestream
 		    
 	        else
-                    #stty sane
-                    #cursor on
-
                     readline_links 2>&1
 		    # $path_usr/readline_links.sh 2>&1
                     # case "$?" in
@@ -1811,7 +1808,8 @@ fi
 
                     unset binding
 		    post_readline=true
-		    
+		    cursor off
+                    
 		    bind -x "\"\ex\":\"\"" 2>/dev/null
 		    bind -x "\"\C-x\":\"\"" 2>/dev/null
 	        fi

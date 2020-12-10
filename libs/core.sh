@@ -752,23 +752,27 @@ function check_in_file { 	## return --> no_download=1 / download=0
 }
 
 function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizioni
-    if [ -f "$1" ]
-    then
-	local file_to_clean="$1"
+    local file_to_clean="$1"
 
+    if [ -f "$file_to_clean" ]
+    then
 	## impedire scrittura non-lineare da più istanze di ZDL
 	if [ -f "${file_to_clean}-rewriting" ]
 	then
+            local timer_start=$(date +%s) timer_now
 	    while [ -f "${file_to_clean}-rewriting" ]
 	    do
-		sleeping 0.1
+                timer_now=$(date +%s)
+                if (( (timer_now - timer_start) >= 3 ))
+                then
+                    rm "${file_to_clean}-rewriting"
+                fi
+		sleeping 0.1                    
 	    done
 	fi
 	touch "${file_to_clean}-rewriting"
 
-	local lines=$(
-	    awk '!($0 in a){a[$0]; gsub(" ","%20"); print}' < "$file_to_clean" 
-	)
+	local lines="$(awk '!($0 in a){a[$0]; gsub(" ","%20"); print}' < "$file_to_clean")"
 
 	if [ -n "$lines" ]
 	then
@@ -776,9 +780,8 @@ function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizio
 	else
 	    rm -f "$file_to_clean"
 	fi
-
-	rm -f "${file_to_clean}-rewriting"
     fi
+    rm -f "${file_to_clean}-rewriting"
 }
 
 function check_start_file {
