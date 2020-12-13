@@ -729,7 +729,12 @@ function check_cloudflare {
 
     if grep jschl_answer <<< "$html" &>/dev/null
     then
-        print_c 2 "$(gettext "Detected Cloudflare")" 
+        print_c 2 "$(gettext "Detected Cloudflare")"
+
+        ######################
+        _log 38
+        ######################
+        
         return 0
     else
         return 1
