@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-06 02:18+0100\n"
+"POT-Creation-Date: 2020-12-13 16:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -21,7 +21,7 @@ msgid "No value entered: do you want to delete the previous value? (yes|*)"
 msgstr "Nessun valore inserito: vuoi cancellare il precedente valore? (sì|*)"
 
 #: ../config_manager.sh:48 ../config_manager.sh:163 ../uninstall_zdl.sh:73
-#: ../uninstall_zdl.sh:75 ../ui/ui.sh:829 ../ui/ui.sh:867
+#: ../uninstall_zdl.sh:75 ../ui/ui.sh:888 ../ui/ui.sh:926
 msgid "yes"
 msgstr "sì"
 
@@ -61,7 +61,7 @@ msgstr "Resetta l'account delle interfacce web (account del socket)"
 msgid "Manage hosting service accounts"
 msgstr "Gestisci gli account dei servizi di hosting"
 
-#: ../config_manager.sh:121 ../gui/gui.sh:35 ../gui/gui.sh:1366
+#: ../config_manager.sh:121 ../gui/gui.sh:35 ../gui/gui.sh:1389
 msgid "Quit"
 msgstr "Esci"
 
@@ -112,7 +112,7 @@ msgstr ""
 "Vuoi davvero resettare l'account dei socket? Potrai reimpostarlo "
 "dall'interfaccia web. (sì|*)"
 
-#: ../config_manager.sh:214 ../gui/gui.sh:1296 ../gui/gui.sh:1362
+#: ../config_manager.sh:214 ../gui/gui.sh:1294 ../gui/gui.sh:1385
 msgid "Options"
 msgstr "Opzioni"
 
@@ -208,11 +208,11 @@ msgstr "Vuoi davvero disinstallare ZigzagDownLoader?"
 msgid "Automatic compilation of zdl-wise.c"
 msgstr "Compilazione automatica di zdl-wise.c"
 
-#: ../updater.sh:105
+#: ../updater.sh:110
 msgid "ZDL update"
 msgstr "Aggiornamento di ZDL"
 
-#: ../updater.sh:106
+#: ../updater.sh:111
 msgid ""
 "The root user password is required.\\nRepeat the ZDL update using the "
 "terminal."
@@ -220,7 +220,7 @@ msgstr ""
 "È richiesta la password di root.\\nRipeti l'aggiornamento di ZDL usando il "
 "terminale"
 
-#: ../updater.sh:125
+#: ../updater.sh:130
 msgid ""
 "can download with Wget but strongly recommends Axel, because:\n"
 "- can significantly speed up the download\n"
@@ -234,7 +234,7 @@ msgstr ""
 "\n"
 "Per ulteriori informazioni su Axel: http://alioth.debian.org/projects/axel/\n"
 
-#: ../updater.sh:132
+#: ../updater.sh:137
 msgid ""
 "uses XTerm if launched from a graphical application such as Firefox/"
 "Iceweasel/Icecat (via Flashgot), Chrome/Chromium (via Download Assistant or "
@@ -244,12 +244,12 @@ msgstr ""
 "Icecat (tramite Flashgot), Chrome/Chromium (attraverso Download Assistant o "
 "Simple Get), XXXTerm/Xombrero e Conkeror:"
 
-#: ../updater.sh:141
+#: ../updater.sh:146
 #, sh-format
 msgid "WARNING: $dep is not installed on your system"
 msgstr "ATTENZIONE: $dep non è installato nel tuo sistema"
 
-#: ../updater.sh:143
+#: ../updater.sh:148
 #, sh-format
 msgid ""
 "\n"
@@ -268,52 +268,52 @@ msgstr ""
 "4) Esci da $PROG per installare $dep manualmente (puoi trovarlo qui: http://"
 "pkgs.org/search/?keyword=$dep)"
 
-#: ../updater.sh:150
+#: ../updater.sh:155
 msgid "Choose what to do (1-4):"
 msgstr "Scegli cosa fare:"
 
-#: ../updater.sh:177
+#: ../updater.sh:182
 msgid "Automatic installation failed"
 msgstr "Installazione automatica non riuscita"
 
-#: ../updater.sh:180
+#: ../updater.sh:185
 msgid "did not find the following package:"
 msgstr "non ha trovato il seguente pacchetto:"
 
-#: ../updater.sh:183
+#: ../updater.sh:188
 msgid "Errors in compilation or installation"
 msgstr "Errori nella compilazione o nell'installazione"
 
-#: ../updater.sh:197 ../updater.sh:451 ../updater.sh:459 ../updater.sh:465
-#: ../updater.sh:480 ../updater.sh:512 ../updater.sh:587
+#: ../updater.sh:202 ../updater.sh:456 ../updater.sh:464 ../updater.sh:470
+#: ../updater.sh:485 ../updater.sh:517 ../updater.sh:600
 msgid "Installing"
 msgstr "Installazione di"
 
-#: ../updater.sh:241
+#: ../updater.sh:246
 msgid "Enter the root password"
 msgstr "Digita la password di utente root"
 
-#: ../updater.sh:284
+#: ../updater.sh:289
 msgid "Update completed"
 msgstr "Aggiornamento completato"
 
-#: ../updater.sh:285
+#: ../updater.sh:290
 msgid "Update failed"
 msgstr "Aggiornamento fallito"
 
-#: ../updater.sh:325 ../updater.sh:382
+#: ../updater.sh:330 ../updater.sh:387
 msgid "failed. Please try again"
 msgstr "fallito. Riprova un'altra volta"
 
-#: ../updater.sh:329 ../updater.sh:386
+#: ../updater.sh:334 ../updater.sh:391
 msgid "saved successfully"
 msgstr "salvato con successo"
 
-#: ../updater.sh:392
+#: ../updater.sh:397
 msgid "Startup batch script installed:"
 msgstr "Script batch di avvio installato:"
 
-#: ../updater.sh:406
+#: ../updater.sh:411
 #, sh-format
 msgid ""
 "Below, the existing ZigzagDownLoader extensions,\n"
@@ -344,33 +344,33 @@ msgstr ""
 "\n"
 "ESTENSIONI:\n"
 
-#: ../updater.sh:419 ../updater.sh:422
+#: ../updater.sh:424 ../updater.sh:427
 msgid "README"
 msgstr "LEGGIMI"
 
-#: ../updater.sh:473
+#: ../updater.sh:478
 msgid "Recovery packages not found:"
 msgstr "Recupero pacchetti non trovati:"
 
-#: ../updater.sh:635
+#: ../updater.sh:648
 msgid "Successfully completed"
 msgstr "Completato con successo"
 
-#: ../updater.sh:642
+#: ../updater.sh:655
 msgid "ZigzagDownLoader update"
 msgstr "Aggiornamento di ZigzagDownLoader"
 
-#: ../updater.sh:643
+#: ../updater.sh:656
 msgid "ZigzagDownLoader updated with success"
 msgstr "ZigzagDownLoader aggiornato con successo"
 
-#: ../updater.sh:648 ../gui/gui.sh:602 ../gui/gui.sh:711 ../gui/gui.sh:753
-#: ../gui/gui.sh:809 ../gui/gui.sh:822 ../gui/gui.sh:1005 ../gui/gui.sh:1204
-#: ../gui/gui.sh:1272 ../gui/gui.sh:1310 ../gui/gui.sh:1411 ../gui/gui.sh:1489
+#: ../updater.sh:661 ../gui/gui.sh:610 ../gui/gui.sh:719 ../gui/gui.sh:761
+#: ../gui/gui.sh:817 ../gui/gui.sh:830 ../gui/gui.sh:1013 ../gui/gui.sh:1219
+#: ../gui/gui.sh:1287 ../gui/gui.sh:1333 ../gui/gui.sh:1434 ../gui/gui.sh:1520
 msgid "Close"
 msgstr "Chiudi"
 
-#: ../updater.sh:649
+#: ../updater.sh:662
 msgid "Restart ZDL"
 msgstr "Riavvia ZDL"
 
@@ -395,7 +395,7 @@ msgstr "Non chiederlo più in questa sessione"
 msgid "Postpone"
 msgstr "Rimanda"
 
-#: ../zdl.sh:79 ../gui/gui.sh:595 ../gui/gui.sh:1308
+#: ../zdl.sh:79 ../gui/gui.sh:603 ../gui/gui.sh:1331
 msgid "Update"
 msgstr "Aggiorna"
 
@@ -435,50 +435,50 @@ msgstr "Link da processare:"
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:449 ../extensions/ddl.sh:153 ../ui/ui.awk:317
+#: ../zdl.sh:448 ../extensions/ddl.sh:153 ../ui/ui.awk:327
 msgid "File URL"
 msgstr "URL del file"
 
-#: ../zdl.sh:759
+#: ../zdl.sh:803
 msgid "Temporary file deleted"
 msgstr "File temporanei cancellati"
 
-#: ../zdl.sh:760
+#: ../zdl.sh:804
 msgid "Cleaning of temporary files not carried out (non-existent files)"
 msgstr "Pulizia file temporanei non effettuata (file inesistenti)"
 
-#: ../zdl.sh:1059
+#: ../zdl.sh:1125
 msgid "The format conversion function depends on ffmpeg or avconv, not found"
 msgstr ""
 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non "
 "trovati"
 
-#: ../zdl.sh:1095
+#: ../zdl.sh:1161
 msgid "Started in daemon mode in %s"
 msgstr "Avviato in modalità demone in %s"
 
-#: ../zdl.sh:1096 ../zdl.sh:1106 ../gui/gui.sh:261 ../gui/gui.sh:283
+#: ../zdl.sh:1162 ../zdl.sh:1172 ../gui/gui.sh:261 ../gui/gui.sh:283
 #: ../gui/gui.sh:287
 msgid "You can control it with:"
 msgstr "Puoi controllarlo con:"
 
-#: ../zdl.sh:1105
+#: ../zdl.sh:1171
 msgid "An active instance of daemon mode already exists in %s"
 msgstr "Esiste già un'istanza attiva della modalità demone in %s"
 
-#: ../zdl.sh:1144 ../gui/gui.sh:1224
+#: ../zdl.sh:1210 ../gui/gui.sh:1239
 msgid "New socket started at the port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:1151 ../gui/gui.sh:1230
+#: ../zdl.sh:1217 ../gui/gui.sh:1245
 msgid "Socket already in use at the port"
 msgstr "Socket già in uso alla porta"
 
-#: ../zdl.sh:1156
+#: ../zdl.sh:1222
 msgid "Socket not started at the port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:1362
+#: ../zdl.sh:1428
 msgid ""
 "Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = "
 "[NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
@@ -486,23 +486,23 @@ msgstr ""
 "Opzione deprecata: '--multi=[NUMERO]' è sostituita da '--max-"
 "downloads=[NUMERO]'. Resta invariata l'opzione breve '-m [NUMERO]'\\n"
 
-#: ../zdl.sh:1385
+#: ../zdl.sh:1451
 msgid "HTTP proxy detected: %s"
 msgstr "Rilevato proxy HTTP: %s"
 
-#: ../zdl.sh:1390
+#: ../zdl.sh:1456
 msgid "IP address: %s"
 msgstr "Indirizzo IP: %s"
 
-#: ../zdl.sh:1393
+#: ../zdl.sh:1459
 msgid "IP address not detected"
 msgstr "Indirizzo IP non rilevato"
 
-#: ../zdl.sh:1449
+#: ../zdl.sh:1515
 msgid "A file already exists with the same name as"
 msgstr "Esiste già un file con lo stesso nome di"
 
-#: ../zdl.sh:1456
+#: ../zdl.sh:1522
 #, sh-format
 msgid ""
 "The file list will be saved in $print_out\\n(you can also use it to "
@@ -511,44 +511,44 @@ msgstr ""
 "La lista dei file verrà salvata in $print_out\\n(puoi anche usarla per "
 "comunicare i file in scaricamento a un altro programma)\\n"
 
-#: ../zdl.sh:1495
+#: ../zdl.sh:1561
 msgid "Active proxy: %s\\n"
 msgstr "Proxy attivo: %s\\n"
 
-#: ../zdl.sh:1498 ../zdl.sh:1502
+#: ../zdl.sh:1564 ../zdl.sh:1568
 msgid "%s: invalid argument\\n\\n"
 msgstr "%s: argomento non valido\\n\\n"
 
-#: ../zdl.sh:1589
+#: ../zdl.sh:1655
 msgid "%s: invalid argument"
 msgstr "%s: argomento non valido"
 
-#: ../zdl.sh:1605
+#: ../zdl.sh:1671
 msgid "Connection and extraction from:"
 msgstr "Connessione ed estrazione da:"
 
-#: ../zdl.sh:1666
+#: ../zdl.sh:1732
 msgid "The complete list of links is in links.txt"
 msgstr "L'elenco completo dei link è in links.txt"
 
-#: ../zdl.sh:1884
+#: ../zdl.sh:1957
 msgid "Download completed"
 msgstr "Download completato"
 
-#: ../zdl.sh:1900
+#: ../zdl.sh:1973
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 
-#: ../zdl.sh:1901
+#: ../zdl.sh:1974
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
 #: ../extensions/000-filecrypt.sh:78 ../extensions/000-linkhub.sh:40
-#: ../extensions/000-linkhub.sh:52 ../extensions/000-pianosolo.sh:47
-#: ../extensions/000-vcrypt.sh:86 ../extensions/backin.sh:55
-#: ../extensions/fattoquotidiano.sh:39 ../extensions/fattoquotidiano.sh:48
-#: ../extensions/filmpertutti.sh:41 ../extensions/wstream.sh:80
-#: ../extensions/wstream.sh:158 ../extensions/yt.sh:37 ../libs/log.sh:188
+#: ../extensions/000-linkhub.sh:60 ../extensions/000-pianosolo.sh:52
+#: ../extensions/001-vcrypt.sh:86 ../extensions/fattoquotidiano.sh:39
+#: ../extensions/fattoquotidiano.sh:48 ../extensions/filmpertutti.sh:41
+#: ../extensions/wstream.sh:80 ../extensions/wstream.sh:158
+#: ../extensions/yt.sh:38 ../libs/log.sh:188
 msgid "Redirection"
 msgstr "Redirezione"
 
@@ -564,24 +564,28 @@ msgstr "Verifica di"
 msgid "DLC container analysis"
 msgstr "Analisi del container DLC"
 
-#: ../extensions/akvideo.sh:56 ../extensions/deltabit.sh:56
+#: ../extensions/akvideo.sh:63 ../extensions/deltabit.sh:56
+#: ../extensions/supervideo.sh:56
 msgid "Cookies deleted"
 msgstr "Cookie cancellati"
 
-#: ../extensions/akvideo.sh:186 ../extensions/upstream.sh:129
+#: ../extensions/akvideo.sh:194 ../extensions/aparat.sh:145
+#: ../extensions/supervideo.sh:132 ../extensions/upstream.sh:198
 msgid "The movie with %s definition is available"
 msgstr "È disponibile il filmato con definizione %s"
 
-#: ../extensions/akvideo.sh:192 ../extensions/upstream.sh:134
+#: ../extensions/akvideo.sh:200 ../extensions/aparat.sh:150
+#: ../extensions/supervideo.sh:140 ../extensions/upstream.sh:203
 msgid "The movie with %s definition is not available"
 msgstr "Non è disponibile il filmato con definizione %s"
 
 #: ../extensions/ddl.sh:142 ../extensions/ddl.sh:154
-#: ../extensions/wstream.sh:228
+#: ../extensions/speedvideo.sh:170 ../extensions/wstream.sh:228
 msgid "The bandwidth limit set by the server has been exceeded"
 msgstr "Superato il limite di banda imposto dal server"
 
-#: ../extensions/ddl.sh:143 ../extensions/wstream.sh:229
+#: ../extensions/ddl.sh:143 ../extensions/speedvideo.sh:171
+#: ../extensions/wstream.sh:229
 msgid ""
 "a proxy will be used (to use more band, perhaps, you can change IP address "
 "by reconnecting the modem/router)"
@@ -597,6 +601,10 @@ msgstr "Attendi"
 #: ../extensions/subyshare.sh:65
 msgid "code not found"
 msgstr "codice non trovato"
+
+#: ../extensions/mega.sh:63 ../libs/extension_utils.sh:543
+msgid "To download from Mega, install the \"megatools\" package"
+msgstr "Per scaricare da Mega, installa il pacchetto \"megatools\""
 
 #: ../extensions/rockfile.sh:209 ../extensions/subyshare.sh:94
 msgid ""
@@ -618,7 +626,7 @@ msgstr "Filmato HD disponibile"
 msgid "The movie will be downloaded with \"normal\" definition"
 msgstr "Il filmato sarà scaricato con definizione \"normale\""
 
-#: ../extensions/zzzzzzzz-m3u8.sh:80 ../extensions/zzzzzzzz-mpd.sh:80
+#: ../extensions/zzzzzzzz-m3u8.sh:82 ../extensions/zzzzzzzz-mpd.sh:80
 msgid "%s link detected: the file will be downloaded using ffmpeg"
 msgstr "Rilevato link %s: il file verrà scaricato con ffmpeg"
 
@@ -634,8 +642,8 @@ msgstr "Seleziona la directory di destinazione dei download:"
 msgid "Select"
 msgstr "Seleziona"
 
-#: ../gui/gui.sh:139 ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:235
-#: ../ui/ui.awk:260
+#: ../gui/gui.sh:139 ../gui/gui.sh:163 ../gui/gui.sh:175 ../ui/ui.awk:242
+#: ../ui/ui.awk:269
 msgid "wait"
 msgstr "attendi"
 
@@ -673,15 +681,15 @@ msgstr ""
 "corretta, ecco i messaggi di errore (il riepilogo è salvato nel file zdl_log."
 "txt):"
 
-#: ../gui/gui.sh:403 ../gui/gui.sh:706 ../gui/gui.sh:817 ../gui/gui.sh:1690
+#: ../gui/gui.sh:403 ../gui/gui.sh:714 ../gui/gui.sh:825 ../gui/gui.sh:1721
 msgid "Warning!"
 msgstr "Attenzione!"
 
-#: ../gui/gui.sh:423
+#: ../gui/gui.sh:431
 msgid "Edit the list of links to start downloading:"
 msgstr "Modifica la lista dei link da cui avviare lo scaricamento:"
 
-#: ../gui/gui.sh:423
+#: ../gui/gui.sh:431
 msgid ""
 "head to each link (the spaces between the lines and around the links will be "
 "ignored)"
@@ -689,15 +697,15 @@ msgstr ""
 "vai a capo ad ogni link (gli spazi fra le righe e intorno ai link saranno "
 "ignorati)"
 
-#: ../gui/gui.sh:437 ../gui/gui.sh:1309 ../gui/gui.sh:1467
+#: ../gui/gui.sh:445 ../gui/gui.sh:1332 ../gui/gui.sh:1498
 msgid "Save"
 msgstr "Salva"
 
-#: ../gui/gui.sh:438 ../gui/gui.sh:1468
+#: ../gui/gui.sh:446 ../gui/gui.sh:1499
 msgid "Cancel"
 msgstr "Annulla"
 
-#: ../gui/gui.sh:575
+#: ../gui/gui.sh:583
 msgid ""
 "Select one or more downloads (Ctrl + Click) and press the button to choose "
 "the function or double click on a download:"
@@ -705,23 +713,23 @@ msgstr ""
 "Seleziona uno o più download (Ctrl+Click) e premi il bottone per scegliere "
 "la funzione o fai doppio click su un download:"
 
-#: ../gui/gui.sh:593 ../gui/gui.sh:1715 ../ui/ui.awk:318
+#: ../gui/gui.sh:601 ../gui/gui.sh:1746 ../ui/ui.awk:328
 msgid "Length"
 msgstr "Grandezza"
 
-#: ../gui/gui.sh:595
+#: ../gui/gui.sh:603
 msgid "Update the download table (automatically every"
 msgstr "Aggiorna la tabella dei download (automaticamente ogni"
 
-#: ../gui/gui.sh:596 ../gui/gui.sh:750
+#: ../gui/gui.sh:604 ../gui/gui.sh:758
 msgid "Play the selected audio/video file"
 msgstr "Riproduci il file audio/video selezionato"
 
-#: ../gui/gui.sh:597 ../gui/gui.sh:751 ../gui/gui.sh:1202
+#: ../gui/gui.sh:605 ../gui/gui.sh:759 ../gui/gui.sh:1217
 msgid "Stop"
 msgstr "Arresta"
 
-#: ../gui/gui.sh:597 ../gui/gui.sh:751
+#: ../gui/gui.sh:605 ../gui/gui.sh:759
 msgid ""
 "Stop the selected download process. If ZDL core is active, the download will "
 "be restarted"
@@ -729,69 +737,69 @@ msgstr ""
 "Arresta il processo di download selezionato. Se il core ZDL è attivo, il "
 "download sarà riavviato"
 
-#: ../gui/gui.sh:598
+#: ../gui/gui.sh:606
 msgid "Stop all"
 msgstr "Arresta tutto"
 
-#: ../gui/gui.sh:598
+#: ../gui/gui.sh:606
 msgid ""
 "Stop all downloads. If ZDL core is active, the downloads will be restarted"
 msgstr ""
 "Arresta tutti i download. Se il core ZDL è attivo, il download sarà riavviato"
 
-#: ../gui/gui.sh:599 ../gui/gui.sh:752
+#: ../gui/gui.sh:607 ../gui/gui.sh:760
 msgid "Remove"
 msgstr "Elimina"
 
-#: ../gui/gui.sh:599 ../gui/gui.sh:752
+#: ../gui/gui.sh:607 ../gui/gui.sh:760
 msgid "Stop selected downloads and delete files"
 msgstr "Arresta i download selezionati e cancella i file"
 
-#: ../gui/gui.sh:600
+#: ../gui/gui.sh:608
 msgid "Completed"
 msgstr "Completato"
 
-#: ../gui/gui.sh:600
+#: ../gui/gui.sh:608
 msgid "Remove completed downloads from the list"
 msgstr "Rimuovi i download completati dalla lista"
 
-#: ../gui/gui.sh:601
+#: ../gui/gui.sh:609
 msgid "Read the info on the downloads in progress or already made"
 msgstr "Leggi le info sui download in corso o già effettuati"
 
-#: ../gui/gui.sh:694
+#: ../gui/gui.sh:702
 msgid "No audio/video player has been configured"
 msgstr "Nessun player audio/video configurato"
 
-#: ../gui/gui.sh:698
+#: ../gui/gui.sh:706
 msgid "is not an audio/video file."
 msgstr "non è un file audio/video"
 
-#: ../gui/gui.sh:720
+#: ../gui/gui.sh:728
 msgid "Choose what to do:"
 msgstr "Scegli cosa fare:"
 
-#: ../gui/gui.sh:746
+#: ../gui/gui.sh:754
 msgid "Action on a download"
 msgstr "Azione su un download"
 
-#: ../gui/gui.sh:750
+#: ../gui/gui.sh:758
 msgid "Play"
 msgstr "Riproduci"
 
-#: ../gui/gui.sh:763
+#: ../gui/gui.sh:771
 msgid "List of links"
 msgstr "Lista dei link"
 
-#: ../gui/gui.sh:764
+#: ../gui/gui.sh:772
 msgid "List of links already entered"
 msgstr "Lista dei link già immessi"
 
-#: ../gui/gui.sh:770
+#: ../gui/gui.sh:778
 msgid "Download activity results"
 msgstr "Risultati attività di download"
 
-#: ../gui/gui.sh:771
+#: ../gui/gui.sh:779
 msgid ""
 "Log of download operations: in particular, unsuccessful attempts and "
 "redirects are recorded"
@@ -799,96 +807,96 @@ msgstr ""
 "Log delle operazioni di download: in particolare, sono registrati i "
 "tentativi senza successo e i reindirizzamenti"
 
-#: ../gui/gui.sh:808
+#: ../gui/gui.sh:816
 msgid "Delete the file"
 msgstr "Cancella il file"
 
-#: ../gui/gui.sh:818
+#: ../gui/gui.sh:826
 #, sh-format
 msgid "The file $filename is not available in $PWD"
 msgstr "Il file $filename non è disponibile in $PWD"
 
-#: ../gui/gui.sh:864
+#: ../gui/gui.sh:872
 msgid "Programming of live broadcasting from"
 msgstr "Programmazione della diretta live da"
 
-#: ../gui/gui.sh:901 ../gui/gui.sh:904 ../ui/ui.sh:754
+#: ../gui/gui.sh:909 ../gui/gui.sh:912 ../ui/ui.sh:813
 msgid "Hours:"
 msgstr "Ore:"
 
-#: ../gui/gui.sh:905
+#: ../gui/gui.sh:913
 msgid "<b> Start time </b> (current:"
 msgstr "<b> Orario di inizio </b> (attuale:"
 
-#: ../gui/gui.sh:906 ../gui/gui.sh:909 ../ui/ui.sh:755
+#: ../gui/gui.sh:914 ../gui/gui.sh:917 ../ui/ui.sh:814
 msgid "Minutes:"
 msgstr "Minuti:"
 
-#: ../gui/gui.sh:908
+#: ../gui/gui.sh:916
 msgid "Duration"
 msgstr "Durata"
 
-#: ../gui/gui.sh:911 ../gui/gui.sh:914 ../ui/ui.sh:756
+#: ../gui/gui.sh:919 ../gui/gui.sh:922 ../ui/ui.sh:815
 msgid "Seconds:"
 msgstr "Secondi:"
 
-#: ../gui/gui.sh:942
+#: ../gui/gui.sh:950
 msgid "Start time"
 msgstr "Orario di inizio"
 
-#: ../gui/gui.sh:977
+#: ../gui/gui.sh:985
 msgid "Manage the links:"
 msgstr "Gestisci i link:"
 
-#: ../gui/gui.sh:995 ../libs/utils.sh:120
+#: ../gui/gui.sh:1003 ../libs/utils.sh:120
 msgid "New link:"
 msgstr "Nuovo link:"
 
-#: ../gui/gui.sh:996
+#: ../gui/gui.sh:1004
 msgid "Live stream:"
 msgstr "Diretta LIVE:"
 
-#: ../gui/gui.sh:997
+#: ../gui/gui.sh:1005
 msgid "Add .torrent file:"
 msgstr "Aggiungi un file .torrent:"
 
-#: ../gui/gui.sh:998 ../gui/gui.sh:1710
+#: ../gui/gui.sh:1006 ../gui/gui.sh:1741
 msgid "Search in www.XDCC.eu:"
 msgstr "Cerca in www.XDCC.eu:"
 
-#: ../gui/gui.sh:999
+#: ../gui/gui.sh:1007
 msgid "Add XDCC server:"
 msgstr "Aggiungi un server XDCC:"
 
-#: ../gui/gui.sh:1000
+#: ../gui/gui.sh:1008
 msgid "Add XDCC channel:"
 msgstr "Aggiungi un canale XDCC:"
 
-#: ../gui/gui.sh:1001
+#: ../gui/gui.sh:1009
 msgid "Add XDCC command:"
 msgstr "Aggiungi un comando XDCC:"
 
-#: ../gui/gui.sh:1002
+#: ../gui/gui.sh:1010
 msgid "Edit links"
 msgstr "Modifica i link"
 
-#: ../gui/gui.sh:1002
+#: ../gui/gui.sh:1010
 msgid "Edit the file from which ZDL core extracts the links to be processed"
 msgstr "Modifica il file da cui ZDL core estrae i link da processare"
 
-#: ../gui/gui.sh:1003
+#: ../gui/gui.sh:1011
 msgid "Read links.txt"
 msgstr "Leggi links.txt"
 
-#: ../gui/gui.sh:1003
+#: ../gui/gui.sh:1011
 msgid "Read the list of links already entered"
 msgstr "Leggi l'elenco dei link già immessi"
 
-#: ../gui/gui.sh:1004 ../gui/gui.sh:1203
+#: ../gui/gui.sh:1012 ../gui/gui.sh:1218
 msgid "Enter"
 msgstr "Esegui"
 
-#: ../gui/gui.sh:1039
+#: ../gui/gui.sh:1047
 msgid ""
 "<b> A schedule already exists for this channel: </b>\n"
 "you can delete the previous one and create a new one or leave the previous "
@@ -901,11 +909,11 @@ msgstr ""
 "\n"
 "<b>Vuoi creare una nuova programmazione, cancellando quella precedente?</b>"
 
-#: ../gui/gui.sh:1043
+#: ../gui/gui.sh:1051
 msgid "Already existing"
 msgstr "Già esistente"
 
-#: ../gui/gui.sh:1124
+#: ../gui/gui.sh:1132
 msgid ""
 "You have not entered a form field required to download via XDCC: repeat the "
 "operation"
@@ -913,35 +921,35 @@ msgstr ""
 "Non hai inserito un campo del form necessario ad effettuare il download "
 "tramite XDCC: ripeti l'operazione"
 
-#: ../gui/gui.sh:1166
+#: ../gui/gui.sh:1182
 msgid "Enable or disable TCP connections:"
 msgstr "Attiva o disattiva connessioni TCP:"
 
-#: ../gui/gui.sh:1166
+#: ../gui/gui.sh:1182
 msgid "enter a free port"
 msgstr "indicare una porta libera"
 
-#: ../gui/gui.sh:1183
+#: ../gui/gui.sh:1198
 msgid "Sockets already enabled:"
 msgstr "Socket già attivati:"
 
-#: ../gui/gui.sh:1190
+#: ../gui/gui.sh:1205
 msgid "No socket enabled"
 msgstr "Nessun socket attivato"
 
-#: ../gui/gui.sh:1201
+#: ../gui/gui.sh:1216
 msgid "Socket port:"
 msgstr "Porta del socket:"
 
-#: ../gui/gui.sh:1202
+#: ../gui/gui.sh:1217
 msgid "Command:"
 msgstr "Comando:"
 
-#: ../gui/gui.sh:1202 ../gui/gui.sh:1211
+#: ../gui/gui.sh:1217 ../gui/gui.sh:1226
 msgid "Start"
 msgstr "Avvia"
 
-#: ../gui/gui.sh:1236
+#: ../gui/gui.sh:1251
 #, sh-format
 msgid ""
 "<b>Port $socket_port not valid!</b>\\n\\nEnter a natural number between 1024 "
@@ -950,214 +958,214 @@ msgstr ""
 "<b>Porta $socket_port non valida!</b>\\n\\nInserire come porta TCP un numero "
 "naturale compreso tra 1024 e 65535"
 
-#: ../gui/gui.sh:1250
+#: ../gui/gui.sh:1265
 msgid "Socket stopping failed at the port"
 msgstr "Arresto del socket fallito alla porta"
 
-#: ../gui/gui.sh:1253
+#: ../gui/gui.sh:1268
 msgid "The socket is stopped at the port"
 msgstr "Arrestato socket alla porta"
 
-#: ../gui/gui.sh:1257
+#: ../gui/gui.sh:1272
 msgid "Socket not already available at the port"
 msgstr "Socket già non disponibile alla porta"
 
-#: ../gui/gui.sh:1264
+#: ../gui/gui.sh:1279
 msgid "Something didn't work"
 msgstr "Qualcosa non ha funzionato"
 
-#: ../gui/gui.sh:1304 ../gui/gui.sh:1449
+#: ../gui/gui.sh:1327 ../gui/gui.sh:1480
 msgid "Default downloader:"
 msgstr "Downloader predefinito:"
 
-#: ../gui/gui.sh:1305
+#: ../gui/gui.sh:1328
 msgid "Simultaneous downloads:"
 msgstr "Download simultanei:"
 
-#: ../gui/gui.sh:1306
+#: ../gui/gui.sh:1329
 msgid "File format:"
 msgstr "Formato del file:"
 
-#: ../gui/gui.sh:1306
+#: ../gui/gui.sh:1329
 msgid "Don't convert"
 msgstr "Non convertire"
 
-#: ../gui/gui.sh:1307
+#: ../gui/gui.sh:1330
 msgid "Configure"
 msgstr "Configura"
 
-#: ../gui/gui.sh:1307
+#: ../gui/gui.sh:1330
 msgid "ZDL configuration"
 msgstr "Configurazione di ZDL"
 
-#: ../gui/gui.sh:1308
+#: ../gui/gui.sh:1331
 msgid "Re/Install the latest ZDL update available"
 msgstr "Re/Installa l'ultimo aggiornamento disponibile di ZDL"
 
-#: ../gui/gui.sh:1309
+#: ../gui/gui.sh:1332
 msgid "Save the download directory options"
 msgstr "Salva le opzioni della directory di download"
 
-#: ../gui/gui.sh:1310
+#: ../gui/gui.sh:1333
 msgid "Cancel the operation and close the window"
 msgstr "Annulla l'operazione e chiudi la finestra"
 
-#: ../gui/gui.sh:1361
+#: ../gui/gui.sh:1384
 msgid "Manage downloads"
 msgstr "Gestisci i download"
 
-#: ../gui/gui.sh:1362
+#: ../gui/gui.sh:1385
 msgid "Change the download control options"
 msgstr "Modifica le opzioni di controllo dei download"
 
-#: ../gui/gui.sh:1363
+#: ../gui/gui.sh:1386
 msgid "ZDL console"
 msgstr "Console ZDL"
 
-#: ../gui/gui.sh:1363
+#: ../gui/gui.sh:1386
 msgid "Follow the download manager operations"
 msgstr "Segui le operazioni del gestore di download"
 
-#: ../gui/gui.sh:1364
+#: ../gui/gui.sh:1387
 msgid "Start/Stop ZDL core"
 msgstr "Avvia/Arresta ZDL core"
 
-#: ../gui/gui.sh:1364
+#: ../gui/gui.sh:1387
 msgid "Start/Stop the download manager"
 msgstr "Avvia/Arresta il gestore di download"
 
-#: ../gui/gui.sh:1365
+#: ../gui/gui.sh:1388
 msgid "Enable or disable sockets for ZDL access through the network"
 msgstr "Attiva o disattiva i socket per l'accesso a ZDL attraverso la rete"
 
-#: ../gui/gui.sh:1366
+#: ../gui/gui.sh:1389
 msgid ""
 "Exit only from the GUI, leaving the downloaders, core or sockets running"
 msgstr ""
 "Esci solo dalla GUI, lasciando in esecuzione i downloader, il core o i "
 "sockets"
 
-#: ../gui/gui.sh:1400
+#: ../gui/gui.sh:1423
 msgid "Extraction and download process console"
 msgstr "Console dei processi di estrazione e download"
 
-#: ../gui/gui.sh:1410
+#: ../gui/gui.sh:1433
 msgid "Clean"
 msgstr "Pulisci"
 
-#: ../gui/gui.sh:1441
+#: ../gui/gui.sh:1458
 msgid "Configuration"
 msgstr "Configurazione"
 
-#: ../gui/gui.sh:1442
+#: ../gui/gui.sh:1473
 msgid "Manage ZDL configuration"
 msgstr "Gestisci la configurazione di ZDL"
 
-#: ../gui/gui.sh:1450
+#: ../gui/gui.sh:1481
 msgid "Number of download parts for Axel:"
 msgstr "Numero parti di download per Axel:"
 
-#: ../gui/gui.sh:1451
+#: ../gui/gui.sh:1482
 msgid "Number of download parts for Aria2:"
 msgstr "Numero parti di download per Aria2:"
 
-#: ../gui/gui.sh:1452
+#: ../gui/gui.sh:1483
 msgid "Maximum number of concurrent downloads:"
 msgstr "Numero massimo di download concorrenti:"
 
-#: ../gui/gui.sh:1453
+#: ../gui/gui.sh:1484
 msgid "Background color in virtual terminals:"
 msgstr "Colore di sfondo nei terminali virtuali:"
 
-#: ../gui/gui.sh:1454
+#: ../gui/gui.sh:1485
 msgid "Language:"
 msgstr "Lingua:"
 
-#: ../gui/gui.sh:1455
+#: ../gui/gui.sh:1486
 msgid "Script/command/program to reconnect the modem/router:"
 msgstr "Script/comando/programma per riconnettere il modem/router:"
 
-#: ../gui/gui.sh:1456
+#: ../gui/gui.sh:1487
 msgid "Automatic updates:"
 msgstr "Aggiornamenti automatici:"
 
-#: ../gui/gui.sh:1457
+#: ../gui/gui.sh:1488
 msgid "Script/command/program to play audio/video files:"
 msgstr "Script/comando/programma per riprodurre file audio/video:"
 
-#: ../gui/gui.sh:1458
+#: ../gui/gui.sh:1489
 msgid "Default editor to edit the link queue:"
 msgstr "Editor predefinito per modificare la coda dei link:"
 
-#: ../gui/gui.sh:1459
+#: ../gui/gui.sh:1490
 msgid "Homonymous files recovery as the option --resume:"
 msgstr "Recupero file omonimi come con opzione --resume:"
 
-#: ../gui/gui.sh:1460
+#: ../gui/gui.sh:1491
 msgid "Default program startup mode:"
 msgstr "Modalità predefinita di avvio:"
 
-#: ../gui/gui.sh:1461
+#: ../gui/gui.sh:1492
 msgid "Torrent TCP port:"
 msgstr "Porta TCP per i torrent:"
 
-#: ../gui/gui.sh:1462
+#: ../gui/gui.sh:1493
 msgid "Torrent UDP port:"
 msgstr "Porta UDP per i torrent:"
 
-#: ../gui/gui.sh:1463
+#: ../gui/gui.sh:1494
 msgid "TCP port for sockets (--socket|--web-ui):"
 msgstr "Porta TCP per i socket (--socket|--web-ui):"
 
-#: ../gui/gui.sh:1464
+#: ../gui/gui.sh:1495
 msgid "Web browser (--web-ui):"
 msgstr "Browser web (--web-ui):"
 
-#: ../gui/gui.sh:1465
+#: ../gui/gui.sh:1496
 msgid "Web User Interface (--socket|--web-ui):"
 msgstr "Interfaccia Utente Web (--socket|--web-ui):"
 
-#: ../gui/gui.sh:1466
+#: ../gui/gui.sh:1497
 msgid "Configuration backup"
 msgstr "Backup della configurazione"
 
-#: ../gui/gui.sh:1487
+#: ../gui/gui.sh:1518
 msgid "Configuration backup in"
 msgstr "Backup della configurazione in"
 
-#: ../gui/gui.sh:1688
+#: ../gui/gui.sh:1719
 msgid "<b>No links found</b> corresponding to the following search keys:"
 msgstr ""
 "<b>Non è stato trovato alcun link</b> corrispondente alle seguenti chiavi di "
 "ricerca:"
 
-#: ../gui/gui.sh:1711
+#: ../gui/gui.sh:1742
 msgid "Select the links found by xdcc.eu:"
 msgstr "Seleziona i link trovati da xdcc.eu:"
 
-#: ../libs/core.sh:132
+#: ../libs/core.sh:145
 msgid "Starting daemon mode"
 msgstr "Avvio in modalità demone"
 
-#: ../libs/core.sh:224
+#: ../libs/core.sh:237
 msgid "New socket started at port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../libs/core.sh:267
+#: ../libs/core.sh:280
 msgid "No default web browser has been set. Start a web browser at:"
 msgstr ""
 "Non è stato impostato alcun browser predefinito.\n"
 "Avvia un browser all'indirizzo:"
 
-#: ../libs/core.sh:1091
+#: ../libs/core.sh:1110
 msgid "%s paused"
 msgstr "%s in pausa"
 
-#: ../libs/core.sh:1092
+#: ../libs/core.sh:1111
 msgid "To process new links, download a number of files greater than zero:"
 msgstr "Per processare nuovi link, scarica un numero di file maggiore di zero:"
 
-#: ../libs/core.sh:1093
+#: ../libs/core.sh:1112
 msgid ""
 "use the [-m|--multi [NUMBER]] option or enter the interactive mode and type "
 "in a number from 1 to 9"
@@ -1165,15 +1173,15 @@ msgstr ""
 "usa l'opzione [-m|--multi [NUMERO]] oppure entra nella modalità interattiva "
 "e digita un numero da 1 a 9"
 
-#: ../libs/core.sh:1161
+#: ../libs/core.sh:1180
 msgid "Redirection (wait up to 90 seconds):"
 msgstr "Redirezione (attendi massimo 90 secondi):"
 
-#: ../libs/core.sh:1181
+#: ../libs/core.sh:1200
 msgid "Processing Links"
 msgstr "Link da processare"
 
-#: ../libs/core.sh:1190
+#: ../libs/core.sh:1209
 msgid ""
 "Download management is forwarded to another active instance of %s (pid: %d), "
 "in the following terminal: %s\\n"
@@ -1181,7 +1189,7 @@ msgstr ""
 "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: "
 "%d), nel seguente terminale: %s\\n"
 
-#: ../libs/core.sh:1523
+#: ../libs/core.sh:1542
 msgid "Link paused"
 msgstr "Link in pausa"
 
@@ -1216,11 +1224,15 @@ msgstr ""
 "com)\n"
 "Puoi usare le opzioni --reconnect oppure --proxy"
 
-#: ../libs/extension_utils.sh:596
+#: ../libs/extension_utils.sh:540
+msgid "Downloading with \"megadl\" from \"megatools\" package"
+msgstr "Scaricamento con \"megadl\" dal pacchetto \"megatools\""
+
+#: ../libs/extension_utils.sh:618
 msgid "The bandwidth limit set by the server has been exceeded:"
 msgstr "Superato il limite di banda imposto dal server:"
 
-#: ../libs/extension_utils.sh:597
+#: ../libs/extension_utils.sh:619
 msgid ""
 "A proxy will be activated (to use more band, perhaps, you can change IP "
 "address by reconnecting the modem/router)"
@@ -1228,32 +1240,32 @@ msgstr ""
 "Sarà utilizzato un proxy (per usare più banda, forse, puoi cambiare "
 "indirizzo IP riconnettendo il modem/router)"
 
-#: ../libs/extension_utils.sh:710
+#: ../libs/extension_utils.sh:732
 #, fuzzy
 msgid "Detected Cloudflare"
 msgstr "Rilevato Cloudflare"
 
-#: ../libs/ip_changer.sh:51 ../libs/ip_changer.sh:75
+#: ../libs/ip_changer.sh:51 ../libs/ip_changer.sh:76
 msgid "Starting modem/router reconnection program"
 msgstr "Avvio programma di riconnessione del modem/router"
 
-#: ../libs/ip_changer.sh:183
+#: ../libs/ip_changer.sh:226
 msgid "Proxy list search"
 msgstr "Ricerca lista proxy"
 
-#: ../libs/ip_changer.sh:189
+#: ../libs/ip_changer.sh:231
 msgid "Proxy not available, please try again later"
 msgstr "Proxy non disponibili, riprovo più tardi"
 
-#: ../libs/ip_changer.sh:225
+#: ../libs/ip_changer.sh:271
 msgid "Download speed test"
 msgstr "Test velocità di download"
 
-#: ../libs/ip_changer.sh:274
+#: ../libs/ip_changer.sh:320
 msgid "Sufficient download speed using the proxy"
 msgstr "Velocità di download sufficiente usando il proxy"
 
-#: ../libs/ip_changer.sh:287
+#: ../libs/ip_changer.sh:333
 msgid ""
 "The maximum download speed achieved using the proxy is less than the minimum "
 "required"
@@ -1261,27 +1273,27 @@ msgstr ""
 "La massima velocità di download raggiunta usando il proxy è inferiore a "
 "quella minima richiesta"
 
-#: ../libs/ip_changer.sh:292
+#: ../libs/ip_changer.sh:338
 msgid "Maximum download speed achieved using the proxy"
 msgstr "Massima velocità di download raggiunta usando il proxy"
 
-#: ../libs/ip_changer.sh:324
+#: ../libs/ip_changer.sh:370
 msgid "Update proxy"
 msgstr "Aggiorna il proxy"
 
-#: ../libs/ip_changer.sh:349
+#: ../libs/ip_changer.sh:395
 msgid "Proxy currently unavailable: attempt with proxy disabled"
 msgstr "Proxy attualmente non disponibile: tentativo con proxy disattivato"
 
-#: ../libs/ip_changer.sh:359
+#: ../libs/ip_changer.sh:405
 msgid "Start connection"
 msgstr "Avvia connessione"
 
-#: ../libs/ip_changer.sh:368
+#: ../libs/ip_changer.sh:414
 msgid "Temporary proxy enabled"
 msgstr "Attivato proxy temporaneo"
 
-#: ../libs/ip_changer.sh:378
+#: ../libs/ip_changer.sh:424
 msgid "Temporary proxy disabled"
 msgstr "Disattivato proxy temporaneo"
 
@@ -1547,6 +1559,10 @@ msgstr ""
 msgid "Wait set to non-premium users, try again later"
 msgstr "Attesa imposta a utenti non premium, riprovo più tardi"
 
+#: ../libs/log.sh:232
+msgid "The video file is DRM protected and not playable on Linux"
+msgstr "Il file del video è protetto da DRM e non è riproducibile su Linux"
+
 #: ../libs/post_processor.sh:64
 msgid "Segment %s was recovered"
 msgstr "Segmento %s recuperato"
@@ -1722,15 +1738,15 @@ msgstr ""
 msgid "URL entry completed: download start"
 msgstr "Immissione URL terminata: avvio download"
 
-#: ../ui/ui.sh:463
+#: ../ui/ui.sh:504
 msgid "unlimited"
 msgstr "illimitati"
 
-#: ../ui/ui.sh:468
+#: ../ui/ui.sh:509
 msgid "Options [number of simultaneous downloads:"
 msgstr "Opzioni [numero di download simultanei:"
 
-#: ../ui/ui.sh:470
+#: ../ui/ui.sh:511
 #, sh-format
 msgid ""
 "${BYellow}   s ${Color_Off}│ ${BYellow}s${Color_Off}elect one or more "
@@ -1745,22 +1761,22 @@ msgstr ""
 "l'${BGreen}e${Color_Off}ditor predefinito\n"
 "     │"
 
-#: ../ui/ui.sh:474
+#: ../ui/ui.sh:515
 #, sh-format
 msgid "${BGreen}   a ${Color_Off}│ download with ${BGreen}a${Color_Off}xel\\n"
 msgstr "${BGreen}   a ${Color_Off}│ scarica con ${BGreen}a${Color_Off}xel\\n"
 
-#: ../ui/ui.sh:475
+#: ../ui/ui.sh:516
 #, sh-format
 msgid "${BGreen}   A ${Color_Off}│ download with ${BGreen}A${Color_Off}ria2\\n"
 msgstr "${BGreen}   A ${Color_Off}│ scarica con ${BGreen}A${Color_Off}ria2\\n"
 
-#: ../ui/ui.sh:476
+#: ../ui/ui.sh:517
 #, sh-format
 msgid "${BGreen}   w ${Color_Off}│ download with ${BGreen}w${Color_Off}get\\n"
 msgstr "${BGreen}   w ${Color_Off}│ scarica con ${BGreen}w${Color_Off}get\\n"
 
-#: ../ui/ui.sh:481
+#: ../ui/ui.sh:522
 #, sh-format
 msgid ""
 "     │\\n${BGreen} 0-9 ${Color_Off}│ download ${BGreen}a number from 0 to "
@@ -1773,12 +1789,12 @@ msgstr ""
 "${BGreen}   m ${Color_Off}│ scarica ${BGreen}m${Color_Off}olti file alla "
 "volta\\n     │"
 
-#: ../ui/ui.sh:485
+#: ../ui/ui.sh:526
 #, sh-format
 msgid "${BGreen}   d ${Color_Off}│ start ${BGreen}d${Color_Off}aemon"
 msgstr "${BGreen}   d ${Color_Off}│ avvia ${BGreen}d${Color_Off}emone"
 
-#: ../ui/ui.sh:487
+#: ../ui/ui.sh:528
 #, sh-format
 msgid ""
 "${BGreen}   c ${Color_Off}│ ${BGreen}c${Color_Off}lean temporary files of "
@@ -1793,7 +1809,7 @@ msgstr ""
 "${BRed}   K ${Color_Off}│ interrompi tutti i download e ogni istanza di ZDL "
 "nella directory (${BRed}K${Color_Off}ill-all)"
 
-#: ../ui/ui.sh:492
+#: ../ui/ui.sh:533
 #, sh-format
 msgid ""
 "${BRed}   Q ${Color_Off}│ stop an active instance of $PROG in $PWD but not "
@@ -1802,7 +1818,7 @@ msgstr ""
 "${BRed}   Q ${Color_Off}│ ferma un'istanza attiva di $PROG in $PWD lasciando "
 "attivi i downloader già avviati"
 
-#: ../ui/ui.sh:494
+#: ../ui/ui.sh:535
 #, sh-format
 msgid ""
 "     │\\n${BBlue}   q ${Color_Off}│ ${BBlue}q${Color_Off}uit from $PROG --"
@@ -1811,7 +1827,7 @@ msgstr ""
 "     │\\n${BBlue}   q ${Color_Off}│ esci da $PROG --interactive (${BBlue}q"
 "${Color_Off}uit)"
 
-#: ../ui/ui.sh:495
+#: ../ui/ui.sh:536
 #, sh-format
 msgid ""
 "${BBlue}   * ${Color_Off}│ ${BBlue}update status${Color_Off} (automatic "
@@ -1821,24 +1837,24 @@ msgstr ""
 "ogni 15 secondi)\n"
 "     │"
 
-#: ../ui/ui.sh:505
+#: ../ui/ui.sh:546
 msgid "Select (Restart/stop, Eliminate, Play audio/video)"
 msgstr "Seleziona (Riavvia/arresta, Elimina, Riproduci audio/video)"
 
-#: ../ui/ui.sh:507
+#: ../ui/ui.sh:548
 msgid "Select download numbers, separated by spaces (you can not select):"
 msgstr ""
 "Seleziona i numeri dei download, separati da spazi (puoi non scegliere):"
 
-#: ../ui/ui.sh:514
+#: ../ui/ui.sh:555
 msgid "Proceed"
 msgstr "Procedi"
 
-#: ../ui/ui.sh:515
+#: ../ui/ui.sh:556
 msgid "What do you want to do with the selected downloads?"
 msgstr "Cosa vuoi fare con i download selezionati?"
 
-#: ../ui/ui.sh:517
+#: ../ui/ui.sh:558
 #, sh-format
 msgid ""
 "${BYellow} r ${Color_Off}│ ${BYellow}r${Color_Off}estart, if an instance of "
@@ -1854,51 +1870,48 @@ msgstr ""
 "un'istanza di ZDL (con --multi >0), altrimenti sospenderli\n"
 "${BRed} E ${Color_Off}│ ${BRed}e${Color_Off}liminarli definitivamente (e "
 "cancellare il file scaricato)\n"
-"${BRed} T ${Color_Off}│ ${BRed}t${Color_Off}erminarli definitivamente SENZA "
-"cancellare il file scaricato (cancella solo il link dalla coda di download)\n"
-"   │\n"
 "${BGreen} p ${Color_Off}│ riprodurre (${BGreen}p${Color_Off}lay) i file "
 "audio/video\n"
 "   │\n"
 "${BBlue} * ${Color_Off}│ ${BBlue}schermata principale${Color_Off}\\n"
 
-#: ../ui/ui.sh:524
+#: ../ui/ui.sh:565
 msgid "Select what to do: ( r | E | p | * ):"
 msgstr "Scegli cosa fare: ( r | E | p | * ):"
 
-#: ../ui/ui.sh:706
+#: ../ui/ui.sh:765
 msgid "Address of the irc host (the 'irc://' protocol is not necessary):"
 msgstr "Indirizzo dell'host irc (il protocollo 'irc://' non è necessario):"
 
-#: ../ui/ui.sh:707
+#: ../ui/ui.sh:766
 msgid "Channel (the hash '#' is not necessary):"
 msgstr "Canale (il cancelletto '#' non è necessario):"
 
-#: ../ui/ui.sh:708
+#: ../ui/ui.sh:767
 msgid "Private message (the '/msg' command is not necessary):"
 msgstr "Messaggio privato (il comando '/msg' non è necessario):"
 
-#: ../ui/ui.sh:711
+#: ../ui/ui.sh:770
 msgid "Acquisition of missing data for XDCC (enter 'quit' to cancel)"
 msgstr "Acquisizione dati mancanti per XDCC (inserisci 'quit' per annullare)"
 
-#: ../ui/ui.sh:778
+#: ../ui/ui.sh:837
 msgid "Enter an integer in the range from 0 to %d (inclusive)"
 msgstr "Digitare un numero intero nell'intervallo da 0 a %d (compresi)"
 
-#: ../ui/ui.sh:807
+#: ../ui/ui.sh:866
 msgid "Available channels (choose the corresponding number):"
 msgstr "Canali disponibili (scegli il numero corrispondente):"
 
-#: ../ui/ui.sh:816
+#: ../ui/ui.sh:875
 msgid "Select the channel from which to download the live"
 msgstr "Seleziona il canale da cui scaricare la diretta"
 
-#: ../ui/ui.sh:824
+#: ../ui/ui.sh:883
 msgid "A schedule already exists for this channel:"
 msgstr "Esiste già una programmazione per questo canale:"
 
-#: ../ui/ui.sh:825
+#: ../ui/ui.sh:884
 msgid ""
 "you can delete the previous one and create a new one or leave the previous "
 "one and cancel this operation.\\n"
@@ -1906,85 +1919,85 @@ msgstr ""
 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella "
 "precedente e annullare questa operazione.\\n"
 
-#: ../ui/ui.sh:826
+#: ../ui/ui.sh:885
 msgid ""
 "Do you want to create a new schedule, deleting the previous one? [yes|*]"
 msgstr ""
 "Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
 
-#: ../ui/ui.sh:851
+#: ../ui/ui.sh:910
 msgid "Operation canceled: previous programming is maintained"
 msgstr "Operazione annullata: è mantenuta la programmazione precedente"
 
-#: ../ui/ui.sh:859
+#: ../ui/ui.sh:918
 msgid "Live stream: program for downloading the live"
 msgstr "Live stream: programma il download della diretta"
 
-#: ../ui/ui.sh:861
+#: ../ui/ui.sh:920
 msgid "It is necessary to indicate the recording start time and its duration"
 msgstr "È necessario indicare l'orario di inizio registrazione e la sua durata"
 
-#: ../ui/ui.sh:863
+#: ../ui/ui.sh:922
 msgid "Recording start time:"
 msgstr "Orario di inizio registrazione:"
 
-#: ../ui/ui.sh:864
+#: ../ui/ui.sh:923
 msgid "Do you want to register right away? [yes|*]"
 msgstr "Vuoi registrare subito? [sì|*]"
 
-#: ../ui/ui.sh:880
+#: ../ui/ui.sh:939
 msgid "Recording duration:"
 msgstr "Durata registrazione:"
 
-#: ../ui/ui.sh:889
+#: ../ui/ui.sh:948
 msgid "The starting time is lower than the current one: is it tomorrow? [*|no]"
 msgstr "L'orario di inizio è inferiore a quello attuale: è di domani? [*|no]"
 
-#: ../ui/ui.sh:900
+#: ../ui/ui.sh:959
 msgid "The download from %s will start around %s for the duration of %s"
 msgstr "Il download da %s si avvierà intorno alle %s per la durata di %s"
 
-#: ../ui/ui.sh:909
+#: ../ui/ui.sh:968
 msgid "Scheduled Live Streams (link, start time, duration):"
 msgstr "Live Stream programmati (link, orario inizio, durata):"
 
-#: ../ui/widgets.sh:329
+#: ../ui/widgets.sh:324
 msgid "<Return> to continue"
 msgstr "<Invio> per continuare"
 
-#: ../ui/widgets.sh:343
+#: ../ui/widgets.sh:347
 msgid "<Return> to exit"
 msgstr "<Invio> per uscire"
 
-#: ../ui/ui.awk:76
+#: ../ui/ui.awk:77
 msgid "Download id:"
 msgstr "Numero download:"
 
-#: ../ui/ui.awk:81
+#: ../ui/ui.awk:82
 msgid " RTMP protocol"
 msgstr " protocollo RTMP"
 
-#: ../ui/ui.awk:98 ../ui/ui.awk:103
+#: ../ui/ui.awk:99 ../ui/ui.awk:104
 msgid "Status"
 msgstr "Stato"
 
-#: ../ui/ui.awk:98
+#: ../ui/ui.awk:99
 msgid "Download not active"
 msgstr "Download non attivo"
 
-#: ../ui/ui.awk:176
+#: ../ui/ui.awk:183
 msgid "(file size not specified by the server)"
 msgstr "(grandezza del file non specificata dal server)"
 
-#: ../ui/ui.awk:181
+#: ../ui/ui.awk:188
 msgid "killed"
 msgstr "terminato"
 
-#: ../ui/ui.awk:230
+#: ../ui/ui.awk:237
 msgid "completed"
 msgstr "completato"
 
-#: ../ui/ui.awk:242
+#: ../ui/ui.awk:249
 msgid "inactive"
 msgstr "non attivo"
 

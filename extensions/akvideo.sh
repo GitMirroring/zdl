@@ -46,6 +46,13 @@ function get_akvideo_definition {
     fi
 }
 
+if [[ "$url_in" =~ akvideo.+fastredirect ]] 
+then
+    get_location "$url_in" akurl
+    url "$akurl" &&
+        replace_url_in "$akurl"
+fi
+
 if [[ "$url_in" =~ akvideo ]] 
 then
     unset html html2 movie_definition
