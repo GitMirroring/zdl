@@ -491,7 +491,7 @@ function interactive {
     do
 	unset instance_pid daemon_pid that_pid that_tty list file_stdout file_out url_out downloader_out pid_out length_out
 
-	show_downloads_extended
+	show_downloads_extended 2>/dev/null
 	if test -f "$path_tmp/max-dl"
 	then
 	    read max_dl < "$path_tmp/max-dl"
