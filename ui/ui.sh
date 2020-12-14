@@ -542,7 +542,7 @@ function interactive {
 		fclear
 		header_z
 		echo
-		show_downloads_extended
+		show_downloads_extended 2>/dev/null
 		header_box_interactive "$(gettext "Select (Restart/stop, Eliminate, Play audio/video)")"
 
 		print_c 2 "$(gettext "Select download numbers, separated by spaces (you can not select):")"
