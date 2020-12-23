@@ -30,7 +30,7 @@
 if [[ "$url_in" =~ pianosolo\.it ]]
 then
     pianosolo_urls=$(curl -s "$url_in" |
-                         grep -oP '[^"]+youtube.com\\/watch[^"]+' |
+                         grep -oP '[^"]+(youtube.com\\/watch|player\.vimeo\.com\/video)[^"]+' |
                          tr -d '\\')
 
     url_in_old="$url_in"

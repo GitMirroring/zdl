@@ -35,8 +35,8 @@ then
         html=$(curl -s "$url_in")
 
         url_in_file=$(grep -P 'videolink.+innerHTML' <<< "$html")
-        url_in_file="${url_in_file#*= \"}"
-        url_in_file="${url_in_file%%\"*}"
+        url_in_file="${url_in_file#*=[\"\']}"
+        url_in_file="${url_in_file%%[\"\']*}"
 
         # url_in_file=$(grep 'id="videolink"' <<< "$html")
         # url_in_file="${url_in_file%<*}"
