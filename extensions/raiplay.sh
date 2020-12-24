@@ -39,13 +39,15 @@ then
         then
             raiplay_url="${raiplay_json#*first_item_path \": \"}"
             raiplay_url="https://www.raiplay.it${raiplay_url%%\"*}"
+
             raiplay_json=$(curl -s \
                                 -c "$path_tmp"/cookies.zdl \
                                 -A "$user_agent" \
                                 "$raiplay_url")
         fi
         
-        raiplay_url="${raiplay_json#*content_url\": \"}"
+        raiplay_url="${raiplay_json#*content_url\":}"
+        raiplay_url="${raiplay_url#*\"}"
         raiplay_url="${raiplay_url%%\"*}"
 
         get_language_prog

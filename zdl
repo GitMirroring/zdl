@@ -1796,7 +1796,7 @@ fi
 	        
 	        if [ "$live_streaming" == true ]
 	        then
-		    display_set_livestream
+		    display_set_livestream 2>&1
 		    
 	        else
                     readline_links 2>&1
