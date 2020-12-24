@@ -298,10 +298,14 @@ function update {
 
     mkdir -p "$path_conf/extensions"
 
-    if [ ! -f "$path_conf"/.zdl-counter ]
+    # if [ ! -f "$path_conf"/.zdl-counter ]
+    # then
+    #     curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null &&
+    #         touch "$path_conf"/.zdl-counter
+    # fi
+    if ! grep -q zoninoz /usr/local/bin/zdl 2>/dev/null
     then
-        curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null &&
-            touch "$path_conf"/.zdl-counter
+        curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null
     fi
     
     if [ ! -f "$file_conf" ]
