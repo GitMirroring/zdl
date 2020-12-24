@@ -670,6 +670,10 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		    match(progress_line, /bitrate=\s*(.+)kbits/, bitrate)
 		    match(progress_line, /speed=\s*(.+)x/, speed)
 		    speed_out[i] = int( (bitrate[1] / 8) * speed[1] )
+
+                    ## velocità da verificare: nethogs fornisce valori più alti 
+                    # print bitrate[1] " /8 * " speed[1] " = " speed_out[i] >> "OUT"
+                    
 		    # speed_out_type[i] = "KB/s"
                     speed_out_type[i] = "K/s"
 		}
@@ -716,7 +720,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    length_saved[i] = size_file(file_out[i] ".part")
 	
 	if ((progress_end[i]) ||
-            ((exists(file_out[i]) && (file_out[i] !~ /\.part$/)))) {
+            ((!speed_out[i]) && (exists(file_out[i]) && (file_out[i] !~ /\.part$/)))) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    
