@@ -57,7 +57,7 @@ then
         if ! url "$url_in_file"
         then
             get_language_prog
-            url_in_file=$(wget -SO- "$raiplay_url" 2>&1 |
+            url_in_file=$(wget -SO- "$raiplay_url" -o /dev/null 2>&1 |
                               grep ocation)
             get_language
         fi
