@@ -1210,3 +1210,18 @@ function open_relink {
     #echo "url: $url_in"
     $browser "$url_in"
 }
+
+function test_url_in_file {
+    local result=1
+    
+    for i in $(seq 0 3)
+    do
+        if wget -q -o /dev/null --spider "$url_in_file"
+        then
+            result=0
+            break
+        fi
+        sleep 1
+    done
+    return $result
+}

@@ -164,7 +164,7 @@ then
 
         file_in="${file_in%%.mp4}".mp4
 
-        wget -q -o /dev/null --spider "$url_in_file" || {
+        test_url_in_file || {
             # echo "Elite" >> "$path_tmp"/proxy
             # echo "Anonymous" >> "$path_tmp"/proxy
             print_c 3 "$(gettext "The bandwidth limit set by the server has been exceeded"):" 
@@ -176,3 +176,4 @@ then
         end_extension
     fi
 fi
+
