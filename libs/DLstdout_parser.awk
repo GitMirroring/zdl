@@ -670,10 +670,6 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		    match(progress_line, /bitrate=\s*(.+)kbits/, bitrate)
 		    match(progress_line, /speed=\s*(.+)x/, speed)
 		    speed_out[i] = int( (bitrate[1] / 8) * speed[1] )
-
-                    ## velocità da verificare: nethogs fornisce valori più alti 
-                    # print bitrate[1] " /8 * " speed[1] " = " speed_out[i] >> "OUT"
-                    
 		    # speed_out_type[i] = "KB/s"
                     speed_out_type[i] = "K/s"
 		}
