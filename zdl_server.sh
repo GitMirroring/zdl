@@ -297,7 +297,8 @@ function create_json {
 
     	done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
 
-    	mv "$server_paths".new "$server_paths"
+        [ -s "$server_paths".new ] &&
+    	    mv "$server_paths".new "$server_paths"
 
     	sed -r "s|,$|]\n|g" -i "$server_data".$socket_port
     	grep -P '^\[$' "$server_data".$socket_port &>/dev/null &&
@@ -313,19 +314,21 @@ function create_json {
 function check_xfer_running {
     local path
 
-    while read path
-    do
-	if [ -s "$path"/"$path_tmp"/xfer-pids ]
-	then
-	    for pid in $(cut -d' ' -f1 < "$path"/"$path_tmp"/xfer-pids)
-	    do
-		check_pid "$pid" &&
-		    return 0
-	    done
-	fi
-
-    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
-
+    if [ -s "$server_paths" ]
+    then
+        while read path
+        do
+	    if [ -s "$path"/"$path_tmp"/xfer-pids ]
+	    then
+	        for pid in $(cut -d' ' -f1 < "$path"/"$path_tmp"/xfer-pids)
+	        do
+		    check_pid "$pid" &&
+		        return 0
+	        done
+	    fi
+            
+        done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    fi
     return 1
 }
 
@@ -546,18 +549,21 @@ function get_livestream_json {
     declare -a line
     ref='['
 
-    while read path
-    do
-	if [ -s "$path"/"$path_tmp"/livestream_time.txt ]
-	then
-	    while read -a line
-	    do
-		test -n "${line[0]}" &&
-		    ref+="{\"path\":\"$path\",\"link\":\"${line[0]}\",\"start\":\"${line[1]}\",\"duration\":\"${line[2]}\"},"
-	    done < "$path"/"$path_tmp"/livestream_time.txt
-	fi
-
-    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    if [ -s "$server_paths" ]
+    then
+        while read path
+        do
+	    if [ -s "$path"/"$path_tmp"/livestream_time.txt ]
+	    then
+	        while read -a line
+	        do
+		    test -n "${line[0]}" &&
+		        ref+="{\"path\":\"$path\",\"link\":\"${line[0]}\",\"start\":\"${line[1]}\",\"duration\":\"${line[2]}\"},"
+	        done < "$path"/"$path_tmp"/livestream_time.txt
+	    fi
+            
+        done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    fi
     ref="${ref%\,}]"
 }
 
@@ -681,10 +687,13 @@ function check_playlist {
 
 function stop_console_webui {
     local flag_file="$1"
-    while read path
-    do
-	rm -f "$path"/"$flag_file"
-    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    if [ -s "$server_paths" ]
+    then
+        while read path
+        do
+	    rm -f "$path"/"$flag_file"
+        done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+    fi
 }
 
 function run_cmd {
@@ -1713,17 +1722,19 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    ;;
 
 	clean-complete)
-	    while read path
-	    do
-		test -d "$path" &&
-		    cd "$path"
-
-		no_complete=true
-		data_stdout
-		unset no_complete
-
-	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
-
+            if [ -s "$server_paths" ]
+            then
+	        while read path
+	        do
+		    test -d "$path" &&
+		        cd "$path"
+                    
+		    no_complete=true
+		    data_stdout
+		    unset no_complete
+                    
+	        done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+            fi
 	    test -d "${line[1]}" &&
 		cd "${line[1]}"
 
@@ -1829,22 +1840,24 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 	kill-all)
 	    ## tutte le istanze di ZDL (in tutti i path) e i downloader
-	    while read path
-	    do
-		test -d "$path" &&
-		    cd "$path"
-
-	    	kill_downloads
-		[ -s "$path_tmp"/.pid.zdl ] &&
-		    read instance_pid < "$path_tmp"/.pid.zdl
-		[ -n "$instance_pid" ] &&
-		    {
-			kill -9 "$instance_pid" &>/dev/null
-			rm -f "$path_tmp"/.date_daemon
-			unset instance_pid
-		    }
-	    done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
-
+            if [ -s "$server_paths" ]
+            then
+	        while read path
+	        do
+		    test -d "$path" &&
+		        cd "$path"
+                    
+	    	    kill_downloads
+		    [ -s "$path_tmp"/.pid.zdl ] &&
+		        read instance_pid < "$path_tmp"/.pid.zdl
+		    [ -n "$instance_pid" ] &&
+		        {
+			    kill -9 "$instance_pid" &>/dev/null
+			    rm -f "$path_tmp"/.date_daemon
+			    unset instance_pid
+		        }
+	        done < <(awk '!($0 in a){a[$0]; print}' "$server_paths")
+            fi
 	    init_client
 	    ;;
 

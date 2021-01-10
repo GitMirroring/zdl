@@ -28,7 +28,7 @@
 ## zdl-extension name: Dplay (HD)
 
 
-if [[ "$url_in" =~ dplay\. ]]
+if [[ "$url_in" =~ (dplay|discoveryplus)\. ]]
 then
     html=$(wget --user-agent="$user_agent" -qO- "$url_in" -o /dev/null)    
 

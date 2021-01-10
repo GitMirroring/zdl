@@ -1401,7 +1401,8 @@ function get_server_pids {
 
 function run_zdl_server {
     local port="$1"
-
+    clear_paths4server
+    
     if [[ "$port" =~ ^[0-9]+$ ]] &&
 	   ((port > 1024 )) && (( port < 65535 )) &&
 	   check_port $port
@@ -1571,9 +1572,12 @@ function del_link_timer {
 
 function add_path4server {
     mkdir -p "$path_server"
-    echo "$1" >>"$path_server"/paths.txt
 
-    ##clean
+    grep -qP "^$1$" "$path_server"/paths.txt ||
+        echo "$1" >>"$path_server"/paths.txt    
+}
+
+function clear_paths4server {
     if [ -s "$path_server"/paths.txt ]
     then
 	rm -f "$path_server"/paths.txt.new
