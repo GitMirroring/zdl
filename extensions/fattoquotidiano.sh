@@ -32,27 +32,36 @@ if [[ "$url_in" =~ ilfattoquotidiano ]]
 then
     get_language_prog
     html=$(curl -s "$url_in")
+    get_language
+
     url_in_file=$(grep 'playlist: \[' <<< "$html" |
 			 sed -r 's|.+\":\"([^"]+\.m3u8)\".+|\1|g' |
 			 tr -d '\\' | head -n1)
-    get_language
-    print_c 4 "$(gettext "Redirection"): $url_in_file"
-    get_language_prog
-    
+
     if url "$url_in_file"
     then
-	url_in_file=$(curl -s "$url_in_file" |
-			     grep http |
-			     head -n1)
+        print_c 4 "$(gettext "Redirection"): $url_in_file"
+        get_language_prog
+        url_in_file=$(curl -s "$url_in_file" |
+			  grep http |
+			  head -n1)
 	get_language
 	print_c 4 "$(gettext "Redirection"): $url_in_file"
-    	get_language_prog
+    	
+        file_in=$(get_title "$html" | head -n1)
+        file_filter "$file_in"
+
+        end_extension
+        
+    else   
+        url_in_file=$(grep -oP '[^"]+youtube\.com\/embed\/[^"]+' <<< "$html")
+        if url "$url_in_file"
+        then
+            replace_url_in "$url_in_file"
+            youtubedl_m3u8="$url_in"
+        fi
+        unset url_in_file
     fi
-    
-    file_in=$(get_title "$html" | head -n1)
-    file_filter "$file_in"
-    
-    end_extension
 fi
 									   
 

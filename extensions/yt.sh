@@ -42,6 +42,16 @@ then
 #    done < <(awk '/data-video-id/{match($0, /data-video-id=\"([^"]+)\"/,m); if(m[1]) print "https://www.youtube.com/watch?v=" m[1]}' <<< "$html")
 fi
 
+if [ "$url_in" != "${url_in//'youtube.com/embed/'}" ]
+then
+    url_new="${url_in//embed\//watch\?v=}"
+    url_new="${url_new%\?*}"
+    url_new="${url_new%\/}"
+
+    url "$url_new" &&
+        replace_url_in "$url_new"
+fi
+
 if [ "$url_in" != "${url_in//'youtube.com/watch'}" ]
 then
     html=$(curl -v "$url_in")
