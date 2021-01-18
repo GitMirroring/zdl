@@ -104,15 +104,12 @@ then
 
         if url "$raiplay_url"
         then
-            #countdown- 120
-            raiplay_url=$(get_location "$raiplay_url")
-
-            if ! url "$raiplay_url"
+            url_in_file=$(get_location "$raiplay_url")
+            
+            if ! url "$url_in_file"
             then
                 unset youtubedl_m3u8
                 _log 45
-            #else
-                #     url_in_file=$(curl -v "$raiplay_url" |tail -n1)
             fi
         fi
 
