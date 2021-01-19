@@ -27,9 +27,20 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: IlFattoQuotidiano
 
-
 if [[ "$url_in" =~ ilfattoquotidiano ]]
 then
+    ilfatto_data=$(youtube-dl --get-url --get-filename "$url_in" | grep -P '\.mp4$')
+
+    url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
+    file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
+
+    end_extension
+fi
+
+if ( test -z "$file_in" ||
+         ! url "$url_in_file" ) &&
+       [[ "$url_in" =~ ilfattoquotidiano ]]
+then   
     get_language_prog
     html=$(curl -s "$url_in")
     get_language
