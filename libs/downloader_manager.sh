@@ -87,7 +87,7 @@ function check_dler_forcing {
 
     elif dler_type "youtube-dl" "$url_in"
     then
-	if command -v youtube-dl &>/dev/null
+	if check_youtube-dl
 	then
 	    force_dler "youtube-dl"
 	else

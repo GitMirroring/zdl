@@ -584,7 +584,7 @@ EXTENSIONS:
         deps['notify-send']=libnotify-bin
         deps['wmctrl']=wmctrl
         deps['mimeopen']=libfile-mimeinfo-perl
-        deps['youtube-dl']=youtube-dl
+        ## deps['youtube-dl']=youtube-dl
         ## deps['tput']=ncurses-bin
         deps['ffmpeg']=ffmpeg
         deps['convert']=imagemagick
@@ -607,7 +607,7 @@ EXTENSIONS:
             fi
         done
 
-        hash youtube-dl 2>/dev/null && try youtube-dl -U &>/dev/null
+        ## check_youtube-dl && try youtube-dl -U &>/dev/null
         
         ## cloudflare:
         # hash composer 2>/dev/null || install_phpcomposer

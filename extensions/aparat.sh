@@ -166,7 +166,7 @@ then
         file_in="${file_in#Watch }"
     fi
 
-    # if hash youtube-dl &>/dev/null && (
+    # if check_youtube-dl && (
     #         ! url "$url_in_file" ||
     #             [ -z "$file_in" ]
     #     )

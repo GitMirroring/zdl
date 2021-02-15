@@ -1225,3 +1225,28 @@ function test_url_in_file {
     done
     return $result
 }
+
+## youtube-dl embedded
+function youtube-dl {
+    local cmd=$(hash -t youtube-dl 2>/dev/null | head -n1)
+    
+    if [ -e /cygdrive ]
+    then
+        test -n "$cmd" &&
+            $cmd "$@"
+        
+    else
+        "$path_usr"/youtube-dl "$@"
+    fi
+}
+
+function check_youtube-dl {    
+    if [ -e /cygdrive ]
+    then
+        hash youtube-dl &>/dev/null &&
+            return 0 ||
+                return 1
+    else
+        return 0
+    fi
+}
