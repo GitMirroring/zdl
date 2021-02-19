@@ -590,25 +590,30 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		      "$youtubedl_m3u8" -o "${file_in}" 2>&1 |
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
+		pid_in=$!
+                #old_ffmpeg="$ffmpeg"
+                #ffmpeg=youtube-dl
                 
 	    else
 		nohup $ffmpeg -loglevel info -i "$url_in_file" -c copy "${file_in}" -y 2>&1 | 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
-                
+                pid_in=$!
 	    fi
 
-            while [ ! -f "$file_in" ]
-            do
-                pid_in=$(awk "/^$ffmpeg/&&!/awk/{match(FILENAME, /\/([0-9]+)\//, matched); print matched[1]}" /proc/*/cmdline)
+            # while [ ! -f "$file_in" ]
+            # do
+            #     pid_in=$(awk "/^$ffmpeg/&&!/awk/{match(FILENAME, /\/([0-9]+)\//, matched); print matched[1]}" /proc/*/cmdline)
                 
-                if [[ "$pid_in" =~ ^[0-9]+$ ]] &&
-                       grep -q "$file_in" /proc/$pid_in/cmdline
-                then
-                    break
-                fi
-                sleep 0.1
-            done
+            #     if [[ "$pid_in" =~ ^[0-9]+$ ]] &&
+            #            grep -q "$file_in" /proc/$pid_in/cmdline 
+            #     then
+            #         break
+            #     fi
+            #     sleep 0.1
+            # done
+
+            #ffmpeg="$old_ffmpeg"
             
 	    echo -e "$pid_in
 $url_in
