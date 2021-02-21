@@ -163,9 +163,10 @@ function check_stdout () {
 	(num_check > 30)){
 	code = code bash_var("num_check", "0")
 	test_stdout["old"] = cat(".zdl_tmp/" file_out[i] "_stdout.old")
-	if (test_stdout["new"] == test_stdout["old"] && 
-	    downloader_out[i] == "Axel" &&		
-	    exists(file_out[i] ".st")) {
+	if (test_stdout["new"] && test_stdout["new"] == test_stdout["old"] && 
+	    ((downloader_out[i] == "Axel" &&		
+             exists(file_out[i] ".st")) ||
+             downloader_out[i] == "FFMpeg")) {
 	    system("kill -9 " pid_out[i] " 2>/dev/null")
 	}
     }
