@@ -38,9 +38,19 @@ then
         url_in_file="${url_in_file#*=[\"\']}"
         url_in_file="${url_in_file%%[\"\']*}"
 
-        # url_in_file=$(grep 'id="videolink"' <<< "$html")
-        # url_in_file="${url_in_file%<*}"
-        # url_in_file="${url_in_file##*>}"
+        if ! url "$url_in_file"
+        then
+            url_in_file=$(grep -P 'id=\"videolink\".+get_video' -A1 <<< "$html")
+            
+            url_in_file_token=$(tail -n1 <<< "$url_in_file")
+            url_in_file_token="${url_in_file_token##*token=}"
+            url_in_file_token="${url_in_file_token%\'*}"
+            
+            url_in_file=$(head -n1 <<< "$url_in_file")
+            url_in_file="${url_in_file%token=*}token=$url_in_file_token"
+            url_in_file="${url_in_file##*>}"
+        fi
+
         [[ "$url_in_file" =~ ^http ]] ||
             url_in_file="https:${url_in_file}"
 
