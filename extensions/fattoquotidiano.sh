@@ -33,7 +33,7 @@ then
 
     url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
     file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
-
+    get_location "$url_in_file" url_in_file
     end_extension
 fi
 
@@ -56,12 +56,13 @@ then
         url_in_file=$(curl -s "$url_in_file" |
 			  grep http |
 			  head -n1)
+        
 	get_language
 	print_c 4 "$(gettext "Redirection"): $url_in_file"
     	
         file_in=$(get_title "$html" | head -n1)
         file_filter "$file_in"
-
+        
         end_extension
         
     else   
