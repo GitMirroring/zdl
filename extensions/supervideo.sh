@@ -113,6 +113,8 @@ then
                                   head -n1                                      |
                                   sed -r 's|.+href=\"([^"]+)\".+|\1|g')
 
+                sanitize_url "$url_in_file" url_in_file
+
                 ((supervideo_loops < 2)) && sleep 1
             done
 

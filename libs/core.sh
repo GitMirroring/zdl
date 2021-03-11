@@ -603,8 +603,12 @@ function check_in_file { 	## return --> no_download=1 / download=0
     fi
 
     [ "$downloader_in" == MegaDL ] && return 0
-    
-    if [ -n "$file_in" ]
+
+    if [ "$downloader_in" == DCC_Xfer ]
+    then
+	return 0
+
+    elif [ -n "$file_in" ]
     then
 	length_saved_in=0
 		    
@@ -742,10 +746,6 @@ function check_in_file { 	## return --> no_download=1 / download=0
 	    return 0
 
 	fi
-
-    elif [ "$downloader_in" == DCC_Xfer ]
-    then
-	return 0
     fi
 
     return 1
