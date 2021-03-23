@@ -39,6 +39,7 @@ then
         url_embed="${url_embed//http\:/https:}"
 
         html_not_embed=$(curl "${url_embed%'-'*}")
+
         # replace_url_in "${url_embed%'-'*}"
     else
         html_not_embed=$(curl "$url_in")
@@ -81,7 +82,6 @@ then
     html=$(curl "$url_in" \
                 -A "$user_agent" \
                 -c "$path_tmp"/cookies.zdl)
-    
     
     if [[ "${htm}${html}" =~ 'File Not Found' ]] 
     then

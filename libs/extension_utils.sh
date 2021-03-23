@@ -1216,7 +1216,9 @@ function test_url_in_file {
     
     for i in $(seq 0 3)
     do
-        if wget -q -o /dev/null --spider "$url_in_file"
+        if wget -q -o /dev/null \
+                --spider "$url_in_file" \
+                -t1 -T 20
         then
             result=0
             break
