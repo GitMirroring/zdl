@@ -489,11 +489,11 @@ streaming services, directly from the link (bypassing the web page
 player):
 
 _Streaming video skipping browser player:_
-     Akvideo (HD), Aparat (HD), Auroravid/Novamov, Backin, Backin,
-     Biqle (HD), Cloudvideo (HD), Dailymotion, Deltabit (HD), Dplay
-     (HD), EasyLoad (HD), Exashare, Facebook, Fastvideo, Flashx.tv,
-     IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex
-     Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
+     Akvideo (HD), Aparat, Auroravid/Novamov, Backin, Backin, Biqle
+     (HD), Cloudvideo (HD), Dailymotion, Deltabit (HD), Dplay (HD),
+     EasyLoad (HD), Exashare, Facebook, Fastvideo, Flashx.tv, IDoWatch,
+     IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex Cloudzilla),
+     NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
      Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
      Sockshare (HD), Speedvideo (HD), Streamango, Streamin, StreamTape,
@@ -501,16 +501,16 @@ _Streaming video skipping browser player:_
      servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
      in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
      Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
-     (HD), VK (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     (HD), VK (HD), Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
-     Akvideo (HD), Aparat (HD), Clicknupload, ClipWatching, ddl.to,
-     Deltabit (HD), dl.free.fr, Dropbox, Easybytez, EasyLoad (HD),
-     Go4Up (multi-link), Jheberg (multi-link), Katfile, Mediafire,
-     Mega, MixDrop, MultiUp (multi-link), Onlystream, Ozofiles,
-     Pastebin, Rockfile, Sockshare (HD), Subyshare, Supervideo (HD),
+     Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
+     (HD), dl.free.fr, Dropbox, Easybytez, EasyLoad (HD), Go4Up
+     (multi-link), Jheberg (multi-link), Katfile, Mediafire, Mega,
+     MixDrop, MultiUp (multi-link), Onlystream, Ozofiles, Pastebin,
+     Rockfile, Sockshare (HD), Subyshare, Supervideo (HD),
      TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
-     Uppit, Upstream, Uptobox, Vidoza, WStream (HD) 
+     Uppit, Upstream, Uptobox, Vidoza, Wolfstream (HD), WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1467,26 +1467,26 @@ Tag Table:
 Node: Top1249
 Node: The ZDL command5133
 Node: Streaming/hosting services13149
-Node: Start ZDL17575
-Node: Stop ZDL19908
-Node: Check the downloads20943
-Node: User manuals24984
-Node: Modes25377
-Node: Readline28412
-Node: Editor29867
-Node: Homonymy31025
-Node: IRC/XDCC32534
-Node: Torrent34170
-Node: Filters34994
-Node: Create new extensions35282
-Node: Recommended software and dependencies36988
-Node: Conkeror38600
-Node: zdl-xterm and XXXTerm/Xombrero39582
-Node: Installation and update41453
-Node: Why this program44466
-Node: Tags48156
-Node: Copying52936
-Node: Contacts54014
+Node: Start ZDL17599
+Node: Stop ZDL19932
+Node: Check the downloads20967
+Node: User manuals25008
+Node: Modes25401
+Node: Readline28436
+Node: Editor29891
+Node: Homonymy31049
+Node: IRC/XDCC32558
+Node: Torrent34194
+Node: Filters35018
+Node: Create new extensions35306
+Node: Recommended software and dependencies37012
+Node: Conkeror38624
+Node: zdl-xterm and XXXTerm/Xombrero39606
+Node: Installation and update41477
+Node: Why this program44490
+Node: Tags48180
+Node: Copying52960
+Node: Contacts54038
 
 End Tag Table
 

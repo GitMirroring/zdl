@@ -25,7 +25,7 @@
 #
 
 ## zdl-extension types: streaming download
-## zdl-extension name: Aparat (HD)
+## zdl-extension name: Aparat, Wolfstream (HD)
 
 function add_aparat_definition {
     set_line_in_file + "$url_in $1" "$path_tmp"/aparat-definitions
@@ -45,8 +45,9 @@ function get_aparat_definition {
     fi
 }
 
-if [[ "$url_in" =~ aparat\. ]]
+if [[ "$url_in" =~ (wolfstream|aparat)\. ]]
 then
+    url_in_domain="${BASH_REMATCH[1]}"
     if check_cloudflare "$url_in"
     then
         get_by_cloudflare "$url_in" html
@@ -104,15 +105,24 @@ then
         	    ((aparat_loops < 2))
             do
         	((aparat_loops++))
+                
+                case $url_in_domain in 
+                    aparat)
+                        url_test="https://aparat.cam/dl?op=download_orig&id=${id_aparat}&mode=${mode_stream}&hash=${hash_aparat}"
+                        ;;
+                    wolfstream)
+                        url_test="https://wolfstream.tv/dl?op=download_orig&id=${id_aparat}&mode=${mode_stream}&hash=${hash_aparat}"
+                        ;;
+                esac
 
         	get_language_prog
         	html2=$(curl -s \
-        		     "https://aparat.cam/dl?op=download_orig&id=${id_aparat}&mode=${mode_stream}&hash=${hash_aparat}" \
+        		     "$url_test" \
                              -A "$user_agent" \
                              -b "$path_tmp/cookies.zdl")
                 [ -n "$html2" ] ||
         	    html2=$(wget -qO- -o /dev/null \
-        		         "https://aparat.cam/dl?op=download_orig&id=${id_aparat}&mode=${mode_stream}&hash=${hash_aparat}" \
+                                 "$url_test" \
                                  --user-agent="$user_agent" \
                                  --load-cookies="$path_tmp/cookies.zdl")
 
