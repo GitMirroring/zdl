@@ -95,6 +95,11 @@ then
 
     if url "$url_4snip"
     then
+        if [[ "$url_4snip" =~ ninjastream\. ]]
+        then
+            url_4snip="${url_4snip//\/watch\///download/}"
+        fi
+        
 	replace_url_in "$url_4snip"
     else
 	_log 32

@@ -670,7 +670,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		if (!speed_out[i]) {
 		    match(progress_line, /bitrate=\s*(.+)kbits/, bitrate)
 		    match(progress_line, /speed=\s*(.+)x/, speed)
-		    speed_out[i] = int( (bitrate[1] / 8) * speed[1] )
+		    speed_out[i] = int( ( bitrate[1] / 8) * speed[1] )
+                    #speed_out[i] = int( ( bitrate[1] * speed[1]) / 5 )
 		    # speed_out_type[i] = "KB/s"
                     speed_out_type[i] = "K/s"
 		}
