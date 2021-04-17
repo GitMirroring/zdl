@@ -366,3 +366,8 @@ then
     unset break_loop
     _log 36
 fi
+
+if [[ "$url_in" =~ ninjastream\..+\/watch\/ ]]
+then
+    replace_url_in "${url_in//\/watch\///download/}"
+fi
