@@ -28,7 +28,7 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Vimeo (HD)
 
-if [[ "$url_in" =~ vimeo\.com\/([0-9]+) ]]
+if [[ "$url_in" =~ vimeo\.com\/([0-9]+|video\/[0-9]+) ]]
 then
     if command -v youtube-dl &>/dev/null
     then

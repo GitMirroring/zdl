@@ -94,8 +94,10 @@ then
 	unset file_in url_in_file
     else
 	[ "$url_in" != "$url_in_file" ] &&
-	    print_c 1 "youtube-dl: $url_in_file"
+	    print_c 1 "youtube-dl: $url_in_file" 
+        
 	unset break_loop
     fi
 fi
+
 
