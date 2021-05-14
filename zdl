@@ -217,6 +217,12 @@ function main_loop {
 	nline=1
 	while :
 	do
+            if [ -s "$file_conf" ]
+            then
+                tcp_port=$(get_item_conf tcp_port)
+                udp_port=$(get_item_conf udp_port)
+            fi
+            
 	    test -f "$path_tmp"/max-dl &&
 		read max_dl < "$path_tmp"/max-dl
             
