@@ -57,6 +57,11 @@ function get_linkhub {
 	    newlink=$(trim "$newlink")
 	    if url "$newlink"
 	    then
+                if [[ "$newlink" =~ ninjastream\..+\/watch\/ ]]
+                then
+                    newlink="${newlink//\/watch\///download/}"
+                fi
+
 	        print_c 4 "$(gettext "Redirection"): $newlink"
 	        set_link + "$newlink"
 	        if [ -z "$newlink_first" ]
