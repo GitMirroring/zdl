@@ -1193,6 +1193,7 @@ function tag_link { ## 1=link 2=name_variable_to_assign_link
 }
 
 function open_relink {
+    rm -f $path_tmp/links_loop.txt
     if [ -d "$path_usr/extensions/" ]
     then
         shopt -s nullglob                   
@@ -1208,7 +1209,8 @@ function open_relink {
     fi
 
     #echo "url: $url_in"
-    $browser "$url_in"
+    #$browser "$url_in"
+    $browser $(cat $path_tmp/links_loop.txt)
 }
 
 function test_url_in_file {
