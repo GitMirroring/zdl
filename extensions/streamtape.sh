@@ -53,9 +53,15 @@ then
 
         [[ "$url_in_file" =~ ^http ]] ||
             url_in_file="https:${url_in_file}"
-
+        
         get_location "$url_in_file" url_in_file
-        file_in=$(get_title "$html")
+
+        file_in=$(grep 'og:title' <<< "$html" |
+                      head -n1 |
+                      sed -r 's|.+content=\"([^"]+)\".+|\1|g')
+        
+        test -z "$file_in" &&
+            file_in=$(get_title "$html")
     fi
     
     end_extension

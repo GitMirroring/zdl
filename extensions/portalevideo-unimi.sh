@@ -51,3 +51,13 @@ then
 
     end_extension
 fi
+
+if [[ "$url_in" =~ videolectures\.unimi\.it ]]
+then
+    file_in="${url_in#*mp4\:}"
+    file_in="${file_in%%\/*}"
+
+    url_in_file="$url_in"
+
+    end_extension
+fi
