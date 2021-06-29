@@ -75,22 +75,22 @@ cygdrive="${cygdrive%%\/*}"
 
 
 ## funzioni per Cygwin
-function get-mirror {
+function get_mirror {
     mirror=$(grep 'last-mirror' /etc/setup/setup.rc -A 1 | tail -n1)
 }
 
-function pkt-download {
+function pkt_download {
     cscript /nologo downloader_tmp.js $1 $2 2>/dev/null
 }
 
-function last-pkt {
+function last_pkt {
     path_pkt=$(grep "\@ $1$" -A 15 <<< "$setup"| grep install |head -n1 | awk '{print $2}')
     echo ${path_pkt##*\/}
 }
 
-function init {
-    get-mirror
-    pkt-download $mirror/x86/setup.bz2 setup.bz2
+function init_cygwin {
+    get_mirror
+    pkt_download $mirror/x86/setup.bz2 setup.bz2
     setup=$(bzcat setup.bz2)
     unset pkts
 }
@@ -102,7 +102,7 @@ function cygwinports {
     unset pkts
 }
 
-function required-pkt {
+function required_pkt {
     if [[ ! "${pkts[*]}" =~ $1 ]]
     then 
 	pkts[${#pkts[*]}]="$1"
@@ -113,7 +113,7 @@ function required-pkt {
     do
 	if [ ! -f /etc/setup/$p.lst.gz ]
 	then
-	    required-pkt $p
+	    required_pkt $p
 	fi
     done
 }
@@ -173,15 +173,15 @@ BinStream.SaveToFile(WScript.Arguments(1));' > downloader_tmp.js
 Installing Wget...
 
 "
-	init
-	required-pkt wget
+	init_cygwin
+	required_pkt wget
 
 	for p in ${pkts[*]}
 	do
 	    echo "Installing $p..."
-	    last-pkt $p
+	    last_pkt $p
 	    tarball=${path_pkt##*\/}
-	    pkt-download $mirror/$path_pkt $tarball
+	    pkt_download $mirror/$path_pkt $tarball
 
 	    cd /
 	    [ "$tarball" != "${tarball%.xz}" ] && tar -xvJf /tmp/$tarball
