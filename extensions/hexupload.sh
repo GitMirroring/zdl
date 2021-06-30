@@ -57,6 +57,10 @@ then
     url_in_file=$(grep 'Click Here To Download' <<< "$html3")
     url_in_file="${url_in_file#*href=\"}"
     url_in_file="${url_in_file%%\"*}"
+
+    test_url_in_file || {
+        _log 28
+    }
     
     end_extension
 fi
