@@ -96,6 +96,9 @@ then
         url_in_file="http:${unpacked#*furl=\"}"
         url_in_file="${url_in_file%%\"*}"
 
+    if [[ "$unpacked" =~ MDCore\.furl\=\" ]]
+    then
+
     elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
     then
         _log 17
