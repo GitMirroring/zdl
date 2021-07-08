@@ -28,7 +28,7 @@
 ## zdl-extension name: playtube
 
 
-if [ "$url_in" != "${url_in//playtube.}" ]
+if [ "$url_in" != "${url_in//playtube.}" ] && [ 1 == 2 ] ## <-- clausola per disattivare l'estensione: ancora non funziona
 then
     html=$(curl -s                         \
 		-A "$user_agent"           \
