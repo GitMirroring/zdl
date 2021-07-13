@@ -48,6 +48,7 @@ then
             #url_in_file=$(head -n1 <<< "$url_list_fattoq" | tail -n1)
 
             ## audio + video (low quality)
+            # url_in_file=$(grep _nc_vs <<< "$url_list_fattoq" | head -n1)
             url_in_file=$(tail -n4 <<< "$url_list_fattoq" | head -n1)
         }
     end_extension
