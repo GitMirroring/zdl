@@ -27,11 +27,12 @@
 ## zdl-extension types: download
 ## zdl-extension name: MixDrop
 
-if [[ "$url_in" =~ mixdrop\. ]]
+
+if [ "$url_in" != "${url_in//mixdrop}" ]
 then
     [[ "$url_in" =~ \/f\/ ]] &&
         replace_url_in "${url_in//\/f\///e/}"
-
+    
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \
@@ -47,7 +48,7 @@ then
     if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
     then
         mixdrop_chunk="${BASH_REMATCH[1]}"
-
+        
         if [ -n "${mixdrop_chunk}" ]
         then
             html=$(curl -s "https://mixdrop.co${mixdrop_chunk}")
@@ -57,7 +58,7 @@ then
     if grep -q 'p,a,c,k,e,d' <<< "$html"
     then
         mixdrop_iframe_url="$url_in"
-        
+
     else
         mixdrop_iframe_url=$(grep iframe <<< "$html")
         mixdrop_iframe_url="${mixdrop_iframe_url#*src=\"}"
@@ -91,24 +92,13 @@ then
 
     unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
-    if [[ "$unpacked" =~ MDCore\.furl\=\" ]]
+    if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
     then
-        url_in_file="http:${unpacked#*furl=\"}"
-        url_in_file="${url_in_file%%\"*}"
-
-    if [[ "$unpacked" =~ MDCore\.furl\=\" ]]
-    then
-
+        url_in_file="https:${BASH_REMATCH[1]}"
+        
     elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
     then
         _log 17
-    fi
-    
-    if ! url "$url_in_file" &&
-            [[ "$unpacked" =~ MDCore\.wurl\=\" ]]
-    then
-        url_in_file="http:${unpacked#*wurl=\"}"
-        url_in_file="${url_in_file%%\"*}"
     fi
 
     if [ -z "$file_in" ]
