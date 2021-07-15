@@ -579,7 +579,7 @@ EXTENSIONS:
         fi
         
         deps['curl']=curl
-        deps['phantomjs']=phantomjs
+        ## deps['phantomjs']=phantomjs
         deps['yad']=yad
         deps['notify-send']=libnotify-bin
         deps['wmctrl']=wmctrl
