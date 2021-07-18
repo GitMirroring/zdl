@@ -119,7 +119,7 @@ $(gettext "Error downloading the video HTML page. Check that the URL has been en
 	    set_link - "$url_in"
 	    ;;
 	16)
-	    msg="$url_in --> $(gettext "The link will not be processed, because it does not matche to the regex"): $file_regex"
+	    msg="$url_in --> $(gettext "The link will not be processed, because it does not matche to the regex"): $url_regex"
 	    set_link - "$url_in"
 	    ;;
 	17)

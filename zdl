@@ -286,7 +286,6 @@ function main_loop {
 		break
 	    fi
 
-	    
 	    if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
 	    then
 		set_link - "$url_in"
@@ -373,6 +372,18 @@ function main_loop {
 		    rm -f "$path_tmp/redirect"
 		fi
 		###################
+
+                if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
+	        then
+		    set_link - "$url_in"
+		    _log 15 "$url_in"
+	        fi
+                
+	        if [ -n "$url_regex" ] && [[ ! "${url_in}" =~ $url_regex ]]
+	        then
+		    set_link - "$url_in"
+		    _log 16 "$url_in"
+	        fi
 
 		get_exit && return 1
 		
@@ -759,18 +770,6 @@ then
     update_updater
 fi
 
-if [[ "${args[*]}" =~ \-\-url=[^\ ]+ ]]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [[ "${args[i]}" =~ ^(--url=[^\ ]+)$ ]]
-	then
-	    url_regex=$(sed -r 's|--url=["]*(.+)["]*$|\1|g' <<< "${args[i]}")
-	    unset args[i]
-	fi
-    done
-fi
-
 
 if [ "${args[*]}" != "${args[*]//--live}" ]
 then
@@ -817,43 +816,6 @@ fi
 init
 
 
-if [[ "${args[*]}" =~ \-\-no\-url=[^\ ]+ ]]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [[ "${args[i]}" =~ ^(--no-url=[^\ ]+)$ ]]
-	then
-	    no_url_regex=$(sed -r 's|--no-url=["]*(.+)["]*$|\1|g' <<< "${args[i]}")
-	    unset args[i]
-	fi
-    done
-fi
-
-if [[ "${args[*]}" =~ \-\-scrape-url=[^\ ]+ ]]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [[ "${args[i]}" =~ ^(--scrape-url=[^\ ]+)$ ]]
-	then
-	    url_page=$(sed -r 's|--scrape-url=["]*(.+)["]*$|\1|g' <<< "${args[i]}")
-	    scrape_url "$url_page"
-	    unset args[i]
-	fi
-    done
-fi
-
-
-if [ "${args[*]}" != "${args[*]//--scrape-url}" ]
-then
-    for ((i=0; i<=$max_args; i++))
-    do
-	if [ "${args[i]}" == "--scrape-url" ]
-	then
-	    scrapeURL=true	    
-	    unset args[i]
-	fi
-    done
-fi
 
 if [ "${args[*]}" != "${args[*]//--list-extensions}" ]
 then
@@ -929,6 +891,56 @@ then
 	    fi
 	fi
     done
+fi
+
+## external application button (firefox/chrome/opera extension)
+#### usage:
+## option "Arguments": --external-application-button [HREF] [zdl parameters...] 
+## option "Quotation": "Surround arguments with quote characters" enabled
+if [ "${args[*]}" != "${args[*]//--external-application-button}" ]
+then
+    if [ "$this_mode" != "daemon" ]
+    then 
+	if [ -z "$DISPLAY" ]
+	then
+	    export DISPLAY=":0"
+	fi
+
+	url="${args[1]}"
+        unset args[0] args[1]
+	parameters="${args[*]}"
+        parameters="${parameters//= /=}"
+
+        test -s /tmp/zigzagdownloader-dirbase &&
+	    cd $(cat /tmp/zigzagdownloader-dirbase) ||
+		cd "$HOME"
+	
+	if [ ! -d "$directory" ]
+	then
+	    get_download_path directory || exit 0
+	    [ ! -d "$directory" ] && exit 0
+	fi
+        
+	echo "$directory" >/tmp/zigzagdownloader-dirbase
+	cd "$directory"
+	mkdir -p "$path_tmp"
+
+	if [ -e "/cygdrive" ]
+	then
+	    #dest_dir="${args[*]#*'--cwd'}"
+	    #dest_dir=$(cygpath -u "$dest_dir")
+	    #[ -n "$dest_dir" ] && cd "$dest_dir"
+	    $prog "$url" $parameters --stop
+	else
+	    xterm -tn "xterm-256color"                                                                      \
+		  -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"                                   \
+		  +bdc -fg grey -bg black -title "ZigzagDownLoader in $PWD"                                 \
+		  -e "/bin/bash -i -c \"export pid_prog=\$$ ; zdl $parameters \\\"$url\\\" --stop \""
+	fi
+	exit
+    else
+	unset args
+    fi
 fi
 
 
@@ -1105,6 +1117,35 @@ then
 	fi
     done 
 fi
+
+
+if [[ "${args[*]}" =~ \-\-scrape-url=[^\ ]+ ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--scrape-url=[^\ ]+)$ ]]
+	then
+	    url_page=$(sed -r 's|--scrape-url=["]*(.+)["]*$|\1|g' <<< "${args[i]}")
+	    scrape_url "$url_page"
+	    unset args[i]
+	fi
+    done
+fi
+
+
+if [ "${args[*]}" != "${args[*]//--scrape-url}" ]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [ "${args[i]}" == "--scrape-url" ]
+	then
+	    scrapeURL=true	    
+	    unset args[i]
+	fi
+    done
+fi
+
+
 
 ## --stop deve precedere --mp3|--flac
 if [ "${args[*]}" != "${args[*]//--stop}" ]
@@ -1592,13 +1633,37 @@ then
     done
 fi
 
+if [[ "${args[*]}" =~ \-\-url=[^\ ]+ ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--url=[^\ ]+)$ ]]
+	then
+	    url_regex=$(sed -r "s|--url=[\"']*(.+)[\"']*$|\1|g" <<< "${args[i]}")
+	    unset args[i]
+	fi
+    done
+fi
+
+if [[ "${args[*]}" =~ \-\-no\-url=[^\ ]+ ]]
+then
+    for ((i=0; i<=$max_args; i++))
+    do
+	if [[ "${args[i]}" =~ ^(--no-url=[^\ ]+)$ ]]
+	then
+	    no_url_regex=$(sed -r "s|--no-url=[\"']*(.+)[\"']*$|\1|g" <<< "${args[i]}")
+	    unset args[i]
+	fi
+    done
+fi
+
 if [[ "${args[*]}" =~ \-\-no-file=[^\ ]+ ]]
 then
     for ((i=0; i<=$max_args; i++))
     do
 	if [[ "${args[i]}" =~ ^(--no-file=[^\ ]+)$ ]]
 	then
-	    no_file_regex=$(sed -r 's;--no-file=["]*(.+)["]*$;\1;g' <<< "${args[i]}")
+	    no_file_regex=$(sed -r "s;--no-file=[\"']*(.+)[\"']*$;\1;g" <<< "${args[i]}")
 	    unset args[i]
 	fi
     done
@@ -1610,7 +1675,7 @@ then
     do
 	if [[ "${args[i]}" =~ ^(--file=[^\ ]+)$ ]]
 	then
-	    file_regex=$(sed -r 's;--file=["]*(.+)["]*$;\1;g' <<< "${args[i]}")
+	    file_regex=$(sed -r "s;--file=[\"']*(.+)[\"']*$;\1;g" <<< "${args[i]}")
 	    unset args[i]
 	fi
     done

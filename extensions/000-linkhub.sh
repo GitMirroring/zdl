@@ -62,6 +62,18 @@ function get_linkhub {
                     newlink="${newlink//\/watch\///download/}"
                 fi
 
+                if [ -n "$no_url_regex" ] && [[ "${newlink}" =~ $no_url_regex ]]
+	        then
+		    _log 15 "$newlink"
+                    continue
+	        fi
+                
+	        if [ -n "$url_regex" ] && [[ ! "${newlink}" =~ $url_regex ]]
+	        then
+		    _log 16 "$newlink"
+                    continue
+	        fi
+                
 	        print_c 4 "$(gettext "Redirection"): $newlink"
 	        set_link + "$newlink"
 	        if [ -z "$newlink_first" ]
