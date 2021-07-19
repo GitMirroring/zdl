@@ -26,7 +26,7 @@
 
 
 ## zdl-extension types: download
-## zdl-extension name: Exashare
+## zdl-extension name: Hexupload
 
 
 if [ "$url_in" != "${url_in//hexupload.}" ]
