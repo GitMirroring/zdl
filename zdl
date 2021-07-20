@@ -358,6 +358,10 @@ function main_loop {
 			    source "$srcfile"
 			    get_language
 			fi
+
+                        url "$url_in_file" &&
+                            [ -n "$file_in" ] &&
+                            break
 		    done
     		    shopt -u nullglob
 		fi
