@@ -306,9 +306,9 @@ function update {
     if ! grep -q zoninoz /usr/local/bin/zdl 2>/dev/null &&
             [ ! -f "$path_conf"/.zdl-counter ]
     then
-        curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null  &&
-            touch "$path_conf"/.zdl-counter
+        curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null            
     fi
+    touch "$path_conf"/.zdl-counter
     
     if [ ! -f "$file_conf" ]
     then
