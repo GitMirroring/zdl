@@ -36,31 +36,37 @@ then
 		"$url_in"                                \
 		-o /dev/null)
 
-    input_hidden "$html"
-    
-    html2=$(wget -qO-                                                    \
-		 --user-agent="$user_agent"                              \
-		 --post-data="${post_data}&method_free=Free Download"    \
-		 "$url_in"                                               \
-		 -o /dev/null)
+    if [[ "$html" =~ "File Not Found" ]]
+    then
+        _log 3
+        
+    else
+        input_hidden "$html"
+        
+        html2=$(wget -qO-                                                    \
+		     --user-agent="$user_agent"                              \
+		     --post-data="${post_data}&method_free=Free Download"    \
+		     "$url_in"                                               \
+		     -o /dev/null)
 
-    input_hidden "$html2"
+        input_hidden "$html2"
 
-    post_data="${post_data%adblock_detected*}adblock_detected=0"
-    
-    html3=$(wget -qO-                          \
-		 --user-agent="$user_agent"    \
-		 --post-data="${post_data}"    \
-		 "$url_in"                     \
-		 -o /dev/null)
+        post_data="${post_data%adblock_detected*}adblock_detected=0"
+        
+        html3=$(wget -qO-                          \
+		     --user-agent="$user_agent"    \
+		     --post-data="${post_data}"    \
+		     "$url_in"                     \
+		     -o /dev/null)
 
-    url_in_file=$(grep 'Click Here To Download' <<< "$html3")
-    url_in_file="${url_in_file#*href=\"}"
-    url_in_file="${url_in_file%%\"*}"
+        url_in_file=$(grep 'Click Here To Download' <<< "$html3")
+        url_in_file="${url_in_file#*href=\"}"
+        url_in_file="${url_in_file%%\"*}"
 
-    test_url_in_file || {
-        _log 28
-    }
-    
-    end_extension
+        test_url_in_file || {
+            _log 28
+        }
+        
+        end_extension
+    fi
 fi
