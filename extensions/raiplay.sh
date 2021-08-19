@@ -101,6 +101,7 @@ then
 
         url_in_file="$raiplay_url"
         youtubedl_m3u8="$url_in_file"
+        unset youtubedl_m3u8
 
         if url "$raiplay_url"
         then
@@ -114,9 +115,10 @@ then
         fi
 
         file_in="${raiplay_json#*name\": \"}"
-        file_in="${file_in%%\"*}"
+        file_in="${file_in%%\"*}".mp4
     fi
 
+    downloader_in=FFMpeg
     downwait_extra=20
 
     end_extension
