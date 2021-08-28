@@ -84,14 +84,38 @@ then
     else
         if [[ "$url_in" =~ \/programmi\/ ]]
         then
-            raiplay_item_path=$(curl -s "${url_in}.json")
-            raiplay_item_path="${raiplay_item_path#*\"first_item_path\" \: \"}"
-            raiplay_item_path="${raiplay_item_path%%\"*}"
-            test -n "${raiplay_item_path}" &&
-                raiplay_item_path="https://www.raiplay.it${raiplay_item_path}"
+            raiplay_seasons_path=(
+                $(curl -s "${url_in}.json" |
+                      grep -oP '[^"]+ContentSet[^"]+')
+            )
+            
+            # raiplay_item_path="${raiplay_item_path#*\"first_item_path\" \: \"}"
+            # raiplay_item_path="${raiplay_item_path%%\"*}"
+            # test -n "${raiplay_item_path}" &&
+            #     raiplay_item_path="https://www.raiplay.it${raiplay_item_path}"
 
-            url "${raiplay_item_path}" &&
-                replace_url_in "${raiplay_item_path}"
+            for ((i=0; i<${#raiplay_seasons_path[@]}; i++))
+            do
+                raiplay_episodes_path=(
+                    $(curl -s "https://www.raiplay.it${raiplay_seasons_path[$i]}" |
+                          grep -oP '\/video\/[^"]+\.json' |
+                          grep -v '/info/')
+                )
+
+                for ((j=0; j<${#raiplay_episodes_path[@]}; j++))
+                do                   
+                    if [ -z "$first" ] &&
+                           url "https://www.raiplay.it${raiplay_episodes_path[$j]}"
+                    then
+                        replace_url_in "https://www.raiplay.it${raiplay_episodes_path[$j]}"
+                        first=true
+                    else
+                        set_link + "https://www.raiplay.it${raiplay_episodes_path[$j]}"
+                    fi
+                    print_c 4 "https://www.raiplay.it${raiplay_episodes_path[$j]}"
+                done
+            done
+            unset first
         fi
       
         raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
