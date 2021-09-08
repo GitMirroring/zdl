@@ -35,38 +35,55 @@ then
 		--user-agent="$user_agent"               \
 		"$url_in"                                \
 		-o /dev/null)
-
+    
     if [[ "$html" =~ "File Not Found" ]]
     then
         _log 3
         
     else
         input_hidden "$html"
+        post_data="${post_data}&method_free=Free Download"
+
+        url_in_file="$url_in"
+        test_mime_hexupload=$(set_ext "$path_tmp/out")
+        rm -f "$path_tmp/out"
         
-        html2=$(wget -qO-                                                    \
-		     --user-agent="$user_agent"                              \
-		     --post-data="${post_data}&method_free=Free Download"    \
-		     "$url_in"                                               \
-		     -o /dev/null)
+        if [[ "$test_mime_hexupload" =~ \.(mkv|avi|mp4) ]]
+        then
+            get_language
+            force_dler Wget
+            get_language_prog
 
-        input_hidden "$html2"
+        else
+            html2=$(wget -SO-                                                    \
+		         --user-agent="$user_agent"                              \
+		         --post-data="${post_data}&method_free=Free Download"    \
+		         "$url_in"                                               \
+		         -o /dev/null)
 
-        post_data="${post_data%adblock_detected*}adblock_detected=0"
-        
-        html3=$(wget -qO-                          \
-		     --user-agent="$user_agent"    \
-		     --post-data="${post_data}"    \
-		     "$url_in"                     \
-		     -o /dev/null)
+            input_hidden "$html2"
 
-        url_in_file=$(grep 'Click Here To Download' <<< "$html3")
-        url_in_file="${url_in_file#*href=\"}"
-        url_in_file="${url_in_file%%\"*}"
+            post_data="${post_data%adblock_detected*}adblock_detected=0"
 
+            html3=$(wget -qO-                          \
+		         --user-agent="$user_agent"    \
+		         --post-data="${post_data}"    \
+		         "$url_in"                     \
+		         -o /dev/null)
+
+            if [[ "$html3" =~ "404 Not Found" ]]
+            then
+                _log 8
+            fi
+
+            url_in_file=$(grep 'Click Here To Download' <<< "$html3")
+            url_in_file="${url_in_file#*href=\"}"
+            url_in_file="${url_in_file%%\"*}"
+        fi
         test_url_in_file || {
             _log 28
         }
-        
+
         end_extension
     fi
 fi

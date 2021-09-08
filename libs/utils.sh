@@ -357,11 +357,10 @@ function set_ext {
 	    sleep 0.5
 	    ((counter++))
 	done
-	
 	kill -9 $mime_pid
 	mime_type=$(file -b --mime-type "$path_tmp/test_mime")
-	rm -f "$path_tmp/test_mime"
-
+	rm -f "$path_tmp/test_mime" 
+        
     elif [ -f "$filename" ]
     then
 	mime_type=$(file -b --mime-type "$filename")
