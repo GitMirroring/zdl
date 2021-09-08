@@ -57,7 +57,7 @@ then
         else
             html2=$(wget -SO-                                                    \
 		         --user-agent="$user_agent"                              \
-		         --post-data="${post_data}&method_free=Free Download"    \
+		         --post-data="${post_data}"    \
 		         "$url_in"                                               \
 		         -o /dev/null)
 
