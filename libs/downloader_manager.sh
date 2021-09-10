@@ -31,7 +31,7 @@ function force_dler {
     ch_dler=1
     if [ "$dler" != "$downloader_in" ]
     then
-	print_c 3 "$(gettext "The server does not allow the use of %s: the download will be made with %s")" "$dler" "$downloader_in"
+	print_c 2 "$(gettext "The server does not allow the use of %s: the download will be made with %s")" "$dler" "$downloader_in"
     fi
 }
 
