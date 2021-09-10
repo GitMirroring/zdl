@@ -40,7 +40,6 @@ if [[ "$url_in" =~ (^https\:\/\/mega\.co\.nz\/|^https\:\/\/mega\.nz\/) ]]
 then
     if hash megadl 2>/dev/null
     then
-        downloader_in=MegaDL
         url_in_file="$url_in"
         test_tmp=$(mktemp)
         megadl --debug api \
@@ -58,9 +57,15 @@ then
         
         file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
         length_in=$(awk '{match($0, /"s":\s(.+),/, matched); if (matched[1]) print matched[1]}' $test_tmp)
+
+        get_language
+        force_dler MegaDL
+        get_language_prog
         
     else
+        get_language
         print_c 3 "$(gettext 'To download from Mega, install the "megatools" package')"
+        get_language_prog
     fi
     
     end_extension

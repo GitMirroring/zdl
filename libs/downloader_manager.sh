@@ -378,8 +378,8 @@ $aria2_parts" >"$path_tmp/${file_in}_stdout.tmp"
 		   "$url_in_file"   2>&1 |
                 stdbuf -i0 -o0 -e0 tr -d "\r" &>>"$path_tmp/${file_in}_stdout.tmp" &
 
-            get_command_pid pid_in megadl "${opts[@]}" 
-            
+            get_command_pid pid_in "megadl.+$file_in"
+
 	    echo -e "${pid_in}
 $url_in
 MegaDL
@@ -388,7 +388,7 @@ $file_in
 $url_in_file
 $file_in_encoded
 $(date +%s)
-$length_in" >"$path_tmp/${file_in}_stdout.tmp"            
+$length_in" >"$path_tmp/${file_in}_stdout.tmp"
             ;;
         
 	Axel)

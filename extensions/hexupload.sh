@@ -31,9 +31,9 @@
 
 if [ "$url_in" != "${url_in//hexupload.}" ]
 then
-    html=$(wget -qO- -t 1 -T $max_waiting                \
-		--user-agent="$user_agent"               \
-		"$url_in"                                \
+    html=$(wget -qO- -t 1 -T $max_waiting         \
+		--user-agent="$user_agent"        \
+		"$url_in"                         \
 		-o /dev/null)
     
     if [[ "$html" =~ "File Not Found" ]]
@@ -55,10 +55,10 @@ then
             get_language_prog
 
         else
-            html2=$(wget -SO-                                                    \
-		         --user-agent="$user_agent"                              \
+            html2=$(wget -SO-                          \
+		         --user-agent="$user_agent"    \
 		         --post-data="${post_data}"    \
-		         "$url_in"                                               \
+		         "$url_in"                     \
 		         -o /dev/null)
 
             input_hidden "$html2"
