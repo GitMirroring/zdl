@@ -57,6 +57,11 @@ then
     file_in="${url_in#*mp4\:}"
     file_in="${file_in%%\/*}"
 
+    [[ "$url_in" =~ m3u8 ]] && {
+        get_language
+        force_dler FFMpeg
+        get_language_prog
+    }
     url_in_file="$url_in"
 
     end_extension
