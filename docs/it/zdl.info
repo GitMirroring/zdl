@@ -1292,7 +1292,7 @@ File: zdl.info,  Node: Perché questo programma,  Next: Tags,  Prev: Installazio
 Perché questo programma
 ************************
 
-ZigzagDownLoader è un gestore di download estensibile, robusto ed
+ZigzagDownLoader è un gestore di download estendibile, robusto ed
 interamente controllabile con un terminale o, attraverso socket, con
 un'interfaccia web adatta anche al formato di uno smartphone
 (_-socket_, _-web-ui_). Può essere integrato ai più diffusi web browser

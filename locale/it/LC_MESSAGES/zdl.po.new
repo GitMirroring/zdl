@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-08 20:15+0200\n"
+"POT-Creation-Date: 2021-09-27 13:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -559,7 +559,7 @@ msgstr ""
 msgid "code not found"
 msgstr ""
 
-#: ../extensions/mega.sh:63 ../libs/extension_utils.sh:543
+#: ../extensions/mega.sh:67 ../libs/extension_utils.sh:543
 msgid "To download from Mega, install the \"megatools\" package"
 msgstr ""
 
@@ -1117,12 +1117,12 @@ msgstr ""
 msgid "Link paused"
 msgstr ""
 
-#: ../libs/downloader_manager.sh:33
+#: ../libs/downloader_manager.sh:34
 msgid ""
 "The server does not allow the use of %s: the download will be made with %s"
 msgstr ""
 
-#: ../libs/downloader_manager.sh:110
+#: ../libs/downloader_manager.sh:112
 msgid "the download requires the use of RTMPDump, which is not installed"
 msgstr ""
 

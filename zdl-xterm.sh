@@ -1,0 +1,70 @@
+#!/bin/bash -i
+#
+# ZigzagDownLoader (ZDL)
+# 
+# This program is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU General Public License as published 
+# by the Free Software Foundation; either version 3 of the License, 
+# or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License 
+# along with this program. If not, see http://www.gnu.org/licenses/. 
+# 
+# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+# 
+# For information or to collaborate on the project:
+# https://savannah.nongnu.org/projects/zdl
+# 
+# Gianluca Zoni (author)
+# http://inventati.org/zoninoz
+# zoninoz@inventati.org
+#
+
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
+
+default_directory=""
+
+if [ "$1" == "--seldir" ]
+then
+    read -p "Seleziona la directory di destinazione [$PWD]:" directory
+
+    if [ ! -d "$directory" ]
+    then
+	unset directory
+    fi
+
+    echo "$directory"
+
+else
+    args=( "$@" )
+    args=( "${args[*]// /20%}" )
+    args=( "${args[*]//&/\&}" )
+
+    xterm -tn "xterm-256color"                                       \
+	  -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"    \
+	  +bdc                                                       \
+	  -fg grey                                                   \
+	  -bg black                                                  \
+	  -title "ZigzagDownLoader in $PWD"                          \
+	  -e "/bin/bash -i -c \"export pid_prog=\$$
+if [ ! -d \\\"$default_directory\\\" ]
+then 
+  cd  \\\"\\\$(zdl-xterm --seldir ${args[@]})\\\"
+
+else 
+  cd \\\"$default_directory\\\" 2>/dev/null
+
+fi
+
+zdl ${args[*]} --stop \"" &
+
+fi

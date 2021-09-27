@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-13 16:01+0100\n"
+"POT-Creation-Date: 2021-09-08 20:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -284,8 +284,8 @@ msgstr "non ha trovato il seguente pacchetto:"
 msgid "Errors in compilation or installation"
 msgstr "Errori nella compilazione o nell'installazione"
 
-#: ../updater.sh:202 ../updater.sh:456 ../updater.sh:464 ../updater.sh:470
-#: ../updater.sh:485 ../updater.sh:517 ../updater.sh:600
+#: ../updater.sh:202 ../updater.sh:462 ../updater.sh:470 ../updater.sh:476
+#: ../updater.sh:491 ../updater.sh:523 ../updater.sh:606
 msgid "Installing"
 msgstr "Installazione di"
 
@@ -301,19 +301,19 @@ msgstr "Aggiornamento completato"
 msgid "Update failed"
 msgstr "Aggiornamento fallito"
 
-#: ../updater.sh:330 ../updater.sh:387
+#: ../updater.sh:336 ../updater.sh:393
 msgid "failed. Please try again"
 msgstr "fallito. Riprova un'altra volta"
 
-#: ../updater.sh:334 ../updater.sh:391
+#: ../updater.sh:340 ../updater.sh:397
 msgid "saved successfully"
 msgstr "salvato con successo"
 
-#: ../updater.sh:397
+#: ../updater.sh:403
 msgid "Startup batch script installed:"
 msgstr "Script batch di avvio installato:"
 
-#: ../updater.sh:411
+#: ../updater.sh:417
 #, sh-format
 msgid ""
 "Below, the existing ZigzagDownLoader extensions,\n"
@@ -344,33 +344,33 @@ msgstr ""
 "\n"
 "ESTENSIONI:\n"
 
-#: ../updater.sh:424 ../updater.sh:427
+#: ../updater.sh:430 ../updater.sh:433
 msgid "README"
 msgstr "LEGGIMI"
 
-#: ../updater.sh:478
+#: ../updater.sh:484
 msgid "Recovery packages not found:"
 msgstr "Recupero pacchetti non trovati:"
 
-#: ../updater.sh:648
+#: ../updater.sh:654
 msgid "Successfully completed"
 msgstr "Completato con successo"
 
-#: ../updater.sh:655
+#: ../updater.sh:661
 msgid "ZigzagDownLoader update"
 msgstr "Aggiornamento di ZigzagDownLoader"
 
-#: ../updater.sh:656
+#: ../updater.sh:662
 msgid "ZigzagDownLoader updated with success"
 msgstr "ZigzagDownLoader aggiornato con successo"
 
-#: ../updater.sh:661 ../gui/gui.sh:610 ../gui/gui.sh:719 ../gui/gui.sh:761
+#: ../updater.sh:667 ../gui/gui.sh:610 ../gui/gui.sh:719 ../gui/gui.sh:761
 #: ../gui/gui.sh:817 ../gui/gui.sh:830 ../gui/gui.sh:1013 ../gui/gui.sh:1219
 #: ../gui/gui.sh:1287 ../gui/gui.sh:1333 ../gui/gui.sh:1434 ../gui/gui.sh:1520
 msgid "Close"
 msgstr "Chiudi"
 
-#: ../updater.sh:662
+#: ../updater.sh:668
 msgid "Restart ZDL"
 msgstr "Riavvia ZDL"
 
@@ -427,58 +427,58 @@ msgstr "Aggiornamento fallito: non è possibile aprire il pacchetto %s"
 msgid "is already the latest version"
 msgstr "è già alla versione più recente"
 
-#: ../zdl.sh:316
+#: ../zdl.sh:321
 msgid "Processing link:"
 msgstr "Link da processare:"
 
-#: ../zdl.sh:319 ../ui/ui.sh:95
+#: ../zdl.sh:324 ../ui/ui.sh:95
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:448 ../extensions/ddl.sh:153 ../ui/ui.awk:327
+#: ../zdl.sh:469 ../extensions/ddl.sh:153 ../ui/ui.awk:327
 msgid "File URL"
 msgstr "URL del file"
 
-#: ../zdl.sh:803
+#: ../zdl.sh:812
 msgid "Temporary file deleted"
 msgstr "File temporanei cancellati"
 
-#: ../zdl.sh:804
+#: ../zdl.sh:813
 msgid "Cleaning of temporary files not carried out (non-existent files)"
 msgstr "Pulizia file temporanei non effettuata (file inesistenti)"
 
-#: ../zdl.sh:1125
+#: ../zdl.sh:1176
 msgid "The format conversion function depends on ffmpeg or avconv, not found"
 msgstr ""
 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non "
 "trovati"
 
-#: ../zdl.sh:1161
+#: ../zdl.sh:1212
 msgid "Started in daemon mode in %s"
 msgstr "Avviato in modalità demone in %s"
 
-#: ../zdl.sh:1162 ../zdl.sh:1172 ../gui/gui.sh:261 ../gui/gui.sh:283
+#: ../zdl.sh:1213 ../zdl.sh:1223 ../gui/gui.sh:261 ../gui/gui.sh:283
 #: ../gui/gui.sh:287
 msgid "You can control it with:"
 msgstr "Puoi controllarlo con:"
 
-#: ../zdl.sh:1171
+#: ../zdl.sh:1222
 msgid "An active instance of daemon mode already exists in %s"
 msgstr "Esiste già un'istanza attiva della modalità demone in %s"
 
-#: ../zdl.sh:1210 ../gui/gui.sh:1239
+#: ../zdl.sh:1261 ../gui/gui.sh:1239
 msgid "New socket started at the port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:1217 ../gui/gui.sh:1245
+#: ../zdl.sh:1268 ../gui/gui.sh:1245
 msgid "Socket already in use at the port"
 msgstr "Socket già in uso alla porta"
 
-#: ../zdl.sh:1222
+#: ../zdl.sh:1273
 msgid "Socket not started at the port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:1428
+#: ../zdl.sh:1479
 msgid ""
 "Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = "
 "[NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
@@ -486,23 +486,23 @@ msgstr ""
 "Opzione deprecata: '--multi=[NUMERO]' è sostituita da '--max-"
 "downloads=[NUMERO]'. Resta invariata l'opzione breve '-m [NUMERO]'\\n"
 
-#: ../zdl.sh:1451
+#: ../zdl.sh:1502
 msgid "HTTP proxy detected: %s"
 msgstr "Rilevato proxy HTTP: %s"
 
-#: ../zdl.sh:1456
+#: ../zdl.sh:1507
 msgid "IP address: %s"
 msgstr "Indirizzo IP: %s"
 
-#: ../zdl.sh:1459
+#: ../zdl.sh:1510
 msgid "IP address not detected"
 msgstr "Indirizzo IP non rilevato"
 
-#: ../zdl.sh:1515
+#: ../zdl.sh:1566
 msgid "A file already exists with the same name as"
 msgstr "Esiste già un file con lo stesso nome di"
 
-#: ../zdl.sh:1522
+#: ../zdl.sh:1573
 #, sh-format
 msgid ""
 "The file list will be saved in $print_out\\n(you can also use it to "
@@ -511,42 +511,42 @@ msgstr ""
 "La lista dei file verrà salvata in $print_out\\n(puoi anche usarla per "
 "comunicare i file in scaricamento a un altro programma)\\n"
 
-#: ../zdl.sh:1561
+#: ../zdl.sh:1612
 msgid "Active proxy: %s\\n"
 msgstr "Proxy attivo: %s\\n"
 
-#: ../zdl.sh:1564 ../zdl.sh:1568
+#: ../zdl.sh:1615 ../zdl.sh:1619
 msgid "%s: invalid argument\\n\\n"
 msgstr "%s: argomento non valido\\n\\n"
 
-#: ../zdl.sh:1655
+#: ../zdl.sh:1730
 msgid "%s: invalid argument"
 msgstr "%s: argomento non valido"
 
-#: ../zdl.sh:1671
+#: ../zdl.sh:1746
 msgid "Connection and extraction from:"
 msgstr "Connessione ed estrazione da:"
 
-#: ../zdl.sh:1732
+#: ../zdl.sh:1807
 msgid "The complete list of links is in links.txt"
 msgstr "L'elenco completo dei link è in links.txt"
 
-#: ../zdl.sh:1957
+#: ../zdl.sh:2032
 msgid "Download completed"
 msgstr "Download completato"
 
-#: ../zdl.sh:1973
+#: ../zdl.sh:2048
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 
-#: ../zdl.sh:1974
+#: ../zdl.sh:2049
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
 #: ../extensions/000-filecrypt.sh:78 ../extensions/000-linkhub.sh:40
-#: ../extensions/000-linkhub.sh:60 ../extensions/000-pianosolo.sh:52
-#: ../extensions/001-vcrypt.sh:86 ../extensions/fattoquotidiano.sh:39
-#: ../extensions/fattoquotidiano.sh:48 ../extensions/filmpertutti.sh:41
+#: ../extensions/000-linkhub.sh:77 ../extensions/000-pianosolo.sh:52
+#: ../extensions/001-vcrypt.sh:86 ../extensions/fattoquotidiano.sh:71
+#: ../extensions/fattoquotidiano.sh:78 ../extensions/filmpertutti.sh:41
 #: ../extensions/wstream.sh:80 ../extensions/wstream.sh:158
 #: ../extensions/yt.sh:38 ../libs/log.sh:188
 msgid "Redirection"
@@ -569,13 +569,21 @@ msgstr "Analisi del container DLC"
 msgid "Cookies deleted"
 msgstr "Cookie cancellati"
 
-#: ../extensions/akvideo.sh:194 ../extensions/aparat.sh:145
-#: ../extensions/supervideo.sh:132 ../extensions/upstream.sh:198
+#: ../extensions/akvideo.sh:156 ../extensions/aparat.sh:101
+#: ../extensions/deltabit.sh:104 ../extensions/supervideo.sh:99
+#: ../extensions/upstream.sh:149
+msgid "Audio/video definition"
+msgstr "Definizione audio/video"
+
+#: ../extensions/akvideo.sh:194 ../extensions/aparat.sh:155
+#: ../extensions/deltabit.sh:136 ../extensions/supervideo.sh:134
+#: ../extensions/upstream.sh:198
 msgid "The movie with %s definition is available"
 msgstr "È disponibile il filmato con definizione %s"
 
-#: ../extensions/akvideo.sh:200 ../extensions/aparat.sh:150
-#: ../extensions/supervideo.sh:140 ../extensions/upstream.sh:203
+#: ../extensions/akvideo.sh:200 ../extensions/aparat.sh:160
+#: ../extensions/deltabit.sh:144 ../extensions/supervideo.sh:142
+#: ../extensions/upstream.sh:203
 msgid "The movie with %s definition is not available"
 msgstr "Non è disponibile il filmato con definizione %s"
 
@@ -1189,7 +1197,7 @@ msgstr ""
 "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: "
 "%d), nel seguente terminale: %s\\n"
 
-#: ../libs/core.sh:1542
+#: ../libs/core.sh:1543
 msgid "Link paused"
 msgstr "Link in pausa"
 
@@ -2003,6 +2011,3 @@ msgstr "non attivo"
 
 #~ msgid "Wait about 30 seconds"
 #~ msgstr "Attendi circa 30 secondi"
-
-#~ msgid "Audio/video definition"
-#~ msgstr "Definizione audio/video"
