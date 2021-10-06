@@ -498,17 +498,18 @@ player delle pagine web):
 _Video in streaming saltando il player del browser:_
      Akvideo (HD), Aparat, Auroravid/Novamov, Backin, Backin, Biqle
      (HD), Cloudvideo (HD), Dailymotion, Deltabit (HD), Dplay (HD),
-     EasyLoad (HD), Exashare, Facebook, Fastvideo, Flashx.tv, IDoWatch,
-     IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex Cloudzilla),
-     NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube,
-     Portalevideo.unimi.it, Putstream, RaiPlay (HD), raiscuola.rai.it
-     (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
-     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, StreamTape,
-     Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
-     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
-     in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
-     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
-     (HD), VK (HD), Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Flashx.tv,
+     IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex
+     Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
+     playtube, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
+     raiscuola.rai.it (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com
+     (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango,
+     Streamin, StreamTape, Supervideo (HD), TED (+sub), Thevideo,
+     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
+     tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream,
+     VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox,
+     Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Wolfstream (HD),
+     WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
@@ -1372,20 +1373,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 40)
+                                                               (line 41)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
-                                                               (line 25)
+                                                               (line 26)
 * file hosting:                          Servizi streaming/hosting.
-                                                               (line 25)
+                                                               (line 26)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 40)
+                                                               (line 41)
 * live:                                  Servizi streaming/hosting.
-                                                               (line 35)
+                                                               (line 36)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 44)
+                                                               (line 45)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1500,26 +1501,26 @@ Tag Table:
 Node: Top1241
 Node: Il comando ZDL5310
 Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18517
-Node: Arrestare ZDL20973
-Node: Controllare i download22078
-Node: Manuali d'uso26330
-Node: Modi26746
-Node: Readline30041
-Node: Editor31593
-Node: Omonimie32818
-Node: IRC/XDCC34366
-Node: Torrent36075
-Node: Filtri36959
-Node: Creare nuove estensioni37280
-Node: Software consigliati e dipendenze39055
-Node: Conkeror40731
-Node: zdl-xterm e XXXTerm/Xombrero41755
-Node: Installazione e aggiornamento43679
-Node: Perché questo programma46994
-Node: Tags50882
-Node: Copying55631
-Node: Contatti56681
+Node: Avviare ZDL18531
+Node: Arrestare ZDL20987
+Node: Controllare i download22092
+Node: Manuali d'uso26344
+Node: Modi26760
+Node: Readline30055
+Node: Editor31607
+Node: Omonimie32832
+Node: IRC/XDCC34380
+Node: Torrent36089
+Node: Filtri36973
+Node: Creare nuove estensioni37294
+Node: Software consigliati e dipendenze39069
+Node: Conkeror40745
+Node: zdl-xterm e XXXTerm/Xombrero41769
+Node: Installazione e aggiornamento43693
+Node: Perché questo programma47008
+Node: Tags50896
+Node: Copying55645
+Node: Contatti56695
 
 End Tag Table
 
