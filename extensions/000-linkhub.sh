@@ -37,7 +37,9 @@ function get_linkhub {
     html="${html%%\"*}"
     
     link_parser "$link"
+    get_language
     print_c 4 "$(gettext "Redirection"): ${parser_proto}${parser_domain}/${html#*\/}"
+    get_language_prog
     html=$(curl "${parser_proto}${parser_domain}/${html#*\/}")
 
     if [[ "$html" =~ text-url ]]
