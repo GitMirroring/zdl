@@ -29,11 +29,21 @@
 
 if [[ "$url_in" =~ isecure\.link ]]
 then
-    isecure_url=$(curl -s "$url_in"|
-                      grep -oP 'Download.+iframe.+src.+' |
+    html=$(curl -s "$url_in")    
+    isecure_url=$(grep -oP 'Download.+iframe.+src.+' <<< "$html" |
                       grep -oP 'http[^"]+')
 
-    url "$isecure_url" &&
-	replace_url_in "$isecure_url" ||
-	    _log 2
+    if ! url "$isecure_url"
+    then        
+        isecure_url=$(grep -oP 'iframe src.+' <<< "$html" |
+                      grep -oP 'http[^"]+')
+    fi
+
+    if url "$isecure_url"
+    then
+        replace_url_in "$isecure_url"
+        
+    else
+	_log 2
+    fi
 fi
