@@ -28,7 +28,7 @@
 ## zdl-extension name: linkhub
 
 function get_linkhub {
-    local link="$1" newlink html
+    local link="$1" newlink html 
     declare -a links=()
     
     html=$(curl "$link")
@@ -37,66 +37,68 @@ function get_linkhub {
     html="${html%%\"*}"
     
     link_parser "$link"
+
     get_language
-    print_c 4 "$(gettext "Redirection"): ${parser_proto}${parser_domain}/${html#*\/}"
+    print_c 4 "$(gettext "Redirection"): $link --> ${parser_proto}${parser_domain}/${html#*\/}"
     get_language_prog
+
     html=$(curl "${parser_proto}${parser_domain}/${html#*\/}")
 
     if [[ "$html" =~ text-url ]]
     then
-        newlink_first=$(grep text-url -A1 <<<  "$html" |
-                            tail -n1 |
-                            sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
+	if [ -z "$newlink_first" ]
+	then
+            newlink_first=$(grep text-url -A1 <<<  "$html" |
+                                tail -n1 |
+                                sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
 
-        newlink_first=$(sanitize_url "$newlink_first")
-
+            newlink_first=$(sanitize_url "$newlink_first")
+        fi
+        
         links+=( $(grep -P 'href.+target=\"_blank\" title=\"' <<< "$html" |
-    		   sed -r 's|.+>([^<]+)<\/a>|\1|g')
-	       )
-
+    		   sed -r 's|.+>([^<]+)<\/a>.+|\1|g') )
+        
         for newlink in "${links[@]}"
         do
 	    newlink=$(trim "$newlink")
-	    if url "$newlink"
+	    if url "$newlink" &&
+                    [ "$newlink" != "$url_in" ]
 	    then
                 if [[ "$newlink" =~ ninjastream\..+\/watch\/ ]]
                 then
                     newlink="${newlink//\/watch\///download/}"
+                    
+                elif [ "$newlink" != "${newlink//linkhub\.}" ]
+                then
+                    get_linkhub "$newlink" || _log 36
+                    continue
                 fi
 
-                if [ -n "$no_url_regex" ] && [[ "${newlink}" =~ $no_url_regex ]]
+                if ( [ -n "$no_url_regex" ] && [[ "${newlink}" =~ $no_url_regex ]] ) ||
+                       ( [ -n "$url_regex" ] && [[ ! "${newlink}" =~ $url_regex ]] )    
 	        then
-		    _log 15 "$newlink"
+                    [ "$newlink_first" == "$newlink" ] && unset newlink_first
                     continue
 	        fi
-                
-	        if [ -n "$url_regex" ] && [[ ! "${newlink}" =~ $url_regex ]]
-	        then
-		    _log 16 "$newlink"
-                    continue
-	        fi
-                
-	        print_c 4 "$(gettext "Redirection"): $newlink"
+
 	        set_link + "$newlink"
+                
 	        if [ -z "$newlink_first" ]
 	        then
 		    newlink_first="$newlink"
 	        fi
-	    fi
+            fi                    
         done
-    fi
-
-    if url "$newlink_first"
-    then
-	replace_url_in "$newlink_first"
-	return 0
-    else
-	return 1
     fi
 }
  
 if [ "$url_in" != "${url_in//linkhub\.}" ]
 then
     get_linkhub "$url_in" || _log 36
+
+    url "$newlink_first" &&
+        replace_url_in "$newlink_first"
+    
+    unset newlink_first
 fi
 
