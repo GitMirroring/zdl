@@ -35,7 +35,7 @@ function get_linkhub {
     html=$(grep get_btn <<< "$html")
     html="${html#*href=\"}"
     html="${html%%\"*}"
-    
+
     link_parser "$link"
 
     get_language
@@ -94,10 +94,16 @@ function get_linkhub {
  
 if [ "$url_in" != "${url_in//linkhub\.}" ]
 then
-    get_linkhub "$url_in" || _log 36
+    for i in 0 1 2
+    do
+        get_linkhub "$url_in" || _log 36
+        [[ ! "$newlink_first" =~ linkhub\. ]] && break
+    done
 
-    url "$newlink_first" &&
-        replace_url_in "$newlink_first"
+    [[ ! "$newlink_first" =~ linkhub\. ]] &&
+        url "$newlink_first" &&
+        replace_url_in "$newlink_first" ||
+            _log 2
     
     unset newlink_first
 fi
