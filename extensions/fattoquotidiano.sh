@@ -33,23 +33,27 @@ then
 
     url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
     file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
-    get_location "$url_in_file" url_in_file
 
-    url "$url_in_file" ||
+    [[ "$url_in_file" =~ dailymotion ]] ||
         {
-            json_fattoq=$(youtube-dl --dump-json "$url_in")            
-            url_list_fattoq=$(grep -oP '\"url\":\ \"([^"]+mp4[^"]+)\"' <<< "$json_fattoq" |
-                                  sed -r 's|\"url\":\ \"([^"]+mp4[^"]+)\"|\1|g')
-            
-            ## better video only
-            #url_in_file=$(tail -n5 <<< "$url_list_fattoq" | head -n1)
-            
-            ## audio only:
-            #url_in_file=$(head -n1 <<< "$url_list_fattoq" | tail -n1)
+            get_location "$url_in_file" url_in_file
 
-            ## audio + video (low quality)
-            # url_in_file=$(grep _nc_vs <<< "$url_list_fattoq" | head -n1)
-            url_in_file=$(tail -n4 <<< "$url_list_fattoq" | head -n1)
+            url "$url_in_file" ||
+                {
+                    json_fattoq=$(youtube-dl --dump-json "$url_in")            
+                    url_list_fattoq=$(grep -oP '\"url\":\ \"([^"]+mp4[^"]+)\"' <<< "$json_fattoq" |
+                                          sed -r 's|\"url\":\ \"([^"]+mp4[^"]+)\"|\1|g')
+                    
+                    ## better video only
+                    #url_in_file=$(tail -n5 <<< "$url_list_fattoq" | head -n1)
+                    
+                    ## audio only:
+                    #url_in_file=$(head -n1 <<< "$url_list_fattoq" | tail -n1)
+
+                    ## audio + video (low quality)
+                    # url_in_file=$(grep _nc_vs <<< "$url_list_fattoq" | head -n1)
+                    url_in_file=$(tail -n4 <<< "$url_list_fattoq" | head -n1)
+                }
         }
     end_extension
 fi
