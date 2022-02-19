@@ -35,7 +35,7 @@ then
 		--user-agent="$user_agent"        \
 		"$url_in"                         \
 		-o /dev/null)
-    
+
     if [[ "$html" =~ "File Not Found" ]]
     then
         _log 3
@@ -80,6 +80,7 @@ then
             url_in_file="${url_in_file#*href=\"}"
             url_in_file="${url_in_file%%\"*}"
         fi
+
         test_url_in_file || {
             _log 28
         }

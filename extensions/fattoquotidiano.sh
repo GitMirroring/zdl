@@ -58,6 +58,7 @@ then
     end_extension
 fi
 
+
 if ( test -z "$file_in" ||
          ! url "$url_in_file" ) &&
        [[ "$url_in" =~ ilfattoquotidiano ]]
