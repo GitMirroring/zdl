@@ -31,50 +31,50 @@ if [ "$url_in" != "${url_in//filecrypt.cc}" ]
 then
     unset redir_filecrypt location_filecrypt
     get_language_prog
-    html=$(wget -qO- \
-		"$url_in" \
-		--keep-session-cookies \
-		--save-cookies="$path_tmp"/cookies.zdl \
-		--user-agent="$user_agent" \
-		-o /dev/null)
-    get_language
-    chunks_filecrypt=$(grep openLink <<< "$html" |
-			   tail -n1 |
-			   sed -r "s|openLink\('|\n|g")
 
-    codes_filecrypt=()
+    html=$(curl -v \
+                -c "$path_tmp"/cookies.zdl \
+                "$url_in" 2>&1)
     
-    for ((i=2; i<=$(wc -l <<< "${chunks_filecrypt[@]}"); i++))
-    do
-	codes_filecrypt+=( $(head -n ${i} <<< "$chunks_filecrypt" |
-				 tail -n1 |
-				 sed -r "s|^([^']+)'.+|\1|") )
-    done
+    get_language
 
+    codes_filecrypt=( $(grep -oP "openLink\(\'[^']+" <<< "$html" |
+                           sed -r "s|openLink\('|\n|g") )
+    
     if (( "${#codes_filecrypt[@]}" >0 ))
     then
 	for code_filecrypt in "${codes_filecrypt[@]}"
 	do
     	    url_filecrypt="https://filecrypt.cc/Link/${code_filecrypt}.html"
 
-	    html=$(wget -qO- \
-			"$url_filecrypt" \
-			--load-cookies="$path_tmp"/cookies.zdl \
-			--keep-session-cookies \
-			--save-cookies="$path_tmp"/cookies2.zdl \
-			--user-agent="$user_agent" \
-			-o /dev/null)	
-	    
-	    url_filecrypt=$(grep iframe <<< "$html")
-	    url_filecrypt="${url_filecrypt%\"*}"
-	    url_filecrypt="${url_filecrypt##*\"}"
-	    
-	    get_location "$url_filecrypt" location_filecrypt
-	
-	    if url "$location_filecrypt"
+            html=$(curl -v \
+                        -b "$path_tmp"/cookies.zdl \
+                        -c "$path_tmp"/cookies2.zdl \
+                        "$url_filecrypt" 2>&1)
+
+            url_filecrypt=$(grep -oP "top.location.href=\'[^']+" <<< "$html")
+            url_filecrypt="${url_filecrypt##*\'}"
+
+            _log 34 "$url_filecrypt"            
+
+            get_language_prog
+
+            location_filecrypt=$(curl -v \
+                                      -b "$path_tmp"/cookies.zdl \
+                                      -c "$path_tmp"/cookies2.zdl \
+                                      "$url_filecrypt" 2>&1 |
+                                     awk "/location/{print \$3}")
+            get_language
+
+            location_filecrypt=$(trim "$location_filecrypt")
+
+
+
+            if url "$location_filecrypt"
 	    then
 		set_link + "$location_filecrypt"
-		get_language
+
+                get_language
 		print_c 4 "$(gettext "Redirection"): $location_filecrypt"
 		get_language_prog
 		
@@ -85,9 +85,12 @@ then
 	if url "$redir_filecrypt"
 	then
 	    set_link - "$url_in"
+
 	    url_in="$redir_filecrypt"
-	    print_links_txt
-	    get_language
+
+            print_links_txt
+
+            get_language
 	    print_c 4 "$(gettext "New link to process"): $url_in"
 	    get_language_prog
 	fi

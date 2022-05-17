@@ -504,22 +504,22 @@ _Video in streaming saltando il player del browser:_
      playtube, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
      raiscuola.rai.it (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com
      (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango,
-     Streamin, StreamTape, Supervideo (HD), TED (+sub), Thevideo,
-     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
-     tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream,
-     VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox,
-     Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Wolfstream (HD),
-     WStream (HD), Youtube, Zinwa (RTMP) 
+     Streamin, Streamlare (HD), StreamTape, Supervideo (HD), TED
+     (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
+     in streaming di tipo .m3u8, Tutti i video in streaming di tipo
+     .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy
+     (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
+     Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
-     (HD), dl.free.fr, Dropbox, Easybytez, EasyLoad (HD), Go4Up
-     (multi-link), Hexupload, Jheberg (multi-link), Katfile, Mediafire,
-     Mega, MixDrop, MultiUp (multi-link), Onlystream, Ozofiles,
-     Pastebin, Rockfile, Sockshare (HD), Subyshare, Supervideo (HD),
-     TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
-     Uppit, Upstream, Uptobox, Vidoza, Voe, Wolfstream (HD), WStream
-     (HD) 
+     (HD), dl.free.fr, Dropbox, Drop.download, Easybytez, EasyLoad
+     (HD), Go4Up (multi-link), Hexupload, Jheberg (multi-link),
+     Katfile, Mediafire, Mega, MixDrop, MultiUp (multi-link),
+     Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare (HD),
+     Subyshare, Supervideo (HD), TubeOffLine.com (tutti i servizi),
+     Tusfiles, Uload, Uploadshub, Uppit, Upstream, Uptobox, Vidoza,
+     Voe, Wolfstream (HD), WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1501,26 +1501,26 @@ Tag Table:
 Node: Top1241
 Node: Il comando ZDL5310
 Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18540
-Node: Arrestare ZDL20996
-Node: Controllare i download22101
-Node: Manuali d'uso26353
-Node: Modi26769
-Node: Readline30064
-Node: Editor31616
-Node: Omonimie32841
-Node: IRC/XDCC34389
-Node: Torrent36098
-Node: Filtri36982
-Node: Creare nuove estensioni37303
-Node: Software consigliati e dipendenze39078
-Node: Conkeror40754
-Node: zdl-xterm e XXXTerm/Xombrero41778
-Node: Installazione e aggiornamento43702
-Node: Perché questo programma47017
-Node: Tags50905
-Node: Copying55654
-Node: Contatti56704
+Node: Avviare ZDL18572
+Node: Arrestare ZDL21028
+Node: Controllare i download22133
+Node: Manuali d'uso26385
+Node: Modi26801
+Node: Readline30096
+Node: Editor31648
+Node: Omonimie32873
+Node: IRC/XDCC34421
+Node: Torrent36130
+Node: Filtri37014
+Node: Creare nuove estensioni37335
+Node: Software consigliati e dipendenze39110
+Node: Conkeror40786
+Node: zdl-xterm e XXXTerm/Xombrero41810
+Node: Installazione e aggiornamento43734
+Node: Perché questo programma47049
+Node: Tags50937
+Node: Copying55686
+Node: Contatti56736
 
 End Tag Table
 
