@@ -509,7 +509,7 @@ _Video in streaming saltando il player del browser:_
      in streaming di tipo .m3u8, Tutti i video in streaming di tipo
      .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy
      (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     Vupload, Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
@@ -1501,26 +1501,26 @@ Tag Table:
 Node: Top1241
 Node: Il comando ZDL5310
 Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18572
-Node: Arrestare ZDL21028
-Node: Controllare i download22133
-Node: Manuali d'uso26385
-Node: Modi26801
-Node: Readline30096
-Node: Editor31648
-Node: Omonimie32873
-Node: IRC/XDCC34421
-Node: Torrent36130
-Node: Filtri37014
-Node: Creare nuove estensioni37335
-Node: Software consigliati e dipendenze39110
-Node: Conkeror40786
-Node: zdl-xterm e XXXTerm/Xombrero41810
-Node: Installazione e aggiornamento43734
-Node: Perché questo programma47049
-Node: Tags50937
-Node: Copying55686
-Node: Contatti56736
+Node: Avviare ZDL18581
+Node: Arrestare ZDL21037
+Node: Controllare i download22142
+Node: Manuali d'uso26394
+Node: Modi26810
+Node: Readline30105
+Node: Editor31657
+Node: Omonimie32882
+Node: IRC/XDCC34430
+Node: Torrent36139
+Node: Filtri37023
+Node: Creare nuove estensioni37344
+Node: Software consigliati e dipendenze39119
+Node: Conkeror40795
+Node: zdl-xterm e XXXTerm/Xombrero41819
+Node: Installazione e aggiornamento43743
+Node: Perché questo programma47058
+Node: Tags50946
+Node: Copying55695
+Node: Contatti56745
 
 End Tag Table
 

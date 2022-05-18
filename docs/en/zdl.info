@@ -502,7 +502,7 @@ _Streaming video skipping browser player:_
      in streaming di tipo .m3u8, Tutti i video in streaming di tipo
      .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy
      (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD),
-     Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
+     Vupload, Wolfstream (HD), WStream (HD), Youtube, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
@@ -1469,26 +1469,26 @@ Tag Table:
 Node: Top1249
 Node: The ZDL command5133
 Node: Streaming/hosting services13149
-Node: Start ZDL17685
-Node: Stop ZDL20018
-Node: Check the downloads21053
-Node: User manuals25094
-Node: Modes25487
-Node: Readline28522
-Node: Editor29977
-Node: Homonymy31135
-Node: IRC/XDCC32644
-Node: Torrent34280
-Node: Filters35104
-Node: Create new extensions35392
-Node: Recommended software and dependencies37098
-Node: Conkeror38710
-Node: zdl-xterm and XXXTerm/Xombrero39692
-Node: Installation and update41563
-Node: Why this program44576
-Node: Tags48266
-Node: Copying53046
-Node: Contacts54124
+Node: Start ZDL17694
+Node: Stop ZDL20027
+Node: Check the downloads21062
+Node: User manuals25103
+Node: Modes25496
+Node: Readline28531
+Node: Editor29986
+Node: Homonymy31144
+Node: IRC/XDCC32653
+Node: Torrent34289
+Node: Filters35113
+Node: Create new extensions35401
+Node: Recommended software and dependencies37107
+Node: Conkeror38719
+Node: zdl-xterm and XXXTerm/Xombrero39701
+Node: Installation and update41572
+Node: Why this program44585
+Node: Tags48275
+Node: Copying53055
+Node: Contacts54133
 
 End Tag Table
 
