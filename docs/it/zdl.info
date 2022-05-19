@@ -504,7 +504,8 @@ _Video in streaming saltando il player del browser:_
      playtube, Portalevideo.unimi.it, Putstream, RaiPlay (HD),
      raiscuola.rai.it (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com
      (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango,
-     Streamin, Streamlare (HD), StreamTape, Supervideo (HD), TED
+     Streamin, Streamlare (HD), StreamSB/SBFull, StreamSB/SBFull (+
+     browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED
      (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video
      in streaming di tipo .m3u8, Tutti i video in streaming di tipo
      .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy
@@ -517,6 +518,7 @@ _File hosting:_
      (HD), Go4Up (multi-link), Hexupload, Jheberg (multi-link),
      Katfile, Mediafire, Mega, MixDrop, MultiUp (multi-link),
      Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare (HD),
+     StreamSB/SBFull, StreamSB/SBFull (+ browser to solve g-recaptcha),
      Subyshare, Supervideo (HD), TubeOffLine.com (tutti i servizi),
      Tusfiles, Uload, Uploadshub, Uppit, Upstream, Uptobox, Vidoza,
      Voe, Wolfstream (HD), WStream (HD) 
@@ -1373,20 +1375,20 @@ Indice analitico generale
 
 * argomenti:                             Il comando ZDL.       (line 18)
 * captcha:                               Servizi streaming/hosting.
-                                                               (line 41)
+                                                               (line 43)
 * comando zdl:                           Il comando ZDL.       (line  6)
 * download:                              Servizi streaming/hosting.
-                                                               (line 26)
+                                                               (line 27)
 * file hosting:                          Servizi streaming/hosting.
-                                                               (line 26)
+                                                               (line 27)
 * generated:                             Servizi streaming/hosting.
-                                                               (line 41)
+                                                               (line 43)
 * live:                                  Servizi streaming/hosting.
-                                                               (line 36)
+                                                               (line 38)
 * opzioni:                               Il comando ZDL.       (line 42)
 * perché zdl:                            Top.                  (line  6)
 * short links:                           Servizi streaming/hosting.
-                                                               (line 45)
+                                                               (line 47)
 * sintassi:                              Il comando ZDL.       (line 13)
 * streaming:                             Servizi streaming/hosting.
                                                                (line 12)
@@ -1501,26 +1503,26 @@ Tag Table:
 Node: Top1241
 Node: Il comando ZDL5310
 Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18581
-Node: Arrestare ZDL21037
-Node: Controllare i download22142
-Node: Manuali d'uso26394
-Node: Modi26810
-Node: Readline30105
-Node: Editor31657
-Node: Omonimie32882
-Node: IRC/XDCC34430
-Node: Torrent36139
-Node: Filtri37023
-Node: Creare nuove estensioni37344
-Node: Software consigliati e dipendenze39119
-Node: Conkeror40795
-Node: zdl-xterm e XXXTerm/Xombrero41819
-Node: Installazione e aggiornamento43743
-Node: Perché questo programma47058
-Node: Tags50946
-Node: Copying55695
-Node: Contatti56745
+Node: Avviare ZDL18725
+Node: Arrestare ZDL21181
+Node: Controllare i download22286
+Node: Manuali d'uso26538
+Node: Modi26954
+Node: Readline30249
+Node: Editor31801
+Node: Omonimie33026
+Node: IRC/XDCC34574
+Node: Torrent36283
+Node: Filtri37167
+Node: Creare nuove estensioni37488
+Node: Software consigliati e dipendenze39263
+Node: Conkeror40939
+Node: zdl-xterm e XXXTerm/Xombrero41963
+Node: Installazione e aggiornamento43887
+Node: Perché questo programma47202
+Node: Tags51090
+Node: Copying55839
+Node: Contatti56889
 
 End Tag Table
 
