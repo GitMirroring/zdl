@@ -52,14 +52,14 @@ then
     then
         replace_url_in "${url_in//sbfull.com\//sbfull.com\/d\/}"
     fi
-    
+
     html=$(curl -s \
                 -A "$user_agent" \
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
     
     file_in=$(get_title "$html")
-        
+    
     download_video=$(grep -P 'download_video' <<< "$html" |head -n1)
 
     hash_sbfull="${download_video%\'*}"
@@ -82,88 +82,85 @@ then
     ## file_in:
     input_hidden "$html"
     file_filter "$file_in"
-	
+    
     for mode_stream in $o h n l
     do
         get_sbfull_definition mode_stream_test
+        
+        [ -n "$mode_stream_test" ] &&
+            mode_stream="$mode_stream_test"
 
-            [ -n "$mode_stream_test" ] &&
-        	mode_stream="$mode_stream_test"
+        print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
+	
+        # sbfull_loops=0
+        # while ! url "$url_in_file" &&
+        #         ((sbfull_loops < 2))
+        # do
+        #     ((sbfull_loops++))
 
-            print_c 2 "$(gettext "Audio/video definition"): ${movie_definition[$mode_stream]}"
-	    
-            # sbfull_loops=0
-            # while ! url "$url_in_file" &&
-            #         ((sbfull_loops < 2))
-            # do
-            #     ((sbfull_loops++))
+        get_language_prog
 
-        	get_language_prog
+        html2=$(curl -s "https://sbfull.com/dl?op=view&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}")
+        
+        # html2=$(wget -qO- -t1 -T$max_waiting           \
+            # 	     "https://sbfull.tv/dl?op=download_orig&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}" \
+            # 	     -o /dev/null)
+        
+        html2=$(curl -s \
+                     -A "$user_agent" \
+                     -b "$path_tmp"/cookies.zdl \
+                     -c "$path_tmp"/cookies2.zdl \
+                     "https://sbfull.com/dl?op=download_orig&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}")
+        cat "$path_tmp"/cookies2.zdl >> "$path_tmp"/cookies.zdl
 
-                html2=$(curl -s "https://sbfull.com/dl?op=view&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}")
-                
-        	# html2=$(wget -qO- -t1 -T$max_waiting           \
-        	# 	     "https://sbfull.tv/dl?op=download_orig&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}" \
-        	# 	     -o /dev/null)
-                
-        	html2=$(curl -s \
-                             -A "$user_agent" \
-                             -b "$path_tmp"/cookies.zdl \
-                             -c "$path_tmp"/cookies2.zdl \
-                             "https://sbfull.com/dl?op=download_orig&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}")
-                cat "$path_tmp"/cookies2.zdl >> "$path_tmp"/cookies.zdl
+        get_language  
+        
+        if grep -q hidden <<< "$html2"
+        then
+            if command -v "$browser" &>/dev/null
+            then
+                $browser "https://sbfull.com/dl?op=download_orig&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}"
+            fi
+            # input_hidden "$html2"
 
-                get_language  
-                                
-                if grep -q hidden <<< "$html2"
-                then
-                    if command -v "$browser" &>/dev/null
-                    then
-                        $browser "https://sbfull.com/dl?op=download_orig&id=${id_sbfull}&mode=${mode_stream}&hash=${hash_sbfull}"
-                    fi
-                    # input_hidden "$html2"
+            # echo "POST: $post_data"
+            
+            # html3=$(curl -s \
+                #          -A "$user_agent" \
+                #          -b "$path_tmp"/cookies.zdl \
+                #          -c "$path_tmp"/cookies2.zdl \
+                #          -d "$post_data" \
+                #          "$url_in")
 
-                    # echo "POST: $post_data"
-                    
-                    # html3=$(curl -s \
-                    #          -A "$user_agent" \
-                    #          -b "$path_tmp"/cookies.zdl \
-                    #          -c "$path_tmp"/cookies2.zdl \
-                    #          -d "$post_data" \
-                    #          "$url_in")
+            # echo "$html3"
+            break
+        fi
 
-                    # echo "$html3"
-                    break
-                fi
+        #     ((sbfull_loops < 2)) && sleep 1
+        # done
 
-            #     ((sbfull_loops < 2)) && sleep 1
-            # done
+        # if ! url "$url_in_file" &&
+        #         [[ "$html2" =~ 'have to wait '([0-9]+) ]]
+        # then
+        #     url_in_timer=$((${BASH_REMATCH[1]} * 60))
+        #     set_link_timer "$url_in" $url_in_timer
+        #     _log 33 $url_in_timer
 
-            # if ! url "$url_in_file" &&
-            #         [[ "$html2" =~ 'have to wait '([0-9]+) ]]
-            # then
-            #     url_in_timer=$((${BASH_REMATCH[1]} * 60))
-            #     set_link_timer "$url_in" $url_in_timer
-            #     _log 33 $url_in_timer
+        #     add_sbfull_definition $mode_stream
+        #     break
 
-            #     add_sbfull_definition $mode_stream
-            #     break
+        # elif url "$url_in_file"
+        # then
+        #     print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
+        #     set_sbfull_definition $mode_stream
+        #     break
 
-            # elif url "$url_in_file"
-            # then
-            #     print_c 1 "$(gettext "The movie with %s definition is available")" "${movie_definition[$mode_stream]}" 
-            #     set_sbfull_definition $mode_stream
-            #     break
+        # else
+        #     print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
+        #     del_sbfull_definition $mode_stream
+        # fi
+    done
 
-            # else
-            #     print_c 3 "$(gettext "The movie with %s definition is not available")" "${movie_definition[$mode_stream]}" 
-            #     del_sbfull_definition $mode_stream
-            # fi
-        done
-
-        _log 36
-    fi
-
-    end_extension
+    _log 36
 fi
 

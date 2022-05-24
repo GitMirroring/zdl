@@ -32,17 +32,28 @@ if [[ "$url_in" =~ drop\.download ]]
 then
     get_language_prog
     location_drop=$(curl -v \
-                         -b "$path_tmp"/cookies2.zdl \
                          -c "$path_tmp"/cookies.zdl \
                          "$url_in" 2>&1 |
                         awk "/location/{print \$3}")
     get_language
     location_drop=$(trim "$location_drop")
-    
+
     if url "$location_drop"
     then
         _log 34 "$location_drop"
 
+        # html=$(curl -v \
+        #             -A "$user_agent" \
+        #             -b "$path_tmp"/cookies.zdl \
+        #             -c "$path_tmp"/cookies2.zdl \
+        #             -H "Connection: keep-alive" \
+        #             -H "Upgrade-Insecure-Requests: 1" \
+        #             -H "Sec-Fetch-Dest: document" \
+        #             -H "Sec-Fetch-Mode: navigate" \
+        #             -H "Sec-Fetch-Site: cross-site" \
+        #             -H "Cache-Control: max-age=0" \
+        #             -H "TE: trailers" \
+        #             "$location_drop" 2>&1)
         html=$(curl -v \
                     -A "$user_agent" \
                     -b "$path_tmp"/cookies.zdl \
@@ -51,45 +62,57 @@ then
                     -H "Upgrade-Insecure-Requests: 1" \
                     -H "Sec-Fetch-Dest: document" \
                     -H "Sec-Fetch-Mode: navigate" \
-                    -H "Sec-Fetch-Site: cross-site" \
-                    -H "Cache-Control: max-age=0" \
+                    -H "Sec-Fetch-Site: none" \
+                    -H "Sec-Fetch-User: ?1" \
                     -H "TE: trailers" \
                     "$location_drop" 2>&1)
-        
+
         input_hidden "$html"
 
-        post_data="${post_data}&method_free=Free Download >>"
-        
+        post_data="${post_data}&method_free=Free+Download+>>"
+
         html=$(curl -v \
                     -A "$user_agent" \
-                    -b "$path_tmp"/cookies.zdl \
-                    -c "$path_tmp"/cookies2.zdl \
+                    -b "$path_tmp"/cookies2.zdl \
+                    -c "$path_tmp"/cookies.zdl \
+                    -H "Origin: https://drop.download" \
                     -H "Connection: keep-alive" \
+                    -H "Referer: $location_drop" \
                     -H "Upgrade-Insecure-Requests: 1" \
                     -H "Sec-Fetch-Dest: document" \
                     -H "Sec-Fetch-Mode: navigate" \
-                    -H "Sec-Fetch-Site: cross-site" \
-                    -H "Cache-Control: max-age=0" \
-                    -H "TE: trailers" \
+                    -H "Sec-Fetch-Site: same-origin" \
+                    -H "Sec-Fetch-User: ?1" \
                     -d "$post_data" \
                     "$location_drop" 2>&1)
 
-        cat "$path_tmp"/cookies2.zdl >> "$path_tmp"/cookies.zdl 
+        # html=$(wget -SO -  \
+        #             --user-agent="$user_agent" \
+        #             --load-cookies="$path_tmp"/cookies2.zdl \
+        #             --save-cookies="$path_tmp"/cookies.zdl \
+        #             --header="Origin: https://drop.download" \
+        #             --header="Connection: keep-alive" \
+        #             --header="Referer: $location_drop" \
+        #             --header="Upgrade-Insecure-Requests: 1" \
+        #             --header="Sec-Fetch-Dest: document" \
+        #             --header="Sec-Fetch-Mode: navigate" \
+        #             --header="Sec-Fetch-Site: same-origin" \
+        #             --header="Sec-Fetch-User: ?1" \
+        #             --post-data="$post_data" \
+        #             "$location_drop" 2>&1)
 
-        captcha_code=$(pseudo_captcha "$html")
+        # captcha_code=$(pseudo_captcha "$html")
         
-        input_hidden "$html"
+        # input_hidden "$html"
 
-        post_data="${post_data%%Free Download*}Free Download >>&method_premium=&adblock_detected=0&data=$captcha_code"
-        post_data="${post_data//referer=/referer=$location_drop}"
+        # post_data="${post_data%%Free Download*}Free Download >>&method_premium=&adblock_detected=0&data=$captcha_code"
+        # post_data="${post_data//referer=/referer=$location_drop}"
 
         drop_unpacked=$(unpack "$(grep 'p,a,c,k,e' <<<  "$html" | tail -n1)")
 
         url_in_file="${drop_unpacked##*\<param name\=\"src\"value\=\"}"
         url_in_file="${url_in_file%%\"*}"
 
-
-#         countdown- 5
         
 #         html=$(curl -v \
 #                     -A "$user_agent" \
