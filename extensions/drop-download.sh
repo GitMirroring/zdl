@@ -100,34 +100,37 @@ then
         #             --post-data="$post_data" \
         #             "$location_drop" 2>&1)
 
-        captcha_code=$(pseudo_captcha "$html")
-        
-        input_hidden "$html"
-
-        post_data="${post_data%%Free Download*}Free+Download+%3E%3E&method_premium=&adblock_detected=0&code=$captcha_code"
         drop_unpacked=$(unpack "$(grep 'p,a,c,k,e' <<<  "$html" | tail -n1)")
 
         url_in_file="${drop_unpacked##*\<param name\=\"src\"value\=\"}"
         url_in_file="${url_in_file%%\"*}"
 
-        html=$(curl -v \
-                    -A "$user_agent" \
-                    -b "$path_tmp"/cookies.zdl \
-                    -c "$path_tmp"/cookies2.zdl \
-                    -H "Connection: keep-alive" \
-                    -H "Upgrade-Insecure-Requests: 1" \
-                    -H "Sec-Fetch-Dest: document" \
-                    -H "Sec-Fetch-Mode: navigate" \
-                    -H "Sec-Fetch-Site: same-origin" \
-                    -H "Sec-Fetch-User: ?1" \
-                    -H "TE: trailers" \
-                    -d "$post_data" \
-                    "$location_drop" 2>&1)
+        if ! url "$url_in_file"
+        then
+            captcha_code=$(pseudo_captcha "$html")
+            
+            input_hidden "$html"
+            
+            post_data="${post_data%%Free Download*}Free+Download+%3E%3E&method_premium=&adblock_detected=0&code=$captcha_code"
+            html=$(curl -v \
+                        -A "$user_agent" \
+                        -b "$path_tmp"/cookies.zdl \
+                        -c "$path_tmp"/cookies2.zdl \
+                        -H "Connection: keep-alive" \
+                        -H "Upgrade-Insecure-Requests: 1" \
+                        -H "Sec-Fetch-Dest: document" \
+                        -H "Sec-Fetch-Mode: navigate" \
+                        -H "Sec-Fetch-Site: same-origin" \
+                        -H "Sec-Fetch-User: ?1" \
+                        -H "TE: trailers" \
+                        -d "$post_data" \
+                        "$location_drop" 2>&1)
 
-        url_in_file=$(grep 'Click here to download' <<< "$html" -B1 | head -n1)
-        url_in_file="${url_in_file#*\"}"
-        url_in_file="${url_in_file%%\"*}"
-        
+            url_in_file=$(grep 'Click here to download' <<< "$html" -B1 | head -n1)
+            url_in_file="${url_in_file#*\"}"
+            url_in_file="${url_in_file%%\"*}"
+            
+        fi        
     fi
     end_extension
 fi
