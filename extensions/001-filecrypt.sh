@@ -68,25 +68,33 @@ then
 
             location_filecrypt=$(trim "$location_filecrypt")
 
-
-
+            unset filecrypt_flag
+            
             if url "$location_filecrypt"
 	    then
-		set_link + "$location_filecrypt"
+                if ( [ -n "$no_url_regex" ] && [[ "$location_filecrypt" =~ $no_url_regex ]] ) ||
+                       ( [ -n "$url_regex" ] && [[ ! "$location_filecrypt" =~ $url_regex ]] )    
+	        then                    
+                    continue
+	        fi
+		set_link + "$location_filecrypt" &&
+                    filecrypt_flag=true
 
                 get_language
 		print_c 4 "$(gettext "Redirection"): $location_filecrypt"
 		get_language_prog
 		
-		url "$redir_filecrypt" || redir_filecrypt="$location_filecrypt"
-	    fi
+		url "$redir_filecrypt" ||
+                    [[ "$redir_filecrypt" =~ filecrypt\.cc ]] ||
+                    redir_filecrypt="$location_filecrypt"
+	    fi            
 	done
 
+        [ -z "$filecrypt_flag" ] && set_link - "$url_in"
+        
 	if url "$redir_filecrypt"
 	then
-	    set_link - "$url_in"
-
-	    url_in="$redir_filecrypt"
+	    replace_url_in "$redir_filecrypt"
 
             print_links_txt
 
@@ -96,5 +104,7 @@ then
 	fi
     else
 	_log 36
-    fi    
+    fi
+
+    end_extension &>/dev/null
 fi
