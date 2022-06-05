@@ -29,15 +29,29 @@
 ## zdl-extension name: Voe
 
 
-if [ "$url_in" != "${url_in//voe.}" ]
+if [[ "$url_in" =~ voe\. ]]
 then
-    html=$(curl -s "$url_in")
-    
+    get_location "$url_in" voe_location
+
+    if url "$voe_location"
+    then
+        html=$(curl -v \
+                    -A "$user_agent" \
+                    -b "$path_tmp"/cookies.zdl \
+                    -c "$path_tmp"/cookies2.zdl \
+                    -H 'Upgrade-Insecure-Requests: 1' \
+                    "$voe_location")
+    fi
+
     file_in=$(get_title "$html")
     file_in="${file_in#Watch }"
     url_in_file=$(grep .m3u8 <<< "$html")
     url_in_file="${url_in_file%\"*}"
     url_in_file="${url_in_file##*\"}"
+    url_in_file=$(curl -s "$url_in_file" | head -n3 |tail -n1)
 
+    downloader_in=FFMpeg
+    youtubedl_m3u8="$url_in_file"
+    
     end_extension
 fi
