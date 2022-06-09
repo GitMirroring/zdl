@@ -53,7 +53,7 @@ then
 	url_in_file=$(grep -oP "[^\"]+\.m3u8[^\"]*" <<< "$html" |
                           head -n1 |
                           grep -oP "[^\"]+\.m3u8[^\"]*")
-
+    
     url_in_file="${url_in_file//index./index_1.}"
     
     if url "$url_in_file" &&
@@ -61,7 +61,12 @@ then
     then
 	url_in_file="https://vodpkg.iltrovatore.it/local/hls/,${url_in_file#*\,}"
 	url_in_file="${url_in_file//csmil/urlset}"
-    
+
+        if [[ "$url_in_file" =~ master\.m3u8 ]]
+        then
+            url_in_file=$(curl -s "$url_in_file" | head -n3 | tail -n1)
+        fi
+        
     elif [ -n "$url_in_file" ] &&
 	   ! url "$url_in_file"
     then
@@ -99,7 +104,9 @@ then
     then
 	file_in+=_scaricato_il_$(date +%Y-%m-%d)_alle_$(date +%H-%M-%S)
     fi
-    
+
+    downloader_in=FFMpeg
+    youtubedl_m3u8="$url_in_file"
     end_extension
 fi
 									   
