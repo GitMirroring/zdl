@@ -105,7 +105,10 @@ then
 	file_in+=_scaricato_il_$(date +%Y-%m-%d)_alle_$(date +%H-%M-%S)
     fi
 
-    downloader_in=FFMpeg
+    get_language
+    force_dler FFMpeg
+    get_language_prog
+ 
     youtubedl_m3u8="$url_in_file"
     end_extension
 fi

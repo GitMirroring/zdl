@@ -52,7 +52,9 @@ then
     url_in_file=$(head -n5 <<< "$url_in_file"|
                       tail -n1)
 
-    downloader_in=FFMpeg
+    get_language
+    force_dler FFMpeg
+    get_language_prog
     youtubedl_m3u8="$url_in_file"
     
     end_extension
