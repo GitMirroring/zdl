@@ -37,8 +37,10 @@ then
                 -A "$user_agent" \
                 "$url_in")
     
-    file_in=$(get_title "$html")
-    file_in="${file_in#Watch }"
+    file_in=$(grep 'og:title' <<< "$html")
+    file_in="${file_in%\"*}"
+    file_in="${file_in##*\"}"
+    file_in="${file_in#*\-}"
 
     url_in_file=$(grep .m3u8 <<< "$html")
     url_in_file="${url_in_file#*\"}"
