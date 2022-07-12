@@ -42,18 +42,23 @@ then
     file_in="${file_in##*\"}"
     file_in="${file_in#*\-}"
 
-    url_in_file=$(grep .m3u8 <<< "$html")
-    url_in_file="${url_in_file#*\"}"
-    url_in_file="${url_in_file%%\"*}"
+    url_in_file_0=$(grep .m3u8 <<< "$html")
+    url_in_file_0="${url_in_file_0#*\"}"
+    url_in_file_0="${url_in_file_0%%\"*}"
 
     url_in_file=$(curl -s \
                 -A "$user_agent" \
                 -b "$path_tmp"/cookies.zdl \
-                "$url_in_file")
+                "$url_in_file_0")
 
     url_in_file=$(head -n5 <<< "$url_in_file"|
                       tail -n1)
 
+    if ! url "$url_in_file"
+    then
+        url_in_file="$url_in_file_0"
+    fi
+    
     get_language
     force_dler FFMpeg
     get_language_prog
