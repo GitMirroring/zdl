@@ -28,8 +28,12 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Vupload
 
+if [ "$url_in" == "https://vupload.com/embed-.html" ] ||
+       [ "$url_in" == "https://vupload.com/.html" ]
+then
+    _log 3
 
-if [ "$url_in" != "${url_in//vupload.}" ]
+elif [ "$url_in" != "${url_in//vupload.}" ]
 then
     replace_url_in "${url_in//embed-}"
 
