@@ -31,7 +31,7 @@ if [[ "$url_in" =~ filmpertutti\. ]]
 then
     get_language_prog
     urls_filmpertutti=( $(curl -s "$url_in" |
-			      grep -oP '[^"]+isecure[^"]+') )
+			      grep -oP '[^"]+(buckler|isecure)[^"]+') )
     get_language
     for url_fpt in "${urls_filmpertutti[@]}"
     do
