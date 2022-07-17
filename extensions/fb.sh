@@ -27,10 +27,16 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Facebook
 
-if [[ "$url_in" =~ facebook.com.+\/videos\/ ]]
+if [[ "$url_in" =~ facebook.com.+videos ]]
 then
+    html=$(curl -v "$url_in")
+    file_in=$(grep -oP 'watch\/\?ref[^<]+' <<< "$html")
+    file_in="${file_in##*>}"
+    
     fb_data=$(youtube-dl -f best --get-url --get-filename "$url_in")
-    file_in=$(tail -n1 <<< "$fb_data")
+
+    [ -z "$file_in" ] &&
+        file_in=$(tail -n1 <<< "$fb_data")
     file_filter "$file_in"
     url_in_file=$(head -n1 <<< "$fb_data")
     

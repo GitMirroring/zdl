@@ -29,33 +29,46 @@
 
 if [[ "$url_in" =~ ilfattoquotidiano ]]
 then
-    ilfatto_data=$(youtube-dl --get-url --get-filename "$url_in" | grep -P '\.mp4$')
+    html=$(curl -s "$url_in")
 
-    url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
-    file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
+    if [[ "$html" =~ \/\/www\.facebook.com\/plugins\/video\.php ]]
+    then
+        url_in_fattoq=$(grep -oP '[^"]+\/\/www\.facebook.com\/plugins\/video\.php[^"]+' <<< "$html")
+        if url "$url_in_fattoq"
+        then
+            replace_url_in "$url_in_fattoq"
+        fi
 
-    [[ "$url_in_file" =~ dailymotion ]] ||
-        {
-            get_location "$url_in_file" url_in_file
+    else
+        ilfatto_data=$(youtube-dl --get-url --get-filename "$url_in" | grep -P '\.mp4$')
 
-            url "$url_in_file" ||
-                {
-                    json_fattoq=$(youtube-dl --dump-json "$url_in")            
-                    url_list_fattoq=$(grep -oP '\"url\":\ \"([^"]+mp4[^"]+)\"' <<< "$json_fattoq" |
-                                          sed -r 's|\"url\":\ \"([^"]+mp4[^"]+)\"|\1|g')
-                    
-                    ## better video only
-                    #url_in_file=$(tail -n5 <<< "$url_list_fattoq" | head -n1)
-                    
-                    ## audio only:
-                    #url_in_file=$(head -n1 <<< "$url_list_fattoq" | tail -n1)
+        url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
+        file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
 
-                    ## audio + video (low quality)
-                    # url_in_file=$(grep _nc_vs <<< "$url_list_fattoq" | head -n1)
-                    url_in_file=$(tail -n4 <<< "$url_list_fattoq" | head -n1)
-                }
-        }
-    end_extension
+        [[ "$url_in_file" =~ dailymotion ]] ||
+            {
+                get_location "$url_in_file" url_in_file
+
+                url "$url_in_file" ||
+                    {
+                        ## facebook: 
+                        json_fattoq=$(youtube-dl --dump-json "$url_in")            
+                        url_list_fattoq=$(grep -oP '\"url\":\ \"([^"]+mp4[^"]+)\"' <<< "$json_fattoq" |
+                                              sed -r 's|\"url\":\ \"([^"]+mp4[^"]+)\"|\1|g')
+                        
+                        ## better video only
+                        #url_in_file=$(tail -n5 <<< "$url_list_fattoq" | head -n1)
+                        
+                        ## audio only:
+                        #url_in_file=$(head -n1 <<< "$url_list_fattoq" | tail -n1)
+
+                        ## audio + video (low quality)
+                        # url_in_file=$(grep _nc_vs <<< "$url_list_fattoq" | head -n1)
+                        url_in_file=$(tail -n4 <<< "$url_list_fattoq" | head -n1)
+                    }
+            }
+        end_extension
+    fi
 fi
 
 
