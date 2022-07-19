@@ -82,13 +82,16 @@ then
 	fi
 	
     else
-        if [[ "$url_in" =~ \/programmi\/ ]]
+        if [[ "$url_in" =~ (^.+\/programmi\/[^\/]+) ]]
         then
+            raiplay_json_url="${BASH_REMATCH[1]}".json
+
+            # $(curl -s "${url_in}.json" |            
             raiplay_seasons_path=(
-                $(curl -s "${url_in}.json" |
-                      grep -oP '[^"]+ContentSet[^"]+')
+                $(curl -s "$raiplay_json_url" |
+                      grep -oP '[^"]+ContentSet[^"]+\.json')
             )
-            
+
             # raiplay_item_path="${raiplay_item_path#*\"first_item_path\" \: \"}"
             # raiplay_item_path="${raiplay_item_path%%\"*}"
             # test -n "${raiplay_item_path}" &&
