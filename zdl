@@ -1981,10 +1981,11 @@ fi
 	    if [ "$this_mode" == "lite" ]
 	    then	    
 	        show_downloads_lite
-	        read_binding
-	        
+                [ -s "$path_tmp/links_loop.txt" ] &&
+	            read_binding
 	    else
-	        read_binding
+                [ -s "$path_tmp/links_loop.txt" ] &&
+	            read_binding
 	        #jobs -l >jobs-list-$(date +%s)
 	    fi
 
@@ -1995,23 +1996,21 @@ fi
 	    fi
 	    
         done #2>/dev/null 
-        
-        if [ "$lite_mode" == true ]
-        then
-	    show_downloads_lite no-clear
-        fi
     fi 
 
     noproxy
 
     wait $loops_pid
 
-    [ "$lite_mode" == true ] &&
-        {
-	    this_mode=stdout
-	    unset lite_mode
-	    start_mode_in_tty "stdout" "${this_tty}"	
-        }
+    if [ "$lite_mode" == true ] ||
+           [ "$this_mode" == lite ]
+    then
+        # kill -9 $loops_pid
+        show_downloads_lite no-clear
+	this_mode=stdout
+	unset lite_mode
+	start_mode_in_tty "stdout" "${this_tty}"	
+    fi
 
     post_process
 
