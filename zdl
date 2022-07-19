@@ -345,6 +345,8 @@ function main_loop {
 		fi
 		###################
 
+                source "$path_usr"/extensions/zzzzzzzz-m3u8.sh
+                
 		try_end=$try_end_default
 		## extensions
 		if [ -d "$path_usr/extensions/" ]

@@ -58,7 +58,6 @@ function post_m3u8_genlink {
 }
 
 
-
 if [[ "$url_in" =~ \.m3u8\?*.* ]] ||
        [[ "$url_in_file" =~ \.m3u8\?*.* ]] ||
        [ "$youtubedl_m3u8" == "$url_in" ] ||
