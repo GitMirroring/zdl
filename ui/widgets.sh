@@ -359,7 +359,9 @@ function zclock {
 
 function header_lite {
     echo -en "\033[1;0H"
-    header_z "ZigzagDownLoader in $PWD" "│ help: M-h" $1
+    local pwd_size=$((COLUMNS - 35))
+    local pwd_resized="${PWD:0:$pwd_size}"
+    header_z "ZigzagDownLoader in $pwd_resized" "│ help: M-h" $1
     print_header
 }
 

@@ -158,7 +158,7 @@ function show_downloads_lite () {
 	if (length(downloader)<5)
 	    downloader = " " downloader #":"
 
-	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +3) " \n"
+	code = code diff_bar_color downloader " " progress_bar clean_after(length(downloader) + length_bar[i] + length_info[i] +4) " \n"
     }
     
     if (no_clear != "no-clear") clean_lite()
@@ -166,7 +166,7 @@ function show_downloads_lite () {
 }
 
 function clean_after (length_text,    num_spaces, spaces, i) {
-    num_spaces = int(cols - length_text)
+    num_spaces = int(cols - length_text + 4)
     for (i=0; i<num_spaces; i++)
 	spaces = spaces " "
     return spaces
