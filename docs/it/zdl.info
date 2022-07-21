@@ -502,7 +502,7 @@ _Video in streaming saltando il player del browser:_
      IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex
      Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
      playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD),
-     RaiPlay, raiscuola.rai.it (HD), Rapidvideo.tv,
+     RaiPlay (HD), raiscuola.rai.it (HD), Rapidvideo.tv,
      Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
      Speedvideo (HD), Streamango, Streamin, Streamlare (HD),
      StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape,
@@ -1504,26 +1504,26 @@ Tag Table:
 Node: Top1241
 Node: Il comando ZDL5310
 Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18717
-Node: Arrestare ZDL21173
-Node: Controllare i download22278
-Node: Manuali d'uso26530
-Node: Modi26946
-Node: Readline30241
-Node: Editor31793
-Node: Omonimie33018
-Node: IRC/XDCC34566
-Node: Torrent36275
-Node: Filtri37159
-Node: Creare nuove estensioni37480
-Node: Software consigliati e dipendenze39255
-Node: Conkeror40931
-Node: zdl-xterm e XXXTerm/Xombrero41955
-Node: Installazione e aggiornamento43879
-Node: Perché questo programma47194
-Node: Tags51082
-Node: Copying55831
-Node: Contatti56881
+Node: Avviare ZDL18722
+Node: Arrestare ZDL21178
+Node: Controllare i download22283
+Node: Manuali d'uso26535
+Node: Modi26951
+Node: Readline30246
+Node: Editor31798
+Node: Omonimie33023
+Node: IRC/XDCC34571
+Node: Torrent36280
+Node: Filtri37164
+Node: Creare nuove estensioni37485
+Node: Software consigliati e dipendenze39260
+Node: Conkeror40936
+Node: zdl-xterm e XXXTerm/Xombrero41960
+Node: Installazione e aggiornamento43884
+Node: Perché questo programma47199
+Node: Tags51087
+Node: Copying55836
+Node: Contatti56886
 
 End Tag Table
 

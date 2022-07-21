@@ -25,7 +25,7 @@
 #
 ## ZDL add-on
 ## zdl-extension types: streaming
-## zdl-extension name: RaiPlay, RaiCultura (HD)
+## zdl-extension name: RaiPlay (HD), RaiCultura (HD)
 
 
 if [[ "$url_in" =~ (raicultura|raiplay) ]]
