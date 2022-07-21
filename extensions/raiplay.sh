@@ -25,10 +25,10 @@
 #
 ## ZDL add-on
 ## zdl-extension types: streaming
-## zdl-extension name: RaiPlay (HD)
+## zdl-extension name: RaiPlay, RaiCultura (HD)
 
 
-if [[ "$url_in" =~ raiplay ]]
+if [[ "$url_in" =~ (raicultura|raiplay) ]]
 then
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
@@ -100,16 +100,10 @@ then
         then
             raiplay_json_url="${BASH_REMATCH[1]}".json
 
-            # $(curl -s "${url_in}.json" |            
             raiplay_seasons_path=(
                 $(curl -s "$raiplay_json_url" |
                       grep -oP '[^"]+ContentSet[^"]+\.json')
             )
-
-            # raiplay_item_path="${raiplay_item_path#*\"first_item_path\" \: \"}"
-            # raiplay_item_path="${raiplay_item_path%%\"*}"
-            # test -n "${raiplay_item_path}" &&
-            #     raiplay_item_path="https://www.raiplay.it${raiplay_item_path}"
 
             for ((i=0; i<${#raiplay_seasons_path[@]}; i++))
             do
@@ -133,31 +127,53 @@ then
                 done
             done
             unset first
+
+        else
+            # raicultura
+            html=$(curl -s \
+                        -A "$user_agent" \
+                        -c "$path_tmp"/cookies.zdl \
+                        "$url_in")
+            rai_url=$(grep -oP 'http[^"]+relinker[^"]+\&\#x3D\;[^&]+' <<< "$html")
+            rai_url="${rai_url//&#x3D;/=}"
+
+            get_language_prog
+	    url_in_file=$(get_location "$rai_url")
+            get_language
+
+            unset raiplay_url
+
+            file_in=$(get_title "$html").mp4
         fi
-      
-        raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
 
-        raiplay_url="${raiplay_json#*content_url\": \"}"
-        raiplay_url="${raiplay_url%%\"*}"
+        if ! url "$url_in_file"
+        then      
+            raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
 
-        url_in_file="$raiplay_url"
-        youtubedl_m3u8="$url_in_file"
-        unset youtubedl_m3u8
+            raiplay_url="${raiplay_json#*content_url\": \"}"
+            raiplay_url="${raiplay_url%%\"*}"
 
+            url_in_file="$raiplay_url"
+        fi
+        
         if url "$raiplay_url"
         then
             url_in_file=$(get_location "$raiplay_url")
             
             if ! url "$url_in_file"
             then
-                unset youtubedl_m3u8
                 _log 45
             fi
         fi
 
-        file_in="${raiplay_json#*name\": \"}"
-        file_in="${file_in%%\"*}".mp4
+        if [ -z "$file_in" ]
+        then
+            file_in="${raiplay_json#*name\": \"}"
+            file_in="${file_in%%\"*}".mp4
+        fi
     fi
+    
+    unset youtubedl_m3u8
 
     force_dler FFMpeg
     downwait_extra=20
