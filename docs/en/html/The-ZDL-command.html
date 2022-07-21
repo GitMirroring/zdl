@@ -1,0 +1,381 @@
+<html lang="en">
+<head>
+<title>The ZDL command - ZigzagDownLoader (ZDL)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="ZigzagDownLoader (ZDL)">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="prev" href="index.html#Top" title="Top">
+<link rel="next" href="Streaming_002fhosting-services.html#Streaming_002fhosting-services" title="Streaming/hosting services">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<!--
+ZigzagDownLoader (ZDL)
+
+ This program is free software: you can redistribute it and / or modify it
+ under the terms of the GNU General Public License as published
+ by the Free Software Foundation; either version 3 of the License,
+ or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see http://www.gnu.org/licenses/.
+
+ Copyright (C) 2011
+ Gianluca Zoni <<zoninoz@inventati.org>>
+
+ For information or to collaborate on the project:
+ `https://savannah.nongnu.org/projects/zdl'
+
+ Gianluca Zoni (author)
+ `http://inventati.org/zoninoz'
+ <zoninoz@inventati.org>-->
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+<link rel="stylesheet" type="text/css" href="../zdl_style.css">
+</head>
+<body>
+<div class="node">
+<a name="The-ZDL-command"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Streaming_002fhosting-services.html#Streaming_002fhosting-services">Streaming/hosting services</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="index.html#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
+<hr>
+</div>
+
+   <p></p><a href="index.html">
+<div class="header"></div>
+</a>
+<div class="container">
+<div class="left">
+<div class="nav">
+<p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+<!-- <iframe src="http://z0n1n0z.000webhostapp.com/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe> -->
+<iframe src="http://zoninoz.altervista.org/zdl/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe>
+</div><br>
+<b>ZDL</b>
+<div class="nav">
+
+<ul class="menu">
+<li><a accesskey="1" href="index.html#Top">Home</a>:  ZigzagDownLoader<br>
+<li><a accesskey="2" href="The-ZDL-command.html#The-ZDL-command">The ZDL command</a>: <br>Command synopsis, options and other arguments<br>
+<li><a accesskey="3" href="Streaming_002fhosting-services.html#Streaming_002fhosting-services">Streaming/hosting services</a>: <br>ZDL extensions and practical tips<br>
+<li><a accesskey="4" href="Installation-and-update.html#Installation-and-update">Installation and update</a>: <br>For GNU/Linux and Microsoft Windows/Cygwin<br>
+<li><a accesskey="5" href="Why-this-program.html#Why-this-program">Why this program</a>: <br>The sense of continuous ZIGZAG experimentation<br>
+</ul>
+</div>
+<br>
+<b>How to use ZDL</b>
+<div class="nav">
+
+<ul class="menu">
+<li><a accesskey="1" href="Start-ZDL.html#Start-ZDL">Start ZDL</a>: <br>How to run the program and start downloads<br>
+<li><a accesskey="2" href="Stop-ZDL.html#Stop-ZDL">Stop ZDL</a>: <br>Program shutdown mode<br>
+<li><a accesskey="3" href="Check-the-downloads.html#Check-the-downloads">Check the downloads</a>: <br>How to control the processes started, queued or suspended<br>
+<li><a accesskey="4" href="User-manuals.html#User-manuals">User manuals</a>: <br>Documentation available for ZDL<br>
+</ul>
+</div>
+<br>
+<b>Tools and functions</b>
+<div class="nav">
+
+<ul class="menu">
+<li><a accesskey="1" href="Modes.html#Modes">Modes</a>: <br>Default, Lite, Interactive, Daemon<br>
+<li><a accesskey="2" href="Readline.html#Readline">Readline</a>: <br>The ZDL command line<br>
+<li><a accesskey="3" href="Editor.html#Editor">Editor</a>: <br>Integrated editor, to change the download queue<br>
+<li><a accesskey="4" href="Homonymy.html#Homonymy">Homonymy</a>: <br>Management of homonymous files and recovery of interrupted downloads<br>
+<li><a accesskey="5" href="IRC_002fXDCC.html#IRC_002fXDCC">IRC/XDCC</a>: <br>Downloading files via IRC-chat/XDCC commands<br>
+<li><a accesskey="6" href="Torrent.html#Torrent">Torrent</a>: <br>Downloading torrents with Aria2: URL magnet or torrent file<br>
+<li><a accesskey="7" href="Filters.html#Filters">Filters</a>: <br>Filters for extracting and selecting files and URLs<br>
+</ul>
+</div>
+<br>
+<b>Expanding ZDL</b>
+<div class="nav">
+
+<ul class="menu">
+<li><a accesskey="1" href="Create-new-extensions.html#Create-new-extensions">Create new extensions</a>: <br>Custom ZDL and new service Bash extensions<br>
+<li><a accesskey="2" href="Recommended-software-and-dependencies.html#Recommended-software-and-dependencies">Recommended software and dependencies</a>: <br>Useful programs for ZDL<br>
+<li><a accesskey="3" href="Conkeror.html#Conkeror">Conkeror</a>: <br>Command <samp><span class="command">zdl</span></samp> for the browser<br>
+<li><a accesskey="4" href="zdl_002dxterm-and-XXXTerm_002fXombrero.html#zdl_002dxterm-and-XXXTerm_002fXombrero">zdl-xterm and XXXTerm/Xombrero</a>: <br>A script to connect ZDL to other programs<br>
+</ul>
+</div>
+</div>
+<div class="content">
+<a href="http://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en-us.png" alt="English version"></a>
+<a href="http://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
+
+<h2 class="unnumbered">The ZDL command</h2>
+
+<p><a name="index-command-zdl-2"></a>
+ZDL is a Bash program, written mainly with the Bash language. Below is a summary of the synopsis, options and other arguments of the command <samp><span class="command">zdl</span></samp>. For more information, consult the specialized sections. ZDL is prepared for the automatic completion of the arguments (use the <kbd>&lt;Tab&gt;</kbd> key). 
+<!-- @man{1} -->
+<!-- @ifman @unnumberedsec NAME -->
+<!-- @ifman @command{zdl} - CLI/TUI/GUI/Web-UI download manager for @emph{GNU/Linux} and @emph{Microsoft Windows + Cygwin}. -->
+
+<!-- @ifman @unnumberedsec SYNOPSIS -->
+<!-- @end man -->
+   <p><a name="index-synopsis-3"></a>
+
+<h3 class="unnumberedsec">Synopsis</h3>
+
+<!-- @man{2} -->
+<p><samp><span class="command">zdl [</span><em>OPTIONS</em><span class="command">] [</span><em>file</em><span class="command"> ...] [</span><em>link</em><span class="command"> ...] [</span><em>directory</em><span class="command">]</span></samp>
+<!-- @end man -->
+
+   <p><a name="index-arguments-4"></a>
+
+<h3 class="unnumberedsec">Arguments</h3>
+
+<!-- @man{4} -->
+<!-- @ifman @unnumberedsubsec Arguments -->
+<p>The order of options and other arguments is not important:
+
+     <dl>
+<dt><em>file</em><dd>File names from which to extract the <em>link</em>. The files must be text or DLC containers or TORRENT files, the latter marked by the extensions <em>.dlc</em> and <em>.torrent</em> respectively (ZDL processes the <em>links</em> in memory in the <em>directory</em> and those in input)
+
+     <br><dt><em>link</em><dd>URL of files or web pages of hosting, streaming or redirection services (if omitted, ZDL processes those in memory in <em>directory</em> and in <em>files</em>). To download via <em>IRC/XDCC</em>, the link must have the following form (port not necessary if it is 6667): <code>irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]</code>. ZDL also accepts links to <em>xWeasel</em>, with protocol <code>xdcc://</code>.
+
+     <br><dt><em>directory</em><dd>ZDL start directory and download destination (if omitted, it is the current one)
+
+   </dl>
+   <!-- @end man -->
+<a name="index-options-5"></a>
+
+<h4 class="unnumberedsubsec">Options</h4>
+
+<!-- @man{5} -->
+<!-- @ifman @unnumberedsec OPTIONS -->
+<p>Short options not followed by values​can be contracted:
+<samp><span class="option">-ufmd</span></samp> is equivalent to <samp><span class="option">-u</span></samp> <samp><span class="option">-f</span></samp> <samp><span class="option">-m</span></samp> <samp><span class="option">-d</span></samp>
+
+     <dl>
+<dt><samp><span class="option">-h, --help</span></samp><dd><em>ZigzagDownLoader (ZDL)</em> help
+
+     <br><dt><samp><span class="option">--list-extensions</span></samp><dd><em>ZigzagDownLoader (ZDL)</em> extensions list
+
+     <br><dt><samp><span class="option">--aria2</span></samp><dd>Download using <em>Aria2</em>
+
+     <br><dt><samp><span class="option">--axel</span></samp><dd>Download using <em>Axel</em>
+
+     <br><dt><samp><span class="option">--wget</span></samp><dd>Download using <em>Wget</em>
+
+     <br><dt><samp><span class="option">-m [</span><em>number</em><span class="option">], --max-downloads[=</span><em>number</em><span class="option">]</span></samp><dd>Parallel download. You can specify the maximum number of downloads to be made simultaneously
+
+     <br><dt><samp><span class="option">--login</span></samp><dd>Use any registered accounts for the enabled services (configure ZDL)
+
+     <br><dt><samp><span class="option">-u, --update</span></samp><dd>Update ZDL
+
+     <br><dt><samp><span class="option">-f, --force</span></samp><dd>Force manual update of ZDL
+
+     <br><dt><samp><span class="option">--clean</span></samp><dd>Delete any temporary files in the destination directory before downloading
+
+     <br><dt><samp><span class="option">-d, --daemon</span></samp><dd>Start ZDL in <em>daemon</em> mode (can be controlled with the interactive interface)
+
+     <br><dt><samp><span class="option">-i, --interactive</span></samp><dd>Launch the interactive ZDL interface for downloads that target the current directory. Managed downloads can be active or recorded in temporary directory files
+
+     <br><dt><samp><span class="option">-l, --lite</span></samp><dd>Start ZDL in standard output mode <em>lite</em> (mode commands in <em>standard output</em> are valid). It can be configured as the default boot mode.
+
+     <br><dt><samp><span class="option">--open-relink=</span><em>link</em></samp><dd>ZDL processes links up to the last URL reachable starting from <em>link</em>, then opens this URL using the configured web browser
+
+     <br><dt><samp><span class="option">--out=</span><em>program</em><span class="option">|</span><em>file</em></samp><dd>Output the names of completed download files, in two alternative ways:
+
+          <dl>
+<dt><em>program</em><dd>program that can "open" the downloaded file
+
+          <br><dt><em>file</em><dd>text file in which file names are recorded
+</dl>
+
+     <br><dt><samp><span class="option">--live</span></samp><dd>It allows to select channels for the download of live broadcasts of some televisions in "live stream"
+
+     <br><dt><samp><span class="option">--mp3</span></samp><dt><samp><span class="option">--flac</span></samp><dd>Convert files (even from video to audio) into <acronym>MP3</acronym> or into <acronym>FLAC</acronym>: they depend on <em>FFMpeg/AVConv</em>
+
+     <br><dt><samp><span class="option">--ip</span></samp><dd>Write the current IP address before performing any other operations
+
+     <br><dt><samp><span class="option">--reconnect</span></samp><dd>Force the modem to reconnect at the end of each download, using a script/command/program (configure ZDL)
+
+     <br><dt><samp><span class="option">-r, --resume</span></samp><dd>Recover or download partially downloaded files. It acts in case of homonymy between files (read the manual). It can be configured as the default behavior
+
+     <br><dt><samp><span class="option">--no-complete</span></samp><dd>Clear temporary files of completed downloads
+
+     <br><dt><samp><span class="option">--no-stop</span></samp><dd>Start without interruption: skip any automatic update (which requires entering the password) or request to enter new links. Keyboard input is still available
+
+   </dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Graphical user interface (GUI):</h5>
+
+<!-- @man{6} -->
+<!-- @ifman @unnumberedsubsec Graphical user interface (GUI): -->
+     <dl>
+<dt><samp><span class="option">-g, --gui</span></samp><dd>Start the graphical interface in the current directory or in the directory inserted among the arguments, automatically activating zdl &ndash;daemon as "core", if zdl has not yet been activated
+
+     <br><dt><samp><span class="option">--path-gui</span></samp><dd>Before starting zdl, it opens a window for selecting the destination directory, if it is not indicated among the command arguments (useful if "zdl &ndash;gui" is started by a desktop icon or a web browser extension, as "External Application Button")
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Sockets and user interfaces:</h5>
+
+<!-- @man{6} -->
+<!-- @ifman @unnumberedsubsec Sockets and user interfaces: -->
+     <dl>
+<dt><samp><span class="option">-s [</span><em>port</em><span class="option">], --socket[=</span><em>port</em><span class="option">]</span></samp><dd>Start the program by connecting it to a socket. If not indicated, the port is the default one.
+
+     <br><dt><samp><span class="option">--web-ui</span></samp><dd>Web user interface. 
+Start the program in daemon mode in the current directory or, possibly, in the one passed as an argument, a socket at the default port or, if occupied by another application, at the first free port and the default browser at the user interface address.
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">IRC/XDCC:</h5>
+
+<!-- @man{7} -->
+<!-- @ifman @unnumberedsubsec IRC/XDCC: -->
+     <dl>
+<dt><samp><span class="option">-x, --xdcc</span></samp><dd>Start the interactive insertion of three data:
+
+          <ol type=1 start=1>
+<li>the IRC server host (<em>HOST</em>)
+
+          <li>the channel to connect to (<em>CHAN</em>)
+
+          <li>the private message (<em>PRIVMSG</em>) containing the command <samp><span class="command">XDCC SEND</span></samp>
+          </ol>
+
+     <p>The download via IRC/XDCC can be done, alternatively and without using options, by entering the information in the link, which must have the following form (port not necessary if it is 6667): <code>irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]</code>. ZDL also accepts links of <em>xWeasel</em>, with protocol <code>xdcc://</code>
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Torrent:</h5>
+
+<!-- @man{8} -->
+<!-- @ifman @unnumberedsubsec Torrent: -->
+     <dl>
+<dt><samp><span class="option">-T </span><em>file</em><span class="option">, --torrent-file=</span><em>file</em></samp><dd>Torrent file for Aria2: may not have a .torrent extension
+
+     <br><dt><samp><span class="option">--tcp-port=</span><em>port</em></samp><dt><samp><span class="option">--udp-port=</span><em>port</em></samp><dd>Open TCP and UDP ports: check the router settings
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Filters:</h5>
+
+<!-- @man{9} -->
+<!-- @ifman @unnumberedsubsec Filters: -->
+     <dl>
+<dt><samp><span class="option">--scrape-url=</span><em>Web page URL</em></samp><dd>Extract URLs (links) from the indicated web page and append them to the registered list
+
+     <br><dt><samp><span class="option">--scrape-url</span></samp><dd>Extract URLs (links) from web pages indicated as <em>link</em>
+
+     <br><dt><samp><span class="option">--url=</span><em>regex</em></samp><dd>Process only the URLs (the links) that correspond to the REGEX
+
+     <br><dt><samp><span class="option">--no-url=</span><em>regex</em></samp><dd>It does not process the URLs (links) that correspond to the REGEX
+
+     <br><dt><samp><span class="option">--file=</span><em>regex</em></samp><dd>Download only files whose name corresponds to the REGEX
+
+     <br><dt><samp><span class="option">--no-file=</span><em>regex</em></samp><dd>It does not download files whose name corresponds to REGEX
+
+     <br><dt><samp><span class="option">--no-rev</span></samp><dd>Do not download files with '.rev' extension
+
+     <br><dt><samp><span class="option">--no-sub</span></samp><dd>It does not download files whose name contains the string 'sub' (in upper and lower case), it discards the subtitled video files.
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Starting with an editor:</h5>
+
+<!-- @man{10} -->
+<!-- @ifman @unnumberedsubsec Starting with an editor: -->
+     <dl>
+<dt><samp><span class="option">-e, --editor</span></samp><dd>replaces the ZDL input interface with the system default editor or with the one configured for ZDL with <samp><span class="command">zdl -c</span></samp>
+<br><dt><samp><span class="option">--emacs, --emacs-nw</span></samp><dd>use Emacs or its plain text/non-graphic version
+<br><dt><samp><span class="option">--jed</span></samp><dd>use Jed, a small Emacs-style editor
+<br><dt><samp><span class="option">--jupp</span></samp><dd>use Jupp
+<br><dt><samp><span class="option">--mcedit</span></samp><dd>use the Midnight Commander editor
+<br><dt><samp><span class="option">--mg</span></samp><dd>use Mg, an Emacs-style micro editor
+<br><dt><samp><span class="option">--nano</span></samp><dd>use the Nano editor
+<br><dt><samp><span class="option">--vi, --vim</span></samp><dd>use the Vi or Vim editor
+<br><dt><samp><span class="option">--zile</span></samp><dd>use Zile, a GNU Emacs-style micro editor
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Starting with Proxy:</h5>
+
+<!-- @man{11} -->
+<!-- @ifman @unnumberedsubsec Starting with proxy: -->
+     <dl>
+<dt><samp><span class="option">--proxy</span></samp><dd>Start ZDL by activating a proxy automatically (the default proxy type is Transparent)
+
+     <br><dt><samp><span class="option">--proxy=t|a|e</span></samp><dd>Start ZDL by activating a proxy of the user-defined type:
+
+          <ul>
+<li><samp><span class="option">t</span></samp> = Transparent
+
+          <li><samp><span class="option">a</span></samp> = Anonymous
+
+          <li><samp><span class="option">e</span></samp> = Elite
+</ul>
+
+     <br><dt><samp><span class="option">--proxy=</span><em>IP</em><span class="option">:</span><em>PORT</em></samp><dd>Start ZDL by activating the proxy indicated by the user, for the entire duration of the download (the proxy is automatically replaced only for the links of the enabled services that need a new IP address)
+
+</dl>
+
+<!-- @end man -->
+<h5 class="unnumberedsubsubsec">Configuration:</h5>
+
+<!-- @man{12} -->
+<!-- @ifman @unnumberedsubsec Configuration: -->
+     <dl>
+<dt><samp><span class="option">-c, --configure</span></samp><dd>Configuration interface of ZDL, also allows you to save any hosting service accounts
+
+     <br><dt><samp><span class="option">--stream [</span><em>parameters</em><span class="option">] [--noXterm]</span></samp><dd>To download the stream by incorporating ZDL in new scripts, the generic model of the parameters for the additional components (comply with the order):
+
+</dl>
+   <!-- @end man -->
+
+   <p><br>
+</div>
+<div class="footer">
+<div class="contentfooter">
+
+<ul class="menu">
+<li><a accesskey="1" href="Tags.html#Tags">Tags</a>: Analytical indices<br>
+
+<li><a accesskey="2" href="Copying.html#Copying">Copying</a>: Authors and License<br>
+
+<li><a accesskey="3" href="Contacts.html#Contacts">Contacts</a>: For assistance or to participate
+</ul>
+</div>
+<div class="contentfooter">
+<b>ZDL Project</b>
+
+     <ul>
+<li><a href="https://joindiaspora.com/tags/zdl">Updates in Diaspora*</a>
+<li><a href="https://savannah.nongnu.org/projects/zdl">Sevannah/GNU development project</a>
+<li><a href="http://download-mirror.savannah.gnu.org/releases/zdl/">Release packages of ZDL</a>
+<li><a href="http://git.savannah.gnu.org/cgit/zdl.git">Repository Git (source version check)</a>
+</ul>
+
+   </ul>
+</div>
+</div>
+</div>
+
+   </body></html>
+

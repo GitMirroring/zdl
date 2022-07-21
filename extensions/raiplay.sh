@@ -28,7 +28,7 @@
 ## zdl-extension name: RaiPlay (HD), RaiCultura (HD), RaiScuola (HD), Rai... (HD)
 
 
-if [[ "$url_in" =~ (raicultura|raiplay|rai\.it) ]]
+if [[ "$url_in" =~ (raicultura|raiplay|rai[a-z]*\.it) ]]
 then
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
