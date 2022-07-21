@@ -851,7 +851,7 @@ function get_data_xdcc_eu {
 
 function check_livestream {
     local link="$1"
-    if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv) ]]
+    if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv|yt_live_broadcast) ]]
     then
         return 0
     else
@@ -903,24 +903,26 @@ function set_livestream_time {
     local link="$1" \
           start_time="$2" \
           duration_time="$3"
+
     [ -s "$path_tmp"/livestream_time.txt ] &&
         sed -r "s|$link\ .+||g" -i "$path_tmp"/livestream_time.txt
+
     set_line_in_file + "$link $start_time $duration_time" "$path_tmp"/livestream_time.txt &&
-        return 0 ||
-            return 1
+        return 0 || return 1
 }
 
 function get_livestream_duration_time {
-    local link="$1"
+    local link="$1" line
     declare -n ref="$2"
-    declare -a line
-    
-    [ -s "$path_tmp"/livestream_time.txt ] &&
-        line=( $(grep -P "^$link\ [0-9]+\:" "$path_tmp"/livestream_time.txt) )
 
-    if [[ "${line[2]}" =~ ([0-9]+\:[0-9]+\:[0-9]+) ]]
+    if [ -s "$path_tmp"/livestream_time.txt ]
     then
-        ref="${line[2]}"
+        line=$(cut -f3 -d' ' "$path_tmp"/livestream_time.txt )
+    fi
+    
+    if [[ "${line}" =~ ([0-9]+\:[0-9]+\:[0-9]+) ]]
+    then
+        ref="$line"
         return 0
     else
         return 1

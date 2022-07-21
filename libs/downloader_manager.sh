@@ -566,7 +566,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		local livestream_time
 		get_livestream_duration_time "$url_in" livestream_time
 
-		nohup $ffmpeg -loglevel info \
+                nohup $ffmpeg -loglevel info \
 		      -i "$url_in_file" \
 		      -c copy \
 		      -t "$livestream_time" \
@@ -574,7 +574,8 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		      -y 2>&1 | 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	    stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" &
-		pid_in=$!
+                pid_in=$!
+
                 # get_command_pid pid_in $ffmpeg ".+$url_in_file.+$file_in"
                 
 	    elif [ "$youtubedl_m3u8" == "$url_in" ] ||

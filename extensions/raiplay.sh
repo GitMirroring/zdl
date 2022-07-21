@@ -32,7 +32,10 @@ if [[ "$url_in" =~ raiplay ]]
 then
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
-        raiplay_json=$(curl -s "${url_in%\#*}.json")
+        raiplay_json=$(curl -s \
+                            -c "$path_tmp"/cookies.zdl \
+                            -A "$user_agent" \
+                            "${url_in%\#*}.json")
 
         if [[ ! "$raiplay_json" =~ content_url ]] &&
                [[ "$raiplay_json" =~ first_item_path ]]
@@ -41,19 +44,28 @@ then
             raiplay_url="https://www.raiplay.it${raiplay_url%%\"*}"
 
             raiplay_json=$(curl -s \
-                                -c "$path_tmp"/cookies.zdl \
+                                -b "$path_tmp"/cookies.zdl \
                                 -A "$user_agent" \
                                 "$raiplay_url")
         fi
         
         raiplay_url="${raiplay_json#*content_url\":}"
         raiplay_url="${raiplay_url#*\"}"
-        raiplay_url="${raiplay_url%%\"*}"
+        raiplay_url="${raiplay_url%%\"*}&output=64"
+
+        raiplay_url=$(curl -s \
+                           -b "$path_tmp"/cookies.zdl \
+                           -c "$path_tmp"/cookies2.zdl \
+                           -A "$user_agent" \
+                           "$raiplay_url" |
+                          grep -P '\[')
+
+        raiplay_url=$(grep -oP 'https[^\[\]]+' <<< "$raiplay_url")
 
         get_language_prog
 	url_in_file=$(get_location "$raiplay_url")
         get_language
-        
+
         if ! url "$url_in_file"
         then
             get_language_prog
@@ -68,13 +80,15 @@ then
 	
         file_in="${raiplay_json#*\"name\":\"}"
         file_in="${file_in%%\"*}"
+
         sanitize_file_in
-        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}
+        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${rai_start_time//\:/-}_durata_${rai_duration_time//\:/-}.mp4
 
 	if [ -n "$rai_duration_time" ]
 	then
 	    print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
 	    livestream_m3u8="$url_in_file"
+            
 	else
 	    [ -n "$gui_alive" ] &&
 		check_linksloop_livestream ||
@@ -145,7 +159,7 @@ then
         file_in="${file_in%%\"*}".mp4
     fi
 
-    downloader_in=FFMpeg
+    force_dler FFMpeg
     downwait_extra=20
 
     end_extension

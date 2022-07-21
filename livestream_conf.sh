@@ -40,6 +40,7 @@ live_streaming_chan=(
     "Rai Gulp"
     "Rai Storia"
     "Rai Play"
+    "Youtube"
 )
 
 live_streaming_url=(
@@ -58,4 +59,5 @@ live_streaming_url=(
     https://www.raiplay.it/dirette/raigulp
     https://www.raiplay.it/dirette/raistoria
     https://www.raiplay.it/dirette/raiplay
+    https://www.youtube.com
 )

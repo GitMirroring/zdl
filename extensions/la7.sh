@@ -87,7 +87,7 @@ then
 	la7_start_time="${la7_start_time//\:tomorrow}"
 	
 	get_livestream_duration_time "$url_in" la7_duration_time
-	file_in+=_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${la7_start_time//\:/-}_durata_${la7_duration_time//\:/-}
+	file_in="LA7_in_diretta"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${la7_start_time//\:/-}_durata_${la7_duration_time//\:/-}.mp4
 
 	if [ -n "$la7_duration_time" ]
 	then

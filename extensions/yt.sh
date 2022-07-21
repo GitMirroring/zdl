@@ -135,5 +135,34 @@ then
     	not_available=true
     fi
 
+    if check_livestream "$url_in_file"
+    then
+        # echo display
+        # yt_that_mode="$this_mode"
+        # this_mode=stdout
+        # display_set_livestream "$url_in"
+        # this_mode=$yt_that_mode
+        
+        get_livestream_start_time "$url_in" yt_start_time
+        get_livestream_duration_time "$url_in" yt_duration_time
+        #grep -P "^ht.+youtube.+\ [0-9]+\:" "$path_tmp"/livestream_time.txt
+        #cat "$path_tmp"/livestream_time.txt
+        echo "url: $url_in_file" 
+        echo "durata: $yt_duration_time"
+        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${yt_start_time//\:/-}_durata_${yt_duration_time//\:/-}.mp4
+
+        if [ -n "$yt_duration_time" ]
+	then
+	    print_c 4 "Diretta Youtube dalle $yt_start_time per la durata di $yt_duration_time"
+	    livestream_m3u8="$url_in_file"
+            force_dler FFMpeg
+	else
+	    [ -n "$gui_alive" ] &&
+		check_linksloop_livestream ||
+		    _log 43
+	fi
+      
+    fi
+
     end_extension
 fi

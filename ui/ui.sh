@@ -875,9 +875,20 @@ function display_set_livestream {
 	    print_c 2 "\n$(gettext "Select the channel from which to download the live") (0-$[i-1]):" 
 	    read -e opt
 	done
-	    
-	tag_link "${live_streaming_url[opt]}" link
 
+        if [[ "${live_streaming_url[opt]}" =~ youtube ]]
+        then
+            print_c 4 "$(gettext "Enter Youtube livestream URL:")"
+            read -e link
+	    link=$(sanitize_url "$link")
+            
+	    # [ -n "$link" ] &&
+	    #     set_link + "$link"
+#            tag_link "$link" link
+        else
+            tag_link "${live_streaming_url[opt]}" link
+        fi
+        
 	if check_livestream_link_time "$link"
 	then
 	    print_c 3 "$(gettext "A schedule already exists for this channel:")"
