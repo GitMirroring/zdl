@@ -202,6 +202,8 @@ function read_binding {
 function main_loop {
     local nline nlines loop_url_in url_in_old
     clean_livestream
+
+    [ -n "$start_file" ] || start_file="$path_tmp"/links_loop.txt
     
     if [ "$this_mode" == "daemon" ] &&
 	   [ ! -s "$path_tmp"/links_loop.txt ] &&
@@ -212,7 +214,7 @@ function main_loop {
    	sleep 2
 
     elif check_start_file &&
-	    ! get_exit
+	    ! check_exit
     then
 	nline=1
 	while :
@@ -344,7 +346,9 @@ function main_loop {
 		    rm -f "$path_tmp/redirect"
 		fi
 		###################
-                                
+
+                source "$path_usr"/extensions/zzzzzzzz-m3u8.sh
+                
 		try_end=$try_end_default
 		## extensions
 		if [ -d "$path_usr/extensions/" ]
@@ -365,7 +369,7 @@ function main_loop {
 		    done
     		    shopt -u nullglob
 		fi
-		
+
 		## se ancora presenti redirezioni fantasma:
 		if [ -s "$path_tmp"/pid_redirects ]
 		then
@@ -389,7 +393,7 @@ function main_loop {
 		    _log 16 "$url_in"
 	        fi
 
-		get_exit && return 1
+		check_exit && return 1
 		
 		if [ "$break_loop" == "true" ]
 		then
@@ -417,7 +421,7 @@ function main_loop {
 			    break
 			fi
 		    done
-		                        
+
 		    ## universal downloader
 		    if [ -z "$file_in" ] && ! url "$url_in_file"
 		    then
@@ -460,6 +464,7 @@ function main_loop {
 		       check_freespace &&
 		       file_filter "$file_in"
 		then
+
 		    check_dler_forcing
 
 		    if [[ "$downloader_in" =~ (RTMPDump|cURL) ]]
@@ -1978,10 +1983,11 @@ fi
 	    if [ "$this_mode" == "lite" ]
 	    then	    
 	        show_downloads_lite
-	        read_binding
-	        
+                [ -s "$path_tmp/links_loop.txt" ] &&
+	            read_binding
 	    else
-	        read_binding
+                [ -s "$path_tmp/links_loop.txt" ] &&
+	            read_binding
 	        #jobs -l >jobs-list-$(date +%s)
 	    fi
 
@@ -1992,23 +1998,21 @@ fi
 	    fi
 	    
         done #2>/dev/null 
-        
-        if [ "$lite_mode" == true ]
-        then
-	    show_downloads_lite no-clear
-        fi
     fi 
 
     noproxy
 
     wait $loops_pid
 
-    [ "$lite_mode" == true ] &&
-        {
-	    this_mode=stdout
-	    unset lite_mode
-	    start_mode_in_tty "stdout" "${this_tty}"	
-        }
+    if [ "$lite_mode" == true ] ||
+           [ "$this_mode" == lite ]
+    then
+        # kill -9 $loops_pid
+        show_downloads_lite no-clear
+	this_mode=stdout
+	unset lite_mode
+	start_mode_in_tty "stdout" "${this_tty}"	
+    fi
 
     post_process
 
@@ -2018,15 +2022,19 @@ fi
         pipe_files
     fi
 
-    if ! get_exit &&
+    if ! check_exit &&
 	    ! check_instance_gui
     then
         [ -f "$path_tmp"/.pid.zdl ] &&
 	    read test_pid < "$path_tmp"/.pid.zdl
+echo check0
+[ "$test_pid" == "$pid_prog" ] && echo check1
+check_start_file || echo check2
 
-        [ "$test_pid" == "$pid_prog" ] &&
+[ "$test_pid" == "$pid_prog" ] &&
 	    ! check_start_file &&
             {
+                this_mode=stdout
                 print_header
                 separator-
                 print_c 1 "$(gettext "Download completed")" 

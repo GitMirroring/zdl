@@ -754,6 +754,11 @@ function check_in_file { 	## return --> no_download=1 / download=0
 function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizioni
     local file_to_clean="$1"
 
+    if [ -z "$file_to_clean" ]
+    then
+        file_to_clean="$path_tmp"/links_loop.txt
+    fi
+    
     if [ -f "$file_to_clean" ]
     then
 	## impedire scrittura non-lineare da più istanze di ZDL
@@ -786,11 +791,13 @@ function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizio
 
 function check_start_file {
     if [ -f "${start_file}-rewriting" ] ||
-	   [ -f "${start_file}" ]
+	   [ -s "${start_file}" ]
     then
 	return 0
 
     else
+        [ -s "${start_file}" ] || rm -rf "${start_file}"
+        set_exit
 	return 1
     fi
     
@@ -1320,7 +1327,7 @@ function set_exit {
     echo "$pid_prog" >"$path_tmp"/zdl_exit
 }
 
-function get_exit {
+function check_exit {
     if [ -f "$path_tmp"/zdl_exit ]
     then
 	local test_exit

@@ -202,6 +202,8 @@ function read_binding {
 function main_loop {
     local nline nlines loop_url_in url_in_old
     clean_livestream
+
+    [ -n "$start_file" ] || start_file="$path_tmp"/links_loop.txt
     
     if [ "$this_mode" == "daemon" ] &&
 	   [ ! -s "$path_tmp"/links_loop.txt ] &&
@@ -212,7 +214,7 @@ function main_loop {
    	sleep 2
 
     elif check_start_file &&
-	    ! get_exit
+	    ! check_exit
     then
 	nline=1
 	while :
@@ -391,7 +393,7 @@ function main_loop {
 		    _log 16 "$url_in"
 	        fi
 
-		get_exit && return 1
+		check_exit && return 1
 		
 		if [ "$break_loop" == "true" ]
 		then
@@ -2020,15 +2022,16 @@ fi
         pipe_files
     fi
 
-    if ! get_exit &&
+    if ! check_exit &&
 	    ! check_instance_gui
     then
         [ -f "$path_tmp"/.pid.zdl ] &&
 	    read test_pid < "$path_tmp"/.pid.zdl
 
         [ "$test_pid" == "$pid_prog" ] &&
-	    ! check_start_file &&
+            ! check_start_file &&
             {
+                this_mode=stdout
                 print_header
                 separator-
                 print_c 1 "$(gettext "Download completed")" 
