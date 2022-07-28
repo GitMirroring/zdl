@@ -325,10 +325,14 @@ function bindings {
 	   [ -n "$binding" ]
     then
 	trap_sigint
-
+        bind -x "\"\ec\":\"no_complete=true; data_stdout; unset no_complete; export READLINE_LINE=' '\"" &>/dev/null
+        bind -x "\"\C-c\":\"no_complete=true; data_stdout; unset no_complete; export READLINE_LINE=' '\"" &>/dev/null
+        
     elif [ "$this_mode" == "lite" ]
     then
 	trap_sigint return
+        bind -x "\"\ec\":\"no_complete=true; data_stdout; unset no_complete; clear; export READLINE_LINE=' '\"" &>/dev/null
+        bind -x "\"\C-c\":\"no_complete=true; data_stdout; unset no_complete; clear; export READLINE_LINE=' '\"" &>/dev/null
     fi
     
     check_instance_prog
@@ -345,7 +349,6 @@ function bindings {
     bind -x "\"\ee\":\"change_mode editor\"" 2>/dev/null
     bind -x "\"\el\":\"change_mode list\"" 2>/dev/null
     bind -x "\"\et\":\"change_mode info\"" 2>/dev/null
-    bind -x "\"\ec\":\"no_complete=true; data_stdout; unset no_complete; export READLINE_LINE=' '\"" &>/dev/null
     bind -x "\"\eC\":\"change_mode configure\"" 2>/dev/null
     
     ## Ctrl:
@@ -354,7 +357,6 @@ function bindings {
     bind -x "\"\C-e\":\"change_mode editor\"" 2>/dev/null
     bind -x "\"\C-l\":\"change_mode list\"" 2>/dev/null
     bind -x "\"\C-t\":\"change_mode info\"" 2>/dev/null
-    bind -x "\"\C-c\":\"no_complete=true; data_stdout; unset no_complete; export READLINE_LINE=' '\"" &>/dev/null
     bind -x "\"\C-C\":\"change_mode configure\"" 2>/dev/null
 
     if [ "$1" != readline_links ]
