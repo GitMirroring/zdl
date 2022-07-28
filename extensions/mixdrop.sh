@@ -105,7 +105,12 @@ then
         then
             _log 17
         fi
-
+        
+        if [[ "$file_in" =~ ^[0-9]+\-(.+$) ]]
+        then
+            file_in="${BASH_REMATCH[1]}"
+        fi
+        
         if [ -z "$file_in" ]
         then
             file_in="mixdrop-${url_in##*\/}"
