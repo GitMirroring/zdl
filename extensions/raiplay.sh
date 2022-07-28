@@ -143,7 +143,12 @@ then
 
             unset raiplay_url
 
-            file_in=$(get_title "$html").mp4
+            file_in=$(get_title "$html")
+
+            if [ -n "$file_in" ]
+            then
+                file_in="${file_in}".mp4
+            fi
         fi
 
         if ! url "$url_in_file"
@@ -169,7 +174,12 @@ then
         if [ -z "$file_in" ]
         then
             file_in="${raiplay_json#*name\": \"}"
-            file_in="${file_in%%\"*}".mp4
+            file_in="${file_in%%\"*}"
+
+            if [ -n "$file_in" ]
+            then
+                file_in="${file_in}".mp4
+            fi
         fi
     fi
     
