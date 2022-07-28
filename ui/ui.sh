@@ -434,15 +434,18 @@ function change_mode {
 	    command -v pinfo &>/dev/null &&
 	    	pinfo -x zdl ||
 		    info zdl
+            clear
 	    ;;
 	
 	list)
 	    zdl --list-extensions
+            clear
 	    ;;
 
 	'help')
             clear
             zdl --help-bindings
+            clear
             # clear
             # header_z help
             # standard_box help

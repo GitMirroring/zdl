@@ -1974,23 +1974,21 @@ fi
         
         [ "$this_mode" == "lite" ] && fclear
 
-
         while check_pid $loops_pid ||
-	        [ -s "$path_tmp/links_loop.txt" ] 
+	        check_start_file
         do
 	    echo "$COLUMNS" > "$path_tmp"/columns
 	    
 	    if [ "$this_mode" == "lite" ]
 	    then	    
 	        show_downloads_lite
-                [ -s "$path_tmp/links_loop.txt" ] &&
-	            read_binding
-	    else
-                [ -s "$path_tmp/links_loop.txt" ] &&
-	            read_binding
-	        #jobs -l >jobs-list-$(date +%s)
-	    fi
+            fi
 
+            if check_start_file 
+            then
+	        read_binding
+            fi
+            
 	    if [ -f "$path_tmp"/stop-binding ]
 	    then
 	        rm "$path_tmp"/stop-binding
@@ -2022,24 +2020,26 @@ fi
         pipe_files
     fi
 
-    if ! check_exit &&
-	    ! check_instance_gui
+    if ! ( check_start_file && ( check_exit || check_instance_gui ) )
     then
-        [ -f "$path_tmp"/.pid.zdl ] &&
+        if [ -f "$path_tmp"/.pid.zdl ]
+        then
 	    read test_pid < "$path_tmp"/.pid.zdl
+        fi
 
-        [ "$test_pid" == "$pid_prog" ] &&
-            ! check_start_file &&
-            {
-                this_mode=stdout
-                print_header
-                separator-
-                print_c 1 "$(gettext "Download completed")" 
-                separator-
-                print_header
-                
-                rm -rf "$path_tmp"
-            }
+        if [ "$test_pid" == "$pid_prog" ] &&
+               ! check_start_file
+        then
+            this_mode=stdout
+            print_header
+            separator-
+            print_c 1 "$(gettext "Download completed")" 
+            separator-
+            print_header
+            
+            rm -rf "$path_tmp"
+        fi
+        
     else
         kill_downloads
     fi
