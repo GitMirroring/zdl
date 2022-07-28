@@ -262,7 +262,7 @@ function main_loop {
 
 	    unset break_loop
 
-	    if [ -s "$start_file" ]
+	    if [ -f "$start_file" ] && [ -n "$(< "$start_file")" ]
 	    then
 		nlines=$(wc -l < "$start_file")		
 		((nline > nlines)) && nline=1

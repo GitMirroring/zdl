@@ -791,12 +791,12 @@ function clean_file { ## URL, nello stesso ordine, senza righe vuote o ripetizio
 
 function check_start_file {
     if [ -f "${start_file}-rewriting" ] ||
-	   [ -s "${start_file}" ]
+	   ( [ -f "${start_file}" ] && [ -n "$(< ${start_file})" ] )
     then
 	return 0
 
     else
-        [ -s "${start_file}" ] || rm -rf "${start_file}"
+        rm -rf "${start_file}"
         set_exit
 	return 1
     fi
