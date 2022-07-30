@@ -119,4 +119,3 @@ then
     
     unset newlink_first
 fi
-

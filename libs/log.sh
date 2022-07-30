@@ -36,7 +36,7 @@ function init_log {
 
 function _log {
     get_language
-    local color_code=3 no_filelog
+    local color_code=3 no_filelog print_always
     
     [ -n "$file_in" ] &&
 	msg_file_in=" $file_in"
@@ -63,6 +63,7 @@ $(gettext "No valid url was found")$msg_url_in_file"
 	    msg="$url_in --> $(gettext "Incorrect link or file not available")" 
 	    set_link - "$url_in"
 	    rm -f "$path_tmp"/"$file_in"_stdout.* "$path_tmp"/filename_"$file_in".txt
+            print_always=true
 	    ;;
 	4)
 	    msg="$(eval_gettext "The\$msg_file_in file exceeds the size allowed by the server for free download") (link: $url_in)"
@@ -235,7 +236,8 @@ $(gettext "Currently, ZDL is not able to download the requested file, I remove t
 
     esac
     
-    if [ -z "$break_loop" ] 
+    if [ -z "$break_loop" ] ||
+           [ -n "$print_always" ]
     then
 	[ -z "$no_filelog" ] && {
 	    init_log

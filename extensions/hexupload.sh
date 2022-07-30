@@ -36,6 +36,13 @@ then
 		"$url_in"                         \
 		-o /dev/null)
 
+    if [ -z "$html" ]
+    then
+        html=$(curl -s \
+                    -A "$user_agent" \
+                    "$url_in")
+    fi
+
     if [[ "$html" =~ "File Not Found" ]]
     then
         _log 3
