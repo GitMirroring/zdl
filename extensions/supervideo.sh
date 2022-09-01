@@ -82,8 +82,10 @@ then
         file_in=$(head -n1 <<< "$file_in")
         file_in="${file_in%%\ }".mp4
 
+        get_language
         force_dler FFMpeg
-
+        get_language_prog
+        
         # declare -A movie_definition
         # movie_definition=(
         #     ['o']="Original"
