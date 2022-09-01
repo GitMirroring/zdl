@@ -50,14 +50,14 @@ if [[ "$url_in" =~ supervideo ]]
 then
     unset html html2 movie_definition
     
-    if [ -z "$(grep -v supervideo "$path_tmp/links_loop.txt" &>/dev/null)" ]
-    then
-        get_language
-        svmsg_0="$(gettext "Cookies deleted")"
-        print_c 1 "$svmsg_0" 
-        get_language_prog       
-        rm -rf "$path_tmp/cookies.zdl"           
-    fi
+    # if [ -z "$(grep -v supervideo "$path_tmp/links_loop.txt" &>/dev/null)" ]
+    # then
+    #     get_language
+    #     svmsg_0="$(gettext "Cookies deleted")"
+    #     print_c 1 "$svmsg_0" 
+    #     get_language_prog       
+    #     rm -rf "$path_tmp/cookies.zdl"           
+    # fi
     
     html=$(wget -t1 -T$max_waiting                               \
                 "$url_in"                                        \
