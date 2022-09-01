@@ -83,9 +83,7 @@ then
         file_in="${file_in%%\ }".mp4
 
         force_dler FFMpeg
-        
-        echo "file: $file_in
-url: $url_in_file"
+
         # declare -A movie_definition
         # movie_definition=(
         #     ['o']="Original"
