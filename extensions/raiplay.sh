@@ -28,7 +28,7 @@
 ## zdl-extension name: RaiPlay (HD), RaiCultura (HD), RaiScuola (HD), Rai... (HD)
 
 
-if [[ "$url_in" =~ (raicultura|raiplay|rai[a-z]*\.it) ]]
+if [[ "$url_in" =~ (raiplay|rai[a-z]*\.it) ]]
 then
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
@@ -134,20 +134,45 @@ then
                         -A "$user_agent" \
                         -c "$path_tmp"/cookies.zdl \
                         "$url_in")
-            rai_url=$(grep -oP 'http[^"]+relinker[^"]+\&\#x3D\;[^&]+' <<< "$html")
-            rai_url="${rai_url//&#x3D;/=}"
+            raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+\&\#x3D\;[^&]+' <<< "$html")
+            raiplay_url="${raiplay_url//&#x3D;/=}"
 
-            get_language_prog
-	    url_in_file=$(get_location "$rai_url")
-            get_language
+            url "$raiplay_url" ||
+                raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")
 
-            unset raiplay_url
 
-            file_in=$(get_title "$html")
+            if ! url "$raiplay_url"
+            then
+                raiplay_url=$(grep -oP '[^"]+iframe.html[^"]+' <<< "$html")
+                link_parser "$url_in"
+                raiplay_url="${parser_proto}${parser_domain}${raiplay_url}"
+
+                html=$(curl -s \
+                        -A "$user_agent" \
+                        -c "$path_tmp"/cookies.zdl \
+                        "$raiplay_url")
+
+                raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")
+
+            fi
+            
+            file_in=$(get_title "$html"|head -n1)
 
             if [ -n "$file_in" ]
             then
                 file_in="${file_in}".mp4
+            fi
+        fi
+
+        if url "$raiplay_url"
+        then
+            get_language_prog
+            url_in_file=$(get_location "$raiplay_url")
+            get_language
+ 
+            if ! url "$url_in_file"
+            then
+                _log 45
             fi
         fi
 
@@ -161,16 +186,6 @@ then
             url_in_file="$raiplay_url"
         fi
         
-        if url "$raiplay_url"
-        then
-            url_in_file=$(get_location "$raiplay_url")
-            
-            if ! url "$url_in_file"
-            then
-                _log 45
-            fi
-        fi
-
         if [ -z "$file_in" ]
         then
             file_in="${raiplay_json#*name\": \"}"
