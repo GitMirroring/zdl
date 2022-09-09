@@ -25,7 +25,7 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Youtube
+## zdl-extension name: Youtube (HD, livestream)
 
 if [[ "$url_in" =~ youtube\.com\/playlist ]]
 then

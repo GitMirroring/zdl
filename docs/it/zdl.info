@@ -497,21 +497,21 @@ player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
      Akvideo (HD), Aparat, Auroravid/Novamov, Backin, Backin, Biqle
-     (HD), Cloudvideo (HD), Dailymotion, Deltabit (HD), Dplay (HD),
+     (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), Dplay (HD),
      EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Flashx.tv,
-     IDoWatch, IlFattoQuotidiano, La7 (HD), Metacafe, Neodrive (ex
-     Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
-     playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD),
-     Rai... (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv,
-     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
-     Speedvideo (HD), Streamango, Streamin, Streamlare (HD),
-     StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape,
-     Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
-     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
-     in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
-     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
-     (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube,
-     Zinwa (RTMP) 
+     IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream),
+     Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo,
+     Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it,
+     Putstream, RaiCultura (HD), Rai... (HD), RaiPlay (HD), RaiScuola
+     (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
+     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Streamlare
+     (HD), StreamSB/SBFull (+ browser to solve g-recaptcha),
+     StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com
+     (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti
+     i video in streaming di tipo .mpd, Upstream, VidABC, Vidce,
+     VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto,
+     Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream
+     (HD), Youtube (HD, Zinwa (RTMP) 
 
 _File hosting:_
      Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
@@ -527,7 +527,7 @@ _File hosting:_
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
      Rai Sport+ HD, Rai Movie, Rai Premium, Rai Yoyo, Rai Gulp, Rai
-     Storia, Rai Play, Youtube 
+     Storia, Rai Play, Youtube, Dailymotion 
 
 _Link generati dal web (anche dopo captcha):_
      Depositfiles, Hugefiles, Openload, Rockfile, Storbit, Uploadable
@@ -1504,26 +1504,26 @@ Tag Table:
 Node: Top1241
 Node: Il comando ZDL5310
 Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18728
-Node: Arrestare ZDL21184
-Node: Controllare i download22289
-Node: Manuali d'uso26541
-Node: Modi26957
-Node: Readline30252
-Node: Editor31804
-Node: Omonimie33029
-Node: IRC/XDCC34577
-Node: Torrent36286
-Node: Filtri37170
-Node: Creare nuove estensioni37491
-Node: Software consigliati e dipendenze39266
-Node: Conkeror40942
-Node: zdl-xterm e XXXTerm/Xombrero41966
-Node: Installazione e aggiornamento43890
-Node: Perché questo programma47205
-Node: Tags51093
-Node: Copying55842
-Node: Contatti56892
+Node: Avviare ZDL18775
+Node: Arrestare ZDL21231
+Node: Controllare i download22336
+Node: Manuali d'uso26588
+Node: Modi27004
+Node: Readline30299
+Node: Editor31851
+Node: Omonimie33076
+Node: IRC/XDCC34624
+Node: Torrent36333
+Node: Filtri37217
+Node: Creare nuove estensioni37538
+Node: Software consigliati e dipendenze39313
+Node: Conkeror40989
+Node: zdl-xterm e XXXTerm/Xombrero42013
+Node: Installazione e aggiornamento43937
+Node: Perché questo programma47252
+Node: Tags51140
+Node: Copying55889
+Node: Contatti56939
 
 End Tag Table
 

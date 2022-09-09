@@ -881,9 +881,9 @@ function display_set_livestream {
 	    read -e opt
 	done
 
-        if [[ "${live_streaming_url[opt]}" =~ youtube ]]
+        if [[ "${live_streaming_url[opt]}" =~ (youtube|dailymotion) ]]
         then
-            print_c 4 "$(gettext "Enter Youtube livestream URL:")"
+            print_c 4 "$(gettext "Enter livestream URL:")"
             read -e link
 	    link=$(sanitize_url "$link")
             

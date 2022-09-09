@@ -41,6 +41,7 @@ live_streaming_chan=(
     "Rai Storia"
     "Rai Play"
     "Youtube"
+    "Dailymotion"
 )
 
 live_streaming_url=(
@@ -60,4 +61,5 @@ live_streaming_url=(
     https://www.raiplay.it/dirette/raistoria
     https://www.raiplay.it/dirette/raiplay
     https://www.youtube.com
+    https://www.dailymotion.com
 )

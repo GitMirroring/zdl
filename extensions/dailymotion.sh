@@ -25,16 +25,44 @@
 #
 
 ## zdl-extension types: streaming
-## zdl-extension name: Dailymotion
+## zdl-extension name: Dailymotion (HD, livestream)
 
 
 if [ "$url_in" != "${url_in//dailymotion.com\/video}" ]
 then
     dailymotion_data=$(youtube-dl --get-url --get-filename "$url_in")
 
+    url_in_file=$(head -n1 <<< "$dailymotion_data")
+    url_in_file=$(sanitize_url "$url_in_file")
+    
     file_in=$(tail -n1 <<< "$dailymotion_data")
     file_filter "$file_in"
-    url_in_file=$(head -n1 <<< "$dailymotion_data")
+    
+    if check_livestream "$url_in_file"
+    then
+        get_livestream_start_time "$url_in" dm_start_time
+        get_livestream_duration_time "$url_in" dm_duration_time
+
+        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${dm_start_time//\:/-}_durata_${dm_duration_time//\:/-}.mp4
+
+        if [ -n "$dm_duration_time" ]
+	then
+	    print_c 4 "Diretta Dailymotion dalle $dm_start_time per la durata di $dm_duration_time"
+	    livestream_m3u8="$url_in_file"
+            force_dler FFMpeg
+	else
+	    [ -n "$gui_alive" ] &&
+		check_linksloop_livestream ||
+		    _log 43
+	fi
+      
+    else    
+        [ -n "$file_in" ] &&
+            file_in="${file_in%.mp4}".mp4
+
+        [[ "$url_in_file" =~ \.m3u8 ]] &&
+            force_dler FFMPeg
+    fi
     
     end_extension
     # echo -e ".dailymotion.com\tTRUE\t/\tFALSE\t0\tff\toff" > "$path_tmp"/cookies.zdl
