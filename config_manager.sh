@@ -164,6 +164,32 @@ function configure {
 		then
 		    rm -f "$path_conf"/.socket-account
 		fi
+
+                while [ ! -s "$path_conf"/.socket-account ]
+                do
+                    printf "${BYellow}$(gettext "New user"):${Color_Off}\n"
+                    input_text newuser
+                    printf "${BYellow}$(gettext "New password"):${Color_Off}\n"
+                    read -s newpass1
+                    printf "${BYellow}$(gettext "Re-type new password"):${Color_Off}\n"
+                    read -s newpass2
+
+                    if [ "$newpass1" != "$newpass2" ] ||
+                           [ -z "$newuser" ] || [ -z "$newpass1" ] || [ -z "$newpass2" ] 
+                    then
+                        printf "${BRed}$(gettext "The re-typed password does not match or at least one field of the form has not been filled in"):${Color_Off}\n"
+                        printf "${BYellow}$(gettext "Do you repeat the operation? (*|no)"):${Color_Off}\n"
+                        input_text opt
+
+                        if [ "$opt" == no ]
+                        then
+                            break
+                        fi
+
+                    else
+                        create_socket_account "$newuser" "$newpass1"
+                    fi
+                done                
 		;;
 	    3)	
 		configure_accounts

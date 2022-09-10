@@ -700,7 +700,7 @@ function run_cmd {
     local line=( "$@" )
     local file link pid path
     unset file_output
-
+    
     case "${line[0]}" in
 	login)
 	    file_output="$path_server"/msg-login.$socket_port
@@ -730,7 +730,7 @@ Seleziona l'opzione 2: Crea un account per i socket di ZDL." > "$file_output"
 	    ;;
 
 	check-account)
-        file_output="$path_server"/msg-account.$socket_port
+            file_output="$path_server"/msg-account.$socket_port
 	    if [ -s "$file_socket_account" ]
 	    then
 		echo "exists" > "$file_output"
@@ -749,19 +749,19 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    rm -f "$file_socket_account"
 	    ;;
 
-    check-version)
-        file_output="$path_tmp"/running-version
-        URL_ROOT="http://download-mirror.savannah.gnu.org/releases/zdl/"
-        remote_version=$(curl -s -m 15 "${URL_ROOT}version")
-        read local_version < "$path_conf/version"
-        if [[ $local_version == ?(-)+([0-9]) ]] && [[ $remote_version == ?(-)+([0-9]) ]]
-        then
-            [[ $remote_version > $local_version ]] && state="outdated" || state="updated"
-        else
-            state="undefined"
-        fi
-        echo "$state" > "$file_output"
-        ;;
+        check-version)
+            file_output="$path_tmp"/running-version
+            URL_ROOT="http://download-mirror.savannah.gnu.org/releases/zdl/"
+            remote_version=$(curl -s -m 15 "${URL_ROOT}version")
+            read local_version < "$path_conf/version"
+            if [[ $local_version == ?(-)+([0-9]) ]] && [[ $remote_version == ?(-)+([0-9]) ]]
+            then
+                [[ $remote_version > $local_version ]] && state="outdated" || state="updated"
+            else
+                state="undefined"
+            fi
+            echo "$state" > "$file_output"
+            ;;
 
 	init-client)
 	    test -d "${line[1]}" &&
@@ -1090,7 +1090,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			fi
 		     	echo -e "running" > "$file_output"
 
-		     else
+		    else
 		     	echo -e "Player non trovato" > "$file_output"
 		    fi
 		fi
@@ -1861,11 +1861,11 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    init_client
 	    ;;
 
-    get-language)
-        file_output="$path_server"/language.i18n
-        local lang=$(get_item_conf 'language')
-        echo "$lang" > "$file_output"
-        ;;
+        get-language)
+            file_output="$path_server"/language.i18n
+            local lang=$(get_item_conf 'language')
+            echo "$lang" > "$file_output"
+            ;;
 
 	get-conf)
 	    get_conf

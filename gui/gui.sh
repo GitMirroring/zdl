@@ -868,8 +868,7 @@ function display_livestream_gui {
     local h=$(date +%H)
     local m=$(date +%M)
     local s=$(date +%S)
-
-    local text="${TEXT}\n\n$(gettext "Programming of live broadcasting from") <b>$chan</b> ($link):\n"
+    local text button_res
 
     {
 	declare -a res
@@ -894,37 +893,106 @@ function display_livestream_gui {
 	#     '' $h'!0..23' $m'!0..59' $s'!0..59' '' '!0..23' '!0..59' '!0..59' 
 
 	###### <b>Orario di inizio</b> (attuale:
-	
-	
+               
 	## in orizzontale su 3 colonne e 2 righe:
-	res=($(yad --title="Links LIVE stream" \
-		   --image="$IMAGE2" \
-		   --image-on-top \
-		   --text="$text" \
-		   --form \
-		   --separator=' ' \
-		   --columns=3 \
-		   --align=center \
-		   --field=" ":LBL \
-		   --field="$(gettext "Hours:")":NUM \
-		   --field="":LBL \
-		   --field=" ":LBL \
-		   --field="$(gettext "Hours:")":NUM \
-		   --field="$(gettext "<b> Start time </b> (current:") $h:$m:$s)":LBL \
-		   --field="$(gettext "Minutes:")":NUM \
-		   --field="":LBL \
-		   --field="<b>$(gettext "Duration")</b>":LBL \
-		   --field="$(gettext "Minutes:")":NUM \
-		   --field=" ":LBL \
-		   --field="$(gettext "Seconds:")":NUM \
-		   --field="":LBL \
-		   --field=" ":LBL \
-		   --field="$(gettext "Seconds:")":NUM \
-		   '' $h'!0..23' '' '' 0'!0..23' '' $m'!0..59' '' '' 0'!0..59' '' $s'!0..59' '' '' 0'!0..59' \
-		   "${YAD_ZDL[@]}" 2>/dev/null))
+        if [[ "$link" =~ (youtube|dailymotion) ]]
+        then
+            fres0=$(mktemp)
+            fres1=$(mktemp)
 
-	if [ "$?" == 0 ]
+            text="${TEXT}\n\n$(gettext "Programming of live broadcasting from") <b>$chan</b>:\n"
+      	    yad --plug=123123 \
+		--form \
+		--separator=' ' \
+		--columns=1 \
+                --tabnum=1 \
+		--align=center \
+                --field="$(gettext "Enter livestream URL:")":CE '' 2>/dev/null 1>$fres0 &
+
+            yad --plug=123123 \
+                --form \
+                --separator=' ' \
+                --tabnum=2 \
+                --columns=3 \
+                --field=" ":LBL \
+		--field="$(gettext "Hours:")":NUM \
+		--field="":LBL \
+		--field=" ":LBL \
+		--field="$(gettext "Hours:")":NUM \
+		--field="$(gettext "<b> Start time </b> (current:") $h:$m:$s)":LBL \
+		--field="$(gettext "Minutes:")":NUM \
+		--field="":LBL \
+		--field="<b>$(gettext "Duration")</b>":LBL \
+		--field="$(gettext "Minutes:")":NUM \
+                --field=" ":LBL \
+		--field="$(gettext "Seconds:")":NUM \
+		--field="":LBL \
+		--field=" ":LBL \
+		--field="$(gettext "Seconds:")":NUM \
+		'' $h'!0..23' '' '' 0'!0..23' '' $m'!0..59' '' '' 0'!0..59' '' $s'!0..59' '' '' 0'!0..59' \
+		"${YAD_ZDL[@]}" 2>/dev/null 1>$fres1 &
+
+            yad --paned \
+                --key=123123 \
+                --title="Links LIVE stream" \
+		--image="$IMAGE2" \
+		--image-on-top \
+		--text="$text"
+            
+            button_res=$?
+
+            # echo "button_res0: $button_res" >> test
+            
+            if [ "$button_res" == 0 ] &&
+                   [ -s "$fres0" ]
+	    then
+                link=$(< $fres0)
+                link=$(sanitize_url "$link")
+                
+                url "$link" || unset button_res
+            fi        
+
+            res=($(< $fres1))
+
+            # echo "link: $link" >> test
+            # echo "res: ${res[@]}" >> test
+            # echo "button_res1: $button_res" >> test
+        else
+            text="${TEXT}\n\n$(gettext "Programming of live broadcasting from") <b>$chan</b> ($link):\n"
+	    res=($(yad --title="Links LIVE stream" \
+		       --image="$IMAGE2" \
+		       --image-on-top \
+		       --text="$text" \
+		       --form \
+		       --separator=' ' \
+		       --columns=3 \
+		       --align=center \
+		       --field=" ":LBL \
+		       --field="$(gettext "Hours:")":NUM \
+		       --field="":LBL \
+		       --field=" ":LBL \
+		       --field="$(gettext "Hours:")":NUM \
+		       --field="$(gettext "<b> Start time </b> (current:") $h:$m:$s)":LBL \
+		       --field="$(gettext "Minutes:")":NUM \
+		       --field="":LBL \
+		       --field="<b>$(gettext "Duration")</b>":LBL \
+		       --field="$(gettext "Minutes:")":NUM \
+		       --field=" ":LBL \
+		       --field="$(gettext "Seconds:")":NUM \
+		       --field="":LBL \
+		       --field=" ":LBL \
+		       --field="$(gettext "Seconds:")":NUM \
+		       '' $h'!0..23' '' '' 0'!0..23' '' $m'!0..59' '' '' 0'!0..59' '' $s'!0..59' '' '' 0'!0..59' \
+		       "${YAD_ZDL[@]}" 2>/dev/null))
+            
+            button_res=$?
+        fi
+
+        if [ "$button_res" == 0 ]
 	then
+            # echo "res: ${res[@]}" >> test
+            # echo "button_res: $button_res" >> test
+            
 	    local now_h=$(printf "%.2d" $h)
 	    local now_m=$(printf "%.2d" $m)
 	    local now_s=$(printf "%.2d" $s)
@@ -956,7 +1024,8 @@ function display_livestream_gui {
 		    start_time+=':tomorrow'
 	    fi
 
-	    if [[ ! "$link" =~ \#[0-9]+ ]]
+	    if [[ ! "$link" =~ \#[0-9]+ ]] &&
+                   [[ ! "$link" =~ (youtube|dailymotion) ]]
 	    then 
 		tag_link "$link" link
 	    fi
