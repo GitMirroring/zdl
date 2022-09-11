@@ -137,6 +137,16 @@ then
 
     if check_livestream "$url_in_file"
     then
+        test_yt_url=$(youtube-dl --get-url "$url_in" |tail -n1)
+        if ! check_livestream "$test_yt_url"
+        then
+            url_in_file="$url_in"
+            force_dler youtube-dl
+        fi
+    fi
+
+    if check_livestream "$url_in_file"
+    then
         get_livestream_start_time "$url_in" yt_start_time
         get_livestream_duration_time "$url_in" yt_duration_time
 
