@@ -169,11 +169,6 @@ then
             get_language_prog
             url_in_file=$(get_location "$raiplay_url")
             get_language
- 
-            if ! url "$url_in_file"
-            then
-                _log 45
-            fi
         fi
 
         if ! url "$url_in_file"
@@ -183,26 +178,37 @@ then
             raiplay_url="${raiplay_json#*content_url\": \"}"
             raiplay_url="${raiplay_url%%\"*}"
 
-            url_in_file="$raiplay_url"
+            url_in_file=$(sanitize_url "$(curl -s "$raiplay_url")")
+
+            if ! url "$url_in_file" &&
+                    url "$raiplay_url"
+            then
+                url_in_file="$raiplay_url"
+            fi
         fi
-        
+
+        if ! url "$url_in_file"
+        then
+            _log 45
+        fi       
+
         if [ -z "$file_in" ]
         then
             file_in="${raiplay_json#*name\": \"}"
             file_in="${file_in%%\"*}"
-
+            
             if [ -n "$file_in" ]
             then
                 file_in="${file_in}".mp4
             fi
         fi
     fi
-    
+
     unset youtubedl_m3u8
 
     force_dler FFMpeg
     downwait_extra=20
-
+    
     end_extension
 fi
 									   
