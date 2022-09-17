@@ -83,7 +83,7 @@ then
                 _log 8
             fi
 
-            url_in_file=$(grep 'Click Here To Download' <<< "$html3")
+            url_in_file=$(grep -P '(Download Now|Click Here To Download)' <<< "$html3")
             url_in_file="${url_in_file#*href=\"}"
             url_in_file="${url_in_file%%\"*}"
         fi
