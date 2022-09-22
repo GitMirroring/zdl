@@ -183,8 +183,8 @@ function sprint_c {
     fi
 }
 
-function print_header { # $1=label ; $2=color ; $3=header pattern
-    local text line hpattern color
+function print_header { # $1=label ; $2=color ; $3=header pattern; $4=columns
+    local text line hpattern color columns
     
     color="$1"
     shift
@@ -196,8 +196,12 @@ function print_header { # $1=label ; $2=color ; $3=header pattern
     text="$1"
     [ -n "$text" ] && text=" $text " 
     shift
+
+    columns="$1"
+    [ -z "$columns" ] && columns=$(stty size | cut -d' ' -f2)
+    shift
     
-    eval printf -v line "%.0s${hpattern}" {1..$(( $COLUMNS-${#text} ))}
+    eval printf -v line "%.0s${hpattern}" {1..$(( columns-${#text} ))}
 
     [ "$this_mode" == daemon ] &&
 	daemon_filter=true
@@ -210,12 +214,9 @@ function separator- {
     then
 	if [[ "$1" =~ ^([0-9]+)$ ]]
 	then
-	    COLS=$COLUMNS
-	    COLUMNS="$1"
-	    print_header "$BBlue" "─" ""
-	    echo -ne "$BBlue┴"
-	    COLUMNS=$((COLS-$1-1))
-	    print_header "$BBlue" "─" ""
+	    print_header "$BBlue" "─" "" $1
+	    echo -ne "${BBlue}┴"
+	    print_header "$BBlue" "─" "" $((COLUMNS-$1-1))
 
 	else
 	    print_header "$BBlue" "─" ""
@@ -339,6 +340,8 @@ function pause {
 }
 
 function xterm_stop {
+    local res
+    
     if [ "$1" == "force" ] ||
 	   ( show_mode_in_tty "$this_mode" "$this_tty" &&
 		   [ -z "${pipe_out[*]}" ]             ||
@@ -346,9 +349,7 @@ function xterm_stop {
     then
 	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to exit")"
 	echo -ne "\n"
-	cursor off
-	read -e 
-	cursor on
+	read -s
     fi
 }
 
