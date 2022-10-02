@@ -134,6 +134,8 @@ then
                         -A "$user_agent" \
                         -c "$path_tmp"/cookies.zdl \
                         "$url_in")
+            raiplay_json="$html"
+            
             raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+\&\#x3D\;[^&]+' <<< "$html")
             raiplay_url="${raiplay_url//&#x3D;/=}"
 
@@ -148,19 +150,12 @@ then
                 raiplay_url="${parser_proto}${parser_domain}${raiplay_url}"
 
                 html=$(curl -s \
-                        -A "$user_agent" \
-                        -c "$path_tmp"/cookies.zdl \
-                        "$raiplay_url")
+                            -A "$user_agent" \
+                            -c "$path_tmp"/cookies.zdl \
+                            "$raiplay_url")
 
                 raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")
 
-            fi
-            
-            file_in=$(get_title "$html"|head -n1)
-
-            if [ -n "$file_in" ]
-            then
-                file_in="${file_in}".mp4
             fi
         fi
 
@@ -196,7 +191,17 @@ then
         then
             file_in="${raiplay_json#*name\": \"}"
             file_in="${file_in%%\"*}"
-            
+
+            if [ -n "$file_in" ]
+            then
+                file_in="${file_in}".mp4
+            fi
+        fi
+
+        if [ -z "$file_in" ]
+        then
+            file_in=$(get_title "$html"|head -n1)
+
             if [ -n "$file_in" ]
             then
                 file_in="${file_in}".mp4
