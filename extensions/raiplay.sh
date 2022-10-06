@@ -30,6 +30,8 @@
 
 if [[ "$url_in" =~ (raiplay|rai[a-z]*\.it) ]]
 then
+    unset raiplay_url raiplay_json
+    
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
         raiplay_json=$(curl -s \
@@ -135,7 +137,7 @@ then
                         -c "$path_tmp"/cookies.zdl \
                         "$url_in")
             raiplay_json="$html"
-            
+
             raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+\&\#x3D\;[^&]+' <<< "$html")
             raiplay_url="${raiplay_url//&#x3D;/=}"
 
@@ -145,6 +147,7 @@ then
 
             if ! url "$raiplay_url"
             then
+
                 raiplay_url=$(grep -oP '[^"]+iframe.html[^"]+' <<< "$html")
                 link_parser "$url_in"
                 raiplay_url="${parser_proto}${parser_domain}${raiplay_url}"
@@ -153,9 +156,36 @@ then
                             -A "$user_agent" \
                             -c "$path_tmp"/cookies.zdl \
                             "$raiplay_url")
-
+                raiplay_json="$html"
                 raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")
+            fi           
+        fi
 
+        if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
+        then
+            raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
+            
+            raiplay_url="${raiplay_json#*content_url\": \"}"
+            raiplay_url="${raiplay_url%%\"*}"
+            
+            url_in_file=$(sanitize_url "$(curl -s "$raiplay_url")")
+            
+            if ! url "$url_in_file" &&
+                    url "$raiplay_url"
+            then
+                url_in_file="$raiplay_url"
+            fi
+            
+            if [[ "$raiplay_url" =~ (^http.+relinker.+) ]]
+            then
+
+                file_in="${raiplay_json#*name\": \"}"
+                file_in="${file_in%%\"*}"
+                
+                if [ -n "$file_in" ]
+                then
+                    file_in="${file_in}".mp4
+                fi
             fi
         fi
 
@@ -166,21 +196,6 @@ then
             get_language
         fi
 
-        if ! url "$url_in_file"
-        then      
-            raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
-
-            raiplay_url="${raiplay_json#*content_url\": \"}"
-            raiplay_url="${raiplay_url%%\"*}"
-
-            url_in_file=$(sanitize_url "$(curl -s "$raiplay_url")")
-
-            if ! url "$url_in_file" &&
-                    url "$raiplay_url"
-            then
-                url_in_file="$raiplay_url"
-            fi
-        fi
 
         if ! url "$url_in_file"
         then
