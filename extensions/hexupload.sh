@@ -87,7 +87,7 @@ then
             url_in_file="${url_in_file#*href=\"}"
             url_in_file="${url_in_file%%\"*}"
         fi
-
+        
         test_url_in_file || {
             _log 28
         }
