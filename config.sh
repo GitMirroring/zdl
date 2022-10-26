@@ -514,8 +514,8 @@ source "$file_conf"
     set_item_conf language "${language::2}"
 
 declare -A list_proxy_url
-## elenco chiavi proxy_server: proxy_list, ip_adress
-proxy_server='proxyscrape'
+## elenco chiavi proxy_server: proxy_list, ip_adress, proxyscrape
+proxy_server='ip_adress'
 list_proxy_url['ip_adress']="https://www.ip-adress.com/proxy_list/" ###"http://zoninoz.hol.es"  ### 
 list_proxy_url['proxy_list']="http://proxy-list.org/en/index.php"
 list_proxy_url['proxyscrape']="https://www.proxyscrape.com/free-proxy-list"
