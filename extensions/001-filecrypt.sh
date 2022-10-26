@@ -55,39 +55,42 @@ then
             url_filecrypt=$(grep -oP "top.location.href=\'[^']+" <<< "$html")
             url_filecrypt="${url_filecrypt##*\'}"
 
-            _log 34 "$url_filecrypt"            
+            if url "$url_filecrypt"
+            then
+                _log 34 "$url_filecrypt"            
 
-            get_language_prog
+                get_language_prog
 
-            location_filecrypt=$(curl -v \
-                                      -b "$path_tmp"/cookies.zdl \
-                                      -c "$path_tmp"/cookies2.zdl \
-                                      "$url_filecrypt" 2>&1 |
-                                     awk "/location/{print \$3}")
-            get_language
-
-            location_filecrypt=$(trim "$location_filecrypt")
-
-            unset filecrypt_flag
-            
-            if url "$location_filecrypt"
-	    then
-                if ( [ -n "$no_url_regex" ] && [[ "$location_filecrypt" =~ $no_url_regex ]] ) ||
-                       ( [ -n "$url_regex" ] && [[ ! "$location_filecrypt" =~ $url_regex ]] )    
-	        then                    
-                    continue
-	        fi
-		set_link + "$location_filecrypt" &&
-                    filecrypt_flag=true
-
+                location_filecrypt=$(curl -v \
+                                          -b "$path_tmp"/cookies.zdl \
+                                          -c "$path_tmp"/cookies2.zdl \
+                                          "$url_filecrypt" 2>&1 |
+                                         awk "/location/{print \$3}")
                 get_language
-		print_c 4 "$(gettext "Redirection"): $location_filecrypt"
-		get_language_prog
-		
-		url "$redir_filecrypt" ||
-                    [[ "$redir_filecrypt" =~ filecrypt\.cc ]] ||
-                    redir_filecrypt="$location_filecrypt"
-	    fi            
+
+                location_filecrypt=$(trim "$location_filecrypt")
+
+                unset filecrypt_flag
+                
+                if url "$location_filecrypt"
+	        then
+                    if ( [ -n "$no_url_regex" ] && [[ "$location_filecrypt" =~ $no_url_regex ]] ) ||
+                           ( [ -n "$url_regex" ] && [[ ! "$location_filecrypt" =~ $url_regex ]] )    
+	            then                    
+                        continue
+	            fi
+		    set_link + "$location_filecrypt" &&
+                        filecrypt_flag=true
+
+                    get_language
+		    print_c 4 "$(gettext "Redirection"): $location_filecrypt"
+		    get_language_prog
+		    
+		    url "$redir_filecrypt" ||
+                        [[ "$redir_filecrypt" =~ filecrypt\.cc ]] ||
+                        redir_filecrypt="$location_filecrypt"
+	        fi
+            fi
 	done
 
         [ -z "$filecrypt_flag" ] && set_link - "$url_in"
