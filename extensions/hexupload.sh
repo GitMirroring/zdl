@@ -81,6 +81,10 @@ then
             if [[ "$html3" =~ "404 Not Found" ]]
             then
                 _log 8
+                
+            elif [[ "$html3" =~ "You have reached the download-limit" ]]
+            then
+                _log 25
             fi
 
             url_in_file=$(grep -P '(Download Now|Click Here To Download)' <<< "$html3")
