@@ -138,6 +138,9 @@ then
                         "$url_in")
             raiplay_json="$html"
 
+            file_in=$(htmldecode "$(get_title "$html")").mp4
+            sanitize_file_in
+            
             raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+\&\#x3D\;[^&]+' <<< "$html")
             raiplay_url="${raiplay_url//&#x3D;/=}"
 
@@ -157,7 +160,7 @@ then
                             -c "$path_tmp"/cookies.zdl \
                             "$raiplay_url")
                 raiplay_json="$html"
-                raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")
+                raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")                
             fi           
         fi
 
