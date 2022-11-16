@@ -46,6 +46,13 @@
 
 @page
 @vskip 0pt plus 1filll
+
+@ifhtml
+@html
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+@end html
+@end ifhtml
+
 @insertcopying
 @end titlepage
 @end ifinfo
@@ -128,7 +135,6 @@
 @macro htmlstart
 @ifhtml
 @html
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </p><a href="index.html">
 <div class="header"></div>
 </a>
