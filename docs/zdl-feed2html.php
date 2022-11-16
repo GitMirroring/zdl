@@ -103,6 +103,7 @@ function displayHead() {
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 <meta name=\"description\" content=\"ZigzagDownLoader (ZDL)\">
 <meta name=\"generator\" content=\"makeinfo 4.13\">
+<meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">
 <link title=\"Top\" rel=\"start\" href=\"index.html#Top\">
 <link rel=\"next\" href=\"Il-comando-ZDL.html#Il-comando-ZDL\" title=\"Il comando ZDL\">
 <link href=\"http://www.gnu.org/software/texinfo/\" rel=\"generator-home\" title=\"Texinfo Homepage\">
