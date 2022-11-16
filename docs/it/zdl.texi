@@ -136,7 +136,7 @@
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 <!-- <iframe src="http://z0n1n0z.000webhostapp.com/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe> -->
-<iframe src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe>
+<iframe src="http://www.zoninoz.altervista.org/zdl/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe>
 </div><br>
 @b{ZDL}
 <div class="nav">
