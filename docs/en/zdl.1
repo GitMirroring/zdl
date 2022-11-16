@@ -1,13 +1,13 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Wed Nov 16 17:45:48 2022" "GNU" "User Commands"
-.SH NAME\	
+.TH "ZigzagDownLoader (ZDL)" "1" "Wed Nov 16 18:24:51 2022" "GNU" "User Commands"\
+.SH NAME	
 \fBzdl\fP - CLI/TUI/GUI/Web-UI download manager for \fIGNU/Linux\fP and \fIMicrosoft Windows + Cygwin\fP.\
 
 
 .SH SYNOPSIS\	
 \fBzdl [\fP\fIOPTIONS\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB]\fP
 
-
-.SH DESCRIPTION\	
+\
+.SH DESCRIPTION	
 \fIZigzagDownLoader\fP is a download manager:
 
 .RS 5
@@ -255,8 +255,8 @@ Before starting zdl, it opens a window for selecting the destination directory, 
 .RS -5
 
 
-
-.SS Sockets and user interfaces:\	
+\
+.SS Sockets and user interfaces:	
 
 .RS 5
 
@@ -332,8 +332,8 @@ Open TCP and UDP ports: check the router settings
 .RS -5
 
 
-
-.SS Filters:\	
+\
+.SS Filters:	
 
 .RS 5
 
@@ -470,8 +470,8 @@ Start ZDL by activating the proxy indicated by the user, for the entire duration
 .RS -5
 
 
-
-.SS Configuration:\	
+\
+.SS Configuration:	
 
 .RS 5
 
@@ -489,10 +489,10 @@ To download the stream by incorporating ZDL in new scripts, the generic model of
 
 .RS -5
 
-\
-.SH OVERVIEW	
 
-.SS Services\	
+.SH OVERVIEW\	
+\
+.SS Services	
 ZDL is enabled for downloading from any kind of valid link, including the video stream (from Youtube, Nowvideo, Dailymotion \&...) by means of browser extensions, and files shared through the following hosting and streaming services, directly from the link (bypassing the web page player):
 
 
@@ -503,7 +503,7 @@ ZDL is enabled for downloading from any kind of valid link, including the video 
 .RS -5
 \fI\fP\fBStreaming video skipping browser player:\fP\fI\fP
 .RS 5
-Akvideo (HD), Aparat, Auroravid/Novamov, Backin, Backin, Biqle (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), Dplay (HD), EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream), Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai\&..\&. (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD, Zinwa (RTMP)
+Akvideo (HD), Aparat, Auroravid/Novamov, Backin, Backin, Biqle (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), Dplay (HD), EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream), Metacafe, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai..\&. (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD, Zinwa (RTMP)
 
 
 .RS -5
@@ -559,9 +559,8 @@ ZDL can be started in different ways:
 .IP "\fI1.\fP" 3
 automatically generating the list of download links:
 
-
-.RS 5
-
+.RS 0
+.IP "\fI1.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 open a terminal and enter the directory that will contain the downloaded files
@@ -585,9 +584,8 @@ type \fBM-x\fP (\fBM\fP, the \fIMeta\fP key, is \fB<Alt>\fP, \fB<Ctrl>\fP or \fB
 .RS 0
 .IP "\fI2.\fP" 3
 Using one or more files prepared with a text editor (wrapping after each link) and reachable from the destination directory (indicate a valid path):
-
-.RS 5
-
+.RS 0
+.IP "\fI2.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 open a terminal and enter the directory that will contain the downloaded files (alternatively, you can indicate to \fIZDL\fP the working directory)
@@ -644,8 +642,8 @@ in "non-interactive" (standard) mode, by typing the \fBi\fP key
 
 
 
-\
-.SS Stop	
+
+.SS Stop\	
 ZDL can be stopped in different ways:
 
 .RS 5
@@ -677,8 +675,8 @@ through the interactive mode \fBzdl -i\fP started in the directory managed by th
 
 
 
-
-.SS Recommended software and dependencies\	
+\
+.SS Recommended software and dependencies	
 
 .RS 5
 
