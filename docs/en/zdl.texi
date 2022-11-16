@@ -31,7 +31,7 @@
  @url{https://savannah.nongnu.org/projects/zdl}
  
  Gianluca Zoni (author)
- @url{http://inventati.org/zoninoz}
+ @url{https://inventati.org/zoninoz}
  @email{zoninoz@@inventati.org}
 
 @end copying
@@ -104,7 +104,7 @@
 @macro menuDev
 @itemize
 @item
-@uref{https://joindiaspora.com/tags/zdl,,Updates in Diaspora*}
+@uref{https://diaspora-fr.org/tags/zdl,,Updates in Diaspora*}
 @item
 @uref{https://savannah.nongnu.org/projects/zdl,,Sevannah/GNU development project}
 @item
@@ -168,8 +168,8 @@
 </div>
 </div>
 <div class="content">
-<a href="http://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en-us.png" alt="English version"></a>
-<a href="http://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
+<a href="https://nongnu.org/zdl/en"><img align="right" src="https://nongnu.org/zdl/en-us.png" alt="English version"></a>
+<a href="https://nongnu.org/zdl/it"><img align="right" src="https://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
 @end html
 @end ifhtml
 @end macro
@@ -809,7 +809,7 @@ In the absence of temporary files related to @emph{link} not yet processed, it i
 Documentation currently available:
 @itemize @bullet
 @item
-online hypertext: @url{http://nongnu.org/zdl}
+online hypertext: @url{https://nongnu.org/zdl}
 @item
 hypertext in @emph{info} format, which can be consulted with the @command{info zdl} command (to improve navigation, we recommend @command{pinfo} or @command{emacs})
 @item
@@ -1366,7 +1366,7 @@ In addition to this guide, you can consult:
 @item info zdl
 Hypertext documentation that you can read more comfortably using @emph{pinfo} or @emph{Emacs}
 
-@item @url{http://nongnu.org/zdl}
+@item @url{https://nongnu.org/zdl}
 @Emph{ZigzagDownLoader} website
 @end table
 
@@ -1391,15 +1391,15 @@ ZDL is released under the GPL license (General Public License, v.3 and later).
 @unnumberedsubsec For information and to collaborate on the project:
 @itemize
 @item
-@url{http://nongnu.org/zdl}
+@url{https://nongnu.org/zdl}
 @item
 @url{https://savannah.nongnu.org/projects/zdl}
 @item
-@url{https://joindiaspora.com/tags/zdl}
+@url{https://diaspora-fr.org/tags/zdl}
 @end itemize
 
 Gianluca Zoni (zoninoz)
-@url{http://inventati.org/zoninoz}
+@url{https://inventati.org/zoninoz}
 
 @c @end man
 

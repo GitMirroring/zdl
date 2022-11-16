@@ -21,7 +21,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
    For information or to collaborate on the project:
 `https://savannah.nongnu.org/projects/zdl'
 
-   Gianluca Zoni (author)  `http://inventati.org/zoninoz'
+   Gianluca Zoni (author)  `https://inventati.org/zoninoz'
 <zoninoz@inventati.org>
 
 INFO-DIR-SECTION Network Applications
@@ -748,7 +748,7 @@ User manuals
 ************
 
 Documentation currently available:
-   * online hypertext: `http://nongnu.org/zdl'
+   * online hypertext: `https://nongnu.org/zdl'
 
    * hypertext in _info_ format, which can be consulted with the `info
      zdl' command (to improve navigation, we recommend `pinfo' or
@@ -1469,29 +1469,29 @@ _zdl-devel - Development list_:
 
 
 Tag Table:
-Node: Top1249
-Node: The ZDL command5133
-Node: Streaming/hosting services13149
-Node: Start ZDL17888
-Node: Stop ZDL20221
-Node: Check the downloads21256
-Node: User manuals25297
-Node: Modes25690
-Node: Readline28725
-Node: Editor30180
-Node: Homonymy31338
-Node: IRC/XDCC32847
-Node: Torrent34483
-Node: Filters35307
-Node: Create new extensions35595
-Node: Recommended software and dependencies37301
-Node: Conkeror38913
-Node: zdl-xterm and XXXTerm/Xombrero39895
-Node: Installation and update41766
-Node: Why this program44779
-Node: Tags48469
-Node: Copying53249
-Node: Contacts54327
+Node: Top1250
+Node: The ZDL command5134
+Node: Streaming/hosting services13150
+Node: Start ZDL17889
+Node: Stop ZDL20222
+Node: Check the downloads21257
+Node: User manuals25298
+Node: Modes25692
+Node: Readline28727
+Node: Editor30182
+Node: Homonymy31340
+Node: IRC/XDCC32849
+Node: Torrent34485
+Node: Filters35309
+Node: Create new extensions35597
+Node: Recommended software and dependencies37303
+Node: Conkeror38915
+Node: zdl-xterm and XXXTerm/Xombrero39897
+Node: Installation and update41768
+Node: Why this program44781
+Node: Tags48471
+Node: Copying53251
+Node: Contacts54329
 
 End Tag Table
 

@@ -21,7 +21,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
    For information or to collaborate on the project:
 `https://savannah.nongnu.org/projects/zdl'
 
-   Gianluca Zoni (author)  `http://inventati.org/zoninoz'
+   Gianluca Zoni (author)  `https://inventati.org/zoninoz'
 <zoninoz@inventati.org>
 
 INFO-DIR-SECTION Network Applications
@@ -762,7 +762,7 @@ Manuali d'uso
 *************
 
 Documentazione attualmente disponibile:
-   * ipertesto online: `http://nongnu.org/zdl'
+   * ipertesto online: `https://nongnu.org/zdl'
 
    * ipertesto in formato _info_, consultabile con il comando `info
      zdl' (per migliorarne la navigazione, si consigliano `pinfo'
@@ -1501,29 +1501,29 @@ _zdl-devel - Lista di sviluppo_:
 
 
 Tag Table:
-Node: Top1241
-Node: Il comando ZDL5310
-Node: Servizi streaming/hosting13823
-Node: Avviare ZDL18775
-Node: Arrestare ZDL21231
-Node: Controllare i download22336
-Node: Manuali d'uso26588
-Node: Modi27004
-Node: Readline30299
-Node: Editor31851
-Node: Omonimie33076
-Node: IRC/XDCC34624
-Node: Torrent36333
-Node: Filtri37217
-Node: Creare nuove estensioni37538
-Node: Software consigliati e dipendenze39313
-Node: Conkeror40989
-Node: zdl-xterm e XXXTerm/Xombrero42013
-Node: Installazione e aggiornamento43937
-Node: Perché questo programma47252
-Node: Tags51140
-Node: Copying55889
-Node: Contatti56939
+Node: Top1242
+Node: Il comando ZDL5311
+Node: Servizi streaming/hosting13824
+Node: Avviare ZDL18776
+Node: Arrestare ZDL21232
+Node: Controllare i download22337
+Node: Manuali d'uso26589
+Node: Modi27006
+Node: Readline30301
+Node: Editor31853
+Node: Omonimie33078
+Node: IRC/XDCC34626
+Node: Torrent36335
+Node: Filtri37219
+Node: Creare nuove estensioni37540
+Node: Software consigliati e dipendenze39315
+Node: Conkeror40991
+Node: zdl-xterm e XXXTerm/Xombrero42015
+Node: Installazione e aggiornamento43939
+Node: Perché questo programma47254
+Node: Tags51142
+Node: Copying55891
+Node: Contatti56941
 
 End Tag Table
 

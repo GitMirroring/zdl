@@ -30,7 +30,7 @@
  @url{https://savannah.nongnu.org/projects/zdl}
  
  Gianluca Zoni (author)
- @url{http://inventati.org/zoninoz}
+ @url{https://inventati.org/zoninoz}
  @email{zoninoz@@inventati.org}
 
 @end copying
@@ -103,7 +103,7 @@
 @macro menuDev
 @itemize
 @item
-@uref{https://joindiaspora.com/tags/zdl,,Aggiornamenti in Diaspora*}
+@uref{https://diaspora-fr.org/tags/zdl,,Aggiornamenti in Diaspora*}
 @item
 @uref{https://savannah.nongnu.org/projects/zdl,,Progetto di sviluppo in Savannah/GNU}
 @item
@@ -167,8 +167,8 @@
 </div>
 </div>
 <div class="content">
-<a href="http://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en-us.png" alt="English version"></a>
-<a href="http://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
+<a href="https://nongnu.org/zdl/en"><img align="right" src="https://nongnu.org/zdl/en-us.png" alt="English version"></a>
+<a href="https://nongnu.org/zdl/it"><img align="right" src="https://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
 @end html
 @end ifhtml
 @end macro
@@ -812,7 +812,7 @@ In mancanza dei file temporanei relativi a @emph{link} non ancora processati, è
 Documentazione attualmente disponibile:
 @itemize @bullet
 @item
-ipertesto online: @url{http://nongnu.org/zdl}
+ipertesto online: @url{https://nongnu.org/zdl}
 @item
 ipertesto in formato @emph{info}, consultabile con il comando @command{info zdl} (per migliorarne la navigazione, si consigliano @command{pinfo} oppure @command{emacs})
 @item
@@ -1393,15 +1393,15 @@ ZDL è rilasciato con licenza GPL (General Public Licence, v.3 e successive).
 @unnumberedsubsec Per informazioni e per collaborare al progetto:
 @itemize 
 @item
-@url{http://nongnu.org/zdl}
+@url{https://nongnu.org/zdl}
 @item
 @url{https://savannah.nongnu.org/projects/zdl}
 @item
-@url{https://joindiaspora.com/tags/zdl}
+@url{https://diaspora-fr.org/tags/zdl}
 @end itemize
 
 Gianluca Zoni (zoninoz)
-@url{http://inventati.org/zoninoz}
+@url{https://inventati.org/zoninoz}
 
 @c @end man
 
