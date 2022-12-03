@@ -67,29 +67,44 @@ then
 		         --post-data="${post_data}"    \
 		         "$url_in"                     \
 		         -o /dev/null)
-
+            
             input_hidden "$html2"
-
+            
             post_data="${post_data%adblock_detected*}adblock_detected=0"
-
+            
             html3=$(wget -qO-                          \
 		         --user-agent="$user_agent"    \
 		         --post-data="${post_data}"    \
 		         "$url_in"                     \
 		         -o /dev/null)
 
-            if [[ "$html3" =~ "404 Not Found" ]]
+            if grep -q 'ldl.ld(' <<< "$html3"
             then
-                _log 8
-                
-            elif [[ "$html3" =~ "You have reached the download-limit" ]]
-            then
-                _log 25
-            fi
+                url_in_file_coded64=$(grep 'ldl.ld(' <<< "$html3")
+                url_in_file_coded64="${url_in_file_coded64#*\'}"
+                url_in_file_coded64="${url_in_file_coded64%%\'*}"
 
-            url_in_file=$(grep -P '(Download Now|Click Here To Download)' <<< "$html3")
-            url_in_file="${url_in_file#*href=\"}"
-            url_in_file="${url_in_file%%\"*}"
+                ## javascript function atob()
+                ## -> pipe of stdout to "base64 -d" = "decode 64":
+                url_in_file=$(echo "${url_in_file_coded64}" | base64 -d)
+                
+                ## javascript function btoa()
+                ## -> pipe of stdout to "base64 -e" = "encode 64"
+
+            else                
+                if [[ "$html3" =~ "404 Not Found" ]]
+                then
+                    _log 8
+                    
+                elif [[ "$html3" =~ "You have reached the download-limit" ]]
+                then
+                    _log 25
+                fi
+
+                url_in_file=$(grep -P '(Download Now|Click Here To Download)' <<< "$html3")
+                url_in_file="${url_in_file#*href=\"}"
+                url_in_file="${url_in_file%%\"*}"
+            fi
         fi
         
         test_url_in_file || {
