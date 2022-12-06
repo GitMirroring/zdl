@@ -34,9 +34,12 @@ then
     then
         html=$(curl -s "$url_in")
 
-        url_in_file=$(grep -P 'videolink.+innerHTML' <<< "$html")
-        url_in_file="${url_in_file#*=[\"\']}"
-        url_in_file="${url_in_file%%[\"\']*}"
+        url_in_file=$(grep -P "(ideo.*|robot)link.+innerHTML" <<< "$html" |
+                          tail -n1)
+
+        url_in_file="${url_in_file##*\(\'}"
+        url_in_file="${url_in_file#*\=}"
+        url_in_file="https://streamtape.com/get_video?id=${url_in_file%%[\"\']*}"
 
         if ! url "$url_in_file"
         then
@@ -58,7 +61,7 @@ then
 
         file_in=$(grep 'og:title' <<< "$html" |
                       head -n1 |
-                      sed -r 's|.+content=\"([^"]+)\".+|\1|g')
+                      sed -r 's|.+content=\"[0-9]*-*([^"]+)\".+|\1|g')
         
         test -z "$file_in" &&
             file_in=$(get_title "$html")
