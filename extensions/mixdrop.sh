@@ -27,6 +27,10 @@
 ## zdl-extension types: download
 ## zdl-extension name: MixDrop
 
+if [ "$url_in" != "${url_in//mixdrp}" ]
+then
+    replace_url_in "${url_in//mixdrp/mixdrop}"
+fi
 
 if [ "$url_in" != "${url_in//mixdrop}" ]
 then
