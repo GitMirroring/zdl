@@ -45,11 +45,13 @@ then
 
     file_in=$(get_title "$html")
     file_in="${file_in#Watch }"
-    url_in_file=$(grep .m3u8 <<< "$html")
-    url_in_file="${url_in_file%\"*}"
-    url_in_file="${url_in_file##*\"}"
-    url_in_file=$(curl -s "$url_in_file" | head -n3 |tail -n1)
-
+    
+    url_in_0=$(grep .m3u8 <<< "$html")
+    url_in_0="${url_in_0%\'*}"
+    url_in_0="${url_in_0##*\'}"
+    
+    url_in_file="${url_in_0%master.m3u8*}"$(curl -s "$url_in_0" | head -n3 |tail -n1)
+    
     get_language
     force_dler FFMpeg
     get_language_prog
