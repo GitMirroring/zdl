@@ -209,7 +209,6 @@ function clean_countdown {
     rm -f "$path_tmp"/.wise-code
 }
 
-
 function char2code {
     printf "%d" "'$1"
 }
@@ -427,6 +426,43 @@ function sanitize_url {
     data="${data//']'/%5D}"
     data="${data//'...'/%2E%2E%2E}"
 
+    data="${data//$'\340'/à}"
+    data="${data//$'\341'/á}"
+    data="${data//$'\342'/â}"
+    data="${data//$'\343'/ã}"
+    data="${data//$'\344'/ä}"
+    data="${data//$'\345'/å}"
+    data="${data//$'\346'/æ}"
+    data="${data//$'\347'/ç}"
+
+    data="${data//$'\350'/è}"
+    
+    data="${data//$'\351'/é}"
+    data="${data//$'\352'/ê}"
+    data="${data//$'\353'/ë}"
+    data="${data//$'\354'/ì}"
+    data="${data//$'\355'/í}"
+    data="${data//$'\356'/î}"
+    data="${data//$'\357'/ï}"
+
+    data="${data//$'\360'/ð}"
+    data="${data//$'\361'/ñ}"
+    data="${data//$'\362'/ò}"
+    data="${data//$'\363'/ó}"
+    data="${data//$'\364'/ô}"
+    data="${data//$'\365'/õ}"
+    data="${data//$'\366'/ö}"
+    data="${data//$'\367'/÷}"
+
+    data="${data//$'\370'/ø}"
+    data="${data//$'\371'/ù}"
+    data="${data//$'\372'/ú}"
+    data="${data//$'\373'/û}"
+    data="${data//$'\374'/ü}"
+    data="${data//$'\375'/ý}"
+    data="${data//$'\376'/þ}"
+    data="${data//$'\377'/ÿ}"
+
     if [[ $2 ]]
     then
 	ref="$data"
@@ -444,6 +480,43 @@ function sanitize_file_in {
 	file_in="${url_in_file%%\/}"
 	file_in="${file_in##*\/}"
     fi
+
+    file_in="${file_in//$'\340'/à}"
+    file_in="${file_in//$'\341'/á}"
+    file_in="${file_in//$'\342'/â}"
+    file_in="${file_in//$'\343'/ã}"
+    file_in="${file_in//$'\344'/ä}"
+    file_in="${file_in//$'\345'/å}"
+    file_in="${file_in//$'\346'/æ}"
+    file_in="${file_in//$'\347'/ç}"
+
+    file_in="${file_in//$'\350'/è}"
+    
+    file_in="${file_in//$'\351'/é}"
+    file_in="${file_in//$'\352'/ê}"
+    file_in="${file_in//$'\353'/ë}"
+    file_in="${file_in//$'\354'/ì}"
+    file_in="${file_in//$'\355'/í}"
+    file_in="${file_in//$'\356'/î}"
+    file_in="${file_in//$'\357'/ï}"
+
+    file_in="${file_in//$'\360'/ð}"
+    file_in="${file_in//$'\361'/ñ}"
+    file_in="${file_in//$'\362'/ò}"
+    file_in="${file_in//$'\363'/ó}"
+    file_in="${file_in//$'\364'/ô}"
+    file_in="${file_in//$'\365'/õ}"
+    file_in="${file_in//$'\366'/ö}"
+    file_in="${file_in//$'\367'/÷}"
+
+    file_in="${file_in//$'\370'/ø}"
+    file_in="${file_in//$'\371'/ù}"
+    file_in="${file_in//$'\372'/ú}"
+    file_in="${file_in//$'\373'/û}"
+    file_in="${file_in//$'\374'/ü}"
+    file_in="${file_in//$'\375'/ý}"
+    file_in="${file_in//$'\376'/þ}"
+    file_in="${file_in//$'\377'/ÿ}"
     
     file_in="${file_in## }"
     file_in="${file_in%% }"
@@ -576,12 +649,12 @@ function grep_urls {
 	fi
 
     done <<< "$input"
-    
-    grep -P '(^xdcc://.+|^irc://.+|^magnet:.+|^\b(((http|https|ftp)://?|www[.]*)[^\s()<>]+(?:\([\w\d()]+\)|([^[:punct:]\s]|/)))[-_=.]*)$' <<< "$input" &&
-	result=0
 
-    return $result
-    
+#    grep -P '^(xdcc|magnet|http|https|ftp):\/\/.+$' <<< "$input" &&
+    grep -P '(^xdcc://.+|^irc://.+|^magnet:.+|^\b(((http|https|ftp)://?|www[.]*)[^\s()<>]+(?:\([\w\d()]+\)|([^[:punct:]\s]|/)))[-_=.]*)$' <<< "$input" &&
+        result=0
+
+    return $result    
 }
 
 function file_filter {
