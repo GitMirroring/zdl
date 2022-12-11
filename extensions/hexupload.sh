@@ -77,7 +77,7 @@ then
 		         --post-data="${post_data}"    \
 		         "$url_in"                     \
 		         -o /dev/null)
-
+#echo html: "$html3"
             if grep -q 'ldl.ld(' <<< "$html3"
             then
                 url_in_file_coded64=$(grep 'ldl.ld(' <<< "$html3")
@@ -87,7 +87,7 @@ then
                 ## javascript function atob()
                 ## -> pipe of stdout to "base64 -d" = "decode 64":
                 url_in_file=$(echo "${url_in_file_coded64}" | base64 -d)
-                
+ # echo "url: $url_in_file"              
                 ## javascript function btoa()
                 ## -> pipe of stdout to "base64 -e" = "encode 64"
 
@@ -105,6 +105,22 @@ then
                 url_in_file="${url_in_file#*href=\"}"
                 url_in_file="${url_in_file%%\"*}"
             fi
+        fi
+
+        if ! url "$url_in_file"
+        then
+            hex_id="${url_in#*\/\/}"
+            hex_id="${hex_id#*\/}"
+            hex_id="${hex_id%%\/*}"
+
+            hex_link=$(curl -s \
+                            -d "op=download1&id=${hex_id}&rand=&usr_login=&fname=${file_in}&ajax=1&method_free=1&dataType=json" \
+                            "https://hexupload.net/download")
+
+            url_in_file="${hex_link#*link\":\"}"
+
+            url_in_file=$(echo "${url_in_file%%\"*}" | base64 -d)
+
         fi
         
         test_url_in_file || {
