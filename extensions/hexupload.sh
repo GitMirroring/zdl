@@ -77,7 +77,7 @@ then
 		         --post-data="${post_data}"    \
 		         "$url_in"                     \
 		         -o /dev/null)
-#echo html: "$html3"
+
             if grep -q 'ldl.ld(' <<< "$html3"
             then
                 url_in_file_coded64=$(grep 'ldl.ld(' <<< "$html3")
@@ -87,7 +87,7 @@ then
                 ## javascript function atob()
                 ## -> pipe of stdout to "base64 -d" = "decode 64":
                 url_in_file=$(echo "${url_in_file_coded64}" | base64 -d)
- # echo "url: $url_in_file"              
+
                 ## javascript function btoa()
                 ## -> pipe of stdout to "base64 -e" = "encode 64"
 
