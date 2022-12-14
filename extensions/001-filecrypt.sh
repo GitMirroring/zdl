@@ -32,15 +32,15 @@ then
     unset redir_filecrypt location_filecrypt
     get_language_prog
 
-    html=$(curl -v \
+    html=$(curl -s \
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in" 2>&1)
     
     get_language
 
     codes_filecrypt=( $(grep -oP "openLink\(\'[^']+" <<< "$html" |
-                           sed -r "s|openLink\('|\n|g") )
-    
+                           sed -r "s|openLink\('||g") )
+
     if (( "${#codes_filecrypt[@]}" >0 ))
     then
 	for code_filecrypt in "${codes_filecrypt[@]}"
