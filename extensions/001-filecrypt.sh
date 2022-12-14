@@ -47,7 +47,7 @@ then
 	do
     	    url_filecrypt="https://filecrypt.cc/Link/${code_filecrypt}.html"
 
-            html=$(curl -v \
+            html=$(curl -s \
                         -b "$path_tmp"/cookies.zdl \
                         -c "$path_tmp"/cookies2.zdl \
                         "$url_filecrypt" 2>&1)
