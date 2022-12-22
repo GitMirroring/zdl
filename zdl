@@ -359,7 +359,9 @@ function main_loop {
 			if [ -f "$srcfile" ]
 			then
 			    get_language_prog
-			    source "$srcfile"
+
+                            source "$srcfile"
+
 			    get_language
 			fi
 
@@ -450,8 +452,9 @@ function main_loop {
 
 		if ! url "$url_in_file" && 
 			[[ "$downloader_in" =~ (Aria2|Wget|Axel|FFMpeg) ]] ||
-			    [ "$break_loop" == "true" ]
+ 			    [ "$break_loop" == "true" ]
 		then
+
 		    unset break_loop
 		    show_downloads
 		    sleep 1

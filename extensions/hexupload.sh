@@ -28,7 +28,6 @@
 ## zdl-extension types: download
 ## zdl-extension name: Hexupload
 
-
 if [ "$url_in" != "${url_in//hexupload.}" ]
 then
     html=$(wget -qO- -t 1 -T $max_waiting         \
@@ -118,11 +117,9 @@ then
                             "https://hexupload.net/download")
 
             url_in_file="${hex_link#*link\":\"}"
-
             url_in_file=$(echo "${url_in_file%%\"*}" | base64 -d)
-
         fi
-        
+
         test_url_in_file || {
             _log 28
         }
@@ -130,3 +127,4 @@ then
         end_extension
     fi
 fi
+

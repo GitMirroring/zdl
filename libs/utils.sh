@@ -426,6 +426,9 @@ function sanitize_url {
     data="${data//']'/%5D}"
     data="${data//'...'/%2E%2E%2E}"
 
+    data="${data//$'\200'}"
+    data="${data//$'\223'}"
+
     data="${data//$'\340'/à}"
     data="${data//$'\341'/á}"
     data="${data//$'\342'/â}"
@@ -481,6 +484,8 @@ function sanitize_file_in {
 	file_in="${file_in##*\/}"
     fi
 
+    file_in="${file_in//$'\200'}"
+    file_in="${file_in//$'\223'}"
     file_in="${file_in//$'\340'/à}"
     file_in="${file_in//$'\341'/á}"
     file_in="${file_in//$'\342'/â}"
@@ -623,6 +628,7 @@ function url {
 
 function grep_urls {
     local input result
+    unset input
     result=1
     
     if [ -f "$1" ] &&
