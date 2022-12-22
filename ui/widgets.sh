@@ -200,7 +200,7 @@ function print_header { # $1=label ; $2=color ; $3=header pattern; $4=columns
     columns="$1"
     [ -z "$columns" ] && columns=$(stty size | cut -d' ' -f2)
     shift
-    
+  
     eval printf -v line "%.0s${hpattern}" {1..$(( columns-${#text} ))}
 
     [ "$this_mode" == daemon ] &&
@@ -266,6 +266,7 @@ function header_z {
     local title="$1"
     local menu="$2"
     local force="$3"
+    local columns=$(stty size | cut -d' ' -f2)
     
     if show_mode_in_tty "$this_mode" "$this_tty" ||
 	    [ -n "$force" ]
@@ -279,7 +280,8 @@ function header_z {
 	    text_start="$title"
 	    text_end="$menu"
 	}
-	eval printf -v text_space "%.0s\ " {1..$(( $COLUMNS-${#text_start}-${#text_end}-3 ))}
+
+	eval printf -v text_space "%.0s\ " {1..$(( $columns-${#text_start}-${#text_end}-3 ))}
 	print_header "$On_Blue" "" "$text_start$text_space$text_end" 
 	print_c 0 ""
     fi
@@ -360,7 +362,8 @@ function zclock {
 
 function header_lite {
     echo -en "\033[1;0H"
-    local pwd_size=$((COLUMNS - 35))
+    local columns=$(stty size | cut -d' ' -f2)
+    local pwd_size=$((columns - 35))
     local pwd_resized="${PWD:0:$pwd_size}"
     header_z "ZigzagDownLoader in $pwd_resized" "│ help: M-h" $1
     print_header

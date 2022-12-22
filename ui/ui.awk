@@ -343,8 +343,9 @@ function display () {
     }
     else {
 	result = show_downloads()
-	if (result ~ /File/)
-	    result = "\n" header("Downloading in "ENVIRON["PWD"], " ", White, On_Blue, "│ help: M-h") result
+	if (result ~ /File/) {            
+	    result = "\n" header("Downloading in " substr(ENVIRON["PWD"],0,cols-30), " ", White, On_Blue, "│ help: M-h") result
+        }
     }
     if (result)
 	printf("%s", result)

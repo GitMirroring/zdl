@@ -38,7 +38,8 @@ function show_downloads {
 	    sleep 0.1
 	done
     else
-	cols=$COLUMNS
+	#cols=$COLUMNS
+        cols=$(stty size | cut -d' ' -f2)
     fi
     
     if show_mode_in_tty "$this_mode" "$this_tty"
