@@ -310,6 +310,7 @@ function set_ext {
 	    item="${item%?*}"
 	
 	test_ext=".${item##*.}"
+        test_ext=$(tr '[:upper:]' '[:lower:]' <<< "$test_ext")
     
 	if [ -n "$test_ext" ] &&
 	       grep -P "^$test_ext\s" $path_usr/mimetypes.txt &>/dev/null
@@ -340,7 +341,7 @@ function set_ext {
 	    method_post="--post-data=${post_data}"
 	fi
 
-	wget --user-agent=Firefox                  \
+	wget --user-agent="$user_agent"            \
 	     -t 3 -T 40                            \
 	     $COOKIES                              \
 	     $method_post                          \

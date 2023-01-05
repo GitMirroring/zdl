@@ -30,15 +30,18 @@
 
 if [ "$url_in" != "${url_in//hexupload.}" ]
 then
-    html=$(wget -qO- -t 1 -T $max_waiting         \
-		--user-agent="$user_agent"        \
-		"$url_in"                         \
+    html=$(wget -qO- -t 1 -T $max_waiting               \
+		--user-agent="$user_agent"              \
+                --keep-session-cookies                  \
+                --save-cookies="$path_tmp"/cookies.zdl  \
+		"$url_in"                               \
 		-o /dev/null)
-
+    
     if [ -z "$html" ]
     then
         html=$(curl -s \
                     -A "$user_agent" \
+                    -c "$path_tmp"/cookies.zdl \
                     "$url_in")
     fi
 
@@ -49,33 +52,37 @@ then
     else
         input_hidden "$html"
         post_data="${post_data}&method_free=Free Download"
+        post_data="${post_data//+/%2B}"
 
         url_in_file="$url_in"
+
         test_mime_hexupload=$(set_ext "$path_tmp/out")
         rm -f "$path_tmp/out"
         
-        if [[ "$test_mime_hexupload" =~ \.(mkv|avi|mp4) ]]
+        if [[ "$test_mime_hexupload" =~ \.(mkv|avi|mp4|MKV|AVI|MP4) ]]
         then
             get_language
             force_dler Wget
             get_language_prog
 
         else
-            html2=$(wget -SO-                          \
-		         --user-agent="$user_agent"    \
-		         --post-data="${post_data}"    \
-		         "$url_in"                     \
-		         -o /dev/null)
-            
+            html2=$(curl -s     \
+	                 -A "$user_agent"    \
+		         -d "$post_data"    \
+                         -b "$path_tmp"/cookies.zdl \
+                         -c "$path_tmp"/cookies2.zdl \
+		         "$url_in")
+
             input_hidden "$html2"
             
             post_data="${post_data%adblock_detected*}adblock_detected=0"
-            
-            html3=$(wget -qO-                          \
-		         --user-agent="$user_agent"    \
-		         --post-data="${post_data}"    \
-		         "$url_in"                     \
-		         -o /dev/null)
+
+            html3=$(curl -s     \
+	                 -A "$user_agent"    \
+		         -d "$post_data"    \
+                         -b "$path_tmp"/cookies2.zdl \
+                         -c "$path_tmp"/cookies.zdl \
+		         "$url_in")
 
             if grep -q 'ldl.ld(' <<< "$html3"
             then
@@ -105,6 +112,8 @@ then
                 url_in_file="${url_in_file%%\"*}"
             fi
         fi
+
+        sanitize_url "$url_in_file" url_in_file
 
         if ! url "$url_in_file"
         then
