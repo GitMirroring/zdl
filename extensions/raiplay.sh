@@ -166,10 +166,13 @@ then
 
         if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
         then
-            raiplay_json=$(curl -s "${url_in//html/json}" -c "$path_tmp"/cookies.zdl)
-            
-            raiplay_url="${raiplay_json#*content_url\": \"}"
-            raiplay_url="${raiplay_url%%\"*}"
+            if ! url "$raiplay_url" || [ -z "$raiplay_json" ]
+            then
+                raiplay_json=$(curl -s "${url_in%html}json" -c "$path_tmp"/cookies.zdl)
+                
+                raiplay_url="${raiplay_json#*content_url\": \"}"
+                raiplay_url="${raiplay_url%%\"*}"
+            fi
             
             url_in_file=$(sanitize_url "$(curl -s "$raiplay_url")")
             
@@ -199,7 +202,17 @@ then
             get_language
         fi
 
-
+        if ! url "$url_in_file"
+        then
+            raiplay_data=$(youtube-dl --get-url \
+                                     --all-formats \
+                                     --get-filename \
+                                     "$url_in")
+                              
+            url_in_file=$(tail -n2 <<< "$raiplay_data" | head -n1) 
+            file_in=$(tail -n1 <<< "$raiplay_data")
+        fi
+    
         if ! url "$url_in_file"
         then
             _log 45
@@ -212,7 +225,7 @@ then
 
             if [ -n "$file_in" ]
             then
-                file_in="${file_in}".mp4
+                file_in="${file_in%.mp4}".mp4
             fi
         fi
 
@@ -222,7 +235,7 @@ then
 
             if [ -n "$file_in" ]
             then
-                file_in="${file_in}".mp4
+                file_in="${file_in%.mp4}".mp4
             fi
         fi
     fi

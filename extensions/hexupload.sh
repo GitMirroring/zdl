@@ -56,8 +56,11 @@ then
 
         url_in_file="$url_in"
 
-        test_mime_hexupload=$(set_ext "$path_tmp/out")
-        rm -f "$path_tmp/out"
+        if [ -s "$path_tmp/out" ]
+        then
+            test_mime_hexupload=$(set_ext "$path_tmp/out")
+            rm -f "$path_tmp/out"
+        fi
         
         if [[ "$test_mime_hexupload" =~ \.(mkv|avi|mp4|MKV|AVI|MP4) ]]
         then
@@ -66,6 +69,7 @@ then
             get_language_prog
 
         else
+            countdown- 5
             html2=$(curl -s     \
 	                 -A "$user_agent"    \
 		         -d "$post_data"    \
