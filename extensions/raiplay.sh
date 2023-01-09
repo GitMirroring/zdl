@@ -204,14 +204,25 @@ then
 
         if ! url "$url_in_file"
         then
-            raiplay_data=$(youtube-dl --get-url \
-                                     --all-formats \
-                                     --get-filename \
-                                     "$url_in")
+            raiplay_data_json=$(youtube-dl --dump-json \
+                                           "$url_in")
                               
-            url_in_file=$(tail -n2 <<< "$raiplay_data" | head -n1) 
-            file_in=$(tail -n1 <<< "$raiplay_data")
+            url_in_file="${raiplay_data_json##*\"manifest_url\": \"}"
+            url_in_file="${url_in_file%%\"*}"
+            
+            file_in="${raiplay_data_json##*\"title\": \"}"
+            file_in="${file_in%%\"*}".mp4
         fi
+        # if ! url "$url_in_file"
+        # then
+        #     raiplay_data=$(youtube-dl --get-url \
+        #                              --all-formats \
+        #                              --get-filename \
+        #                              "$url_in")
+                              
+        #     url_in_file=$(tail -n2 <<< "$raiplay_data" | head -n1) 
+        #     file_in=$(tail -n1 <<< "$raiplay_data")
+        # fi
     
         if ! url "$url_in_file"
         then
