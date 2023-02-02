@@ -34,6 +34,15 @@ function check_pid {
     return 1
 }
 
+function check_pids {
+    local pid
+    for pid in "$@"
+    do
+        check_pid "$pid" && return 0
+    done
+    return 1
+}
+
 function get_pid_regex {
     awk "BEGINFILE{if (ERRNO != \"\") nextfile} /$@/&&!/awk/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/*/cmdline
 }
@@ -853,7 +862,7 @@ function pipe_files {
 }
 
 function pid_list_for_prog {
-    cmd="$1"
+    local cmd="$1"
     
     if [ -n "$cmd" ]
     then
@@ -861,7 +870,7 @@ function pid_list_for_prog {
 	then
 	    ps ax | grep $cmd | awk '{print $1}'
 	else
-	    _text="$(ps -aj $pid_prog | grep -P "[0-9]+ $cmd")"
+	    local _text="$(ps -aj $pid_prog | grep -P "[0-9]+ $cmd")"
 	    cut -d ' ' -f1 <<<  "${_text## }"
 	fi
     fi
@@ -1313,13 +1322,57 @@ function add_pid_url {
 }
 
 function del_pid_url {
+    local type_pid="$2"
+    [ -z "$type_pid" ] && type_pid='pid-url'
+
+    if [[ "$1" =~ ^[0-9]+$ ]]
+    then
+        sed -r "/^ *$1 .+/d" -i "$path_tmp/${type_pid}" 2>/dev/null
+    else
+        local new=$(grep -v "$1" "$path_tmp/${type_pid}" 2>/dev/null)
+        echo "$new" > "$path_tmp/${type_pid}" 
+    fi        
+}
+
+function get_pid_url {
     local url="$1"
     local type_pid="$2"
     [ -z "$type_pid" ] && type_pid='pid-url'
 
-    if [ -f "$path_tmp/${type_pid}" ]
+    url "$url" && test -f "$path_tmp/$type_pid" ||
+            return 1
+
+    if grep -q "${url}" "$path_tmp/$type_pid"
     then
-	sed -r "/^.+ ${url//\//\\/}$/d" -i "$path_tmp/${type_pid}" 2>/dev/null
+        grep "${url}" "$path_tmp/$type_pid" | cut -d' ' -f1 
+        return 0
+    else
+        return 1
+    fi
+    
+}
+
+function check_pid_url {
+    local pid="$1"
+    local url="$2"
+    local type_pid="$3"
+    [ -z "$type_pid" ] && type_pid='pid-url'
+
+    [[ "$pid" =~ ^[0-9]+$ ]] && url "$url" && test -f "$path_tmp/$type_pid" ||
+            return 1
+
+    if grep -q "${pid} ${url}" "$path_tmp/$type_pid"
+    then
+        if check_pid "$pid"
+        then
+            return 0
+        else
+            del_pid_url "$url" "$type_pid"
+            return 1
+        fi
+        
+    else
+        return 1
     fi
 }
 

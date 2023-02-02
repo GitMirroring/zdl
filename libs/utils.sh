@@ -161,6 +161,11 @@ function obfuscate {
     printf "%s" "$res"
 }
 
+function obfuscate_user {
+    local user=$(md5sum <<< "$USER")
+    echo "${user:0:8}"
+}
+
 function countdown+ {
     local max=$1
     print_c 2 "$(gettext "Wait %s seconds")" $max

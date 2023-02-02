@@ -927,6 +927,9 @@ BEGIN {
 	dler = $0
 	downloader_out[i] = dler
     }
+    # if (dler == "DCC_Xfer") {
+    #     pid_out[i] = get_irc_pid()
+    # }
     if (FNR == 4) {
 	pid_prog_out[i] = $0
     }

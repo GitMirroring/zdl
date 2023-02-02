@@ -50,7 +50,7 @@ else
     args=( "${args[*]//&/\&}" )
 
     xterm -tn "xterm-256color"                                       \
-	  -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"    \
+	  -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"    \
 	  +bdc                                                       \
 	  -fg grey                                                   \
 	  -bg black                                                  \

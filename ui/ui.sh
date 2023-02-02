@@ -401,6 +401,7 @@ function bindings_kill {
         kill_pid_urls
         xfer-pids &>/dev/null
         kill_pid_urls irc-pids
+        kill_pid_urls irc-client-pid
         kill_downloads 
         kill_server
         kill_ffmpeg
@@ -583,7 +584,8 @@ function interactive {
 			    do
 				kill_url "${url_out[$i]}" 'xfer-pids'
 				kill_url "${url_out[$i]}" 'irc-pids'
-
+                                kill_url "${url_out[$i]}" 'irc-fifo-pid'
+                                
 				kill -9 ${pid_out[$i]} &>/dev/null
 				if [ ! -f "${file_out[$i]}.st" ] &&
 				       [ ! -f "${file_out[$i]}.aria2" ] &&

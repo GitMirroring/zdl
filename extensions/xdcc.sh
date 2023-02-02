@@ -43,19 +43,19 @@ then
 
     if [ -f "$path_tmp"/xfer-pids ]
     then
-	while read line
-	do
-	    __pid="${line%% *}"
-	    __src="${line#* }"
-	    
-	    if [ "${url_in%'#'*}" == "${__src%'#'*}" ] &&
-		   check_pid "$__pid"
-	    then
-		_log 28
-		break
-	    fi
+        while read line
+        do
+            __pid="${line%% *}"
+            __src="${line#* }"
 
-	done <"$path_tmp"/xfer-pids
+            if [ "${url_in%'#'*}" == "${__src%'#'*}" ] &&
+        	   check_pid "$__pid"
+            then
+        	_log 28
+        	break
+            fi
+
+        done <"$path_tmp"/xfer-pids
     fi
 fi
 

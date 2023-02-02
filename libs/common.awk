@@ -79,6 +79,15 @@ function check_irc_pid () {
     return 0
 }
 
+function get_irc_pid () {
+    c = "grep '" url_out[i] "$' .zdl_tmp/xfer-pids 2>/dev/null"
+    while (c | getline pid) {
+	print pid
+    }
+    close(c)
+    return 0
+}
+
 function bash_array (name, i, value) {
     return name"["i"]=\""value"\"; "
 }

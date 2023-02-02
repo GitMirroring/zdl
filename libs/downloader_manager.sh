@@ -247,7 +247,7 @@ function download {
 		    [port]=6667
 		    [chan]="${BASH_REMATCH[2]}"
 		    [msg]="${MSG}"
-		    [nick]=$(obfuscate "$USER")
+		    [nick]=$(obfuscate_user) #$(obfuscate "$USER")
 		)
 	    fi
 
@@ -257,23 +257,28 @@ function download {
 		    irc[port]="${BASH_REMATCH[2]}"
 		}
 
-	    # rm -f "$path_tmp/${irc[nick]}" "$path_tmp/${irc[nick]}".fifo
-	    # mkfifo "$path_tmp/${irc[nick]}".fifo
-
+            local test_xfer="${irc[msg]##*\|}"
+            test_xfer="${test_xfer%% *}"
+            test_xfer="$path_tmp/${irc[nick]}${test_xfer}${irc[msg]##*\#}" 
+	    rm -f "$test_xfer"
+            
 	    stdbuf -i0 -o0 -e0 \
 		   $path_usr/irc_client.sh "${irc[host]}" "${irc[port]}" "${irc[chan]}" "${irc[msg]}" "${irc[nick]}" "$url_in" "$this_tty" &
 	    pid_in=$!
 	    echo "$pid_in" >>"$path_tmp/external-dl_pids.txt"
-	    
-	    while [ ! -f "$path_tmp/${irc[nick]}" ]
-	    do sleep 0.1
+
+#echo "test_xfer-0: $test_xfer"
+	    while [ ! -f "$test_xfer" ]
+	    do
+#echo "test_xfer-1: $test_xfer"
+                sleep 0.1
 	    done
 
 	    downwait=10
-	    file_in=$(head -n1 "$path_tmp/${irc[nick]}")
-	    url_in_file=$(tail -n1 "$path_tmp/${irc[nick]}")
-	    rm -f "$path_tmp/${irc[nick]}"
-	    
+	    file_in=$(head -n1 "$test_xfer")
+	    url_in_file=$(tail -n1 "$test_xfer")
+
+#echo	    "url: $url_in_file"
 	    if [ "$url_in_file" != "${url_in_file#\/}" ]
 	    then
 		##	    echo -e "$pid_in	    
@@ -287,6 +292,23 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 	    else
 		downwait=0
 	    fi
+
+            # echo "check_pid_url $pid_in $url_in irc-wait"
+            add_pid_url "$pid_in" "$url_in" "irc-wait"
+#            check_pid_url "$pid_in" "$url_in" "irc-wait" && echo VIVO || echo MORTO
+            # cat "$path_tmp/irc-wait"
+            
+ #           echo PID: "$pid_in - pid_xfer da file _stdout.tmp: $(head -n1 "$path_tmp/${file_in}_stdout.tmp")"
+
+            
+            while check_pid_url "$pid_in" "$url_in" "irc-wait" ||
+                    check_pid_url "$(head -n1 "$path_tmp/${file_in}_stdout.tmp")" "$url_in" "irc-wait" ||
+                    ! test -f "$path_tmp/${file_in}_stdout.tmp"
+            do
+                sleep 0.1
+            done
+            
+ #           echo PID: "$pid_in - pid_xfer da file _stdout.tmp: $(head -n1 "$path_tmp/${file_in}_stdout.tmp")"
 	;;
 
 	Aria2)
@@ -638,7 +660,7 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 		   [ ! -e /cygdrive ]
 	    then
 		xterm -tn "xterm-256color"                                              \
-		      -fa "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12" +bdc      \
+		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12" +bdc      \
 		      -fg grey -bg black -title "ZigzagDownLoader in $PWD"              \
 		      -e "youtube-dl \"$url_in_file\"" &
 		
