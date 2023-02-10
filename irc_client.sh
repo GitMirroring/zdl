@@ -107,12 +107,16 @@ function xdcc_cancel {
     kill_url "$url_in" "xfer-pids"
 }
 
+function xfer_kill {
+    [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&
+	kill $(head -n1 "$path_tmp/${file_in}_stdout.tmp") 2>/dev/null
+}
+
 function irc_quit {
     local pid_list
     touch "$test_xfer"
-    
-    [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&
-	kill $(head -n1 "$path_tmp/${file_in}_stdout.tmp") 2>/dev/null
+
+    xfer_kill
 
     xdcc_cancel
     exec 4>&-
@@ -239,7 +243,7 @@ function check_ctcp {
 	    ctcp['size']="${ctcp_msg[5]}"
 	    ctcp['offset']=$(size_file "${ctcp['file']}")
 	    [ -z "${ctcp['offset']}" ] && ctcp['offset']=0
-            unset ctcp_src
+            #unset ctcp_src
 	    if ctcp['address']=$(check_ip_xfer "${ctcp['address']}") &&
 		    [[ "${ctcp['port']}" =~ ^[0-9]+$ ]]
 	    then
@@ -247,7 +251,7 @@ function check_ctcp {
 	    fi
 	fi
     fi
-    unset ctcp_src
+    #unset ctcp_src
     return 1
 }
 
@@ -351,7 +355,7 @@ function dcc_xfer {
 
 	    else
                 del_pid_url "$url_in" "irc-wait"
-		irc_quit
+		#irc_quit
 	    fi
             
             
@@ -393,7 +397,7 @@ function dcc_xfer {
 		set_link - "$url_in"
 	    fi
 
-	    irc_quit
+	    #irc_quit
 	}
 }
 
@@ -423,6 +427,10 @@ function join_xdcc_send {
 	#xdcc_cancel
 	#sleep 3
 
+        irc_send "PRIVMSG $to" "${msg%send*}cancel"
+        irc_send "PRIVMSG $to" "${msg%send*}remove"
+        sleep 3
+        
         irc_send "PRIVMSG $to" "$msg"
 	print_c 2 ">> PRIVMSG $to :$msg"
 	
@@ -503,81 +511,37 @@ function check_line_regex {
     #     ctcp_src="${BASH_REMATCH[1]}"
     #     print_c 4 "$ctcp_src"
     # fi
-    
+                
+    if [[ "$line" =~ (The session limit for your IP .+ has been exceeded\.)  ]]
+    then
+        notice="${BASH_REMATCH[1]}"
+	_log 27
+        #        irc_quit
+        irc_send QUIT
+        del_pid_url "$url_in" "irc-wait"
+        return 1
+    fi
+
+    if [[ "$line" =~ (XDCC REMOVE|XDCC CANCEL)  ]]
+    then
+        notice="$line"
+	_log 27
+#        irc_send "PRIVMSG $to" "${msg%send*}cancel"
+#        irc_send "PRIVMSG $to" "${msg%send*}remove"
+        del_pid_url "$url_in" "irc-wait"
+        return 1
+    fi
+       
     if [[ "$line" =~ (${to//\|/\\\|}\ *:No such nick\/channel) ]]
     then
 	notice="${BASH_REMATCH[1]}"
 	_log 27
+        del_pid_url "$url_in" "irc-wait"
 	irc_quit
+        return 1
     fi
+    return 0
 }
-
-# function set_irc_fifo {
-#     local pid_irc="$1" pid_fifo="$2" fifo="$3"
-
-#     if check_pid "$pid_irc" &&
-#             check_pid "$pid_fifo" &&
-#             test -p "$fifo"
-#     then
-#         return 1
-#     else
-#         mkfifo "$fifo"
-#         echo "$pid_irc $pid_fifo $fifo" >> "$path_tmp/irc-conn"
-#         return 0
-#     fi
-# }
-
-# function check_irc_fifo {
-#     local fifo="$1" ret=0
-
-#     test -p "$fifo" || return 1
-
-#     if test -s "$path_tmp/irc-conn"
-#     then
-#         while read -a line
-#         do
-#             if ! ( check_pid "${line[0]}" &&
-#                        check_pid "${line[1]}" &&
-#                        [ "$fifo" == "${line[2]}" ] )
-#             then
-#                 kill -9 "${line[0]}" 2>/dev/null
-#                 kill -9 "${line[1]}" 2>/dev/null
-#                 rm -f "${line[2]}"
-#                 ret=1
-#             fi
-                
-#         done < "$path_tmp/irc-conn"
-
-#         if [ "$ret" == 1 ]               
-#         then
-#             grep -vP " $fifo$"  "$path_tmp/irc-conn" >"$path_tmp/irc-conn.new"
-#         else
-#             mv "$path_tmp/irc-conn" "$path_tmp/irc-conn.new"
-#         fi
-#         awk '!($0 in a){a[$0]; print}' "$path_tmp/irc-conn.new" > "$path_tmp/irc-conn"
-
-#     else
-#         rm -f "$fifo"
-#         ret=1
-#     fi
-
-#     return $ret
-# }
-
-# function set_irc_queue {
-#     local u new
-#     url "$1" &&
-#         u="$1" ||
-#             u="$url_in"
-    
-#     if test -s "$path_tmp/irc-queue"
-#     then
-#         new=$(grep -v "$u" "$path_tmp/irc-queue")
-#         echo "$new" >"$path_tmp/irc-queue"
-#     fi
-
-#     echo "$u" >>"$path_tmp/irc-queue"
-# }
 
 function irc_client {
     local line user from txt irc_cmd conn 
@@ -608,16 +572,23 @@ function irc_client {
 	        txt=$(trim "${line#*:}")
 	        irc_cmd="${line%% *}"
 
+                check_line_regex "$line" || break
+                
 	        join_xdcc_send "$line" 
 
 	        ## per ricerche e debug:
-                #print_c 4 "$line"
+                # print_c 4 "$line"
 
-	        check_line_regex "$line"
+	        check_line_regex "$line" || break
 
 	        check_irc_command "$irc_cmd" "$txt" && break
 
             done <&3
+
+            # while check_pid_url "$PID" "$url_in" "irc-wait"
+            # do
+            #     sleep 0.1
+            # done
             irc_send "QUIT"
             exec 3>&-
 
@@ -683,7 +654,7 @@ exec 3>&-
 
 irc_client ||
     {
-        echo "irc_client restituisce eccezione/errore"
+        #echo "irc_client restituisce eccezione/errore"
 	touch "$test_xfer"
 	_log 26
 	exec 3>&-

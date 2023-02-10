@@ -247,7 +247,7 @@ function download {
 		    [port]=6667
 		    [chan]="${BASH_REMATCH[2]}"
 		    [msg]="${MSG}"
-		    [nick]=$(obfuscate_user) #$(obfuscate "$USER")
+		    [nick]=$(obfuscate "$USER") #$(obfuscate_user) #$(obfuscate "$USER")
 		)
 	    fi
 
@@ -267,10 +267,8 @@ function download {
 	    pid_in=$!
 	    echo "$pid_in" >>"$path_tmp/external-dl_pids.txt"
 
-#echo "test_xfer-0: $test_xfer"
 	    while [ ! -f "$test_xfer" ]
 	    do
-#echo "test_xfer-1: $test_xfer"
                 sleep 0.1
 	    done
 
@@ -278,10 +276,8 @@ function download {
 	    file_in=$(head -n1 "$test_xfer")
 	    url_in_file=$(tail -n1 "$test_xfer")
 
-#echo	    "url: $url_in_file"
 	    if [ "$url_in_file" != "${url_in_file#\/}" ]
 	    then
-		##	    echo -e "$pid_in	    
 		echo -e "____PID_IN____
 $url_in
 DCC_Xfer
@@ -293,22 +289,13 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 		downwait=0
 	    fi
 
-            # echo "check_pid_url $pid_in $url_in irc-wait"
             add_pid_url "$pid_in" "$url_in" "irc-wait"
-#            check_pid_url "$pid_in" "$url_in" "irc-wait" && echo VIVO || echo MORTO
-            # cat "$path_tmp/irc-wait"
-            
- #           echo PID: "$pid_in - pid_xfer da file _stdout.tmp: $(head -n1 "$path_tmp/${file_in}_stdout.tmp")"
-
             
             while check_pid_url "$pid_in" "$url_in" "irc-wait" ||
-                    check_pid_url "$(head -n1 "$path_tmp/${file_in}_stdout.tmp")" "$url_in" "irc-wait" ||
-                    ! test -f "$path_tmp/${file_in}_stdout.tmp"
+                    check_pid_url "$(head -n1 "$path_tmp/${file_in}_stdout.tmp")" "$url_in" "irc-wait" #|| ! test -f "$path_tmp/${file_in}_stdout.tmp"
             do
                 sleep 0.1
             done
-            
- #           echo PID: "$pid_in - pid_xfer da file _stdout.tmp: $(head -n1 "$path_tmp/${file_in}_stdout.tmp")"
 	;;
 
 	Aria2)

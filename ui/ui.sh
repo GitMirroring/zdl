@@ -582,18 +582,17 @@ function interactive {
 			r)   
 			    for i in ${inputs[*]}
 			    do
-				kill_url "${url_out[$i]}" 'xfer-pids'
-				kill_url "${url_out[$i]}" 'irc-pids'
-                                kill_url "${url_out[$i]}" 'irc-fifo-pid'
+				#kill_url "${url_out[$i]}" 'xfer-pids'
+				#kill_url "${url_out[$i]}" 'irc-pids'
                                 
 				kill -9 ${pid_out[$i]} &>/dev/null
-				if [ ! -f "${file_out[$i]}.st" ] &&
-				       [ ! -f "${file_out[$i]}.aria2" ] &&
-				       [ ! -f "${file_out[$i]}.zdl" ] &&
-				       [ "${percent_out[i]}" != 100 ]
-				then
-				    rm -rf "${file_out[$i]}" 
-				fi
+				# if [ ! -f "${file_out[$i]}.st" ] &&
+				#        [ ! -f "${file_out[$i]}.aria2" ] &&
+				#        [ ! -f "${file_out[$i]}.zdl" ] &&
+				#        [ "${percent_out[i]}" != 100 ]
+				# then
+				#     rm -rf "${file_out[$i]}" 
+				# fi
 			    done
 			    ;;
 
@@ -601,8 +600,8 @@ function interactive {
 			    for i in ${inputs[*]}
 			    do
 				set_link - "${url_out[$i]}"
-				kill_url "${url_out[$i]}" 'xfer-pids'
-				kill_url "${url_out[$i]}" 'irc-pids'
+				# kill_url "${url_out[$i]}" 'xfer-pids'
+				# kill_url "${url_out[$i]}" 'irc-pids'
 				
 				kill -9 ${pid_out[$i]} &>/dev/null
 				rm -rf "${file_out[$i]}"   \
