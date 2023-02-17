@@ -56,22 +56,14 @@ function get_linkhub {
         html=$(curl "${parser_proto}${parser_domain}/${linkhub_code}")
 
         if [[ "$html" =~ text-url ]]
-        then
-	    if [ -z "$newlink_first" ]
-	    then
-                newlink_first=$(grep text-url -A1 <<<  "$html" |
-                                    tail -n1 |
-                                    sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
+        then           
+            links+=( $(grep -oP 'https\:\/\/[^\"]+' <<< "$html" |
+                               grep -v google) )
 
-                newlink_first=$(sanitize_url "$newlink_first")
-            fi
-            
-            links+=( $(grep -P 'href.+target=\"_blank\" title=\"' <<< "$html" |
-    		           sed -r 's|.+>([^<]+)<\/a>.+|\1|g') )
-            
             for newlink in "${links[@]}"
             do
-	        newlink=$(trim "$newlink")
+	        newlink=$(sanitize_url "$newlink")
+
 	        if url "$newlink" &&
                         [ "$newlink" != "$url_in" ]
 	        then
@@ -92,18 +84,34 @@ function get_linkhub {
                         continue
 	            fi
 
-	            set_link + "$newlink"
+	            set_link + "$newlink" &&
+                        print_c 4 "$newlink"
                     
 	            if [ -z "$newlink_first" ]
 	            then
+                        echo >> links.txt 2>/dev/null
+	                date >> links.txt 2>/dev/null
+
 		        newlink_first="$newlink"
 	            fi
+
+                    grep -qP "^$newlink$" links.txt ||
+                        echo "$newlink" >> links.txt 2>/dev/null
                 fi                    
             done
+
+            if [ -z "$newlink_first" ]
+	    then
+                newlink_first=$(grep text-url -A1 <<<  "$html" |
+                                    tail -n1 |
+                                    sed -r 's|^[^"]+\"([^"]+)\".+|\1|' )
+
+                newlink_first=$(sanitize_url "$newlink_first")
+            fi
         fi
     fi
 }
- 
+
 if [ "$url_in" != "${url_in//linkhub\.}" ]
 then
     for i in 0 1 2

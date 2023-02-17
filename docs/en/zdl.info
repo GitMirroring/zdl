@@ -497,8 +497,8 @@ _Streaming video skipping browser player:_
      Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it,
      Putstream, RaiCultura (HD), Rai... (HD), RaiPlay (HD), RaiScuola
      (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo,
-     Sockshare (HD), Speedvideo (HD), Streamango, Streamin, Streamlare
-     (HD), StreamSB/SBFull (+ browser to solve g-recaptcha),
+     Sockshare (HD), Speedvideo (HD), Streamango, StreamHide, Streamin,
+     Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha),
      StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com
      (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti
      i video in streaming di tipo .mpd, Upstream, VidABC, Vidce,
@@ -1472,26 +1472,26 @@ Tag Table:
 Node: Top1250
 Node: The ZDL command5134
 Node: Streaming/hosting services13150
-Node: Start ZDL17889
-Node: Stop ZDL20222
-Node: Check the downloads21257
-Node: User manuals25298
-Node: Modes25692
-Node: Readline28727
-Node: Editor30182
-Node: Homonymy31340
-Node: IRC/XDCC32849
-Node: Torrent34485
-Node: Filters35309
-Node: Create new extensions35597
-Node: Recommended software and dependencies37303
-Node: Conkeror38915
-Node: zdl-xterm and XXXTerm/Xombrero39897
-Node: Installation and update41768
-Node: Why this program44781
-Node: Tags48471
-Node: Copying53251
-Node: Contacts54329
+Node: Start ZDL17901
+Node: Stop ZDL20234
+Node: Check the downloads21269
+Node: User manuals25310
+Node: Modes25704
+Node: Readline28739
+Node: Editor30194
+Node: Homonymy31352
+Node: IRC/XDCC32861
+Node: Torrent34497
+Node: Filters35321
+Node: Create new extensions35609
+Node: Recommended software and dependencies37315
+Node: Conkeror38927
+Node: zdl-xterm and XXXTerm/Xombrero39909
+Node: Installation and update41780
+Node: Why this program44793
+Node: Tags48483
+Node: Copying53263
+Node: Contacts54341
 
 End Tag Table
 
