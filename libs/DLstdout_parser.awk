@@ -660,6 +660,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     else if (dler == "FFMpeg") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ "muxing") {
+                ## confrontare "duration" e "time" NON guardare "muxing" perché compare in altre occasioni/condizioni
+                ## forse ffmpeg o altri strumenti già dipendenze di zdl permettono di vedere e verificare la completezza del file
 	    	progress_end[i] = chunk[y]
 		break
 	    }
@@ -716,9 +718,10 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	length_saved[i] = size_file(file_out[i])
 	if (!lengh_saved[i])
 	    length_saved[i] = size_file(file_out[i] ".part")
-	
-	if ( (progress_end[i]) ||
-            ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) ) {
+
+        ## confrontare "duration" e "time"
+	# if ( (progress_end[i]) ||
+        if  ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    
