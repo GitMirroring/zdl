@@ -597,9 +597,8 @@ function interactive {
 			    ;;
 
 			E)
-			    for i in ${inputs[*]}
+			    for i in ${inputs[@]}
 			    do
-				set_link - "${url_out[$i]}"
 				# kill_url "${url_out[$i]}" 'xfer-pids'
 				# kill_url "${url_out[$i]}" 'irc-pids'
 				
@@ -611,7 +610,9 @@ function interactive {
 				   "$path_tmp"/"${file_out[$i]}_stdout.tmp" \
 				   "$path_tmp"/"${file_out[$i]}.MEGAenc_stdout.tmp"
 
-			    done
+			    
+                                sed "|^${url_out[$i]}$|d" -i "$path_tmp"/links_loop.txt
+                            done
 			    ;;
 
 			p)
@@ -649,6 +650,7 @@ function interactive {
 			    fi
 			    ;;
 		    esac
+                    unset inputs input
 		fi
 		;;
 	    

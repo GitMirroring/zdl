@@ -665,7 +665,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    # 	progress_end[i] = chunk[y]
 	    #     break
 	    # }
-	    
+
+            
 	    if (chunk[y] ~ /bitrate=.+speed=/) {
 		progress_line = chunk[y]
 
@@ -720,8 +721,15 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    length_saved[i] = size_file(file_out[i] ".part")
 
         ## confrontare "duration" e "time"
-	# if ( (progress_end[i]) ||
-        if  ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) {
+        # test_end_ffmpeg = system("mplayer -identify -vo /dev/null -ao /dev/null " file_out[i] " 2>&1 | grep fail")
+        # if (exists(file_out[i]) && test_end_ffmpeg == "" )
+        #     progress_end[i] = "true"
+        # }
+        
+        
+	#if ( (progress_end[i]) ||
+        if ( (time_out[i] >= duration_out[i]) ||
+             ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) ) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    

@@ -684,6 +684,7 @@ function check_in_file { 	## return --> no_download=1 / download=0
 			    # [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&                                       
 			    #     test_completed=$(grep 'muxing' "$path_tmp/${file_in}_stdout.tmp")
                             unset test_completed
+                            
 			    if [ -f "${file_in}" ] &&                        
 				   [ -z "$test_completed" ] &&                  
 				   ( [ -z "$bis" ] || [ "$no_bis" == true ] )

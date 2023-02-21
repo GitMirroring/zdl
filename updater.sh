@@ -513,6 +513,7 @@ EXTENSIONS:
         deps['curl']=curl
         deps['convert']=imagemagick
         deps['tesseract']=tesseract-ocr
+        ##deps['mplayer']=mplayer
         ## deps['tput']=ncurses-bin
 
         for cmd in "${!deps[@]}"
@@ -553,7 +554,7 @@ EXTENSIONS:
         apt-cyg install bash-completion 2>/dev/null
 
     else
-        ## DIPENDENZE
+        ## DEPENDENCES
         #
         ## GNU/LINUX
         
@@ -593,6 +594,7 @@ EXTENSIONS:
         deps['tesseract']=tesseract-ocr
         ## deps['composer']=composer
         ## php-mbstring
+        ##deps['mplayer']=mplayer
         
         command -v X &>/dev/null &&
             deps['xterm']=xterm
