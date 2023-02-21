@@ -1256,6 +1256,8 @@ function check_youtube-dl {
             return 0 ||
                 return 1
     else
-        return 0
+        hash $youtube_dl &>/dev/null &&
+            return 0 ||
+                return 1
     fi
 }

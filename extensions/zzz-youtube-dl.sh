@@ -28,14 +28,14 @@
 ## zdl-extension name: youtube-dl (comando per elenco delle estensioni: youtube-dl --list-extractors), Aria2 (anche torrent), Axel, Wget, RTMPDump, cURL
 
 
-if command -v youtube-dl &>/dev/null &&
+if command -v $youtube_dl &>/dev/null &&
        [ -z "$url_in_file" ] &&
        [ -z "$break_loop" ] &&
        ! dler_type "no-resume" "$url_in" &&
        ! dler_type "wget" "$url_in" &&
        ! dler_type "rtmp" "$url_in"
 then
-    youtube-dl -R 1 \
+    $youtube_dl -R 1 \
 	       --get-url \
 	       --get-filename "$url_in" \
 	       --cookies "$path_tmp"/cookies.zdl &>"$path_tmp"/youtube-dl.data &

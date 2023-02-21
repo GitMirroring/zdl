@@ -489,6 +489,17 @@ _downloader['Axel']=axel
 _downloader['Aria2']=aria2c
 _downloader['Wget']=wget
 
+## youtube-dl embedded
+if [ -e /cygdrive ]
+then
+    ytcmd=$(hash -t youtube-dl 2>/dev/null | head -n1)
+    test -n "$ytcmd" &&
+        youtube_dl="$ytcmd"
+        
+else
+    youtube_dl="$path_usr/yt-dlp"
+fi
+
 prog=zdl 
 name_prog="ZigzagDownLoader"
 PROG="ZDL"  #`echo $prog | tr a-z A-Z`

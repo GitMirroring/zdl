@@ -40,7 +40,7 @@ then
         fi
 
     else
-        ilfatto_data=$(youtube-dl --get-url --get-filename "$url_in" | grep -P '\.mp4$')
+        ilfatto_data=$($youtube_dl --get-url --get-filename "$url_in" | grep -P '\.mp4$')
 
         url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
         file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
@@ -52,7 +52,7 @@ then
                 url "$url_in_file" ||
                     {
                         ## facebook: 
-                        json_fattoq=$(youtube-dl --dump-json "$url_in")            
+                        json_fattoq=$($youtube_dl --dump-json "$url_in")            
                         url_list_fattoq=$(grep -oP '\"url\":\ \"([^"]+mp4[^"]+)\"' <<< "$json_fattoq" |
                                               sed -r 's|\"url\":\ \"([^"]+mp4[^"]+)\"|\1|g')
                         

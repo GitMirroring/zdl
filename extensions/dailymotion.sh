@@ -30,7 +30,7 @@
 
 if [ "$url_in" != "${url_in//dailymotion.com\/video}" ]
 then
-    dailymotion_data=$(youtube-dl --get-url --get-filename "$url_in")
+    dailymotion_data=$($youtube_dl --get-url --get-filename "$url_in")
 
     url_in_file=$(head -n1 <<< "$dailymotion_data")
     url_in_file=$(sanitize_url "$url_in_file")

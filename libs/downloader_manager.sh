@@ -595,7 +595,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                 file_in="${file_in%.???}"
                 file_in="${file_in%.mp4}"
                 file_in="${file_in}.mp4"
-		nohup youtube-dl \
+		nohup $youtube_dl \
                       --continue \
 		      -f best \
 		      --hls-prefer-ffmpeg \
@@ -649,7 +649,7 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 		xterm -tn "xterm-256color"                                              \
 		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12" +bdc      \
 		      -fg grey -bg black -title "ZigzagDownLoader in $PWD"              \
-		      -e "youtube-dl \"$url_in_file\"" &
+		      -e "$youtube_dl \"$url_in_file\"" &
 		
 	    else
 		if [ -f "$path_tmp/external-dl_pids.txt" ]
@@ -659,7 +659,7 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 			kill $line_pid
 		    done < "$path_tmp/external-dl_pids.txt" 
 		fi
-		youtube-dl "$url_in_file" --newline &>> "$path_tmp/${file_in}_stdout.ytdl" &
+		$youtube_dl "$url_in_file" --newline &>> "$path_tmp/${file_in}_stdout.ytdl" &
  		pid_ytdl=$!
 		
 		echo -e "${pid_in}

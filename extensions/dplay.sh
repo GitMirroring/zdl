@@ -54,7 +54,7 @@ then
 
     if ! url "$url_in_file"
     then
-	dplay_data=$(youtube-dl --get-url \
+	dplay_data=$($youtube_dl --get-url \
 				--get-filename \
 				"$url_in" \
 				2>/dev/null)

@@ -33,7 +33,7 @@ then
     file_in=$(grep -oP 'watch\/\?ref[^<]+' <<< "$html")
     file_in="${file_in##*>}"
     
-    fb_data=$(youtube-dl -f best --get-url --get-filename "$url_in")
+    fb_data=$($youtube_dl -f best --get-url --get-filename "$url_in")
 
     [ -z "$file_in" ] &&
         file_in=$(tail -n1 <<< "$fb_data")

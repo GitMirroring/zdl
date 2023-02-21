@@ -226,7 +226,7 @@ then
                 [ -z "$file_in" ]
         )
     then
-        html=$(youtube-dl --get-url --get-filename "$url_in")
+        html=$($youtube_dl --get-url --get-filename "$url_in")
         url_in_file=$(head -n1 <<< "$html")
         file_in=$(tail -n1 <<< "$html")
     fi

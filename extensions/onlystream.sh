@@ -48,9 +48,9 @@ function get_onlystream_definition {
 
 if [[ "$url_in" =~ onlystream\. ]]
 then
-    if command -v youtube-dl &>/dev/null
+    if command -v $youtube_dl &>/dev/null
     then
-        html=$(youtube-dl --get-url --get-filename "$url_in")
+        html=$($youtube_dl --get-url --get-filename "$url_in")
 	url_in_file=$(head -n1 <<< "$html")
 	file_in=$(tail -n1 <<< "$html")
     fi

@@ -30,7 +30,7 @@
 if [[ "$url_in" =~ youtube\.com\/playlist ]]
 then
     #html=$(curl -s "$url_in")
-    yt_json=$(youtube-dl --dump-json "$url_in")
+    yt_json=$($youtube_dl --dump-json "$url_in")
     while read yt_link
     do
         if url "$yt_link"
@@ -75,9 +75,9 @@ then
     		       tr '[A-Z]' '[a-z]'                             |
     		       sed -r 's/_amp//ig')
 
-	if command -v youtube-dl &>/dev/null
+	if command -v $youtube_dl &>/dev/null
 	then
-	    data=$(youtube-dl --get-url -f best --get-filename "${url_in}")
+	    data=$($youtube_dl --get-url -f best --get-filename "${url_in}")
 	    file_in="$(tail -n1 <<< "$data")"
 	    file_in="${file_in% _ *}"
 	    
@@ -137,7 +137,7 @@ then
 
     if check_livestream "$url_in_file"
     then
-        test_yt_url=$(youtube-dl --get-url "$url_in" |tail -n1)
+        test_yt_url=$($youtube_dl --get-url "$url_in" |tail -n1)
         if ! check_livestream "$test_yt_url"
         then
             url_in_file="$url_in"

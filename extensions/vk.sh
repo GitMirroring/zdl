@@ -29,7 +29,7 @@
 
 if [ "$url_in" != "${url_in//vk.com}" ]
 then
-    vkdata=$(youtube-dl --get-url --get-filename "$url_in" 2>"$path_tmp"/vk.log)
+    vkdata=$($youtube_dl --get-url --get-filename "$url_in" 2>"$path_tmp"/vk.log)
     if grep -q 'only available for registered users' "$path_tmp"/vk.log
     then
 	_log 11

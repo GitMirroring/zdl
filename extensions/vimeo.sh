@@ -30,9 +30,9 @@
 
 if [[ "$url_in" =~ vimeo\.com\/([0-9]+|video\/[0-9]+) ]]
 then
-    if command -v youtube-dl &>/dev/null
+    if command -v $youtube_dl &>/dev/null
     then
-	vimeo_data=$(youtube-dl --get-url --get-filename "$url_in")
+	vimeo_data=$($youtube_dl --get-url --get-filename "$url_in")
 	url_in_file=$(head -n1 <<< "$vimeo_data")
 	file_in=$(tail -n1 <<< "$vimeo_data")
 	youtubedl_m3u8="$url_in"
