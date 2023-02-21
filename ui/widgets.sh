@@ -351,7 +351,7 @@ function xterm_stop {
     then
 	print_header "$On_Blue$BWhite" "\<" ">>>>>>>> $(gettext "<Return> to exit")"
 	echo -ne "\n"
-	read -s
+	read -es
     fi
 }
 
