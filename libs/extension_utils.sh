@@ -1245,7 +1245,7 @@ function youtube-dl {
             $cmd "$@"
         
     else
-        "$path_usr"/youtube-dl "$@"
+        "$youtube_dl" "$@"
     fi
 }
 

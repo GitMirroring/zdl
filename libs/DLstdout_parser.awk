@@ -659,12 +659,12 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     }
     else if (dler == "FFMpeg") {
 	for (y=n; y>0; y--) {
-	    if (chunk[y] ~ "muxing") {
-                ## confrontare "duration" e "time" NON guardare "muxing" perché compare in altre occasioni/condizioni
-                ## forse ffmpeg o altri strumenti già dipendenze di zdl permettono di vedere e verificare la completezza del file
-	    	progress_end[i] = chunk[y]
-		break
-	    }
+	    # if (chunk[y] ~ "muxing") {
+            #     ## confrontare "duration" e "time" NON guardare "muxing" perché compare in altre occasioni/condizioni
+            #     ## forse ffmpeg o altri strumenti già dipendenze di zdl permettono di vedere e verificare la completezza del file
+	    # 	progress_end[i] = chunk[y]
+	    #     break
+	    # }
 	    
 	    if (chunk[y] ~ /bitrate=.+speed=/) {
 		progress_line = chunk[y]

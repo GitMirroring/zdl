@@ -818,3 +818,21 @@ function sanitize_text {
 	    stdbuf -i0 -o0 -e0 sed -r "s|([─]+)|\n|g"
     fi
 }
+
+function zwhich {
+    local cmd="$1" path
+    declare -a paths=(
+        "$HOME/bin"
+        /usr/local/bin
+        /usr/bin
+        /bin
+    )
+    for path in "${paths[@]}"
+    do
+        [ -x "$path"/"$cmd" ] && {
+            echo "$path"/"$cmd"
+            return 0
+        }
+    done
+    return 1
+}

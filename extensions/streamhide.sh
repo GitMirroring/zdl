@@ -32,14 +32,16 @@ if [ "$url_in" != "${url_in//streamhide}" ]
 then
     #### streaming: youtube-dl
     ytdl_old="$youtube_dl"
-    ytdl_new=$(command -v youtube-dl 2>/dev/null)
-    if [ -n "$ytdl_new" ]
+    ytdl_new=$(zwhich youtube-dl)
+    if [ -f "$ytdl_new" ]
     then
         youtube_dl="$ytdl_new"
     fi
     streamhide_data=$($youtube_dl --get-url --get-filename "$url_in")
+
     file_in=$(tail -n1 <<< "$streamhide_data")
     file_in="${file_in#Watch_}"
+
     url_in_file=$(head -n1 <<< "$streamhide_data")
 
     youtube_dl="$ytdl_old"
