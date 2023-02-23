@@ -340,7 +340,9 @@ function dcc_xfer {
 			
 	    if [ -n "$pid_cat" ]
 	    then
+                get_language
 		print_c 1 "$(gettext "Connected to the address"): ${ctcp['address']}:${ctcp['port']}"
+                get_language_prog
                 del_pid_url "$url_in" "irc-wait"
                 
 		set_mode "daemon"
@@ -385,6 +387,16 @@ function dcc_xfer {
 		    kill -9 "$pid_cat"
 		    rm -f "$path_tmp/${file_in}_stdout".*
 		fi
+
+                if (( old_offset == offset )) &&
+                       (( ctcp['size'] > offset )) &&
+                       check_pid $pid_cat
+                then
+                    ((timeout_cat++))
+                fi
+
+                ((timeout_cat > 20)) && kill -9 $pid_cat
+                
 		old_offset=$offset
 
 		## (offset - old_offset /1024) KB/s --> sleep 1 (ogni secondo)
@@ -511,8 +523,16 @@ function check_line_regex {
     #     ctcp_src="${BASH_REMATCH[1]}"
     #     print_c 4 "$ctcp_src"
     # fi
-                
-    if [[ "$line" =~ (The session limit for your IP .+ has been exceeded\.)  ]]
+
+    # if [[ "$line" =~ (You already requested that pack)  ]]
+    # then
+    #     notice="${BASH_REMATCH[1]}"
+    #     _log 27
+    #     irc_send QUIT
+    #     del_pid_url "$url_in" "irc-wait"
+    # fi
+    
+    if [[ "$line" =~ (You already requested that pack|The session limit for your IP .+ has been exceeded\.)  ]]
     then
         notice="${BASH_REMATCH[1]}"
 	_log 27
@@ -615,6 +635,7 @@ function irc_client {
 
 ################ main:
 PID=$$
+get_language_prog
 
 set_mode "stdout"
 this_tty="$7"
