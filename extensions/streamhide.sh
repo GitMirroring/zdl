@@ -61,5 +61,18 @@ then
     #             -d "$post_data" \
     #             "$url_in")
 
+    if ! url "$url_in_file"
+    then
+        html=$(curl -s "$url_in")
+        url_in_file=$(unpack "$html")
+        url_in_file="${url_in_file#*file:\"}"
+        url_in_file="${url_in_file%%\"*}"
+        file_in=$(grep "h4 mb-3 text-white" <<< "$html")
+        file_in="${file_in%<*}"
+        file_in="${file_in##*>}".mp4
+       
+        sanitize_file_in
+    fi
+    
     end_extension
 fi
