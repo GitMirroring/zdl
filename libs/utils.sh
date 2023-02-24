@@ -113,17 +113,29 @@ function add_container {
 		   -d "content=${container}"        |
 		     egrep -e "http" -e "://")
 
+    url_in_old="$url_in"
     while read line
     do
 	new=$(sed -r "s|.*\"(.+)\".*|\\1|g" <<< "$line")
 	new=$(sanitize_url "$new")
 	
-	(( i == 1 )) && url_in="$new"
-
+	if (( i == 1 )) &&
+               [ "$file_dlc" == true ]
+        then
+            url_in="$new"
+        elif [ "$url_in_old" == "$url_in" ]
+        then
+            replace_url_in "$new"
+        fi
 	echo "$new" >> "$path_tmp"/links_loop.txt &&
 	    print_c 1 "$(gettext "New link:") $new" #"Aggiunto URL: $new"
 
     done <<< "$URLlist"
+    
+    clean_file "$path_tmp"/links_loop.txt
+    echo >> links.txt 2>/dev/null
+    date >> links.txt 2>/dev/null
+    cat "$path_tmp"/links_loop.txt >> links.txt 2>/dev/null
 }
 
 function base36 {

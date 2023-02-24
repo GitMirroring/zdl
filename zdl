@@ -1761,6 +1761,7 @@ then
 	then
 	    if [ "${args[i]}" != "${args[i]%.dlc}" ]
 	    then
+                file_dlc=true
 		add_container "${BASE_DIR}${args[i]}" ## container_file
 
 	    elif [ "${args[i]}" != "${args[i]%.torrent}" ]
