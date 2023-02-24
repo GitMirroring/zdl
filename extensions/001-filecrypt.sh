@@ -110,12 +110,20 @@ then
     # fi
     #end_extension &>/dev/null
     
-    container_url=$(curl -s "$url_in" | grep dlcdownload)
-    container_url="${container_url##*\(\'}"
-    container_url=https://filecrypt.cc/DLC/"${container_url%%\'\)*}".dlc
-    print_c 4 "Container DLC URL: $container_url"
-    container_ncrypt=$(mktemp)
-    wget -qO "$container_ncrypt" "$container_url"
-    add_container "$container_ncrypt"
+    container_code=$(curl -s "$url_in" | grep dlcdownload)
+    container_code="${container_code##*\(\'}"
+    container_code="${container_code%%\'\)*}"
+
+    if [ -n "$container_code" ]
+    then
+        container_url=https://filecrypt.cc/DLC/"$container_code".dlc
+        print_c 4 "Container DLC URL: $container_url"
+        container_ncrypt=$(mktemp)
+        wget -qO "$container_ncrypt" "$container_url"
+        add_container "$container_ncrypt"               
+    else
+        print_c 3 "$url_in --> $(gettext "Unsupported download: enter the captcha code using a web browser")"
+        _log 25
+    fi
     break_loop=true
 fi
