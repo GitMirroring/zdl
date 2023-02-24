@@ -116,12 +116,13 @@ then
 
     if [ -n "$container_code" ]
     then
+        set_link - "$url_in"
         container_url=https://filecrypt.cc/DLC/"$container_code".dlc
         print_c 4 "Container DLC URL: $container_url"
         container_ncrypt=$(mktemp)
         wget -qO "$container_ncrypt" "$container_url"
         add_container "$container_ncrypt"
-        set_link - "$url_in"
+ 
     else
         print_c 3 "$url_in --> $(gettext "Unsupported download: enter the captcha code using a web browser")"
         _log 25
