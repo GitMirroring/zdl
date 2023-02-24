@@ -45,17 +45,18 @@ then
 
     file_in=$(get_title "$html")
     file_in="${file_in#Watch }"
+    [ -n "$file_in" ] && file_in="$file_in".mp4
     
     url_in_0=$(grep .m3u8 <<< "$html")
     url_in_0="${url_in_0%\'*}"
     url_in_0="${url_in_0##*\'}"
-    
+
+    print_c 4 "M3U8 master: $url_in_0"    
     url_in_file="${url_in_0%master.m3u8*}"$(curl -s "$url_in_0" | head -n3 |tail -n1)
     
     get_language
     force_dler FFMpeg
     get_language_prog
-    youtubedl_m3u8="$url_in_file"
     
     end_extension
 fi

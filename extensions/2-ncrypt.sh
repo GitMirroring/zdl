@@ -33,9 +33,8 @@ then
     html="${html%.dlc\"*}.dlc"
     container_url="${html##*\"}"
     container_url="http://ncrypt.in${container_url}"
-    get_language
-    print_c 1 "$(gettext "DLC container analysis") ..."
-    get_language_prog	
-    add_container $(wget -q -O- "$container_url")
+    container_ncrypt=$(mktemp)
+    wget -q -O "$container_ncrypt" "$container_url"
+    add_container "$container_ncrypt"
     break_loop=true
 fi

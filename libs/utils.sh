@@ -102,10 +102,14 @@ function urlencode_query {
 }
 
 function add_container {
+    get_language
+    print_c 1 "$(gettext "DLC container analysis") ..."
+    get_language_prog 2>/dev/null
+
     local new
-    unset new
-    container=$(urlencode "$1")
-    URLlist=$(curl "http://dcrypt.it/decrypt/paste"  \
+    local content=$(cat "$1")
+    container=$(urlencode "$content")
+    URLlist=$(curl -s "http://dcrypt.it/decrypt/paste"  \
 		   -d "content=${container}"        |
 		     egrep -e "http" -e "://")
 
