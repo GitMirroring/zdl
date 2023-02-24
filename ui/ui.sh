@@ -610,8 +610,8 @@ function interactive {
 				   "$path_tmp"/"${file_out[$i]}_stdout.tmp" \
 				   "$path_tmp"/"${file_out[$i]}.MEGAenc_stdout.tmp"
 
-			    
-                                sed -r "s;^${url_out[$i]}$;;" -i "$path_tmp"/links_loop.txt
+			        sed "s;^${url_out[$i]}$;;" -i "$path_tmp"/links_loop.txt
+                                #sed -r "s;^${url_out[$i]}$;;" -i "$path_tmp"/links_loop.txt
                                 #set_link - "${url_out[$i]}"
                             done
 			    ;;
