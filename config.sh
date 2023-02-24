@@ -497,7 +497,7 @@ then
         youtube_dl="$ytcmd"
         
 else
-    youtube_dl="$path_usr/yt-dlp"
+    youtube_dl="$path_usr/yt-dlp --compat-options filename-sanitization"
 fi
 
 prog=zdl 
