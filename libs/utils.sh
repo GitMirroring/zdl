@@ -119,11 +119,12 @@ function add_container {
 	new=$(sed -r "s|.*\"(.+)\".*|\\1|g" <<< "$line")
 	new=$(sanitize_url "$new")
 	
-	if (( i == 1 )) &&
+	if [ -z "$url_in" ] &&
                [ "$file_dlc" == true ]
         then
             url_in="$new"
-        elif [ "$url_in_old" == "$url_in" ]
+            
+        elif [ -n "$url_in_old" ] && [ "$url_in_old" == "$url_in" ]
         then
             replace_url_in "$new"
         fi
