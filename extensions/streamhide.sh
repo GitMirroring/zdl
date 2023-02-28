@@ -69,7 +69,7 @@ then
         url_in_file="${url_in_file%%\"*}"
         file_in=$(grep "h4 mb-3 text-white" <<< "$html")
         file_in="${file_in%<*}"
-        file_in="${file_in##*>}".mp4
+        file_in="${file_in##*>}"-"${url_in##*\/}".mp4
        
         sanitize_file_in
     fi
