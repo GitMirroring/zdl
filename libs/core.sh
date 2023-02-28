@@ -1564,7 +1564,7 @@ function lock_fifo {
 }
 
 function create_hash {
-    openssl dgst -whirlpool -hex <<< "${*}" | cut -d' ' -f2
+    openssl dgst -md5 -hex <<< "${*}" | cut -d' ' -f2
 }
 
 function kill_ffmpeg {
