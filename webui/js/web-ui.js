@@ -1466,7 +1466,7 @@ var init = function (path) {
 
     displayPlaylistButton("playlist-browse");
     getPlaylist("playlist-list");
-    getLiveStreamOpts();
+    //getLiveStreamOpts();
 };
 
 // window.onbeforeunload = function () {

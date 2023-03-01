@@ -706,7 +706,7 @@ function run_cmd {
 	    file_output="$path_server"/msg-login.$socket_port
 	    data=$(clean_data "${line[1]}${line[2]}")
 
-	    if [ -s "$file_socket_account" ]
+	    if [ -f "$file_socket_account" ]
 	    then
 		if grep -P "^$(create_hash "$data")$" "$file_socket_account" &>/dev/null
 		then
@@ -731,7 +731,7 @@ Seleziona l'opzione 2: Crea un account per i socket di ZDL." > "$file_output"
 
 	check-account)
             file_output="$path_server"/msg-account.$socket_port
-	    if [ -s "$file_socket_account" ]
+	    if [ -f "$file_socket_account" ]
 	    then
 		echo "exists" > "$file_output"
 
@@ -1942,7 +1942,7 @@ function send_login {
 
 
 function check_session_cookie {
-    if [[ "$1" =~ .*(_ZigzagDownLoader=[a-z0-9]{128}).* ]]
+    if [[ "$1" =~ .*(_ZigzagDownLoader=[a-z0-9]+).* ]]
     then
 	grep "${BASH_REMATCH[1]}" "$path_server"/http-sessions &>/dev/null && return 0
     fi
@@ -1955,26 +1955,36 @@ function http_server {
 
     case $http_method in
 	GET)
-            #echo "header: ${line[*]}" >>zdl_server_$id.log
+            ((DEBUG)) && echo "header: ${line[*]}" >>zdl_server_$id.log
             while read header
             do
-                #echo "header: $header" >>zdl_server_$id.log
+                ((DEBUG)) && echo "header: $header" >>zdl_server_$id.log
                 if [ "$header" == "$(code2char 13)" ]
                 then
-                    #echo "--------------" >>zdl_server_$id.log
+                    ((DEBUG)) && echo "--------------" >>zdl_server_$id.log
                     break
 
                 elif [[ "$header" =~ 'Cookie' ]]
 	        then
 		    cookie="$(clean_data "$header")"
 		    check_session_cookie "$cookie" && logged_on=true
+
+                    ((DEBUG)) && {
+                        if [ -n "$logged_on" ]
+                        then
+                            echo "LOGGED" >>zdl_server_$id.log
+                        else
+                            echo "NOT LOGGED" >>zdl_server_$id.log
+                        fi
+                    }
                 fi
             done
 
             if [ -z "$logged_on" ] &&
-		   [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
-		   [[ ! "$file_output" =~ login.*\.html\? ]]
+	           [[ ! "$file_output" =~ \.(css|js|gif|jpg|jpeg|ico|png|$socket_port)$ ]] &&
+	           [[ ! "$file_output" =~ login.*\.html\? ]]
 	    then
+                ((DEBUG)) && echo "302: $logged_on" >>zdl_server_$id.log
 		send_login
 	    fi
 
@@ -2021,7 +2031,7 @@ function http_server {
     return 0
 }
 
-#id=$$
+((DEBUG)) && id=$$
 
 ## MAIN:
 while read -a line
