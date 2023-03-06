@@ -189,7 +189,7 @@ var manage = {
 
     // Edit and save links in the queue
     saveLinks: function ( elem ) {
-        var links = elem.prev().val();
+        var links = elem.prev().prev().val();
         if ( links ) {
             var splitted = links.split( "\n" ),
                 pass = true;

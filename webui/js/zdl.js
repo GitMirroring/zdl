@@ -106,10 +106,12 @@ class ZDL {
     }
 
     addLink( url ) {
+        url = encodeURIComponent( url );
         return this.request( `cmd=add-link&path=${this.path}&link=${url}` );
     }
 
     addTorrent( torrent ) {
+        torrent = encodeURIComponent( torrent );
         return this.request( `cmd=add-link&path=${this.path}&link=${torrent}&type=torrent` );
     }
 
@@ -122,6 +124,7 @@ class ZDL {
     }
 
     stopLink( link ) {
+        link = encodeURIComponent( link );
         return this.request( `cmd=stop-link&path=${this.path}&link=${link}` );
     }
 
@@ -130,6 +133,7 @@ class ZDL {
     }
 
     deleteLink( link, path ) {
+        link = encodeURIComponent( link );
         return this.request( `cmd=del-link&path=${path}&link=${link}` );
     }
 
@@ -178,6 +182,7 @@ class ZDL {
     }
 
     setLivestream( path, link, start, duration ) {
+        link = encodeURIComponent(link);
         return this.request( `cmd=set-livestream&path=${path}&link=${link}&start=${start}&duration=${duration}` );
     }
 
