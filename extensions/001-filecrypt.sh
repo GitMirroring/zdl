@@ -109,7 +109,8 @@ then
     #     _log 36
     # fi
     #end_extension &>/dev/null
-    
+
+    replace_url_in "https://${url_in##*\/\/}"
     container_code=$(curl -s "$url_in" | grep dlcdownload)
     container_code="${container_code##*\(\'}"
     container_code="${container_code%%\'\)*}"
