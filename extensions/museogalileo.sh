@@ -28,15 +28,34 @@
 ## zdl-extension name: MuseoGalileo.it
 
 
-if [[ "$url_in" =~ (museogalileo\.it) ]]
+if [[ "$url_in" =~ (catalogo\.museogalileo\.it\/multimedia) ]]
+then
+    html=$(curl -s "$url_in")
+               
+    url_in_file="$(grep -oP 'source.+video\.museogalileo[^"]+' <<< "$html")"
+    url_in_file="${url_in_file#*\"}"
+    file_in="$(get_title "$html")"
+    if [ -n "$file_in" ]
+    then
+        file_in="$file_in".mp4
+        sanitize_file_in
+    fi
+    
+    end_extension
+
+elif [[ "$url_in" =~ (museogalileo\.it) ]]
 then
     html=$(curl -s "$url_in")
     html=$(grep pathVideoBase <<< "$html" | head -n1)
 
     if [[ "$html" =~ \"(.+)\" ]]
     then
-        replace_url_in "https:${BASH_REMATCH[1]}"
-        
+        museogalileo_url="https:${BASH_REMATCH[1]}"
+
+        if url "$museogalileo_url"
+        then
+            replace_url_in "${museogalileo_url}"
+        fi
     else
         _log 3
     fi    
