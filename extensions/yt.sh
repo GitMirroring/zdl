@@ -45,9 +45,6 @@ fi
 if [ "$url_in" != "${url_in//'youtube.com/embed/'}" ]
 then
     url_new="${url_in//embed\//watch\?v=}"
-    url_new="${url_new%\?*}"
-    url_new="${url_new%\/}"
-
     url "$url_new" &&
         replace_url_in "$url_new"
 fi
