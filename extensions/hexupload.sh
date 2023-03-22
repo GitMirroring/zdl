@@ -56,12 +56,6 @@ then
 
         url_in_file="$url_in"
 
-        if [ -s "$path_tmp/out" ]
-        then
-            test_mime_hexupload=$(set_ext "$path_tmp/out")
-            rm -f "$path_tmp/out"
-        fi
-        
         if [[ "$test_mime_hexupload" =~ \.(mkv|avi|mp4|MKV|AVI|MP4) ]]
         then
             get_language

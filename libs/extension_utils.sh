@@ -61,6 +61,9 @@ function input_hidden {
             value=${value#\'}
             value=${value%%\"*}
             value=${value%%\'*}
+
+            value=$(htmldecode "$value")
+            
             value="${value//'&'/%26}"
 
             value="${value//'&#x27;'/\'}"
