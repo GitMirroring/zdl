@@ -79,6 +79,15 @@ then
 	url_in_file="${url_in_file%%\"*}"
 
 	url_in_file=http://"${url_in_file##*\/\/}"
+        
+    elif ! url "$url_in_file"
+    then
+        url_in_file=$(grep 'id: "player_la7"' -A1 <<< "$html" | tail -n1)
+        url_in_file="${url_in_file%\"*}"
+        url_in_file="${url_in_file##*\"}"
+
+        file_in=$(get_title "$html")
+        sanitize_file_in
     fi
 
     if [[ "$file_in" =~ Diretta ]]
@@ -100,16 +109,21 @@ then
 		    _log 43
 	fi
 
-    elif [ -n "$file_in" ]
+    elif [ -n "$file_in" ] &&
+             [[ ! "$file_in" =~ \.mp4$ ]]
     then
 	file_in+=_scaricato_il_$(date +%Y-%m-%d)_alle_$(date +%H-%M-%S)
     fi
 
-    get_language
-    force_dler FFMpeg
-    get_language_prog
- 
-    youtubedl_m3u8="$url_in_file"
+    if url "$url_in_file" &&
+            [[ ! "$url_in_file" =~ \.mp4$ ]]
+    then
+        get_language
+        force_dler FFMpeg
+        get_language_prog
+        youtubedl_m3u8="$url_in_file"
+    fi
+    
     end_extension
 fi
 									   
