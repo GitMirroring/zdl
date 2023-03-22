@@ -201,7 +201,7 @@ function read_binding {
 
 function main_loop {
     local nline nlines loop_url_in url_in_old
-    clean_livestream
+    #clean_livestream
 
     [ -n "$start_file" ] || start_file="$path_tmp"/links_loop.txt
     
@@ -233,7 +233,7 @@ function main_loop {
 		zero_dl 
 
 	    post_process
-	    clean_livestream
+	    #clean_livestream
 	    display_livestreams
 
 	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)

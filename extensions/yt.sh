@@ -94,7 +94,7 @@ then
 	then
 	    url_in_file=$(wget -t3 -T10 \
 			       -qO- \
-			       "http://zoninoz.altervista.org/api.php?uri=$url_in" \
+			       "https://zoninoz.altervista.org/api.php?uri=$url_in" \
 			       -o /dev/null |
 				 tail -n1)
 	    
@@ -135,6 +135,7 @@ then
     if check_livestream "$url_in_file"
     then
         test_yt_url=$($youtube_dl --get-url "$url_in" |tail -n1)
+
         if ! check_livestream "$test_yt_url"
         then
             url_in_file="$url_in"
@@ -162,5 +163,11 @@ then
       
     fi
 
+    if [ -n "$file_in" ]
+    then
+        file_in="${file_in//🔴}"
+        sanitize_file_in
+    fi
+    
     end_extension
 fi

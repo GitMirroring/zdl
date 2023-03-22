@@ -910,7 +910,7 @@ function set_livestream_time {
 
     [ -s "$path_tmp"/livestream_time.txt ] &&
         sed -r "s|$link\ .+||g" -i "$path_tmp"/livestream_time.txt
-
+    
     set_line_in_file + "$link $start_time $duration_time" "$path_tmp"/livestream_time.txt &&
         return 0 || return 1
 }
@@ -1012,7 +1012,7 @@ function clean_livestream {
     local line
     declare -a lines
 
-    if [ ! -f "$path_tmp"/links_loop.txt ] &&
+    if [ ! -f "$path_tmp"/links_loop.txt ] ||
            test -z "$(<"$path_tmp"/links_loop.txt)"
     then
         rm -f "$path_tmp"/livestream_time.txt "$path_tmp"/livestream_start.txt
@@ -1020,14 +1020,10 @@ function clean_livestream {
 
     if test -f "$path_tmp"/livestream_time.txt
     then
-
-        if [ -f "$path_tmp"/live-rewriting ]
-        then
-            while [ -f "$path_tmp"/live-rewriting ]
-            do
-                sleeping 0.1
-            done
-        fi
+        while [ -f "$path_tmp"/live-rewriting ]
+        do
+            sleeping 0.1
+        done
         touch "$path_tmp"/live-rewriting
 
         while read -a lines
