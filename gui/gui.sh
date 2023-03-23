@@ -897,7 +897,7 @@ function display_livestream_gui {
 	###### <b>Orario di inizio</b> (attuale:
                
 	## in orizzontale su 3 colonne e 2 righe:
-        if [[ "$link" =~ (youtube|dailymotion) ]]
+        if [ -z "$link"  ] #&&               [[ "$chan" =~ (youtube|dailymotion) ]]
         then
             fres0=$(mktemp)
             fres1=$(mktemp)
@@ -1104,20 +1104,27 @@ function display_link_manager_gui {
 			fi
 		    fi
 
-                    if check_livestream "${res[0]}"
-                    then
+                    if [ -z "${res[0]}" ] ||
+                            check_livestream "${res[0]}"
+                    then                        
                         clean_livestream
 		        ## livestream
 		        if [ -n "${res[1]}" ]
 		        then
-			    local link
+                            local link
 			    for ((i=0; i<${#live_streaming_chan[@]}; i++))
 			    do
 			        if [ "${live_streaming_chan[i]}" == "${res[1]}" ]
 			        then
-                                    [[ "${res[0]}" =~ (youtube|dailymotion)\. ]] ||
+                                    if [[ "${res[0]}" =~ (youtube|dailymotion)\. ]]
+                                    then
+                                        link="${res[0]}"
+                                        
+                                    elif [[ ! "${live_streaming_url[i]}" =~ (youtube|dailymotion)\. ]]
+                                    then
 				        tag_link "${live_streaming_url[i]}" link
-				    
+				    fi
+                                    
 				    if check_livestream_link_time "$link"
 				    then
 				        text=$(gettext "<b> A schedule already exists for this channel: </b>

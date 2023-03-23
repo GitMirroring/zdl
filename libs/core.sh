@@ -485,21 +485,22 @@ function check_link {
     if url "$link" &&
 	   set_link in "$link"
     then
+        if check_livestream "$link"
+        then
+            if check_livestream_link_start "$link" &&
+                    check_livestream_link_time "$link"
+            then
+                ret=0
+            else
+                ret=1
+	    fi
+        fi
+
 	if data_stdout
 	then
 	    if [ -n "$max_dl" ] && (( "${#pid_alive[*]}" >= "$max_dl" ))
 	    then
 		ret=1
-            fi
-
-            if check_livestream "$link"
-            then
-                if check_livestream_link_start "$link"
-                then
-                    ret=0
-                else
-                    ret=1
-	        fi
             fi
 
 	    for ((i=0; i<${#pid_out[@]}; i++))
@@ -517,10 +518,6 @@ function check_link {
 	ret=1
     fi
 
-    check_livestream_link_time "$link" &&
-	! check_livestream_link_start "$link" &&
-	ret=1
-
     return $ret
 }
 
@@ -533,9 +530,9 @@ function check_in_loop {
     then
 	for ((i=0; i<${#url_out[i]}; i++))
 	do	    
-	    check_livestream_link_start "${url_out[i]}" &&
-		! check_pid "${pid_out[i]}" &&
-		ret=1
+	    # check_livestream_link_start "${url_out[i]}" &&
+	    #     ! check_pid "${pid_out[i]}" &&
+	    #     ret=1
 
 	    if ! set_link in "${url_out[i]}" &&
 		    [[ "${percent_out[i]}" =~ ^([0-9.]+)$ ]] &&
