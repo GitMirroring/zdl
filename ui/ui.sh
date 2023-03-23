@@ -888,27 +888,37 @@ function display_set_livestream {
 
         if [[ "${live_streaming_url[opt]}" =~ (youtube|dailymotion) ]]
         then
-            print_c 4 "$(gettext "Enter livestream URL:")"
+            print_c 2 "$(gettext "Enter livestream URL:")"
             read -e link
 	    link=$(sanitize_url "$link")
-            
-	    # [ -n "$link" ] &&
-	    #     set_link + "$link"
-#            tag_link "$link" link
+
+            check_livestream "$link" || {
+                set_link + "$link"
+                return 1
+            }
+
         else
             tag_link "${live_streaming_url[opt]}" link
         fi
-        
+
 	if check_livestream_link_time "$link"
 	then
 	    print_c 3 "$(gettext "A schedule already exists for this channel:")"
-	    print_c 0 "$(gettext "you can delete the previous one and create a new one or leave the previous one and cancel this operation.\n")"
+	    print_c 4 "$(gettext "you can delete the previous one and create a new one or leave the previous one and cancel this operation.\n")"
+            
+            get_livestream_start_time "$link" start_time
+            get_livestream_duration_time "$link" duration_time
+            
+            print_c 4 "$(gettext "The download from %s will start around %s for the duration of %s")\n" \
+	            "$link" "$start_time" "$duration_time"
+
 	    print_c 2 "$(gettext "Do you want to create a new schedule, deleting the previous one? [yes|*]")"
 	    read -e opt
 	    
 	    if [ "$opt" == "$(gettext "yes")" ]
 	    then
 		remove_livestream_link_start "$link"
+                remove_livestream_link_time "$link"
 		
 		if data_stdout
 		then
@@ -937,8 +947,8 @@ function display_set_livestream {
     fi
     
     header_box "$(gettext "Live stream: program for downloading the live")"
-    print_c 4 "Link: $link"
-    print_c 0 "$(gettext "It is necessary to indicate the recording start time and its duration")\n"
+    print_c 2 "Link: $link"
+    print_c 4 "$(gettext "It is necessary to indicate the recording start time and its duration")\n"
 
     print_c 4 "$(gettext "Recording start time:")"
     print_c 2 "$(gettext "Do you want to register right away? [yes|*]")"

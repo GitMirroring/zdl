@@ -38,31 +38,31 @@ then
     file_in=$(tail -n1 <<< "$dailymotion_data")
     file_filter "$file_in"
     
-    if check_livestream "$url_in_file"
-    then
-        get_livestream_start_time "$url_in" dm_start_time
-        get_livestream_duration_time "$url_in" dm_duration_time
+    # if check_livestream "$url_in_file"
+    # then
+    #     get_livestream_start_time "$url_in" dm_start_time
+    #     get_livestream_duration_time "$url_in" dm_duration_time
 
-        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${dm_start_time//\:/-}_durata_${dm_duration_time//\:/-}.mp4
+    #     file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${dm_start_time//\:/-}_durata_${dm_duration_time//\:/-}.mp4
 
-        if [ -n "$dm_duration_time" ]
-	then
-	    print_c 4 "Diretta Dailymotion dalle $dm_start_time per la durata di $dm_duration_time"
-	    livestream_m3u8="$url_in_file"
-            force_dler FFMpeg
-	else
-	    [ -n "$gui_alive" ] &&
-		check_linksloop_livestream ||
-		    _log 43
-	fi
+    #     if [ -n "$dm_duration_time" ]
+    #     then
+    #         print_c 4 "Diretta Dailymotion dalle $dm_start_time per la durata di $dm_duration_time"
+    #         livestream_m3u8="$url_in_file"
+    #         force_dler FFMpeg
+    #     else
+    #         [ -n "$gui_alive" ] &&
+    #     	check_linksloop_livestream ||
+    #     	    _log 43
+    #     fi
       
-    else    
-        [ -n "$file_in" ] &&
-            file_in="${file_in%.mp4}".mp4
-
-        [[ "$url_in_file" =~ \.m3u8 ]] &&
-            force_dler FFMPeg
-    fi
+    # else    
+    [ -n "$file_in" ] &&
+        file_in="${file_in%.mp4}".mp4
+    
+    [[ "$url_in_file" =~ \.m3u8 ]] &&
+        force_dler FFMPeg
+    # fi
     
     end_extension
     # echo -e ".dailymotion.com\tTRUE\t/\tFALSE\t0\tff\toff" > "$path_tmp"/cookies.zdl

@@ -860,11 +860,13 @@ function check_livestream_gui {
 }
 
 function display_livestream_gui {
+    local chan="$1" link="$2"
+    
     if check_livestream_gui
     then
 	return
     fi
-    local chan="$1" link="$2"
+
     local h=$(date +%H)
     local m=$(date +%M)
     local s=$(date +%S)
@@ -987,8 +989,9 @@ function display_livestream_gui {
             
             button_res=$?
         fi
-
-        if [ "$button_res" == 0 ]
+        
+        if check_livestream "$link" &&
+                [ "$button_res" == 0 ]
 	then
             # echo "res: ${res[@]}" >> test
             # echo "button_res: $button_res" >> test
@@ -1011,7 +1014,7 @@ function display_livestream_gui {
 	    local now_in_sec=$(human_to_seconds $now_h $now_m $now_s)       
 	    local start_time_in_sec=$(human_to_seconds $start_h $start_m $start_s)
 	    
-	    text="The start time is lower than the current one: is it tomorrow?\nIf it is not, ZDL will proceed as soon as possible"
+	    text="$(gettext "The start time is lower than the current one: is it tomorrow?\nIf it is not, ZDL will proceed as soon as possible")"
 
 	    if ((start_time_in_sec<now_in_sec))
 	    then
@@ -1033,7 +1036,7 @@ function display_livestream_gui {
 	    set_livestream_time "$link" "$start_time" "$duration_time"
 	    set_link + "$link"
 	    run_livestream_timer "$link" "$start_time"
-	fi
+        fi
     } &
     local pid=$!
     echo $pid > "$path_tmp"/livestream_gui_pid
@@ -1101,55 +1104,60 @@ function display_link_manager_gui {
 			fi
 		    fi
 
-		    ## livestream
-		    if [ -n "${res[1]}" ]
-		    then
-			local link
-			for ((i=0; i<${#live_streaming_chan[@]}; i++))
-			do
-			    if [ "${live_streaming_chan[i]}" == "${res[1]}" ]
-			    then
-				tag_link "${live_streaming_url[i]}" link
-				
-				if check_livestream_link_time "$link"
-				then
-				    text=$(gettext "<b> A schedule already exists for this channel: </b>
+                    if check_livestream "${res[0]}"
+                    then
+                        clean_livestream
+		        ## livestream
+		        if [ -n "${res[1]}" ]
+		        then
+			    local link
+			    for ((i=0; i<${#live_streaming_chan[@]}; i++))
+			    do
+			        if [ "${live_streaming_chan[i]}" == "${res[1]}" ]
+			        then
+                                    [[ "${res[0]}" =~ (youtube|dailymotion)\. ]] ||
+				        tag_link "${live_streaming_url[i]}" link
+				    
+				    if check_livestream_link_time "$link"
+				    then
+				        text=$(gettext "<b> A schedule already exists for this channel: </b>
 you can delete the previous one and create a new one or leave the previous one and cancel this operation
 <b> Do you want to create a new schedule, deleting the previous one? </b>")
-				    
-				    if yad --title "$(gettext "Already existing")" \
-					   --image dialog-question \
-					   --text "$text" \
-					   --button=gtk-yes:0 \
-					   --button=gtk-no:1 \
-					   "${YAD_ZDL[@]}" #2>/dev/null
-				    then
-					if data_stdout
-					then
-					    for ((j=0; j<${#pid_out[@]}; j++))
-					    do
-						if [ "$link" == "${url_out[j]}" ] &&
-						       check_pid "${pid_out[j]}"
-						then
-						    kill -9 "${pid_out[j]}"
-						fi
-						
-						if [ "$link" == "${url_out[j]}" ] &&
-						       [ -f "${file_out[j]}" ]
-						then
-						    rm -f "${file_out[j]}" "$path_tmp"/"${file_out[j]}"_stdout.* "$path_tmp"/"${file_out[j]}".MEGAenc_stdout.* 
-						fi
-					    done					    
-					fi
-				    else					
-					break
+				        
+				        if yad --title "$(gettext "Already existing")" \
+					       --image dialog-question \
+					       --text "$text" \
+					       --button=gtk-yes:0 \
+					       --button=gtk-no:1 \
+					       "${YAD_ZDL[@]}" #2>/dev/null
+				        then
+					    if data_stdout
+					    then
+					        for ((j=0; j<${#pid_out[@]}; j++))
+					        do
+						    if [ "$link" == "${url_out[j]}" ] &&
+						           check_pid "${pid_out[j]}"
+						    then
+						        kill -9 "${pid_out[j]}"
+						    fi
+						    
+						    if [ "$link" == "${url_out[j]}" ] &&
+						           [ -f "${file_out[j]}" ]
+						    then
+						        rm -f "${file_out[j]}" "$path_tmp"/"${file_out[j]}"_stdout.* "$path_tmp"/"${file_out[j]}".MEGAenc_stdout.* 
+						    fi
+					        done					    
+					    fi
+				        else					
+					    break
+				        fi
 				    fi
-				fi
 
-				display_livestream_gui "${live_streaming_chan[i]}" "$link"
-				break
-			    fi
-			done
+				    display_livestream_gui "${live_streaming_chan[i]}" "$link"
+				    break
+			        fi
+			    done
+                        fi
 		    fi
 		    		    
 		    ## torrent
