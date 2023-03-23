@@ -570,7 +570,8 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 	    ## URL-FILE.M3U8
 	    rm -f "$path_tmp/${file_in}_stdout.tmp"
 
-	    if [ "$livestream_m3u8" == "$url_in_file" ]
+	    if [ "$livestream_m3u8" == "$url_in" ] ||
+                   [ "$livestream_m3u8" == "$url_in_file" ]
 	    then
 		local livestream_time
 		get_livestream_duration_time "$url_in" livestream_time

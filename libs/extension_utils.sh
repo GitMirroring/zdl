@@ -855,8 +855,13 @@ function get_data_xdcc_eu {
 
 function check_livestream {
     local link="$1"
-    if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv|yt_live_broadcast.+m3u8|dailymotion.+live.+m3u8) ]]
+    if [[ "$link" =~ youtube\. ]]
     then
+        link=$($youtube_dl -f b --get-url "$link" | tail -n1)
+    fi
+
+    if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv|yt_live_broadcast.+m3u8|dailymotion.+live.+m3u8) ]]
+    then            
         return 0
     else
         return 1
@@ -1111,7 +1116,8 @@ function check_linksloop_livestream {
                         
                     elif [ "$this_mode" != daemon ]
                     then
-                        display_set_livestream "$line"
+                        #                        display_set_livestream "$line"
+                        :
                     fi
                     
                 elif [ -s "$path_tmp"/livestream_time.txt ] &&

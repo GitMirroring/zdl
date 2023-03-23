@@ -72,51 +72,57 @@ then
     		       tr '[A-Z]' '[a-z]'                             |
     		       sed -r 's/_amp//ig')
 
-	if command -v $youtube_dl &>/dev/null
-	then
-	    data=$($youtube_dl --get-url -f best --get-filename "${url_in}")
-	    file_in="$(tail -n1 <<< "$data")"
-	    file_in="${file_in% _ *}"
-	    
-	    if [[ "$file_in" =~ ^(_|\ )\- ]]
-	    then
-		file_in="${title}${file_in}"
-	    fi
-	    url_in_file="$(tail -n2 <<< "$data" | head -n1)"
-
-	    if ! url "$url_in_file"
-	    then
-		unset file_in url_in_file
-	    fi
-	fi
-
+        file_in="${title}".mp4
+        
+	data=$($youtube_dl -f b --get-url --get-filename "${url_in}")
+	# file_in="$(tail -n1 <<< "$data")"
+	# file_in="${file_in% _ *}"
+	
+	# if [[ "$file_in" =~ ^(_|\ )\- ]]
+	# then
+	#     file_in="${title}${file_in}"
+	# fi
+        
+	url_in_file="$(tail -n2 <<< "$data" | head -n1)"
+        
 	if ! url "$url_in_file"
 	then
-	    url_in_file=$(wget -t3 -T10 \
-			       -qO- \
-			       "https://zoninoz.altervista.org/api.php?uri=$url_in" \
-			       -o /dev/null |
-				 tail -n1)
-	    
-	    wget --spider -S "$url_in_file" -o "$path_tmp"/videoType.yt
-
-	    if [ -s "$path_tmp"/videoType.yt ]
-	    then
-		videoType=$(grep 'Content-Type:' "$path_tmp"/videoType.yt)
-		videoType="${videoType##*\/}"
-	    fi
-
-	    if [ -n "$videoType" ]
-	    then
-		file_in="$title.$videoType"
-		rm -f "$path_tmp"/videoType.yt
-	    fi
+	    unset file_in url_in_file
 	fi
+
+        if [[ "$url_in_file" =~ \.m3u8 ]] # || check_livestream "$url_in"
+        then
+            livestream_m3u8="$url_in"
+            force_dler FFMpeg
+        fi
+        
+	# if ! url "$url_in_file"
+	# then
+	#     url_in_file=$(wget -t3 -T10 \
+	# 		       -qO- \
+	# 		       "http://zoninoz.altervista.org/api.php?uri=$url_in" \
+	# 		       -o /dev/null |
+	# 			 tail -n1)
+	    
+	#     wget --spider -S "$url_in_file" -o "$path_tmp"/videoType.yt
+
+	#     if [ -s "$path_tmp"/videoType.yt ]
+	#     then
+	# 	videoType=$(grep 'Content-Type:' "$path_tmp"/videoType.yt)
+	# 	videoType="${videoType##*\/}"
+	#     fi
+
+	#     if [ -n "$videoType" ]
+	#     then
+	# 	file_in="$title.$videoType"
+	# 	rm -f "$path_tmp"/videoType.yt
+	#     fi
+	# fi
 
 	if [ "$downloader_in" == "Axel" ] &&
 	       [ -n "$(axel -o /dev/null "$url_in_file" | grep '403 Forbidden')" ]
 	then
-	    force_dler "Wget"
+	    force_dler Wget
 	fi
 
 	if [[ "$url_in_file" =~ (Age check) ]]
@@ -131,37 +137,38 @@ then
     	_log 9
     	not_available=true
     fi
-
-    if check_livestream "$url_in_file"
-    then
-        test_yt_url=$($youtube_dl --get-url "$url_in" |tail -n1)
-
-        if ! check_livestream "$test_yt_url"
-        then
-            url_in_file="$url_in"
-            force_dler youtube-dl
-        fi
-    fi
-
-    if check_livestream "$url_in_file"
-    then
-        get_livestream_start_time "$url_in" yt_start_time
-        get_livestream_duration_time "$url_in" yt_duration_time
-
-        file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${yt_start_time//\:/-}_durata_${yt_duration_time//\:/-}.mp4
-
-        if [ -n "$yt_duration_time" ]
-	then
-	    print_c 4 "Diretta Youtube dalle $yt_start_time per la durata di $yt_duration_time"
-	    livestream_m3u8="$url_in_file"
-            force_dler FFMpeg
-	else
-	    [ -n "$gui_alive" ] &&
-		check_linksloop_livestream ||
-		    _log 43
-	fi
+    
+    
+    #     if check_livestream "$url_in_file"
+    #     then
+    #  #       test_yt_url=$($youtube_dl --get-url "$url_in" |tail -n1)
+    
+    #         # if ! check_livestream "$test_yt_url"
+    #         # then
+    #             url_in_file="$url_in"
+    #             force_dler youtube-dl
+    # #        fi
+    #     fi
+    
+    # if check_livestream "$url_in_file"
+    # then
+    #     get_livestream_start_time "$url_in" yt_start_time
+    #     get_livestream_duration_time "$url_in" yt_duration_time
+    
+    #     file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${yt_start_time//\:/-}_durata_${yt_duration_time//\:/-}.mp4
+    
+    #     if [ -n "$yt_duration_time" ]
+    #     then
+    #         print_c 4 "Diretta Youtube dalle $yt_start_time per la durata di $yt_duration_time"
+    #         livestream_m3u8="$url_in_file"
+    #         force_dler FFMpeg
+    #     else
+    #         [ -n "$gui_alive" ] &&
+    #     	check_linksloop_livestream ||
+    #     	    _log 43
+    #     fi
       
-    fi
+    # fi
 
     if [ -n "$file_in" ]
     then

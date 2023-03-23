@@ -660,8 +660,6 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     else if (dler == "FFMpeg") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /video.+muxing\soverhead/) {
-                ## confrontare "duration" e "time" NON guardare "muxing" perché compare in altre occasioni/condizioni
-                ## forse ffmpeg o altri strumenti già dipendenze di zdl permettono di vedere e verificare la completezza del file
 		progress_end[i] = chunk[y]
 	        break
 	    }
@@ -697,15 +695,13 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	if (exists(".zdl_tmp/livestream_time.txt")) {
 	    cmd = "cat .zdl_tmp/livestream_time.txt"
 	    while (cmd | getline line) {
-		if (line ~ url_out[i]) {
-		    match(line, /:[0-9]{2}\s{1}([0-9:.]+)$/, matched)
-		    duration_out[i] = int( get_ffmpeg_seconds(matched[1]) )
-		    break
-		}
+                split(line, matched, /\s/)
+                duration_out[i] = int( get_ffmpeg_seconds(matched[3]) )
+                break
 	    }
 	    close(cmd)
 	}
-	if (! duration_out[i]) {
+	if (duration_out[i] == 0) {
 	    cmd = "cat .zdl_tmp/"file_out[i]"_stdout.tmp"
 	    while (cmd | getline line) {
 		if (line ~ /Duration/) {
@@ -720,7 +716,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	if (!lengh_saved[i])
 	    length_saved[i] = size_file(file_out[i] ".part")
 
-	if ( (progress_end[i]) ||
+           
+        if ( (progress_end[i]) ||
              (time_out[i] >= duration_out[i]) ||
              ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) ) {
 	    if (! no_check)
