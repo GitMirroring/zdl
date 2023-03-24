@@ -475,9 +475,8 @@ function check_link {
     test -f "$path_tmp/max-dl" &&
 	read max_dl < "$path_tmp/max-dl"
 
-    if [ -z "$max_dl" ] &&
-	   check_livestream_link_time "$link" &&
-	   ! check_livestream_link_start "$link"
+    if  check_livestream_link_time "$link" &&
+	    ! check_livestream_link_start "$link"
     then
 	return 1
     fi
@@ -500,7 +499,9 @@ function check_link {
 
 	if data_stdout
 	then
-	    if [ -n "$max_dl" ] && (( "${#pid_alive[*]}" >= "$max_dl" ))
+	    if [ -n "$max_dl" ] &&
+                   (( "${#pid_alive[*]}" >= "$max_dl" )) &&
+                   ! check_livestream_link_start "$link"
 	    then
 		ret=1
             fi
@@ -518,22 +519,6 @@ function check_link {
     else
 	ret=1
     fi
-    
-    # local live
-    # while read live
-    # do
-    #     #print_c 4 "Check livestream: $live"
-    #     if [ "$link" != "$live" ] &&
-    #            ! check_livestream_link_start "$link" &&
-    #            ! check_livestream_link_time "$link" &&
-    #            check_livestream_link_time "$live" &&
-    #            ! check_pid "$live" &&
-    #            set_link in "$live"
-    #     then
-    #         #print_c 4 "Checked"
-    #         ret=1
-    #     fi
-    # done < "$path_tmp"/livestream_start.txt
 
     return $ret
 }

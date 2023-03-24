@@ -279,7 +279,6 @@ function main_loop {
 
 		if ! check_link "$url_in"
 		then
-                    echo asd
 		    sleep 2
 		    ((nline++))
 		    continue
