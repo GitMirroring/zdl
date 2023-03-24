@@ -66,23 +66,13 @@ then
 	
     elif [[ "$html" =~ \<title\>(.+)\<\/title\> ]]
     then
-    	title=$(sed -r 's/([^0-9a-z])+/_/ig' <<< "${BASH_REMATCH[1]}" |
+    	yt_title=$(sed -r 's/([^0-9a-z])+/_/ig' <<< "${BASH_REMATCH[1]}" |
     		       sed -r 's/_youtube//ig'                        |
     		       sed -r 's/^_//ig'                              |
     		       tr '[A-Z]' '[a-z]'                             |
-    		       sed -r 's/_amp//ig')
-
-        file_in="${title}".mp4
+    		       sed -r 's/_amp//ig')        
         
-	data=$($youtube_dl -f b --get-url --get-filename "${url_in}")
-	# file_in="$(tail -n1 <<< "$data")"
-	# file_in="${file_in% _ *}"
-	
-	# if [[ "$file_in" =~ ^(_|\ )\- ]]
-	# then
-	#     file_in="${title}${file_in}"
-	# fi
-        
+	data=$($youtube_dl -f b --get-url --get-filename "${url_in}")       
 	url_in_file="$(tail -n2 <<< "$data" | head -n1)"
         
 	if ! url "$url_in_file"
@@ -90,35 +80,17 @@ then
 	    unset file_in url_in_file
 	fi
 
-        if [[ "$url_in_file" =~ \.m3u8 ]] # || check_livestream "$url_in"
+        if [[ "$url_in_file" =~ \.m3u8 ]]
         then
             livestream_m3u8="$url_in"
             force_dler FFMpeg
+
+            get_livestream_duration_time "$url_in" yt_duration
+            get_livestream_start_time "$url_in" yt_start
+            yt_title="$yt_title"_$(date +%Y-%m-%d)_"${yt_start//\:/\-}"_"${yt_duration//\:/\-}"
         fi
+        file_in="$yt_title".mp4
         
-	# if ! url "$url_in_file"
-	# then
-	#     url_in_file=$(wget -t3 -T10 \
-	# 		       -qO- \
-	# 		       "http://zoninoz.altervista.org/api.php?uri=$url_in" \
-	# 		       -o /dev/null |
-	# 			 tail -n1)
-	    
-	#     wget --spider -S "$url_in_file" -o "$path_tmp"/videoType.yt
-
-	#     if [ -s "$path_tmp"/videoType.yt ]
-	#     then
-	# 	videoType=$(grep 'Content-Type:' "$path_tmp"/videoType.yt)
-	# 	videoType="${videoType##*\/}"
-	#     fi
-
-	#     if [ -n "$videoType" ]
-	#     then
-	# 	file_in="$title.$videoType"
-	# 	rm -f "$path_tmp"/videoType.yt
-	#     fi
-	# fi
-
 	if [ "$downloader_in" == "Axel" ] &&
 	       [ -n "$(axel -o /dev/null "$url_in_file" | grep '403 Forbidden')" ]
 	then
@@ -138,38 +110,6 @@ then
     	not_available=true
     fi
     
-    
-    #     if check_livestream "$url_in_file"
-    #     then
-    #  #       test_yt_url=$($youtube_dl --get-url "$url_in" |tail -n1)
-    
-    #         # if ! check_livestream "$test_yt_url"
-    #         # then
-    #             url_in_file="$url_in"
-    #             force_dler youtube-dl
-    # #        fi
-    #     fi
-    
-    # if check_livestream "$url_in_file"
-    # then
-    #     get_livestream_start_time "$url_in" yt_start_time
-    #     get_livestream_duration_time "$url_in" yt_duration_time
-    
-    #     file_in="${file_in%.mp4}"_$(date +%Y-%m-%d)_dalle_$(date +%H-%M-%S)__prog_inizio_${yt_start_time//\:/-}_durata_${yt_duration_time//\:/-}.mp4
-    
-    #     if [ -n "$yt_duration_time" ]
-    #     then
-    #         print_c 4 "Diretta Youtube dalle $yt_start_time per la durata di $yt_duration_time"
-    #         livestream_m3u8="$url_in_file"
-    #         force_dler FFMpeg
-    #     else
-    #         [ -n "$gui_alive" ] &&
-    #     	check_linksloop_livestream ||
-    #     	    _log 43
-    #     fi
-      
-    # fi
-
     if [ -n "$file_in" ]
     then
         file_in="${file_in//🔴}"

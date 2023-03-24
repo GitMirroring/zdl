@@ -1027,8 +1027,7 @@ function display_livestream_gui {
 		    start_time+=':tomorrow'
 	    fi
 
-	    if [[ ! "$link" =~ \#[0-9]+ ]] &&
-                   [[ ! "$link" =~ (youtube|dailymotion) ]]
+	    if [[ ! "$link" =~ \#[0-9]+$ ]] #&& [[ ! "$link" =~ (youtube|dailymotion) ]]
 	    then 
 		tag_link "$link" link
 	    fi
@@ -1118,7 +1117,7 @@ function display_link_manager_gui {
 			        then
                                     if [[ "${res[0]}" =~ (youtube|dailymotion)\. ]]
                                     then
-                                        link="${res[0]}"
+                                        tag_link "${res[0]}" link
                                         
                                     elif [[ ! "${live_streaming_url[i]}" =~ (youtube|dailymotion)\. ]]
                                     then

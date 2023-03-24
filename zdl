@@ -279,6 +279,7 @@ function main_loop {
 
 		if ! check_link "$url_in"
 		then
+                    echo asd
 		    sleep 2
 		    ((nline++))
 		    continue
@@ -288,6 +289,10 @@ function main_loop {
 		break
 	    fi
 
+            #echo "url_0: $url_in"
+            prioritize_scheduled_livestreams
+            #echo "url_1: $url_in"
+            
 	    if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
 	    then
 		set_link - "$url_in"

@@ -50,7 +50,7 @@ then
                                 -A "$user_agent" \
                                 "$raiplay_url")
         fi
-        
+
         raiplay_url="${raiplay_json#*content_url\":}"
         raiplay_url="${raiplay_url#*\"}"
         raiplay_url="${raiplay_url%%\"*}&output=64"
@@ -64,16 +64,32 @@ then
 
         raiplay_url=$(grep -oP 'https[^\[\]]+' <<< "$raiplay_url")
 
-        get_language_prog
-	url_in_file=$(get_location "$raiplay_url")
-        get_language
+        if ! url "$url_in_file" &&
+                [[ "$raiplay_url" =~ \.m3u8 ]]
+        then
+            # url_in_file="${raiplay_url//output=64/output=45}"
+            url_in_file="${raiplay_url}"
+        fi
 
+        if ! url "$url_in_file"
+        then
+            get_language_prog
+	    url_in_file=$(get_location "$raiplay_url")
+            get_language
+        fi
+        
         if ! url "$url_in_file"
         then
             get_language_prog
             url_in_file=$(wget -SO- "$raiplay_url" -o /dev/null 2>&1 |
                               grep ocation)
             get_language
+        fi
+
+        if ! url "$url_in_file"
+        then
+            url_in_file=$($youtube_dl --get-url "${url_in%\#*}" | head -n1)
+            
         fi
 	get_livestream_start_time "$url_in" rai_start_time
 
@@ -89,7 +105,8 @@ then
 	if [ -n "$rai_duration_time" ]
 	then
 	    print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
-	    livestream_m3u8="$url_in_file"
+	    livestream_m3u8="$url_in"
+            
             
 	else
 	    [ -n "$gui_alive" ] &&

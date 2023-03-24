@@ -891,6 +891,7 @@ function display_set_livestream {
             print_c 2 "$(gettext "Enter livestream URL:")"
             read -e link
 	    link=$(sanitize_url "$link")
+            tag_link "$link" link
 
             check_livestream "$link" || {
                 set_link + "$link"

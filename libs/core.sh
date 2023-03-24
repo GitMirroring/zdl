@@ -485,6 +485,8 @@ function check_link {
     if url "$link" &&
 	   set_link in "$link"
     then
+	check_livestream_twice "$link"
+
         if check_livestream "$link"
         then
             if check_livestream_link_start "$link" &&
@@ -504,22 +506,66 @@ function check_link {
             fi
 
 	    for ((i=0; i<${#pid_out[@]}; i++))
-	    do
-		check_livestream_twice "$link"
-		
-		if ( [ "$link" == "${url_out[i]}" ] && check_pid "${pid_out[i]}" )		       
+	    do		
+		if [ "$link" == "${url_out[i]}" ] &&
+                       check_pid "${pid_out[i]}" 
 		then
 		    ret=1
 		fi
-	    done	
+	    done
 	fi
-	
+	    
     else
 	ret=1
     fi
+    
+    # local live
+    # while read live
+    # do
+    #     #print_c 4 "Check livestream: $live"
+    #     if [ "$link" != "$live" ] &&
+    #            ! check_livestream_link_start "$link" &&
+    #            ! check_livestream_link_time "$link" &&
+    #            check_livestream_link_time "$live" &&
+    #            ! check_pid "$live" &&
+    #            set_link in "$live"
+    #     then
+    #         #print_c 4 "Checked"
+    #         ret=1
+    #     fi
+    # done < "$path_tmp"/livestream_start.txt
 
     return $ret
 }
+
+function prioritize_scheduled_livestreams {
+    local live
+    while read live
+    do
+	if [ "$url_in" != "$live" ] && 
+               ! check_livestream_link_start "$url_in" && 
+               ! check_livestream_link_time "$url_in" && 
+               check_livestream_link_time "$live" && 
+               set_link in "$live"
+	then
+            # ! check_pid "$live PID" 
+	    if data_stdout
+	    then
+	        for ((i=0; i<${#pid_out[@]}; i++))
+	        do		
+		    if [ "$live" == "${url_out[i]}" ] &&
+                         ! check_pid "${pid_out[i]}" 
+		    then
+		        url_in="$live"
+		    fi
+	        done
+            else
+                url_in="$live"
+            fi
+	fi
+    done < "$path_tmp"/livestream_start.txt
+}
+
 
 function check_in_loop {
     local line i j max_dl ret=1
