@@ -1118,6 +1118,7 @@ function display_link_manager_gui {
                                     if [[ "${res[0]}" =~ (youtube|dailymotion)\. ]]
                                     then
                                         tag_link "${res[0]}" link
+                                        set_link - "${res[0]}"
                                         
                                     elif [[ ! "${live_streaming_url[i]}" =~ (youtube|dailymotion)\. ]]
                                     then
