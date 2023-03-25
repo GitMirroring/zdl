@@ -655,6 +655,19 @@ var displayLiveStreamForm = function(opts) {
 	content += "</select></div>";
 	document.getElementById("livestream-opts").innerHTML = content;
     }
+
+    var today = new Date();
+    var hours = today.getUTCHours();
+    var minutes = today.getUTCMinutes();
+    var seconds = today.getUTCSeconds();
+    var diff = today.getTimezoneOffset();
+
+    document.getElementById("input-live-start-h").value = hours + (-1 * diff/60);
+    document.getElementById("input-live-start-m").value = minutes;
+    document.getElementById("input-live-start-s").value = seconds;
+    document.getElementById("input-live-duration-h").value = 0;
+    document.getElementById("input-live-duration-m").value = 0;
+    document.getElementById("input-live-duration-s").value = 0;
 };
 
 var normalize_time = function (v) {
@@ -1466,7 +1479,7 @@ var init = function (path) {
 
     displayPlaylistButton("playlist-browse");
     getPlaylist("playlist-list");
-    //getLiveStreamOpts();
+    getLiveStreamOpts();
 };
 
 // window.onbeforeunload = function () {
