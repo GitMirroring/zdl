@@ -57,6 +57,17 @@ var getUriParam = function (name, url) {
     return (results === null) ? null : results[1];
 };
 
+var isHttpUrl = function (string) {
+    let url;
+    try {
+        url = new URL(string)
+    }
+    catch (_) {
+        return false;
+    }
+    return true;
+};
+
 var isJsonString = function (str) {
     try {
         JSON.parse(str);
@@ -631,26 +642,39 @@ var displayConsole = function(spec) {
     }
 };
 
-var stopConsole = function() {
+var stopConsole = function () {
     document.getElementById("input-active-path-console").value = "";
     ZDL.pathConsole = "";
     document.getElementById("path-sel-console").innerHTML = "";
     ajax({query: "cmd=stop-console"});
 };
 
-var getLiveStreamOpts = function() {
+var getLiveStreamOpts = function () {
     ajax({
 	query: "cmd=get-livestream-opts",
 	callback: displayLiveStreamForm
     });
 };
 
-var displayLiveStreamForm = function(opts) {
+var getLiveStreamURL = function () {
+    var pattern = /(youtube|dailymotion)/;
+    var chan = document.getElementById("input-livestream-opts").value;
+    if (pattern.exec ( chan ) === null) { 
+        content = ""; 
+    }
+    else {
+        content = "<input id='input-link-livestream' type='text'>";
+    }
+    
+    document.getElementById("livestream-url").innerHTML = content;
+};
+
+var displayLiveStreamForm = function ( opts ) {
     if (isJsonString(opts)) {
-	var content = "<div class='btn-select'><select id='input-livestream-opts'>";
+	var content = "<div class='btn-select'><select id='input-livestream-opts' onchange='getLiveStreamURL()'>";
         var data = JSON.parse(opts);
 	data.forEach(function(item){
-	    content += "<option value='" + item.url + "'>" + item.chan + "</option>";
+	    content += "<option value='" + item.url + "'>" + item.chan + "</option>";            
 	});
 	content += "</select></div>";
 	document.getElementById("livestream-opts").innerHTML = content;
@@ -683,7 +707,16 @@ var normalize_time = function (v) {
 };
 
 var setLiveStreamTimer = function () {
-    var link = document.getElementById("input-livestream-opts").value;
+    if (document.body.contains(document.getElementById("input-link-livestream"))) {
+        var link = document.getElementById("input-link-livestream").value;
+        if (! isHttpUrl( link )) {
+            alert ( "Inserisci un link corretto: " + link + " non è un URL");
+            return false;
+        }
+    } else {
+        var link = document.getElementById("input-livestream-opts").value;
+    }
+    
     var start = "",
 	duration = "",
 	s, d, failed, err_msg;
@@ -722,8 +755,6 @@ var setLiveStreamTimer = function () {
 	query: "cmd=set-livestream&path=" + ZDL.path + "&link=" + link + "&start=" + start + "&duration=" + duration,
 	callback: function (res){
 	    if (res == "") {
-	    // 	alert(msg);
-	    // else
 		alert("ERRORE: Il server non è riuscito a salvare la programmazione del download");
 	    }
 	}
