@@ -545,7 +545,8 @@ function sanitize_file_in {
     file_in="${file_in//$'\375'/ý}"
     file_in="${file_in//$'\376'/þ}"
     file_in="${file_in//$'\377'/ÿ}"
-    
+    file_in="${file_in//$'\234'/_}"
+
     file_in="${file_in## }"
     file_in="${file_in%% }"
     file_in="${file_in// /_}"
