@@ -568,6 +568,18 @@ var livestream = {
                 channel = $( this ).val();
             }
         } );
+        // #zoninoz
+        if ( $( "#link-livestream" ).is( ":visible" ) ) {
+            var link = $( "#add-link-livestream" ).val();
+            if ( utils.validateInput( link, "URL" ) ) {
+                channel = link;
+                utils.log( "link-added", link );
+            } else {
+                $( "#add-link-livestream" ).val( "" );
+                utils.log( "link-incorrect", link, true );
+            }
+        }
+        // #zoninoz-end
         if ( channel ) {
             var start = $( "#start-rec" ).val(),
                 duration = $( "#duration-rec" ).val(),
@@ -602,7 +614,39 @@ var livestream = {
             }
             utils.log( "livestream-delete", channels[ link.slice( 0, link.lastIndexOf( "#" ) ) ] );
         } );
-    }
+    },
+
+    /* #zoninoz: get livestream link of Youtube/Dailymotion channels */
+    getLivestreamLink: function () {
+        $( ".livestream-channels > input" ).each( function () {
+            if ( $( this ).prop( "checked" ) ) {
+                channel = $( this ).val();
+            }
+        } );
+        var pattern = /(youtube|dailymotion)/;
+        if (pattern.exec ( channel ) === null &&
+            $( "#link-livestream" ).is( ":visible" ) ) {            
+            $( "#link-livestream" ).toggle( "blind", null, 500, function () {
+                if ( $( this ).is( ":hidden" ) ) {
+                    $( "#link-livestream" ).html( "" );
+                }
+            });
+        }
+        else if (pattern.exec ( channel ) !== null &&
+            $( "#link-livestream" ).is( ":hidden" ) ) {
+
+            $( "#link-livestream" ).toggle( "blind", null, 500, function () {
+                if ( $( this ).is( ":visible" ) ) {
+                    var content = `<input id="add-link-livestream" type="text" placeholder="http(s)://(youtube|dailimotion).com/path/params">`;
+
+                    $( this ).html( content );
+                } else {
+                    $( this ).html( "" );
+                    alert ("else");
+                }
+            } );
+        }
+    }   
 };
 
 /**

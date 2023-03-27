@@ -468,7 +468,7 @@ function set_default_configure_values {
     key_conf[13]=udp_port;           val_conf[13]="";          	    string_conf[13]="UDP open port for Aria2 torrents (check your modem/router settings)"
     key_conf[14]=socket_port;        val_conf[14]="8080";      	    string_conf[14]="TCP port for sockets (options: --socket and --web-ui)"
     key_conf[15]=browser;            val_conf[15]="firefox";   	    string_conf[15]="Browser for --web-ui option"
-    key_conf[16]=web_ui;             val_conf[16]="1";         	    string_conf[16]="Select default web-ui (1|2|3|lite)"
+    key_conf[16]=web_ui;             val_conf[16]="2";         	    string_conf[16]="Select default web-ui (1|2|3|lite)"
 }
 set_default_configure_values
 

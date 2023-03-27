@@ -76,6 +76,16 @@ var client = ( function () {
                 }
             }
         } );
+        // #zoninoz 
+        var today = new Date(),
+            diff = today.getTimezoneOffset(),
+            hours = today.getUTCHours() + (-1 * diff/60),
+            minutes = today.getUTCMinutes(),
+            seconds = today.getUTCSeconds();
+        if (hours.toString().length == 1) hours = `0${hours}`;
+        if (minutes.toString().length == 1) minutes = `0${minutes}`;
+        if (seconds.toString().length == 1) seconds = `0${seconds}`;
+        $( "#start-rec" ).val(hours + ":" + minutes + ":" + seconds);
     }
 
     /* Display livestream scheduled */
@@ -89,12 +99,23 @@ var client = ( function () {
                 },
                 streamUrl,
                 scheduledRec = $( "#scheduled-rec" );
+            scheduledRec.empty();             // #zoninoz
             $.each( livestream, function ( index, item ) {
-                streamUrl = item.link.slice( 0, item.link.lastIndexOf( "#" ) );
+                // #zoninoz
+                var pattern = /(youtube|dailymotion)/,
+                    title;
+                if (pattern.exec ( item.link ) === null) {
+                    streamUrl = item.link.slice( 0, item.link.lastIndexOf( "#" ) );
+                    title = data.channels[ streamUrl ];
+                }
+                else {
+                    title = pattern.exec( item.link )[0];
+                }
+                // #zoninoz-end
                 scheduledMarkup = `
                     <div class="scheduled-item">
                         <div class="title">
-                            ${data.channels[ streamUrl ]}
+                            ${title}
                             <button class="button rec-delete ui-button ui-widget ui-corner-all ui-button-icon-only" data-link="${item.link}" data-path="${item.path}">
                                 <span class="ui-button-icon ui-icon ui-icon-close"></span>
                             </button>
@@ -104,8 +125,9 @@ var client = ( function () {
                         </div>
                     </div>
                 `;
+                scheduledRec.append( scheduledMarkup ).i18n(); // #zoninoz
             } );
-            scheduledRec.empty().append( scheduledMarkup ).i18n();
+            //scheduledRec.empty().append( scheduledMarkup ).i18n(); 
             scheduledRec.find( ".button" ).button().i18n();
         } else {
             var elem = $( "#scheduled-rec" );

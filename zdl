@@ -211,7 +211,7 @@ function main_loop {
     then
     	start_file="$path_tmp"/links_loop.txt
 	post_process
-   	sleep 2
+   	sleep 1
 
     elif check_start_file &&
 	    ! check_exit
@@ -279,7 +279,7 @@ function main_loop {
 
 		if ! check_link "$url_in"
 		then
-		    sleep 2
+		    sleep 1
 		    ((nline++))
 		    continue
 		fi
