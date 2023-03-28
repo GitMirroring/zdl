@@ -79,10 +79,10 @@ var client = ( function () {
         // #zoninoz 
         var today = new Date(),
             diff = today.getTimezoneOffset(),
-            hours = today.getUTCHours() + (-1 * diff/60),
+            hours = today.getUTCHours() - diff/60,
             minutes = today.getUTCMinutes(),
             seconds = today.getUTCSeconds();
-        if (hours > 23) hours = "00";
+        if (hours > 23) hours = hours - 24;
         if (hours.toString().length == 1) hours = `0${hours}`;
         if (minutes.toString().length == 1) minutes = `0${minutes}`;
         if (seconds.toString().length == 1) seconds = `0${seconds}`;

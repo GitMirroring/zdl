@@ -683,8 +683,8 @@ var displayLiveStreamForm = function ( opts ) {
     var today = new Date();
     var diff = today.getTimezoneOffset();
 
-    var hours = today.getUTCHours()  + (-1 * diff/60);
-    if (hours > 23) hours = 0;
+    var hours = today.getUTCHours() - diff/60;
+    if (hours > 23) hours = hours - 24;
     var minutes = today.getUTCMinutes();
     var seconds = today.getUTCSeconds();
 
