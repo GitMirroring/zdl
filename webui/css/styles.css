@@ -368,7 +368,7 @@ h4.subtitle {
 }
 
 .livestream-channels>label:not(:last-child) {
-  margin-right: 5px;
+    margin: 2px;
 }
 
 .scheduled>.scheduled-item {

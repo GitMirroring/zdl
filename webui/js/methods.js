@@ -637,9 +637,10 @@ var livestream = {
 
             $( "#link-livestream" ).toggle( "blind", null, 500, function () {
                 if ( $( this ).is( ":visible" ) ) {
-                    var content = `<input id="add-link-livestream" type="text" placeholder="http(s)://(youtube|dailimotion).com/path/params">`;
-
+                    var content = `<div class="inline-group" style="width: 100%; margin: 0px;">
+                    <div data-i18n="tab-2-label-url" class="label">Add URL:</div><input id="add-link-livestream" type="text" placeholder="http(s)://(youtube|dailimotion).com/path/params"></div>`;                    
                     $( this ).html( content );
+                    $( this ).i18n( "tab-5-label-url" );
                 } else {
                     $( this ).html( "" );
                     alert ("else");
@@ -1185,6 +1186,10 @@ var utils = {
         } );
         $( ".livestream-channels" ).append( channels );
         client.set( "channels", dataChannels );
+        // #zoninoz
+        var divInputLivestream = `<div class="toggle" style="width: 100%;"><div id="link-livestream" class="content read ui-widget-content ui-corner-all" style="width: 98%; background: none;"></div></div>`;
+        $( ".livestream-channels" ).append( divInputLivestream );
+        $( ".livestream-channels" ).change( livestream.getLivestreamLink );
     },
 
     /* Update download counters */

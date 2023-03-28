@@ -82,6 +82,7 @@ var client = ( function () {
             hours = today.getUTCHours() + (-1 * diff/60),
             minutes = today.getUTCMinutes(),
             seconds = today.getUTCSeconds();
+        if (hours == 24) hours = "00";
         if (hours.toString().length == 1) hours = `0${hours}`;
         if (minutes.toString().length == 1) minutes = `0${minutes}`;
         if (seconds.toString().length == 1) seconds = `0${seconds}`;
