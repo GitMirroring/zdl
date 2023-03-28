@@ -681,11 +681,12 @@ var displayLiveStreamForm = function ( opts ) {
     }
 
     var today = new Date();
+    var diff = today.getTimezoneOffset();
+
     var hours = today.getUTCHours()  + (-1 * diff/60);
     if (hours > 23) hours = 0;
     var minutes = today.getUTCMinutes();
     var seconds = today.getUTCSeconds();
-    var diff = today.getTimezoneOffset();
 
     document.getElementById("input-live-start-h").value = hours;
     document.getElementById("input-live-start-m").value = minutes;
