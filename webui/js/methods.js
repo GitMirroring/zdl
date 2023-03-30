@@ -638,7 +638,7 @@ var livestream = {
             $( "#link-livestream" ).toggle( "blind", null, 500, function () {
                 if ( $( this ).is( ":visible" ) ) {
                     var content = `<div class="inline-group" style="width: 100%; margin: 0px;">
-                    <div data-i18n="tab-2-label-url" class="label">Add URL:</div><input id="add-link-livestream" type="text" placeholder="http(s)://(youtube|dailimotion).com/path/params"></div>`;                    
+                    <div data-i18n="tab-2-label-url" class="label">Add URL:</div><input id="add-link-livestream" type="text" placeholder="http(s)://(youtube|dailymotion).com/path/params"></div>`;                    
                     $( this ).html( content );
                     $( this ).i18n( "tab-5-label-url" );
                 } else {
