@@ -29,7 +29,7 @@
 
 if [[ "$url_in" =~ youtube\.com\/playlist ]]
 then
-    #html=$(curl -s "$url_in")
+    ## html=$(curl -s "$url_in")
     yt_json=$($youtube_dl --dump-json "$url_in")
     while read yt_link
     do
@@ -39,7 +39,7 @@ then
             [[ "$url_in" =~ youtube.com\/playlist ]] && replace_url_in "$yt_link"
         fi
     done < <(grep -oP '[^"]+youtube\.com\/watch[^"]+' <<< "$yt_json")
-#    done < <(awk '/data-video-id/{match($0, /data-video-id=\"([^"]+)\"/,m); if(m[1]) print "https://www.youtube.com/watch?v=" m[1]}' <<< "$html")
+    ## done < <(awk '/data-video-id/{match($0, /data-video-id=\"([^"]+)\"/,m); if(m[1]) print "https://www.youtube.com/watch?v=" m[1]}' <<< "$html")
 fi
 
 if [ "$url_in" != "${url_in//'youtube.com/embed/'}" ]
@@ -49,65 +49,41 @@ then
         replace_url_in "$url_new"
 fi
 
-if [ "$url_in" != "${url_in//'youtube.com/watch'}" ]
-then
-    html=$(curl -v "$url_in")
+if [[ "$url_in" =~ (youtube\.com\/watch|youtu\.be) ]]
+then       
     replace_url_in "$(urldecode "${url_in%%'&'*}")"    
+    
+    data=$($youtube_dl -f b --get-title --get-url "${url_in}")       
+    url_in_file="$(tail -n1 <<< "$data")"
+    yt_title="$(tail -n2 <<< "$data" | head -n1)"
 
-    if check_connection &&
-	    [ -z "$html" ]
+    if ! url "$url_in_file"
     then
-    	_log 8 
+	unset file_in url_in_file
+    fi
 
-    elif [[ "$html" =~ 'Questo video include contenuti di UMG che sono stati bloccati dallo stesso proprietario per motivi di copyright' ]] ||
-	     [[ "$html" =~ 'This video contains content from UMG, who has blocked it on copyright grounds' ]]
+    if [[ "$url_in_file" =~ \.m3u8 ]]
     then
-	_log 3
-	
-    elif [[ "$html" =~ \<title\>(.+)\<\/title\> ]]
+        livestream_m3u8="$url_in"
+        force_dler FFMpeg
+
+        get_livestream_duration_time "$url_in" yt_duration
+        get_livestream_start_time "$url_in" yt_start
+        yt_title="$yt_title"_$(date +%Y-%m-%d)_"${yt_start//\:/\-}"_"${yt_duration//\:/\-}"
+    fi
+    file_in="$yt_title".mp4
+    
+    if [ "$downloader_in" == "Axel" ] &&
+	   [ -n "$(axel -o /dev/null "$url_in_file" | grep '403 Forbidden')" ]
     then
-    	yt_title=$(sed -r 's/([^0-9a-z])+/_/ig' <<< "${BASH_REMATCH[1]}" |
-    		       sed -r 's/_youtube//ig'                        |
-    		       sed -r 's/^_//ig'                              |
-    		       tr '[A-Z]' '[a-z]'                             |
-    		       sed -r 's/_amp//ig')        
-        
-	data=$($youtube_dl -f b --get-url --get-filename "${url_in}")       
-	url_in_file="$(tail -n2 <<< "$data" | head -n1)"
-        
-	if ! url "$url_in_file"
-	then
-	    unset file_in url_in_file
-	fi
+	force_dler Wget
+    fi
 
-        if [[ "$url_in_file" =~ \.m3u8 ]]
-        then
-            livestream_m3u8="$url_in"
-            force_dler FFMpeg
-
-            get_livestream_duration_time "$url_in" yt_duration
-            get_livestream_start_time "$url_in" yt_start
-            yt_title="$yt_title"_$(date +%Y-%m-%d)_"${yt_start//\:/\-}"_"${yt_duration//\:/\-}"
-        fi
-        file_in="$yt_title".mp4
-        
-	if [ "$downloader_in" == "Axel" ] &&
-	       [ -n "$(axel -o /dev/null "$url_in_file" | grep '403 Forbidden')" ]
-	then
-	    force_dler Wget
-	fi
-
-	if [[ "$url_in_file" =~ (Age check) ]]
-	then
-	    _log 19
-	else
-	    axel_parts=4
-	fi
-	
-    elif check_connection
+    if [[ "$url_in_file" =~ (Age check) ]]
     then
-    	_log 9
-    	not_available=true
+	_log 19
+    else
+	axel_parts=4
     fi
     
     if [ -n "$file_in" ]
