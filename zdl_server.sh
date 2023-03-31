@@ -585,7 +585,7 @@ function create_http_session {
 
 function search_xdcc {
     file_output="$path_server"/xdcc-search.$socket_port
-    url="http://www.xdcc.eu/search.php?searchkey=$1"
+    url="https://www.xdcc.eu/search.php?searchkey=$1"
     response=""
 
     local server channel bot slot gets name length
@@ -1282,7 +1282,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 	    local searchkey="${line[*]//search\-xdcc}"
 	    searchkey="${searchkey# }"
 	    searchkey="${searchkey//\ /+}"
-
+            
 	    search_xdcc "$searchkey"
     	    ;;
 

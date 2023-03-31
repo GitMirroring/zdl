@@ -808,25 +808,25 @@ var displayInputSelect = function (spec, id, callback) {
 
     /****** AGGIORNAMENTO: Visualizzare nomi delle webui nel selector ******/
     var selected, otpName;
-	var webuiNames = {"1":"Default", "2":"Multilang", "3":"Multilang dark", "lite":"Lite"};
-
-	if (!spec.value) {
-		output += "<option selected></option>";
+    var webuiNames = {"1":"Default", "2":"Multilang", "3":"Multilang dark", "lite":"Lite"};
+    
+    if (!spec.value) {
+	output += "<option selected></option>";
     }
-
+    
     spec.options.forEach(function (item) {
     	if (spec.value === item) {
-	    	selected = " selected";
-		} else {
-			selected = "";
+	    selected = " selected";
+	} else {
+	    selected = "";
         }
-
-		optName = webuiNames[item] || item;
-		output += "<option value='" + item + "'" + selected + ">" + optName + "</option>";
+        
+	optName = webuiNames[item] || item;
+	output += "<option value='" + item + "'" + selected + ">" + optName + "</option>";
     });
     /****** FINE AGGIORNAMENTO ******/
     output += "</select></div>";
-
+    
     document.getElementById(id).innerHTML = output;
 };
 
