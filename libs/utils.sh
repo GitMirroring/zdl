@@ -451,6 +451,7 @@ function sanitize_url {
 
     data="${data//$'\200'}"
     data="${data//$'\223'}"
+    data="${data//$'\231'}"
 
     data="${data//$'\340'/à}"
     data="${data//$'\341'/á}"
@@ -508,7 +509,12 @@ function sanitize_file_in {
     fi
 
     file_in="${file_in//$'\200'}"
+    file_in="${file_in//$'\221'}"
+    file_in="${file_in//$'\222'}"
     file_in="${file_in//$'\223'}"
+    file_in="${file_in//$'\231'}"
+    file_in="${file_in//$'\235'}"
+    file_in="${file_in//$'\237'}"
     file_in="${file_in//$'\340'/à}"
     file_in="${file_in//$'\341'/á}"
     file_in="${file_in//$'\342'/â}"

@@ -532,20 +532,21 @@ do
     [ "${tags[i]}" == "TTY" ] && ps_ax_tty="\$$j"
 done
 
+
 #### PIPE:
 #
 # stdin="$(ls -l /dev/fd/0)"
 # stdin="${stdin/*-> /}"
 # if [ "${stdin}" != "${stdin//'pipe:['}" ]
 if [ -p /dev/fd/0 ]
-then    
+then
     read -d '' pipe < /dev/fd/0
-    exec 0<$(echo /dev/$(ps ax| grep ^[\ ]*$$ | awk "{print $ps_ax_tty}"))
-    
-    args+=( $pipe )
+    exec 0< /dev/$(ps ax | grep ^[\ ]*$$ | awk "{print $ps_ax_tty}")
+    args+=( "$pipe" )
     
     unset pipe
 fi
+
 
 #### OPTIONS:
 
