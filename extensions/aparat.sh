@@ -169,11 +169,18 @@ then
         url_in_file="${url_in_file#*\"}"
         url_in_file="${url_in_file%%\"*}"
     fi
+
+    if url "$url_in_file" &&
+            [[ "$url_in_file" =~ \.m3u8 ]]
+    then
+        force_dler FFMpeg
+    fi
     
     if [ -z "$file_in" ]
     then
         file_in=$(get_title "$html")
         file_in="${file_in#Watch }"
+        file_in="${file_in%%.mp4}".mp4
     fi
 
     # if check_youtube-dl && (
