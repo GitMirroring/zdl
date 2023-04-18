@@ -30,20 +30,15 @@
 
 if [ "$url_in" != "${url_in//hexupload.}" ]
 then
-    html=$(wget -qO- -t 1 -T $max_waiting               \
-		--user-agent="$user_agent"              \
-                --keep-session-cookies                  \
-                --save-cookies="$path_tmp"/cookies.zdl  \
-		"$url_in"                               \
-		-o /dev/null)
-    
-    if [ -z "$html" ]
+    if [[ "$url_in" =~ ^(https\:\/\/hexupload) ]]
     then
-        html=$(curl -s \
-                    -A "$user_agent" \
-                    -c "$path_tmp"/cookies.zdl \
-                    "$url_in")
+        replace_url_in "${url_in//\/\//'//www.'}"
     fi
+    
+    html=$(curl -sk \
+                -A "$user_agent" \
+                -c "$path_tmp"/cookies.zdl \
+                "$url_in")
 
     if [[ "$html" =~ "File Not Found" ]]
     then
@@ -64,7 +59,7 @@ then
 
         else
             countdown- 5
-            html2=$(curl -s     \
+            html2=$(curl -sk     \
 	                 -A "$user_agent"    \
 		         -d "$post_data"    \
                          -b "$path_tmp"/cookies.zdl \
@@ -75,7 +70,7 @@ then
             
             post_data="${post_data%adblock_detected*}adblock_detected=0"
 
-            html3=$(curl -s     \
+            html3=$(curl -sk    \
 	                 -A "$user_agent"    \
 		         -d "$post_data"    \
                          -b "$path_tmp"/cookies2.zdl \
@@ -119,7 +114,7 @@ then
             hex_id="${hex_id#*\/}"
             hex_id="${hex_id%%\/*}"
 
-            hex_link=$(curl -s \
+            hex_link=$(curl -ks \
                             -d "op=download1&id=${hex_id}&rand=&usr_login=&fname=${file_in}&ajax=1&method_free=1&dataType=json" \
                             "https://hexupload.net/download")
 
