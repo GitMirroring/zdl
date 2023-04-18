@@ -239,9 +239,9 @@ function main_loop {
 	    for gui_instance in $(ls "$path_tmp"/yad_multiprogress_pid.* 2>/dev/null)
 	    do
 		read gui_instance_pid < "$gui_instance"
-		if check_pid "$gui_instance_pid" &&
-			gui_alive=true
+		if check_pid "$gui_instance_pid"
 		then
+                    gui_alive=true
 		    check_linksloop_livestream
 		    break
 		fi

@@ -482,20 +482,9 @@ function check_link {
     fi
 
     if url "$link" &&
-	   set_link in "$link"
+	    set_link in "$link"
     then
 	check_livestream_twice "$link"
-
-        if check_livestream "$link"
-        then
-            if check_livestream_link_start "$link" &&
-                    check_livestream_link_time "$link"
-            then
-                ret=0
-            else
-                ret=1
-	    fi
-        fi
 
 	if data_stdout
 	then
@@ -508,14 +497,38 @@ function check_link {
 
 	    for ((i=0; i<${#pid_out[@]}; i++))
 	    do		
-		if [ "$link" == "${url_out[i]}" ] &&
-                       check_pid "${pid_out[i]}" 
+		if [ "$link" == "${url_out[i]}" ]
 		then
-		    ret=1
+                    if check_pid "${pid_out[i]}"
+                    then
+		        ret=1
+                    else
+                        if check_livestream "$link"
+                        then
+                            if check_livestream_link_start "$link" &&
+                                    check_livestream_link_time "$link"
+                            then
+                                ret=0
+                            else
+                                ret=1
+	                    fi
+                        fi
+                    fi
 		fi
 	    done
-	fi
-	    
+        else
+	    if check_livestream "$link"
+            then
+                if check_livestream_link_start "$link" &&
+                        check_livestream_link_time "$link"
+                then
+                    ret=0
+                else
+                    ret=1
+	        fi
+            fi
+        fi
+	
     else
 	ret=1
     fi
