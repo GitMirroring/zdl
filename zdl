@@ -219,6 +219,9 @@ function main_loop {
 	nline=1
 	while :
 	do
+            unset test_livestream_boolean
+            sleep 1
+            
             if [ -s "$file_conf" ]
             then
                 tcp_port=$(get_item_conf tcp_port)
@@ -256,7 +259,7 @@ function main_loop {
 	    
 	    if check_in_loop
 	    then
-		sleep 2
+		#sleep 2
 		continue
 	    fi
 
@@ -279,7 +282,7 @@ function main_loop {
 
 		if ! check_link "$url_in"
 		then
-		    sleep 1
+		    #sleep 1
 		    ((nline++))
 		    continue
 		fi
@@ -334,7 +337,7 @@ function main_loop {
 		check_link_timer "$url_in" ||
 		    {
 			show_downloads
-			sleep 1
+			#sleep 1
 			((nline++))
 
 			continue
@@ -405,7 +408,7 @@ function main_loop {
 		then
 		    unset break_loop
 		    show_downloads
-		    sleep 1
+		    #sleep 1
 		    continue
 		fi
                 
@@ -465,7 +468,7 @@ function main_loop {
 
 		    unset break_loop
 		    show_downloads
-		    sleep 1
+		    #sleep 1
 		    continue
 		fi
 
@@ -504,8 +507,8 @@ function main_loop {
 
 	    show_downloads
 	    pipe_files
-	    [ ! -s "$start_file" ] && sleeping_pause=0 
-	    sleeping "$sleeping_pause"
+	    #[ ! -s "$start_file" ] && sleeping_pause=0 
+	    #sleeping "$sleeping_pause"
 	    unset break_loop post_data not_available exceeded
 	done 
 

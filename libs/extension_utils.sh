@@ -854,16 +854,30 @@ function get_data_xdcc_eu {
 }
 
 function check_livestream {
-    local link="$1"
+    if [ "$test_livestream_boolean" == true ]
+    then
+        return 0
+        
+    elif [ "$test_livestream_boolean" == false ]
+    then
+        return 1
+        
+    else
+        local link="$1"
+    fi
+    
     if [[ "$link" =~ (youtube\.|dailymotion\.com\/video) ]]
     then
+        #print_c 4 "Checking link: %s" "$link"
         link=$($youtube_dl -f b --get-url "$link" | tail -n1)
     fi
 
     if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv|yt_live_broadcast.+m3u8|dailymotion.+live.+m3u8) ]]
     then
+        test_livestream_boolean=true
         return 0
     else
+        test_livestream_boolean=false
         return 1
     fi
 }
