@@ -678,7 +678,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		}
 	    }
 
-	    if (chunk[y] ~ /time=/) {
+	    if ( chunk[y] ~ /time=/ && chunk[y] !~ /Opening/ ) {
 		progress_line = chunk[y]
 				
 		if (!time_out[i]) {
