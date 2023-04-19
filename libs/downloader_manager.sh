@@ -166,11 +166,11 @@ function check_wget {
     countdown- 30 &
     pid_countdown=$!
 
-    wget -t3 -T10 -S --spider -U "$user_agent" "$url_in_file" -o "$path_tmp"/wget_checked
+    wget -t3 -T10 -S --spider --user-agent="$user_agent" "$url_in_file" -o "$path_tmp"/wget_checked
     kill -9 $pid_countdown
 
     test -f "$path_tmp"/wget_checked &&
-	read wget_checked < "$path_tmp"/wget_checked
+	read url_checked < "$path_tmp"/wget_checked
 
     if grep -P '(Remote file does not exist|failed: Connection refused)' "$path_tmp"/wget_checked &>/dev/null
     then
@@ -178,6 +178,22 @@ function check_wget {
 	return 1
     else
 	rm -rf "$path_tmp"/wget_checked 
+	return 0
+    fi
+}
+
+function check_curl {
+    local pid_countdown
+    countdown- 30 &
+    pid_countdown=$!
+
+    url_checked=$(curl -is -U "$user_agent" "$url_in_file" | head -n1)
+    kill -9 $pid_countdown
+    
+    if [[ ! "$url_checked" =~ (HTTP/[0-9.]+ 200) ]]
+    then
+	return 1
+    else
 	return 0
     fi
 }
@@ -191,7 +207,7 @@ function download {
     fi
     
     get_language_prog
-    
+
     if ! dler_type "no-check" "$url_in" &&
 	    [ -z "$debrided" ]
     then
@@ -200,14 +216,14 @@ function download {
 	       ! dler_type "rtmp" "$url_in" &&
 	       ! dler_type "wget" "$url_in" &&
 	       ! dler_type "youtube-dl" "$url_in" &&
-	       ! check_wget
+               ! check_curl
 	then
-	    if [[ ! "$wget_checked" =~ (HTTP/[0-9.]+ 503) ]]
+	    if [[ ! "$url_checked" =~ (HTTP/[0-9.]+ 503) ]]
 	    then
-		_log 2 
+                _log 2
 		return 1
 	    fi
-	    if [[ "$wget_checked" =~ (HTTP/[0-9.]+ 404) ]]
+	    if [[ "$url_checked" =~ (HTTP/[0-9.]+ 404) ]]
 	    then
 		_log 3
 		return 1
