@@ -722,12 +722,7 @@ function check_in_file { 	## return --> no_download=1 / download=0
 		then
 		    case "$i" in
 			resume_dl|rewrite_dl) 
-			    # [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&                                       
-			    #     test_completed=$(grep 'muxing' "$path_tmp/${file_in}_stdout.tmp")
-                            unset test_completed
-                            
-			    if [ -f "${file_in}" ] &&                        
-				   [ -z "$test_completed" ] &&                  
+			    if [ -f "${file_in}" ] &&			
 				   ( [ -z "$bis" ] || [ "$no_bis" == true ] )
 			    then 
 				unset no_newip

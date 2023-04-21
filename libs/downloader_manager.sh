@@ -638,6 +638,17 @@ $file_in
 $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 
 	    #downwait=$((downwait+10))
+            local tmp_lines=0
+            local connecting="$(gettext "Connecting")"
+            while ((tmp_lines < 10))
+            do
+                tmp_lines=$(wc -l "$path_tmp/${file_in}_stdout.tmp" | cut -d' ' -f1)
+                sleep 1
+                check_wait_connecting &&
+	            print_r 2 " $connecting ...       "  ||
+		        print_r 1 " $connecting . . .     " 
+            done
+            print_r 0 "                      "
 	    ;;
 
 	youtube-dl)

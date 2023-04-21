@@ -155,6 +155,14 @@ function size_file (filename) {
     return result
 }
 
+function get_file_lines (filename) {
+    ## in bytes
+    c = "wc -l \"" filename "\" |cut -d' ' -f1"
+    c | getline result
+    close(c)
+    return result
+}
+
 function size_dir (dir) {
     c = "du -cb \"" dir "\" 2>/dev/null | tail -n1 | cut -f1"
     c | getline result

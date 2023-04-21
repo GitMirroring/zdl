@@ -132,6 +132,9 @@ function get_color_out () {
 	}
 	else {
 	    color_out[i] = "yellow"
+            if (percent_out[i] == 100) {
+                percent_out[i] = 0
+            }
 	}		    
     }
     array_out(color_out[i], "color_out")   
@@ -276,7 +279,6 @@ function yellow_progress () {
     else {
 	percent_out[i] = 0
 	speed_out[i] = 0
-	#speed_out_type[i] = "KB/s"
         speed_out_type[i] = "K/s"
 	## mancano ancora (secondi):
 	eta_out[i] = ""
@@ -659,11 +661,16 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
     }
     else if (dler == "FFMpeg") {
 	for (y=n; y>0; y--) {
-	    if (chunk[y] ~ /video.+muxing\soverhead/) {
-		progress_end[i] = chunk[y]
-	        break
+            if (chunk[y] ~ /video.+muxing\soverhead/) {
+                if (chunk[y-2] ~ /Error\smuxing\sa\spacket/) {
+                    progress_error[i] = chunk[y]
+                    break
+                }
+                else {
+                    progress_end[i] = chunk[y]
+                    break
+                }
 	    }
-
             
 	    if (chunk[y] ~ /bitrate=.+speed=/) {
 		progress_line = chunk[y]
@@ -673,7 +680,6 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 		    match(progress_line, /speed=\s*(.+)x/, speed)
 		    speed_out[i] = int( ( bitrate[1] / 8) * speed[1] )
                     #speed_out[i] = int( ( bitrate[1] * speed[1]) / 5 )
-		    # speed_out_type[i] = "KB/s"
                     speed_out_type[i] = "K/s"
 		}
 	    }
@@ -716,8 +722,19 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	if (!lengh_saved[i])
 	    length_saved[i] = size_file(file_out[i] ".part")
 
-           
-        if ( (progress_end[i]) ||
+        if (length_saved[i] == 0 || length_saved[i] == "") {
+            percent_out[i] = 0
+        }
+
+        if (progress_error[i] != "") {
+            system("kill -9 " pid_out[i] " 2>/dev/null")
+            percent_out[i] = 0
+	    system("rm -f " file_out[i])
+            length_out[i] = 0
+            speed_out[i] = 0
+            
+        }
+        else if ( (progress_end[i]) ||
              (time_out[i] >= duration_out[i]) ||
              ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) ) {
 	    if (! no_check)
@@ -729,28 +746,36 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    percent_out[i] = 100
         }
-	else if (time_out[i] && duration_out[i]) {
-	    percent_out[i] = time_out[i] * 100 / duration_out[i]
-	    if (percent_out[i]) {
-		length_out[i] = int(100 * length_saved[i] / percent_out[i])
-	    }
-	    else {
-		length_out[i] = "unspecified"
-	    }
-	    
-	    if (int(speed_out[i]) != 0 && int(speed_out[i]) > 0) {
-		eta_out[i] = int(((length_out[i] / 1024) * (100 - percent_out[i]) / 100) / int(speed_out[i]))
-		eta_out[i] = seconds_to_human(eta_out[i])
-	    }
-	}
-	else if (! time_out[i] || ! duration_out[i]) {
-	    length_out[i] = "unspecified"
-	}
-	
-	if (!speed_out[i])
-	    speed_out[i] = 0
-	if (!length_out[i])
-	    length_out[i] = length_saved[i] ##"unspecified"
+#        else if (progress_line != "") {
+        else if (time_out[i] && duration_out[i]) {
+            percent_out[i] = time_out[i] * 100 / duration_out[i]
+            if (percent_out[i]) {
+                length_out[i] = int(100 * length_saved[i] / percent_out[i])
+            }
+            else {
+                length_out[i] = "unspecified"
+            }
+            
+            if (int(speed_out[i]) != 0 && int(speed_out[i]) > 0) {
+                eta_out[i] = int(((length_out[i] / 1024) * (100 - percent_out[i]) / 100) / int(speed_out[i]))
+                eta_out[i] = seconds_to_human(eta_out[i])
+            }
+        }
+        else if (! time_out[i] || ! duration_out[i]) {
+            length_out[i] = "unspecified"
+        }
+        
+        if (!speed_out[i])
+            speed_out[i] = 0
+        if (!length_out[i])
+            length_out[i] = length_saved[i] ##"unspecified"
+        # }
+        # else {
+        #     length_out[i] = 0
+        #     length_seved[i] = 0
+        #     speed_out[i] = 0
+        #     percent_out[i] = 0
+        # }
     }
     else if (dler == "MegaDL") {
 	for (y=n; y>0; y--) {
@@ -928,9 +953,7 @@ BEGIN {
 	dler = $0
 	downloader_out[i] = dler
     }
-    # if (dler == "DCC_Xfer") {
-    #     pid_out[i] = get_irc_pid()
-    # }
+
     if (FNR == 4) {
 	pid_prog_out[i] = $0
     }

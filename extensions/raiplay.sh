@@ -271,7 +271,7 @@ then
     unset youtubedl_m3u8
 
     force_dler FFMpeg
-    downwait_extra=20
+    #downwait_extra=20
     
     end_extension
 fi
