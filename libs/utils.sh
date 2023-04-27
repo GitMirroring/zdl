@@ -490,6 +490,11 @@ function sanitize_url {
     data="${data//$'\376'/þ}"
     data="${data//$'\377'/ÿ}"
 
+    if [[ "$data" =~ ^irc ]]
+    then
+        data="${data//'/#'//}"
+    fi
+
     if [[ $2 ]]
     then
 	ref="$data"

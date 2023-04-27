@@ -312,6 +312,8 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
             do
                 sleep 0.1
             done
+
+            local wait_lines=7
 	;;
 
 	Aria2)
@@ -637,18 +639,9 @@ ${pid_prog}
 $file_in
 $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 
-	    #downwait=$((downwait+10))
-            local tmp_lines=0
-            local connecting="$(gettext "Connecting")"
-            while ((tmp_lines < 10))
-            do
-                tmp_lines=$(wc -l "$path_tmp/${file_in}_stdout.tmp" | cut -d' ' -f1)
-                sleep 1
-                check_wait_connecting &&
-	            print_r 2 " $connecting ...       "  ||
-		        print_r 1 " $connecting . . .     " 
-            done
-            print_r 0 "                      "
+	    downwait=$((downwait+10))
+
+            local wait_lines=10
 	    ;;
 
 	youtube-dl)
@@ -707,6 +700,28 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.ytdl"
     rm -f "$path_tmp/._stdout.tmp" "$path_tmp/_stdout.tmp"
     
     ## è necessario aspettare qualche secondo
-    countdown- $downwait
+    # countdown- $downwait
+    local tmp_lines=0 loop_lines=0
+    local connecting="$(gettext "Connecting")"
+    ((wait_lines)) || wait_lines=15
+    print_c 0 "                      "
+    while ((tmp_lines < wait_lines))
+    do
+        tmp_lines=$(wc -l "$path_tmp/${file_in}_stdout.tmp" | cut -d' ' -f1)
+        sleep 1
+        check_wait_connecting &&
+	    print_r 2 " $connecting ...       "  ||
+	        print_r 1 " $connecting . . .     "
+        if ((loop_lines >= 30)) ||
+               [ ! -f "$path_tmp/${file_in}_stdout.tmp" ]
+        then
+            kill -9 "$pid_in"
+            break
+        fi
+        check_pid "$pid_prog" || break
+        ((loop_lines++))
+    done
+    print_c 0 "                      "
+            
 }
 

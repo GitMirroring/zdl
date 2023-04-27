@@ -178,14 +178,51 @@ function irc_ctcp {
 # function get_irc_code {
 #     local msg="$1"
 #     local code
-#     echo "$msg"
+#     echo "MSG: $msg"
 #     awk -v msg="$msg" '{match($0, /\"([^\"]+)\"/, pattern); if (match(msg, pattern[1])) {print pattern[1]}}' $path_usr/irc/*
 # }
 
+function get_irc_code {
+    local notice="$1"
+    grep "$notice" $path_usr/irc/* |
+        cut -d' ' -f1 |
+        cut -d':' -f2
+}
+
 function check_notice {
-    local chan
-    notice="$1"
-    notice2=${notice%%:*}
+    local chan notice="$1"    
+    #notice_msg=( $(tr -d "\001\015\012" <<< "$*") )
+
+    ## se richiede la cancellazione:
+    # if [[ "$notice" =~ (XDCC CANCEL) ]]
+    # then
+    ######### operazione ancora da scrivere:
+    #     grep -oP '\/MSG.+XDCC CANCEL' "$notice"
+    #     irc_quit
+    # fi
+
+    notice="${notice## }"
+    notice="${notice##'*'}"
+    notice="${notice//'!'}"
+    notice="${notice## }"
+
+    local irc_code=$(get_irc_code "$notice")
+
+    case $irc_code in
+        743|883|878|879|1124|1131)
+            print_c 3 "$notice"
+            rm -f "$path_tmp/${file_in}_stdout.tmp"
+            irc_quit
+     	;;
+    esac
+
+    irc_code=$(get_irc_code "(${notice##*\(}")
+    if [ "$irc_code" == 894 ]
+    then
+        set_resume
+    fi
+
+    local notice2=${notice%%:*}
     notice2=${notice2%%','*}
     notice2=${notice2%%[0-9]*}
     notice2=${notice2%%SEND*}
@@ -216,26 +253,25 @@ function check_ctcp {
     unset ctcp_msg 
 
     ctcp_msg=( $(tr -d "\001\015\012" <<< "$*") )
-
-    ########### codice del msg: 
-    # irc_code=$(get_irc_code "${ctcp_msg[*]}")
-    # case $irc_code in
-    # 	743|883|878|879|1124|1131)
-    # 	    irc_quit
-    # 	    ;;
-    # esac
-
+    
     if [ "${ctcp_msg[0]}" == 'DCC' ] &&
 	   [ -n "$ctcp_src" ]
-    then
+    then                    
 	if [ "${ctcp_msg[1]}" == 'ACCEPT' ]
 	then
-	    print_c 1 "CTCP<< PRIVMSG $ctcp_src :${ctcp_msg[*]}"
+	    #print_c 1 "CTCP<< PRIVMSG $ctcp_src :${ctcp_msg[*]}"
+            print_c 1 "CTCP<< PRIVMSG ${irc['nick']} :${ctcp_msg[*]}"
 	    set_resume
+            accepted=true
 	
 	elif [ "${ctcp_msg[1]}" == 'SEND' ]
 	then
-	    print_c 1 "CTCP<< PRIVMSG $ctcp_src :${ctcp_msg[*]}"
+            # [ "$resume" == true ] &&
+            #     [ "$accepted" != true ] &&
+            #     return 1
+
+            #print_c 1 "CTCP<< PRIVMSG $ctcp_src :${ctcp_msg[*]}"
+	    print_c 1 "CTCP<< PRIVMSG ${irc['nick']} :${ctcp_msg[*]}"
 	    
 	    ctcp['file']="${ctcp_msg[2]}"
 	    ctcp['address']="${ctcp_msg[3]}"
@@ -244,6 +280,7 @@ function check_ctcp {
 	    ctcp['offset']=$(size_file "${ctcp['file']}")
 	    [ -z "${ctcp['offset']}" ] && ctcp['offset']=0
             #unset ctcp_src
+
 	    if ctcp['address']=$(check_ip_xfer "${ctcp['address']}") &&
 		    [[ "${ctcp['port']}" =~ ^[0-9]+$ ]]
 	    then
@@ -279,7 +316,6 @@ function check_dcc_resume {
 	   [ "$(cat "${ctcp['file']}.zdl")" == "$url_in" ] &&
 	   (( ctcp['offset']<ctcp['size'] ))
     then
-
 	irc_ctcp "PRIVMSG $ctcp_src" "DCC RESUME ${ctcp['file']} ${ctcp['port']} ${ctcp['offset']}" >&3
 	print_c 2 "CTCP>> PRIVMSG $ctcp_src :DCC RESUME ${ctcp['file']} ${ctcp['port']} ${ctcp['offset']}" 
 
@@ -320,11 +356,8 @@ function check_ip_xfer {
 }
 
 function dcc_xfer {
-    local offset old_offset pid_cat
-    unset resume
-
-    check_dcc_resume && resume=true
-
+    local offset old_offset #pid_cat 
+    
     exec 4<>/dev/tcp/${ctcp['address']}/${ctcp['port']} &&
 	{
 	    if [ -n "$resume" ]
@@ -337,7 +370,7 @@ function dcc_xfer {
 		cat <&4 >"$file_in" &
 		pid_cat=$!
 	    fi
-			
+                  
 	    if [ -n "$pid_cat" ]
 	    then
                 get_language
@@ -353,22 +386,23 @@ function dcc_xfer {
 		do
 		    sleep 0.1
 		done
-		sed -r "s,____PID_IN____,$pid_cat,g" -i "$path_tmp/${file_in}_stdout.tmp"
+                #echo CAMBIO: $pid_cat
+                #grep ____PID_IN____ "$path_tmp/${file_in}_stdout.tmp"
+		sed -r "1s/.+/$pid_cat/g" -i "$path_tmp/${file_in}_stdout.tmp"
 
 	    else
                 del_pid_url "$url_in" "irc-wait"
 		#irc_quit
 	    fi
             
-            
-
             this_mode=daemon
 	    while [ ! -f "${file_in}" ]
 	    do
 		sleep 0.1
 	    done
-
-	    while check_pid "$pid_cat" && [ "$offset" != "${ctcp['size']}" ]
+	    offset=$(size_file "$file_in")
+            
+	    while check_pid "$pid_cat" && (( offset < ${ctcp['size']} ))
 	    do
 		[ -f "$path_tmp/irc-timeout" ] &&
 		    ! grep -P "^$url_in$" "$path_tmp/irc-timeout" &>/dev/null &&
@@ -388,14 +422,18 @@ function dcc_xfer {
 		    rm -f "$path_tmp/${file_in}_stdout".*
 		fi
 
-                if (( old_offset == offset )) &&
-                       (( ctcp['size'] > offset )) &&
+                if (( ctcp['size'] > offset )) &&
                        check_pid $pid_cat
-                then
-                    ((timeout_cat++))
+                then                    
+                    if (( old_offset == offset ))
+                    then
+                        ((timeout_cat++))
+                    else
+                        timeout_cat=0
+                    fi
                 fi
-
-                ((timeout_cat > 20)) && kill -9 $pid_cat
+                ((timeout_cat > 30)) &&
+                    kill -9 $pid_cat #&& print_c 3 TIMEOUT
                 
 		old_offset=$offset
 
@@ -403,8 +441,10 @@ function dcc_xfer {
 		sleep 1
 	    done
 
-	    if [ "$(size_file "$file_in")" == "${ctcp['size']}" ]
+            offset=$(size_file "$file_in")
+	    if (( offset >= ${ctcp['size']} ))
 	    then
+                kill -9 $pid_cat
 		rm -f "${file_in}.zdl"
 		set_link - "$url_in"
 	    fi
@@ -441,12 +481,16 @@ function join_xdcc_send {
 
         irc_send "PRIVMSG $to" "${msg%send*}cancel"
         irc_send "PRIVMSG $to" "${msg%send*}remove"
-        sleep 3
+# echo "       irc_send \"PRIVMSG $to\" \"${msg%send*}cancel\"
+#         irc_send \"PRIVMSG $to\" \"${msg%send*}remove\"
+#  "
+        countdown- 3
         
         irc_send "PRIVMSG $to" "$msg"
 	print_c 2 ">> PRIVMSG $to :$msg"
 	
 	unset irc[msg]
+        return 2
     fi
 
     if [[ "$line" =~ 'Join #'([^\ ]+)' for !search' ]]
@@ -495,12 +539,19 @@ function check_irc_command {
 	PRIVMSG)
 	    if check_ctcp "$txt"
 	    then
+                if check_dcc_resume &&
+                        [ -z "$resume" ]
+                then
+                    #echo RESUME
+                    resume=true
+                    return 1 
+                fi
 		file_in="${ctcp['file']}"
 		sanitize_file_in
 		
 		url_in_file="/dev/tcp/${ctcp['address']}/${ctcp['port']}"
 		echo -e "$file_in\n$url_in_file" >"$test_xfer"
-
+                
 		while [ ! -f "$path_tmp/${file_in}_stdout.tmp" ]
 		do sleep 0.1
 		done
@@ -546,8 +597,8 @@ function check_line_regex {
     then
         notice="$line"
 	_log 27
-#        irc_send "PRIVMSG $to" "${msg%send*}cancel"
-#        irc_send "PRIVMSG $to" "${msg%send*}remove"
+        irc_send "PRIVMSG $to" "${msg%send*}cancel"
+        irc_send "PRIVMSG $to" "${msg%send*}remove"
         del_pid_url "$url_in" "irc-wait"
         return 1
     fi
@@ -574,13 +625,13 @@ function irc_client {
 	irc_send "NICK ${irc['nick']}"
 	irc_send "USER ${irc['nick']} localhost ${irc['host']} :${irc['nick']}"
 
-        {            
+        {
+            local step=0
 	    while read line
 	    do
                 get_mode
-
 	        line=$(tr -d "\001\015\012" <<< "${line//\*}")
-
+                
 	        if [ "${line:0:1}" == ":" ]
 	        then
 		    from="${line%% *}"
@@ -592,16 +643,25 @@ function irc_client {
 	        txt=$(trim "${line#*:}")
 	        irc_cmd="${line%% *}"
 
+                ## per ricerche e debug:
+                #print_c 4 "$line"
+                
                 check_line_regex "$line" || break
                 
-	        join_xdcc_send "$line" 
-
-	        ## per ricerche e debug:
-                # print_c 4 "$line"
-
-	        check_line_regex "$line" || break
-
-	        check_irc_command "$irc_cmd" "$txt" && break
+                case $step in
+                    0)
+                        #print_c 0 "step: $step"
+                        join_xdcc_send "$line"
+                        [ "$?" == 2 ] && ((step++))
+                        ;;
+                    1)
+                        #print_c 0 "step: $step"
+	                check_irc_command "$irc_cmd" "$txt" #&& break
+                        #((step++))
+                        ;;
+                esac
+	        #check_line_regex "$line" || break
+	        #check_irc_command "$irc_cmd" "$txt" && break
 
             done <&3
 
@@ -609,6 +669,7 @@ function irc_client {
             # do
             #     sleep 0.1
             # done
+
             irc_send "QUIT"
             exec 3>&-
 

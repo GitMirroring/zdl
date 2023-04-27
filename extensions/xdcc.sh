@@ -38,6 +38,7 @@ fi
 if [[ "$url_in" =~ ^irc:\/\/ ]]
 then
     file_in="temporaneo-$(date +%s)"
+    replace_url_in "$(sanitize_url "$url_in")"
     url_in_file="$url_in"
     downloader_in=DCC_Xfer
 
