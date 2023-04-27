@@ -386,9 +386,12 @@ function dcc_xfer {
 		do
 		    sleep 0.1
 		done
-                #echo CAMBIO: $pid_cat
-                #grep ____PID_IN____ "$path_tmp/${file_in}_stdout.tmp"
-		sed -r "1s/.+/$pid_cat/g" -i "$path_tmp/${file_in}_stdout.tmp"
+
+                while [ "$(head -n1 "$path_tmp/${file_in}_stdout.tmp")" != $pid_cat ]
+                do                    
+		    sed -r "1s/.+/$pid_cat/g" -i "$path_tmp/${file_in}_stdout.tmp"
+                    sleep 0.1
+                done
 
 	    else
                 del_pid_url "$url_in" "irc-wait"
