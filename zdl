@@ -850,6 +850,8 @@ then
 	    this_mode=list
 	    services_box
 	    xterm_stop force
+            stty sane
+            cursor on
 	    exit
 	fi
     done
