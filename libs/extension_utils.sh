@@ -859,7 +859,8 @@ function check_livestream {
     then
         return 0
         
-    elif [ "$test_livestream_boolean" == false ]
+    elif [ "$test_livestream_boolean" == false ] ||
+             set_line_in_file in "$1" "$path_tmp/not-livestream-links.txt"   
     then
         return 1
         
@@ -880,6 +881,7 @@ function check_livestream {
         return 0
     else        
         test_livestream_boolean=false
+        set_line_in_file + "$1" "$path_tmp/not-livestream-links.txt"
         return 1
     fi
 }
