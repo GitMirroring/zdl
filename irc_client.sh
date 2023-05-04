@@ -480,13 +480,10 @@ function join_xdcc_send {
 
 	echo "$to $url_in" >>"$path_tmp"/irc_xdcc
 	#xdcc_cancel
-	#sleep 3
 
         irc_send "PRIVMSG $to" "${msg%send*}cancel"
         irc_send "PRIVMSG $to" "${msg%send*}remove"
-# echo "       irc_send \"PRIVMSG $to\" \"${msg%send*}cancel\"
-#         irc_send \"PRIVMSG $to\" \"${msg%send*}remove\"
-#  "
+
         countdown- 3
         
         irc_send "PRIVMSG $to" "$msg"
@@ -496,25 +493,13 @@ function join_xdcc_send {
         return 2
     fi
 
-    if [[ "$line" =~ 'Join #'([^\ ]+)' for !search' ]]
+    if [[ "$line" =~ 'Join #'([^\ ]+) ]] #' for !search' ]]
     then
 	chan="${BASH_REMATCH[1]}"
     	print_c 2 ">> JOIN #${chan}"
     	irc_send "JOIN #${chan}"
     fi
 }
-
-# function send_xdcc {
-#     read -r to msg <<< "${irc[msg]}"
-#     echo "$to $url_in" >>"$path_tmp"/irc_xdcc
-    
-#     irc_send "PRIVMSG $to" "$msg"
-#     print_c 2 ">> PRIVMSG $to :$msg"
-#     #irc_send "zdl_irc_client$to"
-
-#     # check_line_regex "$line"
-#     # check_irc_command "$irc_cmd" "$txt"
-# }
 
 function check_irc_command {
     local cmd="$1"
@@ -545,7 +530,6 @@ function check_irc_command {
                 if check_dcc_resume &&
                         [ -z "$resume" ]
                 then
-                    #echo RESUME
                     resume=true
                     return 1 
                 fi
@@ -641,30 +625,31 @@ function irc_client {
 		    line="${line#* }"
 	        fi
 
-	        # from="${from:1}"
-	        # user=${from%%\!*}
-	        txt=$(trim "${line#*:}")
+	        #from="${from:1}"
+	        #user=${from%%\!*}
+
+                txt=$(trim "${line#*:}")
 	        irc_cmd="${line%% *}"
 
+                #[ "$irc_cmd" == PING ] && step=1
+                
                 ## per ricerche e debug:
                 #print_c 4 "$line"
                 
                 check_line_regex "$line" || break
-                
-                case $step in
-                    0)
-                        #print_c 0 "step: $step"
-                        join_xdcc_send "$line"
-                        [ "$?" == 2 ] && ((step++))
-                        ;;
-                    1)
-                        #print_c 0 "step: $step"
-	                check_irc_command "$irc_cmd" "$txt" #&& break
-                        #((step++))
-                        ;;
-                esac
-	        #check_line_regex "$line" || break
-	        #check_irc_command "$irc_cmd" "$txt" && break
+
+                # case $step in
+                #     0)
+                #         #print_c 0 "step: $step"
+                         join_xdcc_send "$line"
+                #         [ "$?" == 2 ] && step=1
+                #         ;;
+                #     1)
+                #         #print_c 0 "step: $step"
+	                 check_irc_command "$irc_cmd" "$txt" #&& break
+                #         #((step++))
+                #         ;;
+                # esac
 
             done <&3
 
