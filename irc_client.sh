@@ -191,7 +191,7 @@ function get_irc_code {
 
 function check_notice {
     local chan notice="$1"    
-    #notice_msg=( $(tr -d "\001\015\012" <<< "$*") )
+    # notice_msg=( $(tr -d "\001\015\012" <<< "$*") )
 
     ## se richiede la cancellazione:
     # if [[ "$notice" =~ (XDCC CANCEL) ]]
@@ -574,7 +574,7 @@ function check_line_regex {
     then
         notice="${BASH_REMATCH[1]}"
 	_log 27
-        #        irc_quit
+        xdcc_cancel
         irc_send QUIT
         del_pid_url "$url_in" "irc-wait"
         return 1
@@ -631,25 +631,23 @@ function irc_client {
                 txt=$(trim "${line#*:}")
 	        irc_cmd="${line%% *}"
 
-                #[ "$irc_cmd" == PING ] && step=1
-                
                 ## per ricerche e debug:
-                #print_c 4 "$line"
+                print_c 4 "$line"
                 
                 check_line_regex "$line" || break
 
-                # case $step in
-                #     0)
-                #         #print_c 0 "step: $step"
-                         join_xdcc_send "$line"
-                #         [ "$?" == 2 ] && step=1
-                #         ;;
-                #     1)
-                #         #print_c 0 "step: $step"
+                 case $step in
+                     0)
+                         join_xdcc_send "$line"                       
+                         [ "$?" == 2 ] && step=1
+                         
+                         [ "$irc_cmd" == PING ] &&
+                             check_irc_command "$irc_cmd" "$txt"
+                         ;;
+                     1)
 	                 check_irc_command "$irc_cmd" "$txt" #&& break
-                #         #((step++))
-                #         ;;
-                # esac
+                         ;;
+                 esac
 
             done <&3
 
