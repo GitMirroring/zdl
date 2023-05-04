@@ -632,7 +632,7 @@ function irc_client {
 	        irc_cmd="${line%% *}"
 
                 ## per ricerche e debug:
-                print_c 4 "$line"
+                #print_c 4 "$line"
                 
                 check_line_regex "$line" || break
 
