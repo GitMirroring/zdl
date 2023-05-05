@@ -46,7 +46,7 @@ function get_sbdomain_definition {
 }
 
 
-if [[ "$url_in" =~ (lvturbo|sbchill|sbface|streamsb|sbfull|sblongvu)\. ]]
+if [[ "$url_in" =~ (sblanh|lvturbo|sbchill|sbface|streamsb|sbfull|sblongvu)\. ]]
 then
     sbdomain=${BASH_REMATCH[1]}
     
