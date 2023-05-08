@@ -29,17 +29,27 @@
 
 if [[ "$url_in" =~ youtube\.com\/playlist ]]
 then
-    ## html=$(curl -s "$url_in")
-    yt_json=$($youtube_dl --dump-json "$url_in")
+    html=$(curl -s "$url_in")
+    ## yt_json=$($youtube_dl --dump-json "$url_in")
+    
     while read yt_link
     do
+        yt_link="https://www.youtube.com${yt_link%%'&'*}"
+        yt_link="${yt_link%%u0026*}"
+        
         if url "$yt_link"
         then
-            set_link + "$yt_link" && print_c 4 "$(gettext "Redirection"): $yt_link"
-            [[ "$url_in" =~ youtube.com\/playlist ]] && replace_url_in "$yt_link"
+            test_livestream_boolean=false
+            set_line_in_file + "$yt_link" "$path_tmp/not-livestream-links.txt"
+            set_link + "$yt_link" &&
+                print_c 4 "$(gettext "Redirection"): $yt_link"
+            
+            [[ "$url_in" =~ youtube.com\/playlist ]] &&
+                replace_url_in "$yt_link"
         fi
-    done < <(grep -oP '[^"]+youtube\.com\/watch[^"]+' <<< "$yt_json")
-    ## done < <(awk '/data-video-id/{match($0, /data-video-id=\"([^"]+)\"/,m); if(m[1]) print "https://www.youtube.com/watch?v=" m[1]}' <<< "$html")
+    done < <(grep -oP '[^"]+watch\?v=[^"]+' <<< "$html")
+    ##done < <(grep -oP '[^"]+youtube\.com\/watch[^"]+' <<< "$yt_json")
+    ##done < <(awk '/data-video-id/{match($0, /data-video-id=\"([^"]+)\"/,m); if(m[1]) print "https://www.youtube.com/watch?v=" m[1]}' <<< "$html")
 fi
 
 if [ "$url_in" != "${url_in//'youtube.com/embed/'}" ]
