@@ -553,7 +553,7 @@ function check_irc_command {
 		dcc_xfer &
 		pid_xfer=$!			
 		add_pid_url "$pid_xfer" "$url_in" "xfer-pids"
-                return 0
+                return 2
 	    fi
 	    ;;
     esac
@@ -653,7 +653,8 @@ function irc_client {
                              check_irc_command "$irc_cmd" "$txt"
                          ;;
                      1)
-	                 check_irc_command "$irc_cmd" "$txt" #&& break
+	                 check_irc_command "$irc_cmd" "$txt"
+                         [ "$?" == 2 ] && break
                          ;;
                  esac
 
