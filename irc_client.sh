@@ -370,7 +370,9 @@ function dcc_xfer {
 		cat <&4 >"$file_in" &
 		pid_cat=$!
 	    fi
-                  
+
+            irc_send "QUIT"
+
 	    if [ -n "$pid_cat" ]
 	    then
                 get_language
@@ -404,8 +406,8 @@ function dcc_xfer {
 		sleep 0.1
 	    done
 	    offset=$(size_file "$file_in")
-            
-	    while check_pid "$pid_cat" && (( offset < ${ctcp['size']} ))
+                       
+	    while (( offset < ${ctcp['size']} ))
 	    do
 		[ -f "$path_tmp/irc-timeout" ] &&
 		    ! grep -P "^$url_in$" "$path_tmp/irc-timeout" &>/dev/null &&
@@ -421,7 +423,7 @@ function dcc_xfer {
 		if [[ "$(head -n2 "$path_tmp/${file_in}_stdout.tmp" |tail -n1)" =~ ^XDCC ]] ||
 		       [[ "$file_in" =~ XDCC' ' ]]
 		then		    
-		    kill -9 "$pid_cat"
+		    kill "$pid_cat"
 		    rm -f "$path_tmp/${file_in}_stdout".*
 		fi
 
@@ -435,11 +437,18 @@ function dcc_xfer {
                         timeout_cat=0
                     fi
                 fi
-                ((timeout_cat > 30)) &&
-                    kill -9 $pid_cat #&& print_c 3 TIMEOUT
+                if ((timeout_cat > 30))
+                then
+                    kill $pid_cat &&
+                        print_c 3 "Xfer_DCC timeout"
+                fi
+                    
+                if ! check_pid $pid_cat
+                then
+                    break
+                fi
+		old_offset=$offset          
                 
-		old_offset=$offset
-
 		## (offset - old_offset /1024) KB/s --> sleep 1 (ogni secondo)
 		sleep 1
 	    done
@@ -447,18 +456,16 @@ function dcc_xfer {
             offset=$(size_file "$file_in")
 	    if (( offset >= ${ctcp['size']} ))
 	    then
-                kill -9 $pid_cat
+                kill $pid_cat               
 		rm -f "${file_in}.zdl"
 		set_link - "$url_in"
 	    fi
-
-	    #irc_quit
 	}
 }
 
 function join_xdcc_send {
     local line="$1"
-    local msg
+    #local msg
     
     if [[ "$line" =~ (MODE ${irc['nick']}) ]] &&
 	   [ -n "${irc[chan]}" ]
@@ -608,9 +615,10 @@ function irc_client {
     if exec 3<>"$dev_host"
     then
 	print_c 1 "host: ${irc['host']}\nchan: ${irc[chan]}\nmsg: ${irc[msg]}\nnick: ${irc['nick']}"
-        
-	irc_send "NICK ${irc['nick']}"
-	irc_send "USER ${irc['nick']} localhost ${irc['host']} :${irc['nick']}"
+
+        irc_send "NICK ${irc['nick']}"
+        irc_send "USER ${irc['nick']} localhost ${irc['host']} :${irc['nick']}"
+
 
         {
             local step=0
@@ -714,7 +722,7 @@ ctcp_src="${url_in#*'%20'}"
 ctcp_src="${ctcp_src%%'%20'*}"
 
 add_pid_url "$PID" "$url_in" "irc-pids"
-start_timeout
+#start_timeout
 init_resume
 add_pid_url "$PID" "$url_in" "irc-client-pid"
 

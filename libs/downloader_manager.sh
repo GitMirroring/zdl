@@ -263,7 +263,7 @@ function download {
 		    [port]=6667
 		    [chan]="${BASH_REMATCH[2]}"
 		    [msg]="${MSG}"
-		    [nick]=$(obfuscate "$USER") #$(obfuscate_user) #$(obfuscate "$USER")
+		    [nick]=$(obfuscate_user) #$(obfuscate "$USER")
 		)
 	    fi
 
