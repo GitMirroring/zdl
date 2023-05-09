@@ -263,6 +263,7 @@ function check_ctcp {
             print_c 1 "CTCP<< PRIVMSG ${irc['nick']} :${ctcp_msg[*]}"
 	    set_resume
             accepted=true
+            irc_send "QUIT"
 	
 	elif [ "${ctcp_msg[1]}" == 'SEND' ]
 	then
@@ -369,9 +370,8 @@ function dcc_xfer {
 	    else
 		cat <&4 >"$file_in" &
 		pid_cat=$!
+                irc_send "QUIT"
 	    fi
-
-            irc_send "QUIT"
 
 	    if [ -n "$pid_cat" ]
 	    then
@@ -640,7 +640,7 @@ function irc_client {
 	        irc_cmd="${line%% *}"
 
                 ## per ricerche e debug:
-                #print_c 4 "$line"
+                print_c 4 "$line"
                 
                 check_line_regex "$line" || break
 

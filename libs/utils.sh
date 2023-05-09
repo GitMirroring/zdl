@@ -514,6 +514,7 @@ function sanitize_file_in {
     fi
 
     file_in="${file_in//$'\200'}"
+    file_in="${file_in//$'\210'/è}"
     file_in="${file_in//$'\214'}"
     file_in="${file_in//$'\221'}"
     file_in="${file_in//$'\222'}"
@@ -521,7 +522,11 @@ function sanitize_file_in {
     file_in="${file_in//$'\231'}"
     file_in="${file_in//$'\235'}"
     file_in="${file_in//$'\237'}"
+    file_in="${file_in//$'\240'/à}"
+    file_in="${file_in//$'\250'/é}"
+    file_in="${file_in//$'\251'/è}"
     file_in="${file_in//$'\261'}"
+    file_in="${file_in//$'\271'/ù}"
     file_in="${file_in//$'\303'}"
     file_in="${file_in//$'\314'}"
     # file_in="${file_in//$'\340'/à}"
