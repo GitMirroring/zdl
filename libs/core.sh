@@ -1296,7 +1296,17 @@ function kill_downloads {
     
     if data_stdout
     then
-	[ -n "${pid_alive[*]}" ] && kill -9 ${pid_alive[*]} &>/dev/null
+	[ -n "${pid_alive[*]}" ] && {
+            for ((i=0; i<${#pid_out[@]}; i++))
+	    do
+                if [[ "${url_out[$i]}" =~ (xdcc send) ]]
+                then
+		    kill ${pid_out[$i]} &>/dev/null
+                else
+                    kill -9 ${pid_out[$i]} &>/dev/null
+                fi
+	    done
+        }
     fi
 }
 

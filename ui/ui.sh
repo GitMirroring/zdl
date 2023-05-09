@@ -584,8 +584,12 @@ function interactive {
 			    do
 				#kill_url "${url_out[$i]}" 'xfer-pids'
 				#kill_url "${url_out[$i]}" 'irc-pids'
-                                
-				kill -9 ${pid_out[$i]} &>/dev/null
+                                if [[ "${url_out[$i]}" =~ (xdcc send) ]]
+                                then
+				    kill ${pid_out[$i]} &>/dev/null
+                                else
+                                    kill -9 ${pid_out[$i]} &>/dev/null
+                                fi
 				# if [ ! -f "${file_out[$i]}.st" ] &&
 				#        [ ! -f "${file_out[$i]}.aria2" ] &&
 				#        [ ! -f "${file_out[$i]}.zdl" ] &&
