@@ -31,7 +31,10 @@ if [[ "$url_in" =~ isecure\. ]]
 then
     html=$(curl -s "$url_in")
 
-    isecure_url=$(grep -P 'iframe[. ]+src' <<< "$html" | grep -oP 'http[^"]+')
+    isecure_url=$(grep -P 'iframe[. ]+src' <<< "$html" |
+                      grep -oP 'http[^"]+' |
+                      tail -n1)
+    
     sanitize_url "$isecure_url" isecure_url
     
     if url "$isecure_url" &&
