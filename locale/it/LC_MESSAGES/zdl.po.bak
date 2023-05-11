@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 15:14+0200\n"
+"POT-Creation-Date: 2023-05-11 15:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -21,7 +21,7 @@ msgid "No value entered: do you want to delete the previous value? (yes|*)"
 msgstr "Nessun valore inserito: vuoi cancellare il precedente valore? (sì|*)"
 
 #: ../config_manager.sh:48 ../config_manager.sh:163 ../uninstall_zdl.sh:73
-#: ../uninstall_zdl.sh:75 ../ui/ui.sh:919 ../ui/ui.sh:958
+#: ../uninstall_zdl.sh:75 ../ui/ui.sh:923 ../ui/ui.sh:962
 msgid "yes"
 msgstr "sì"
 
@@ -131,7 +131,8 @@ msgid ""
 "The re-typed password does not match or at least one field of the form has "
 "not been filled in"
 msgstr ""
-"La password digitata nuovamente non corrisponde o almeno un campo del form non è stato compilato"
+"La password digitata nuovamente non corrisponde o almeno un campo del form "
+"non è stato compilato"
 
 #: ../config_manager.sh:181
 msgid "Do you repeat the operation? (*|no)"
@@ -205,7 +206,7 @@ msgstr "Lista utenti registrati"
 msgid "For information on"
 msgstr "Per informazioni su"
 
-#: ../irc_client.sh:344
+#: ../irc_client.sh:379
 msgid "Connected to the address"
 msgstr "Connesso all'indirizzo"
 
@@ -452,58 +453,58 @@ msgstr "Aggiornamento fallito: non è possibile aprire il pacchetto %s"
 msgid "is already the latest version"
 msgstr "è già alla versione più recente"
 
-#: ../zdl.sh:327
+#: ../zdl.sh:330
 msgid "Processing link:"
 msgstr "Link da processare:"
 
-#: ../zdl.sh:330 ../ui/ui.sh:96
+#: ../zdl.sh:333 ../libs/downloader_manager.sh:705 ../ui/ui.sh:96
 msgid "Connecting"
 msgstr "Connessione in corso"
 
-#: ../zdl.sh:484 ../extensions/ddl.sh:153 ../ui/ui.awk:327
+#: ../zdl.sh:487 ../extensions/ddl.sh:153 ../ui/ui.awk:327
 msgid "File URL"
 msgstr "URL del file"
 
-#: ../zdl.sh:827
+#: ../zdl.sh:831
 msgid "Temporary file deleted"
 msgstr "File temporanei cancellati"
 
-#: ../zdl.sh:828
+#: ../zdl.sh:832
 msgid "Cleaning of temporary files not carried out (non-existent files)"
 msgstr "Pulizia file temporanei non effettuata (file inesistenti)"
 
-#: ../zdl.sh:1192
+#: ../zdl.sh:1198
 msgid "The format conversion function depends on ffmpeg or avconv, not found"
 msgstr ""
 "La funzione di conversione in formato dipende da ffmpeg o da avconv, non "
 "trovati"
 
-#: ../zdl.sh:1228
+#: ../zdl.sh:1234
 msgid "Started in daemon mode in %s"
 msgstr "Avviato in modalità demone in %s"
 
-#: ../zdl.sh:1229 ../zdl.sh:1239 ../gui/gui.sh:261 ../gui/gui.sh:283
+#: ../zdl.sh:1235 ../zdl.sh:1245 ../gui/gui.sh:261 ../gui/gui.sh:283
 #: ../gui/gui.sh:287
 msgid "You can control it with:"
 msgstr "Puoi controllarlo con:"
 
-#: ../zdl.sh:1238
+#: ../zdl.sh:1244
 msgid "An active instance of daemon mode already exists in %s"
 msgstr "Esiste già un'istanza attiva della modalità demone in %s"
 
-#: ../zdl.sh:1277 ../gui/gui.sh:1323
+#: ../zdl.sh:1283 ../gui/gui.sh:1323
 msgid "New socket started at the port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:1284 ../gui/gui.sh:1329
+#: ../zdl.sh:1290 ../gui/gui.sh:1329
 msgid "Socket already in use at the port"
 msgstr "Socket già in uso alla porta"
 
-#: ../zdl.sh:1289
+#: ../zdl.sh:1295
 msgid "Socket not started at the port"
 msgstr "Avviato nuovo socket alla porta"
 
-#: ../zdl.sh:1495
+#: ../zdl.sh:1501
 msgid ""
 "Deprecated option: '--multi = [NUMBER]' is replaced by '--max-downloads = "
 "[NUMBER]'. The short option remains unchanged: '-m [NUMERO]'\\n"
@@ -511,23 +512,23 @@ msgstr ""
 "Opzione deprecata: '--multi=[NUMERO]' è sostituita da '--max-"
 "downloads=[NUMERO]'. Resta invariata l'opzione breve '-m [NUMERO]'\\n"
 
-#: ../zdl.sh:1518
+#: ../zdl.sh:1524
 msgid "HTTP proxy detected: %s"
 msgstr "Rilevato proxy HTTP: %s"
 
-#: ../zdl.sh:1523
+#: ../zdl.sh:1529
 msgid "IP address: %s"
 msgstr "Indirizzo IP: %s"
 
-#: ../zdl.sh:1526
+#: ../zdl.sh:1532
 msgid "IP address not detected"
 msgstr "Indirizzo IP non rilevato"
 
-#: ../zdl.sh:1582
+#: ../zdl.sh:1588
 msgid "A file already exists with the same name as"
 msgstr "Esiste già un file con lo stesso nome di"
 
-#: ../zdl.sh:1589
+#: ../zdl.sh:1595
 #, sh-format
 msgid ""
 "The file list will be saved in $print_out\\n(you can also use it to "
@@ -536,35 +537,35 @@ msgstr ""
 "La lista dei file verrà salvata in $print_out\\n(puoi anche usarla per "
 "comunicare i file in scaricamento a un altro programma)\\n"
 
-#: ../zdl.sh:1628
+#: ../zdl.sh:1634
 msgid "Active proxy: %s\\n"
 msgstr "Proxy attivo: %s\\n"
 
-#: ../zdl.sh:1631 ../zdl.sh:1635
+#: ../zdl.sh:1637 ../zdl.sh:1641
 msgid "%s: invalid argument\\n\\n"
 msgstr "%s: argomento non valido\\n\\n"
 
-#: ../zdl.sh:1746
+#: ../zdl.sh:1752
 msgid "%s: invalid argument"
 msgstr "%s: argomento non valido"
 
-#: ../zdl.sh:1762
+#: ../zdl.sh:1768
 msgid "Connection and extraction from:"
 msgstr "Connessione ed estrazione da:"
 
-#: ../zdl.sh:1824
+#: ../zdl.sh:1830
 msgid "The complete list of links is in links.txt"
 msgstr "L'elenco completo dei link è in links.txt"
 
-#: ../zdl.sh:2048
+#: ../zdl.sh:2054
 msgid "Download completed"
 msgstr "Download completato"
 
-#: ../zdl.sh:2065
+#: ../zdl.sh:2071
 msgid "In %s there is a file that contains a list of operations of %s."
 msgstr "In %s è presente un file che contiene un elenco di operazioni di %s."
 
-#: ../zdl.sh:2066
+#: ../zdl.sh:2072
 msgid "To read it, enter:"
 msgstr "Per leggerlo, digita:"
 
@@ -573,7 +574,7 @@ msgstr "Per leggerlo, digita:"
 #: ../extensions/0000-filmpertutti.sh:41 ../extensions/0000-pianosolo.sh:52
 #: ../extensions/000-linkhub.sh:53 ../extensions/001-vcrypt.sh:86
 #: ../extensions/wstream.sh:80 ../extensions/wstream.sh:158
-#: ../extensions/yt.sh:38 ../libs/log.sh:189
+#: ../extensions/yt.sh:45 ../libs/log.sh:189
 msgid "Redirection"
 msgstr "Redirezione"
 
@@ -851,13 +852,13 @@ msgstr "Il file $filename non è disponibile in $PWD"
 msgid "Programming of live broadcasting from"
 msgstr "Programmazione della diretta live da"
 
-#: ../gui/gui.sh:912 ../ui/ui.sh:891
+#: ../gui/gui.sh:912 ../ui/ui.sh:895
 #, fuzzy
 msgid "Enter livestream URL:"
 msgstr "Diretta LIVE:"
 
 #: ../gui/gui.sh:920 ../gui/gui.sh:923 ../gui/gui.sh:973 ../gui/gui.sh:976
-#: ../ui/ui.sh:823
+#: ../ui/ui.sh:827
 msgid "Hours:"
 msgstr "Ore:"
 
@@ -866,7 +867,7 @@ msgid "<b> Start time </b> (current:"
 msgstr "<b> Orario di inizio </b> (attuale:"
 
 #: ../gui/gui.sh:925 ../gui/gui.sh:928 ../gui/gui.sh:978 ../gui/gui.sh:981
-#: ../ui/ui.sh:824
+#: ../ui/ui.sh:828
 msgid "Minutes:"
 msgstr "Minuti:"
 
@@ -875,7 +876,7 @@ msgid "Duration"
 msgstr "Durata"
 
 #: ../gui/gui.sh:930 ../gui/gui.sh:933 ../gui/gui.sh:983 ../gui/gui.sh:986
-#: ../ui/ui.sh:825
+#: ../ui/ui.sh:829
 msgid "Seconds:"
 msgstr "Secondi:"
 
@@ -1203,15 +1204,15 @@ msgstr ""
 "Non è stato impostato alcun browser predefinito.\n"
 "Avvia un browser all'indirizzo:"
 
-#: ../libs/core.sh:1157
+#: ../libs/core.sh:1165
 msgid "%s paused"
 msgstr "%s in pausa"
 
-#: ../libs/core.sh:1158
+#: ../libs/core.sh:1166
 msgid "To process new links, download a number of files greater than zero:"
 msgstr "Per processare nuovi link, scarica un numero di file maggiore di zero:"
 
-#: ../libs/core.sh:1159
+#: ../libs/core.sh:1167
 msgid ""
 "use the [-m|--multi [NUMBER]] option or enter the interactive mode and type "
 "in a number from 1 to 9"
@@ -1219,15 +1220,15 @@ msgstr ""
 "usa l'opzione [-m|--multi [NUMERO]] oppure entra nella modalità interattiva "
 "e digita un numero da 1 a 9"
 
-#: ../libs/core.sh:1227
+#: ../libs/core.sh:1235
 msgid "Redirection (wait up to 90 seconds):"
 msgstr "Redirezione (attendi massimo 90 secondi):"
 
-#: ../libs/core.sh:1247
+#: ../libs/core.sh:1255
 msgid "Processing Links"
 msgstr "Link da processare"
 
-#: ../libs/core.sh:1256
+#: ../libs/core.sh:1264
 msgid ""
 "Download management is forwarded to another active instance of %s (pid: %d), "
 "in the following terminal: %s\\n"
@@ -1235,7 +1236,7 @@ msgstr ""
 "La gestione dei download è inoltrata a un'altra istanza attiva di %s (pid: "
 "%d), nel seguente terminale: %s\\n"
 
-#: ../libs/core.sh:1635
+#: ../libs/core.sh:1653
 msgid "Link paused"
 msgstr "Link in pausa"
 
@@ -1601,8 +1602,9 @@ msgid "Wait set to non-premium users, try again later"
 msgstr "Attesa imposta a utenti non premium, riprovo più tardi"
 
 #: ../libs/log.sh:233
-msgid "The video file is DRM protected and not playable on Linux"
-msgstr "Il file del video è protetto da DRM e non è riproducibile su Linux"
+#, fuzzy
+msgid "The video file is DRM protected and not playable"
+msgstr "Il file del video è protetto da DRM e non è riproducibile"
 
 #: ../libs/post_processor.sh:64
 msgid "Segment %s was recovered"
@@ -1924,39 +1926,39 @@ msgstr ""
 msgid "Select what to do: ( r | E | p | * ):"
 msgstr "Scegli cosa fare: ( r | E | p | * ):"
 
-#: ../ui/ui.sh:775
+#: ../ui/ui.sh:779
 msgid "Address of the irc host (the 'irc://' protocol is not necessary):"
 msgstr "Indirizzo dell'host irc (il protocollo 'irc://' non è necessario):"
 
-#: ../ui/ui.sh:776
+#: ../ui/ui.sh:780
 msgid "Channel (the hash '#' is not necessary):"
 msgstr "Canale (il cancelletto '#' non è necessario):"
 
-#: ../ui/ui.sh:777
+#: ../ui/ui.sh:781
 msgid "Private message (the '/msg' command is not necessary):"
 msgstr "Messaggio privato (il comando '/msg' non è necessario):"
 
-#: ../ui/ui.sh:780
+#: ../ui/ui.sh:784
 msgid "Acquisition of missing data for XDCC (enter 'quit' to cancel)"
 msgstr "Acquisizione dati mancanti per XDCC (inserisci 'quit' per annullare)"
 
-#: ../ui/ui.sh:847
+#: ../ui/ui.sh:851
 msgid "Enter an integer in the range from 0 to %d (inclusive)"
 msgstr "Digitare un numero intero nell'intervallo da 0 a %d (compresi)"
 
-#: ../ui/ui.sh:876
+#: ../ui/ui.sh:880
 msgid "Available channels (choose the corresponding number):"
 msgstr "Canali disponibili (scegli il numero corrispondente):"
 
-#: ../ui/ui.sh:885
+#: ../ui/ui.sh:889
 msgid "Select the channel from which to download the live"
 msgstr "Seleziona il canale da cui scaricare la diretta"
 
-#: ../ui/ui.sh:907
+#: ../ui/ui.sh:911
 msgid "A schedule already exists for this channel:"
 msgstr "Esiste già una programmazione per questo canale:"
 
-#: ../ui/ui.sh:908
+#: ../ui/ui.sh:912
 msgid ""
 "you can delete the previous one and create a new one or leave the previous "
 "one and cancel this operation.\\n"
@@ -1964,45 +1966,45 @@ msgstr ""
 "puoi cancellare quella precedente e crearne una nuova oppure lasciare quella "
 "precedente e annullare questa operazione.\\n"
 
-#: ../ui/ui.sh:913 ../ui/ui.sh:991
+#: ../ui/ui.sh:917 ../ui/ui.sh:995
 msgid "The download from %s will start around %s for the duration of %s"
 msgstr "Il download da %s si avvierà intorno alle %s per la durata di %s"
 
-#: ../ui/ui.sh:916
+#: ../ui/ui.sh:920
 msgid ""
 "Do you want to create a new schedule, deleting the previous one? [yes|*]"
 msgstr ""
 "Vuoi creare una nuova programmazione, cancellando quella precedente? [sì|*]"
 
-#: ../ui/ui.sh:942
+#: ../ui/ui.sh:946
 msgid "Operation canceled: previous programming is maintained"
 msgstr "Operazione annullata: è mantenuta la programmazione precedente"
 
-#: ../ui/ui.sh:950
+#: ../ui/ui.sh:954
 msgid "Live stream: program for downloading the live"
 msgstr "Live stream: programma il download della diretta"
 
-#: ../ui/ui.sh:952
+#: ../ui/ui.sh:956
 msgid "It is necessary to indicate the recording start time and its duration"
 msgstr "È necessario indicare l'orario di inizio registrazione e la sua durata"
 
-#: ../ui/ui.sh:954
+#: ../ui/ui.sh:958
 msgid "Recording start time:"
 msgstr "Orario di inizio registrazione:"
 
-#: ../ui/ui.sh:955
+#: ../ui/ui.sh:959
 msgid "Do you want to register right away? [yes|*]"
 msgstr "Vuoi registrare subito? [sì|*]"
 
-#: ../ui/ui.sh:971
+#: ../ui/ui.sh:975
 msgid "Recording duration:"
 msgstr "Durata registrazione:"
 
-#: ../ui/ui.sh:980
+#: ../ui/ui.sh:984
 msgid "The starting time is lower than the current one: is it tomorrow? [*|no]"
 msgstr "L'orario di inizio è inferiore a quello attuale: è di domani? [*|no]"
 
-#: ../ui/ui.sh:1000
+#: ../ui/ui.sh:1004
 msgid "Scheduled Live Streams (link, start time, duration):"
 msgstr "Live Stream programmati (link, orario inizio, durata):"
 
@@ -2046,5 +2048,5 @@ msgstr "completato"
 msgid "inactive"
 msgstr "non attivo"
 
-msgid "Wait about 30 seconds"
-msgstr "Attendi circa 30 secondi"
+#~ msgid "Wait about 30 seconds"
+#~ msgstr "Attendi circa 30 secondi"
