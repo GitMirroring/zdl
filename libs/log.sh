@@ -230,7 +230,7 @@ $(gettext "Currently, ZDL is not able to download the requested file, I remove t
 	    no_filelog=true
 	    ;;
         45)
-	    msg="$url_in --> $(gettext "The video file is DRM protected and not playable on Linux")"
+	    msg="$url_in --> $(gettext "The video file is DRM protected and not playable")"
             set_link - "$url_in"
 	    ;;
 
