@@ -45,6 +45,8 @@ then
         url_in_file=$(grep -P '^http' <<< "$ilfatto_data" |tail -n1)
         file_in=$(grep -vP '^http' <<< "$ilfatto_data" |tail -n1)
 
+        sanitize_file_in
+        
         [[ "$url_in_file" =~ dailymotion ]] ||
             {
                 get_location "$url_in_file" url_in_file
@@ -98,6 +100,8 @@ then
         file_in=$(get_title "$html" | head -n1)
         file_filter "$file_in"
         
+        sanitize_file_in
+
         end_extension
         
     else   

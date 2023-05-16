@@ -582,7 +582,7 @@ EXTENSIONS:
         fi
         
         deps['curl']=curl
-        ## deps['phantomjs']=phantomjs
+        deps['phantomjs']=phantomjs
         deps['yad']=yad
         deps['notify-send']=libnotify-bin
         deps['wmctrl']=wmctrl
@@ -600,10 +600,24 @@ EXTENSIONS:
             deps['xterm']=xterm
 
         for cmd in "${!deps[@]}"
-        do
+        do            
             if ! command -v $cmd  &>/dev/null
             then
-                if [ "$cmd" != node ] || ( [ "$cmd" == node ] && ! command -v nodejs &>/dev/null )
+                if [ "$cmd" == phantomjs ]
+                then
+                    cd /tmp
+                    local phantomjs_url=$(curl -s https://phantomjs.org/download.html |
+                                              awk "/Download.+`uname -m`/{split(\$0, matched, \"\\\"\"); print matched[2]}")
+                    local phantomjs_bz2="${phantomjs_url##*\/}"
+                    local phantomjs_path="${phantomjs_bz2%.tar.bz2}"
+                    
+                    wget -qO "$phantomjs_bz2" "$phantomjs_url"                    
+                    tar -xjf "$phantomjs_bz2"
+                    chmod +x "$phantom_path"/bin/phantomjs 
+                    try cp "$phantom_path"/bin/phantomjs /usr/local/bin/
+                    rm -rf "$phantomjs_bz2" "$phantomjs_path"
+                    
+                elif [ "$cmd" != node ] || ( [ "$cmd" == node ] && ! command -v nodejs &>/dev/null )
                 then
                     print_c 1 "$(gettext "Installing") ${deps[$cmd]}"
                     install_dep ${deps[$cmd]}

@@ -27,7 +27,7 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Youtube (HD, livestream)
 
-if [[ "$url_in" =~ youtube\.com\/playlist ]]
+if [[ "$url_in" =~ youtube\.com(\/playlist|.+\/videos$) ]]
 then
     html=$(curl -s "$url_in")
     ## yt_json=$($youtube_dl --dump-json "$url_in")
