@@ -880,7 +880,7 @@ function check_livestream {
         test_livestream_boolean=true
         set_line_in_file + "$1" "$path_tmp/livestream-links.txt"
         return 0
-    else        
+    else
         test_livestream_boolean=false
         set_line_in_file + "$1" "$path_tmp/not-livestream-links.txt"
         return 1

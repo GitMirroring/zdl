@@ -316,7 +316,7 @@ function main_loop {
 	    fi
 
 	    print_c 4 "Checking link: %s" "$url_in"
-	    
+
 	    if check_link "$url_in"
 	    then
 		axel_parts=$axel_parts_conf
@@ -403,7 +403,7 @@ function main_loop {
 	        fi
 
 		check_exit && return 1
-		
+
 		if [ "$break_loop" == "true" ]
 		then
 		    unset break_loop

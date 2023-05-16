@@ -841,6 +841,7 @@ function check_start_file {
     if [ -f "${start_file}-rewriting" ] ||
 	   ( [ -f "${start_file}" ] && [ -n "$(< ${start_file})" ] )
     then
+        reset_exit
 	return 0
 
     else
