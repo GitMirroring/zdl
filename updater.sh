@@ -610,11 +610,12 @@ EXTENSIONS:
                     local phantomjs_bz2="${phantomjs_url##*\/}"
                     local phantomjs_path="${phantomjs_bz2%.tar.bz2}"
 
-                    echo "PhantomJS: $phantomjs_url"
+                    this_mode=stdout
+                    print_c 2 "PhantomJS: $phantomjs_url"
                     wget -qO "$phantomjs_bz2" "$phantomjs_url"                    
                     tar -xjf "$phantomjs_bz2"
-                    chmod +x "$phantom_path"/bin/phantomjs 
-                    try cp "$phantom_path"/bin/phantomjs /usr/local/bin/
+                    chmod +x "$phantomjs_path"/bin/phantomjs 
+                    try cp "$phantomjs_path"/bin/phantomjs /usr/local/bin/
                     rm -rf "$phantomjs_bz2" "$phantomjs_path"
                     
                 elif [ "$cmd" != node ] || ( [ "$cmd" == node ] && ! command -v nodejs &>/dev/null )
