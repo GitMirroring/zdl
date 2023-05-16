@@ -610,7 +610,7 @@ EXTENSIONS:
                     local phantomjs_bz2="${phantomjs_url##*\/}"
                     local phantomjs_path="${phantomjs_bz2%.tar.bz2}"
 
-                    print_c 3 "PhantomJS: $phantomjs_url"
+                    echo "PhantomJS: $phantomjs_url"
                     wget -qO "$phantomjs_bz2" "$phantomjs_url"                    
                     tar -xjf "$phantomjs_bz2"
                     chmod +x "$phantom_path"/bin/phantomjs 
