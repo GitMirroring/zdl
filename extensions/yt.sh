@@ -27,7 +27,7 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Youtube (HD, livestream)
 
-if [[ "$url_in" =~ youtube\.com(\/playlist|.+\/videos$) ]]
+if [[ "$url_in" =~ youtube\.com(\/playlist|.+\/(videos|featured|playlists|community|channels)$) ]]
 then
     html=$(curl -s "$url_in")
     ## yt_json=$($youtube_dl --dump-json "$url_in")
@@ -44,7 +44,7 @@ then
             set_link + "$yt_link" &&
                 print_c 4 "$(gettext "Redirection"): $yt_link"
             
-            [[ "$url_in" =~ youtube.com\/playlist ]] &&
+            [[ "$url_in" =~ youtube\.com(\/playlist|.+\/(videos|featured|playlists|community|channels)$) ]] &&
                 replace_url_in "$yt_link"
         fi
     done < <(grep -oP '[^"]+watch\?v=[^"]+' <<< "$html")

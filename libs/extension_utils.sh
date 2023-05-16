@@ -869,7 +869,7 @@ function check_livestream {
     fi
     
     if [[ "$link" =~ (youtube\.|dailymotion\.com\/video) ]] &&
-           [[ ! "$link" =~ (youtube\.com\/playlist) ]]
+           [[ ! "$link" =~ youtube\.com(\/playlist|.+\/(videos|featured|playlists|community|channels)$) ]]
     then        
         print_c 4 "Checking livestream link: %s" "$link"
         link=$($youtube_dl -f b --get-url "$link" | tail -n1)
