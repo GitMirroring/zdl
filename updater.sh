@@ -605,12 +605,12 @@ EXTENSIONS:
             then
                 if [ "$cmd" == phantomjs ]
                 then
-                    cd /tmp
                     local phantomjs_url=$(curl -s https://phantomjs.org/download.html |
                                               awk "/Download.+`uname -m`/{split(\$0, matched, \"\\\"\"); print matched[2]}")
                     local phantomjs_bz2="${phantomjs_url##*\/}"
                     local phantomjs_path="${phantomjs_bz2%.tar.bz2}"
-                    
+
+                    print_c 3 "PhantomJS: $phantomjs_url"
                     wget -qO "$phantomjs_bz2" "$phantomjs_url"                    
                     tar -xjf "$phantomjs_bz2"
                     chmod +x "$phantom_path"/bin/phantomjs 
