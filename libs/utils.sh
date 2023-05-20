@@ -559,6 +559,7 @@ function sanitize_file_in {
     file_in="${file_in//$'\300'}"
     file_in="${file_in//$'\303'}"
     file_in="${file_in//$'\314'}"
+    file_in="${file_in//$'\320'}"
     # file_in="${file_in//$'\340'/à}"
     # file_in="${file_in//$'\341'/á}"
     # file_in="${file_in//$'\342'/â}"
