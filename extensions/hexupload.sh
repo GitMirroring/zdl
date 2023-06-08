@@ -40,7 +40,7 @@ then
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
 
-    if [[ "$html" =~ "File Not Found" ]]
+    if [[ "$html" =~ (No such file with this filename|File Not Found) ]]
     then
         _log 3
         
@@ -67,8 +67,8 @@ then
 		         "$url_in")
 
             input_hidden "$html2"
-            
-            post_data="${post_data%adblock_detected*}adblock_detected=0"
+            post_data="${post_data%adblock_detected*}"
+            post_data="${post_data%'&'}&adblock_detected=0"
 
             html3=$(curl -sk    \
 	                 -A "$user_agent"    \
