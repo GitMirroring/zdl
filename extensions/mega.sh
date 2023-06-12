@@ -41,16 +41,31 @@ then
     if hash megadl 2>/dev/null
     then
         url_in_file="$url_in"
-        test_tmp=$(mktemp)
-        megadl --debug api \
-               "$url_in" &> "$test_tmp" &
-        pid_mega=$!
-        
-        while [[ ! "$(cat "$test_tmp")" =~ '%' ]]
+
+        while [ -z "$ok" ]
         do
-            sleep 0.1
+            test_tmp=$(mktemp)
+            megadl --debug api \
+                   "$url_in" &> "$test_tmp" &
+            pid_mega=$!
+            
+            while :
+            do
+                if [[ "$(cat "$test_tmp")" =~ 'Local file already exists: '(.+)$ ]]
+                then
+                    rm -rf "${BASH_REMATCH[1]}"
+                    break
+                fi
+
+                if [[ "$(cat "$test_tmp")" =~ '%' ]]
+                then
+                    ok=true
+                    break
+                fi
+                sleep 0.1
+            done
+            kill $pid_mega 
         done
-        kill $pid_mega 
         
         file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
         rm -f "$file_in_encoded"
