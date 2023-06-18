@@ -363,8 +363,22 @@ function main_loop {
 		    shopt -s nullglob		    
 		    for srcfile in "$path_usr"/extensions/*.sh
 		    do
+                        if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
+	                then
+		            set_link - "$url_in"
+		            _log 15 "$url_in"
+                            break
+	                fi
+                        
+	                if [ -n "$url_regex" ] && [[ ! "${url_in}" =~ $url_regex ]]
+	                then
+		            set_link - "$url_in"
+		            _log 16 "$url_in"
+                            break
+	                fi
+
 			if [ -f "$srcfile" ]
-			then
+			then                            
 			    get_language_prog
 
                             source "$srcfile"
