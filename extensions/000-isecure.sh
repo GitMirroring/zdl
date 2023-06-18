@@ -43,6 +43,6 @@ then
         replace_url_in "$isecure_url"
         
     else
-	_log 2
+	_log 3
     fi
 fi
