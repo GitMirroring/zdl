@@ -286,7 +286,7 @@ function yellow_progress () {
     }
 }
 
-function progress_out (chunk,           progress_line, line, cmd, var_temp) {
+function progress_out (chunk,           progress_line, line, cmd, var_temp, array_length) {
     ## eta, %, speed, speed type, length-saved (length-out)
     if (dler == "Axel") {
 	for (y=n; y>0; y--) {
@@ -807,17 +807,21 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp) {
 	    cmd | getline this_time
 	    close(cmd)
 	    elapsed_time = this_time - start_time
-	    split(progress_line, progress_elems, /([:\(\)]{1}|\s\-\s|byte|%|\(|\))/)
-	    percent_out[i] = int(progress_elems[2])
+	    # split(progress_line, progress_elems, /([:\(\)]{1}|\s\-\s|byte|%|\(|\))/)
+	    # percent_out[i] = int(progress_elems[2])
+	    split(progress_line, progress_elems, /(%)/)
+            array_length = split(progress_elems[1], progress_percent, " ")
+	    percent_out[i] = int(progress_percent[array_length])
 
 	    if (percent_out[i] > 0) {
 		eta_out[i] = int((elapsed_time * 100 / percent_out[i]) - elapsed_time)
 		eta_out[i] = seconds_to_human(eta_out[i])
 		length_saved[i] = size_file(file_out[i] "/" file_out_encoded[i])
 		if (! length_saved[i]) length_saved[i] = 0
-                split(progress_elems[8], speed_elems, /[^0-9.,a-zA-Z\/]+/)
-		speed_out[i] = speed_elems[1]
-		speed_out_type[i] = speed_elems[2]
+                
+                array_length = split(progress_line, speed_elems, /[\(\)\?]/)
+		speed_out[i] = speed_elems[array_length -2]
+		speed_out_type[i] = speed_elems[array_length -1]
 
                 # if (speed_out_type[i] ~ /K/) speed_out_type[i]="KB/s"
                 # else if (speed_out_type[i] ~ /M/) speed_out_type[i]="MB/s"
