@@ -42,6 +42,7 @@ then
     then
         url_in_file="$url_in"
 
+        unset ok
         while [ -z "$ok" ]
         do
             test_tmp=$(mktemp)
