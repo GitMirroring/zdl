@@ -32,7 +32,7 @@ then
     replace_url_in "${url_in//mixdrp/mixdrop}"
 fi
 
-if [ "$url_in" != "${url_in//mixdrop}" ]
+if [[ "$url_in" =~ (mixdr[o]*p) ]]
 then
     [[ "$url_in" =~ \/f\/ ]] &&
         replace_url_in "${url_in//\/f\///e/}"
