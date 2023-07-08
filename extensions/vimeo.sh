@@ -37,6 +37,11 @@ then
 	file_in=$(tail -n1 <<< "$vimeo_data")
 	youtubedl_m3u8="$url_in"
     fi
+
+    if [[ "$url_in_file" =~ \.m3u8 ]]
+    then
+        force_dler FFMpeg
+    fi
     
     end_extension
 fi
