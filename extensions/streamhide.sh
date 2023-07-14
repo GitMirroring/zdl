@@ -28,7 +28,7 @@
 ## zdl-extension name: StreamHide
 
 
-if [[ "$url_in" =~ (streamhide|guccihide)\. ]]
+if [[ "$url_in" =~ (streamhide|guccihide|ahvsh)\. ]]
 then
     #### streaming: youtube-dl
     ytdl_old="$youtube_dl"
