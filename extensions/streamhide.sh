@@ -42,6 +42,12 @@ then
     file_in=$(tail -n1 <<< "$streamhide_data")
     file_in="${file_in#Watch_}"
 
+    if [[ "$file_in" =~ StreamHide ]]
+    then
+        file_in=$(curl -s "$url_in" |grep 'h4 mb-3 text-white' | grep -oP '>[^<]+<')
+        file_in="${file_in//[<>]}".mp4
+    fi
+       
     url_in_file=$(head -n1 <<< "$streamhide_data")
 
     youtube_dl="$ytdl_old"
