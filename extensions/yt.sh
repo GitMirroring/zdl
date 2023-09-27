@@ -66,8 +66,8 @@ then
 fi
 
 if [[ "$url_in" =~ (youtube\.com\/watch|youtu\.be) ]]
-then       
-    replace_url_in "$(urldecode "${url_in%%'&'*}")"    
+then
+    replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     
     data=$($youtube_dl -f b --get-title --get-url "${url_in}")       
     url_in_file="$(tail -n1 <<< "$data")"
@@ -110,3 +110,4 @@ then
     
     end_extension
 fi
+

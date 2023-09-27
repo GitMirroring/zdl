@@ -776,8 +776,9 @@ function grep_urls {
 
     done <<< "$input"
 
-#    grep -P '^(xdcc|magnet|http|https|ftp):\/\/.+$' <<< "$input" &&
-    grep -P '(^xdcc://.+|^irc://.+|^magnet:.+|^\b(((http|https|ftp)://?|www[.]*)[^\s()<>]+(?:\([\w\d()]+\)|([^[:punct:]\s]|/)))[-_=.]*)$' <<< "$input" &&
+    #    grep -P '^(xdcc|magnet|http|https|ftp):\/\/.+$' <<< "$input" &&
+    #    grep -P '(^xdcc://.+|^irc://.+|^magnet:.+|^\b(((http|https|ftp)://?|www[.]*)[^\s()<>]+(?:\([\w\d()]+\)|([^[:punct:]\s]|/)))[-_=.]*)$' <<< "$input" &&
+    grep -P '(^xdcc://.+|^irc://.+|^magnet:.+|^\b(((http|https|ftp)://?|www[.]*)[^\s()<>]+(?:\([\w\d()]+\)|([^[:punct:]\s]|/))).*)$' <<< "$input" &&
         result=0
 
     return $result    

@@ -25,24 +25,47 @@
 #
 
 ## zdl-extension types: shortlinks
-## zdl-extension name: isecure
+## zdl-extension name: isecure, protectlinker
 
-if [[ "$url_in" =~ isecure\. ]]
+if [[ "$url_in" =~ (isecure|protectlinker)\. ]]
 then
     html=$(curl -s "$url_in")
 
-    isecure_url=$(grep -P 'iframe[. ]+src' <<< "$html" |
+    data_link=$(grep -P 'iframe[. ]+src' <<< "$html" |
                       grep -oP 'http[^"]+' |
                       tail -n1)
     
-    sanitize_url "$isecure_url" isecure_url
+    sanitize_url "$data_link" data_link
     
-    if url "$isecure_url" &&
-            [ "$isecure_url" != "$url_in" ]
+    if url "$data_link" &&
+            [ "$data_link" != "$url_in" ]
     then
-        replace_url_in "$isecure_url"
+        replace_url_in "$data_link"
         
     else
-	_log 3
+        if [[ "$url_in" =~ protectlinker\. ]]
+        then
+            data_links=( $(grep -oP 'meta-link="[^"]+' <<< "$html" |
+                             sed -r 's|meta-link=\"||g') )
+            
+            if url "${data_links[0]}" 
+            then
+                for data_link in "${data_links[@]}"
+                do
+                    if url "$data_link"
+                    then
+                        set_link + "$data_link"
+                        print_c 4 "$data_link"
+                    fi
+                done
+
+                replace_url_in "${data_links[0]}"
+            else
+                _log 3
+            fi
+
+        else
+	    _log 3
+        fi
     fi
 fi

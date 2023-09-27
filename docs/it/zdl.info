@@ -496,14 +496,14 @@ servizi di hosting e di streaming, direttamente dal link (bypassando il
 player delle pagine web):
 
 _Video in streaming saltando il player del browser:_
-     Akvideo (HD), Aparat, Auroravid/Novamov, Backin, Backin, Biqle
-     (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD),
-     DiscoveryPlus (HD), EasyLoad (HD), Exashare, Facebook, Fanpage,
-     Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD),
-     livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive (ex
-     Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
-     playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD),
-     Rai... (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv,
+     Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD),
+     Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), DiscoveryPlus
+     (HD), EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo,
+     Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream),
+     livestream), Metacafe, MuseoGalileo.it, Neodrive (ex Cloudzilla),
+     NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube,
+     Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai... (HD),
+     RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv,
      Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
      Speedvideo (HD), Streamango, StreamHide, Streamin, Streamlare
      (HD), StreamSB/SBFull (+ browser to solve g-recaptcha),
@@ -515,15 +515,15 @@ _Video in streaming saltando il player del browser:_
      (HD), Youtube (HD, Zinwa (RTMP) 
 
 _File hosting:_
-     Akvideo (HD), Aparat, Clicknupload, ClipWatching, ddl.to, Deltabit
-     (HD), dl.free.fr, Dropbox, Drop.download, Easybytez, EasyLoad
-     (HD), Go4Up (multi-link), Hexupload, Jheberg (multi-link),
-     Katfile, Mediafire, Mega, MixDrop, MultiUp (multi-link),
-     Onlystream, Ozofiles, Pastebin, Rockfile, Sockshare (HD),
-     StreamSB/SBFull (+ browser to solve g-recaptcha), Subyshare,
-     Supervideo (HD), TubeOffLine.com (tutti i servizi), Tusfiles,
-     Uload, Uploadshub, Uppit, Upstream, Uptobox, Vidoza, Voe,
-     Wolfstream (HD), WStream (HD) 
+     Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
+     dl.free.fr, Dropbox, Drop.download, Easybytez, EasyLoad (HD),
+     Go4Up (multi-link), Hexupload, Jheberg (multi-link), Katfile,
+     Mediafire, Mega, MixDrop, MultiUp (multi-link), Onlystream,
+     Ozofiles, Pastebin, Rockfile, Sockshare (HD), StreamSB/SBFull (+
+     browser to solve g-recaptcha), Subyshare, Supervideo (HD),
+     TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
+     Uppit, Upstream, Uptobox, Vidoza, Voe, Wolfstream (HD), WStream
+     (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -538,8 +538,9 @@ _Short links:_
      4snip.pw, altadefinizione01, atharori.net, ay.gy, bc.vc, buckler,
      cb01, cinemalibero, Filecrypt.cc, filmpertutti, hd4me.net,
      isecure, link4.me, linkhub, linkup, Masklink, mysnip.xyz,
-     pianosolo.it, q.gs, Rapidcrypt, sapolatsu, Shortlink, stayonline,
-     swzz.xyz, thouth.net, uprotector, uprot.net, vaussneim.net, vcrypt
+     pianosolo.it, protectlinker, q.gs, Rapidcrypt, sapolatsu,
+     Shortlink, stayonline, swzz.xyz, thouth.net, uprotector,
+     uprot.net, vaussneim.net, vcrypt
 
 _Tutti i file scaricabili con le seguenti estensioni dei browser:_
      _Flashgot_ di _Firefox/Iceweasel/Icecat_, funzione `M-x zdl' di
@@ -1505,26 +1506,26 @@ Tag Table:
 Node: Top1242
 Node: Il comando ZDL5311
 Node: Servizi streaming/hosting13824
-Node: Avviare ZDL18829
-Node: Arrestare ZDL21285
-Node: Controllare i download22390
-Node: Manuali d'uso26642
-Node: Modi27059
-Node: Readline30354
-Node: Editor31906
-Node: Omonimie33131
-Node: IRC/XDCC34679
-Node: Torrent36388
-Node: Filtri37272
-Node: Creare nuove estensioni37593
-Node: Software consigliati e dipendenze39368
-Node: Conkeror41044
-Node: zdl-xterm e XXXTerm/Xombrero42068
-Node: Installazione e aggiornamento43992
-Node: Perché questo programma47307
-Node: Tags51195
-Node: Copying55944
-Node: Contatti56994
+Node: Avviare ZDL18833
+Node: Arrestare ZDL21289
+Node: Controllare i download22394
+Node: Manuali d'uso26646
+Node: Modi27063
+Node: Readline30358
+Node: Editor31910
+Node: Omonimie33135
+Node: IRC/XDCC34683
+Node: Torrent36392
+Node: Filtri37276
+Node: Creare nuove estensioni37597
+Node: Software consigliati e dipendenze39372
+Node: Conkeror41048
+Node: zdl-xterm e XXXTerm/Xombrero42072
+Node: Installazione e aggiornamento43996
+Node: Perché questo programma47311
+Node: Tags51199
+Node: Copying55948
+Node: Contatti56998
 
 End Tag Table
 

@@ -36,7 +36,7 @@ then
 				2>/dev/null)
     
     file_in=$(tail -n1 <<< "$dplus_data")
-    file_in="${file_in}"
+    file_in="${file_in%.*}.mp4"
     
     url_in_file=$(head -n1 <<< "$dplus_data")
 
