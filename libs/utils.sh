@@ -747,7 +747,7 @@ function url {
 }
 
 function grep_urls {
-    local input result
+    local input result line
     unset input
     result=1
     

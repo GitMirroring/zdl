@@ -78,7 +78,7 @@ function start_timeout {
 
 	elif (( diff_now >= $max_seconds ))
 	then            
-            touch "$test_xfer"
+            touch "$test_xfer" "$path_tmp"/irc_done
 	    sed -r "/^.+ ${url//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
 	    kill_url "$url" 'xfer-pids'
 	    kill_url "$url" 'irc-pids'
@@ -109,7 +109,7 @@ function xdcc_cancel {
 
 function irc_quit {
     local pid_list
-    touch "$test_xfer"
+    touch "$test_xfer" "$path_tmp"/irc_done
     
     [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] &&
 	kill $(head -n1 "$path_tmp/${file_xfer}_stdout.tmp") 2>/dev/null
@@ -397,7 +397,8 @@ function join_chan {
 
     if [ "$in_chan" == true ] || [[ "$line" =~ (JOIN :) ]] #&& [ -n "${irc['msg']}" ] )
     then
-        [[ "$line" =~ ^\: ]] ||	print_c 1 "<< $line"
+        #[[ "$line" =~ ^\: ]] ||
+            print_c 1 "<< $line"
         in_chan=true
 
         return 0
@@ -506,16 +507,16 @@ function add_xdcc_url {
 
 
 function set_xdcc_key_value {
-    local key="$1" value="$2"
+    local Key="$1" Value="$2"
 
     source "$xdcc_struct_file"
-    xdcc[$key,$xdcc_index]="$value"
+    xdcc[$Key,$xdcc_index]="$Value"
 
     set_xdcc_struct
 }
 
 function del_xdcc_url {
-    local res key
+    local res K i counter    
 
     if url "$1"
     then
@@ -524,8 +525,6 @@ function del_xdcc_url {
         grep -v "$match" "$xdcc_struct_file" > "$xdcc_struct_file".new
         mv "$xdcc_struct_file".new "$xdcc_struct_file"
 
-        local counter res key
-        
         echo "irc_pid=$irc_pid" > "$xdcc_struct_file"
         
         count_xdcc counter
@@ -533,11 +532,11 @@ function del_xdcc_url {
         
         for ((i=0; i<=$counter; i++))
         do
-            for key in ${keys[@]}
+            for K in ${keys[@]}
             do
                 if [ "$1" == "${xdcc['url',$i]}" ]
                 then
-                    res+="unset xdcc[$key,$i]\n"
+                    res+="unset xdcc[$K,$i]\n"
                 fi
             done
         done
@@ -568,24 +567,31 @@ function count_xdcc {
 }
 
 function set_xdcc_struct {    
-    local counter res key
+    local counter res k i
 
     echo "irc_pid=$irc_pid" > "$xdcc_struct_file"
-    
+
     count_xdcc counter
     #counter="${#xdcc[@]}"
-    
+
     for ((i=0; i<=$counter; i++))
     do
-        if url "${xdcc['url',$i]}" 
+        if url "${xdcc['url',$i]}"
         then
-            for key in ${keys[@]}
+            for k in ${keys[@]}
             do
-                [ $key == url ] && res+="\n"
-                res+="xdcc['$key',$i]='${xdcc[$key,$i]}'\n"
+                [ $k == url ] && res+="\n"
+
+                if grep -q "${xdcc['url',$i]}" "$path_tmp"/links_loop.txt
+                then
+                    res+="xdcc['$k',$i]='${xdcc[$k,$i]}'\n"
+                else
+                    res+="unset xdcc[$k,$i]\n"
+                fi                    
             done
         fi
     done
+
     echo -e "$res" >> "$xdcc_struct_file"
 
     [ -f "$xdcc_struct_file" ] && source "$xdcc_struct_file"
@@ -623,7 +629,23 @@ function irc_client {
                 
 	        while read line
 	        do
-                    #echo "line: $line"
+	            line=$(tr -d "\001\015\012" <<< "${line//\*}")
+
+	            if [ "${line:0:1}" == ":" ]
+	            then
+		        from="${line%% *}"
+		        line="${line#* }"
+	            fi
+
+	            # from="${from:1}"
+	            # user=${from%%\!*}
+	            txt=$(trim "${line#*:}")
+	            irc_cmd="${line%% *}"
+
+
+	            check_line_regex "$line"
+	            # check_irc_command "$irc_cmd" "$txt"
+
                     ## ZDL cli mode output:
                     get_mode
 	            ## per ricerche e debug:
@@ -640,9 +662,9 @@ function irc_client {
                             print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
 
                             irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
-                            set_xdcc_key_value sent true                            
+
+                            set_xdcc_key_value sent true
                         fi
-                        
                     fi
 
                     if [ "${xdcc['sent',$xdcc_index]}" == true ]
@@ -657,30 +679,13 @@ function irc_client {
                                         ! check_pid "${xdcc['pid_cat',$i]}"
                                 then
                                     xdcc_index=$i
-                                    set_xdcc_key_value sent false                                    
+                                    set_xdcc_key_value sent false
                                 fi
                             done
                         fi
                     fi
-
-	            line=$(tr -d "\001\015\012" <<< "${line//\*}")
-
-	            if [ "${line:0:1}" == ":" ]
-	            then
-		        from="${line%% *}"
-		        line="${line#* }"
-	            fi
-
-	            # from="${from:1}"
-	            # user=${from%%\!*}
-	            txt=$(trim "${line#*:}")
-	            irc_cmd="${line%% *}"
-
+                    
                     ## interaction with the input $line
-                    
-	            # check_line_regex "$line"
-	            # check_irc_command "$irc_cmd" "$txt"
-                    
                     case "$irc_cmd" in
 	                PING)
 	                    if [ -n "$txt" ]
@@ -695,8 +700,9 @@ function irc_client {
 	                    print_c 1 ">> PONG $chunk"
 	                    ;;
 
-                        ERROR)
+                        ERROR|QUIT)
                             print_c 3 "$line"
+                            touch "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")"
                             set_done
                             break
                             ;;
@@ -735,6 +741,7 @@ function irc_client {
 		                set_xdcc_key_value pid_xfer $!
                                 
 		                add_pid_url "${xdcc['pid_xfer',$xdcc_index]}" "$url" "xfer-pids"
+                                sleep 2
 	                    fi
 	                    ;;
                     esac
@@ -825,10 +832,10 @@ fi
 ## MAIN:
 set_mode "stdout"
 
-#add_pid_url "$PID" "$url" "irc-pids"
+add_pid_url "$PID" "$url" "irc-pids"
 start_timeout
 init_resume
-#add_pid_url "$PID" "$url" "irc-client-pid"
+add_pid_url "$PID" "$url" "irc-client-pid"
 
 keys=( url host chan slot pack pid_xfer pid_cat sent file address port size offset )
 xdcc_struct_file="/tmp/${irc[host]//\/}-${irc[chan]//\/}"
@@ -863,7 +870,7 @@ set_xdcc_key_value sent false
 irc_client ||
     {
         echo "irc_client error"
-	touch "$test_xfer"
+	touch "$test_xfer" "$path_tmp"/irc_done
 
 	_log 26
 	exec 3>&-
