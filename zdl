@@ -203,6 +203,8 @@ function main_loop {
     local nline nlines loop_url_in url_in_old
     #clean_livestream
 
+    rm -f "$path_tmp"/req_irc
+    
     [ -n "$start_file" ] || start_file="$path_tmp"/links_loop.txt
     
     if [ "$this_mode" == "daemon" ] &&

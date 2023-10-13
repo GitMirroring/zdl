@@ -109,7 +109,7 @@ function xdcc_cancel {
 
 function irc_quit {
     local pid_list
-    touch "$test_xfer" "$path_tmp"/irc_done
+    touch "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")" "$path_tmp"/irc_done "$test_xfer"
     
     [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] &&
 	kill $(head -n1 "$path_tmp/${file_xfer}_stdout.tmp") 2>/dev/null
@@ -643,7 +643,7 @@ function irc_client {
 	            irc_cmd="${line%% *}"
 
 
-	            check_line_regex "$line"
+	            check_line_regex "$line" 
 	            # check_irc_command "$irc_cmd" "$txt"
 
                     ## ZDL cli mode output:
@@ -676,7 +676,9 @@ function irc_client {
                             for ((i=0; i<$counter; i++))
                             do
                                 if url "${xdcc['url',$i]}" &&
-                                        ! check_pid "${xdcc['pid_cat',$i]}"
+                                        ! check_pid "${xdcc['pid_cat',$i]}" &&
+                                        [ -f "$path_tmp"/req_irc ] &&
+                                        grep -q "${xdcc['url',$i]}" "$path_tmp"/req_irc
                                 then
                                     xdcc_index=$i
                                     set_xdcc_key_value sent false
@@ -739,6 +741,9 @@ function irc_client {
 
 		                dcc_xfer &
 		                set_xdcc_key_value pid_xfer $!
+
+                                grep -v "${xdcc['url',$xdcc_index]}" "$path_tmp"/req_irc >"$path_tmp"/req_irc.new
+                                mv "$path_tmp"/req_irc.new "$path_tmp"/req_irc
                                 
 		                add_pid_url "${xdcc['pid_xfer',$xdcc_index]}" "$url" "xfer-pids"
                                 sleep 2
@@ -817,7 +822,7 @@ then
 	['host']="${BASH_REMATCH[1]}"
 	['port']=6667
 	['chan']="${BASH_REMATCH[2]}"
-	['nick']=$(obfuscate_user)$(date +%s) #$(obfuscate "$USER")
+	['nick']=$(obfuscate_user) #$(date +%s) #$(obfuscate "$USER")
         ['slot']=$(cut -f2 -d' ' <<< "${url//%20/ }")
         ['pack']=$(cut -f5 -d' ' <<< "${url//%20/ }")
     )
@@ -832,10 +837,10 @@ fi
 ## MAIN:
 set_mode "stdout"
 
-add_pid_url "$PID" "$url" "irc-pids"
+#add_pid_url "$PID" "$url" "irc-pids"
 start_timeout
 init_resume
-add_pid_url "$PID" "$url" "irc-client-pid"
+#add_pid_url "$PID" "$url" "irc-client-pid"
 
 keys=( url host chan slot pack pid_xfer pid_cat sent file address port size offset )
 xdcc_struct_file="/tmp/${irc[host]//\/}-${irc[chan]//\/}"
@@ -866,6 +871,8 @@ set_xdcc_key_value chan "${irc['chan']}"
 set_xdcc_key_value slot "${irc['slot']}"
 set_xdcc_key_value pack "${irc['pack']}"
 set_xdcc_key_value sent false
+
+echo "$url" >> "$path_tmp"/req_irc
 
 irc_client ||
     {
