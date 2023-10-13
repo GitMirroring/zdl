@@ -417,7 +417,7 @@ function join_chan {
 function check_line_regex {
     local line="$1"
 
-    if [[ "$line" =~ (You already requested that pack|The session limit for your IP .+ has been exceeded\.)  ]]
+    if [[ "$line" =~ (Hai già richiesto questo pack|You already requested that pack|The session limit for your IP .+ has been exceeded\.)  ]]
     then
         notice="${BASH_REMATCH[1]}"
 	_log 27
@@ -700,7 +700,7 @@ function irc_client {
 	                    print_c 1 ">> PONG $chunk"
 	                    ;;
 
-                        ERROR|QUIT)
+                        ERROR | QUIT)
                             print_c 3 "$line"
                             touch "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")"
                             set_done
