@@ -63,6 +63,8 @@ function get_linkhub {
             for newlink in "${links[@]}"
             do
 	        newlink=$(sanitize_url "$newlink")
+                newlink="${newlink%'</a>'*}"
+                newlink="${newlink%'%5D'*}"
 
 	        if url "$newlink" &&
                         [ "$newlink" != "$url_in" ]

@@ -31,7 +31,11 @@
 if [[ "$url_in" =~ (raiplay|rai[a-z]*\.it) ]]
 then
     unset raiplay_url raiplay_json
-    
+
+    # if [[ "$url_in" =~ \/collezioni\/ ]]
+    # then
+        
+        
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
         raiplay_json=$(curl -s \
@@ -115,7 +119,7 @@ then
 	fi
 	
     else
-        if [[ "$url_in" =~ (^.+\/programmi\/[^\/]+) ]]
+        if [[ "$url_in" =~ (^.+\/(collezioni|programmi)\/[^\/]+) ]]
         then
             raiplay_json_url="${BASH_REMATCH[1]}".json
 

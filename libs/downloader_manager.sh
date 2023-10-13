@@ -248,42 +248,19 @@ function download {
 
     case "$downloader_in" in
 	DCC_Xfer)
+            rm -rf "$path_tmp/irc_done" 
 	    unset irc ctcp
 	    declare -A ctcp
-	    declare -A irc
-	    if [[ "$url_in" =~ ^irc:\/\/([^/]+)\/([^/]+)\/([^/]+$) ]]
-	    then
-		MSG=$(urldecode "${BASH_REMATCH[3]}")
-		MSG="${MSG#ctcp}"
-		MSG="${MSG#msg}"
-		MSG=$(trim "$MSG")
-		
-		irc=(
-		    [host]="${BASH_REMATCH[1]}"
-		    [port]=6667
-		    [chan]="${BASH_REMATCH[2]}"
-		    [msg]="${MSG}"
-		    [nick]=$(obfuscate_user) #$(obfuscate "$USER")
-		)
-	    fi
 
-	    [[ "${irc[host]}" =~ ^(.+)\:([0-9]+)$ ]] &&
-		{
-		    irc[host]="${BASH_REMATCH[1]}"
-		    irc[port]="${BASH_REMATCH[2]}"
-		}
-
-            local test_xfer="${irc[msg]##*\|}"
-            test_xfer="${test_xfer%% *}"
-            test_xfer="$path_tmp/${irc[nick]}${test_xfer}${irc[msg]##*\#}" 
+            local test_xfer="$path_tmp/$(create_hash "$url_in")" 
 	    rm -f "$test_xfer"
-            
+
 	    stdbuf -i0 -o0 -e0 \
-		   $path_usr/irc_client.sh "${irc[host]}" "${irc[port]}" "${irc[chan]}" "${irc[msg]}" "${irc[nick]}" "$url_in" "$this_tty" &
+		   $path_usr/irc_client.sh "$url_in" "$this_tty" &
 	    pid_in=$!
 	    echo "$pid_in" >>"$path_tmp/external-dl_pids.txt"
 
-	    while [ ! -f "$test_xfer" ]
+	    until [ -f "$test_xfer" ]
 	    do
                 sleep 0.1
 	    done
@@ -292,27 +269,19 @@ function download {
 	    file_in=$(head -n1 "$test_xfer")
 	    url_in_file=$(tail -n1 "$test_xfer")
 
-	    if [ "$url_in_file" != "${url_in_file#\/}" ]
-	    then
-		echo -e "____PID_IN____
+	    echo -e "____PID_IN____
 $url_in
 DCC_Xfer
 ${pid_prog}
 $file_in
 $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 
-	    else
-		downwait=0
-	    fi
-
-            add_pid_url "$pid_in" "$url_in" "irc-wait"
-            
-            while check_pid_url "$pid_in" "$url_in" "irc-wait" ||
-                    check_pid_url "$(head -n1 "$path_tmp/${file_in}_stdout.tmp")" "$url_in" "irc-wait" #|| ! test -f "$path_tmp/${file_in}_stdout.tmp"
+            until [ -f "$path_tmp/irc_done" ]
             do
                 sleep 0.1
             done
-
+            rm -rf "$path_tmp/irc_done"
+            
             local wait_lines=7
 	;;
 

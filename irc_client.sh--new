@@ -1,0 +1,1040 @@
+#!/bin/bash
+#
+# ZigzagDownLoader (ZDL)
+# 
+# This program is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU General Public License as published 
+# by the Free Software Foundation; either version 3 of the License, 
+# or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License 
+# along with this program. If not, see http://www.gnu.org/licenses/. 
+# 
+# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+# 
+# For information or to collaborate on the project:
+# https://savannah.nongnu.org/projects/zdl
+# 
+# Gianluca Zoni (author)
+# http://inventati.org/zoninoz
+# zoninoz@inventati.org
+#
+
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
+
+path_usr="/usr/local/share/zdl"
+path_tmp=".zdl_tmp"
+gui_log="$path_tmp"/gui-log.txt
+
+source $path_usr/libs/core.sh
+source $path_usr/libs/utils.sh
+source $path_usr/libs/downloader_manager.sh
+source $path_usr/libs/log.sh
+source $path_usr/config.sh
+get_conf
+
+[ -z "$background" ] && background=tty
+source $path_usr/ui/widgets.sh
+
+file_log="zdl_log.txt"
+name_prog=ZigzagDownLoader
+
+if [ -f "$file_log" ]
+then
+    log=1
+fi
+
+function start_timeout {
+    local start=$(date +%s)
+    local now
+    local diff_now
+    local max_seconds=60
+    if [ -d /cygdrive ]
+    then
+	max_seconds=120
+    fi
+    
+    
+    touch "$path_tmp/irc-timeout"
+    sed -r "/^${url_in//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
+    
+    for i in {0..12}
+    do
+	now=$(date +%s)
+	diff_now=$(( now - start ))
+
+	if grep -P "^$url_in$" "$path_tmp/irc-timeout" &>/dev/null
+	then                 
+	    exit
+
+	elif (( diff_now >= $max_seconds ))
+	then            
+            touch "$test_xfer"
+	    sed -r "/^.+ ${url_in//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
+	    kill_url "$url_in" 'xfer-pids'
+	    kill_url "$url_in" 'irc-pids'
+
+            del_pid_url "$url_in" "irc-wait"
+	    exit
+	fi
+	
+	sleep 10
+    done &
+}
+
+function set_mode {
+    this_mode="$1"
+    printf "%s $s\n" "$this_mode" "$url_in" >>"$path_tmp/irc_this_mode"
+}
+
+function get_mode {
+    this_mode=$(grep "$url_in$" "$path_tmp/irc_this_mode" | cut -d' ' -f1)
+    [ -z "$this_mode" ] && this_mode=stdout
+}
+
+function xdcc_cancel {
+    # [ -z "$ctcp_src" ] &&
+    # 	ctcp_src=$(grep "$url_in" "$path_tmp"/irc_xdcc 2>/dev/null |
+    # 			  cut -d' ' -f1 | tail -n1)
+    irc_send "PRIVMSG $ctcp_src" "XDCC CANCEL"
+    irc_send "PRIVMSG $ctcp_src" "XDCC REMOVE"
+    kill_url "$url_in" "xfer-pids"
+}
+
+function irc_quit {
+    local pid_list
+    touch "$test_xfer"
+    
+    [ -f "$path_tmp/${file_in}_stdout.tmp" ] &&
+	kill $(head -n1 "$path_tmp/${file_in}_stdout.tmp") 2>/dev/null
+
+    xdcc_cancel
+    exec 4>&-
+    irc_send "QUIT"
+    exec 3>&-
+
+    #kill_url "$url_in" "irc-pids"
+    
+    if [ -d /cygdrive ]
+    then
+    	pid_list=( $(children_pids $PID) $PID )
+
+    else
+    	pid_list=( $(ps -o pid --no-headers --ppid $PID) $PID )
+    fi
+
+    for pid in ${pid_list[@]} 
+    do
+	kill -9 $pid
+    done &
+
+    exit 1
+}
+
+function irc_send {
+    printf "%s\r\n" "$*" >&3
+}
+
+
+function irc_ctcp {
+    local pre=$1
+    local post=$2
+    ## \015 -> \r ; \012 -> \n
+
+    printf "%s :\001%s\001\015\012" "$pre" "$post" >&3
+}
+
+# function get_irc_code {
+#     local msg="$1"
+#     local code
+#     #code=$(grep -h "$msg" $path_usr/irc/* |
+# 		  # cut -d' ' -f1 |
+# 		  #     head -n1) 
+#     code=$(awk "/$msg/{print $1}" $path_usr/irc/*)
+#     ## metodo alternativo (rivedere codifica dei file dei messaggi in $path_usr/irc/)
+#     # [[ "$(cat $path_usr/irc/*)" =~ ([0-9]+)' "'[^\"]*$msg ]] &&
+#     # 	code=${BASH_REMATCH[1]}
+
+#     if [[ "$code" =~ ^[0-9]+$ ]]
+#     then
+# 	printf "%d" "$code"
+# 	return 0
+
+#     else
+# 	return 1
+#     fi
+# }
+
+# function get_irc_code {
+#     local msg="$1"
+#     local code
+#     echo "$msg"
+#     awk -v msg="$msg" '{match($0, /\"([^\"]+)\"/, pattern); if (match(msg, pattern[1])) {print pattern[1]}}' $path_usr/irc/*
+# }
+
+function check_notice {
+    local chan
+    notice="$1"
+    notice2=${notice%%:*}
+    notice2=${notice2%%','*}
+    notice2=${notice2%%[0-9]*}
+    notice2=${notice2%%SEND*}
+    notice2=$(trim "$notice2")
+
+    if [ "$errors_again" != "${errors_again//$notice2}" ]
+    then
+	_log 27
+	irc_quit
+    fi
+
+    if [ "$errors_stop" != "${errors_stop//$notice2}" ]
+    then
+	_log 29
+	irc_quit
+    fi
+
+    # if [[ "$notice" =~ 'JOIN #'([^\ ]+) ]]
+    # then
+    # 	chan="${BASH_REMATCH[1]}"
+    # 	print_c 2 "/JOIN #${chan}"
+    # 	irc_send "JOIN #${chan}"
+    # fi
+}
+
+function check_ctcp {
+    local irc_code key 
+    unset ctcp_msg
+    declare -a ctcp_msg=( $(tr -d "\001\015\012" <<< "$*") )
+    
+    # local new=$(awk '!($0 in a){a[$0]; print}' "$path_tmp"/irc_xdcc)
+    # echo "$new" > "$path_tmp"/irc_xdcc
+
+    #    if [ -z "$ctcp_src" ]
+    #    then
+    #        ctcp_src=$(grep "$url_in" "$path_tmp"/irc_xdcc 2>/dev/null |
+    #		   cut -d' ' -f1)
+    ctcp_src="${url_in#*'%20'}"
+    ctcp_src="${ctcp_src%%'%20'*}"
+    #    fi
+    ########### codice del msg: 
+    # irc_code=$(get_irc_code "${ctcp_msg[*]}")
+    # case $irc_code in
+    # 	743|883|878|879|1124|1131)
+    # 	    irc_quit
+    # 	    ;;
+    # esac
+
+    if [ "${ctcp_msg[0]}" == 'DCC' ] &&
+	   [ -n "$ctcp_src" ]
+    then
+	if [ "${ctcp_msg[1]}" == 'ACCEPT' ]
+	then
+	    print_c 1 "CTCP<< PRIVMSG $ctcp_src :${ctcp_msg[*]}"
+	    set_resume
+	    
+	elif [ "${ctcp_msg[1]}" == 'SEND' ]
+	then
+	    print_c 1 "CTCP<< PRIVMSG $ctcp_src :${ctcp_msg[*]}"
+	    
+	    ctcp['file']="${ctcp_msg[2]}"
+	    ctcp['address']="${ctcp_msg[3]}"
+	    ctcp['port']="${ctcp_msg[4]}"
+	    ctcp['size']="${ctcp_msg[5]}"
+	    ctcp['offset']=$(size_file "${ctcp['file']}")
+	    [ -z "${ctcp['offset']}" ] && ctcp['offset']=0
+            unset ctcp_src
+            
+	    if ctcp['address']=$(check_ip_xfer "${ctcp['address']}") &&
+		    [[ "${ctcp['port']}" =~ ^[0-9]+$ ]]
+	    then
+		return 0
+	    fi
+	fi
+    fi
+    unset ctcp_src
+    return 1
+}
+
+function set_resume {
+    echo "$url_in" >>"$path_tmp"/irc_xdcc_resume
+}
+
+function get_resume {
+    if [ -f "$path_tmp"/irc_xdcc_resume ]
+    then
+	grep -P "^$url_in$" "$path_tmp"/irc_xdcc_resume &>/dev/null
+        return 0
+    else
+        return 1
+    fi
+}
+
+function init_resume {
+    if [ -f "$path_tmp"/irc_xdcc_resume ]
+    then
+	sed -r "/^${url_in//\//\\/}$/d" -i "$path_tmp"/irc_xdcc_resume
+    fi
+    unset resume_req
+}
+
+function check_dcc_resume {
+    if [ -f "${ctcp['file']}" ] &&
+	   [ -f "${ctcp['file']}.zdl" ] &&
+	   [ "$(cat "${ctcp['file']}.zdl")" == "$url_in" ] &&
+	   (( ctcp['offset'] < ctcp['size'] ))
+    then
+	irc_ctcp "PRIVMSG $ctcp_src" "DCC RESUME ${ctcp[file]} ${ctcp[port]} ${ctcp[offset]}" #&3
+	print_c 2 "CTCP>> PRIVMSG $ctcp_src :DCC RESUME ${ctcp[file]} ${ctcp[port]} ${ctcp[offset]}" 
+
+	for ((i=0; i<10; i++))
+	do		    
+	    if get_resume
+	    then
+		init_resume
+		return 0
+	    fi
+	    sleep 1
+	done
+    fi
+    return 1
+}
+
+function check_ip_xfer {
+    local ip_address="$1"
+
+    if [[ "$ip_address" =~ ^[0-9]+$ ]]
+    then
+	ip_address=$(dotless2ip $ip_address)
+	
+    elif [[ "$ip_address" =~ ^[0-9a-zA-Z:]+$ ]]
+    then
+	ip_address="[$ip_address]"
+    fi
+
+    if [ -n "$ip_address" ]
+    then
+	printf "$ip_address"
+	return 0
+
+    else
+	return 1
+    fi
+}
+
+function dcc_xfer {
+    local offset old_offset pid_cat
+    #unset resume
+
+    #check_dcc_resume && resume=true
+
+    if exec 4<>/dev/tcp/${ctcp['address']}/${ctcp['port']}
+    then
+echo "RESUME -> $resume"        
+	if [ -n "$resume" ]
+	then
+	    unset resume
+	    cat <&4 >>"$file_in" &
+	    pid_cat=$!
+
+	else
+	    cat <&4 >"$file_in" &
+	    pid_cat=$!
+	fi
+            echo "PID_CAT: $pid_cat"
+
+            
+	    
+	if [ -n "$pid_cat" ]
+	then
+	    print_c 1 "$(gettext "Connected to the address"): ${ctcp['address']}:${ctcp['port']}"
+            del_pid_url "$url_in" "irc-wait"
+            
+	    set_mode "daemon"
+	    echo "$url_in"  >"$file_in.zdl"
+	    add_pid_url "$pid_cat" "$url_in" "xfer-pids"
+
+            local timeout=0
+	    until [ -f "$path_tmp/${file_in}_stdout.tmp" ] ||
+                      (( timeout > 300 ))
+	    do
+                #echo tmp
+		sleep 0.1
+                ((timeout++))
+	    done
+	    sed -r "s,____PID_IN____,$pid_cat,g" -i "$path_tmp/${file_in}_stdout.tmp"
+
+	else
+            del_pid_url "$url_in" "irc-wait"
+	    irc_quit
+	fi
+        
+        this_mode=daemon
+        timeout=0
+	until [ -f "$file_in" ] ||
+                  (( timeout > 300 ))
+	do
+	    sleep 0.1
+            ((timeout++))
+	done
+
+        touch "$path_tmp/irc_done"
+#echo "while check_pid \"$pid_cat\" && [ \"$offset\" != \"${ctcp['size']}\" ]"
+	while check_pid "$pid_cat" && [ "$offset" != "${ctcp['size']}" ]
+	do
+	    [ -f "$path_tmp/irc-timeout" ] &&
+		! grep -P "^$url_in$" "$path_tmp/irc-timeout" &>/dev/null &&
+		echo "$url_in" >>"$path_tmp/irc-timeout"
+	    
+	    offset=$(size_file "$file_in")
+	    [ -z "$offset" ] && offset=0
+	    [ -z "$old_offset" ] && old_offset=$offset
+	    (( old_offset > offset )) && old_offset=$offset
+
+#printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${ctcp['size']}" 
+	    printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${ctcp['size']}" >>"$path_tmp/${file_in}_stdout.tmp"
+
+	    if [[ "$(head -n2 "$path_tmp/${file_in}_stdout.tmp" | tail -n1)" =~ ^XDCC ]] ||
+		   [[ "$file_in" =~ XDCC' ' ]]
+	    then		    
+		kill -9 "$pid_cat"
+		rm -f "$path_tmp/${file_in}_stdout".*
+	    fi
+	    old_offset=$offset
+
+	    ## (offset - old_offset /1024) KB/s --> sleep 1 (ogni secondo)
+	    sleep 1
+	done
+
+	if [ "$(size_file "$file_in")" == "${ctcp['size']}" ]
+	then
+	    rm -f "${file_in}.zdl"
+	    set_link - "$url_in"
+	fi
+
+	#irc_quit
+    else
+        touch "$path_tmp/irc_done" 
+    fi
+}
+
+# function join_xdcc_send {
+#     local line="$1"
+#     local msg
+
+#     if [[ "$line" =~ (MODE ${irc[nick]}) ]] &&
+# 	   [ -n "${irc[chan]}" ]
+#     then
+# 	print_c 1 "$line"
+
+# 	irc_send "JOIN #${irc[chan]}"
+# 	print_c 2 ">> JOIN #${irc[chan]}"
+#     fi
+
+#     if [[ "$line" =~ (JOIN :) ]] &&
+# 	   [ -n "${irc[msg]}" ]
+#     then
+# 	unset irc[chan]
+
+# 	print_c 1 "<< $line"
+
+# 	read -r to msg <<< "${irc[msg]}"
+
+# 	echo "$to $url_in" >>"$path_tmp"/irc_xdcc
+# 	#xdcc_cancel
+# 	#sleep 3
+
+#         irc_send "PRIVMSG $to" "$msg"
+# 	print_c 2 ">> PRIVMSG $to :$msg"
+
+# 	unset irc[msg]
+#     fi
+
+#     if [[ "$line" =~ 'Join #'([^\ ]+)' for !search' ]]
+#     then
+# 	chan="${BASH_REMATCH[1]}"
+#     	print_c 2 ">> JOIN #${chan}"
+#     	irc_send "JOIN #${chan}"
+#     fi
+# }
+
+# function check_chan {
+#     [ -n "${irc[chan]}" ] &&
+#         return 1 ||
+#             return 0
+# }
+
+function join_chan {
+    if [[ "$line" =~ (MODE ${irc['nick']}) ]] &&
+	   [ -n "${irc['chan']}" ]
+    then
+	print_c 1 "$line"
+	
+	irc_send "JOIN #${irc['chan']}"
+	print_c 2 ">> JOIN #${irc['chan']}"
+    fi
+
+    if [[ "$line" =~ (JOIN :) ]] &&
+	   [ -n "${irc['msg']}" ]
+    then
+	print_c 1 "<< $line"
+        # local to msg
+        # 	read -r to msg <<< "${irc[msg]}"
+        # 	echo "$to $url_in" >>"$path_tmp"/irc_xdcc
+
+        set_xdcc_key_value chan "${irc['chan']}"
+        cat "$xdcc_struct_file"
+
+        return 0
+	# #xdcc_cancel
+	# #sleep 3
+
+        # irc_send "PRIVMSG $to" "$msg"
+	# print_c 2 ">> PRIVMSG $to :$msg"
+	
+	# unset irc[msg]
+    fi
+
+    # if [[ "$line" =~ 'Join #'([^\ ]+)' for !search' ]]
+    # then
+    #     chan="${BASH_REMATCH[1]}"
+    # 	print_c 2 ">> JOIN #${chan}"
+    # 	irc_send "JOIN #${chan}"
+    # fi
+
+    return 1
+}
+
+# function send_xdcc {
+#     read -r to msg <<< "${irc[msg]}"
+#     echo "$to $url_in" >>"$path_tmp"/irc_xdcc
+
+#     irc_send "PRIVMSG $to" "$msg"
+#     print_c 2 ">> PRIVMSG $to :$msg"
+#     irc_send "zdl_irc_client$to"
+
+#     # check_line_regex "$line"
+#     # check_irc_command "$irc_cmd" "$txt"
+# }
+
+# function check_irc_command {
+#     local cmd="$1"
+#     local txt="$2"
+
+#     case "$cmd" in
+# 	PING)
+# 	    unset chunk
+# 	    if [ -n "$txt" ]
+# 	    then
+# 		chunk=":$txt"
+
+# 	    else
+# 		chunk="${irc[nick]}"
+# 	    fi
+# 	    ## print_c 2 "PONG $chunk"
+# 	    irc_send "PONG $chunk"
+# 	    ;;
+# 	NOTICE)
+# 	    check_notice "$txt"
+# 	    print_c 4 "<< $txt"
+# 	    ;;
+# 	PRIVMSG)
+# 	    if check_ctcp "$txt"
+# 	    then
+# 		file_in="${ctcp[file]}"
+# 		sanitize_file_in
+
+# 		url_in_file="/dev/tcp/${ctcp[address]}/${ctcp[port]}"
+# 		echo -e "$file_in\n$url_in_file" >"$test_xfer"
+
+# #echo "creato $test_xfer"
+# #cat "$test_xfer"
+
+# 		while [ ! -f "$path_tmp/${file_in}_stdout.tmp" ]
+# 		do
+#                     echo "file mancante: $path_tmp/${file_in}_stdout.tmp" 
+#                     sleep 0.1
+# 		done
+
+# 		dcc_xfer &
+# 		pid_xfer=$!			
+# 		add_pid_url "$pid_xfer" "$url_in" "xfer-pids"
+# 	    fi
+# 	    ;;
+#     esac
+# }
+
+function check_line_regex {
+    local line="$1"
+
+    # if [[ "$line" =~ zdl_irc_client(.+)' :.+' ]]
+    # then
+    #     ctcp_src="${BASH_REMATCH[1]}"
+    #     print_c 4 "$ctcp_src"
+    # fi
+    
+    if [[ "$line" =~ (You already requested that pack|The session limit for your IP .+ has been exceeded\.)  ]]
+    then
+        notice="${BASH_REMATCH[1]}"
+	_log 27
+        xdcc_cancel
+        irc_send QUIT
+        del_pid_url "$url_in" "irc-wait"
+        return 1
+    fi
+
+    if [[ "$line" =~ (XDCC REMOVE|XDCC CANCEL)  ]]
+    then
+        notice="$line"
+	_log 27
+        irc_send "PRIVMSG $to" "${msg%send*}cancel"
+        irc_send "PRIVMSG $to" "${msg%send*}remove"
+        del_pid_url "$url_in" "irc-wait"
+        return 1
+    fi
+    
+    if [[ "$line" =~ (${to//\|/\\\|}\ *:No such nick\/channel) ]]
+    then
+	notice="${BASH_REMATCH[1]}"
+	_log 27
+	irc_quit
+        return 1
+    fi
+
+    return 0
+}
+
+# function set_irc_fifo {
+#     local pid_irc="$1" pid_fifo="$2" fifo="$3"
+
+#     if check_pid "$pid_irc" &&
+#             check_pid "$pid_fifo" &&
+#             test -p "$fifo"
+#     then
+#         return 1
+#     else
+#         mkfifo "$fifo"
+#         echo "$pid_irc $pid_fifo $fifo" >> "$path_tmp/irc-conn"
+#         return 0
+#     fi
+# }
+
+# function check_irc_fifo {
+#     local fifo="$1" ret=0
+
+#     test -p "$fifo" || return 1
+
+#     if test -s "$path_tmp/irc-conn"
+#     then
+#         while read -a line
+#         do
+#             if ! ( check_pid "${line[0]}" &&
+#                        check_pid "${line[1]}" &&
+#                        [ "$fifo" == "${line[2]}" ] )
+#             then
+#                 kill -9 "${line[0]}" 2>/dev/null
+#                 kill -9 "${line[1]}" 2>/dev/null
+#                 rm -f "${line[2]}"
+#                 ret=1
+#             fi
+
+#         done < "$path_tmp/irc-conn"
+
+#         if [ "$ret" == 1 ]               
+#         then
+#             grep -vP " $fifo$"  "$path_tmp/irc-conn" >"$path_tmp/irc-conn.new"
+#         else
+#             mv "$path_tmp/irc-conn" "$path_tmp/irc-conn.new"
+#         fi
+#         awk '!($0 in a){a[$0]; print}' "$path_tmp/irc-conn.new" > "$path_tmp/irc-conn"
+
+#     else
+#         rm -f "$fifo"
+#         ret=1
+#     fi
+
+#     return $ret
+# }
+
+# function set_irc_queue {
+#     local u new
+#     url "$1" &&
+#         u="$1" ||
+#             u="$url_in"
+
+#     if test -s "$path_tmp/irc-queue"
+#     then
+#         new=$(grep -v "$u" "$path_tmp/irc-queue")
+#         echo "$new" >"$path_tmp/irc-queue"
+#     fi
+
+#     echo "$u" >>"$path_tmp/irc-queue"
+# }
+
+function add_xdcc_url_in {
+    local url_in="$1" counter
+    unset xdcc_index
+    source "$xdcc_struct_file"
+
+    count_xdcc counter
+    
+    for ((i=0; i<=$counter; i++))
+    do
+        if [ -z "${xdcc['url_in',$i]}" ]
+        then
+            xdcc_index=$i
+            break
+            
+        elif [ "${xdcc['url_in',$i]}" == "$url_in" ]
+        then
+            if [ -z "$xdcc_index" ]
+            then
+                xdcc_index=$i
+                unset xdcc['host',$i]
+                unset xdcc['chan',$i]
+                unset xdcc['slot',$i]
+                unset xdcc['pack',$i]
+                unset xdcc['pid',$i]
+                break
+                
+            else
+                unset xdcc['url_in',$i]
+                unset xdcc['host',$i]
+                unset xdcc['chan',$i]
+                unset xdcc['slot',$i]
+                unset xdcc['pack'$i]
+                unset xdcc['pid',$i]
+                break
+            fi
+        fi
+    done
+
+    if [ -z "$xdcc_index" ]
+    then
+        echo COUNTER=$counter
+        for ((i=0; i<=$counter; i++))
+        do
+            echo I=$i
+            if [ -z "${xdcc['url_in',$i]}" ]
+            then
+                xdcc_index=$i
+                break
+            fi
+        done
+    fi
+
+    set_xdcc_key_value url_in "$url_in"
+    
+    #### data structure in xdcc_struct:
+    # irc_pid
+    #
+    ## hash table:
+    # xdcc['url_in',$xdcc_index]
+    # xdcc['host',$xdcc_index]
+    # xdcc['chan',$xdcc_index]
+    # xdcc['slot',$xdcc_index]
+    # xdcc['pack',$xdcc_index]
+    # xdcc['pid',$xdcc_index]
+}
+
+
+function set_xdcc_key_value {
+    local key="$1" value="$2"
+
+    source "$xdcc_struct_file"
+    xdcc[$key,$xdcc_index]="$value"
+
+    set_xdcc_struct
+}
+
+function count_xdcc {    
+    declare -n ref="$1"
+    local c1=0 c2=0
+
+    source "$xdcc_struct_file"
+    
+    for ((i=0; i<${#xdcc[@]}; i++))
+    do
+        if [ -n "${xdcc['url_in',$i]}" ]
+        then
+            c1=$((c1 + c2 +1))
+            c2=0
+        else
+            ((c2++))            
+        fi
+    done
+
+    ref="$c1"
+}
+
+function set_xdcc_struct {
+    local counter
+    echo "irc_pid=$irc_pid" > "$xdcc_struct_file"
+    
+    count_xdcc counter
+    #counter="${#xdcc[@]}"
+    
+    for ((i=0; i<=$counter; i++))
+    do
+        echo "
+xdcc['url_in',$i]='${xdcc['url_in',$i]}'
+xdcc['host',$i]='${xdcc['host',$i]}'
+xdcc['chan',$i]='${xdcc['chan',$i]}'
+xdcc['slot',$i]='${xdcc['slot',$i]}' 
+xdcc['pack',$i]='${xdcc['pack',$i]}'
+xdcc['pid',$i]=${xdcc['pid',$i]}" >> "$xdcc_struct_file"
+    done
+}
+
+
+function irc_client {
+    local line user from txt irc_cmd #conn ppp
+    dev_host="/dev/tcp/${irc[host]}/${irc[port]}"
+    
+    if [ -s "$xdcc_struct_file" ] &&
+           check_pid "$irc_pid" 
+    then
+        echo 0
+        
+    else
+        echo 1
+
+        if exec 3<>"$dev_host"
+        then
+	    print_c 1 "host: ${irc[host]}\nchan: ${irc[chan]}\nmsg: ${irc[msg]}\nnick: ${irc[nick]}"
+            
+	    irc_send "NICK ${irc[nick]}"
+	    irc_send "USER ${irc[nick]} localhost ${irc[host]} :${irc[nick]}"
+
+            set_xdcc_key_value host "${irc['host']}"
+
+            echo 2
+            {
+	        while read line
+	        do
+                    get_mode
+
+	            line=$(tr -d "\001\015\012" <<< "${line//\*}")
+
+	            if [ "${line:0:1}" == ":" ]
+	            then
+		        from="${line%% *}"
+		        line="${line#* }"
+	            fi
+
+	            # from="${from:1}"
+	            # user=${from%%\!*}
+	            txt=$(trim "${line#*:}")
+	            irc_cmd="${line%% *}"
+                    #####################################################
+
+                    if join_chan 
+                    then
+                        if [ "${irc['slot']}" != "${xdcc['slot',$xdcc_index]}" ] ||
+                               [ "${irc['pack']} != ${xdcc['pack',$xdcc_index]}" ]
+                        then
+                            irc_send "PRIVMSG ${irc['slot']}" "xdcc send ${irc['pack']}"
+                            
+                            xdcc['slot',$xdcc_index]="${irc['slot']}"
+                            xdcc['pack',$xdcc_index]="${irc['pack']}"
+                            set_xdcc_struct
+                            
+                            print_c 2 ">> PRIVMSG ${irc['slot']} :xdcc send ${irc['pack']}"
+                        fi
+                    fi
+	            
+	            ## per ricerche e debug:
+                    print_c 4 "$line"
+
+	            # check_line_regex "$line"
+	            # check_irc_command "$irc_cmd" "$txt"
+
+                    case "$irc_cmd" in
+	                PING)
+	                    if [ -n "$txt" ]
+	                    then
+		                chunk=":$txt"
+                                
+	                    else
+		                chunk="${irc[nick]}"
+	                    fi
+	                    print_c 2 "PONG $chunk"
+	                    irc_send "PONG $chunk"
+	                    ;;
+
+                        ERROR)
+                            print_c 3 "$line"
+                            touch "$path_tmp"/irc_done "$test_xfer"
+                            break
+                            ;;
+                        
+	                NOTICE)
+	                    check_notice "$txt"
+	                    print_c 4 "<< $txt"
+	                    ;;
+                        
+	                PRIVMSG)
+	                    if check_ctcp "$txt"
+	                    then
+                                # if check_dcc_resume
+                                # then
+                                #     echo RESUME=true                                    
+                                #     resume=true
+                                #     continue
+                                # fi
+
+                                if [ -f "${ctcp['file']}" ] &&
+	                               [ -f "${ctcp['file']}.zdl" ] &&
+	                               [ "$(cat "${ctcp['file']}.zdl")" == "$url_in" ] &&
+	                               (( ctcp['offset'] < ctcp['size'] ))
+                                then
+                                    echo dentro-resume
+                                    if [ -z "$resume_req" ]
+                                    then
+	                                irc_ctcp "PRIVMSG $ctcp_src" "DCC RESUME ${ctcp[file]} ${ctcp[port]} ${ctcp[offset]}" #&3
+	                                print_c 2 "CTCP>> PRIVMSG $ctcp_src :DCC RESUME ${ctcp[file]} ${ctcp[port]} ${ctcp[offset]}" 
+                                        resume_req=true
+                      #                  continue
+                                        
+                                    else
+	                                # for ((i=0; i<10; i++))
+	                                # do		    
+	                                    if get_resume
+	                                    then
+		                                init_resume
+                                                resume=true
+                                                echo loop-resume
+	                                    fi
+	                                    sleep 1                                            
+	                                #one
+
+                       #                 [ "$resume" == true ] || continue
+                                    fi
+                                fi
+                                
+		                file_in="${ctcp[file]}"
+		                sanitize_file_in
+		                
+		                url_in_file="/dev/tcp/${ctcp[address]}/${ctcp[port]}"
+		                echo -e "$file_in\n$url_in_file" >"$test_xfer"
+                                
+                                # echo "creato $test_xfer"
+                                # cat "$test_xfer"
+		                
+		                until [ -f "$path_tmp/${file_in}_stdout.tmp" ]
+		                do
+                                    #echo "file mancante: $path_tmp/${file_in}_stdout.tmp" 
+                                    sleep 0.1
+		                done
+
+		                dcc_xfer &
+		                xdcc['pid',$xdcc_index]=$!
+
+		                add_pid_url "${xdcc['pid',$xdcc_index]}" "$url_in" "xfer-pids"
+	                    fi
+	                    ;;
+                    esac
+
+                    ############################################################
+                done <&3
+                
+                irc_send "QUIT"
+                exec 3>&-
+            } &
+	    local irc_pid_new=$!
+            disown $irc_pid_new
+
+            source "$xdcc_struct_file"
+            irc_pid=$irc_pid_new
+            set_xdcc_struct
+            
+            until check_pid "$irc_pid"
+            do sleep 0.1
+            done
+            
+	    add_pid_url "$irc_pid" "$url_in" "irc-loop-pids"
+	    echo "$irc_pid" >>"$path_tmp/external-dl_pids.txt"
+            add_pid_url "$PID" "$url_in" "irc-wait"
+
+            while check_pid "$irc_pid"
+            do sleep 1
+            done
+
+            irc_send "QUIT"
+            exec 3>&-
+            
+	    return 0
+            
+        else
+            touch "$path_tmp"/irc_done
+            return 1
+        fi
+    fi
+}
+
+
+
+################ main:
+PID=$$
+
+set_mode "stdout"
+this_tty="$7"
+
+#errors=$(grep -P '(743|883|878|879|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' $path_usr/irc/* -h) # |cut -d'"' -f2 |cut -d'%' -f1)
+
+errors_again=$(grep -P '(743|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' $path_usr/irc/* -h)
+errors_stop=$(grep -P '(878|879)' $path_usr/irc/* -h)
+
+declare -A ctcp
+declare -A xdcc
+declare -A irc
+irc=(
+    ['host']="$1"
+    ['port']="$2"
+    ['chan']="$3"
+    ['msg']="$4"
+    ['nick']="$5"
+    ['slot']=$(cut -f2 -d' ' <<< "${4//%20/ }")
+    ['pack']=$(cut -f5 -d' ' <<< "${4//%20/ }")
+)
+
+url_in="$6"
+test_xfer="$8"
+
+
+#add_pid_url "$PID" "$url_in" "irc-pids"
+start_timeout
+init_resume
+#add_pid_url "$PID" "$url_in" "irc-client-pid"
+
+xdcc_struct_file="$path_tmp/${irc[host]//\/}-${irc[chan]//\/}"
+touch "$xdcc_struct_file"
+
+add_xdcc_url_in "$url_in"
+set_xdcc_struct
+
+irc_client ||
+    {
+        echo "irc_client error"
+	touch "$test_xfer"
+
+	_log 26
+	exec 3>&-
+
+	if [ -d /cygdrive ]
+	then
+	    kill -9 $(children_pids $PID)
+	    
+	else
+	    kill -9 $(ps -o pid --no-headers --ppid $PID)
+	fi
+    }
+
