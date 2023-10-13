@@ -93,11 +93,11 @@ function start_timeout {
 
 function set_mode {
     this_mode="$1"
-    printf "%s $s\n" "$this_mode" "$url" >>"$path_tmp/irc_this_mode"
+    printf "%s %s\n" "$this_mode" "$url" >>"$path_tmp/irc_this_mode"
 }
 
 function get_mode {
-    this_mode=$(grep "$url$" "$path_tmp/irc_this_mode" | cut -d' ' -f1)
+    this_mode=$(grep "$url" "$path_tmp/irc_this_mode" | cut -d' ' -f1 | tail -n1)
     [ -z "$this_mode" ] && this_mode=stdout
 }
 
@@ -309,7 +309,7 @@ function dcc_xfer {
 	    print_c 1 "$(gettext "Connected to the address"): ${xdcc['address',$xdcc_index]}:${xdcc['port',$xdcc_index]}"
             del_pid_url "$url" "irc-wait"
             
-	    set_mode "daemon"
+	    #set_mode "daemon"
 	    echo "$url"  >"$file_xfer.zdl"
 	    add_pid_url "$pid_cat" "$url" "xfer-pids"
             set_xdcc_key_value pid_cat "$pid_cat"
@@ -397,7 +397,7 @@ function join_chan {
 
     if [ "$in_chan" == true ] || [[ "$line" =~ (JOIN :) ]] #&& [ -n "${irc['msg']}" ] )
     then
-	print_c 1 "<< $line"
+        [[ "$line" =~ ^\: ]] ||	print_c 1 "<< $line"
         in_chan=true
 
         return 0
@@ -623,8 +623,12 @@ function irc_client {
                 
 	        while read line
 	        do
+                    #echo "line: $line"
                     ## ZDL cli mode output:
                     get_mode
+	            ## per ricerche e debug:
+                    # [[ "$line" =~ ^(372|333|353) ]] ||
+                         print_c 4 "$line"
 
                     ## join chan ---> send xdcc:                    
                     if join_chan #|| [ "$in_chan" == true ]
@@ -671,12 +675,6 @@ function irc_client {
 	            # user=${from%%\!*}
 	            txt=$(trim "${line#*:}")
 	            irc_cmd="${line%% *}"
-
-
-                    
-	            ## per ricerche e debug:
-                    # [[ "$line" =~ ^(372|333|353) ]] ||
-                         print_c 4 "$line"
 
                     ## interaction with the input $line
                     
@@ -790,8 +788,6 @@ function irc_client {
 ################ 
 PID=$$
 
-set_mode "stdout"
-
 ## input args:
 url="$1"
 test_xfer="$path_tmp/$(create_hash "$url")"
@@ -814,7 +810,7 @@ then
 	['host']="${BASH_REMATCH[1]}"
 	['port']=6667
 	['chan']="${BASH_REMATCH[2]}"
-	['nick']=$(obfuscate_user) #$(obfuscate "$USER")
+	['nick']=$(obfuscate_user)$(date +%s) #$(obfuscate "$USER")
         ['slot']=$(cut -f2 -d' ' <<< "${url//%20/ }")
         ['pack']=$(cut -f5 -d' ' <<< "${url//%20/ }")
     )
@@ -827,6 +823,7 @@ then
 fi
 
 ## MAIN:
+set_mode "stdout"
 
 #add_pid_url "$PID" "$url" "irc-pids"
 start_timeout
