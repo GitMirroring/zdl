@@ -417,7 +417,7 @@ function join_chan {
 function check_line_regex {
     local line="$1"
 
-    if [[ "$line" =~ (Hai già richiesto questo pack|You already requested that pack|The session limit for your IP .+ has been exceeded\.)  ]]
+    if [[ "$line" =~ (Hai gi.+ richiesto questo pack|You already requested that pack|The session limit for your IP .+ has been exceeded\.)  ]]
     then
         notice="${BASH_REMATCH[1]}"
 	_log 27
