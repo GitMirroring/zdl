@@ -587,6 +587,8 @@ function interactive {
                                 if [[ "${url_out[$i]}" =~ (xdcc send) ]]
                                 then
 				    kill ${pid_out[$i]} &>/dev/null
+                                    rm -f "$path_tmp"/irc_file_url
+                                    touch "$path_tmp"/irc_done
                                 else
                                     kill -9 ${pid_out[$i]} &>/dev/null
                                 fi
@@ -606,7 +608,14 @@ function interactive {
 				# kill_url "${url_out[$i]}" 'xfer-pids'
 				# kill_url "${url_out[$i]}" 'irc-pids'
 				
-				kill -9 ${pid_out[$i]} &>/dev/null
+                                if [[ "${url_out[$i]}" =~ (xdcc send) ]]
+                                then
+				    kill ${pid_out[$i]} &>/dev/null
+                                    rm -f "$path_tmp"/irc_file_url
+                                    touch "$path_tmp"/irc_done
+                                else
+                                    kill -9 ${pid_out[$i]} &>/dev/null
+                                fi
 				rm -rf "${file_out[$i]}"   \
 				   "${file_out[$i]}.st"    \
 				   "${file_out[$i]}.zdl"   \

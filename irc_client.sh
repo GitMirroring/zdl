@@ -629,6 +629,9 @@ function irc_client {
     
     if [ "$xdcc_proc" == true ]
     then
+        exec 3<>"$dev_host" &&
+            irc_send QUIT
+        
         if exec 3<>"$dev_host"
         then
             start_timeout
