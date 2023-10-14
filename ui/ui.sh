@@ -572,7 +572,9 @@ function interactive {
 		    print_c 2 "$(gettext "Select what to do: ( r | E | p | * ):")"
 
 		    input_text input
-		    
+
+                    local irc_address
+                    
 		    for ((i=0; i<${#inputs[*]}; i++))
 		    do
 			[[ ! "${inputs[$i]}" =~ ^[0-9]+$ ]] && unset inputs[i]
@@ -584,21 +586,13 @@ function interactive {
 			    do
 				#kill_url "${url_out[$i]}" 'xfer-pids'
 				#kill_url "${url_out[$i]}" 'irc-pids'
-                                if [[ "${url_out[$i]}" =~ (xdcc send) ]]
+                                if [[ "${url_out[$i]}" =~ (xdcc%20send) ]]
                                 then
-				    kill ${pid_out[$i]} &>/dev/null
-                                    rm -f "$path_tmp"/irc_file_url
-                                    touch "$path_tmp"/irc_done
+                                    cancel_xdcc_url "${url_out[$i]}"
+
                                 else
                                     kill -9 ${pid_out[$i]} &>/dev/null
                                 fi
-				# if [ ! -f "${file_out[$i]}.st" ] &&
-				#        [ ! -f "${file_out[$i]}.aria2" ] &&
-				#        [ ! -f "${file_out[$i]}.zdl" ] &&
-				#        [ "${percent_out[i]}" != 100 ]
-				# then
-				#     rm -rf "${file_out[$i]}" 
-				# fi
 			    done
 			    ;;
 
@@ -608,11 +602,10 @@ function interactive {
 				# kill_url "${url_out[$i]}" 'xfer-pids'
 				# kill_url "${url_out[$i]}" 'irc-pids'
 				
-                                if [[ "${url_out[$i]}" =~ (xdcc send) ]]
+                                if [[ "${url_out[$i]}" =~ (xdcc%20send) ]]
                                 then
-				    kill ${pid_out[$i]} &>/dev/null
-                                    rm -f "$path_tmp"/irc_file_url
-                                    touch "$path_tmp"/irc_done
+                                    cancel_xdcc_url "${url_out[$i]}"
+
                                 else
                                     kill -9 ${pid_out[$i]} &>/dev/null
                                 fi

@@ -1707,3 +1707,10 @@ function clear_paths4server {
 	fi
     fi
 }
+
+function cancel_xdcc_url {
+    if url "$1"
+    then
+        echo "$1" >> "$path_tmp"/xdcc-remove
+    fi
+}          

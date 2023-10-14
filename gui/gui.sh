@@ -620,9 +620,15 @@ function display_download_manager_gui {
 		2)
 		    if (( ${#res[@]}>0 ))
 		    then
-			for ((i=5; i<${#res[@]}; i=i+6))
+			for ((i=0; i<${#res[@]}; i=i+6))
 			do
-		    	    kill -9 "${res[i]}" &>/dev/null
+                            if [[ "${res[$i]}" =~ (xdcc%20send) ]]
+                            then
+                                cancel_xdcc_url "${res[$i]}"
+                                
+                            else
+		    	        kill -9 "${res[i+5]}" &>/dev/null
+                            fi
 			done
 		    fi
 		    ;;
@@ -633,9 +639,16 @@ function display_download_manager_gui {
 			do
 			    set_link - "${res[i]}"
 
-			    [[ "${res[i+5]}" =~ ^([0-9]+)$ ]] &&
-			    	kill -9 "${res[i+5]}" &>/dev/null
+                            if [[ "${res[$i]}" =~ (xdcc%20send) ]]
+                            then
+                                cancel_xdcc_url "${res[$i]}"
+                                
+                            else
 
+			        [[ "${res[i+5]}" =~ ^([0-9]+)$ ]] &&
+			    	    kill -9 "${res[i+5]}" &>/dev/null
+                            fi
+                            
 			    [ "${res[i+2]}" != '-' ] &&
 			    	rm -f "${res[i+2]}" \
 				   "${res[i+2]}.st" \

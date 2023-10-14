@@ -594,6 +594,7 @@ function search_xdcc {
                sed -r 's|<tr>|\n|g' |
                grep data-c)
 
+    local row    
     while read row
     do
 	unset server channel bot slot gets name length
@@ -697,7 +698,7 @@ function stop_console_webui {
 }
 
 function run_cmd {
-    local line=( "$@" )
+    declare -a line=( "$@" )
     local file link pid path
     unset file_output
     
@@ -1351,9 +1352,11 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 		link="$(urldecode "${line[i]}")"
 
-		if url "$link"
+		if url "$link" ||
+                        url "${line[$i]}"
 		then
 		    set_link - "$link"
+                    set_link - "${line[$i]}"
 		    remove_livestream_link_start "$link"
 		    remove_livestream_link_time "$link"
 		    unset json_flag
@@ -1362,10 +1365,16 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 		    for ((j=0; j<${#pid_out[@]}; j++))
 		    do
-			if [ "${url_out[j]}" == "$link" ]
+			if [ "${url_out[j]}" == "$link" ] ||
+                               [ "${url_out[j]}" == "${line[$i]}" ]
 			then
-			    kill -9 "${pid_out[j]}" &>/dev/null
-
+                            if [[ "${line[$i]}" =~ (xdcc%20send) ]]
+                            then
+                                cancel_xdcc_url "${line[$i]}"
+                                
+                            else
+			        kill -9 "${pid_out[j]}" &>/dev/null
+                            fi
 			    rm -rf "${file_out[j]}"        \
 			       "${file_out[j]}".st         \
 			       "${file_out[j]}".aria2      \
@@ -1394,18 +1403,25 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 
 		link="$(urldecode "${line[i]}")"
 
-		if url "$link"
+		if url "$link" ||
+                        url "${line[$i]}"
 		then
 		    unset json_flag
 		    data_stdout
 		    json_flag=true
-
 		    for ((j=0; j<${#pid_out[@]}; j++))
 		    do
-			if [ "${url_out[j]}" == "$link" ]
+			if [ "${url_out[j]}" == "$link" ] ||
+                               [ "${url_out[j]}" == "${line[$i]}" ]
 			then
-			    kill -9 "${pid_out[j]}" &>/dev/null
-			fi
+                            if [[ "${line[$i]}" =~ (xdcc%20send) ]]
+                            then
+                                cancel_xdcc_url "${line[$i]}"
+                                
+                            else
+			        kill -9 "${pid_out[j]}" &>/dev/null
+                            fi
+		         fi
 		    done
 		fi
 	    done
@@ -1911,9 +1927,9 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 }
 
 function run_data {
-    local data=( ${1//'&'/ } )
+    declare -a data=( ${1//'&'/ } )
     local name value last
-    local line_cmd=()
+    declare -a line_cmd=()
 
     for ((i=0; i<${#data[*]}; i++))
     do
