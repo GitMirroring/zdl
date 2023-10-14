@@ -252,23 +252,31 @@ function download {
 	    unset irc ctcp
 	    declare -A ctcp
 
-            local test_xfer="$path_tmp/$(create_hash "$url_in")" 
-	    rm -f "$test_xfer"
+            local test_xfer="$path_tmp"/irc_file_url #$(create_hash "$url_in")" 
+	    > "$test_xfer"
 
 	    stdbuf -i0 -o0 -e0 \
 		   $path_usr/irc_client.sh "$url_in" "$this_tty" &
 	    pid_in=$!
-	    echo "$pid_in" >>"$path_tmp/external-dl_pids.txt"
+	    echo "$pid_in" >>"$path_tmp/external-dl_pids.txt"            
 
-	    until [ -f "$test_xfer" ]
+	    while [ -f "$test_xfer" ]
 	    do
+	        file_in=$(head -n1 "$test_xfer")
+	        url_in_file=$(tail -n1 "$test_xfer")
+
+                if [[ "$url_in_file" =~ \/dev\/tcp ]] &&
+                        [ -n "$file_in" ]
+                then
+	            rm -f "$test_xfer"
+                fi
+                #echo loop-0
                 sleep 0.1
 	    done
 
 	    downwait=10
-	    file_in=$(head -n1 "$test_xfer")
-	    url_in_file=$(tail -n1 "$test_xfer")
 
+            
 	    echo -e "____PID_IN____
 $url_in
 DCC_Xfer
@@ -278,6 +286,7 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 
             until [ -f "$path_tmp/irc_done" ]
             do
+                #echo loop-1
                 sleep 0.1
             done
             rm -rf "$path_tmp/irc_done"

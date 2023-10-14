@@ -63,27 +63,39 @@ function start_timeout {
 	max_seconds=120
     fi
     
-    
     touch "$path_tmp/irc-timeout"
     sed -r "/^${url//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
     
-    for i in {0..12}
+    for i in {0..18}
     do
 	now=$(date +%s)
 	diff_now=$(( now - start ))
 
-	if grep -P "^$url$" "$path_tmp/irc-timeout" &>/dev/null
-	then                 
+	if grep -q "$url" "$path_tmp/irc-timeout"
+	then
 	    exit
 
 	elif (( diff_now >= $max_seconds ))
-	then            
-            touch "$test_xfer" "$path_tmp"/irc_done
+	then
+            print_c 3 "irc_client timeout: ${url//'%20'/' '}"
+
+            irc_send QUIT
+            exec 3>&-
+            
+            rm -rf "$test_xfer"
+            touch "$path_tmp"/irc_done
 	    sed -r "/^.+ ${url//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
-	    kill_url "$url" 'xfer-pids'
-	    kill_url "$url" 'irc-pids'
+	    #kill_url "$url" 'xfer-pids'
+	    #kill_url "$url" 'irc-pids'
+
+            
+            for test_pid in get_pid_url "${url//\//\\/}" "irc-loop-pids"
+            do
+                [[ "$test_pid" =~ ^[0-9]+$ ]] && kill -9 $test_pid
+            done
 
             del_pid_url "$url" "irc-wait"
+            kill -9 $PID
 	    exit
 	fi
 	
@@ -93,23 +105,24 @@ function start_timeout {
 
 function set_mode {
     this_mode="$1"
-    printf "%s %s\n" "$this_mode" "$url" >>"$path_tmp/irc_this_mode"
+    printf "%s %s\n" "$this_mode" "${xdcc['url',$xdcc_index]}" >>"$path_tmp/irc_this_mode"
 }
 
 function get_mode {
-    this_mode=$(grep "$url" "$path_tmp/irc_this_mode" | cut -d' ' -f1 | tail -n1)
+    this_mode=$(grep "${xdcc['url',$xdcc_index]}" "$path_tmp/irc_this_mode" | cut -d' ' -f1 | tail -n1)
     [ -z "$this_mode" ] && this_mode=stdout
 }
 
 function xdcc_cancel {
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "XDCC CANCEL"
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "XDCC REMOVE"
-    kill_url "$url" "xfer-pids"
+    kill_url "${xdcc['url',$xdcc_index]}" "xfer-pids"
 }
 
 function irc_quit {
     local pid_list
-    touch "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")" "$path_tmp"/irc_done "$test_xfer"
+    touch "$path_tmp"/irc_done
+    rm -rf "$test_xfer"
     
     [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] &&
 	kill $(head -n1 "$path_tmp/${file_xfer}_stdout.tmp") 2>/dev/null
@@ -223,13 +236,13 @@ function check_ctcp {
 }
 
 function set_resume {
-    echo "$url" >>"$path_tmp"/irc_xdcc_resume
+    echo "${xdcc['url',$xdcc_index]}" >>"$path_tmp"/irc_xdcc_resume
 }
 
 function get_resume {
     if [ -f "$path_tmp"/irc_xdcc_resume ]
     then
-	grep -P "^$url$" "$path_tmp"/irc_xdcc_resume &>/dev/null
+	grep -P "^${xdcc['url',$xdcc_index]}$" "$path_tmp"/irc_xdcc_resume &>/dev/null
         return 0
     else
         return 1
@@ -247,7 +260,7 @@ function init_resume {
 function check_dcc_resume {
     if [ -f "${xdcc['file',$xdcc_index]}" ] &&
 	   [ -f "${xdcc['file',$xdcc_index]}.zdl" ] &&
-	   [ "$(cat "${xdcc['file',$xdcc_index]}.zdl")" == "$url" ] &&
+	   [ "$(cat "${xdcc['file',$xdcc_index]}.zdl")" == "${xdcc['url',$xdcc_index]}" ] &&
 	   (( xdcc['offset',$xdcc_index] < xdcc['size',$xdcc_index] ))
     then
 	irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC RESUME ${xdcc['file',$xdcc_index]} ${xdcc['port',$xdcc_index]} ${xdcc['offset',$xdcc_index]}"
@@ -307,16 +320,15 @@ function dcc_xfer {
         if [ -n "$pid_cat" ]
 	then
 	    print_c 1 "$(gettext "Connected to the address"): ${xdcc['address',$xdcc_index]}:${xdcc['port',$xdcc_index]}"
-            del_pid_url "$url" "irc-wait"
+            del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
             
 	    #set_mode "daemon"
-	    echo "$url"  >"$file_xfer.zdl"
-	    add_pid_url "$pid_cat" "$url" "xfer-pids"
+	    echo "${xdcc['url',$xdcc_index]}"  >"$file_xfer.zdl"
+	    add_pid_url "$pid_cat" "${xdcc['url',$xdcc_index]}" "xfer-pids"
             set_xdcc_key_value pid_cat "$pid_cat"
             
             local timeout=0
-	    until ( [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] && grep -q ____PID_IN____ "$xfer_tmp" ) ||
-                      (( timeout > 300 ))
+	    until ( [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] && grep -q ____PID_IN____ "$xfer_tmp" ) #||                      (( timeout > 300 ))
             do
                 sleep 0.1
                 ((timeout++))
@@ -324,14 +336,13 @@ function dcc_xfer {
             sed -r "s,____PID_IN____,$pid_cat,g" -i "$xfer_tmp"
 
         else
-            del_pid_url "$url" "irc-wait"
+            del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
             irc_quit
         fi
 
         this_mode=daemon
         timeout=0
-        until [ -f "$file_xfer" ] ||
-                  (( timeout > 300 ))
+        until [ -f "$file_xfer" ] #||                  (( timeout > 300 ))
         do
             sleep 0.1
             ((timeout++))
@@ -342,9 +353,9 @@ function dcc_xfer {
         while check_pid "$pid_cat" && [ "$offset" != "${xdcc['size',$xdcc_index]}" ]
         do
             [ -f "$path_tmp/irc-timeout" ] &&
-	        ! grep -P "^$url$" "$path_tmp/irc-timeout" &>/dev/null &&
-	        echo "$url" >>"$path_tmp/irc-timeout"
-            
+	        ! grep -q "${xdcc['url',$xdcc_index]}" "$path_tmp/irc-timeout" &&
+	        echo "${xdcc['url',$xdcc_index]}" >>"$path_tmp/irc-timeout"
+
             offset=$(size_file "$file_xfer")
             [ -z "$offset" ] && offset=0
             [ -z "$old_offset" ] && old_offset=$offset
@@ -368,7 +379,7 @@ function dcc_xfer {
         then
             kill $pid_cat
             rm -f "${file_xfer}.zdl"
-            set_link - "$url"
+            set_link - "${xdcc['url',$xdcc_index]}"
             del_xdcc_url "${xdcc['url',$xdcc_index]}" 
         fi
         exec 4>&-        
@@ -423,7 +434,7 @@ function check_line_regex {
 	_log 27
         xdcc_cancel
         irc_send QUIT
-        del_pid_url "$url" "irc-wait"
+        del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
         return 1
     fi
 
@@ -433,7 +444,7 @@ function check_line_regex {
 	_log 27
         irc_send "PRIVMSG $to" "${msg%send*}cancel"
         irc_send "PRIVMSG $to" "${msg%send*}remove"
-        del_pid_url "$url" "irc-wait"
+        del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
         return 1
     fi
     
@@ -620,6 +631,8 @@ function irc_client {
     then
         if exec 3<>"$dev_host"
         then
+            start_timeout
+            
             ## /connect <host>            
 	    irc_send "NICK ${irc['nick']}"
 	    irc_send "USER ${irc['nick']} localhost ${irc['host']} :${irc['nick']}"
@@ -704,8 +717,9 @@ function irc_client {
 
                         ERROR | QUIT)
                             print_c 3 "$line"
-                            touch "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")"
+                            rm -rf "$test_xfer"
                             set_done
+                            exec 3>&-
                             break
                             ;;
                         
@@ -719,7 +733,7 @@ function irc_client {
 	                    then
                                 if [ -f "${xdcc['file',$xdcc_index]}" ] &&
 	                               [ -f "${xdcc['file',$xdcc_index]}.zdl" ] &&
-	                               [ "$(cat "${xdcc['file',$xdcc_index]}.zdl")" == "$url" ] &&
+	                               [ "$(cat "${xdcc['file',$xdcc_index]}.zdl")" == "${xdcc['url',$xdcc_index]}" ] &&
 	                               (( xdcc['offset',$xdcc_index] < xdcc['size',$xdcc_index] ))
                                 then
 	                            irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC RESUME ${xdcc['file',$xdcc_index]} ${xdcc['port',$xdcc_index]} ${xdcc['offset',$xdcc_index]}" 
@@ -731,7 +745,8 @@ function irc_client {
 		                sanitize_file_xfer
                              
 		                url_xfer="/dev/tcp/${xdcc['address',$xdcc_index]}/${xdcc['port',$xdcc_index]}"
-		                echo -e "$file_xfer\n$url_xfer" > "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")"
+		                #echo -e "$file_xfer\n$url_xfer" > "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")"
+                                echo -e "$file_xfer\n$url_xfer" > "$test_xfer"
 
                                 xfer_tmp="$path_tmp/${file_xfer}_stdout.tmp"
 		                until [ -f "$xfer_tmp" ]
@@ -741,11 +756,14 @@ function irc_client {
 
 		                dcc_xfer &
 		                set_xdcc_key_value pid_xfer $!
-
+# echo REQ
+# cat  "$path_tmp"/req_irc
+# echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# grep -v "${xdcc['url',$xdcc_index]}" "$path_tmp"/req_irc
                                 grep -v "${xdcc['url',$xdcc_index]}" "$path_tmp"/req_irc >"$path_tmp"/req_irc.new
                                 mv "$path_tmp"/req_irc.new "$path_tmp"/req_irc
                                 
-		                add_pid_url "${xdcc['pid_xfer',$xdcc_index]}" "$url" "xfer-pids"
+		                add_pid_url "${xdcc['pid_xfer',$xdcc_index]}" "${xdcc['url',$xdcc_index]}" "xfer-pids"
                                 sleep 2
 	                    fi
 	                    ;;
@@ -771,10 +789,10 @@ function irc_client {
                 rm -f "$path_tmp"/_stdout.tmp
                 sleep  1
             done
-            
-	    add_pid_url "$irc_pid" "$url" "irc-loop-pids"
+
+	    add_pid_url "$irc_pid" "${xdcc['url',$xdcc_index]}" "irc-loop-pids"
 	    echo "$irc_pid" >>"$path_tmp/external-dl_pids.txt"
-            add_pid_url "$PID" "$url" "irc-wait"
+            add_pid_url "$PID" "${xdcc['url',$xdcc_index]}" "irc-wait"
 
             while check_pid "$irc_pid"
             do sleep 1
@@ -802,7 +820,7 @@ PID=$$
 
 ## input args:
 url="$1"
-test_xfer="$path_tmp/$(create_hash "$url")"
+test_xfer="$path_tmp"/irc_file_url #$(create_hash "$url")"
 this_tty="$2"
 
 ## error codes:
@@ -834,16 +852,17 @@ then
     irc['port']="${BASH_REMATCH[2]}"
 fi
 
+
 ## MAIN:
 set_mode "stdout"
 
 #add_pid_url "$PID" "$url" "irc-pids"
-start_timeout
+
 init_resume
 #add_pid_url "$PID" "$url" "irc-client-pid"
 
 keys=( url host chan slot pack pid_xfer pid_cat sent file address port size offset )
-xdcc_struct_file="/tmp/${irc[host]//\/}-${irc[chan]//\/}"
+xdcc_struct_file="/tmp/${irc[host]//\/}--zdl--${irc[chan]//\/}"
 if [ -f "$xdcc_struct_file" ]
 then
     source "$xdcc_struct_file"
@@ -861,6 +880,15 @@ then
     set_xdcc_key_value url "$url"
     
 else
+    for F in /tmp/${irc['host']}--zdl--*
+    do
+        test_pid=$(head -n1 "$F" | cut -d'=' -f2)
+        if check_pid "$test_pid"
+        then
+            irc['nick']+=$(date +%s)
+            break
+        fi
+    done
     add_xdcc_url "$url"
     set_xdcc_struct
 fi
@@ -877,7 +905,8 @@ echo "$url" >> "$path_tmp"/req_irc
 irc_client ||
     {
         echo "irc_client error"
-	touch "$test_xfer" "$path_tmp"/irc_done
+	touch "$path_tmp"/irc_done
+        rm -rf "$test_xfer" 
 
 	_log 26
 	exec 3>&-
