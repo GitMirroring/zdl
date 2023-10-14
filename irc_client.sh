@@ -629,8 +629,10 @@ function irc_client {
     
     if [ "$xdcc_proc" == true ]
     then
-        exec 3<>"$dev_host" &&
+        exec 3<>"$dev_host" && {
             irc_send QUIT
+            3>&-
+        }
         
         if exec 3<>"$dev_host"
         then
@@ -888,7 +890,7 @@ else
         test_pid=$(head -n1 "$F" | cut -d'=' -f2)
         if check_pid "$test_pid"
         then
-            irc['nick']+=$(date +%s)
+            irc['nick']+="$(create_hash "${irc[chan]}")" #$(date +%s)
             break
         fi
     done
