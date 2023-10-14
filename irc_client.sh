@@ -629,10 +629,10 @@ function irc_client {
     
     if [ "$xdcc_proc" == true ]
     then
-        exec 3<>"$dev_host" && {
-            irc_send QUIT
-            3>&-
-        }
+        # exec 3<>"$dev_host" && {
+        #     irc_send QUIT
+        #     3>&-
+        # }
         
         if exec 3<>"$dev_host"
         then
@@ -720,13 +720,13 @@ function irc_client {
 	                    print_c 1 ">> PONG $chunk"
 	                    ;;
 
-                        ERROR | QUIT)
-                            print_c 3 "$line"
-                            rm -rf "$test_xfer"
-                            set_done
-                            exec 3>&-
-                            break
-                            ;;
+                        # ERROR | QUIT)
+                        #     print_c 3 "$line"
+                        #     rm -rf "$test_xfer"
+                        #     set_done
+                        #     exec 3>&-
+                        #     break
+                        #     ;;
                         
 	                NOTICE)
 	                    check_notice "$line"
