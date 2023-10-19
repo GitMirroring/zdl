@@ -853,7 +853,7 @@ function irc_xdcc_send {
     
     ##/MSG <slot> XDCC SEND <#pack>    
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
-
+    
     while :
     do
         get_mode
@@ -869,13 +869,13 @@ function irc_xdcc_send {
                [ -n "${xdcc['pid_cat',$xdcc_index]}" ] && check_pid "${xdcc['pid_cat',$xdcc_index]}" ||
                    [ "${xdcc['sent',$xdcc_index]}" == true ] ||
                    (( ( $(date +%s) - timeout_start ) > 190 )) ||
-                   ! check_pid "$(< "$path_tmp/.pid.zdl")"
+                   ! check_instance_prog 
         then
             exec 6>&-
             rm -f "$xdcc_host_url_fifo"
             break
         fi
-        
+
         if [ -z "${irc_line// }" ]
         then
             unset irc_line
@@ -901,12 +901,12 @@ function irc_xdcc_send {
         then
             local chan match
             notice="${irc['line']}"
-            notice2="${notice%%:*}"
-            notice2="${notice2%%','*}"
-            notice2="${notice2%%[0-9]*}"
-            notice2="${notice2%%SEND*}"
+            notice2=${notice%%:*}
+            notice2=${notice2%%','*}
+            notice2=${notice2%%[0-9]*}
+            notice2=${notice2%%SEND*}
             notice2=$(trim "$notice2")
-            
+
             if [[ "${irc['txt']}" =~ XDCC\ SEND\ (denied|negato) ]]
             then
                 print_c 3 "${irc['txt']}"
@@ -919,24 +919,17 @@ function irc_xdcc_send {
                 xdcc_send_remove
                 reset_irc_request
                 break
-
-            elif [[ "${irc['txt']}" =~ DCC\ Timeout\ \(180\ Sec\ Timeout\) ]]
-            then
-                print_c 3 "${irc['txt']}"
-                xdcc_send_remove
-                reset_irc_request
-                break
-
+                
             elif [[ "${irc['txt']}" =~ (Connection reset by peer) ]]
             then
                 print_c 3 "${irc['txt']}"
                 #exec 3>&-
                 reset_irc_request
                 break
-                
+
             elif grep -qP '(richiesto questo pack|You already requested that pack)' <<< "$irc_line"
             then
-                print_c 3 "$irc_line"
+                print_c 3 
                 notice="${BASH_REMATCH[1]}"
                 _log 27 "${xdcc['url',$xdcc_index]}"
                 xdcc_send_cancel
@@ -949,18 +942,18 @@ function irc_xdcc_send {
                     grep -q "pack errato" <<< "${irc['line']}"
             then
                 print_c 3 "$irc_line"
-                
+
                 reset_irc_request
                 break
             fi
-            
+
             if grep -P '(433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
             then
                 _log 27
                 echo "NOTICE per codice"
             fi
-            
-        elif [ "${irc['cmd']}" == PRIVMSG ] ||
+
+	elif [ "${irc['cmd']}" == PRIVMSG ] ||
                  [[ "${irc['line']}" =~ PRIVMSG.+"${xdcc['nick',$xdcc_index]}".+DCC(SEND|RESUME|ACCEPT) ]]
         then            
             local irc_code key 
@@ -1021,12 +1014,12 @@ function irc_xdcc_send {
                             sleep 0.1
                         done
                         connected=true
-                        
+
 		        #add_pid_url "${xdcc['pid_xfer',$xdcc_index]}" "${xdcc['url',$xdcc_index]}" "xfer-pids"
 	            fi
 	        fi                
             fi
-            
+
         elif [ -e "$xdcc_host_fifo" ]
         then
             echo "$irc_line" > "$xdcc_host_fifo"
@@ -1036,9 +1029,9 @@ function irc_xdcc_send {
         [ -n "${irc_line// }" ] &&
             print_c 4 "[xdcc]\n$irc_line"
     done
+
     
-    
-    #    echo USCITO
+#    echo USCITO
     sleep 2
     
     rm -rf "$path_tmp"/irc_file_url
@@ -1054,7 +1047,6 @@ function irc_main {
     countdown- 3
     #set_xdcc_var_value xdcc_pid $PID
     get_xdcc_host_url_data
-    xdcc_host_fifo="/tmp/${irc['host']}.fifo"
     #source "$xdcc_host_url_data"
 #    echo "MAIN $xdcc_pid"
     
@@ -1111,7 +1103,7 @@ function irc_main {
    
     if [ "$connection" == true ]
     then
-        [ -e "$xdcc_host_fifo" ] ||
+        [ -f "$xdcc_host_fifo" ] ||
             mkfifo "$xdcc_host_fifo"
 
         local ___timeout ___timeout_test 
@@ -1131,7 +1123,8 @@ function irc_main {
                 
                 for ___timeout in {0..5}
                 do
-                    sprint_c 0 "%d\r" $___timeout
+                    print_c 0 ''
+                    print_c 0 "%d\r" $___timeout
                     sleep 1
                     #echo "timeout ($$): $___timeout -> $___timeout_test"
                     
@@ -1193,13 +1186,12 @@ function irc_main {
             # if [ "$connected" == true ] &&
             #        [ "$connection" == false ]
             # then
-        fi
+
   
        # echo "2) connection=$connection --- connected=$connected"
 
         ###################################################################### MAIN-loop: JOIN-CHAN ---> XDCC SEND:
-        if [ "$connected" == true ] 
-        then
+
             exec 5<>"$xdcc_host_fifo"
             
             timeout_start=$(date +%s)
@@ -1209,7 +1201,7 @@ function irc_main {
             local chan_joined joined
             while : 
             do
-                #check_pid "$(< "$path_tmp/.pid.zdl")" || ( echo "BREAK" && break )
+                check_instance_prog || break
                 get_mode
 
                 if get_irc_request
@@ -1340,7 +1332,7 @@ function irc_main {
                         ;;
                 esac
 
-                #### move to XDCC SEND / NOTICE function via FIFO
+                #### move to 
                 
                 if ( [[ "$irc_line" =~ (PRIVMSG) ]] ||
                          [[ "${irc['cmd']}" =~ (PRIVMSG|NOTICE) ]] ||
@@ -1356,21 +1348,21 @@ function irc_main {
 
             done
 
-#            echo USCITA-MAIN---0
+            #echo USCITA-MAIN---0
             return 0
         fi
     fi
     
     if [ "$connected" == true ]
     then
-        #        echo USCITA-MAIN---1
+#        echo USCITA-MAIN---1
         return 0
     else
-        #        echo USCITA-MAIN---2
+#        echo USCITA-MAIN---2
         return 1
     fi
-    
-    #    USCITA-MAIN---3
+
+#    USCITA-MAIN---3
 }
 
 
@@ -1463,4 +1455,3 @@ set_irc_request
 
 irc_main || irc_die
 
-#echo EXIT

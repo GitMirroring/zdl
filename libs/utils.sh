@@ -200,7 +200,7 @@ function countdown+ {
 	s=`date +"%s"`
 	s=$(( $s-$k ))
 	[[ "$this_mode" =~ ^(daemon|lite)$ ]] ||
-	    print_c 0 "%d\r" $s
+	    sprint_c 0 "%d\r" $s
     done 
 }
 

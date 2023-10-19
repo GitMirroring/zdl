@@ -588,7 +588,7 @@ function interactive {
 				#kill_url "${url_out[$i]}" 'irc-pids'
                                 if [[ "${url_out[$i]}" =~ (xdcc%20send) ]]
                                 then
-                                    cancel_xdcc_url "${url_out[$i]}"
+                                    set_xdcc_cancel_url "${url_out[$i]}"
 
                                 else
                                     kill -9 ${pid_out[$i]} &>/dev/null
@@ -604,7 +604,7 @@ function interactive {
 				
                                 if [[ "${url_out[$i]}" =~ (xdcc%20send) ]]
                                 then
-                                    cancel_xdcc_url "${url_out[$i]}"
+                                    set_xdcc_cancel_url "${url_out[$i]}"
 
                                 else
                                     kill -9 ${pid_out[$i]} &>/dev/null

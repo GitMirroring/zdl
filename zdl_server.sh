@@ -1370,7 +1370,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			then
                             if [[ "${line[$i]}" =~ (xdcc%20send) ]]
                             then
-                                cancel_xdcc_url "${line[$i]}"
+                                set_xdcc_cancel_url "${line[$i]}"
                                 
                             else
 			        kill -9 "${pid_out[j]}" &>/dev/null
@@ -1416,7 +1416,7 @@ per configurare un account, usa il comando 'zdl --configure'" > "$file_output"
 			then
                             if [[ "${line[$i]}" =~ (xdcc%20send) ]]
                             then
-                                cancel_xdcc_url "${line[$i]}"
+                                set_xdcc_cancel_url "${line[$i]}"
                                 
                             else
 			        kill -9 "${pid_out[j]}" &>/dev/null

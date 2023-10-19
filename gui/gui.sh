@@ -622,9 +622,10 @@ function display_download_manager_gui {
 		    then
 			for ((i=0; i<${#res[@]}; i=i+6))
 			do
+                            echo "${res[$i]}"
                             if [[ "${res[$i]}" =~ (xdcc%20send) ]]
                             then
-                                cancel_xdcc_url "${res[$i]}"
+                                set_xdcc_cancel_url "${res[$i]}"
                                 
                             else
 		    	        kill -9 "${res[i+5]}" &>/dev/null
@@ -641,7 +642,7 @@ function display_download_manager_gui {
 
                             if [[ "${res[$i]}" =~ (xdcc%20send) ]]
                             then
-                                cancel_xdcc_url "${res[$i]}"
+                                set_xdcc_cancel_url "${res[$i]}"
                                 
                             else
 

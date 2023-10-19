@@ -255,6 +255,8 @@ function download {
             local test_xfer="$path_tmp"/irc_file_url #$(create_hash "$url_in")" 
 	    > "$test_xfer"
 
+            echo >"$path_tmp"/irc_request
+            
 	    stdbuf -i0 -o0 -e0 \
 		   $path_usr/irc_client.sh "$url_in" "$this_tty" &
 	    pid_in=$!
@@ -284,13 +286,11 @@ ${pid_prog}
 $file_in
 $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 
-            until [ -f "$path_tmp/irc_done" ]
+            while [ -f "$path_tmp"/irc_request ]
             do
                 #echo loop-1
                 sleep 0.1
-            done
-            rm -rf "$path_tmp/irc_done"
-            
+            done            
             local wait_lines=7
 	;;
 

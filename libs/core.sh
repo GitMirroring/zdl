@@ -62,12 +62,19 @@ function get_command_pid {
 
 function check_pid_regex {
     local PID="$1" \
-	  REGEX="$2"
+	  REGEX="$2" \
+          res
+    
     if [[ "$PID" =~ ^([0-9]+)$ ]] &&
 	   [ -n "$REGEX" ]
     then
-	awk "BEGINFILE{if (ERRNO != \"\") nextfile} /$REGEX/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/$PID/cmdline
-	return 0
+	res=$(awk "BEGINFILE{if (ERRNO != \"\") nextfile} /$REGEX/{match(FILENAME, /[0-9]+/, matched); print matched[0]}" /proc/$PID/cmdline)
+	if [ "$res" == $PID ]
+        then
+            return 0
+        else
+            return 1
+        fi
     else
 	return 1
     fi
@@ -179,14 +186,13 @@ function check_instance_prog {
 	read test_pid < "$path_tmp/.pid.zdl"
 
 	if test -f /proc/"$test_pid"/cmdline
-	then
-	    read test_cmdline < /proc/"$test_pid"/cmdline
-	    
-	    if [[ "$test_cmdline" =~ \/bin\/zdl ]] &&
+	then            
+       	    if grep -qP '\/bin\/zdl' /proc/"$test_pid"/cmdline &&
 		   check_pid "$test_pid" && [ "$pid_prog" != "$test_pid" ]
 	    then
 		that_pid=$test_pid
 		tty_pid "$test_pid" that_tty
+            
 		return 0
 	    fi
 	fi
@@ -1708,9 +1714,9 @@ function clear_paths4server {
     fi
 }
 
-function cancel_xdcc_url {
+function set_xdcc_cancel_url {
     if url "$1"
     then
-        echo "$1" >> "$path_tmp"/xdcc-remove
+        touch "$path_tmp"/xdcc-remove-$(create_hash "$1")
     fi
 }          
