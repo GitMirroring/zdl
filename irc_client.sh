@@ -66,7 +66,7 @@ function start_timeout {
     fi
     
     touch "$path_tmp/irc-timeout"
-    sed -r "/^${url//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
+    sed "/^${url//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
     
     for i in {0..18}
     do
@@ -75,7 +75,7 @@ function start_timeout {
 
 	if grep -q "$url" "$path_tmp/irc-timeout"
 	then
-	    exit
+	    break
 
 	elif (( diff_now >= $max_seconds ))
 	then
@@ -84,8 +84,7 @@ function start_timeout {
             irc_send QUIT
             #exec 3>&-
             
-            rm -rf "$test_xfer"
-            touch "$path_tmp"/irc_done
+            reset_irc_request
 	    sed -r "/^.+ ${url//\//\\/}$/d" -i "$path_tmp/irc-timeout" 
 	    #kill_url "$url" 'xfer-pids'
 	    #kill_url "$url" 'irc-pids'
@@ -98,7 +97,7 @@ function start_timeout {
 
             del_pid_url "$url" "irc-wait"
             kill -9 $PID
-	    exit
+	    break
 	fi
 	
 	sleep 10
@@ -107,9 +106,8 @@ function start_timeout {
 
 
 function irc_die {
-    rm -rf "$path_tmp"/irc_file_url
-    reset_irc_request
-    _log 26
+    reset_irc_request force
+    _log 26 "${xdcc['url',$xdcc_index]}"
     #exec 3>&-
 
     if [ -d /cygdrive ]
@@ -133,7 +131,7 @@ function get_mode {
     #check_instance_prog || this_mode=daemon
 }
 
-function xdcc_send_cancel {
+function xdcc_cancel {
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "XDCC CANCEL"
 #    kill_url "${xdcc['url',$xdcc_index]}" "xfer-pids"
 }
@@ -151,7 +149,7 @@ function irc_quit {
     [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] &&
 	kill $(head -n1 "$path_tmp/${file_xfer}_stdout.tmp") 2>/dev/null
 
-    xdcc_send_cancel
+    xdcc_cancel
     exec 4>&-
     irc_send "QUIT"
     #exec 3>&-
@@ -489,6 +487,9 @@ function extract_irc_line {
     local line="$1"
 
     line=$(tr -d "\001\015\012" <<< "${line//\*}")
+
+    irc['code']=$(cut -d' ' -f2 <<<"$line")  # ----> ['cmd']??
+
     irc['line']="$line"
     
     if [ "${line:0:1}" == ":" ]
@@ -540,16 +541,20 @@ function get_irc_request {
         if [[ "$req" =~ /tmp/${irc['host']}--zdl-- ]]
         then
             xdcc_host_url_data="$req"
-            echo >"$path_tmp"/irc_request 
+            echo >"$path_tmp"/irc_request
+            touch "$path_tmp"/irc_request_ok 
             return 0
         fi
     fi
     return 1
 }
 
-function reset_irc_request {
-    rm -f "$path_tmp"/irc_request
-    rm -rf "$path_tmp"/irc_file_url
+function reset_irc_request {    
+    if [ -f "$path_tmp"/irc_request_ok ] || [ "$1" == force ]
+    then
+        rm -f "$path_tmp"/irc_request_ok "$path_tmp"/irc_request
+        rm -f "$path_tmp"/irc_file_url
+    fi
 }
 
 function check_ip_xfer {
@@ -849,11 +854,18 @@ function irc_xdcc_send {
     set_xdcc_key_value pid_cat ''
     set_xdcc_key_value pid_xfer ''
     
+    # xdcc_cancel
+    # countdown- 13
+    
     print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
     
     ##/MSG <slot> XDCC SEND <#pack>    
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
-
+    timeout_dcc=$(date +%s)
+    timeout_dcc_delay=30
+    
+    exec 6<>"$xdcc_host_url_fifo"
+    
     while :
     do
         get_mode
@@ -865,14 +877,20 @@ function irc_xdcc_send {
         extract_irc_line "$irc_line"
         irc_ping_pong
 
-        if [ "$connected" == true ] &&
-               [ -n "${xdcc['pid_cat',$xdcc_index]}" ] && check_pid "${xdcc['pid_cat',$xdcc_index]}" ||
-                   [ "${xdcc['sent',$xdcc_index]}" == true ] ||
-                   (( ( $(date +%s) - timeout_start ) > 190 )) ||
-                   ! check_pid "$(< "$path_tmp/.pid.zdl")"
+        if (( ( $(date +%s) - timeout_dcc ) > $timeout_dcc_delay )) ||
+               (
+                   [ "$connected" == true ] &&
+                       [ -n "${xdcc['pid_cat',$xdcc_index]}" ] && check_pid "${xdcc['pid_cat',$xdcc_index]}" ||
+                           [ "${xdcc['sent',$xdcc_index]}" == true ] ||
+                           (( ( $(date +%s) - timeout_start ) > 190 )) ||
+                           ! check_pid "$(< "$path_tmp/.pid.zdl")"
+               )
         then
+            (( ( $(date +%s) - timeout_dcc ) > $timeout_dcc_delay )) &&
+                print_c 3 "TIMEOUT xdcc send (delay: $timeout_dcc_delay sec)"
             exec 6>&-
             rm -f "$xdcc_host_url_fifo"
+            reset_irc_request
             break
         fi
         
@@ -896,6 +914,10 @@ function irc_xdcc_send {
         fi
 
         ## triggers ########################################
+# echo "confronto:
+# CMD: ${irc['cmd']}
+# CODE: ${irc['code']}
+# "
 
         if [ "${irc['cmd']}" == NOTICE ]
         then
@@ -938,8 +960,8 @@ function irc_xdcc_send {
             then
                 print_c 3 "$irc_line"
                 notice="${BASH_REMATCH[1]}"
-                _log 27 "${xdcc['url',$xdcc_index]}"
-                xdcc_send_cancel
+                _log 27 "${xdcc['url',$xdcc_index]}" 
+                xdcc_cancel
                 #irc_send QUIT
                 reset_irc_request
                 #del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
@@ -956,7 +978,7 @@ function irc_xdcc_send {
             
             if grep -P '(433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
             then
-                _log 27
+                _log 27 "${xdcc['url',$xdcc_index]}"
                 echo "NOTICE per codice"
             fi
             
@@ -976,6 +998,8 @@ function irc_xdcc_send {
             if [ "${ctcp_msg[0]}" == 'DCC' ] &&
 	           [ -n "${xdcc['slot',$xdcc_index]}" ]
             then
+                timeout_dcc=$(date +%s)
+                
 	        if [ "${ctcp_msg[1]}" == 'ACCEPT' ]
 	        then
 	            print_c 1 "CTCP<< PRIVMSG ${xdcc['slot',$xdcc_index]} :${ctcp_msg[*]}"
@@ -1117,8 +1141,7 @@ function irc_main {
         local ___timeout ___timeout_test 
         if [ "$connected" == false ]
         then
-#echo "---> connected--0 = $connected"
-            sleep 1
+#echo "---> connected--0 = $connected"            
             {
                 until lsof -a -d3 | grep -qP 'irc_clien.+TCP'
                 do
@@ -1152,7 +1175,8 @@ function irc_main {
                 done
                 #irc_send QUIT
                 pid=$(cut -f2 <<< "$___timeout_test")
-                #echo USCITA---LOOP                
+                #echo USCITA---LOOP
+                print_c 3 "TIMEOUT host server connection"  ## SYN_SENT
                 irc_die
             } &
             local piddd=$!
@@ -1207,16 +1231,20 @@ function irc_main {
 
             declare -a chans_joined
             local chan_joined joined
-            while : 
+            
+            while check_pid "$(< "$path_tmp"/.pid.zdl)"
             do
                 #check_pid "$(< "$path_tmp/.pid.zdl")" || ( echo "BREAK" && break )
                 get_mode
-
+#echo check-0
                 if get_irc_request
                 then
+#echo check-1                    
                     if [[ "$xdcc_host_url_data" =~ /tmp/${irc['host']}--zdl-- ]]
                     then
+#echo check-2                        
                         get_xdcc_host_url_data
+#echo check-3
                         #source "$xdcc_host_url_data"
 #                        echo "file HOST-URL: $xdcc_host_url_data"
 #                        cat "$xdcc_host_url_data"
@@ -1224,7 +1252,7 @@ function irc_main {
                         xdcc_host_url_fifo="${xdcc_host_url_data%.data}".fifo    
                         [ -e "$xdcc_host_url_fifo" ] ||
                             mkfifo "$xdcc_host_url_fifo"
-
+#echo check-4
                         joined=false
 #                        echo "ciclo for ${chans_joined[@]}"
                         for chan_joined in "${chans_joined[@]}"
@@ -1246,7 +1274,7 @@ function irc_main {
 #                        echo "aggiunto all'array: ${chans_joined[@]}"                        
                         {
 #                            echo 66666666666666666666666666666
-                            exec 6<>"$xdcc_host_url_fifo"
+
 
 #                            echo     SSSSSSSSSSSSSSSSEND
                             irc_xdcc_send
@@ -1281,7 +1309,7 @@ function irc_main {
                 if [ -z "${irc_line// }" ]
                 then
                     unset irc_line
-                    read -t 2 -u 5 irc_line
+                    read -t 1 -u 5 irc_line
                     
                     extract_irc_line "$irc_line"
                     irc_ping_pong

@@ -256,7 +256,12 @@ function download {
 	    > "$test_xfer"
 
             echo >"$path_tmp"/irc_request
-            
+
+            local test_irc_url="${url_in#*\/\/}"
+            if [ "${test_irc_url}" != "${test_irc_url//\/\/}" ]
+            then
+                replace_url_in "irc://${test_irc_url//\/\//\/}"
+            fi
 	    stdbuf -i0 -o0 -e0 \
 		   $path_usr/irc_client.sh "$url_in" "$this_tty" &
 	    pid_in=$!
@@ -268,7 +273,7 @@ function download {
 	        url_in_file=$(tail -n1 "$test_xfer")
 
                 if [[ "$url_in_file" =~ \/dev\/tcp ]] &&
-                        [ -n "$file_in" ]
+                       [ -n "$file_in" ]
                 then
 	            rm -f "$test_xfer"
                 fi
