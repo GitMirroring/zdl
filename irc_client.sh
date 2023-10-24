@@ -979,7 +979,7 @@ function irc_xdcc_send {
             if grep -P '(433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
             then
                 _log 27 "${xdcc['url',$xdcc_index]}"
-                echo "NOTICE per codice"
+                print_c 3 "NOTICE code: ${BASH_REMATCH[1]}"
             fi
             
         elif [ "${irc['cmd']}" == PRIVMSG ] ||
