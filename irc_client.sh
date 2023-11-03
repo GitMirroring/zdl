@@ -649,7 +649,6 @@ function dcc_xfer {
 
         while check_pid "$pid_cat" && [ "$offset" != "${xdcc['size',$xdcc_index]}" ]
         do
-            echo "$offset"
             [ -f "$path_tmp/irc-timeout" ] &&
 	        ! grep -q "${xdcc['url',$xdcc_index]}" "$path_tmp/irc-timeout" &&
 	        echo "${xdcc['url',$xdcc_index]}" >>"$path_tmp/irc-timeout"

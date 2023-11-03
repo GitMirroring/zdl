@@ -37,6 +37,11 @@ function init_log {
 function _log {
     get_language
     local color_code=3 no_filelog print_always
+    if ! url "$url_in" &&
+            url "$2"
+    then
+        local url_in="$2"
+    fi
     
     [ -n "$file_in" ] &&
 	msg_file_in=" $file_in"
