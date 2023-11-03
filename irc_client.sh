@@ -592,20 +592,34 @@ function dcc_xfer {
 	fi
 	sleep 1
     done
-    
-    if exec 4<>/dev/tcp/${xdcc['address',$xdcc_index]}/${xdcc['port',$xdcc_index]}
+
+    if [ "${xdcc['port',$xdcc_index]}" == 0 ]
+    then
+        local xfer_address="/dev/tcp/${xdcc['address',$xdcc_index]}"
+#        echo "xfer_address: $xfer_address"
+        {
+            countdown- 3
+            get_ip real_ip proxy_ip
+            print_c 2 "CTCP [reverse]>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
+            irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
+        } &
+    else
+        local xfer_address="/dev/tcp/${xdcc['address',$xdcc_index]}/${xdcc['port',$xdcc_index]}"
+    fi
+
+    if exec 4<>"$xfer_address"
     then
 	if [ -n "$resume" ]
 	then
 	    unset resume
 	    cat <&4 >>"$file_xfer" &
 	    pid_cat=$!
-
+            
 	else
 	    cat <&4 >"$file_xfer" &
 	    pid_cat=$!
 	fi       
-
+#        echo "pid_cat: $pid_cat"
         if [ -n "$pid_cat" ]
 	then
 	    print_c 1 "$(gettext "Connected to the address"): ${xdcc['address',$xdcc_index]}:${xdcc['port',$xdcc_index]}"
@@ -629,12 +643,13 @@ function dcc_xfer {
         do
             sleep 0.1
         done
-
+#echo "reset"
         reset_irc_request
         start_xfer_killer
 
         while check_pid "$pid_cat" && [ "$offset" != "${xdcc['size',$xdcc_index]}" ]
         do
+            echo "$offset"
             [ -f "$path_tmp/irc-timeout" ] &&
 	        ! grep -q "${xdcc['url',$xdcc_index]}" "$path_tmp/irc-timeout" &&
 	        echo "${xdcc['url',$xdcc_index]}" >>"$path_tmp/irc-timeout"
@@ -659,7 +674,7 @@ function dcc_xfer {
 
             sleep 1
         done
-
+#echo USCITO-while-XFER
         if [ "$(size_file "$file_xfer")" == "${xdcc['size',$xdcc_index]}" ]
         then
             kill $pid_cat
@@ -824,6 +839,25 @@ function irc_join_chan {
             break           
         fi
 
+        case "${irc['cmd']}" in
+            QUIT)
+                if [[ "${irc['line']}" =~ ${xdcc['nick',$xdcc_index]} ]] # "$ping_code" ]]
+                then
+                    print_c 3 "${irc['line']}"
+                    break
+                fi
+                ;;
+            
+            ERROR)
+                get_ip real_ip proxy_ip
+                if [[ "${irc['line']}" =~ \[$real_ip\] ]]
+                then
+                    print_c 3 "${irc['line']}"
+                    break
+                fi
+                ;;
+        esac
+
         if ((timeout > 1800))
         then
             print_c 2 ">> CHAN: ${xdcc['chan',$xdcc_index]}"
@@ -831,9 +865,10 @@ function irc_join_chan {
             print_c 2 ">> JOIN #${xdcc['chan',$xdcc_index]}"
             irc_send "JOIN #${xdcc['chan',$xdcc_index]}"
             
+            reset_irc_request
         #     echo USCITA---JOIN-CHAN
         #     irc_quit
-        #     exit
+             exit
         fi
         ((timeout++))
     done
@@ -863,7 +898,7 @@ function irc_xdcc_send {
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
     timeout_dcc=$(date +%s)
     timeout_dcc_delay=30
-    
+
     exec 6<>"$xdcc_host_url_fifo"
     
     while :
@@ -918,7 +953,22 @@ function irc_xdcc_send {
 # CMD: ${irc['cmd']}
 # CODE: ${irc['code']}
 # "
-
+#        if grep -qP "(You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ .+\ seconds\ or\ more)" <<< "$irc_line"
+        if [[ "$irc_line" =~ You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ ([0-9]+)\ seconds\ or\ more ]]
+        then
+            xdcc_send_delay="${BASH_REMATCH[1]}"
+            print_c 3 "\n$irc_line"
+            
+            print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
+            countdown- $(( $xdcc_send_delay +5 ))
+            
+            ##/MSG <slot> XDCC SEND <#pack>    
+            irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
+            timeout_dcc=$(date +%s)
+            timeout_dcc_delay=180
+            #break
+        fi
+        
         if [ "${irc['cmd']}" == NOTICE ]
         then
             local chan match
@@ -976,11 +1026,11 @@ function irc_xdcc_send {
                 break
             fi
             
-            if grep -P '(433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
-            then
-                _log 27 "${xdcc['url',$xdcc_index]}"
-                print_c 3 "NOTICE code: ${BASH_REMATCH[1]}"
-            fi
+            # if grep -P '(433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
+            # then
+            #     _log 27 "${xdcc['url',$xdcc_index]}"
+            #     print_c 3 "NOTICE code: ${BASH_REMATCH[1]}"
+            # fi
             
         elif [ "${irc['cmd']}" == PRIVMSG ] ||
                  [[ "${irc['line']}" =~ PRIVMSG.+"${xdcc['nick',$xdcc_index]}".+DCC(SEND|RESUME|ACCEPT) ]]
@@ -999,7 +1049,7 @@ function irc_xdcc_send {
 	           [ -n "${xdcc['slot',$xdcc_index]}" ]
             then
                 timeout_dcc=$(date +%s)
-                
+#echo "LINE: $irc_line"                
 	        if [ "${ctcp_msg[1]}" == 'ACCEPT' ]
 	        then
 	            print_c 1 "CTCP<< PRIVMSG ${xdcc['slot',$xdcc_index]} :${ctcp_msg[*]}"
@@ -1008,23 +1058,44 @@ function irc_xdcc_send {
 	        elif [ "${ctcp_msg[1]}" == 'SEND' ]
 	        then
 	            print_c 1 "CTCP<< PRIVMSG ${xdcc['slot',$xdcc_index]} :${ctcp_msg[*]}"
-	            
+	            # for ((ii=0; ii < ${#ctcp_msg[@]}; ii++))
+                    # do
+                    #     echo "$ii: ${ctcp_msg[$ii]}"
+                    # done
+                    
 	            set_xdcc_key_value file "${ctcp_msg[2]}"
 	            set_xdcc_key_value address "${ctcp_msg[3]}"
-	            set_xdcc_key_value port "${ctcp_msg[4]}"
 	            set_xdcc_key_value size "${ctcp_msg[5]}"
 	            set_xdcc_key_value offset $(size_file "${xdcc['file',$xdcc_index]}")
-	            [ -z "${xdcc['offset',$xdcc_index]}" ] && set_xdcc_key_value offset 0
+                    [ -z "${xdcc['offset',$xdcc_index]}" ] && set_xdcc_key_value offset 0
+                    set_xdcc_key_value address $(check_ip_xfer "${xdcc['address',$xdcc_index]}")
                     
-                    set_xdcc_key_value address $(check_ip_xfer "${xdcc['address',$xdcc_index]}") 
-	            if [ -n "${xdcc['address',$xdcc_index]}" ] &&
+                    if [ "${ctcp_msg[4]}" == 0 ] && [ -n "${ctcp_msg[6]}" ]
+                    then
+
+	                set_xdcc_key_value token "${ctcp_msg[6]}"
+                        # get_ip real_ip proxy_ip
+                        # print_c 2 "CTCP [reverse]>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
+                        # irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
+                        
+                    else
+                        set_xdcc_key_value port "${ctcp_msg[4]}"
+                    fi                  
+                    
+                    
+
+# echo "	            if [ -n \"${xdcc['address',$xdcc_index]}\" ] &&
+# 		           [[ \"${xdcc['port',$xdcc_index]}\" =~ ^[0-9]+\$ ]]
+# "
+                    if [ -n "${xdcc['address',$xdcc_index]}" ] &&
 		           [[ "${xdcc['port',$xdcc_index]}" =~ ^[0-9]+$ ]]
 	            then
+
                         send_dcc_resume
-                        
+#echo in-0                        
 		        file_xfer="${xdcc['file',$xdcc_index]}"
 		        sanitize_file_xfer
-                        
+#echo in-1                                                
 		        url_xfer="/dev/tcp/${xdcc['address',$xdcc_index]}/${xdcc['port',$xdcc_index]}"
 		        #echo -e "$file_xfer\n$url_xfer" > "$path_tmp/$(create_hash "${xdcc['url',$xdcc_index]}")"
                         echo -e "$file_xfer\n$url_xfer" > "$test_xfer"
@@ -1039,7 +1110,7 @@ function irc_xdcc_send {
                         local pid_xfer=$!
                         disown pid_xfer
 		        set_xdcc_key_value pid_xfer $pid_xfer
-                        
+#echo in-2                                                
                         until check_pid "${xdcc['pid_xfer',$xdcc_index]}"
                         do
                             sleep 0.1
@@ -1370,10 +1441,13 @@ function irc_main {
 
                 #### move to XDCC SEND / NOTICE function via FIFO
                 
-                if ( [[ "$irc_line" =~ (PRIVMSG) ]] ||
-                         [[ "${irc['cmd']}" =~ (PRIVMSG|NOTICE) ]] ||
-                         [[ "${irc['line']}" =~ PRIVMSG ]] ) &&
-                       [ -n "$xdcc_host_url_fifo" ] && [ -e "$xdcc_host_url_fifo" ]
+                if (
+                    [[ "$irc_line" =~ (PRIVMSG) ]] ||
+                        [[ "${irc['cmd']}" =~ (PRIVMSG|NOTICE) ]] ||
+                        [[ "${irc['line']}" =~ PRIVMSG ]] ||
+                        [[ "$irc_line" =~ (You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ )([0-9]+)(\ seconds\ or\ more) ]]
+                ) &&
+                    [ -n "$xdcc_host_url_fifo" ] && [ -e "$xdcc_host_url_fifo" ]
                 then
                     echo "$irc_line" > "$xdcc_host_url_fifo"
 

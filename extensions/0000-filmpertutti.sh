@@ -27,28 +27,58 @@
 ## zdl-extension types: shortlinks
 ## zdl-extension name: filmpertutti
 
+function extract_filmpertutti {
+    local url_fpt
+    
+    if url "$1"
+    then
+        local linker_fpt=$(curl -s "$1" |
+                               grep -oP '[^"]+protectlinker[^"]+')
+        
+        if url "$linker_fpt"
+        then
+            get_language
+            while read url_fpt 
+            do
+	        if url "$url_fpt"
+	        then
+                    [ -z "$url_in_start" ] &&
+                        url_in_start="$url_fpt"
+                    
+	            set_link + "$url_fpt"
+	            print_c 4 "$(gettext "Redirection"): $url_fpt"
+	        fi
+                
+            done < <(curl -s "$linker_fpt" | grep -oP 'meta-link=\"http[^ ]+' | grep -oP 'http[^"]+')
+        fi
+    fi
+}
+
 if [[ "$url_in" =~ filmpertutti\. ]]
 then
     get_language_prog
-    urls_filmpertutti=( $(curl -s "$url_in" |
-			      grep -oP '[^"]+(buckler|isecure)[^"]+') )
-    get_language
-    for url_fpt in "${urls_filmpertutti[@]}"
-    do
-	if url "$url_fpt"
-	then
-	    set_link + "$url_fpt"
-	    print_c 4 "$(gettext "Redirection"): $url_fpt"
-	fi
-    done
-    
-    if url "${urls_filmpertutti[0]}"
+
+    if [[ "$url_in" =~ show_video ]]
     then
-	set_link - "$url_in"
-	url_in="${urls_filmpertutti[0]}"
-	print_c 4 "$(gettext "New link to process"): ${urls_filmpertutti[0]}"
+        extract_filmpertutti "$url_in"
 
     else
-	end_extension
-    fi    
+        while read url_fpt 
+        do
+	    if url "$url_fpt"
+	    then
+	        extract_filmpertutti "$url_fpt"
+	    fi
+        done < <(curl -s "$url_in" | grep -oP '[^"]+show_video=true[^"]+' | sed -r 's|\#038\;||g')
+    
+    fi
+    
+    get_language    
+    if url "$url_in_start"
+    then
+	replace_url_in "$url_in_start"
+        unset url_in_start
+	print_c 4 "$(gettext "New link to process"): $url_in"
+    fi
 fi
+
