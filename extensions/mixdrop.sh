@@ -32,12 +32,12 @@ then
     replace_url_in "${url_in//mixdrp/mixdrop}"
 fi
 
-if [[ "$url_in" =~ (mixdr[o]*p) ]]
+if [[ "$url_in" =~ (mixdr[o]*p|md3b0j6hj) ]]
 then
     [[ "$url_in" =~ \/f\/ ]] &&
         replace_url_in "${url_in//\/f\///e/}"
 
-    for i in {0..5}
+    for i in {0..3}
     do
         get_location "$url_in" mixdrop_location
         url "$mixdrop_location" && break
