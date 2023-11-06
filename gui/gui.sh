@@ -525,7 +525,7 @@ function load_download_manager_gui {
     echo -e "\f"
     for ((i=1; i<="${#url_out_gui[@]}"; i++))
     do
-	link="${url_out_gui[i]}"
+	link="${url_out_gui[i]//'&'/%26}"
 	length=$(length_to_human "${length_out_gui[i]}")
 	[ -z "$length" ] && length=0
 
@@ -622,10 +622,10 @@ function display_download_manager_gui {
 		    then
 			for ((i=0; i<${#res[@]}; i=i+6))
 			do
-                            echo "${res[$i]}"
+                            #echo "${res[$i]}"
                             if [[ "${res[$i]}" =~ (xdcc%20send) ]]
                             then
-                                set_xdcc_cancel_url "${res[$i]}"
+                                set_xdcc_cancel_url "${res[$i]//%26/'&'}"
                                 
                             else
 		    	        kill -9 "${res[i+5]}" &>/dev/null
@@ -638,14 +638,13 @@ function display_download_manager_gui {
 		    then
 			for ((i=0; i<${#res[@]}; i=i+6))
 			do
-			    set_link - "${res[i]}"
-
                             if [[ "${res[$i]}" =~ (xdcc%20send) ]]
                             then
-                                set_xdcc_cancel_url "${res[$i]}"
+                	        set_link - "${res[i]//%26/'&'}"
+                                set_xdcc_cancel_url "${res[$i]//%26/'&'}"
                                 
                             else
-
+	                        set_link - "${res[i]}"
 			        [[ "${res[i+5]}" =~ ^([0-9]+)$ ]] &&
 			    	    kill -9 "${res[i+5]}" &>/dev/null
                             fi
@@ -745,11 +744,24 @@ function yad_download_manager_dclick {
 	do
 	    case $line in
     		0)
-		    kill -9 "${res[5]}" &>/dev/null
+                    if [[ "${res[0]}" =~ (xdcc%20send) ]]
+                    then
+                        set_xdcc_cancel_url "${res[0]//%26/'&'}"
+                        
+                    else
+		        kill -9 "${res[5]}" &>/dev/null
+                    fi
 		    ;;
 		1)
-		    set_link - "${res[0]}"
-		    kill -9 "${res[5]}" &>/dev/null
+                    if [[ "${res[0]}" =~ (xdcc%20send) ]]
+                    then
+                        set_xdcc_cancel_url "${res[0]//%26/'&'}"
+                        set_link - "${res[0]//%26/'&'}"
+                    else
+		        set_link - "${res[0]}"
+		        kill -9 "${res[5]}" &>/dev/null
+                    fi
+
 		    rm -f "${res[2]}" \
 		       "${res[2]}.st" \
 		       "${res[2]}.zdl" \
@@ -1767,21 +1779,6 @@ function check_pid_file {
     fi
 }
 
-####################################################
-## per usare questo file come script:
-function main {
-    prog=zdl
-    path_tmp=".${prog}_tmp"
-    path_usr="/usr/local/share/${prog}"
-    start_file="$path_tmp"/links_loop.txt
-
-    source $path_usr/libs/core.sh
-    source $path_usr/libs/DLstdout_parser.sh
-
-    run_gui "$@"
-}
-
-[ "$1" == start ] && main "$@"
 
 
 function display_xdcc_eu_gui {
@@ -1812,7 +1809,7 @@ function display_xdcc_eu_gui {
     local IFS_old="$IFS"
     IFS=' '
 
-    if       [ -z "${link_xdcc_eu[0]}" ]
+    if [ -z "${link_xdcc_eu[0]}" ]
     then
         local msg="$(gettext "<b>No links found</b> corresponding to the following search keys:") $xdcc_eu_searchkey"
 	yad --center \
@@ -1829,9 +1826,8 @@ function display_xdcc_eu_gui {
     declare -a data_xdcc_eu
     for ((i=0; i<${#link_xdcc_eu[@]}; i++))
     do
-	data_xdcc_eu+=( FALSE "${file_xdcc_eu[i]}" "${length_xdcc_eu[i]}" "${link_xdcc_eu[i]}" )
+	data_xdcc_eu+=( FALSE "${file_xdcc_eu[i]}" "${length_xdcc_eu[i]}" "${link_xdcc_eu[i]//'&'/%26}" )
     done
-
 
     declare -a res
     res=($(yad --list --checklist --multiple \
@@ -1842,14 +1838,14 @@ function display_xdcc_eu_gui {
     	       --image-on-top --image="$IMAGE2" \
 	       "${YAD_ZDL[@]}" \
 	       --column ":CHK" --column "File" --column "$(gettext "Length")" --column "Link" \
-	       "${data_xdcc_eu[@]}" 2>/dev/null))
-
+               "${data_xdcc_eu[@]}" 2>/dev/null))
+               
     if [ "$?" == 0 ] &&
 	   (( ${#res[@]}>0 ))
     then	    
 	for ((i=3; i<${#res[@]}; i=i+4))
 	do
-	    set_link + "${res[i]}"
+	    set_link + "${res[i]//%26/'&'}"
 	done
     fi
     set_link - "$xdcc_eu_search_link"
@@ -1857,3 +1853,20 @@ function display_xdcc_eu_gui {
 
     IFS="$IFS_old"
 }
+
+
+####################################################
+## per usare questo file come script:
+function main {
+    prog=zdl
+    path_tmp=".${prog}_tmp"
+    path_usr="/usr/local/share/${prog}"
+    start_file="$path_tmp"/links_loop.txt
+
+    source $path_usr/libs/core.sh
+    source $path_usr/libs/DLstdout_parser.sh
+
+    run_gui "$@"
+}
+
+[ "$1" == start ] && main "$@"
