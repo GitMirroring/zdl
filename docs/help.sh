@@ -145,6 +145,12 @@ OPZIONI
                                richiesta di immettere nuovi link. L'input da tastiera
                                è comunque disponibile
 
+       --external-application-button [HREF]
+                               Per usare ${PROG} come gestore esterno di download
+                               per Firefox, Opera, Chrome/Chromium.
+                               L'opzione deve essere inserita nel campo 'Arguments'
+                               delle preferenze dell'estensione External Application Button.
+                               '[HREF]' non deve essere modificato.
 
 Interfaccia grafica (GUI):
   -g,  --gui                   Avvia l'interfaccia grafica nella directory corrente o 
@@ -187,6 +193,16 @@ IRC/XDCC:
                                informazioni nel link, che deve avere la forma 
                                seguente (porta non necessaria se è 6667):
                                   irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]
+
+  -X <keywords>, --xdcc-search=<keywords>
+                               Utilizzando il motore di ricerca di https://www.xdcc.eu
+                               avvia la ricerca di file disponibili per il download via XDCC.
+                               Il risultato della ricerca è aperto da una GUI, per permettere
+                               una selezione dei file da scaricare.
+                               Lo stesso tipo di ricerca può essere effettuato
+                               da --gui e --web-ui
+                               <keywords> è la chiave di ricerca e deve essere racchiusa
+                               fra virgolette singole o doppie
 
 
 Torrent (Aria2):
@@ -416,6 +432,13 @@ OPTIONS
                                request to enter new links. Keyboard input
                                is still available
 
+       --external-application-button [HREF]
+                               To use ZDL as an external download manager
+                               for Firefox, Opera, Chrome/Chromium.
+                               The option must be entered in the 'Arguments' field
+                               of the 'External Application Button' extension preferences.
+                               '[HREF]' should not be changed.
+
 
 Graphical user interface (GUI):
   -g,  --gui                   Start the graphical interface in the current directory or
@@ -458,6 +481,17 @@ IRC / XDCC:
                                information in the link, which must have the
                                following form (port not necessary if it is 6667):
                                   irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]
+
+
+  -X <keywords>, --xdcc-search=<keywords>
+                               Using the https://www.xdcc.eu engine, start searching
+                               for files available for download via XDCC.
+                               The search result is opened by a GUI, to allow
+                               a selection of files to download.
+                               The same type of search can be performed
+                               from --gui and --web-ui
+                               <keywords> is the search key and must be enclosed
+                               in single or double quotes
 
 
 Torrent (Aria2):

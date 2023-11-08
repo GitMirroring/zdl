@@ -846,7 +846,7 @@ function get_data_xdcc_eu {
 
         link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
         length_xdcc_eu+=( "$length" )
-        file_xdcc_eu+=( "$filename" )
+        file_xdcc_eu+=( "${filename// /_}" )
         
     done <<< "$html"
 

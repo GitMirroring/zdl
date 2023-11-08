@@ -408,6 +408,11 @@ Cancella i file temporanei dei download completati
 @item  --no-stop
 Avvio senza interruzioni: salta l'eventuale aggiornamento automatico (che richiede l'immissione della password) o la richiesta di immettere nuovi link. L'input da tastiera è comunque disponibile
 
+@item  --external-application-button [HREF]
+Per usare ZDL come gestore esterno di download per Firefox, Opera, Chrome/Chromium.
+L'opzione deve essere inserita nel campo @emph{Arguments} delle preferenze dell'estensione @emph{External Application Button}.
+@option{[HREF]} non deve essere modificato.
+
 @end table
 
 @c @end man
@@ -457,6 +462,12 @@ il messaggio privato (@emph{PRIVMSG}) che contiene il comando @command{XDCC SEND
 @end enumerate
 
 Il download via IRC/XDCC può essere affettuato, alternativamente e senza usare opzioni, inserendo le informazioni nel link, che deve avere la forma seguente (porta non necessaria se è 6667): @code{irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]}. ZDL accetta anche i link di @emph{xWeasel}, con protocollo @code{xdcc://}
+
+@item -X @emph{keywords}, --xdcc-search=@emph{keywords}
+Utilizzando il motore di ricerca di @url{https://www.xdcc.eu} avvia la ricerca di file disponibili per il download via XDCC.
+Il risultato della ricerca è aperto da una GUI, per permettere una selezione dei file da scaricare.
+Lo stesso tipo di ricerca può essere effettuato da @option{--gui} e @option{--web-ui}.
+@emph{keywords} è la chiave di ricerca è deve essere racchiusa fra virgolette singole o doppie.
 
 @end table
 

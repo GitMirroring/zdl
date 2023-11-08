@@ -1,13 +1,13 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Tue Nov  7 14:40:56 2023" "GNU" "User Commands"
+.TH "ZigzagDownLoader (ZDL)" "1" "Wed Nov  8 17:44:28 2023" "GNU" "User Commands"
 .SH NAME\	
 \fBzdl\fP - CLI/TUI/GUI/Web-UI download manager for \fIGNU/Linux\fP and \fIMicrosoft Windows + Cygwin\fP.\
 
-
-.SH SYNOPSIS\	
+\
+.SH SYNOPSIS	
 \fBzdl [\fP\fIOPTIONS\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB]\fP
 
-\
-.SH DESCRIPTION	
+
+.SH DESCRIPTION\	
 \fIZigzagDownLoader\fP is a download manager:
 
 .RS 5
@@ -67,8 +67,8 @@ a polyglot system, using different interpreters (for PHP, Javascript, Python, Pe
 
 ZigzagDownLoader is a "zigzag" program: it is not just a program, it is a laboratory and a system open to new inventions.
 
-\
-.SS Arguments	
+
+.SS Arguments\	
 The order of options and other arguments is not important:
 
 
@@ -93,8 +93,8 @@ ZDL start directory and download destination (if omitted, it is the current one)
 
 .RS -5
 
-
-.SH OPTIONS\	
+\
+.SH OPTIONS	
 Short options not followed by values​can be contracted:
 \fB-ufmd\fP is equivalent to \fB-u\fP \fB-f\fP \fB-m\fP \fB-d\fP
 
@@ -232,6 +232,13 @@ Clear temporary files of completed downloads
 .RS 5
 Start without interruption: skip any automatic update (which requires entering the password) or request to enter new links\&. Keyboard input is still available
 
+.RS -5
+\fB--external-application-button [HREF]\fP
+.RS 5
+To use ZDL as an external download manager for Firefox, Opera, Chrome/Chromium.
+The option must be entered in the \fIArguments\fP field of the \fIExternal Application Button\fP extension preferences.
+\fB[HREF]\fP should not be changed.
+
 
 .RS -5
 
@@ -275,8 +282,8 @@ Start the program in daemon mode in the current directory or, possibly, in the o
 .RS -5
 
 
-
-.SS IRC/XDCC:\	
+\
+.SS IRC/XDCC:	
 
 .RS 5
 
@@ -305,13 +312,21 @@ the private message (\fIPRIVMSG\fP) containing the command \fBXDCC SEND\fP
 
 The download via IRC/XDCC can be done, alternatively and without using options, by entering the information in the link, which must have the following form (port not necessary if it is 6667): \fBirc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]\fP\&. ZDL also accepts links of \fIxWeasel\fP, with protocol \fBxdcc://\fP
 
+.RS -5
+\fB-X \fP\fIkeywords\fP\fB, --xdcc-search=\fP\fIkeywords\fP\fB\fP
+.RS 5
+Using the \fBhttps://www.xdcc.eu\fP engine, start searching for files available for download via XDCC.
+The search result is opened by a GUI, to allow a selection of files to download.
+The same type of search can be performed from \fB--gui\fP and \fB--web-ui\fP.
+\fIkeywords\fP is the search key and must be enclosed in single or double quotes.
+
 
 .RS -5
 
 
 
-
-.SS Torrent:\	
+\
+.SS Torrent:	
 
 .RS 5
 
@@ -332,8 +347,8 @@ Open TCP and UDP ports: check the router settings
 .RS -5
 
 
-\
-.SS Filters:	
+
+.SS Filters:\	
 
 .RS 5
 
@@ -381,8 +396,8 @@ It does not download files whose name contains the string 'sub' (in upper and lo
 .RS -5
 
 
-\
-.SS Starting with an editor:	
+
+.SS Starting with an editor:\	
 
 .RS 5
 
@@ -427,8 +442,8 @@ use Zile, a GNU Emacs-style micro editor
 .RS -5
 
 
-
-.SS Starting with proxy:\	
+\
+.SS Starting with proxy:	
 
 .RS 5
 
@@ -489,10 +504,10 @@ To download the stream by incorporating ZDL in new scripts, the generic model of
 
 .RS -5
 
-\
-.SH OVERVIEW	
-\
-.SS Services	
+
+.SH OVERVIEW\	
+
+.SS Services\	
 ZDL is enabled for downloading from any kind of valid link, including the video stream (from Youtube, Nowvideo, Dailymotion \&...) by means of browser extensions, and files shared through the following hosting and streaming services, directly from the link (bypassing the web page player):
 
 
@@ -541,8 +556,8 @@ Aria2 (anche torrent), Axel, cURL, RTMPDump, Wget, youtube-dl (comando per elenc
 .RS -5
 
 
-
-.SS Start\	
+\
+.SS Start	
 ZDL can be started in different ways:
 
 
@@ -559,9 +574,8 @@ ZDL can be started in different ways:
 .IP "\fI1.\fP" 3
 automatically generating the list of download links:
 
-
-.RS 5
-
+.RS 0
+.IP "\fI1.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 open a terminal and enter the directory that will contain the downloaded files

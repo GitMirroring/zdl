@@ -320,6 +320,12 @@ Le opzioni brevi non seguite da valori possono essere contratte:
      richiesta di immettere nuovi link. L'input da tastiera è comunque
      disponibile
 
+`--external-application-button [HREF]'
+     Per usare ZDL come gestore esterno di download per Firefox, Opera,
+     Chrome/Chromium.  L'opzione deve essere inserita nel campo
+     _Arguments_ delle preferenze dell'estensione _External Application
+     Button_.  `[HREF]' non deve essere modificato.
+
 
 Interfaccia grafica (GUI):
 ..........................
@@ -371,6 +377,14 @@ IRC/XDCC:
      avere la forma seguente (porta non necessaria se è 6667):
      `irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]'. ZDL accetta anche i
      link di _xWeasel_, con protocollo `xdcc://'
+
+`-X _keywords_, --xdcc-search=_keywords_'
+     Utilizzando il motore di ricerca di `https://www.xdcc.eu' avvia la
+     ricerca di file disponibili per il download via XDCC.  Il
+     risultato della ricerca è aperto da una GUI, per permettere una
+     selezione dei file da scaricare.  Lo stesso tipo di ricerca può
+     essere effettuato da `--gui' e `--web-ui'.  _keywords_ è la chiave
+     di ricerca è deve essere racchiusa fra virgolette singole o doppie.
 
 
 Torrent:
@@ -1505,27 +1519,27 @@ _zdl-devel - Lista di sviluppo_:
 Tag Table:
 Node: Top1242
 Node: Il comando ZDL5311
-Node: Servizi streaming/hosting13824
-Node: Avviare ZDL18848
-Node: Arrestare ZDL21304
-Node: Controllare i download22409
-Node: Manuali d'uso26661
-Node: Modi27078
-Node: Readline30373
-Node: Editor31925
-Node: Omonimie33150
-Node: IRC/XDCC34698
-Node: Torrent36407
-Node: Filtri37291
-Node: Creare nuove estensioni37612
-Node: Software consigliati e dipendenze39387
-Node: Conkeror41063
-Node: zdl-xterm e XXXTerm/Xombrero42087
-Node: Installazione e aggiornamento44011
-Node: Perché questo programma47326
-Node: Tags51214
-Node: Copying55963
-Node: Contatti57013
+Node: Servizi streaming/hosting14589
+Node: Avviare ZDL19613
+Node: Arrestare ZDL22069
+Node: Controllare i download23174
+Node: Manuali d'uso27426
+Node: Modi27843
+Node: Readline31138
+Node: Editor32690
+Node: Omonimie33915
+Node: IRC/XDCC35463
+Node: Torrent37172
+Node: Filtri38056
+Node: Creare nuove estensioni38377
+Node: Software consigliati e dipendenze40152
+Node: Conkeror41828
+Node: zdl-xterm e XXXTerm/Xombrero42852
+Node: Installazione e aggiornamento44776
+Node: Perché questo programma48091
+Node: Tags51979
+Node: Copying56728
+Node: Contatti57778
 
 End Tag Table
 

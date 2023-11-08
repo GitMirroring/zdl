@@ -37,26 +37,8 @@ fi
 ##
 if [[ "$url_in" =~ ^irc:\/\/ ]]
 then
-#    file_in="temporaneo-$(date +%s)"
     replace_url_in "$(sanitize_url "$url_in")"
     url_in_file="$url_in"
     downloader_in=DCC_Xfer
-
-    # if [ -f "$path_tmp"/xfer-pids ]
-    # then
-    #     while read line
-    #     do
-    #         __pid="${line%% *}"
-    #         __src="${line#* }"
-
-    #         if [ "${url_in%'#'*}" == "${__src%'#'*}" ] &&
-    #     	   check_pid "$__pid"
-    #         then
-    #     	_log 28
-    #     	break
-    #         fi
-
-    #     done <"$path_tmp"/xfer-pids
-    # fi
 fi
 

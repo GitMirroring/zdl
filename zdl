@@ -1,4 +1,4 @@
-#!/bin/bash -i 
+#!/bin/bash -i
 #
 # ZigzagDownLoader (ZDL)
 # 
@@ -293,9 +293,7 @@ function main_loop {
 		break
 	    fi
 
-            #echo "url_0: $url_in"
             prioritize_scheduled_livestreams
-            #echo "url_1: $url_in"
             
 	    if [ -n "$no_url_regex" ] && [[ "${url_in}" =~ $no_url_regex ]]
 	    then
@@ -339,7 +337,6 @@ function main_loop {
 		check_link_timer "$url_in" ||
 		    {
 			show_downloads
-			#sleep 1
 			((nline++))
 
 			continue
@@ -1413,8 +1410,10 @@ fi
 ## 2) -x, --xdcc //-->interattivo: 1) /connect irc://irc.host; 2) /join #channel; 3) /msg ...
 ## 3) da fare: --irc=[host], --chan=[chan], --msg=[privmsg] (se manca un parametro: input_xdcc)
 
-if [[ "${args[*]}" =~ \-x ]]
+if [[ "${args[*]}" =~ \-(x|X) ]]
 then
+    start_file="$path_tmp/links_loop.txt"
+    
     for ((i=0; i<=$max_args; i++))
     do
 	if [[ "${args[i]}" =~ ^(-x|--xdcc)$ ]]
@@ -1436,8 +1435,24 @@ then
 	    fi
 	    unset args[i] irc
 	fi
+        
+        if [[ "${args[i]}" =~ ^(\-X|\-\-xdcc-search\=.+)$ ]]
+        then
+            if [ "${args[i]}" == '-X' ]
+            then
+                XDCC_PATTERN="${args[i+1]}"
+                unset args[i+1] args[i]
+            else
+                XDCC_PATTERN="${BASH_REMATCH[1]}"
+                XDCC_PATTERN="${XDCC_PATTERN#*=}"
+                unset args[i]
+            fi
+            display_xdcc_eu_gui "$XDCC_PATTERN"
+        fi
+                                                    
     done
 fi
+
 
 ## -T | --torrent-file=
 if [[ "${args[*]}" =~ \-(T|\-torrent-file=) ]]

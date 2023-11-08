@@ -316,6 +316,12 @@ equivalent to `-u' `-f' `-m' `-d'
      requires entering the password) or request to enter new links.
      Keyboard input is still available
 
+`--external-application-button [HREF]'
+     To use ZDL as an external download manager for Firefox, Opera,
+     Chrome/Chromium.  The option must be entered in the _Arguments_
+     field of the _External Application Button_ extension preferences.
+     `[HREF]' should not be changed.
+
 
 Graphical user interface (GUI):
 ...............................
@@ -365,6 +371,13 @@ IRC/XDCC:
      have the following form (port not necessary if it is 6667):
      `irc://[HOST[:PORT]]/[CHAN]/msg [PRIVMSG]'. ZDL also accepts links
      of _xWeasel_, with protocol `xdcc://'
+
+`-X _keywords_, --xdcc-search=_keywords_'
+     Using the `https://www.xdcc.eu' engine, start searching for files
+     available for download via XDCC.  The search result is opened by a
+     GUI, to allow a selection of files to download.  The same type of
+     search can be performed from `--gui' and `--web-ui'.  _keywords_
+     is the search key and must be enclosed in single or double quotes.
 
 
 Torrent:
@@ -1473,27 +1486,27 @@ _zdl-devel - Development list_:
 Tag Table:
 Node: Top1250
 Node: The ZDL command5134
-Node: Streaming/hosting services13150
-Node: Start ZDL17961
-Node: Stop ZDL20294
-Node: Check the downloads21329
-Node: User manuals25370
-Node: Modes25764
-Node: Readline28799
-Node: Editor30254
-Node: Homonymy31412
-Node: IRC/XDCC32921
-Node: Torrent34557
-Node: Filters35381
-Node: Create new extensions35669
-Node: Recommended software and dependencies37375
-Node: Conkeror38987
-Node: zdl-xterm and XXXTerm/Xombrero39969
-Node: Installation and update41840
-Node: Why this program44853
-Node: Tags48543
-Node: Copying53323
-Node: Contacts54401
+Node: Streaming/hosting services13834
+Node: Start ZDL18645
+Node: Stop ZDL20978
+Node: Check the downloads22013
+Node: User manuals26054
+Node: Modes26448
+Node: Readline29483
+Node: Editor30938
+Node: Homonymy32096
+Node: IRC/XDCC33605
+Node: Torrent35241
+Node: Filters36065
+Node: Create new extensions36353
+Node: Recommended software and dependencies38059
+Node: Conkeror39671
+Node: zdl-xterm and XXXTerm/Xombrero40653
+Node: Installation and update42524
+Node: Why this program45537
+Node: Tags49227
+Node: Copying54007
+Node: Contacts55085
 
 End Tag Table
 
