@@ -1412,7 +1412,8 @@ fi
 
 if [[ "${args[*]}" =~ \-(x|X) ]]
 then
-    start_file="$path_tmp/links_loop.txt"
+    #start_file="$path_tmp/links_loop.txt"
+    no_stop=true
     
     for ((i=0; i<=$max_args; i++))
     do

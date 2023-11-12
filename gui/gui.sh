@@ -1780,7 +1780,6 @@ function check_pid_file {
 }
 
 
-
 function display_xdcc_eu_gui {
     TEXTDOMAINDIR=/usr/local/share/locale
     TEXTDOMAIN=zdl

@@ -348,7 +348,8 @@ function set_xdcc_pid {
         
         if lsof -i -d3 |
                 grep " $test_xdcc_pid " |
-                grep -q irc_clien
+                grep -q irc_clien |
+                grep -v CLOSE_WAIT
         then
             xdcc_pid="$test_xdcc_pid"
             set_xdcc_var_value xdcc_pid "$test_xdcc_pid"
@@ -608,7 +609,7 @@ function dcc_xfer {
             set_xdcc_key_value pid_cat "$pid_cat"
             
 	    until (
-                [ -f "$path_tmp/${file_xfer}_stdout.tmp" ] &&
+                [ -f "$xfer_tmp" ] &&
                     grep -q ____PID_IN____ "$xfer_tmp"
             )
             do
@@ -638,7 +639,7 @@ function dcc_xfer {
 
             printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${xdcc['size',$xdcc_index]}" >>"$xfer_tmp" 
 
-            if [[ "$(head -n2 "$path_tmp/${file_xfer}_stdout.tmp" | tail -n1)" =~ ^XDCC ]] ||
+            if [[ "$(head -n2 "$xfer_tmp" | tail -n1)" =~ ^XDCC ]] ||
 	           [[ "$file_xfer" =~ XDCC' ' ]]                   
             then		    
 	        kill "$pid_cat"
@@ -967,7 +968,7 @@ function irc_xdcc_send {
                     grep -q "pack errato" <<< "${irc['line']}"
             then
                 print_c 3 "$irc_line"
-                
+                _log 3 "${xdcc['url',$xdcc_index]}"
                 reset_irc_request
                 break
             fi
@@ -1092,7 +1093,7 @@ function irc_main {
         connection=false
         connected=true       
     fi
-   
+
     if [ "$connection" == true ]
     then
         [ -e "$xdcc_host_fifo" ] ||
@@ -1133,7 +1134,7 @@ function irc_main {
                 irc_die
             } &
             local piddd=$!
-            
+
             countdown- 5
             if exec 3<>"$dev_host" 
             then
@@ -1282,9 +1283,9 @@ function irc_main {
                 #### move to XDCC SEND / NOTICE function via FIFO
                 
                 if (
-                    [[ "$irc_line" =~ (PRIVMSG) ]] ||
+                    [[ "$irc_line" =~ (PRIVMSG|NOTICE) ]] ||
                         [[ "${irc['cmd']}" =~ (PRIVMSG|NOTICE) ]] ||
-                        [[ "${irc['line']}" =~ PRIVMSG ]] ||
+                        [[ "${irc['line']}" =~ (PRIVMSG|NOTICE) ]] ||
                         [[ "$irc_line" =~ (You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ )([0-9]+)(\ seconds\ or\ more) ]]
                 ) &&
                     [ -n "$xdcc_host_url_fifo" ] && [ -e "$xdcc_host_url_fifo" ]
