@@ -107,7 +107,8 @@ then
         file_in="${file_in//🔴}"
         sanitize_file_in
     fi
-    
+
+    no_check_links+=( youtube youtu\.be )
     end_extension
 fi
 
