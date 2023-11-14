@@ -504,12 +504,12 @@ player):
 _Streaming video skipping browser player:_
      Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD),
      Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), DiscoveryPlus
-     (HD), EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo,
-     Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream),
-     livestream), Metacafe, MuseoGalileo.it, Neodrive (ex Cloudzilla),
-     NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube,
-     Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai... (HD),
-     RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv,
+     (HD), Dropload, EasyLoad (HD), Exashare, Facebook, Fanpage,
+     Fastvideo, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD),
+     livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive (ex
+     Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
+     playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD),
+     Rai... (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv,
      Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD),
      Speedvideo (HD), Streamango, StreamHide, Streamin, Streamlare
      (HD), StreamSB/SBFull (+ browser to solve g-recaptcha),
@@ -527,9 +527,8 @@ _File hosting:_
      Mediafire, Mega, MixDrop, MultiUp (multi-link), Onlystream,
      Ozofiles, Pastebin, Rockfile, Sockshare (HD), StreamSB/SBFull (+
      browser to solve g-recaptcha), Subyshare, Supervideo (HD),
-     TubeOffLine.com (tutti i servizi), Tusfiles, Uload, Uploadshub,
-     Uppit, Upstream, Uptobox, Vidoza, Voe, Wolfstream (HD), WStream
-     (HD) 
+     TubeOffLine.com (tutti i servizi), Uload, Uploadshub, Uppit,
+     Upstream, Uptobox, Vidoza, Voe, Wolfstream (HD), WStream (HD) 
 
 _Live stream:_
      La 7, Rai 1, Rai 2, Rai 3, Rai 4, Rai 5, Rai News 24, Rai Sport,
@@ -1359,19 +1358,19 @@ General index
 
 * arguments:                             The ZDL command.      (line 17)
 * captcha:                               Streaming/hosting services.
-                                                               (line 45)
+                                                               (line 44)
 * command zdl:                           The ZDL command.      (line  6)
 * download:                              Streaming/hosting services.
                                                                (line 29)
 * file hosting:                          Streaming/hosting services.
                                                                (line 29)
 * generated:                             Streaming/hosting services.
-                                                               (line 45)
+                                                               (line 44)
 * live:                                  Streaming/hosting services.
-                                                               (line 40)
+                                                               (line 39)
 * options:                               The ZDL command.      (line 40)
 * short links:                           Streaming/hosting services.
-                                                               (line 49)
+                                                               (line 48)
 * streaming:                             Streaming/hosting services.
                                                                (line 12)
 * synopsis:                              The ZDL command.      (line 12)
@@ -1487,26 +1486,26 @@ Tag Table:
 Node: Top1250
 Node: The ZDL command5134
 Node: Streaming/hosting services13834
-Node: Start ZDL18645
-Node: Stop ZDL20978
-Node: Check the downloads22013
-Node: User manuals26054
-Node: Modes26448
-Node: Readline29483
-Node: Editor30938
-Node: Homonymy32096
-Node: IRC/XDCC33605
-Node: Torrent35241
-Node: Filters36065
-Node: Create new extensions36353
-Node: Recommended software and dependencies38059
-Node: Conkeror39671
-Node: zdl-xterm and XXXTerm/Xombrero40653
-Node: Installation and update42524
-Node: Why this program45537
-Node: Tags49227
-Node: Copying54007
-Node: Contacts55085
+Node: Start ZDL18640
+Node: Stop ZDL20973
+Node: Check the downloads22008
+Node: User manuals26049
+Node: Modes26443
+Node: Readline29478
+Node: Editor30933
+Node: Homonymy32091
+Node: IRC/XDCC33600
+Node: Torrent35236
+Node: Filters36060
+Node: Create new extensions36348
+Node: Recommended software and dependencies38054
+Node: Conkeror39666
+Node: zdl-xterm and XXXTerm/Xombrero40648
+Node: Installation and update42519
+Node: Why this program45532
+Node: Tags49222
+Node: Copying54002
+Node: Contacts55080
 
 End Tag Table
 
