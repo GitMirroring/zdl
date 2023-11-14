@@ -48,7 +48,7 @@ function delete_tmp_complete_inexistent (K, line) {
     for (K=0; K<length(percent_out); K++) {
 	if ((percent_out[K] == 100) &&
             (! exists(file_out[K]) &&
-             (((url_out[K] ~ /^magnet/) || exists(url_out[K])) && (! is_dir(file_out[K]))) &&
+             (((url_out[K] ~ /^magnet/) || exists(file_out[K])) && (! is_dir(file_out[K]))) &&
              (! exists(file_out[K] ".part"))))
         {
 	    #system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
@@ -401,7 +401,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 	    	progress_abort[i] = chunk[y]
 	    	break
 	    }
-	    if (((chunk[y] ~ "download completed") || (chunk[y] ~ "SEED")) && (! exists(file_out[i]".aria2"))) {
+	    if (((chunk[y] ~ "download completed") || (chunk[y] ~ "SEED")) &&
+                ((! exists(file_out[i]".aria2")) || (! system("ls " file_out[i] "/*.aria2 2>/dev/null")))) {
 	    	progress_end[i] = chunk[y]
 	    } 
 	    if (chunk[y] ~ /%/) {
