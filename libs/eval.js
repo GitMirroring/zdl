@@ -22,6 +22,7 @@ var a = process.argv.slice(2);
 var vm = require('vm');
 var context = vm.createContext();
 var script = new vm.Script(a[0]);
+console.log(a[0])
 console.log(script.runInNewContext(context));
 
 //////// ALTERNATIVE VERSION:

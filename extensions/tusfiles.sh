@@ -24,35 +24,25 @@
 # zoninoz@inventati.org
 #
 
-## zdl-extension types: download
-## zdl-extension name: Tusfiles
+## zdl-extension types: streaming
+## zdl-extension name: Dropload
 
-if [ "$url_in" != "${url_in//'tusfiles.net'}" ]
+if [ "$url_in" != "${url_in//dropload}" ]
 then
-    if [[ "$url_in" =~ '/d/' ]]
-    then
-	url_in_file="$url_in"
-	file_in=${url_in_file##*\/}
-	
-	end_extension
+    html=$(curl -s "$url_in")
 
-    else
-	html=$(curl -s -c "$path_tmp"/cookies.zdl "$url_in")
-	
-	if [[ "$html" =~ (The file you are trying to download is no longer available) ]]
-	then
-	    _log 3
-	else
-	    input_hidden "$html"
-	    
-	    url_in_file=$(curl -v -d "$post_data" "$url_in" 2>&1)	    
-	    url_in_file=$(grep location <<<  "$url_in_file")
-	    url_in_file="${url_in_file#*location: }"
-	    url_in_file=$(trim "$url_in_file")
+    url_in_file=$(grep -oP 'sources\:\[\{file\:\"[^"]+' <<< "$(unpack "$html")")
+    url_in_file="${url_in_file#*\"}"
 
-	    file_in=${url_in_file##*\/}
-	    
-	    end_extension
-	fi
-    fi
+    html_url=$(grep '/d/' <<< "$html")
+    html_url="${html_url#*\"}"
+    html_url="${html_url%%\"*}"
+
+    file_in=$(curl -s "$html_url" | grep "Download File" -A1 | tail -n1)
+    file_in="${file_in%\(*}"
+    file_in="${file_in%.mp4}".mp4
+
+    force_dler FFMpeg
+    
+    end_extension
 fi

@@ -247,11 +247,11 @@ function nodejs_eval {
         jscode="$1"
     fi
 
-    result=$($nodejs $evaljs "($jscode)")
+    result=$($nodejs $evaljs "eval($jscode)"  2>&1)
 
     if [ -z "$result" ]
     then
-        result=$($nodejs $evaljs "$jscode")
+        result=$($nodejs $evaljs "$jscode" 2>&1)
     fi
        
     if [ -d /cygdrive ] &&
@@ -265,11 +265,11 @@ function nodejs_eval {
 
 function unpack {
     local jscode
-    
-    jscode=$(grep -P 'eval.+p,a,c,k,e' <<< "$1" | 
-                    sed -r 's|.*eval||g')
 
-    nodejs_eval "$jscode"    
+    jscode=$(grep -P 'eval.+p,a,c,k,e' <<< "$1" |
+             sed -r 's|.*eval||g')
+
+    nodejs_eval "${jscode}"    
 }
 
 function packed {
