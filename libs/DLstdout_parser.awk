@@ -48,7 +48,7 @@ function delete_tmp_complete_inexistent (K, line) {
     for (K=0; K<length(percent_out); K++) {
 	if ((percent_out[K] == 100) &&
             (! exists(file_out[K]) &&
-             (((url_out[K] ~ /^magnet/) || exists(file_out[K])) && (! is_dir(file_out[K]))) &&
+             (((url_out[K] ~ /^magnet/) || exists(url_out[K])) && (! is_dir(file_out[K]))) &&
              (! exists(file_out[K] ".part"))))
         {
 	    #system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
@@ -470,7 +470,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 		    file_out[i] = matched[1] "." format_out
 	    }
 	}
-	else if (progress_abort[i]) {
+	else if ((url_out[i] !~ /^magnet/) && (progress_abort[i] != "")) {
 	    bash_var("url_in", "")
 	    percent_out[i] = 0
 	    code = code "_log 3 \"" url_out[i] "\"; "
@@ -1052,6 +1052,7 @@ END {
 	    for (J=0; J<length(file_out); J++) {
 		## cancella download di file con nome diverso per uno stesso link/url
 		if ((url_out[I] == url_out[J]) &&
+                    (url_out[I] !~ /^magnet/) &&
 		    (file_out[I] != file_out[J]) &&
 		    (check_pid(pid_out[I]))) {
 		    #system("rm -f .zdl_tmp/"file_out[J]"_stdout.tmp " file_out[J] " " file_out[J] ".st " file_out[J] ".aria2")
