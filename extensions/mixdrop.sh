@@ -32,8 +32,14 @@ then
     replace_url_in "${url_in//mixdrp/mixdrop}"
 fi
 
-test_mixdrop=$(grep -oP 'https://[^\/]+' <<< "$url_in")
-get_location "$test_mixdrop" test_mixdrop
+if ! url "$url_in_file" ||
+        test -z "$file_in"
+then        
+    test_mixdrop=$(grep -oP 'https://[^\/]+' <<< "$url_in")
+    get_location "$test_mixdrop" test_mixdrop
+else
+    unset test_mixdrop
+fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p|md3b0j6hj) ]]
 then
