@@ -46,9 +46,9 @@ function delete_notify_complete_inexistent (K, line) {
 
 function delete_tmp_complete_inexistent (K, line) {
     for (K=0; K<length(percent_out); K++) {
-	if ((percent_out[K] == 100) &&
+        if ((percent_out[K] == 100) &&
             (! exists(file_out[K]) &&
-             (((url_out[K] ~ /^magnet/) || (exists(url_out[K]) && (url_out[i] ~ /\.torrent$/)) && (! is_dir(file_out[K]))) &&
+             (((url_out[K] ~ /^magnet/) || (exists(url_out[K]) && (url_out[K] ~ /\.torrent$/))) && (! is_dir(file_out[K]))) &&
              (! exists(file_out[K] ".part"))))
         {
 	    #system("rm -f .zdl_tmp/"file_out[K]"_stdout.*")
