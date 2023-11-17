@@ -36,8 +36,9 @@ function data_stdout {
     declare -a tmp_files
     while read line
     do
-        tmp_files[$i]="$line"
-    done < <(ls -1 "$path_tmp" | grep -qP '_stdout\.tmp$')
+        tmp_files[$i]="${path_tmp}/${line}"
+        ((i++))
+    done < <(ls -1 "$path_tmp" | grep -P '_stdout\.tmp$')
 
     #shopt -u nullglob
     #shopt -u dotglob
