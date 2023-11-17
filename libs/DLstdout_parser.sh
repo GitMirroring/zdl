@@ -25,14 +25,22 @@
 #
 
 function data_stdout {    
-    shopt -s nullglob
-    shopt -s dotglob
+    #shopt -s nullglob
+    #shopt -s dotglob
+
     rm -f "$path_tmp"/._stdout.tmp
     # tmp_files=( "$path_tmp"/?*_stdout.tmp )
     # tmp_files=( $(awk '/_stdout.tmp$/{print "'"$path_tmp/"'"$0}' < <(ls -a "$path_tmp")) )
-    tmp_files=( $(awk '/_stdout.tmp$/{print "'"$path_tmp/"'"$0}' < <(ls "$path_tmp")) )
-    shopt -u nullglob
-    shopt -u dotglob
+    #tmp_files=( $(awk '/_stdout.tmp$/{print "'"$path_tmp/"'"$0}' < <(ls -1 "$path_tmp")) )
+    local i=0 line
+    declare -a tmp_files
+    while read line
+    do
+        tmp_files[$i]="$line"
+    done < <(ls -1 "$path_tmp" | grep -qP '_stdout\.tmp$')
+
+    #shopt -u nullglob
+    #shopt -u dotglob
     unset pid_alive pid_out file_out url_out percent_out length_saved length_out no_check
     [ -z "$num_check" ] && num_check=0
 
@@ -47,7 +55,6 @@ function data_stdout {
     else
 	(( num_check++ ))
     fi
-
     
     if (( ${#tmp_files[*]}>0 ))
     then
@@ -97,8 +104,6 @@ function data_stdout {
 			  -f $path_usr/libs/DLstdout_parser.awk                \
 			  ${tmp_files[@]}                                      \
 		)
-	unset tmp_files
-
 	eval "$awk_data"
 
 	[ -f "$path_tmp/awk2bash_commands" ] &&
