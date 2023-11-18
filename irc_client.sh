@@ -829,7 +829,7 @@ function irc_join_chan {
 function irc_check_chan_user {
     local irc_line irc_cmd irc_txt
     [ "$chan" == true ] &&  {
-        echo ">> NAMES #${xdcc['chan',$xdcc_index]}"
+        print_c 1 ">> NAMES #${xdcc['chan',$xdcc_index]}"
         irc_send "NAMES #${xdcc['chan',$xdcc_index]}"
     }
 }

@@ -46,19 +46,22 @@ then
     [[ "$url_in" =~ \/f\/ ]] &&
         replace_url_in "${url_in//\/f\///e/}"
 
-    for i in {0..3}
-    do
-        get_location "$url_in" mixdrop_location
-        url "$mixdrop_location" && break
-        countdown- 6
-    done
-
-    if url "$mixdrop_location" &&
-            [ "$url_in" != "$mixdrop_location" ]
+    if [[ "$url_in" =~ mixdrop ]]
     then
-        replace_url_in "$mixdrop_location"
-    fi
+        for i in {0..3}
+        do
+            get_location "$url_in" mixdrop_location
+            url "$mixdrop_location" && break
+            countdown- 6
+        done
 
+        if url "$mixdrop_location" &&
+                [ "$url_in" != "$mixdrop_location" ]
+        then
+            replace_url_in "$mixdrop_location"
+        fi
+    fi
+    
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \

@@ -440,6 +440,7 @@ function sanitize_url {
 	declare -n ref="$2"
     data=$(anydownload "$1")
     
+    data=$(trim "$data")
     data="${data%%'?'}"
     data="${data%%'+'}"
     data="${data## }"

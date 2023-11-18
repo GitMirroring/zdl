@@ -695,7 +695,8 @@ function get_location { # 1=url 2=variable_to_new_url
                        awk '/ocation:/{print $3}'     |
                        head -n1)
     fi
-    location=$(trim "$location")
+    
+    sanitize_url "$location" location
     
     if [ -n "$2" ]
     then

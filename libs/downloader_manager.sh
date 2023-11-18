@@ -249,13 +249,9 @@ function download {
     case "$downloader_in" in
 	DCC_Xfer)
             rm -rf "$path_tmp/irc_done" 
-	    unset irc ctcp
-	    declare -A ctcp
 
             local test_xfer="$path_tmp"/irc_file_url #$(create_hash "$url_in")" 
-	    > "$test_xfer"
-
-            echo >"$path_tmp"/irc_request
+	    > "$test_xfer" > "$path_tmp"/irc_request
 
             local test_irc_url="${url_in#*\/\/}"
             if [ "${test_irc_url}" != "${test_irc_url//\/\/}" ]
@@ -277,12 +273,10 @@ function download {
                 then
 	            rm -f "$test_xfer"
                 fi
-                #echo loop-0
                 sleep 0.1
 	    done
 
 	    downwait=10
-
             
 	    echo -e "____PID_IN____
 $url_in
@@ -292,9 +286,7 @@ $file_in
 $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 
             while [ -f "$path_tmp"/irc_request ]
-            do
-                #echo loop-1
-                sleep 0.1
+            do sleep 0.1
             done            
             local wait_lines=7
 	;;
