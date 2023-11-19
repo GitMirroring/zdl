@@ -758,9 +758,9 @@ function irc_connect_server {
                 elif [[ "${irc['line']}" =~ (Closing link: ${xdcc['nick',$xdcc_index]}\[$real_ip\]) ]]
                 then
                     print_c 3 "${irc['line']}"
-                    irc_quit                    
+                    
                     reset_irc_request
-                    exit
+                    irc_quit                    
                 fi
                 ;;
         esac
@@ -808,6 +808,13 @@ function irc_join_chan {
                 then
                     print_c 3 "${irc['line']}"
                     break
+
+                elif [[ "${irc['line']}" =~ (Closing link: ${xdcc['nick',$xdcc_index]}\[$real_ip\]) ]]
+                then
+                    print_c 3 "${irc['line']}"
+
+                    reset_irc_request
+                    irc_quit                    
                 fi
                 ;;
         esac
@@ -1276,6 +1283,13 @@ function irc_main {
                         then
                             print_c 3 "${irc['line']}"
                             break
+                            
+                        elif [[ "${irc['line']}" =~ (Closing link: ${xdcc['nick',$xdcc_index]}\[$real_ip\]) ]]
+                        then
+                            print_c 3 "${irc['line']}"
+
+                            reset_irc_request
+                            irc_quit                    
                         fi
                         ;;
                 esac
