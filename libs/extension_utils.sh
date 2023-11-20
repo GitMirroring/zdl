@@ -868,7 +868,7 @@ function check_livestream {
     else
         local link="$1"
     fi
-    
+
     if [[ "$link" =~ (youtube\.|dailymotion\.com\/video) ]] &&
            [[ ! "$link" =~ youtube\.com(\/playlist|.+\/(videos|featured|playlists|community|channels)$) ]]
     then        

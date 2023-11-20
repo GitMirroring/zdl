@@ -34,8 +34,7 @@ then
 
     # if [[ "$url_in" =~ \/collezioni\/ ]]
     # then
-        
-        
+
     if check_livestream "$url_in" ## in libs/extension_utils.sh
     then
         raiplay_json=$(curl -s \
