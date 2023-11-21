@@ -54,7 +54,7 @@ function extract_filmpertutti {
     fi
 }
 
-if [[ "$url_in" =~ filmpertutti\. ]]
+if [[ "$url_in" =~ (filmpertutti|fpt)\. ]]
 then
     get_language_prog
 
