@@ -966,6 +966,7 @@ function irc_xdcc_send {
                 notice="${BASH_REMATCH[1]}"
                 _log 27 "${xdcc['url',$xdcc_index]}" 
                 xdcc_cancel
+                xdcc_remove
                 #irc_send QUIT
                 reset_irc_request
                 #del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
