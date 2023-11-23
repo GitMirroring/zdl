@@ -873,14 +873,16 @@ function irc_xdcc_send {
     set_xdcc_key_value pid_cat ''
     set_xdcc_key_value pid_xfer ''
     
-    # xdcc_cancel
-    #countdown- 60
     if [ "${xdcc['chan',$xdcc_index]}" == "THE.SOURCE.NOSPAM" ]
     then
         #timeout_dcc_delay=240
         countdown- 61
     fi
     
+    # xdcc_cancel
+    # xdcc_remove
+    # countdown- 5
+        
     print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
     
     ##/MSG <slot> XDCC SEND <#pack>    
