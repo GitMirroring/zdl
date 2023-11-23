@@ -72,6 +72,12 @@ then
         done < <(curl -s "$url_in" | grep -oP '[^"]+show_video=true[^"]+' | sed -r 's|\#038\;||g')
     
     fi
+
+    if ! url "$url_in_start" &&
+            [[ ! "$url_in" =~ show_video ]]
+    then
+        extract_filmpertutti "${url_in}?show_video=true"
+    fi
     
     get_language    
     if url "$url_in_start"
