@@ -888,7 +888,7 @@ function irc_xdcc_send {
     ##/MSG <slot> XDCC SEND <#pack>    
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
     timeout_dcc=$(date +%s)
-    timeout_dcc_delay=30
+    timeout_dcc_delay=60
 
 
     exec 6<>"$xdcc_host_url_fifo"
