@@ -807,25 +807,36 @@ function join {
     tr " " "$2" <<< "$1"
 }
 
-function dotless2ip {
+function integer2ip {
     local k
-    local dotless=$1
+    local integer=$1
     local i=$2
     [ -z "$i" ] && i=3
     
     if ((i == 0))
     then
-	ip+=( $dotless )
+	ip+=( $integer )
 	join "${ip[*]}" '.'
 	return
 
     else
 	k=$((256**i))
 	
-	ip+=( $((dotless / k)) )
+	ip+=( $((integer / k)) )
 	((i--))
-	dotless2ip $((dotless - ip[-1] * k )) $i
+	integer2ip $((integer - ip[-1] * k )) $i
     fi
+}
+
+function ip2integer {
+    declare -a ip=( ${1//./ } )
+    local res=0 i
+
+    for i in {3..0}
+    do
+        res=$(( ip[3 - $i] * 256 ** $i + $res ))
+    done
+    echo $res
 }
 
 function equal_file_size {

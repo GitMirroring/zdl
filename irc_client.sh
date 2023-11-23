@@ -201,7 +201,8 @@ function send_dcc_resume {
            (( xdcc['offset',$xdcc_index] < xdcc['size',$xdcc_index] )) # (( xdcc['offset',$xdcc_index] < xdcc['size',$xdcc_index] ))
     then
 	irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC RESUME ${xdcc['file',$xdcc_index]} ${xdcc['port',$xdcc_index]} ${xdcc['offset',$xdcc_index]}"
-	print_c 2 "CTCP>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC RESUME ${xdcc['file',$xdcc_index]} ${xdcc['port',$xdcc_index]} ${xdcc['offset',$xdcc_index]}" 
+	print_c 2 "CTCP>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC RESUME ${xdcc['file',$xdcc_index]} ${xdcc['port',$xdcc_index]} ${xdcc['offset',$xdcc_index]}"
+        test_resume=true
     fi
 }
 
@@ -542,7 +543,7 @@ function check_ip_xfer {
 
     if [[ "$ip_address" =~ ^[0-9]+$ ]]
     then
-	ip_address=$(dotless2ip $ip_address)
+	ip_address=$(integer2ip $ip_address)
 	
     elif [[ "$ip_address" =~ ^[0-9a-zA-Z:]+$ ]]
     then
@@ -561,110 +562,125 @@ function check_ip_xfer {
 
 function dcc_xfer {
     local offset old_offset pid_cat
-    
-    for ((i=0; i<10; i++))
-    do		    
-	if get_resume
-	then
-            init_resume
-            resume=true
-	    break
-	fi
-	sleep 1
-    done
 
-    if [ "${xdcc['port',$xdcc_index]}" == 0 ]
+    if [ "$test_resume" == true ]
     then
-        local xfer_address="/dev/tcp/${xdcc['address',$xdcc_index]}"
-        {
-            countdown- 3
-            get_ip real_ip proxy_ip
-            print_c 2 "CTCP [reverse]>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
-            irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
-        } &
-    else
-        local xfer_address="/dev/tcp/${xdcc['address',$xdcc_index]}/${xdcc['port',$xdcc_index]}"
+        unset test_resume
+        for ((i=0; i<10; i++))
+        do		    
+	    if get_resume
+	    then
+                init_resume
+                resume=true
+	        break
+	    fi
+	    sleep 1
+        done
     fi
 
-    if exec 4<>"$xfer_address"
-    then
+    if [ "${xdcc['port',$xdcc_index]}" == 0 ]
+    then        
 	if [ -n "$resume" ]
 	then
-	    unset resume
-	    cat <&4 >>"$file_xfer" &
-	    pid_cat=$!
-            
-	else
-	    cat <&4 >"$file_xfer" &
-	    pid_cat=$!
-	fi       
-
-        if [ -n "$pid_cat" ]
-	then
-	    print_c 1 "$(gettext "Connected to the address"): ${xdcc['address',$xdcc_index]}:${xdcc['port',$xdcc_index]}"
-            del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
-            
-	    echo "${xdcc['url',$xdcc_index]}"  >"$file_xfer.zdl"
-	    add_pid_url "$pid_cat" "${xdcc['url',$xdcc_index]}" "xfer-pids"
-            set_xdcc_key_value pid_cat "$pid_cat"
-            
-	    until (
-                [ -f "$xfer_tmp" ] &&
-                    grep -q ____PID_IN____ "$xfer_tmp"
-            )
-            do
-                sleep 0.1
-            done
-            sed -r "s,____PID_IN____,$pid_cat,g" -i "$xfer_tmp"
+            unset resume
+        else
+            rm -f "$file_xfer"
         fi
 
-        until [ -f "$file_xfer" ]
+        #socat -u TCP-L:$tcp_port,reuseaddr,fork,rcvbuf=1 OPEN:"$file_xfer",creat,append &
+        socat -u TCP-L:$tcp_port,reuseaddr,fork OPEN:"$file_xfer",creat,append &
+        pid_cat=$!
+        
+        until check_pid "$pid_cat"
+        do sleep .1
+        done
+        
+        get_ip real_ip proxy_ip
+        print_c 2 "CTCP [reverse]>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC SEND ${xdcc['file',$xdcc_index]} $(ip2integer $real_ip) $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
+        irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC SEND ${xdcc['file',$xdcc_index]} $(ip2integer $real_ip) $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
+        
+    else
+        local xfer_address="/dev/tcp/${xdcc['address',$xdcc_index]}/${xdcc['port',$xdcc_index]}"
+        if exec 4<>"$xfer_address"
+        then
+	    if [ -n "$resume" ]
+	    then
+	        unset resume
+	        cat <&4 >>"$file_xfer" &
+	        pid_cat=$!
+                
+	    else
+	        cat <&4 >"$file_xfer" &
+	        pid_cat=$!
+	    fi
+        fi
+    fi
+
+    countdown- 3
+
+    if [ -n "$pid_cat" ]
+    then
+	print_c 1 "$(gettext "Connected to the address"): ${xdcc['address',$xdcc_index]}:${xdcc['port',$xdcc_index]}"
+        del_pid_url "${xdcc['url',$xdcc_index]}" "irc-wait"
+        
+	echo "${xdcc['url',$xdcc_index]}"  >"$file_xfer.zdl"
+	add_pid_url "$pid_cat" "${xdcc['url',$xdcc_index]}" "xfer-pids"
+        set_xdcc_key_value pid_cat "$pid_cat"
+        
+	until (
+            [ -f "$xfer_tmp" ] &&
+                grep -q ____PID_IN____ "$xfer_tmp"
+        )
         do
             sleep 0.1
         done
-
-        reset_irc_request
-        start_xfer_killer
-
-        while check_pid "$pid_cat" && [ "$offset" != "${xdcc['size',$xdcc_index]}" ]
-        do
-            [ -f "$path_tmp/irc-timeout" ] &&
-	        ! grep -q "${xdcc['url',$xdcc_index]}" "$path_tmp/irc-timeout" &&
-	        echo "${xdcc['url',$xdcc_index]}" >>"$path_tmp/irc-timeout"
-
-            offset=$(size_file "$file_xfer")
-            [ -z "$offset" ] && offset=0
-            [ -z "$old_offset" ] && old_offset=$offset
-            (( old_offset > offset )) && old_offset=$offset
-
-            printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${xdcc['size',$xdcc_index]}" >>"$xfer_tmp" 
-
-            if [[ "$(head -n2 "$xfer_tmp" | tail -n1)" =~ ^XDCC ]] ||
-	           [[ "$file_xfer" =~ XDCC' ' ]]                   
-            then		    
-	        kill "$pid_cat"
-	        rm -f "$path_tmp/${file_xfer}_stdout".*
-            fi
-            old_offset=$offset
-
-            check_pid_regex "$xdcc_pid" irc_client ||
-                kill "$pid_cat"
-
-            sleep 1
-        done
-
-        if [ "$(size_file "$file_xfer")" == "${xdcc['size',$xdcc_index]}" ]
-        then
-            kill $pid_cat
-            rm -f "${file_xfer}.zdl"
-            set_link - "${xdcc['url',$xdcc_index]}"
-            #del_xdcc_url "${xdcc['url',$xdcc_index]}" 
-        fi
-        exec 4>&-
-        
-    else
-        reset_irc_request
+        sed -r "s,____PID_IN____,$pid_cat,g" -i "$xfer_tmp"
     fi
+
+    until [ -f "$file_xfer" ]
+    do
+        sleep 0.1
+    done
+
+    reset_irc_request
+    start_xfer_killer
+
+    while check_pid "$pid_cat" && [ "$offset" != "${xdcc['size',$xdcc_index]}" ]
+    do
+        [ -f "$path_tmp/irc-timeout" ] &&
+	    ! grep -q "${xdcc['url',$xdcc_index]}" "$path_tmp/irc-timeout" &&
+	    echo "${xdcc['url',$xdcc_index]}" >>"$path_tmp/irc-timeout"
+
+        offset=$(size_file "$file_xfer")
+        [ -z "$offset" ] && offset=0
+        [ -z "$old_offset" ] && old_offset=$offset
+        (( old_offset > offset )) && old_offset=$offset
+
+        printf "XDCC %s %s %s XDCC\n" "$offset" "$old_offset" "${xdcc['size',$xdcc_index]}" >>"$xfer_tmp" 
+
+        if [[ "$(head -n2 "$xfer_tmp" | tail -n1)" =~ ^XDCC ]] ||
+	       [[ "$file_xfer" =~ XDCC' ' ]]                   
+        then		    
+	    kill "$pid_cat"
+	    rm -f "$path_tmp/${file_xfer}_stdout".*
+        fi
+        old_offset=$offset
+
+        check_pid_regex "$xdcc_pid" irc_client ||
+            kill "$pid_cat"
+
+        sleep 1
+    done
+
+    if [ "$(size_file "$file_xfer")" == "${xdcc['size',$xdcc_index]}" ]
+    then
+        kill $pid_cat
+        rm -f "${file_xfer}.zdl"
+        set_link - "${xdcc['url',$xdcc_index]}"
+        #del_xdcc_url "${xdcc['url',$xdcc_index]}" 
+    fi
+    exec 4>&-   
+
     set_xdcc_key_value sent true
     
     if ! grep -qP "${xdcc['host',$xdcc_index]}.+xdcc%20send" "$path_tmp"/links_loop.txt
@@ -1020,23 +1036,16 @@ function irc_xdcc_send {
 	            set_xdcc_key_value offset $(size_file "${xdcc['file',$xdcc_index]}")
                     [ -z "${xdcc['offset',$xdcc_index]}" ] && set_xdcc_key_value offset 0
                     set_xdcc_key_value address $(check_ip_xfer "${xdcc['address',$xdcc_index]}")
+                    set_xdcc_key_value port "${ctcp_msg[4]}"
                     
                     if [ "${ctcp_msg[4]}" == 0 ] && [ -n "${ctcp_msg[6]}" ]
                     then
-
 	                set_xdcc_key_value token "${ctcp_msg[6]}"
-                        # get_ip real_ip proxy_ip
-                        # print_c 2 "CTCP [reverse]>> PRIVMSG ${xdcc['slot',$xdcc_index]} :DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
-                        # irc_ctcp "PRIVMSG ${xdcc['slot',$xdcc_index]}" "DCC SEND ${xdcc['file',$xdcc_index]} $real_ip $tcp_port ${xdcc['size',$xdcc_index]} ${xdcc['token',$xdcc_index]}"
-                        
-                    else
-                        set_xdcc_key_value port "${ctcp_msg[4]}"
                     fi                  
 
                     if [ -n "${xdcc['address',$xdcc_index]}" ] &&
-		           [[ "${xdcc['port',$xdcc_index]}" =~ ^[0-9]+$ ]]
+		           [[ "${xdcc['port',$xdcc_index]}${xdcc['token',$xdcc_index]}" =~ ^[0-9]+$ ]]
 	            then
-
                         send_dcc_resume
 
 		        file_xfer="${xdcc['file',$xdcc_index]}"
@@ -1051,7 +1060,7 @@ function irc_xdcc_send {
 		        do
                             sleep 0.1
 		        done
-                        
+
 		        dcc_xfer &
                         local pid_xfer=$!
                         disown pid_xfer
@@ -1062,7 +1071,7 @@ function irc_xdcc_send {
                             sleep 0.1
                         done
                         connected=true
-                        
+
 		        #add_pid_url "${xdcc['pid_xfer',$xdcc_index]}" "${xdcc['url',$xdcc_index]}" "xfer-pids"
 	            fi
 	        fi                
