@@ -785,11 +785,20 @@ function irc_connect_server {
 }
 
 function irc_join_chan {
-    local irc_line 
+    local irc_line
+
     print_c 2 ">> CHAN: ${xdcc['chan',$xdcc_index]}"
 
-    print_c 2 ">> JOIN #${xdcc['chan',$xdcc_index]}"
-    irc_send "JOIN #${xdcc['chan',$xdcc_index]}"
+    if [ "${xdcc['chan',$xdcc_index]}" == "THE.SOURCE" ]
+    then
+        set_xdcc_key_value chan "${xdcc['chan',$xdcc_index]}.NOSPAM"
+        print_c 2 ">> JOIN #${xdcc['chan',$xdcc_index]}"
+        irc_send "JOIN #${xdcc['chan',$xdcc_index]}"
+        
+    else
+        print_c 2 ">> JOIN #${xdcc['chan',$xdcc_index]}"
+        irc_send "JOIN #${xdcc['chan',$xdcc_index]}"
+    fi
 
     while :
     do
@@ -865,7 +874,12 @@ function irc_xdcc_send {
     set_xdcc_key_value pid_xfer ''
     
     # xdcc_cancel
-    # countdown- 13
+    #countdown- 60
+    if [ "${xdcc['chan',$xdcc_index]}" == "THE.SOURCE.NOSPAM" ]
+    then
+        #timeout_dcc_delay=240
+        countdown- 61
+    fi
     
     print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
     
@@ -873,6 +887,7 @@ function irc_xdcc_send {
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
     timeout_dcc=$(date +%s)
     timeout_dcc_delay=30
+
 
     exec 6<>"$xdcc_host_url_fifo"
     
@@ -924,19 +939,33 @@ function irc_xdcc_send {
         fi
 
         ## triggers ########################################
+        if [[ "${irc['line']}" =~ (JOIN :) ]] 
+        then
+            print_c 1 "<< ${irc['line']}"
+        fi
 
         if [[ "$irc_line" =~ You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ ([0-9]+)\ seconds\ or\ more ]]
         then
             xdcc_send_delay="${BASH_REMATCH[1]}"
             print_c 3 "\n$irc_line"
-            
-            print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
+
+            #xdcc_cancel
+            #xdcc_remove
+
+            # print_c 2 ">> CHAN: ${xdcc['chan',$xdcc_index]}"
+            # set_xdcc_key_value chan "${xdcc['chan',$xdcc_index]}.NOSPAM"
+            # print_c 2 ">> JOIN #${xdcc['chan',$xdcc_index]}"
+            # irc_send "JOIN #${xdcc['chan',$xdcc_index]}"
+
             countdown- $(( $xdcc_send_delay +5 ))
-            
+            print_c 2 ">> PRIVMSG ${xdcc['slot',$xdcc_index]} :xdcc send ${xdcc['pack',$xdcc_index]}"
+
             ##/MSG <slot> XDCC SEND <#pack>    
             irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
             timeout_dcc=$(date +%s)
-            timeout_dcc_delay=180
+            timeout_dcc_delay=120       
+
+            #continue
         fi
         
         if [ "${irc['cmd']}" == NOTICE ]

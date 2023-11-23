@@ -34,7 +34,7 @@ function extract_filmpertutti {
     then
         local linker_fpt=$(curl -s "$1" |
                                grep -oP '[^"]+protectlinker[^"]+')
-        
+
         if url "$linker_fpt"
         then
             get_language
@@ -79,6 +79,8 @@ then
 	replace_url_in "$url_in_start"
         unset url_in_start
 	print_c 4 "$(gettext "New link to process"): $url_in"
+    else
+        _log 17
     fi
 fi
 
