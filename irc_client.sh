@@ -1020,7 +1020,7 @@ function irc_xdcc_send {
                 break
                 
             elif grep -q "${xdcc['nick',$xdcc_index]}" <<< "${irc['line']}" &&
-                    grep -q "pack errato" <<< "${irc['line']}"
+                    grep -q "pack errato" <<< "${irc['line']}" 
             then
                 print_c 3 "$irc_line"
                 _log 3 "${xdcc['url',$xdcc_index]}"
@@ -1028,12 +1028,19 @@ function irc_xdcc_send {
                 break
             fi
             
-            # if grep -P '(433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
+            # if grep -P '(401|433|743|879|883|890|891|1124|1131|1381|1382|1775|1776|1777|1778)' <<< "$notice"
             # then
             #     _log 27 "${xdcc['url',$xdcc_index]}"
             #     print_c 3 "NOTICE code: ${BASH_REMATCH[1]}"
             # fi
-            
+        elif grep -q "${xdcc['nick',$xdcc_index]}" <<< "${irc['line']}" &&
+                grep -qP "(pack errato|No such nick\/channel)" <<< "${irc['line']}" 
+        then
+            print_c 3 "$irc_line"
+            _log 3 "${xdcc['url',$xdcc_index]}"
+            reset_irc_request
+            break
+
         elif [ "${irc['cmd']}" == PRIVMSG ] ||
                  [[ "${irc['line']}" =~ PRIVMSG.+"${xdcc['nick',$xdcc_index]}".+DCC(SEND|RESUME|ACCEPT) ]]
         then            
@@ -1341,7 +1348,8 @@ function irc_main {
                     [[ "$irc_line" =~ (PRIVMSG|NOTICE) ]] ||
                         [[ "${irc['cmd']}" =~ (PRIVMSG|NOTICE) ]] ||
                         [[ "${irc['line']}" =~ (PRIVMSG|NOTICE) ]] ||
-                        [[ "$irc_line" =~ (You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ )([0-9]+)(\ seconds\ or\ more) ]]
+                        [[ "$irc_line" =~ (You\ cannot\ send\ messages\ to\ users\ until\ .+\ been\ connected\ for\ )([0-9]+)(\ seconds\ or\ more) ]] ||
+                        ( grep -q "${xdcc['nick',$xdcc_index]}" <<< "${irc['line']}" && grep -qP "(pack errato|No such nick\/channel)" <<< "${irc['line']}" )
                 ) &&
                     [ -n "$xdcc_host_url_fifo" ] && [ -e "$xdcc_host_url_fifo" ]
                 then
