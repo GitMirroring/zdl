@@ -37,6 +37,7 @@ if ! url "$url_in_file" ||
 then        
     test_mixdrop=$(grep -oP 'https://[^\/]+' <<< "$url_in")
     get_location "$test_mixdrop" test_mixdrop
+
 else
     unset test_mixdrop
 fi
@@ -53,8 +54,8 @@ then
     url "$mixdrop_url_in" &&
         replace_url_in "$mixdrop_url_in"
 
-    if [[ "$url_in" =~ mixdrop ]]
-    then
+    # if [[ "$url_in" =~ mixdrop ]]
+    # then
         for i in {0..3}
         do
             get_location "$url_in" mixdrop_location
@@ -67,7 +68,7 @@ then
         then
             replace_url_in "$mixdrop_location"
         fi
-    fi
+    # fi
     
     html=$(curl -s \
                 -A "$user_agent" \
