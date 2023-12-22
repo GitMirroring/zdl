@@ -845,7 +845,8 @@ function get_data_xdcc_eu {
             return 1
         fi
 
-        link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
+        #link_xdcc_eu+=( "irc://$data_s"/"$data_c"/"msg%20${data_p// /%20}" )
+        link_xdcc_eu+=( "$(sanitize_url "irc://$data_s"/"$data_c"/"msg $data_p" )" )
         length_xdcc_eu+=( "$length" )
         file_xdcc_eu+=( "${filename// /_}" )
         

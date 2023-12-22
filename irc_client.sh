@@ -79,7 +79,7 @@ function start_timeout {
 
 	elif (( diff_now >= $max_seconds ))
 	then
-            print_c 3 "irc_client timeout: ${url//'%20'/' '}"
+            print_c 3 "irc_client timeout: $url"
 
             irc_send QUIT
             
@@ -872,7 +872,7 @@ function irc_xdcc_send {
 
     set_xdcc_key_value pid_cat ''
     set_xdcc_key_value pid_xfer ''
-    
+
     if [ "${xdcc['chan',$xdcc_index]}" == "THE.SOURCE.NOSPAM" ]
     then
         #timeout_dcc_delay=240
@@ -889,7 +889,6 @@ function irc_xdcc_send {
     irc_send "PRIVMSG ${xdcc['slot',$xdcc_index]}" "xdcc send ${xdcc['pack',$xdcc_index]}"
     timeout_dcc=$(date +%s)
     timeout_dcc_delay=180
-
 
     exec 6<>"$xdcc_host_url_fifo"
     
@@ -979,8 +978,15 @@ function irc_xdcc_send {
             notice2="${notice2%%[0-9]*}"
             notice2="${notice2%%SEND*}"
             notice2=$(trim "$notice2")
-            
-            if [[ "${irc['txt']}" =~ XDCC\ SEND\ (denied|negato) ]]
+
+            if [[ "${irc['txt']}" =~ Join\ (.+) ]]
+            then
+                xdcc['chan',$xdcc_index]="${BASH_REMATCH[1]}"
+                #xdcc['chan',$xdcc_index]="ELiTE-CHAT"
+                irc_join_chan
+                
+                
+            elif [[ "${irc['txt']}" =~ XDCC\ SEND\ (denied|negato) ]]
             then
                 print_c 3 "${irc['txt']}"
                 reset_irc_request
@@ -1159,9 +1165,7 @@ function irc_main {
         then
             {
                 until lsof -a -d3 | grep -qP 'irc_clien.+TCP'
-                do
-                    ___timeout_test=$(lsof -a -d3 | grep -qP 'irc_clien.+TCP')
-                    sleep 0.1
+                do sleep 0.1
                 done
                 
                 for ___timeout in {0..5}
@@ -1400,9 +1404,10 @@ then
 	['port']=6667
 	['chan']="${BASH_REMATCH[2]}"
 	['nick']=$(obfuscate_user) #$(date +%s) #$(obfuscate "$USER")
-        ['slot']=$(cut -f2 -d' ' <<< "${url//%20/ }")
+        ['slot']=$(cut -f2 -d' ' <<< "$(urldecode "$url")") 
         ['pack']=$(cut -f5 -d' ' <<< "${url//%20/ }")
     )
+    #"${url//%20/ }")
 fi
 
 if [[ "${irc[host]}" =~ ^(.+)\:([0-9]+)$ ]]
