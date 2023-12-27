@@ -106,7 +106,7 @@ function displayHead() {
 <meta http-equiv=\"Content-Security-Policy\" content=\"upgrade-insecure-requests\">
 <link title=\"Top\" rel=\"start\" href=\"index.html#Top\">
 <link rel=\"next\" href=\"Il-comando-ZDL.html#Il-comando-ZDL\" title=\"Il comando ZDL\">
-<link href=\"http://www.gnu.org/software/texinfo/\" rel=\"generator-home\" title=\"Texinfo Homepage\">
+<link href=\"https://www.gnu.org/software/texinfo/\" rel=\"generator-home\" title=\"Texinfo Homepage\">
 <!--
 ZigzagDownLoader (ZDL)
 
@@ -129,9 +129,9 @@ ZigzagDownLoader (ZDL)
  `https://savannah.nongnu.org/projects/zdl'
 
  Gianluca Zoni (author)
- `http://inventati.org/zoninoz'
+ `https://inventati.org/zoninoz'
  <zoninoz@inventati.org>-->
-<link rel=\"stylesheet\" type=\"text/css\" href=\"http://nongnu.org/zdl/zdl_rss_style.css\">
+<link rel=\"stylesheet\" type=\"text/css\" href=\"https://www.nongnu.org/zdl/zdl_rss_style.css\">
 </head>
 <body>";
           echo $header;

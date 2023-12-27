@@ -32,8 +32,14 @@ function extract_filmpertutti {
     
     if url "$1"
     then
-        local linker_fpt=$(curl -s "$1" |
-                               grep -oP '[^"]+protectlinker[^"]+')
+        local html=$(curl -s "$1")
+        local linker_fpt=$(grep -oP '[^"]+protectlinker[^"]+' <<< "$html")
+
+        if ! url "$linker_fpt"
+        then
+            linker_fpt=$(grep -oP 'iframe src="[^"]+' <<< "$html")
+            linker_fpt="${linker_fpt##*\"}"
+        fi
 
         if url "$linker_fpt"
         then
