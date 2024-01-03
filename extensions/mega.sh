@@ -43,18 +43,21 @@ then
         url_in_file="$url_in"
 
         unset ok
-        while [ -z "$ok" ]
+        ok_loop=0
+        while [ -z "$ok" ] || (( ok_loop >1 ))
         do
             test_tmp=$(mktemp)
             megadl --debug api \
                    "$url_in" &> "$test_tmp" &
             pid_mega=$!
             
-            while :
+            for iiii in {0..30}
             do
                 if [[ "$(cat "$test_tmp")" =~ 'Local file already exists: '(.+)$ ]]
                 then
-                    rm -rf "${BASH_REMATCH[1]}"
+                    file_in="${BASH_REMATCH[1]}"
+#                    echo "Local file already exists: ${BASH_REMATCH[1]}"
+                    ok=true
                     break
                 fi
 
@@ -63,15 +66,92 @@ then
                     ok=true
                     break
                 fi
-                sleep 0.1
+                sleep 1
             done
-            kill $pid_mega 
+            kill -9 $pid_mega
+            ((ok_loop++))
         done
         
-        file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
-        rm -f "$file_in_encoded"
-        
-        file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
+#        echo "cat $test_tmp:"         
+#        cat "$test_tmp" 
+
+        #sleep 1
+        #[ -d "$file_in" ] ||
+        #    mkdir -p "$file_in"
+
+        if [ -z "$file_in" ]
+        then
+            file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
+            mkdir -p "$file_in"
+            file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
+            rm -rf "$file_in_encoded"
+            
+        else
+            [ -d "$file_in" ] ||
+                mkdir -p "$file_in"
+
+            unset ok
+            ok_loop=0
+            while [ -z "$ok" ] && (( ok_loop <2 ))
+            do            
+                test_tmp=$(mktemp)
+                megadl --debug api \
+                       --path "${file_in}" \
+                       "$url_in" &> "$test_tmp" &
+                pid_mega=$!
+                # echo "            megadl --debug api \
+                #    --path       \"$file_in\" \
+                #    \"$url_in\" &> \"$test_tmp\" &"
+                
+                for iiii in {0..120}
+                do
+                    #echo "test: $test_tmp"
+                    (( iiii % 2 )) &&
+                    sprint_c 2 "\r. . ." ||
+                        sprint_c 2 "\r...  "
+                    
+                    if [[ "$(cat "$test_tmp")" =~ 'Local file already exists: '(.+)$ ]]
+                    then
+                        rm -rf "${BASH_REMATCH[1]}"
+#                        echo "Local file already exists: ${BASH_REMATCH[1]}"
+                        break
+                    fi
+
+                    if [[ "$(cat "$test_tmp")" =~ (\%) ]]
+                    then
+                        ok=true
+                        break
+                    fi
+
+                    if [[ "$(cat "$test_tmp")" =~ (Server\ returned\ 509) ]]
+                    then
+                        ok_loop=10
+                        _log 25
+                        break
+                    fi
+
+                    # if (( $(grep -A5 '"ip":' "$test_tmp" | wc -l) == 5 )) && (( iiii > 20 ))
+                    # then
+                    #     #ok=true
+                    #     ok_loop=2
+                    #     break
+                    # fi
+                    
+                    sleep 1
+                done
+                kill -9 $pid_mega
+                ((ok_loop++))
+            done
+ #           echo "cat $test_tmp:"         
+ #           cat "$test_tmp"
+            file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
+            file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
+        fi
+
+ #       echo "FILE_IN: $file_in"
+  
+        #rm -f "$file_in_encoded"
+
         length_in=$(awk '{match($0, /"s":\s(.+),/, matched); if (matched[1]) print matched[1]}' $test_tmp)
 
         get_language
@@ -83,6 +163,6 @@ then
         print_c 3 "$(gettext 'To download from Mega, install the "megatools" package')"
         get_language_prog
     fi
-    
+
     end_extension
 fi

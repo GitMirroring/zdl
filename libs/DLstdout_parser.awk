@@ -603,7 +603,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 	    cmd = "date +%s"
 	    cmd | getline this_time
 	    close(cmd)
-	    elapsed_time = this_time - start_time
+	    elapsed_time = this_time - start_time[i]
 	    split(progress_line, progress_elems, /[ ]*[%]*[\(]*/)
 	    percent_out[i] = int(progress_elems[length(progress_elems)-1])
 	    if (percent_out[i] > 0) {
@@ -790,34 +790,40 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 	    }
 	}
 
-	if (progress_end[i]) {
+	if (progress_end[i] &&
+            (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) ) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_dir(file_out[i])
 	    percent_out[i] = 100
-            if (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) {
+            #if (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) {
                 system("mv " file_out[i] " " file_out[i] "enc")
                 system("mv " file_out[i] "enc/" file_out[i] " .")
                 system("rm -rf " file_out[i] "enc")
-            }
+            #}
             #rm_file(file_out_encoded[i])
 	}
 	else if (progress_line) {
-	    cmd = "date +%s"
+            length_saved[i] = size_file(file_out[i] "/" file_out_encoded[i])
+
+            percent_out[i] = ( length_saved[i] / length_out[i] ) * 100
+            
+            cmd = "date +%s"
 	    cmd | getline this_time
 	    close(cmd)
-	    elapsed_time = this_time - start_time
-	    # split(progress_line, progress_elems, /([:\(\)]{1}|\s\-\s|byte|%|\(|\))/)
-	    # percent_out[i] = int(progress_elems[2])
-	    split(progress_line, progress_elems, /(%)/)
-            array_length = split(progress_elems[1], progress_percent, " ")
-	    percent_out[i] = int(progress_percent[array_length])
+	    elapsed_time = this_time - start_time[i]
+
+            # # split(progress_line, progress_elems, /([:\(\)]{1}|\s\-\s|byte|%|\(|\))/)
+	    # # percent_out[i] = int(progress_elems[2])
+	    # split(progress_line, progress_elems, /(%)/)
+            # array_length = split(progress_elems[1], progress_percent, " ")
+	    # percent_out[i] = int(progress_percent[array_length])
 
 	    if (percent_out[i] > 0) {
 		eta_out[i] = int((elapsed_time * 100 / percent_out[i]) - elapsed_time)
 		eta_out[i] = seconds_to_human(eta_out[i])
-		length_saved[i] = size_file(file_out[i] "/" file_out_encoded[i])
+
 		if (! length_saved[i]) length_saved[i] = 0
                 
                 array_length = split(progress_line, speed_elems, /[\(\)\?]/)
@@ -831,14 +837,44 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
                 else if (speed_out_type[i] ~ /M/) speed_out_type[i]="M/s"
                 else if (speed_out_type[i] ~ /B/) speed_out_type[i]="B/s"
 	    }
-	    # if (! pid_alive[i] && length_saved[i] < length_out[i]) {
-	    #     #system("rm -f " file_out[i])
-            #     rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
-            #     rm_file(file_out[i])
-            #     rm_file(file_out[i] ".st")
-            #     rm_file(file_out[i] ".aria2")
-            # }
 	}        
+        
+	# else if (progress_line) {
+	#     cmd = "date +%s"
+	#     cmd | getline this_time
+	#     close(cmd)
+	#     elapsed_time = this_time - start_time[i]
+	#     # split(progress_line, progress_elems, /([:\(\)]{1}|\s\-\s|byte|%|\(|\))/)
+	#     # percent_out[i] = int(progress_elems[2])
+	#     split(progress_line, progress_elems, /(%)/)
+        #     array_length = split(progress_elems[1], progress_percent, " ")
+	#     percent_out[i] = int(progress_percent[array_length])
+
+	#     if (percent_out[i] > 0) {
+	# 	eta_out[i] = int((elapsed_time * 100 / percent_out[i]) - elapsed_time)
+	# 	eta_out[i] = seconds_to_human(eta_out[i])
+	# 	length_saved[i] = size_file(file_out[i] "/" file_out_encoded[i])
+	# 	if (! length_saved[i]) length_saved[i] = 0
+                
+        #         array_length = split(progress_line, speed_elems, /[\(\)\?]/)
+	# 	speed_out[i] = speed_elems[array_length -2]
+	# 	speed_out_type[i] = speed_elems[array_length -1]
+
+        #         # if (speed_out_type[i] ~ /K/) speed_out_type[i]="KB/s"
+        #         # else if (speed_out_type[i] ~ /M/) speed_out_type[i]="MB/s"
+        #         # else if (speed_out_type[i] ~ /B/) speed_out_type[i]="B/s"
+        #         if (speed_out_type[i] ~ /K/) speed_out_type[i]="K/s"
+        #         else if (speed_out_type[i] ~ /M/) speed_out_type[i]="M/s"
+        #         else if (speed_out_type[i] ~ /B/) speed_out_type[i]="B/s"
+	#     }
+	#     # if (! pid_alive[i] && length_saved[i] < length_out[i]) {
+	#     #     #system("rm -f " file_out[i])
+        #     #     rm_file(".zdl_tmp/"file_out[i]"_stdout.tmp")
+        #     #     rm_file(file_out[i])
+        #     #     rm_file(file_out[i] ".st")
+        #     #     rm_file(file_out[i] ".aria2")
+        #     # }
+	# }        
     }
     
     if (! speed_out[i]) speed_out[i] = 0
@@ -986,8 +1022,11 @@ BEGIN {
             file_out_encoded[i] = $0
         }
     }
-    if (FNR == 8) {        
-        start_time = $0
+    if (FNR == 8) {
+        if ($0 ~ /[0-9]+/)
+            start_time[i] = $0
+        else
+            start_time[i] = 0
     }
     if  (dler ~ /MegaDL/) {
         if (FNR == 9)

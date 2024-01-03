@@ -374,10 +374,12 @@ $aria2_parts" >"$path_tmp/${file_in}_stdout.tmp"
                 --debug api
                 --path "$file_in"
             )
-            [ -f "$file_in" ] &&
-                rm -f "$file_in"
-            mkdir -p "$file_in"
+            # [ -f "$file_in" ] &&
+            #     rm -f "$file_in"
+            #mkdir -p "$file_in"
 
+#            echo "file_in ---> $file_in ---- $path_tmp/${file_in}_stdout.tmp"
+#pkill megadl
             stdbuf -oL -eL                                   \
 		   megadl                                    \
 		   "${opts[@]}"                              \
