@@ -784,6 +784,12 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 		progress_end[i] = chunk[y]
 		break
 	    }
+            if (chunk[y] ~ "Server returned 509") {
+                speed_out[i] = 0
+                delete progress_line
+                system("kill -9 " pid_out[i])
+                break
+            }
             if (chunk[y] ~ /[%]+.+byte/) {
 		progress_line = chunk[y]
 		break
@@ -792,19 +798,22 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 
 	if (progress_end[i] &&
             (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) ) {
-	    if (! no_check)
-		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
 	    if (url_in == url_out[i]) bash_var("url_in", "")
 	    length_saved[i] = size_dir(file_out[i])
-	    percent_out[i] = 100
+
+            if ( length_saved[i] == length_out[i] ) {
+                percent_out[i] = 100
             #if (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) {
                 system("mv " file_out[i] " " file_out[i] "enc")
                 system("mv " file_out[i] "enc/" file_out[i] " .")
                 system("rm -rf " file_out[i] "enc")
-            #}
+                #}
             #rm_file(file_out_encoded[i])
+                if (! no_check)
+                    rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
+            }
 	}
-	else if (progress_line) {
+	if (progress_line) {
             length_saved[i] = size_file(file_out[i] "/" file_out_encoded[i])
 
             percent_out[i] = ( length_saved[i] / length_out[i] ) * 100

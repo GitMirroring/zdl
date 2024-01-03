@@ -50,6 +50,7 @@ then
             megadl --debug api \
                    "$url_in" &> "$test_tmp" &
             pid_mega=$!
+            echo "$pid_mega" >> "$path_tmp/external-dl_pids.txt" 
             
             for iiii in {0..30}
             do
@@ -81,7 +82,7 @@ then
 
         if [ -z "$file_in" ]
         then
-            file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
+            file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp | tail -n1)"
             mkdir -p "$file_in"
             file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
             rm -rf "$file_in_encoded"
@@ -95,10 +96,11 @@ then
             while [ -z "$ok" ] && (( ok_loop <2 ))
             do            
                 test_tmp=$(mktemp)
-                megadl --debug api \
-                       --path "${file_in}" \
-                       "$url_in" &> "$test_tmp" &
+                megadl --debug api          \
+                       --path "${file_in}"  \
+                       "$url_in" 2>&1  &>> "$test_tmp" &
                 pid_mega=$!
+                echo "$pid_mega" >> "$path_tmp/external-dl_pids.txt" 
                 # echo "            megadl --debug api \
                 #    --path       \"$file_in\" \
                 #    \"$url_in\" &> \"$test_tmp\" &"
@@ -117,19 +119,34 @@ then
                         break
                     fi
 
-                    if [[ "$(cat "$test_tmp")" =~ (\%) ]]
+                    if (( $(wc -l < "$test_tmp") >18 ))
                     then
-                        ok=true
-                        break
+                        mega_line_19=$(tail -n1 "$test_tmp")
+                        
+                        if grep -q "Server returned 509" <<< "$mega_line_19"
+                        then
+                            ok_loop=10
+                            _log 25
+                            break
+                            
+                        elif [[ "$mega_line_19" =~ (\%) ]]
+                        then
+                            ok=true
+                            break
+                        fi
+                        # if grep -q "Server returned 509" "$test_tmp"
+                        # then
+                        #     ok_loop=10
+                        #     _log 25
+                        #     break
+                        # fi
+                        
+                        # if [[ "$(cat "$test_tmp")" =~ (\%) ]]
+                        # then
+                        #     ok=true
+                        #     break
+                        # fi
                     fi
-
-                    if [[ "$(cat "$test_tmp")" =~ (Server\ returned\ 509) ]]
-                    then
-                        ok_loop=10
-                        _log 25
-                        break
-                    fi
-
                     # if (( $(grep -A5 '"ip":' "$test_tmp" | wc -l) == 5 )) && (( iiii > 20 ))
                     # then
                     #     #ok=true
@@ -142,16 +159,16 @@ then
                 kill -9 $pid_mega
                 ((ok_loop++))
             done
- #           echo "cat $test_tmp:"         
- #           cat "$test_tmp"
-            file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp)"
+            #           echo "cat $test_tmp:"         
+            #           cat "$test_tmp"
+            file_in="$(awk '{match($0, /^([^"]+):\s[0-9]+/, matched); if (matched[1]) print matched[1]}' $test_tmp | tail -n1)"
             file_in_encoded=.megatmp.$(awk '{match($0, /"p":\s"(.+)"/, matched); if (matched[1]) print matched[1]}' $test_tmp)
         fi
-
- #       echo "FILE_IN: $file_in"
-  
+        
+        #       echo "FILE_IN: $file_in"
+        
         #rm -f "$file_in_encoded"
-
+        
         length_in=$(awk '{match($0, /"s":\s(.+),/, matched); if (matched[1]) print matched[1]}' $test_tmp)
 
         get_language
@@ -164,5 +181,7 @@ then
         get_language_prog
     fi
 
+    no_check_links+=( mega )
+    
     end_extension
 fi
