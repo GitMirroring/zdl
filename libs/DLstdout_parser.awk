@@ -835,7 +835,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 
 		if (! length_saved[i]) length_saved[i] = 0
                 
-                array_length = split(progress_line, speed_elems, /[\(\)\?]/)
+                array_length = split(progress_line, speed_elems, /[\(\)\?\ ]/)
 		speed_out[i] = speed_elems[array_length -2]
 		speed_out_type[i] = speed_elems[array_length -1]
 
