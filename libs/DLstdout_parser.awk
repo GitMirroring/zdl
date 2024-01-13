@@ -331,7 +331,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 	    ## conversione formato --mp3|--flac:
 	    if ((format_out != "") &&
 	    	(!exists(file_out[i]))) {
-		match(file_out[i], /(.+)\.[^\.]+$/, matched)
+		match(file_out[i], /(.+)\.[^.]+$/, matched)
 		if (exists(matched[1] "." format_out))
 		    file_out[i] = matched[1] "." format_out
 	    }
@@ -835,7 +835,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 
 		if (! length_saved[i]) length_saved[i] = 0
                 
-                array_length = split(progress_line, speed_elems, /[\(\)\?\ ]/)
+                array_length = split(progress_line, speed_elems, /[()? ]/)
 		speed_out[i] = speed_elems[array_length -2]
 		speed_out_type[i] = speed_elems[array_length -1]
 
