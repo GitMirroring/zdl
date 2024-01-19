@@ -123,7 +123,8 @@ then
             raiplay_json_url="${BASH_REMATCH[1]}".json
 
             raiplay_seasons_path=(
-                $(curl -s "$raiplay_json_url" |
+                $(curl -s "$raiplay_json_url" \
+                       -A "$user_agent" |
                       grep -oP '[^"]+ContentSet[^"]+\.json')
             )
 
@@ -150,7 +151,8 @@ then
             done
             unset first
 
-        else
+        elif [[ ! "$url_in" =~ (^.+\/video\/[^\/]+) ]]
+        then
             # raicultura
             html=$(curl -s \
                         -A "$user_agent" \
@@ -188,14 +190,19 @@ then
         then
             if ! url "$raiplay_url" || [ -z "$raiplay_json" ]
             then
-                raiplay_json=$(curl -s "${url_in%html}json" -c "$path_tmp"/cookies.zdl)
+                raiplay_json=$(curl -s "${url_in%html}json" \
+                                    -A "$user_agent" \
+                                    -c "$path_tmp"/cookies.zdl)
                 
                 raiplay_url="${raiplay_json#*content_url\": \"}"
                 raiplay_url="${raiplay_url%%\"*}"
             fi
+
+            url_in_file=$(curl -v  "$raiplay_url" -A "$user_agent" 2>&1 | grep location)
+            url_in_file="${url_in_file##* }"
             
-            url_in_file=$(sanitize_url "$(curl -s "$raiplay_url")")
-            
+            url_in_file=$(sanitize_url "$url_in_file")
+
             if ! url "$url_in_file" &&
                     url "$raiplay_url"
             then
@@ -215,15 +222,14 @@ then
             fi
         fi
 
-        if url "$raiplay_url"
-        then
-            get_language_prog
-            url_in_file=$(get_location "$raiplay_url")
-            get_language
-        fi
-
         if ! url "$url_in_file"
         then
+            if url "$raiplay_url"
+            then
+                get_language_prog
+                url_in_file=$(get_location "$raiplay_url")
+                get_language
+            fi
             raiplay_data_json=$($youtube_dl --dump-json \
                                            "$url_in")
                               
