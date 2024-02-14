@@ -736,7 +736,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
             
         }
         else if ( (progress_end[i]) ||
-             (time_out[i] >= duration_out[i]) ||
+             (time_out[i] >= duration_out[i] - 1) ||
              ( !speed_out[i] && exists(file_out[i]) && (file_out[i] !~ /\.part$/) && !check_pid(pid_out[i]) ) ) {
 	    if (! no_check)
 		rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
