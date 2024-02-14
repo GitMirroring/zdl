@@ -246,7 +246,7 @@ then
             url_in_file="${url_in_file%%\"*}"
             
             file_in="${raiplay_data_json##*\"title\": \"}"
-            file_in="$file_in_prefix_-_${file_in%%\"*}".mp4
+            file_in="${file_in_prefix}_-_${file_in%%\"*}".mp4
         fi
         # if ! url "$url_in_file"
         # then
