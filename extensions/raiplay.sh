@@ -232,12 +232,21 @@ then
             fi
             raiplay_data_json=$($youtube_dl --dump-json \
                                            "$url_in")
-                              
+            #echo "json: $raiplay_data_json"
+
+            episode_number=$(grep -oP 'episode_number\": [0-9]+' <<< "$raiplay_data_json")
+            episode_number="${episode_number##* }"
+            season_number=$(grep -oP 'season_number\": [0-9]+' <<< "$raiplay_data_json")
+            season_number="${season_number##* }"
+            if [ "${season_number}x${episode_number}" != x ]
+            then
+                file_in_prefix="${season_number}x$(printf "%.2d" ${episode_number})"
+            fi
             url_in_file="${raiplay_data_json##*\"manifest_url\": \"}"
             url_in_file="${url_in_file%%\"*}"
             
             file_in="${raiplay_data_json##*\"title\": \"}"
-            file_in="${file_in%%\"*}".mp4
+            file_in="$file_in_prefix_-_${file_in%%\"*}".mp4
         fi
         # if ! url "$url_in_file"
         # then

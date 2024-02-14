@@ -44,30 +44,28 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-    [[ "$url_in" =~ \/f\/ ]] &&
-        replace_url_in "${url_in//\/f\///e/}"
-
+    replace_url_in "${url_in//\/f\///e/}"
     mixdrop_url_in=$(curl -s "$url_in" | grep -P 'iframe.+src=\"\/\/mixdrop')
     mixdrop_url_in="${mixdrop_url_in#*src=\"}"
-    mixdrop_url_in="https:${mixdrop_url_in%%\"*}"
-
+    mixdrop_url_in="https:${mixdrop_url_in%%\"*}"    
+    
     url "$mixdrop_url_in" &&
         replace_url_in "$mixdrop_url_in"
-
+    
     # if [[ "$url_in" =~ mixdrop ]]
     # then
-        for i in {0..3}
-        do
-            get_location "$url_in" mixdrop_location
-            url "$mixdrop_location" && break
-            countdown- 6
-        done
+    for i in {0..3}
+    do
+        get_location "$url_in" mixdrop_location
+        url "$mixdrop_location" && break
+        countdown- 6
+    done
 
-        if url "$mixdrop_location" &&
-                [ "$url_in" != "$mixdrop_location" ]
-        then
-            replace_url_in "$mixdrop_location"
-        fi
+    if url "$mixdrop_location" &&
+            [ "$url_in" != "$mixdrop_location" ]
+    then
+        replace_url_in "$mixdrop_location"
+    fi
     # fi
     
     html=$(curl -s \
