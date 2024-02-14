@@ -518,6 +518,7 @@ function sanitize_file_in {
 	file_in="${file_in##*\/}"
     fi
 
+    file_in=$(iconv -c <<< "$file_in")
     file_in="${file_in//$'\200'}"
     file_in="${file_in//$'\210'}"
     file_in="${file_in//$'\214'}"
