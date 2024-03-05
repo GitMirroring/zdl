@@ -29,6 +29,13 @@
 
 if [ "$url_in" != "${url_in//ilcorsaronero\.}" ]
 then
+    get_location "$url_in" corsaro_location
+
+    if url "$corsaro_location"
+    then
+        replace_url_in "$corsaro_location"
+    fi
+    
     magnet_url=$(curl -s "$url_in" | grep magnet)
     magnet_url="${magnet_url#*href=\"}"
     magnet_url="${magnet_url%%\"*}"
