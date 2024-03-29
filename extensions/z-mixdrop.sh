@@ -44,7 +44,6 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-echo "test: ${test_mixdrop}"    
     mixdrop_url_in=$(curl -s "${url_in//\/f\///e/}" | grep -P 'iframe.+src=\"\/\/mixdrop')
     mixdrop_url_in="${mixdrop_url_in#*src=\"}"
     mixdrop_url_in="https:${mixdrop_url_in%%\"*}"    
