@@ -776,7 +776,6 @@ function check_in_file { 	## return --> no_download=1 / download=0
 				   [ -n "$test_completed" ] )
 		    then
 			set_link - "$url_in"
-
 		    fi
 		fi
 	    done
