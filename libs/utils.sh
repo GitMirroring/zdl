@@ -692,6 +692,10 @@ function sanitize_file_in {
 	fi               
 	
 	file_in="${file_in%$ext}-${file_hash}$ext"
+
+    elif [[ "$url_in_file" =~ \.m3u8 ]]
+    then
+        file_in="${file_in%.mp4}-${file_hash}.mp4"
     fi
 }
 
