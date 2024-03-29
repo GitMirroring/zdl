@@ -44,7 +44,7 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-#    replace_url_in "${url_in//\/f\///e/}"
+    replace_url_in "${url_in//\/f\///e/}"
     mixdrop_url_in=$(curl -s "$url_in" | grep -P 'iframe.+src=\"\/\/mixdrop')
     mixdrop_url_in="${mixdrop_url_in#*src=\"}"
     mixdrop_url_in="https:${mixdrop_url_in%%\"*}"    
@@ -61,12 +61,14 @@ then
         countdown- 6
     done
 
+    file_in=$(get_title "$html")
+    file_in="${file_in%%.mp4*}"
+    
     if url "$mixdrop_location" &&
             [ "$url_in" != "$mixdrop_location" ]
     then
         replace_url_in "$mixdrop_location"
-    fi
-    # fi
+    fi    
     
     html=$(curl -s \
                 -A "$user_agent" \
@@ -80,7 +82,7 @@ then
         _log 3
 
     else
-        if [ -z "$file_in" ]
+        if test -z "$file_in" 
         then
             file_in=$(get_title "$html")
         fi
@@ -117,6 +119,11 @@ then
                     -c "$path_tmp"/cookies.zdl \
                     "$mixdrop_iframe_url")
 
+        if test -z "$file_in" 
+        then
+            file_in=$(get_title "$html")
+        fi
+        
         if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
         then
             mixdrop_chunk="${BASH_REMATCH[1]}"
@@ -127,12 +134,15 @@ then
                             -c "$path_tmp"/cookies.zdl)
             fi
         fi
-        
-        file_in=$(grep title <<< "$html")
-        file_in="${file_in%</a>*}"
-        file_in="${file_in##*>}"
-        file_in="${file_in## }"
 
+        if test -z "$file_in"
+        then
+            file_in=$(grep title <<< "$html")
+            file_in="${file_in%</a>*}"
+            file_in="${file_in##*>}"
+            file_in="${file_in## }"
+        fi
+        
         unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
         if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
@@ -149,7 +159,7 @@ then
             file_in="${BASH_REMATCH[1]}"
         fi
         
-        if [ -z "$file_in" ]
+        if test -z "$file_in" 
         then
             file_in="mixdrop-${url_in##*\/}"
         fi
