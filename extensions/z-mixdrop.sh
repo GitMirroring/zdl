@@ -44,7 +44,7 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-    replace_url_in "${url_in//\/f\///e/}"
+#    replace_url_in "${url_in//\/f\///e/}"
     mixdrop_url_in=$(curl -s "$url_in" | grep -P 'iframe.+src=\"\/\/mixdrop')
     mixdrop_url_in="${mixdrop_url_in#*src=\"}"
     mixdrop_url_in="https:${mixdrop_url_in%%\"*}"    
@@ -91,7 +91,8 @@ then
             
             if [ -n "${mixdrop_chunk}" ]
             then
-                html=$(curl -s "https://mixdrop.co${mixdrop_chunk}")
+                html=$(curl -s "https://mixdrop.co${mixdrop_chunk}" \
+                            -c "$path_tmp"/cookies.zdl)
             fi
         fi
 
@@ -107,14 +108,14 @@ then
             [ -n "$mixdrop_iframe_url" ] &&
                 [[ ! "$mixdrop_iframe_url" =~ http ]] &&
                 mixdrop_iframe_url="https:${mixdrop_iframe_url#https:}"
-
-            html=$(curl -s \
-                        -A "$user_agent" \
-                        -H 'Connection: keep-alive' \
-                        -H 'Upgrade-Insecure-Requests: 1' \
-                        -c "$path_tmp"/cookies.zdl \
-                        "$mixdrop_iframe_url")
         fi
+
+        html=$(curl -s \
+                    -A "$user_agent" \
+                    -H 'Connection: keep-alive' \
+                    -H 'Upgrade-Insecure-Requests: 1' \
+                    -c "$path_tmp"/cookies.zdl \
+                    "$mixdrop_iframe_url")
 
         if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
         then
@@ -122,13 +123,15 @@ then
 
             if [ -n "${mixdrop_chunk}" ]
             then
-                html=$(curl -s "https://mixdrop.co${mixdrop_chunk}")
+                html=$(curl -s "https://mixdrop.co${mixdrop_chunk}" \
+                            -c "$path_tmp"/cookies.zdl)
             fi
         fi
         
         file_in=$(grep title <<< "$html")
         file_in="${file_in%</a>*}"
         file_in="${file_in##*>}"
+        file_in="${file_in## }"
 
         unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
 
@@ -150,6 +153,7 @@ then
         then
             file_in="mixdrop-${url_in##*\/}"
         fi
+
     fi            
     
     end_extension
