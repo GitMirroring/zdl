@@ -626,7 +626,7 @@ function check_in_loop {
     return $ret
 }
 
-function check_in_file { 	## return --> no_download=1 / download=0
+function check_in_file { 	## return --> no_download=1 / download=0    
     sanitize_file_in
     url_in_bis="${url_in::100}"
     file_in_bis="${file_in}__BIS__${url_in_bis//\//_}.${file_in##*.}"
@@ -682,14 +682,16 @@ function check_in_file { 	## return --> no_download=1 / download=0
 	if [ -f "$file_in" ]
 	then
 	    ## `--bis` abilitato di default
-	    [ "$resume" != "enabled" ] && bis=true
+	    #[ "$resume" != "enabled" ] && bis=true
+            
 	    if [ "$bis" == true ]
 	    then
 		homonymy_treating=( resume_dl rewrite_dl bis_dl )
 	    else
 		homonymy_treating=( resume_dl rewrite_dl )
 	    fi
-	    
+
+            local i
 	    for i in ${homonymy_treating[*]}
 	    do
 		if [ "$downloader_in" == "Wget" ]
@@ -771,7 +773,10 @@ function check_in_file { 	## return --> no_download=1 / download=0
 		    then
 			return 0
 
-		    elif [ -f "$file_in_bis" ] ||
+		    elif ( [ -f "$file_in_bis" ] &&
+                               [ ! -f "$file_in_bis".st ] &&
+                               [ ! -f "$file_in_bis".aria2 ]
+                         ) ||
 			     ( [ "${downloader_out[$i]}" == "RTMPDump" ] &&
 				   [ -n "$test_completed" ] )
 		    then

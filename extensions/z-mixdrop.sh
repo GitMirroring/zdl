@@ -57,7 +57,7 @@ then
     
     if ! grep -q 'p,a,c,k,e,d' <<< "$html"
     then    
-        for i in {0..3}
+        for iiiiiii in {0..3}
         do
             get_location "$mixdrop_url_in" mixdrop_location
             url "$mixdrop_location" && break

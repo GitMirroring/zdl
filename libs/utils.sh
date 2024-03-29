@@ -675,6 +675,9 @@ function sanitize_file_in {
     file_in=$(sed -r 's|^[^0-9a-zA-Z\[\]()]*([0-9a-zA-Z\[\]()]+)[^0-9a-zA-Z\[\]()]*$|\1|g' <<< "$file_in" 2>/dev/null)
     file_in=$(trim "$file_in")
 
+    local file_hash=$(create_hash "${url_in##http*\/\/}" | cut -b 1-12)
+    file_in="${file_in//-$file_hash}"
+
     if ! dler_type "no-check-ext" "$url_in" &&
 	    [[ ! "$url_in_file" =~ \.m3u8 ]] &&
             ! check_ext "$file_in"
@@ -688,7 +691,7 @@ function sanitize_file_in {
 	    ext=${BASH_REMATCH[1]}
 	fi               
 	
-	file_in="${file_in%$ext}$ext"
+	file_in="${file_in%$ext}-${file_hash}$ext"
     fi
 }
 

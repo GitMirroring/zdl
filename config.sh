@@ -273,6 +273,7 @@ function get_conf {
 
 	get_language
     fi
+    resume=enabled
 }
 
 function get_language {
