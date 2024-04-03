@@ -518,7 +518,7 @@ EXTENSIONS:
         deps['openssl']=openssl
         deps['curl']=curl
         deps['convert']=imagemagick
-        deps['tesseract']=tesseract-ocr
+        #deps['tesseract']=tesseract-ocr
         ##deps['mplayer']=mplayer
         ## deps['tput']=ncurses-bin
 
