@@ -233,7 +233,13 @@ function install_pk {
         try port install $dep
         install_test pk port $dep &&
             return 0
-
+        
+    elif command -v pkg &>/dev/null
+    then
+        try pkg install $dep
+        install_test pk pkg $dep &&
+            return 0
+        
     else
         return 1
     fi
