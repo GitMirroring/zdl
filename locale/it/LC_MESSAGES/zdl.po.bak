@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-11 15:25+0200\n"
+"POT-Creation-Date: 2023-05-11 15:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -117,14 +117,12 @@ msgid "New user"
 msgstr "Nuovo utente"
 
 #: ../config_manager.sh:172
-#, fuzzy
 msgid "New password"
-msgstr "Visualizza password degli account"
+msgstr "Nuova password"
 
 #: ../config_manager.sh:174
-#, fuzzy
 msgid "Re-type new password"
-msgstr "Digita la password di utente root"
+msgstr "Ridigita la nuova password"
 
 #: ../config_manager.sh:180
 msgid ""
@@ -853,9 +851,8 @@ msgid "Programming of live broadcasting from"
 msgstr "Programmazione della diretta live da"
 
 #: ../gui/gui.sh:912 ../ui/ui.sh:895
-#, fuzzy
 msgid "Enter livestream URL:"
-msgstr "Diretta LIVE:"
+msgstr "Inserisci l'URL della Diretta LIVE:"
 
 #: ../gui/gui.sh:920 ../gui/gui.sh:923 ../gui/gui.sh:973 ../gui/gui.sh:976
 #: ../ui/ui.sh:827
@@ -881,11 +878,10 @@ msgid "Seconds:"
 msgstr "Secondi:"
 
 #: ../gui/gui.sh:1017
-#, fuzzy
 msgid ""
 "The start time is lower than the current one: is it tomorrow?\\nIf it is "
 "not, ZDL will proceed as soon as possible"
-msgstr "L'orario di inizio è inferiore a quello attuale: è di domani? [*|no]"
+msgstr "L'orario di inizio è inferiore a quello attuale: è di domani? Se non lo è, ZDL procederà appena possibile"
 
 #: ../gui/gui.sh:1021
 msgid "Start time"
@@ -1288,7 +1284,6 @@ msgstr ""
 "indirizzo IP riconnettendo il modem/router)"
 
 #: ../libs/extension_utils.sh:738
-#, fuzzy
 msgid "Detected Cloudflare"
 msgstr "Rilevato Cloudflare"
 
