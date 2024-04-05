@@ -251,8 +251,8 @@ function make_index {
 }
 
 function scrape_url {
-    url_page="$1" 
-    
+    local url_page="$1"
+
     if url "$url_page"
     then
 	print_c 1 "[--scrape-url] $(gettext "connecting"): $url_page" #connessione in corso
@@ -262,10 +262,15 @@ function scrape_url {
 	if check_cloudflare "$url_page"
 	then
 	    get_by_cloudflare "$url_page" html
-	    
+
 	else
 	    html=$(curl -s -A "$user_agent" "$url_page")
+            if [ -z "$html" ]
+            then
+                html=$(wget -qO- -o /dev/null --user-agent="$user_agent" "$url_page")
+            fi
 	fi
+
 
 	if [ -n "$html" ]
 	then
@@ -280,15 +285,18 @@ function scrape_url {
 	else
 	    return 1
 	fi
-
+        
 	while read line
 	do
 	    [[ ! "$line" =~ ^(ht|f)tp[s]*\:\/\/ ]] &&
 		line="${baseURL}/$line"
 
-	    if [[ "$line" =~ "$url_regex" ]]
+            [ -z "${url_regex}" ] && url_regex=tp
+            [ -z "${url_regex_scrape}" ] && url_regex_scrape=tp
+            
+	    if [[ "$line" =~ $url_regex ]] &&
+               	   [[ "$line" =~ $url_regex_scrape ]]
 	    then
-		echo "$line"
 		if [ -z "$links" ]
 		then
 		    links="$line"
@@ -296,7 +304,13 @@ function scrape_url {
 		    links="${links}\n$line"
 		fi
 		start_file="$path_tmp/links_loop.txt"
-		set_link + "$line"
+		print_c 0 "$line"
+                set_link + "$line"
+
+                if [ "$url_page" == "$url_in" ]
+                then
+                    replace_url_in "$line"
+                fi
 	    fi
 	done <<< "$html" 
 

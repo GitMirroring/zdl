@@ -27,17 +27,20 @@
 ## zdl-extension types: shortlinks
 ## zdl-extension name: cb01
 
-if [ "$url_in" != "${url_in//cb01.}" ]
+if [ "$url_in" != "${url_in//cb01.}" ] &&
+       [ "$scraped" != true ]
 then
-    cb01_redirect=$(get_location "${url_in//serietv\/}")
+    #cb01_redirect=$(get_location "${url_in//serietv\/}")
+    # if url "$cb01_redirect"
+    # then
+    #     replace_url_in "$cb01_redirect"
 
-    if url "$cb01_redirect"
-    then
-	replace_url_in "$cb01_redirect"
-
-    else
-	_log 2
-    fi
+    # else
+    #     _log 2
+    # fi
+    
+    url_regex_scrape="(staycheck|stayonline)"
+    scrape_url "$url_in"    
 fi
 
 if [ "$url_in" != "${url_in//k4pp4.}" ]

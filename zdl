@@ -1166,6 +1166,7 @@ then
 	then
 	    url_page=$(sed -r 's|--scrape-url=["]*(.+)["]*$|\1|g' <<< "${args[i]}")
 	    scrape_url "$url_page"
+            scraped=true	    
 	    unset args[i]
 	fi
     done
@@ -1178,7 +1179,7 @@ then
     do
 	if [ "${args[i]}" == "--scrape-url" ]
 	then
-	    scrapeURL=true	    
+	    scrapeURL=true
 	    unset args[i]
 	fi
     done
@@ -1834,6 +1835,7 @@ then
 		if [ "$scrapeURL" == "true" ]
 		then
 		    scrape_url "${args[i]}"
+                    scraped=true
 		    
 		else
 		    if [ -z "$links" ]
