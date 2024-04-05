@@ -149,7 +149,7 @@ For more information on Axel: http://alioth.debian.org/projects/axel/
 1) Automatically install \$dep from packages (RECOMMENDED)
 2) Automatically installs \$dep from sources
 3) Skip the \$dep installation and continue with the installation of \$PROG and its other dependencies
-4) Exit \$PROG to install dep manually (you can find it here: http://pkgs.org/search/?keyword=\$dep)")"
+4) Exit \$PROG to install dep manually (you can find it here: https://pkgs.org/search/?q=\$dep)")"
 
         echo -e "$depmsg"
         print_c 2 "$(gettext "Choose what to do (1-4):")"
