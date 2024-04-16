@@ -44,10 +44,6 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-    mixdrop_url_in=$(curl -s "${url_in//\/f\///e/}" | grep -P 'iframe.+src=\"\/\/mixdrop')
-    mixdrop_url_in="${mixdrop_url_in#*src=\"}"
-    mixdrop_url_in="https:${mixdrop_url_in%%\"*}"    
-
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \
@@ -57,10 +53,21 @@ then
     
     if ! grep -q 'p,a,c,k,e,d' <<< "$html"
     then    
+        mixdrop_url_in=$(curl -s "${url_in//\/f\///e/}" | grep -P 'iframe.+src=\"\/\/mixdrop')
+        mixdrop_url_in="${mixdrop_url_in#*src=\"}"
+        mixdrop_url_in="https:${mixdrop_url_in%%\"*}"    
+
         for iiiiiii in {0..3}
         do
             get_location "$mixdrop_url_in" mixdrop_location
-            url "$mixdrop_location" && break
+
+            if url "$mixdrop_location"
+            then
+                break
+            else
+                get_location "$url_in" mixdrop_location
+                url "$mixdrop_location" && break
+            fi
             countdown- 6
         done
     fi
