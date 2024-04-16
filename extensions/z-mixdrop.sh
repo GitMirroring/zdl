@@ -50,6 +50,12 @@ then
                 -H 'Upgrade-Insecure-Requests: 1' \
                 -c "$path_tmp"/cookies.zdl \
                 "$url_in")
+
+    if test -z "$file_in" 
+    then    
+        file_in=$(get_title "$html")
+        file_in="${file_in%%.mp4*}"
+    fi
     
     if ! grep -q 'p,a,c,k,e,d' <<< "$html"
     then    
