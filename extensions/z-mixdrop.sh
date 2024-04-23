@@ -55,6 +55,8 @@ then
     then    
         file_in=$(get_title "$html")
         file_in="${file_in%%.mp4*}"
+        [[ "$file_in" =~ (302 Found) ]] && unset file_in
+
     fi
     
     if ! grep -q 'p,a,c,k,e,d' <<< "$html"
@@ -82,6 +84,7 @@ then
     then    
         file_in=$(get_title "$html")
         file_in="${file_in%%.mp4*}"
+        [[ "$file_in" =~ (302 Found) ]] && unset file_in
     fi
     
     if url "$mixdrop_location"
@@ -105,6 +108,7 @@ then
     then    
         file_in=$(get_title "$html")
         file_in="${file_in%%.mp4*}"
+        [[ "$file_in" =~ (302 Found) ]] && unset file_in
     fi
     
     if [[ "$html" =~ (WE ARE SORRY) ]]
@@ -124,6 +128,7 @@ then
                 then
                     file_in=$(get_title "$html")
                     file_in="${file_in%%.mp4*}"
+                    [[ "$file_in" =~ (302 Found) ]] && unset file_in
                 fi
             fi
         fi
@@ -153,6 +158,7 @@ then
         then
             file_in=$(get_title "$html")
             file_in="${file_in%%.mp4*}"
+            [[ "$file_in" =~ (302 Found) ]] && unset file_in
         fi
         
         if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
@@ -170,6 +176,7 @@ then
         then
             file_in=$(get_title "$html")
             file_in="${file_in%%.mp4*}"
+            [[ "$file_in" =~ (302 Found) ]] && unset file_in
         fi
 
         if test -z "$file_in"
@@ -195,6 +202,7 @@ then
         then
             file_in="${BASH_REMATCH[1]}"
         fi
+        [[ "$file_in" =~ (302 Found) ]] && unset file_in
         
         if test -z "$file_in" 
         then
