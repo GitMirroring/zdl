@@ -44,8 +44,8 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-    get_location "$url_in" mixdrop_location
-        
+    get_location "$url_in" mixdrop_location    
+    
     if ! url "$mixdrop_location" 
     then
         mixdrop_location="$url_in"
@@ -58,15 +58,36 @@ then
                 -c "$path_tmp"/cookies.zdl \
                 "$mixdrop_location")
 
-    if grep -q 'p,a,c,k,e,d' <<< "$html" 
+    file_in=$(grep '<div class=\"title' <<< "$html")
+    file_in="${file_in%</a>*}"
+    file_in="${file_in##*>}"
+    file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
+    
+    if grep -q iframe <<< "$html"
     then
-        unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+        mixdrop_location="$(grep iframe <<< "$html" | head -n1)"
+        mixdrop_location="${mixdrop_location##*src=\"}"
+        mixdrop_location="${mixdrop_location%%\"*}"        
+        test -n "$mixdrop_location" &&
+            mixdrop_location="https:${mixdrop_location#'https:'}"
+       
+        html=$(wget -SO- \
+                    -o /dev/null \
+                    --user-agent="$user_agent" \
+                    --keep-session-cookies \
+                    --save-cookies="$path_tmp"/cookies.zdl \
+                    "$mixdrop_location")
 
         file_in=$(grep '<div class=\"title' <<< "$html")
         file_in="${file_in%</a>*}"
         file_in="${file_in##*>}"
         file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
-        
+    fi
+    
+    if grep -q 'p,a,c,k,e,d' <<< "$html" 
+    then
+        unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+
         if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
         then
             url_in_file="https:${BASH_REMATCH[1]}"
