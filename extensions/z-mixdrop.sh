@@ -63,7 +63,21 @@ then
     file_in="${file_in##*>}"
     file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
     
-    if grep -q iframe <<< "$html"
+    
+    if grep -q 'p,a,c,k,e,d' <<< "$html" 
+    then
+        unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+
+        if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
+        then
+            url_in_file="https:${BASH_REMATCH[1]}"
+
+        elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
+        then
+            _log 17
+        fi
+        
+    elif grep -q iframe <<< "$html"
     then
         mixdrop_location="$(grep iframe <<< "$html" | head -n1)"
         mixdrop_location="${mixdrop_location##*src=\"}"
@@ -82,21 +96,7 @@ then
         file_in="${file_in%</a>*}"
         file_in="${file_in##*>}"
         file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
-    fi
-    
-    if grep -q 'p,a,c,k,e,d' <<< "$html" 
-    then
-        unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
-
-        if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
-        then
-            url_in_file="https:${BASH_REMATCH[1]}"
-
-        elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
-        then
-            _log 17
-        fi
-        
+            
     else
         mixdrop_url_in=$(curl -s "${url_in//\/f\///e/}" | grep -P 'iframe.+src=\"\/\/mixdrop')
         mixdrop_url_in="${mixdrop_url_in#*src=\"}"
