@@ -44,11 +44,18 @@ fi
 
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
-    get_location "$url_in" mixdrop_location    
+    get_location "$url_in" mixdrop_location
     
+
     if ! url "$mixdrop_location" 
     then
         mixdrop_location="$url_in"
+    fi
+
+    if [[ "$mixdrop_location" =~ (\/f\/|\?download) ]]
+    then
+        mixdrop_location="${mixdrop_location%\?*}"
+        mixdrop_location="${mixdrop_location//\/f\///e/}"
     fi
 
     html=$(curl -s \
@@ -63,7 +70,6 @@ then
     file_in="${file_in##*>}"
     file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
     
-    
     if grep -q 'p,a,c,k,e,d' <<< "$html" 
     then
         unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
@@ -76,7 +82,7 @@ then
         then
             _log 17
         fi
-        
+
     elif grep -q iframe <<< "$html"
     then
         mixdrop_location="$(grep iframe <<< "$html" | head -n1)"
