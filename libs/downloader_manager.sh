@@ -302,10 +302,15 @@ $url_in_file" >"$path_tmp/${file_in}_stdout.tmp"
 		    opts+=( '--enable-dht=true' "--dht-listen-port=$udp_port" )
 
                 opts+=( "--seed-time=0" )
+
+                local file_hash=$(create_hash "${url_in##http*\/\/}" | cut -b 1-12)
+                
                 file_in="${file_in%.mkv}"
                 file_in="${file_in%.mp4}"
                 file_in="${file_in%.mp3}"
                 file_in="${file_in%.avi}"
+                file_in="${file_in//$file_hash}-$file_hash"
+
                 fileout=( -d "$file_in" )
                 
 	    elif [ -n "$file_in" ]
