@@ -36,8 +36,8 @@ fi
 ## link di ZDL:
 ##
 if [[ "$url_in" =~ ^irc:\/\/ ]]
-then
-    replace_url_in "$(sanitize_url "$url_in")"
+then    
+    replace_url_in "$(sanitize_url "${url_in//artikanet.org/arabaphenix.it}")"
     url_in_file="$url_in"
     downloader_in=DCC_Xfer
 fi
