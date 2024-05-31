@@ -607,6 +607,7 @@ no_check_links=(
     akvideo
     speedvideo
     'mega.(co|nz)'
+    gofile\.
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
