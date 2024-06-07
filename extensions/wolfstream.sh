@@ -29,11 +29,24 @@
 
 if [[ "$url_in" =~ wolfstream\. ]]
 then
-    data_wolfstream=$($youtube_dl --get-url --get-title "$url_in")
-    file_in=$(head -n1 <<< "$data_wolfstream" | sed -r 's|^[0-9 ]+||g')
-    file_in="${file_in% mp4}".mp4
-    url_in_file=$(tail -n1 <<< "$data_wolfstream")
-    force_dler FFMpeg
+    if [[ "$url_in" =~ embed- ]]
+    then
+        replace_url_in "${url_in//embed-}"
+    fi
+    
+    html=$(curl -v "$url_in")
+
+    url_in_file=$(grep 'sources\: \[{file\:' <<< "$html")
+    url_in_file="${url_in_file%\"*}"
+    url_in_file="${url_in_file##*\"}"
+
+    file_in=$(get_title "$html")
+    file_in="${file_in#Watch }"
+
+    if [[ "$url_in_file" =~ m3u8 ]]
+    then
+        force_dler FFMpeg
+    fi
     
     end_extension
 fi
