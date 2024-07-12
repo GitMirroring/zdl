@@ -264,6 +264,13 @@ then
             _log 45
         fi       
 
+        get_location "$url_in_file" raiplay_location
+
+        if url "$raiplay_location"
+        then
+            url_in_file="$raiplay_location"
+        fi
+        
         if [ -z "$file_in" ]
         then
             file_in="${raiplay_json#*name\": \"}"
