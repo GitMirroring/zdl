@@ -804,13 +804,14 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
             if ( length_saved[i] == length_out[i] ) {
                 percent_out[i] = 100
             #if (is_dir(file_out[i]) && exists(file_out[i] "/" file_out[i])) {
-                system("mv " file_out[i] " " file_out[i] "enc")
-                system("mv " file_out[i] "enc/" file_out[i] " .")
-                system("rm -rf " file_out[i] "enc")
-                #}
+            #     system("mv " file_out[i] " " file_out[i] "enc")
+            #     system("mv " file_out[i] "enc/" file_out[i] " .")
+            #     system("rm -rf " file_out[i] "enc")
+            # }
             #rm_file(file_out_encoded[i])
-                if (! no_check)
+            #    if (! no_check)
                     rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
+            
             }
 	}
 	if (progress_line) {
