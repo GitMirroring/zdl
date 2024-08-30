@@ -30,6 +30,7 @@
 
 if [ "$url_in" != "${url_in//dailymotion.com\/video}" ]
 then
+    no_check_links+=( dailymotion )
     dailymotion_data=$($youtube_dl --get-url --get-filename "$url_in")
 
     url_in_file=$(head -n1 <<< "$dailymotion_data")

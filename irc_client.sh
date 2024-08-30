@@ -674,7 +674,7 @@ function dcc_xfer {
 
     if [ "$(size_file "$file_xfer")" == "${xdcc['size',$xdcc_index]}" ]
     then
-        kill $pid_cat
+        kill -9 $pid_cat
         rm -f "${file_xfer}.zdl"
         set_link - "${xdcc['url',$xdcc_index]}"
         #del_xdcc_url "${xdcc['url',$xdcc_index]}" 
@@ -687,7 +687,7 @@ function dcc_xfer {
     then
         ## non chiudiamo/uccidiamo una connessione all'host se dobbiamo ancora scaricare link che la richiedono (se cade da sola viene rifatta da istanza di ZDL)
         irc_quit
-        kill "$xdcc_pid"
+        kill -9 "$xdcc_pid"
     fi
     
     exit
