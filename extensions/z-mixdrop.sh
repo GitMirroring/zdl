@@ -57,7 +57,8 @@ then
         mixdrop_location="${mixdrop_location%\?*}"
         mixdrop_location="${mixdrop_location//\/f\///e/}"
     fi
-
+    
+    print_c 4 "location: $mixdrop_location"
     html=$(curl -s \
                 -A "$user_agent" \
                 -H 'Connection: keep-alive' \
@@ -77,7 +78,7 @@ then
         if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
         then
             url_in_file="https:${BASH_REMATCH[1]}"
-
+            
         elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
         then
             _log 17
@@ -255,8 +256,9 @@ then
             file_in="mixdrop-${url_in##*\/}"
         fi
         
-    fi            
+    fi
     
+    no_check_links+=( mixdrop )    
     end_extension
 fi
 
