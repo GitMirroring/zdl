@@ -186,41 +186,47 @@ then
             fi           
         fi
 
-        if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
-        then
-            if ! url "$raiplay_url" || [ -z "$raiplay_json" ]
-            then
-                raiplay_json=$(curl -s "${url_in%html}json" \
-                                    -A "$user_agent" \
-                                    -c "$path_tmp"/cookies.zdl)
-                
-                raiplay_url="${raiplay_json#*content_url\": \"}"
-                raiplay_url="${raiplay_url%%\"*}"
-            fi
-
-            url_in_file=$(curl -v  "$raiplay_url" -A "$user_agent" 2>&1 | grep location)
-            url_in_file="${url_in_file##* }"
+        # if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
+        # then
+        #     if [[ "$url_in" =~ (\.html$) ]]
+        #     then
+        #         replace_url_in "${url_in%html}json"
+        #         raiplay_url="$url_in"
+        #     fi
             
-            url_in_file=$(sanitize_url "$url_in_file")
+        #     if ! url "$raiplay_url" || [ -z "$raiplay_json" ]
+        #     then
+        #         raiplay_json=$(curl -s "$url_in" \
+        #                             -A "$user_agent" \
+        #                             -c "$path_tmp"/cookies.zdl)
 
-            if ! url "$url_in_file" &&
-                    url "$raiplay_url"
-            then
-                url_in_file="$raiplay_url"
-            fi
+        #         raiplay_url="${raiplay_json#*content_url\": \"}"
+        #         raiplay_url="${raiplay_url%%\"*}"
+        #     fi
+
+        #     url_in_file=$(curl -v  "$raiplay_url" -A "$user_agent" 2>&1 | grep location)
+        #     url_in_file="${url_in_file##* }"
             
-            if [[ "$raiplay_url" =~ (^http.+relinker.+) ]]
-            then
+        #     url_in_file=$(sanitize_url "$url_in_file")
 
-                file_in="${raiplay_json#*name\": \"}"
-                file_in="${file_in%%\"*}"
+        #     if ! url "$url_in_file" &&
+        #             url "$raiplay_url"
+        #     then
+        #         url_in_file="$raiplay_url"
+        #     fi
+            
+        #     if [[ "$raiplay_url" =~ (^http.+relinker.+) ]]
+        #     then
+
+        #         file_in="${raiplay_json#*name\": \"}"
+        #         file_in="${file_in%%\"*}"
                 
-                if [ -n "$file_in" ]
-                then
-                    file_in="${file_in}".mp4
-                fi
-            fi
-        fi
+        #         if [ -n "$file_in" ]
+        #         then
+        #             file_in="${file_in}".mp4
+        #         fi
+        #     fi
+        # fi
 
         if ! url "$url_in_file"
         then
