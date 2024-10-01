@@ -282,6 +282,9 @@ function main_loop {
 		fi
 		url_in_old="$url_in"
 
+                [[ "$url_in" =~ '*' ]] &&
+                    replace_url_in "${url_in//\*/%2A}"
+                                
 		if ! check_link "$url_in"
 		then
 		    #sleep 1

@@ -33,18 +33,20 @@ then
     dplus_data=$($youtube_dl --get-url \
 			     --get-filename \
 			     "$url_in" \
-				2>/dev/null)
+			     2>/dev/null)
     
     file_in=$(tail -n1 <<< "$dplus_data")
     file_in="${file_in%.*}.mp4"
     
     url_in_file=$(head -n1 <<< "$dplus_data")
-
+    
     force_dler FFMpeg
-
+    
     countdown- 5
     
     end_extension
 fi
+
+
 									   
 

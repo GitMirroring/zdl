@@ -856,6 +856,11 @@ function get_data_xdcc_eu {
 }
 
 function check_livestream {
+    if [[ "$1" =~ youtube.+watch.+list ]]
+    then
+        test_livestream_boolean=false
+    fi
+    
     if [ "$test_livestream_boolean" == true ] ||
            set_line_in_file in "$1" "$path_tmp/livestream-links.txt"   
     then
