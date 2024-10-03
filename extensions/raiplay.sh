@@ -30,8 +30,8 @@
 
 if [[ "$url_in" =~ (raiplay|rai[a-z]*\.it) ]]
 then
-    unset raiplay_url raiplay_json
-
+    unset raiplay_url raiplay_json    
+    
     # if [[ "$url_in" =~ \/collezioni\/ ]]
     # then
 
@@ -92,7 +92,6 @@ then
         if ! url "$url_in_file"
         then
             url_in_file=$($youtube_dl --get-url "${url_in%\#*}" | head -n1)
-            
         fi
 	get_livestream_start_time "$url_in" rai_start_time
 
@@ -108,8 +107,7 @@ then
 	if [ -n "$rai_duration_time" ]
 	then
 	    print_c 4 "Diretta Rai dalle $rai_start_time per la durata di $rai_duration_time"
-	    livestream_m3u8="$url_in"
-            
+	    livestream_m3u8="$url_in"            
             
 	else
 	    [ -n "$gui_alive" ] &&
@@ -236,8 +234,7 @@ then
                 url_in_file=$(get_location "$raiplay_url")
                 get_language
             fi
-            raiplay_data_json=$($youtube_dl --dump-json \
-                                           "$url_in")
+            raiplay_data_json=$($youtube_dl --dump-json "$url_in")
             #echo "json: $raiplay_data_json"
 
             episode_number=$(grep -oP 'episode_number\": [0-9]+' <<< "$raiplay_data_json")
@@ -248,11 +245,37 @@ then
             then
                 file_in_prefix="${season_number}x$(printf "%.2d" ${episode_number})_-_"
             fi
-            url_in_file="${raiplay_data_json##*\"manifest_url\": \"}"
-            url_in_file="${url_in_file%%\"*}"
-            
             file_in="${raiplay_data_json##*\"title\": \"}"
             file_in="${file_in_prefix}${file_in%%\"*}".mp4
+
+            raiplay_format=$($youtube_dl --list-formats "$url_in" |
+                                 grep https |
+                                 tail -n1 |
+                                 cut -d' ' -f1)
+
+            #url_in_file=$($youtube_dl -f "$raiplay_format" --get-url "$url_in")
+            
+            #url_in_file="${raiplay_data_json##*\"manifest_url\": \"}"
+            raiplay_url_in_file="${raiplay_data_json##*\"url\": \"}"
+            raiplay_url_in_file="${raiplay_url_in_file%%\"*}"
+
+            get_language_prog
+            url_in_file=$(curl -v -A "$user_agent" "$raiplay_url_in_file" 2>&1 |
+                              grep location |
+                              cut -d' ' -f3)
+            get_language
+
+            no_check_links+=( raiplay )
+            #url_in_file=$(get_location "$raiplay_url_in_file")
+            #url_in_file=$(curl -v -A "$user_agent" "$url_in_file" 2>&1
+            # url "$url_in_file" &&
+            #     force_dler youtube-dl
+
+
+            # url "$url_in_file" &&
+            #     youtubedl_m3u8="$url_in_file" 
+
+            
         fi
         # if ! url "$url_in_file"
         # then
@@ -301,7 +324,6 @@ then
 
     unset youtubedl_m3u8
 
-    force_dler FFMpeg
     #downwait_extra=20
     
     end_extension

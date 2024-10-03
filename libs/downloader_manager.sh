@@ -612,7 +612,11 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                 #ffmpeg=youtube-dl
                 
 	    else
-		nohup $ffmpeg -loglevel info -i "$url_in_file" -c copy "${file_in}" -y &> >( 
+		nohup $ffmpeg -loglevel info \
+                      -i "$url_in_file" \
+                      -c copy \
+                      "${file_in}" \
+                      -y &> >( 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	        stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
                 pid_in=$!
@@ -630,7 +634,29 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
             local wait_lines=10
 	    ;;
 
-	youtube-dl)
+        youtube-dl-experimental)
+            file_in="${file_in%.???}"
+            file_in="${file_in%.mp4}"
+            file_in="${file_in}.mp4"
+	    nohup $youtube_dl \
+                  -v \
+                  --continue \
+		  -f best \
+                  --no-part \
+		  "$url_in" -o "${file_in}" &> >(
+		stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	    stdbuf -i0 -o0 -e0 grep -P '\[download\].+\%' >> "$path_tmp/${file_in}_stdout.tmp" ) &
+	    pid_in=$!
+            
+            echo -e "$pid_in
+$url_in     
+youtube-dl
+${pid_prog}
+$file_in
+$url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
+            ;;
+
+        youtube-dl)
 	    ## provvisorio per youtube-dl non gestito	    
 	    _log 21
 	    echo

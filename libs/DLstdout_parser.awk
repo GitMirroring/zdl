@@ -395,6 +395,77 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 	else
 	    yellow_progress()
     }
+    else if (dler == "youtube-dl") {
+	for (y=n; y>0; y--) {
+	    if (chunk[y] ~ /\[download\]\s.+\%/) {
+		split(chunk[y], progress_elems, /([ ]+|\t|MiB|GiB|KiB|%|of|at|ETA)/)
+		percent_out[i] = int(progress_elems[2])
+		#length_out[i] = int(progress_elems[6])
+                length_out[i] = 1000
+		speed_out[i] = int(progress_elems[10])
+                eta_out[i] = progress_elems[14]
+
+                print "percentuale: " percent_out[i] " -- length: " length_out[i] " -- speed: " speed_out[i] " -- eta: " eta_out[i] >> "output.txt"
+
+                for (mm=0; mm<20; mm++) {
+                    print mm ": " progress_elems[mm] >> "output.txt"
+                }
+
+                if (chunk[y] ~ /KiB\/s/) {
+                    speed_out_type[i] = "K/s"
+                } else if (chunk[y] ~ /MiB\/s/) {
+                    speed_out_type[i] = "M/s"
+                } else if (chunk[y] ~ /GiB\/s/) {
+                    speed_out_type[i] = "G/s"
+                }
+		break
+	    }
+	}
+
+        if (exists(file_out[i] ".part"))
+            length_saved[i] = size_file(file_out[i] ".part")
+        else if (exists(file_out[i]))
+            length_saved[i] = size_file(file_out[i])
+        else
+            length_saved[i] = 0
+
+	if (percent_out[i] == 100) {
+	    rm_line(url_out[i], ".zdl_tmp/links_loop.txt")
+	    speed_out[i] = 0
+	    
+	    if (url_in == url_out[i]) bash_var("url_in", "")	    
+	}
+	else if (length_out[i]) {
+	    #percent_out[i] = int(length_saved[i] * 100 / length_out[i])
+	    #speed_out[i] = (length_saved[i] - old_saved[i]) / 1024
+	    
+	    if (eta_out[i]) {
+                split(eta_out[i], eta_elems, /[:]/)
+                if (eta_elems[3]) {
+                    eta_s = eta_elems[3]
+                    eta_m = eta_elems[2]
+                    eta_h = eta_elems[1]
+                }
+                else if (eta_elems[2]) {
+                    eta_s = eta_elems[2]
+                    eta_m = eta_elems[1]
+                    eta_h = 0
+                } else if (eta_elems[1]) {
+                    eta_s = eta_elems[1]
+                    eta_s = 0
+                    eta_s = 0
+                }
+                
+	        eta_out[i] = seconds_to_human(eta_h * 3600 + eta_m * 60 + eta_s)
+                print "eta_s: " eta_s " -- eta_m: " eta_m " -- eta_h: " eta_h " --> " eta_out[i] >> "output.txt"
+	    }
+
+            print percent_out[i] "\n" speed_out[i] "\n" speed_out_type[i] "\n" eta_out[i] "\n" length_saved[i] > ".zdl_tmp/"file_out[i]"_stdout.yellow"
+	}
+	else
+	    yellow_progress()
+
+    }
     else if (dler == "Aria2") {
 	for (y=n; y>0; y--) {
 	    if (chunk[y] ~ /(404 Not Found)/) {
