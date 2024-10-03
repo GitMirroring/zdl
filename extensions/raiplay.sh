@@ -114,6 +114,8 @@ then
 		check_linksloop_livestream ||
 		    _log 43
 	fi
+
+        force_dler FFMpeg
 	
     else
         if [[ "$url_in" =~ (^.+\/(collezioni|programmi)\/[^\/]+) ]]
