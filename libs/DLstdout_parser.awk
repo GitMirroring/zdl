@@ -400,8 +400,8 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
 	    if (chunk[y] ~ /\[download\]\s.+\%/) {
 		split(chunk[y], progress_elems, /([ ]+|\t|MiB|GiB|KiB|%|of|at|ETA)/)
 		percent_out[i] = int(progress_elems[2])
-		#length_out[i] = int(progress_elems[6])
-                length_out[i] = 1000
+		length_out[i] = int(progress_elems[6])
+                #length_out[i] = 1000
 		speed_out[i] = int(progress_elems[10])
                 eta_out[i] = progress_elems[14]
 
