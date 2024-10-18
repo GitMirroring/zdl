@@ -397,7 +397,7 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
     }
     else if (dler == "youtube-dl") {
 	for (y=n; y>0; y--) {
-	    if (chunk[y] ~ /\[download\]\s.+\%/) {
+	    if (chunk[y] ~ /\[download\]\s.+%/) {
 		split(chunk[y], progress_elems, /([ ]+|\t|MiB|GiB|KiB|%|of|at|ETA)/)
 		percent_out[i] = int(progress_elems[2])
 		length_out[i] = int(progress_elems[6])
