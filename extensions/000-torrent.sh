@@ -45,6 +45,7 @@ then
 	length_in="${length_in//,}"
 	
     else
+        replace_url_in "${url_in//\&amp\;/\&}"
 	url_in_file="$url_in"
 	file_in=$(sed -r 's|.+&dn=([^\&]+)&.+|\1|' <<< "$(urldecode "$url_in")")
 	length_in=$(sed -r 's|.+&xl=([^\&]+)&.+|\1|' <<< "$(urldecode "$url_in")")
