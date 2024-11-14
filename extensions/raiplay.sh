@@ -202,10 +202,18 @@ then
                                     -c "$path_tmp"/cookies.zdl)
 
                 raiplay_url=$(node -e "var json = $raiplay_json; console.log(json.video.content_url)")
+                
+                ffmpeg_map=$(curl -v -A Firefox -L "$raiplay_url" 2>&1)
+
+                ffmpeg_map=$(grep -P ^chunklist <<< "$ffmpeg_map" | wc -l)
+                ffmpeg_opts+=( -map p:$((ffmpeg_map -1)) )
             fi
 
-            url_in_file=$(curl -v  "$raiplay_url" -A "$user_agent" 2>&1 | grep location)
-            url_in_file="${url_in_file##* }"
+            get_language_prog
+            url_in_file=$(curl -v "$raiplay_url" -A Firefox 2>&1 |
+                              grep location |
+                       cut -d' ' -f3)
+            get_language
             
             url_in_file=$(sanitize_url "$url_in_file")
 
@@ -213,20 +221,15 @@ then
                     url "$raiplay_url"
             then
                 url_in_file="$raiplay_url"
+                url_in_file=$(sanitize_url "$url_in_file")
             fi
-            
-            if [[ "$raiplay_url" =~ (^http.+relinker.+) ]]
+
+            file_in=$(node -e "var json = $raiplay_json; console.log(json.name)")
+
+            if [ -n "$file_in" ]
             then
-
-                file_in="${raiplay_json#*name\": \"}"
-                file_in="${file_in%%\"*}"
-                
-                if [ -n "$file_in" ]
-                then
-                    file_in="${file_in}".mp4
-                fi
+                file_in="${file_in}".mp4
             fi
-
             force_dler FFMpeg
         fi
 
@@ -240,8 +243,8 @@ then
                 get_language
             fi
             raiplay_data_json=$($youtube_dl --dump-json "$url_in")
-            #echo "json: $raiplay_data_json"
             
+            #echo "json: $raiplay_data_json"            
             #node -e "var json = $raiplay_data_json; console.log(json)" >node.json
 
             episode_number=$(grep -oP 'episode_number\": [0-9]+' <<< "$raiplay_data_json")
@@ -267,7 +270,7 @@ then
             raiplay_url_in_file="${raiplay_url_in_file%%\"*}"
 
             
-         #   echo "rai_url: $raiplay_url_in_file"
+            # echo "rai_url: $raiplay_url_in_file"
 
             if [[ "$raiplay_url_in_file" =~ \.m3u8 ]]
             then

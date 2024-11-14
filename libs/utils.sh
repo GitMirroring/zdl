@@ -692,7 +692,12 @@ function sanitize_file_in {
     local file_hash=$(create_hash "${url_in##http*\/\/}" | cut -b 1-12)
     file_in="${file_in//-$file_hash}"
 
-    if ! dler_type "no-check-ext" "$url_in" &&
+    if [[ "$url_in_file" =~ \.m3u8 ]] ||
+             [ "$downloader_in" == FFMpeg ]
+    then
+        file_in="${file_in%.mp4}-${file_hash}.mp4"
+        
+    elif ! dler_type "no-check-ext" "$url_in" &&
 	    [[ ! "$url_in_file" =~ \.m3u8 ]] &&
             ! check_ext "$file_in"
     then
@@ -706,10 +711,6 @@ function sanitize_file_in {
 	fi               
 	
 	file_in="${file_in%$ext}-${file_hash}$ext"
-
-    elif [[ "$url_in_file" =~ \.m3u8 ]]
-    then
-        file_in="${file_in%.mp4}-${file_hash}.mp4"
     fi
 }
 
