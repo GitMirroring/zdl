@@ -84,8 +84,9 @@ then
         if ! url "$url_in_file"
         then
             get_language_prog
-            url_in_file=$(wget -SO- "$raiplay_url" -o /dev/null 2>&1 |
-                              grep ocation)
+            url_in_file=$(curl -v -A "$user_agent" "$raiplay_url" 2>&1 |
+                              grep location |
+                              cut -d' ' -f3)
             get_language
         fi
 
@@ -186,50 +187,52 @@ then
             fi           
         fi
 
-        # if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
-        # then
-        #     if [[ "$url_in" =~ (\.html$) ]]
-        #     then
-        #         replace_url_in "${url_in%html}json"
-        #         raiplay_url="$url_in"
-        #     fi
+        if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
+        then
+            if [[ "$url_in" =~ (\.html$) ]]
+            then
+                replace_url_in "${url_in%html}json"
+                raiplay_url="$url_in"
+            fi
             
-        #     if ! url "$raiplay_url" || [ -z "$raiplay_json" ]
-        #     then
-        #         raiplay_json=$(curl -s "$url_in" \
-        #                             -A "$user_agent" \
-        #                             -c "$path_tmp"/cookies.zdl)
+            if ! url "$raiplay_url" || [ -z "$raiplay_json" ]
+            then
+                raiplay_json=$(curl -s "$url_in" \
+                                    -A "$user_agent" \
+                                    -c "$path_tmp"/cookies.zdl)
 
-        #         raiplay_url="${raiplay_json#*content_url\": \"}"
-        #         raiplay_url="${raiplay_url%%\"*}"
-        #     fi
+                raiplay_url=$(node -e "var json = $raiplay_json; console.log(json.video.content_url)")
+            fi
 
-        #     url_in_file=$(curl -v  "$raiplay_url" -A "$user_agent" 2>&1 | grep location)
-        #     url_in_file="${url_in_file##* }"
+            url_in_file=$(curl -v  "$raiplay_url" -A "$user_agent" 2>&1 | grep location)
+            url_in_file="${url_in_file##* }"
             
-        #     url_in_file=$(sanitize_url "$url_in_file")
+            url_in_file=$(sanitize_url "$url_in_file")
 
-        #     if ! url "$url_in_file" &&
-        #             url "$raiplay_url"
-        #     then
-        #         url_in_file="$raiplay_url"
-        #     fi
+            if ! url "$url_in_file" &&
+                    url "$raiplay_url"
+            then
+                url_in_file="$raiplay_url"
+            fi
             
-        #     if [[ "$raiplay_url" =~ (^http.+relinker.+) ]]
-        #     then
+            if [[ "$raiplay_url" =~ (^http.+relinker.+) ]]
+            then
 
-        #         file_in="${raiplay_json#*name\": \"}"
-        #         file_in="${file_in%%\"*}"
+                file_in="${raiplay_json#*name\": \"}"
+                file_in="${file_in%%\"*}"
                 
-        #         if [ -n "$file_in" ]
-        #         then
-        #             file_in="${file_in}".mp4
-        #         fi
-        #     fi
-        # fi
+                if [ -n "$file_in" ]
+                then
+                    file_in="${file_in}".mp4
+                fi
+            fi
+
+            force_dler FFMpeg
+        fi
 
         if ! url "$url_in_file"
         then
+
             if url "$raiplay_url"
             then
                 get_language_prog
@@ -238,6 +241,8 @@ then
             fi
             raiplay_data_json=$($youtube_dl --dump-json "$url_in")
             #echo "json: $raiplay_data_json"
+            
+            #node -e "var json = $raiplay_data_json; console.log(json)" >node.json
 
             episode_number=$(grep -oP 'episode_number\": [0-9]+' <<< "$raiplay_data_json")
             episode_number="${episode_number##* }"
@@ -261,34 +266,21 @@ then
             raiplay_url_in_file="${raiplay_data_json##*\"url\": \"}"
             raiplay_url_in_file="${raiplay_url_in_file%%\"*}"
 
-            get_language_prog
-            url_in_file=$(curl -v -A "$user_agent" "$raiplay_url_in_file" 2>&1 |
-                              grep location |
-                              cut -d' ' -f3)
-            get_language
-
-            no_check_links+=( raiplay )
-            #url_in_file=$(get_location "$raiplay_url_in_file")
-            #url_in_file=$(curl -v -A "$user_agent" "$url_in_file" 2>&1
-            # url "$url_in_file" &&
-            #     force_dler youtube-dl
-
-
-            # url "$url_in_file" &&
-            #     youtubedl_m3u8="$url_in_file" 
-
             
+         #   echo "rai_url: $raiplay_url_in_file"
+
+            if [[ "$raiplay_url_in_file" =~ \.m3u8 ]]
+            then
+                url_in_file="$raiplay_url_in_file"
+                
+            else
+                get_language_prog
+                url_in_file=$(curl -v -A "$user_agent" "$raiplay_url_in_file" 2>&1 |
+                                  grep location |
+                                  cut -d' ' -f3)
+                get_language
+            fi
         fi
-        # if ! url "$url_in_file"
-        # then
-        #     raiplay_data=$($youtube_dl --get-url \
-        #                              --all-formats \
-        #                              --get-filename \
-        #                              "$url_in")
-                              
-        #     url_in_file=$(tail -n2 <<< "$raiplay_data" | head -n1) 
-        #     file_in=$(tail -n1 <<< "$raiplay_data")
-        # fi
     
         if ! url "$url_in_file"
         then
@@ -325,7 +317,8 @@ then
     fi
 
     unset youtubedl_m3u8
-
+    no_check_links+=( raiplay )
+    
     #downwait_extra=20
     
     end_extension

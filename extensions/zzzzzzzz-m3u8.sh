@@ -58,15 +58,15 @@ function post_m3u8_genlink {
 }
 
 
-if [[ "$url_in" =~ \.m3u8\?*.* ]] ||
-       [[ "$url_in_file" =~ \.m3u8\?*.* ]] ||
+if [[ "$url_in" =~ \.m3u8[?]*.* ]] ||
+       [[ "$url_in_file" =~ \.m3u8[?]*.* ]] ||
        [ "$youtubedl_m3u8" == "$url_in" ] ||
        ( [ "$youtubedl_m3u8" == "$url_in_file" ] && [ -n "$url_in_file" ] )
 then
-    downloader_in=FFMpeg
+    force_dler FFMpeg
 
     [ -z "$url_in_file" ] &&
-	[[ "$url_in" =~ \.m3u8\?*.* ]] &&
+	[[ "$url_in" =~ \.m3u8[?]*.* ]] &&
 	url_in_file="$url_in"
     
     [ -z "$file_in" ] &&
