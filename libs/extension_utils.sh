@@ -877,7 +877,20 @@ function check_livestream {
 
     if [[ "$link" =~ (youtube\.|dailymotion\.com\/video) ]] &&
            [[ ! "$link" =~ youtube\.com(\/playlist|.+\/(videos|featured|playlists|community|channels)$) ]]
-    then        
+    then
+        if [[ "$link" =~ google ]]
+        then
+            local location=$(grep -P "url=[^&]+" <<< "$link")
+            location="${location#*url=}"
+            location="${location%%&*}"
+            
+            if url "$location" &&
+                    [ "$location" != "$link" ]
+            then
+                location=$(urldecode "$location")
+            fi
+        fi
+        
         print_c 4 "Checking livestream link: %s" "$link"
         link=$($youtube_dl -f b --get-url "$link" | tail -n1)
     fi
@@ -886,10 +899,12 @@ function check_livestream {
     then
         test_livestream_boolean=true
         set_line_in_file + "$1" "$path_tmp/livestream-links.txt"
+        set_line_in_file + "$location" "$path_tmp/livestream-links.txt"
         return 0
     else
         test_livestream_boolean=false
         set_line_in_file + "$1" "$path_tmp/not-livestream-links.txt"
+        set_line_in_file + "$location" "$path_tmp/not-livestream-links.txt"
         return 1
     fi
 }
@@ -1160,7 +1175,10 @@ function check_linksloop_livestream {
                     get_livestream_start_time "$line" start_time
                     run_livestream_timer "$line" "$start_time"
                 fi
-            fi
+                
+            else
+                set_line_in_file + "$line" "$path_tmp/not-livestream-links.txt"
+            fi            
         done
     fi
     IFS="$oIFS"
