@@ -29,10 +29,10 @@
 
 if [[ "$url_in" =~ google ]]
 then    
-    location=$(grep -P "url=[^&]+" <<< "$url_in")
-    location="${location#*url=}"
-    location="${location%%&*}"
-    location=$(urldecode "$location")
+    google_location=$(grep -P "url=[^&]+" <<< "$url_in")
+    google_location="${google_location#*url=}"
+    google_location="${google_location%%&*}"
+    google_location=$(urldecode "$google_location")
 
-    replace_url_in "$location"
+    replace_url_in "$google_location"
 fi

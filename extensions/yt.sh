@@ -111,4 +111,3 @@ then
     no_check_links+=( youtube youtu\.be )
     end_extension
 fi
-
