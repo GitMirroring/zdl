@@ -30,19 +30,21 @@
 
 if [[ "$url_in" =~ discoveryplus\. ]]
 then
-    dplus_data=$($youtube_dl --get-url \
-			     --get-filename \
+    dplus_json=$($youtube_dl --dump-json \
 			     "$url_in" \
 			     2>/dev/null)
     
-    file_in=$(tail -n1 <<< "$dplus_data")
-    file_in="${file_in%.*}.mp4"
-    
-    url_in_file=$(head -n1 <<< "$dplus_data")
-    
+    file_in=$(node -e "var json = $dplus_json; var filename = json.title; if (json.season_number) { filename = json.season_number + 'x' + ('00' + json.episode_number).slice(-2) + '_-_' + filename; } console.log(filename + '.mp4')")
+    sanitize_file_in "$file_in"
+
+    url_in_file=$(node -e "var json = $dplus_json; console.log(json.requested_formats[0].url + '\n' + json.requested_formats[1].url)")
+
+    url_in_file_video=$(grep video <<< "$url_in_file")
+    url_in_file_audio=$(grep audio <<< "$url_in_file")
+
+    url_in_file=$(head -n1 <<< "$url_in_file")
+
     force_dler FFMpeg
-    
-    countdown- 5
     
     end_extension
 fi

@@ -574,7 +574,21 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 	    ## URL-FILE.M3U8
 	    rm -f "$path_tmp/${file_in}_stdout.tmp"
 
-	    if [ "$livestream_m3u8" == "$url_in" ] ||
+            if url "$url_in_file_video" &&
+                    url "$url_in_file_audio"
+            then
+		nohup $ffmpeg -loglevel info \
+                      -i "$url_in_file_video" \
+                      -i "$url_in_file_audio" \
+                      -c copy \
+                      "${file_in}" \
+                      ${ffmpeg_opts[@]} \
+                      -y &> >( 
+		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	        stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
+                pid_in=$!                
+                
+            elif [ "$livestream_m3u8" == "$url_in" ] ||
                    [ "$livestream_m3u8" == "$url_in_file" ]
 	    then
 		local livestream_time
