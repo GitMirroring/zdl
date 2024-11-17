@@ -55,32 +55,87 @@
 
 @macro menuZdl
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Top, Home}: ZigzagDownLoader@*
+
+@item
+@ref{Il comando ZDL}:@*Sintassi, opzioni e altri argomenti@*
+
+@item
+@ref{Servizi streaming/hosting, Servizi streaming/hosting}:@*Estensioni di ZDL e consigli pratici@*
+
+@item
+@ref{Installazione e aggiornamento, Installazione e aggiornamento}:@*Per GNU/Linux e Microsoft Windows/Cygwin@*
+
+@item
+@ref{Perché questo programma}:@*Il senso di una sperimentazione continua a ZIGZAG@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Home:Top. ZigzagDownLoader@*
 * Il comando ZDL::@*Sintassi, opzioni e altri argomenti@*
 * Servizi streaming/hosting::@*Estensioni di ZDL e consigli pratici@*
 * Installazione e aggiornamento::@*Per GNU/Linux e Microsoft Windows/Cygwin@*
 * Perché questo programma::@*Il senso di una sperimentazione continua a ZIGZAG@*
+@end ifnothtml
 @end macro
 
 @macro menuUso
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Avviare ZDL,Avviare ZDL}:@*Modalità di esecuzione del programma e avvio dei download@*
+
+@item
+@ref{Arrestare ZDL,Arrestare ZDL}:@*Modalità di arresto del programma@*
+
+@item
+@ref{Controllare i download,Controllare i download}:@*Modalità di controllo dei processi avviati, in coda o sospesi@*
+
+@item
+@ref{Manuali d'uso,Manuali d'uso}:@*Documentazione disponibile per ZDL@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Avviare ZDL::@*Modalità di esecuzione del programma e avvio dei download@*
 * Arrestare ZDL::@*Modalità di arresto del programma@*
 * Controllare i download::@*Modalità di controllo dei processi avviati, in coda o sospesi@*
 * Manuali d'uso::@*Documentazione disponibile per ZDL@*
+@end ifnothtml
 @end macro
 
 @macro menuTools
 @ifhtml
-@html
-@end html
+@itemize
+@item
+@ref{Modi,Modi}:@*Predefinito, Lite, Interattivo, Demone@*
+
+@item
+@ref{Readline,Readline}:@*La riga di comando di ZDL@*
+
+@item
+@ref{Editor,Editor}:@*Editor integrato, per modificare la coda di download@*
+
+@item
+@ref{Omonimie,Omonimie}:@*Gestione dei file omonimi e recupero dei download interrotti@*
+
+@item
+@ref{IRC/XDCC,IRC/XDCC}:@*Scaricamento file via chat attraverso comandi XDCC@*
+
+@item
+@ref{Torrent,Torrent}:@*Scaricamento dei torrent con Aria2: URL magnet oppure file torrent@*
+
+@item
+@ref{Filtri,Filtri}:@*Filtri per l'estrazione e la selezione di file e URL@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Modi::@*Predefinito, Lite, Interattivo, Demone@*
 * Readline::@*La riga di comando di ZDL@*
 * Editor::@*Editor integrato, per modificare la coda di download@*
@@ -88,17 +143,33 @@
 * IRC/XDCC::@*Scaricamento file via chat attraverso comandi XDCC@*
 * Torrent::@*Scaricamento dei torrent con Aria2: URL magnet oppure file torrent@*
 * Filtri::@*Filtri per l'estrazione e la selezione di file e URL@*
+@end ifnothtml
 @end macro
 
 @macro menuExt
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Creare nuove estensioni,Creare nuove estensioni}:@*Estensioni Bash di ZDL personalizzate e per nuovi servizi@*
+
+@item
+@ref{Software consigliati e dipendenze,Software consigliati e dipendenze}:@*Programmi utili a ZDL@*
+
+@item
+@ref{Conkeror,Conkeror}:@*Comando @command{zdl} per il browser@*
+
+@item
+@ref{zdl-xterm e XXXTerm/Xombrero,zdl-xterm e XXXTerm/Xombrero}:@*Uno script per collegare ZDL ad altri programmi@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Creare nuove estensioni::@*Estensioni Bash di ZDL personalizzate e per nuovi servizi@*
 * Software consigliati e dipendenze::@*Programmi utili a ZDL@*
 * Conkeror::@*Comando @command{zdl} per il browser@*
 * zdl-xterm e XXXTerm/Xombrero::@*Uno script per collegare ZDL ad altri programmi@*
+@end ifnothtml
 @end macro
 
 @macro menuDev
@@ -116,14 +187,27 @@
 
 @macro menuFooter
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Tags, Tags}:Indici analitici@*
+
+@item
+@ref{Copying, Copying}:Autori e Licenza@*
+
+@item
+@ref{Contatti, Contatti}:Per assistenza o per partecipare
+
+@end itemize
 @end ifhtml
+
+@ifnothtml
 * Tags::Indici analitici@*
 
 * Copying::Autori e Licenza@*
 
 * Contatti::Per assistenza o per partecipare
+@end ifnothtml
 @end macro
 
 @macro htmlstart
@@ -136,35 +220,34 @@
 <div class="left">
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
-<!-- <iframe src="http://z0n1n0z.000webhostapp.com/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe> -->
 <iframe src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe>
 </div><br>
 @b{ZDL}
 <div class="nav">
-@menu
+
 @menuZdl
-@end menu
+
 </div>
 <br>
 @b{Come si usa ZDL}
 <div class="nav">
-@menu
+
 @menuUso
-@end menu
+
 </div>
 <br>
 @b{Strumenti e funzioni}
 <div class="nav">
-@menu
+
 @menuTools
-@end menu
+
 </div>
 <br>
 @b{Espandere ZDL}
 <div class="nav">
-@menu
+
 @menuExt
-@end menu
+
 </div>
 </div>
 <div class="content">
@@ -181,15 +264,15 @@
 </div>
 <div class="footer">
 <div class="contentfooter">
-@menu
+@c @menu
 @menuFooter
-@end menu
+@c @end menu
 </div>
 <div class="contentfooter">
 @b{Progetto ZDL}
-@menu
+@c @menu
 @menuDev
-@end menu
+@c @end menu
 </div>
 </div>
 </div>
@@ -202,11 +285,11 @@
 @ifhtml
 @node Top,Il comando ZDL, ,
 @end ifhtml
-@html
-@end html
+
 @ifinfo
 @node Top,Il comando ZDL, ,(dir)
 @end ifinfo
+
 @htmlstart
 @top ZigzagDownLoader (ZDL)
 @cindex perché zdl
@@ -779,7 +862,8 @@ da modalità interattiva, digitare @kbd{Q} (tasti @kbd{<Shift>+<q>})
 
 Una volta @emph{chiuso} (o anche @emph{ucciso} interrompendo i download), ZDL può essere riavviato utilizzando nuove opzioni.
 
-@unnumberedsubsec Un esempio, partendo da un problema pratico: aggiungere opzioni a download avviati dal browser. 
+@c @unnumberedsubsec Un esempio, partendo da un problema pratico: aggiungere opzioni a download avviati dal browser.
+@unnumbered Un esempio, partendo da un problema pratico: aggiungere opzioni a download avviati dal browser. 
 @table @emph
 @item Problema:
 voglio scaricare dei file da Easybytez usando @emph{Flashgot}, ma voglio
@@ -807,13 +891,15 @@ quando ho finito di registrare i link, torno al terminale e, senza
 @end table
 
 @*@*
-@unnumberedsubsec Controllo manuale dei download.
+@c @unnumberedsubsec Controllo manuale dei download.
+@unnumbered Controllo manuale dei download.
 ZDL processa i @emph{link} registrati, generando per ciascuno un file temporaneo da cui può estrarre informazioni sul file da scaricare e sul download in corso, intattivo o completato. Grazie a tali informazioni, è possibile il controllo dei processi di download, sia automaticamente da parte di ZDL, sia manualmente da parte dell'utente.
 
 I download di ZDL possono essere controllati manualmente attraverso la modalità interattiva, che può essere attivata da quella standard digitando @kbd{M-i} (tasti @kbd{<Alt>+<i>}) o da un qualsiasi terminale @emph{Bash} dalla stessa directory di download, utilizzando l'opzione @option{-i|--interactive}. Se non è attiva alcuna istanza di avvio e gestione automatica dei download, dall'interfaccia interattiva è possibile avviare la modalità @emph{demone}, che agisce in background come @emph{server} ed è indipendente dal terminale di avvio. Per gestire i download e la stessa chiusura di ZDL in modalità demone, è comunque necessario utilizzare l'interfaccia interattiva, che ha funzione di @emph{client}.@*
 I comandi sono elencati nella stessa interfaccia interattiva: è possibile modificare il numero massimo di download (da @kbd{1} a @kbd{9}, digitando i tasti dei numeri, o illimitati, digitando il tasto @kbd{m} o in pausa digitando @kbd{0}), il tipo di downloader da utilizzare (Axel o Wget, digitando @emph{a} o @emph{w} o @emph{A}), avviare l'editor predefinito per modificare l'elenco dei link da processare (tasto @emph{e}), selezionare con @emph{s} i download in gestione per @emph{riavviarli} (ZDL interrompe il download in corso e processa quello successivo fino al termine della lista registrata, poi ricomincia dal primo e così via) o @emph{eliminarli} completamente. Per queste ultime tre operazioni è possibile selezionare più download alla volta, indicandone i numeri identificativi separandoli con spazi.
 
-@unnumberedsubsec Controllo manuale dei download ancora da processare.
+@c @unnumberedsubsec Controllo manuale dei download ancora da processare.
+@unnumbered Controllo manuale dei download ancora da processare.
 In mancanza dei file temporanei relativi a @emph{link} non ancora processati, è possibile intervenire manualmente utilizzando un @emph{editor} (@ref{Editor}).
 
 @htmlend
@@ -1070,7 +1156,8 @@ migliore di @emph{info} ed esteticamente più simile a ZDL
 Almeno un editor qualsiasi (qui solo alcuni suggerimenti) per poter modificare in qualsiasi momento la lista dei link da cui effettuare i download
 @end table
 
-@unnumberedsubsec ZDL estende: 
+@c @unnumberedsubsec ZDL estende: 
+@unnumbered ZDL estende: 
 @table @emph
 @pindex firefox
 @pindex iceweasel
@@ -1098,7 +1185,8 @@ Funzione @kbd{M-x zdl} autoinstallata
 
 @end table
 
-@unnumberedsubsec Dipendenze: 
+@c @unnumberedsubsec Dipendenze:
+@unnumbered Dipendenze: 
 @table @emph
 @item Nodejs
 @item Panthomjs
@@ -1106,7 +1194,8 @@ Motori Javascript per l'acquisizione di informazioni dal web
 
 @end table
 
-@unnumberedsubsec Dipendenze aggiuntive per Windows: 
+@c @unnumberedsubsec Dipendenze aggiuntive per Windows:
+@unnumbered Dipendenze aggiuntive per Windows: 
 @table @emph
 @item Cygwin (x86 32-bit)
 Distribuzione per il porting di software di sistemi POSIX su Microsoft Windows
@@ -1303,7 +1392,8 @@ ZigzagDownLoader è molte cose: un @emph{server/client TCP} utile per un @emph{N
 
 Nonostante i suoi limiti strutturali, il linguaggio della @emph{Bash} si è rivelato adatto allo scopo, soprattutto per la flessibilità d'uso nella gestione dei processi di altri programmi. Una progressiva efficienza è stata raggiunta attraverso lo sviluppo di script @emph{monolitici} nel linguaggio di @emph{Awk} (@emph{Gawk}). Il software include, inoltre, interpreti di altri linguaggi (attualmente: @emph{node.js} e @emph{php}, necessari al trattamento dei link di alcuni servizi), fornendo un supporto per ulteriori estensioni e sviluppi. ZigzagDownLoader è, per certi versi, un esempio complesso di @emph{programmazione poliglotta}.
 
-@unnumberedsubsec Almeno quattro direttrici di sviluppo
+@c @unnumberedsubsec Almeno quattro direttrici di sviluppo
+@unnumbered Almeno quattro direttrici di sviluppo
 L'esecuzione dei downloader può richiedere assistenza: la connessione può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i nomi dei file scaricati possono non essere intelligibili o coincidere con altri di file già salvati, ecc. 
 @emph{In primo luogo}, ZigzagDownLoader serve ad automatizzare la gestione ed il recupero dei download o a semplificarne eventuali interventi manuali. ZDL è pensato, soprattutto, per il download @emph{accelerato} di grossi file e per il recupero del loro @emph{URL} a partire da informazioni disponibili nel web o fornite dall'utente. 
 
