@@ -214,7 +214,7 @@
 @macro htmlstart
 @ifhtml
 @html
-</p><a href="index.html">
+</div><a href="index.html">
 <div class="header"></div>
 </a>
 <div class="container">
@@ -263,8 +263,6 @@
 @ifhtml
 @html
 <br>
-</div>
-</div>
 </div>
 </div>
 </div>

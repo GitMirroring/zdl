@@ -224,11 +224,12 @@ div {
 div.nav-panel {
     padding:0px;
     background: #000000;
-    width: 100%;
+    width: 1000px;
     eigth: 2em;
-    float: right;
+    float: center;
     color: #9A9A9A;
     font-weight: bold;
+    margin: auto;
 }
 
 /* div.top-level-extent { */
@@ -246,7 +247,7 @@ div.nav-panel {
     margin-right: 4em;
 }
 
-.node a {
+.nav-panel a {
     color:white;
 }
 
