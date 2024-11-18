@@ -670,7 +670,7 @@ download_:
 può essere riavviato utilizzando nuove opzioni.
 
 Un esempio, partendo da un problema pratico: aggiungere opzioni a download avviati dal browser.
-***********************************************************************************************
+===============================================================================================
 
 _Problema:_
      voglio scaricare dei file da Easybytez usando _Flashgot_, ma voglio
@@ -695,7 +695,7 @@ _Soluzione:_
 
 
 Controllo manuale dei download.
-*******************************
+===============================
 
 ZDL processa i _link_ registrati, generando per ciascuno un file
 temporaneo da cui può estrarre informazioni sul file da scaricare e sul
@@ -727,7 +727,7 @@ più download alla volta, indicandone i numeri identificativi separandoli
 con spazi.
 
 Controllo manuale dei download ancora da processare.
-****************************************************
+====================================================
 
 In mancanza dei file temporanei relativi a _link_ non ancora processati,
 è possibile intervenire manualmente utilizzando un _editor_ (*note
@@ -1076,7 +1076,7 @@ _Zile_
      i download
 
 ZDL estende:
-************
+============
 
 _Firefox/Iceweasel/Icecat_
      Attraverso l'estensione _Flashgot_
@@ -1091,14 +1091,14 @@ _Conkeror_
      Funzione ‘M-x zdl’ autoinstallata
 
 Dipendenze:
-***********
+===========
 
 _Nodejs_
 _Panthomjs_
      Motori Javascript per l'acquisizione di informazioni dal web
 
 Dipendenze aggiuntive per Windows:
-**********************************
+==================================
 
 _Cygwin (x86 32-bit)_
      Distribuzione per il porting di software di sistemi POSIX su
@@ -1294,7 +1294,7 @@ ulteriori estensioni e sviluppi.  ZigzagDownLoader è, per certi versi,
 un esempio complesso di _programmazione poliglotta_.
 
 Almeno quattro direttrici di sviluppo
-*************************************
+=====================================
 
 L'esecuzione dei downloader può richiedere assistenza: la connessione
 può interrompersi, l'indirizzo IP cambiare, i download incepparsi, i

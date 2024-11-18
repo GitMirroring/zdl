@@ -1,4 +1,4 @@
-
+;
 \input texinfo @c - * - texinfo - * -
 @c %**start of header
 @setfilename zdl.info
@@ -141,30 +141,30 @@
 </div><br>
 @b{ZDL}
 <div class="nav">
-@menu
+
 @menuZdl
-@end menu
+
 </div>
 <br>
 @b{How to use ZDL}
 <div class="nav">
-@menu
+
 @menuUse
-@end menu
+
 </div>
 <br>
 @b{Tools and functions}
 <div class="nav">
-@menu
+
 @menuTools
-@end menu
+
 </div>
 <br>
 @b{Expanding ZDL}
 <div class="nav">
-@menu
+
 @menuExt
-@end menu
+
 </div>
 </div>
 <div class="content">
@@ -181,15 +181,15 @@
 </div>
 <div class="footer">
 <div class="contentfooter">
-@menu
+
 @menuFooter
-@end menu
+
 </div>
 <div class="contentfooter">
 @b{ZDL Project}
-@menu
+
 @menuDev
-@end menu
+
 </div>
 </div>
 </div>
@@ -776,7 +776,7 @@ from interactive mode, type @kbd{Q} (@kbd{<Shift> + <q>} keys)
 
 Once @emph{closed} (or even @emph{killed} interrupting downloads), ZDL can be restarted using new options.
 
-@unnumberedsubsec An example, starting from a practical problem: add options to downloads started by the browser.
+@unnumberedsec An example, starting from a practical problem: add options to downloads started by the browser.
 @table @emph
 @item Problem:
 I want to download files from Easybytez using @emph{Flashgot}, but also I want to use the options @option{--login}, @option{--max-downloads=} and @option{--clean}, which are not
@@ -1067,7 +1067,7 @@ better than @emph{info} and more aesthetically similar to ZDL
 At least one editor (here are just a few suggestions) to change the list of links to download from at any time
 @end table
 
-@unnumberedsubsec ZDL extends:
+@unnumberedsec ZDL extends:
 @table @emph
 @pindex firefox
 @pindex iceweasel
@@ -1095,7 +1095,7 @@ Through the extension @emph{External Application Button}
 
 @end table
 
-@unnumberedsubsec Dependencies:
+@unnumberedsec Dependencies:
 @table @emph
 @item Nodejs
 @item Panthomjs
@@ -1103,7 +1103,7 @@ Javascript engines for acquiring information from the web
 
 @end table
 
-@unnumberedsubsec Additional dependencies for Windows:
+@unnumberedsec Additional dependencies for Windows:
 @table @emph
 @item Cygwin (x86 32-bit)
 Distribution for software porting of POSIX systems on Microsoft Windows
@@ -1300,7 +1300,7 @@ ZigzagDownLoader is a lot of things: a @emph{server/TCP client} useful for a @em
 
 Despite its structural limitations, the language of the @emph{Bash} proved to be fit for purpose, especially for the flexibility of use in the management of the processes of other programs. Progressive efficiency has been achieved through the development of @emph{monolithic} scripts in the language of @emph{Awk} (@emph{Gawk}). The software also includes interpreters of other languages​(currently: @emph{node.js} and @emph{php}, necessary for processing the links of some services), providing support for further extensions and developments. ZigzagDownLoader is, in some ways, a complex example of @emph{polyglot programming}.
 
-@unnumberedsubsec At least four development guidelines
+@unnumberedsec At least four development guidelines
 The execution of the downloaders may require assistance: the connection may be interrupted, the IP address change, the downloads get stuck, the names of the downloaded files may not be intelligible or may coincide with others of files already saved, etc.
 @emph{First}, ZigzagDownLoader is used to automate the management and recovery of downloads or to simplify any manual interventions. ZDL is designed, above all, for the @emph{accelerated} download of large files and for the recovery of their @emph{URL} from information available on the web or provided by the user.
 
