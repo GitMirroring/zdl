@@ -46,7 +46,7 @@ function getLocale () {
     return $lang;
 }
 
-function getLocaleReferer () {
+/* function getLocaleReferer () {
     if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
         $origin = $_SERVER['HTTP_ORIGIN'];
     }
@@ -55,25 +55,31 @@ function getLocaleReferer () {
     } else {
         $origin = $_SERVER['REMOTE_ADDR'];
     }
-    $origin = $_SERVER['HTTP_REFERER'];
-
-    return print_r($origin[0]);
-    /* preg_match("/\/(it|en)\//", $origin, matches);   $lang = $matches[1]; */
+    $origin = $_SERVER['HTTP_REFERER']; */
+    
+    //preg_match("/\/(it|en)\//", $origin, matches);
     
     // Set default language if a `$lang` version of site is not available
-    /* if ($lang !== "it" && $lang !== "en")        $lang = 'en';    return $lang; */    
-}
+    /* if ($lang !== "it" && $lang !== "en")
+        $lang = 'en';
+    return $lang;    
+} */
 
-function getLocaleParam () {
-    return $_SERVER['HTTP_GET'];
+function getLocaleParam ($param) {
+    if (strpos($_GET[$param], "it")) {
+        $lang = 'it';    
+    } else {
+        $lang = 'en';
+    }
+    return $lang;
 }
 
 function displayFeed($url){
     $getfile = html_entity_decode(file_get_contents($url));
-    $lang = getLocaleReferer();
-
-    $xml = new SimpleXMLElement($getfile);
-    //$xml = simplexml_load_file($url);
+    $lang = getLocaleParam('origin');
+    
+    //$xml = new SimpleXMLElement($getfile);
+    $xml = simplexml_load_file($url);
 
     $feed_info = array();
     $feed_art = array();
@@ -156,16 +162,15 @@ ZigzagDownLoader (ZDL)
 <link rel=\"stylesheet\" type=\"text/css\" href=\"https://www.nongnu.org/zdl/zdl_rss_style.css\">
 </head>
 <body>";
-          echo $header;
+    echo $header;
 }
 
 function displayTail() {
     echo "</body></html>";
 }
 
-//displayHead();
-//displayFeed("https://savannah.nongnu.org/news/atom.php?group=zdl");
-echo getLocaleParam();
-//displayTail();
+displayHead();
+displayFeed("https://savannah.nongnu.org/news/atom.php?group=zdl");
+displayTail();
 
 ?>
