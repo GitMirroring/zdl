@@ -35,24 +35,24 @@ ZigzagDownLoader (ZDL)
 **********************
 
 _ZigzagDownLoader_ is a download manager:
-   − equipped with command line user interfaces (_CLI_), for terminals
+   • equipped with command line user interfaces (_CLI_), for terminals
      (_TUI_), graphics (_GUI_) and for internet and web applications
      (_Web-UI_);
-   − handles downloads of some downloaders such as _Aria2_, _Axel_,
+   • handles downloads of some downloaders such as _Aria2_, _Axel_,
      _Wget_, _RTMPDump_ or _cURL_, using its potential (for example,
      download acceleration);
-   − extracts the URL of the files to be downloaded from file hosting
+   • extracts the URL of the files to be downloaded from file hosting
      and video streaming services, also using ‘youtube-dl’ extensions
      (or _extractors_);
-   − downloads _TORRENT_;
-   − automatically requests and downloads files via _IRC/XDCC_, without
+   • downloads _TORRENT_;
+   • automatically requests and downloads files via _IRC/XDCC_, without
      any human interaction via chat;
-   − downloads movies _LIVE_ from some television networks
-   − extends web browsers, such as _Conkeror_, _XXXTerm/Xombrero_ and,
+   • downloads movies _LIVE_ from some television networks
+   • extends web browsers, such as _Conkeror_, _XXXTerm/Xombrero_ and,
      using _Flashgot_, _Firefox_;
-   − the _External Application Button_ extension integrates ZDL into
+   • the _External Application Button_ extension integrates ZDL into
      _Firefox_, _Chrome/Chromium_ and _Opera_;
-   − using _Cygwin_, it also works in _Microsoft Windows_ (CLI and TUI
+   • using _Cygwin_, it also works in _Microsoft Windows_ (CLI and TUI
      interfaces, also from _Firefox_ + _Flashgot_ of Windows).
 
    The server and web interfaces, for remote and network control, make
@@ -68,11 +68,11 @@ without having to perform any IRC/chat.  All interfaces allow _live-tv_
 recordings to be programmed.
 
    But ZDL is also much more, because it can be:
-   − combined with other programs or inserted into a script, as a work
+   • combined with other programs or inserted into a script, as a work
      tool
-   − extended by the user, who can develop new extensions suitable for
+   • extended by the user, who can develop new extensions suitable for
      their purposes
-   − a polyglot system, using different interpreters (for PHP,
+   • a polyglot system, using different interpreters (for PHP,
      Javascript, Python, Perl, Awk ...)  and Bash tools
 
    ZigzagDownLoader is a "zigzag" program: it is not just a program, it
@@ -158,6 +158,7 @@ Command ‘zdl’ for the browser
 
 * zdl-xterm and XXXTerm/Xombrero::
 A script to connect ZDL to other programs
+
 
 
 * Tags::Analytical indices
@@ -1449,28 +1450,28 @@ _zdl-devel - Development list_:
 
 Tag Table:
 Node: Top1239
-Node: The ZDL command5147
-Node: Streaming/hosting services14140
-Node: Start ZDL18998
-Node: Stop ZDL21407
-Node: Check the downloads22466
-Node: User manuals26554
-Node: Modes26968
-Node: Readline30053
-Node: Editor31527
-Node: Homonymy32695
-Node: IRC/XDCC34231
-Node: Torrent35881
-Node: Filters36728
-Node: Create new extensions37016
-Node: Recommended software and dependencies38758
-Node: Conkeror40378
-Node: zdl-xterm and XXXTerm/Xombrero41349
-Node: Installation and update43268
-Node: Why this program46326
-Node: Tags50027
-Node: Copying55408
-Node: Contacts56490
+Node: The ZDL command5148
+Node: Streaming/hosting services14141
+Node: Start ZDL18999
+Node: Stop ZDL21408
+Node: Check the downloads22467
+Node: User manuals26555
+Node: Modes26969
+Node: Readline30054
+Node: Editor31528
+Node: Homonymy32696
+Node: IRC/XDCC34232
+Node: Torrent35882
+Node: Filters36729
+Node: Create new extensions37017
+Node: Recommended software and dependencies38759
+Node: Conkeror40379
+Node: zdl-xterm and XXXTerm/Xombrero41350
+Node: Installation and update43269
+Node: Why this program46327
+Node: Tags50028
+Node: Copying55409
+Node: Contacts56491
 
 End Tag Table
 

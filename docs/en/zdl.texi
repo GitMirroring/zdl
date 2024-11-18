@@ -61,13 +61,13 @@
 @ref{Top, Home}: ZigzagDownLoader@*
 
 @item
-@ref{The ZDL command,The ZDL command}:@*Command synopsis, options and other arguments@*
+@ref{The ZDL command, The ZDL command}:@*Command synopsis, options and other arguments@*
 
 @item
-@ref{Streaming/hosting services,Streaming/hosting services}:@*ZDL extensions and practical tips@*
+@ref{Streaming/hosting services, Streaming/hosting services}:@*ZDL extensions and practical tips@*
 
 @item
-@ref{Installation and update,Installation and update}:For GNU/Linux and Microsoft Windows/Cygwin@*
+@ref{Installation and update, Installation and update}:For GNU/Linux and Microsoft Windows/Cygwin@*
 
 @item
 @ref{Why this program}:@*The sense of continuous ZIGZAG experimentation@*
@@ -144,6 +144,7 @@
 * IRC/XDCC::@*Downloading files via IRC-chat/XDCC commands@*
 * Torrent::@*Downloading torrents with Aria2: URL magnet or torrent file@*
 * Filters::@*Filters for extracting and selecting files and URLs@*
+@end ifnothtml
 @end macro
 
 @macro menuExt
@@ -169,6 +170,7 @@
 * Recommended software and dependencies::@*Useful programs for ZDL@*
 * Conkeror::@*Command @command{zdl} for the browser@*
 * zdl-xterm and XXXTerm/Xombrero::@*A script to connect ZDL to other programs@*
+@end ifnothtml
 @end macro
 
 @macro menuDev
@@ -186,14 +188,27 @@
 
 @macro menuFooter
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Tags, Tags}:Analytical indices@*
+
+@item
+@ref{Copying, Copying}:Authors and License@*
+
+@item
+@ref{Contacts, Contacts}:For assistance or to participate
+
+@end itemize
 @end ifhtml
+
+@ifnothtml
 * Tags::Analytical indices@*
 
 * Copying::Authors and License@*
 
 * Contacts::For assistance or to participate
+@end ifnothtml
 @end macro
 
 @macro htmlstart
@@ -286,7 +301,7 @@
 
 @c @ifman @unnumberedsec DESCRIPTION
 @emph{ZigzagDownLoader} is a download manager:
-@itemize @minus
+@itemize 
 @item
 equipped with command line user interfaces (@emph{CLI}), for terminals (@emph{TUI}), graphics (@emph{GUI}) and for internet and web applications (@emph{Web-UI});
 @item
@@ -313,7 +328,7 @@ Furthermore, the Web interfaces (@emph{Web-UI}) and graphics (@emph{GUI}) allow 
 All interfaces allow @emph{live-tv} recordings to be programmed.
 
 But ZDL is also much more, because it can be:
-@itemize @minus
+@itemize 
 @item
 combined with other programs or inserted into a script, as a work tool
 @item
