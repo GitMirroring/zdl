@@ -219,8 +219,13 @@
 <div class="left">
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
-<iframe src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php" height="300px" width="100%" style="border-style:none;"></iframe>
-</div><br>
+<div id='feed'></div>
+<script type="text/javascript">
+document.getElementById("feed").innerHTML = '<iframe height="300px" width="100%" style="border-style:none;" src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
+</script>
+
+@c <iframe src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php?origin=<script>document.write(window.location);</script>" height="300px" width="100%" style="border-style:none;"></iframe>
+</iframe><br>
 @b{ZDL}
 <div class="nav">
 

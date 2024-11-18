@@ -46,9 +46,31 @@ function getLocale () {
     return $lang;
 }
 
+function getLocaleReferer () {
+    if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
+        $origin = $_SERVER['HTTP_ORIGIN'];
+    }
+    else if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+        $origin = $_SERVER['HTTP_REFERER'];
+    } else {
+        $origin = $_SERVER['REMOTE_ADDR'];
+    }
+    $origin = $_SERVER['HTTP_REFERER'];
+
+    return print_r($origin[0]);
+    /* preg_match("/\/(it|en)\//", $origin, matches);   $lang = $matches[1]; */
+    
+    // Set default language if a `$lang` version of site is not available
+    /* if ($lang !== "it" && $lang !== "en")        $lang = 'en';    return $lang; */    
+}
+
+function getLocaleParam () {
+    return $_SERVER['HTTP_GET'];
+}
+
 function displayFeed($url){
     $getfile = html_entity_decode(file_get_contents($url));
-    $lang = getLocale();
+    $lang = getLocaleReferer();
 
     $xml = new SimpleXMLElement($getfile);
     //$xml = simplexml_load_file($url);
@@ -141,8 +163,9 @@ function displayTail() {
     echo "</body></html>";
 }
 
-displayHead();
-displayFeed("https://savannah.nongnu.org/news/atom.php?group=zdl");
-displayTail();
+//displayHead();
+//displayFeed("https://savannah.nongnu.org/news/atom.php?group=zdl");
+echo getLocaleParam();
+//displayTail();
 
 ?>
