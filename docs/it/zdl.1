@@ -1,4 +1,4 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Mon Nov 18 17:11:13 2024" "GNU" "User Commands"
+.TH "ZigzagDownLoader (ZDL)" "1" "Mon Nov 18 17:19:06 2024" "GNU" "User Commands"
 .SH NOME\	
 \fBzdl\fP - CLI/TUI/GUI/Web-UI download manager per \fIGNU/Linux\fP e \fIMicrosoft Windows + Cygwin\fP.\
 
@@ -93,8 +93,8 @@ Directory di avvio di ZDL e di destinazione dei download (se omessa, è quella c
 
 .RS -5
 
-
-.SH OPZIONI\	
+\
+.SH OPZIONI	
 Le opzioni brevi non seguite da valori possono essere contratte: 
 \fB-ufmd\fP equivale a \fB-u\fP \fB-f\fP \fB-m\fP \fB-d\fP
 
@@ -262,8 +262,8 @@ Prima di avviare zdl, apre una finestra per la selezione della directory di dest
 .RS -5
 
 
-
-.SS Socket e interfacce utente:\	
+\
+.SS Socket e interfacce utente:	
 
 .RS 5
 
@@ -282,8 +282,8 @@ Avvia il programma in modalità demone nella directory corrente o, eventualmente
 .RS -5
 
 
-
-.SS IRC/XDCC:\	
+\
+.SS IRC/XDCC:	
 
 .RS 5
 
@@ -396,8 +396,8 @@ Non scarica i file il cui nome contiene la stringa 'sub' (in lettere maiuscole e
 .RS -5
 
 
-
-.SS Avvio con un editor:\	
+\
+.SS Avvio con un editor:	
 
 .RS 5
 
@@ -504,10 +504,10 @@ Per scaricare lo stream incorporando ZDL in nuovi script, il modello generico de
 
 .RS -5
 
-
-.SH PANORAMICA\	
-
-.SS Servizi\	
+\
+.SH PANORAMICA	
+\
+.SS Servizi	
 ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream video (da Youtube, Nowvideo, Dailymotion\&...) per mezzo di estensioni dei browser, ed i file condivisi attraverso i seguenti servizi di hosting e di streaming, direttamente dal link (bypassando il player delle pagine web):
 
 
@@ -518,7 +518,7 @@ ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream
 .RS -5
 \fI\fP\fBVideo in streaming saltando il player del browser:\fP\fI\fP
 .RS 5
-Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), DiscoveryPlus (HD), Dropload, EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Filemoon, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai\&..\&. (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, StreamHide, Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD, Zinwa (RTMP)
+Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), DiscoveryPlus (HD), Dropload, EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Filemoon, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai..\&. (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, StreamHide, Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD, Zinwa (RTMP)
 
 
 .RS -5
@@ -556,8 +556,8 @@ Aria2 (anche torrent), Axel, cURL, RTMPDump, Wget, youtube-dl (comando per elenc
 .RS -5
 
 
-
-.SS Avvio\	
+\
+.SS Avvio	
 ZDL può essere avviato in diversi modi:
 
 
@@ -600,9 +600,8 @@ digita \fBM-x\fP (\fBM\fP, il tasto \fIMeta\fP, è \fB<Alt>\fP, \fB<Ctrl>\fP o \
 .RS 0
 .IP "\fI2.\fP" 3
 Utilizzando uno o più file preparati con un editor di testi (andare a capo dopo ogni link) e raggiungibili dalla directory di destinazione (indica un path valido):
-
-.RS 5
-
+.RS 0
+.IP "\fI2.\fP" 3ize @minus
 .RS 0
 .IP "\fI-\fP" 2
 apri un terminale ed entra nella directory che dovrà contenere i file scaricati (in alternativa, puoi indicare a \fIZDL\fP la directory di lavoro)

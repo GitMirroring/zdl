@@ -223,7 +223,7 @@
 document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
 </script>
 @c <iframe src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php?origin=<script>document.write(window.location);</script>" height="300px" width="100%" style="border-style:none;"></iframe>
-</iframe><br>
+<br>
 @b{ZDL}
 <div class="nav">
 
