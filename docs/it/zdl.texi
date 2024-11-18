@@ -762,7 +762,7 @@ ZDL può essere avviato in diversi modi:
 @item
 generando automaticamente la lista dei link per il download:
 
-@itemize @minus
+@itemize 
 @item
 apri un terminale ed entra nella directory che dovrà contenere i file scaricati
 
@@ -779,7 +779,7 @@ digita @kbd{M-x} (@kbd{M}, il tasto @emph{Meta}, è @kbd{<Alt>}, @kbd{<Ctrl>} o 
 
 @item
 Utilizzando uno o più file preparati con un editor di testi (andare a capo dopo ogni link) e raggiungibili dalla directory di destinazione (indica un path valido):
-@itemize @minus
+@itemize 
 @item
 apri un terminale ed entra nella directory che dovrà contenere i file scaricati (in alternativa, puoi indicare a @emph{ZDL} la directory di lavoro)
 
@@ -855,7 +855,7 @@ attraverso la modalità interattiva @command{zdl -i} avviata nella directory ges
 
 I download possono essere controllati in modalità diverse in base al tipo di operazione da effettuare.
 L'avvio da terminale permette l'esecuzione delle operazioni elencate nella presentazione del comando: @ref{Il comando ZDL}. Poiché ZDL può essere chiuso senza interrompere i download, questa modalità di controllo può essere adottata in ogni momento, a esecuzione già avviata. Per @emph{chiudere senza interrompere i download}:
-@itemize @minus
+@itemize 
 @item
 se avviato in modalità standard, digitare @kbd{M-q} (tasti @kbd{<Alt>+<q>})
 @item
@@ -875,7 +875,7 @@ usando il browser (con @emph{Flashgot}), se queste possono essere attivate
 solo dal terminale?
 
 @item Soluzione:
-@itemize @minus
+@itemize 
 @item
 avvio zdl in un terminale, dalla directory di destinazione,
     utilizzando tutte le opzioni di cui ho bisogno:
@@ -1216,7 +1216,7 @@ Per usarlo, digita: @kbd{M-x zdl}
 
 @table @emph
 @item Dopo aver avviato il comando, il minibuffer di Conkeror
-@itemize @minus
+@itemize 
 @item 
 chiede di selezionare la @emph{directory} di destinazione 
 @item
@@ -1253,7 +1253,7 @@ di zdl in un nuovo terminale virtuale xterm è reso possibile, appunto,
 da @command{zdl-xterm}.
 
 @unnumberedsec Uso in XXXTerm:
-@itemize @minus
+@itemize 
 @item
 comando @command{:run_script}
 @item
@@ -1277,7 +1277,7 @@ Per utilizzare zdl-xterm con più rapidità, XXXTerm può essere
 configurato in molti modi.
 
 @b{Un suggerimento:}
-@itemize @minus
+@itemize 
 @item
 apri il file @file{$HOME/.xxxterm.conf}
 @item

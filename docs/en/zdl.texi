@@ -761,7 +761,7 @@ ZDL can be started in different ways:
 @item
 automatically generating the list of download links:
 
-@itemize @minus
+@itemize 
 @item
 open a terminal and enter the directory that will contain the downloaded files
 
@@ -778,7 +778,7 @@ type @kbd{M-x} (@kbd{M}, the @emph{Meta} key, is @kbd{<Alt>}, @kbd{<Ctrl>} or @k
 
 @item
 Using one or more files prepared with a text editor (wrapping after each link) and reachable from the destination directory (indicate a valid path):
-@itemize @minus
+@itemize 
 @item
 open a terminal and enter the directory that will contain the downloaded files (alternatively, you can indicate to @emph{ZDL} the working directory)
 
@@ -854,7 +854,7 @@ through the interactive mode @command{zdl -i} started in the directory managed b
 
 Downloads can be controlled in different ways depending on the type of operation to be performed.
 Starting from the terminal allows the operations listed in the command presentation to be executed: @ref{The ZDL command}. Since ZDL can be closed without interrupting downloads, this control mode can be adopted at any time, once execution has started. @emph{To close without interrupting downloads}:
-@itemize @minus
+@itemize 
 @item
 if started in standard mode, type @kbd{M-q} (@kbd{<Alt> + <q>} keys)
 @item
@@ -872,7 +872,7 @@ using the browser (with @emph{Flashgot}), if these can be activated
 only from the terminal?
 
 @item Solution:
-@itemize @minus
+@itemize 
 @item
 start zdl in a terminal, from the destination directory,
     using all the options I need:
@@ -1209,7 +1209,7 @@ To use it, type: @kbd{M-x zdl}
 
 @table @emph
 @item After starting the command, the Conkeror minibuffer
-@itemize @minus
+@itemize 
 @item
 asks you to select the destination @emph{directory}
 @item
@@ -1246,7 +1246,7 @@ of zdl in a new virtual terminal xterm is made possible, precisely,
 from @command{zdl-xterm}.
 
 @unnumberedsec Use in XXXTerm:
-@itemize @minus
+@itemize 
 @item
 command @command{:run_script}
 @item
@@ -1270,7 +1270,7 @@ To use zdl-xterm more quickly, XXXTerm can be
 configured in many ways.
 
 @b{A tip:}
-@itemize @minus
+@itemize 
 @item
 open the file @file{$HOME/.xxxterm.conf}
 @item

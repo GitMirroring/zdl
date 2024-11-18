@@ -575,26 +575,26 @@ _A) Per immettere link e avviare nuovi download:_
 
        1. generando automaticamente la lista dei link per il download:
 
-             − apri un terminale ed entra nella directory che dovrà
+             • apri un terminale ed entra nella directory che dovrà
                contenere i file scaricati
 
-             − avvia ZDL digitando il comando seguito da eventuali
+             • avvia ZDL digitando il comando seguito da eventuali
                opzioni
 
-             − copia i link dei file da scaricare e incollali nel
+             • copia i link dei file da scaricare e incollali nel
                terminale (vai a capo dopo ogni link)
 
-             − digita ‘M-x’ (‘M’, il tasto _Meta_, è ‘<Alt>’, ‘<Ctrl>’ o
+             • digita ‘M-x’ (‘M’, il tasto _Meta_, è ‘<Alt>’, ‘<Ctrl>’ o
                ‘<Esc>’)
 
        2. Utilizzando uno o più file preparati con un editor di testi
           (andare a capo dopo ogni link) e raggiungibili dalla directory
           di destinazione (indica un path valido):
-             − apri un terminale ed entra nella directory che dovrà
+             • apri un terminale ed entra nella directory che dovrà
                contenere i file scaricati (in alternativa, puoi indicare
                a _ZDL_ la directory di lavoro)
 
-             − digita il comando ‘zdl’ seguito dai nomi dei file che
+             • digita il comando ‘zdl’ seguito dai nomi dei file che
                contengono la lista dei link: ‘zdl’ _path/file ..._
 
        3. Indicando direttamente a ZDL i link da processare (se link
@@ -663,8 +663,8 @@ l'esecuzione delle operazioni elencate nella presentazione del comando:
 i download, questa modalità di controllo può essere adottata in ogni
 momento, a esecuzione già avviata.  Per _chiudere senza interrompere i
 download_:
-   − se avviato in modalità standard, digitare ‘M-q’ (tasti ‘<Alt>+<q>’)
-   − da modalità interattiva, digitare ‘Q’ (tasti ‘<Shift>+<q>’)
+   • se avviato in modalità standard, digitare ‘M-q’ (tasti ‘<Alt>+<q>’)
+   • da modalità interattiva, digitare ‘Q’ (tasti ‘<Shift>+<q>’)
 
    Una volta _chiuso_ (o anche _ucciso_ interrompendo i download), ZDL
 può essere riavviato utilizzando nuove opzioni.
@@ -680,15 +680,15 @@ _Problema:_
      possono essere attivate solo dal terminale?
 
 _Soluzione:_
-        − avvio zdl in un terminale, dalla directory di destinazione,
+        • avvio zdl in un terminale, dalla directory di destinazione,
           utilizzando tutte le opzioni di cui ho bisogno: ‘zdl -m
           --login --clean’
-        − usando _Firefox_, clicco con il tasto destro del mouse sui
+        • usando _Firefox_, clicco con il tasto destro del mouse sui
           link dei file da scaricare e avvio il download con _Flashgot_:
           il download non viene effettuato subito e i link vengono
           registrati da zdl per essere processati da un'altra istanza
           attiva del programma (quella nel terminale)
-        − quando ho finito di registrare i link, torno al terminale e,
+        • quando ho finito di registrare i link, torno al terminale e,
           senza scrivere nulla, digito ‘M-x’
 
 
@@ -1114,14 +1114,14 @@ ZDL implementa automaticamente il browser Conkeror con un nuovo comando.
 Per usarlo, digita: ‘M-x zdl’
 
 _Dopo aver avviato il comando, il minibuffer di Conkeror_
-        − chiede di selezionare la _directory_ di destinazione
-        − offre la possibilità di utilizzare le _opzioni_ di ZDL
+        • chiede di selezionare la _directory_ di destinazione
+        • offre la possibilità di utilizzare le _opzioni_ di ZDL
           (lasciare il campo vuoto per non selezionarle)
-        − mostra e indicizza i _link_ nel buffer corrente (per esempio
+        • mostra e indicizza i _link_ nel buffer corrente (per esempio
           la pagina web), per procedere nella selezione del link da
           immettere in ZDL (il link della pagina corrente corrisponde
           all'indice 0)
-        − avvia ZDL in un terminale xterm oppure, se è stata selezionata
+        • avvia ZDL in un terminale xterm oppure, se è stata selezionata
           l'opzione ‘--daemon’ (oppure ‘-d’), in background.  In ogni
           caso è possibile gestire i download utilizzando l'interfaccia
           interattiva
@@ -1146,9 +1146,9 @@ xterm è reso possibile, appunto, da ‘zdl-xterm’.
 Uso in XXXTerm:
 ===============
 
-   − comando ‘:run_script’
-   − digita: ‘zdl-xterm’
-   − il programma avvia un'istanza di xterm che:
+   • comando ‘:run_script’
+   • digita: ‘zdl-xterm’
+   • il programma avvia un'istanza di xterm che:
         • chiede in quale _directory_ scaricare il file (è possibile
           evitare questa interazione configurando zdl-xterm: inserisci
           in ‘/usr/local/bin/zdl-xterm’, come valore della variabile
@@ -1163,8 +1163,8 @@ Per utilizzare zdl-xterm con più rapidità, XXXTerm può essere
 configurato in molti modi.
 
    Un suggerimento:
-   − apri il file ‘$HOME/.xxxterm.conf’
-   − inserisci il seguente testo:
+   • apri il file ‘$HOME/.xxxterm.conf’
+   • inserisci il seguente testo:
           default_script = zdl-xterm
           keybinding = run_script,C-z
 

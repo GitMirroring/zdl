@@ -899,12 +899,15 @@ function check_livestream {
     then
         test_livestream_boolean=true
         set_line_in_file + "$1" "$path_tmp/livestream-links.txt"
-        set_line_in_file + "$location" "$path_tmp/livestream-links.txt"
+
+        url "$location" &&
+            set_line_in_file + "$location" "$path_tmp/livestream-links.txt"
         return 0
     else
         test_livestream_boolean=false
         set_line_in_file + "$1" "$path_tmp/not-livestream-links.txt"
-        set_line_in_file + "$location" "$path_tmp/not-livestream-links.txt"
+        url "$location" &&
+            set_line_in_file + "$location" "$path_tmp/not-livestream-links.txt"
         return 1
     fi
 }

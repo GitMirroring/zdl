@@ -569,25 +569,25 @@ _A) To enter links and start new downloads:_
 
        1. automatically generating the list of download links:
 
-             − open a terminal and enter the directory that will contain
+             • open a terminal and enter the directory that will contain
                the downloaded files
 
-             − start ZDL by typing the command followed by any options
+             • start ZDL by typing the command followed by any options
 
-             − copy the links of the files to download and paste them in
+             • copy the links of the files to download and paste them in
                the terminal (wrap up after each link)
 
-             − type ‘M-x’ (‘M’, the _Meta_ key, is ‘<Alt>’, ‘<Ctrl>’ or
+             • type ‘M-x’ (‘M’, the _Meta_ key, is ‘<Alt>’, ‘<Ctrl>’ or
                ‘<Esc>’)
 
        2. Using one or more files prepared with a text editor (wrapping
           after each link) and reachable from the destination directory
           (indicate a valid path):
-             − open a terminal and enter the directory that will contain
+             • open a terminal and enter the directory that will contain
                the downloaded files (alternatively, you can indicate to
                _ZDL_ the working directory)
 
-             − type the command ‘zdl’ followed by the names of the files
+             • type the command ‘zdl’ followed by the names of the files
                containing the list of links: ‘zdl’ _path/file ..._
 
        3. By indicating directly to ZDL the links to be processed (if
@@ -655,8 +655,8 @@ operations listed in the command presentation to be executed: *note The
 ZDL command::.  Since ZDL can be closed without interrupting downloads,
 this control mode can be adopted at any time, once execution has
 started.  _To close without interrupting downloads_:
-   − if started in standard mode, type ‘M-q’ (‘<Alt> + <q>’ keys)
-   − from interactive mode, type ‘Q’ (‘<Shift> + <q>’ keys)
+   • if started in standard mode, type ‘M-q’ (‘<Alt> + <q>’ keys)
+   • from interactive mode, type ‘Q’ (‘<Shift> + <q>’ keys)
 
    Once _closed_ (or even _killed_ interrupting downloads), ZDL can be
 restarted using new options.
@@ -672,14 +672,14 @@ _Problem:_
      can be activated only from the terminal?
 
 _Solution:_
-        − start zdl in a terminal, from the destination directory, using
+        • start zdl in a terminal, from the destination directory, using
           all the options I need: ‘zdl -m --login --clean’
-        − using _Firefox_, I click with the right mouse button on the
+        • using _Firefox_, I click with the right mouse button on the
           links of download file and start the download with _Flashgot_:
           download it is not carried out immediately and the links are
           registered by zdl for be processed by another active instance
           of the program (that one in the terminal)
-        − when I finished recording the links, I go back to the terminal
+        • when I finished recording the links, I go back to the terminal
           and, without write anything, type ‘M-x’
 
 
@@ -1095,14 +1095,14 @@ ZDL automatically implements the Conkeror browser with a new command.
 To use it, type: ‘M-x zdl’
 
 _After starting the command, the Conkeror minibuffer_
-        − asks you to select the destination _directory_
-        − offers the possibility to use the _options_ of ZDL (leave the
+        • asks you to select the destination _directory_
+        • offers the possibility to use the _options_ of ZDL (leave the
           field blank to not select them)
-        − show and index _links_ in the current buffer (for example the
+        • show and index _links_ in the current buffer (for example the
           web page), to proceed with the selection of the link to be
           entered in the ZDL (the current page link corresponds to index
           0)
-        − start ZDL in an xterm terminal or, if it has been selected the
+        • start ZDL in an xterm terminal or, if it has been selected the
           ‘--daemon’ (or ‘-d’) option, in the background.  In any case
           it is You can manage downloads using the interface interactive
 
@@ -1126,9 +1126,9 @@ precisely, from ‘zdl-xterm’.
 Use in XXXTerm:
 ===============
 
-   − command ‘:run_script’
-   − type: ‘zdl-xterm’
-   − the program starts an instance of xterm which:
+   • command ‘:run_script’
+   • type: ‘zdl-xterm’
+   • the program starts an instance of xterm which:
         • asks in which _directory_ to download the file (You can avoid
           this interaction by configuring zdl-xterm: enter in
           ‘/usr/local/bin/zdl-xterm’, as a value of the variable
@@ -1142,8 +1142,8 @@ Simplification for XXXTerm.
 To use zdl-xterm more quickly, XXXTerm can be configured in many ways.
 
    A tip:
-   − open the file ‘$HOME/.xxxterm.conf’
-   − enter the following text:
+   • open the file ‘$HOME/.xxxterm.conf’
+   • enter the following text:
           default_script = zdl-xterm
           keybinding = run_script,C-z
 
