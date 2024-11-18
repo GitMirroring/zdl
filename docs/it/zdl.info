@@ -35,24 +35,24 @@ ZigzagDownLoader (ZDL)
 **********************
 
 _ZigzagDownLoader_ è un download manager:
-   − dotato di interfacce utente a linea di comando (_CLI_), per
+   • dotato di interfacce utente a linea di comando (_CLI_), per
      terminale (_TUI_), grafiche (_GUI_) e per applicazioni internet e
      web (_Web-UI_);
-   − gestisce gli scaricamenti di alcuni downloader come _Aria2_,
+   • gestisce gli scaricamenti di alcuni downloader come _Aria2_,
      _Axel_, _Wget_, _RTMPDump_ o _cURL_, utilizzandone le potenzialità
      (per esempio, l'accelerazione dei download);
-   − estrae l'URL dei file da scaricare da servizi di file hosting e
+   • estrae l'URL dei file da scaricare da servizi di file hosting e
      video streaming, facendo uso anche delle estensioni (o
      _estrattori_) di ‘youtube-dl’
-   − scarica i _TORRENT_;
-   − richiede automaticamente e scarica file via _IRC/XDCC_, senza
+   • scarica i _TORRENT_;
+   • richiede automaticamente e scarica file via _IRC/XDCC_, senza
      alcuna interazione umana via chat;
-   − scarica filmati _LIVE_ da alcune reti televisive
-   − estende i browser web, come _Conkeror_, _XXXTerm/Xombrero_ e
+   • scarica filmati _LIVE_ da alcune reti televisive
+   • estende i browser web, come _Conkeror_, _XXXTerm/Xombrero_ e
      _Firefox_;
-   − l'estensione _External Application Button_ integra ZDL in _Firefox_
+   • l'estensione _External Application Button_ integra ZDL in _Firefox_
      (anche _Flashgot_), _Chrome/Chromium_ e _Opera_;
-   − usando _Cygwin_, funziona anche in _Microsoft Windows_ (interfacce
+   • usando _Cygwin_, funziona anche in _Microsoft Windows_ (interfacce
      CLI e TUI, anche da _Firefox_ + _Flashgot_ di Windows).
 
    Il server e le interfacce web, per il controllo remoto e in rete, ne
@@ -68,11 +68,11 @@ dover compiere alcuna operazione IRC/chat.  Tutte le interfacce
 permettono la programmazione delle registrazioni _live-tv_.
 
    Ma ZDL è anche molto altro, perché può essere:
-   − combinato con altri programmi o inserito in uno script, come
+   • combinato con altri programmi o inserito in uno script, come
      strumento di lavoro
-   − esteso dall'utente, che può sviluppare nuove estensioni adatte ai
+   • esteso dall'utente, che può sviluppare nuove estensioni adatte ai
      propri scopi
-   − un sistema poliglotta, utilizzando diversi interpreti (per PHP,
+   • un sistema poliglotta, utilizzando diversi interpreti (per PHP,
      Javascript, Python, Perl, Awk...)  e strumenti della Bash
 
    ZigzagDownLoader è un programma "zigzag": non è solo un programma, è

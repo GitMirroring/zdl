@@ -55,32 +55,88 @@
 
 @macro menuZdl
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Top, Home}: ZigzagDownLoader@*
+
+@item
+@ref{The ZDL command,The ZDL command}:@*Command synopsis, options and other arguments@*
+
+@item
+@ref{Streaming/hosting services,Streaming/hosting services}:@*ZDL extensions and practical tips@*
+
+@item
+@ref{Installation and update,Installation and update}:For GNU/Linux and Microsoft Windows/Cygwin@*
+
+@item
+@ref{Why this program}:@*The sense of continuous ZIGZAG experimentation@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Home:Top. ZigzagDownLoader@*
 * The ZDL command::@*Command synopsis, options and other arguments@*
 * Streaming/hosting services::@*ZDL extensions and practical tips@*
 * Installation and update::@*For GNU/Linux and Microsoft Windows/Cygwin@*
 * Why this program::@*The sense of continuous ZIGZAG experimentation@*
+@end ifnothtml
 @end macro
 
 @macro menuUse
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Start ZDL,Start ZDL}:@*How to run the program and start downloads@*
+
+@item
+@ref{Stop ZDL,Stop ZDL}:@*Program shutdown mode@*
+
+@item
+@ref{Check the downloads,Check the downloads}:@*How to control the processes started, queued or suspended@*
+
+@item
+@ref{User manuals,User manuals}:@*Documentation available for ZDL@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Start ZDL::@*How to run the program and start downloads@*
 * Stop ZDL::@*Program shutdown mode@*
 * Check the downloads::@*How to control the processes started, queued or suspended@*
 * User manuals::@*Documentation available for ZDL@*
+@end ifnothtml
 @end macro
 
 @macro menuTools
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Modes,Modes}:@*Default, Lite, Interactive, Daemon@*
+
+@item
+@ref{Readline,Readline}:@*The ZDL command line@*
+
+@item
+@ref{Editor,Editor}:@*Integrated editor, to change the download queue@*
+
+@item
+@ref{Homonymy,Homonymy}:@*Management of homonymous files and recovery of interrupted downloads@*
+
+@item
+@ref{IRC/XDCC,IRC/XDCC}:@*Downloading files via IRC-chat/XDCC commands@*
+
+@item
+@ref{Torrent,Torrent}:@*Downloading torrents with Aria2: URL magnet or torrent file@*
+
+@item
+@ref{Filters,Filters}:@*Filters for extracting and selecting files and URLs@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Modes::@*Default, Lite, Interactive, Daemon@*
 * Readline::@*The ZDL command line@*
 * Editor::@*Integrated editor, to change the download queue@*
@@ -92,9 +148,23 @@
 
 @macro menuExt
 @ifhtml
-@html
-@end html
+@itemize
+
+@item
+@ref{Create new extensions,Create new extensions}:@*Custom ZDL and new service Bash extensions@*
+
+@item
+@ref{Recommended software and dependencies,Recommended software and dependencies}:@*Useful programs for ZDL@*
+
+@item
+@ref{Conkeror,Conkeror}:@*Command @command{zdl} for the browser@*
+
+@item
+@ref{zdl-xterm and XXXTerm/Xombrero,zdl-xterm and XXXTerm/Xombrero}:@*A script to connect ZDL to other programs@*
+
+@end itemize
 @end ifhtml
+@ifnothtml
 * Create new extensions::@*Custom ZDL and new service Bash extensions@*
 * Recommended software and dependencies::@*Useful programs for ZDL@*
 * Conkeror::@*Command @command{zdl} for the browser@*
@@ -179,6 +249,11 @@
 @html
 <br>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="footer">
 <div class="contentfooter">
 
@@ -190,8 +265,6 @@
 
 @menuDev
 
-</div>
-</div>
 </div>
 @end html
 @end ifhtml

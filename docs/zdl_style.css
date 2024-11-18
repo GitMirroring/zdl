@@ -173,7 +173,8 @@ div {
 .container {
     text-align: center;
     border: 0px;
-    display: inline-block;
+    display: inline-block; 
+    /*display: inline-table; */
     width: 1000px;
     background: black;
 }
@@ -206,7 +207,21 @@ div {
     padding: 16px;
 }
 
-div.node {
+/* div.node { */
+/*     padding:0px; */
+/*     background: #000000; */
+/*     width: 100%; */
+/*     eigth: 2em; */
+/*     float: right; */
+/*     color: #9A9A9A; */
+/*     font-weight: bold; */
+/* } */
+
+.mini-toc {
+    display: none;
+}
+
+div.nav-panel {
     padding:0px;
     background: #000000;
     width: 100%;
@@ -215,6 +230,16 @@ div.node {
     color: #9A9A9A;
     font-weight: bold;
 }
+
+/* div.top-level-extent { */
+/*     padding:0px; */
+/*     background: #000000; */
+/*     width: 100%; */
+/*     eigth: 2em; */
+/*     float: right; */
+/*     color: #9A9A9A; */
+/*     font-weight: bold; */
+/* } */
 
 .node p {
     text-align: right;

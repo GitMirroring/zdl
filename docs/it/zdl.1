@@ -1,4 +1,4 @@
-.TH "ZigzagDownLoader (ZDL)" "1" "Mon Nov 18 00:01:20 2024" "GNU" "User Commands"\
+.TH "ZigzagDownLoader (ZDL)" "1" "Mon Nov 18 01:29:16 2024" "GNU" "User Commands"\
 .SH NOME	
 \fBzdl\fP - CLI/TUI/GUI/Web-UI download manager per \fIGNU/Linux\fP e \fIMicrosoft Windows + Cygwin\fP.\
 
@@ -6,38 +6,38 @@
 .SH SINTASSI\	
 \fBzdl [\fP\fIOPZIONI\fP\fB] [\fP\fIfile\fP\fB \&...] [\fP\fIlink\fP\fB \&...] [\fP\fIdirectory\fP\fB] \fP
 
-
-.SH DESCRIZIONE\	
+\
+.SH DESCRIZIONE	
 \fIZigzagDownLoader\fP è un download manager:
 
 .RS 5
-
+ 
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 dotato di interfacce utente a linea di comando (\fICLI\fP), per terminale (\fITUI\fP), grafiche (\fIGUI\fP) e per applicazioni internet e web (\fIWeb-UI\fP);
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 gestisce gli scaricamenti di alcuni downloader come \fIAria2\fP, \fIAxel\fP, \fIWget\fP, \fIRTMPDump\fP o \fIcURL\fP, utilizzandone le potenzialità (per esempio, l'accelerazione dei download);
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 estrae l'URL dei file da scaricare da servizi di file hosting e video streaming, facendo uso anche delle estensioni (o \fIestrattori\fP) di \fByoutube-dl\fP
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 scarica i \fITORRENT\fP;
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 richiede automaticamente e scarica file via \fIIRC/XDCC\fP, senza alcuna interazione umana via chat;
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 scarica filmati \fILIVE\fP da alcune reti televisive
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 estende i browser web, come \fIConkeror\fP, \fIXXXTerm/Xombrero\fP e \fIFirefox\fP;
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 l'estensione \fIExternal Application Button\fP integra ZDL in \fIFirefox\fP (anche \fIFlashgot\fP), \fIChrome/Chromium\fP e \fIOpera\fP;
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 usando \fICygwin\fP, funziona anche in \fIMicrosoft Windows\fP (interfacce CLI e TUI, anche da \fIFirefox\fP + \fIFlashgot\fP di Windows).
 
 .RS -5
@@ -51,15 +51,15 @@ Tutte le interfacce permettono la programmazione delle registrazioni \fIlive-tv\
 Ma ZDL è anche molto altro, perché può essere:
 
 .RS 5
-
+ 
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 combinato con altri programmi o inserito in uno script, come strumento di lavoro
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 esteso dall'utente, che può sviluppare nuove estensioni adatte ai propri scopi
 .RS 0
-.IP "\fI-\fP" 2
+.IP "\fI*\fP" 2
 un sistema poliglotta, utilizzando diversi interpreti (per PHP, Javascript, Python, Perl, Awk\&...) e strumenti della Bash
 
 .RS -5
@@ -67,8 +67,8 @@ un sistema poliglotta, utilizzando diversi interpreti (per PHP, Javascript, Pyth
 
 ZigzagDownLoader è un programma "zigzag": non è solo un programma, è un laboratorio e un sistema aperto a nuove invenzioni.
 
-\
-.SS Argomenti	
+
+.SS Argomenti\	
 L'ordine delle opzioni e degli altri argomenti non è importante:
 
 
@@ -282,8 +282,8 @@ Avvia il programma in modalità demone nella directory corrente o, eventualmente
 .RS -5
 
 
-
-.SS IRC/XDCC:\	
+\
+.SS IRC/XDCC:	
 
 .RS 5
 
@@ -325,8 +325,8 @@ Lo stesso tipo di ricerca può essere effettuato da \fB--gui\fP e \fB--web-ui\fP
 
 
 
-
-.SS Torrent:\	
+\
+.SS Torrent:	
 
 .RS 5
 
@@ -442,8 +442,8 @@ usa Zile, un micro editor GNU in stile Emacs
 .RS -5
 
 
-\
-.SS Avvio con proxy:	
+
+.SS Avvio con proxy:\	
 
 .RS 5
 
@@ -460,7 +460,7 @@ Avvia ZDL attivando un proxy del tipo definito dall'utente:
 
 
 .RS 5
-
+ @w{}
 .RS 0
 .IP "\fI \fP" 2 
 \fBt\fP = Transparent
@@ -485,8 +485,8 @@ Avvia ZDL attivando il proxy indicato dall'utente, per l'intera durata del downl
 .RS -5
 
 
-
-.SS Configurazione:\	
+\
+.SS Configurazione:	
 
 .RS 5
 
@@ -504,8 +504,8 @@ Per scaricare lo stream incorporando ZDL in nuovi script, il modello generico de
 
 .RS -5
 
-\
-.SH PANORAMICA	
+
+.SH PANORAMICA\	
 
 .SS Servizi\	
 ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream video (da Youtube, Nowvideo, Dailymotion\&...) per mezzo di estensioni dei browser, ed i file condivisi attraverso i seguenti servizi di hosting e di streaming, direttamente dal link (bypassando il player delle pagine web):
@@ -518,7 +518,7 @@ ZDL è abilitato per il download da ogni tipo di link valido, compresi lo stream
 .RS -5
 \fI\fP\fBVideo in streaming saltando il player del browser:\fP\fI\fP
 .RS 5
-Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), DiscoveryPlus (HD), Dropload, EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Filemoon, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai\&..\&. (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, StreamHide, Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD, Zinwa (RTMP)
+Akvideo (HD), Auroravid/Novamov, Backin, Backin, Biqle (HD), Cloudvideo (HD), Dailymotion (HD, Deltabit (HD), DiscoveryPlus (HD), Dropload, EasyLoad (HD), Exashare, Facebook, Fanpage, Fastvideo, Filemoon, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7 (HD), livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it, playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai..\&. (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, StreamHide, Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD, Zinwa (RTMP)
 
 
 .RS -5

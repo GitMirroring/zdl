@@ -55,10 +55,6 @@
 
 @macro menuZdl
 @ifhtml
-@html
-@end html
-@end ifhtml
-@ifhtml
 @itemize
 
 @item
@@ -89,10 +85,6 @@
 
 @macro menuUso
 @ifhtml
-@html
-@end html
-@end ifhtml
-@ifhtml
 @itemize
 
 @item
@@ -118,10 +110,6 @@
 @end macro
 
 @macro menuTools
-@ifhtml
-@html
-@end html
-@end ifhtml
 @ifhtml
 @itemize
 @item
@@ -159,10 +147,6 @@
 @end macro
 
 @macro menuExt
-@ifhtml
-@html
-@end html
-@end ifhtml
 @ifhtml
 @itemize
 
@@ -282,6 +266,7 @@
 @html
 <br><br>
 </div>
+</div>
 <div class="footer">
 <div class="contentfooter">
 
@@ -292,8 +277,6 @@
 @b{Progetto ZDL}
 
 @menuDev
-
-</div>
 </div>
 </div>
 @end html
@@ -318,7 +301,7 @@
 
 @c @ifman @unnumberedsec DESCRIZIONE
 @emph{ZigzagDownLoader} è un download manager:
-@itemize @minus
+@itemize 
 @item
 dotato di interfacce utente a linea di comando (@emph{CLI}), per terminale (@emph{TUI}), grafiche (@emph{GUI}) e per applicazioni internet e web (@emph{Web-UI});
 @item
@@ -345,7 +328,7 @@ Inoltre, le interfacce Web (@emph{Web-UI}) e grafica (@emph{GUI}) permettono la 
 Tutte le interfacce permettono la programmazione delle registrazioni @emph{live-tv}.
 
 Ma ZDL è anche molto altro, perché può essere:
-@itemize @minus
+@itemize 
 @item
 combinato con altri programmi o inserito in uno script, come strumento di lavoro
 @item
