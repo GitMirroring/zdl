@@ -341,7 +341,8 @@ ZigzagDownLoader è un programma "zigzag": non è solo un programma, è un labor
 @c @end man
 
 @unnumbered Software Libero
-ZDL è software libero, rilasciato con licenza GPL (General Public License): @url{http://www.gnu.org/licenses/gpl.html}
+ZDL è software libero, rilasciato con licenza GPL (General Public License):
+@url{http://www.gnu.org/licenses/gpl.html}
 
 @ref{Copying}.
 
