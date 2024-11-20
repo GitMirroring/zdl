@@ -54,29 +54,17 @@ then
                                 "$raiplay_url")
         fi
 
-        # raiplay_url="${raiplay_json#*content_url\":}"
-        # raiplay_url="${raiplay_url#*\"}"
-        # raiplay_url="${raiplay_url%%\"*}&output=64"
-
-        # raiplay_url=$(curl -s \
-        #                    -b "$path_tmp"/cookies.zdl \
-        #                    -c "$path_tmp"/cookies2.zdl \
-        #                    -A "$user_agent" \
-        #                    "$raiplay_url" |
-        #                   grep -P '\[')
-
-        # raiplay_url=$(grep -oP 'https[^\[\]]+' <<< "$raiplay_url")
         raiplay_url=$(node -e "var json = $raiplay_json; console.log(json.video.content_url)")
-        
-        ffmpeg_map=$(curl -v -A Firefox -L "$raiplay_url" 2>&1)
-        
-        ffmpeg_map=$(grep -P ^chunklist <<< "$ffmpeg_map" | wc -l)
-        ffmpeg_opts+=( -map p:$((ffmpeg_map -1)) )
+        raiplay_url=$(curl -s -L -A "$user_agent" "$raiplay_url""&output=64" |
+                          grep .m3u8)
+        raiplay_url="${raiplay_url##*[}"
+        raiplay_url="${raiplay_url%%]*}"
+        raiplay_url=$(get_location "$raiplay_url")
+        ffmpeg_opts+=( -map p:0 )
                 
         if ! url "$url_in_file" &&
                 [[ "$raiplay_url" =~ \.m3u8 ]]
         then
-            # url_in_file="${raiplay_url//output=64/output=45}"
             url_in_file="${raiplay_url}"
         fi
 
