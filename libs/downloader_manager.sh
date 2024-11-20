@@ -599,6 +599,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		      -c copy \
 		      -t "$livestream_time" \
 		      "${file_in}" \
+                      ${ffmpeg_opts[@]} \
 		      -y &> >( 
 		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
 	    	        stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
