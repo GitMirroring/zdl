@@ -1972,6 +1972,7 @@ fi
 
     else
         echo "$pid_prog" > "$path_tmp/.pid.zdl"
+        rm -f "$path_tmp"/livestream_run.txt
     fi
 
 
