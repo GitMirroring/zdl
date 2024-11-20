@@ -930,9 +930,12 @@ function run_livestream_timer {
         start_time_in_sec=$(human_to_seconds ${start_time//\:/ })
     fi
 
-    if [[ "$start_time" =~ ([0-9]+\:[0-9]+\:[0-9]+) ]]
+    if [[ "$start_time" =~ ([0-9]+\:[0-9]+\:[0-9]+) ]] &&
+           ! set_line_in_file in "$link" "$path_tmp"/livestream_run.txt
     then
         {
+            set_line_in_file + "$link" "$path_tmp"/livestream_run.txt
+            
             while (( start_time_in_sec > now_in_sec ))
             do
                 sleep 1

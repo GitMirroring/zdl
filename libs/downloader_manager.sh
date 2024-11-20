@@ -604,6 +604,8 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 	    	        stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
                 pid_in=$!
 
+                set_line_in_file in "$url_in" "$path_tmp"/livestream_run.txt &&
+                    set_line_in_file - "$url_in" "$path_tmp"/livestream_run.txt
                 # get_command_pid pid_in $ffmpeg ".+$url_in_file.+$file_in"
                 
 	    elif [ "$youtubedl_m3u8" == "$url_in" ] ||
