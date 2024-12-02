@@ -530,6 +530,7 @@ function sanitize_file_in {
     then
 	file_in="${url_in_file%%\/}"
 	file_in="${file_in##*\/}"
+        file_in="${file_in##-}"
     fi
 
     file_in=$(iconv -c <<< "$file_in")
