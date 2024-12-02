@@ -27,9 +27,9 @@
 ## zdl-extension types: shortlinks
 ## zdl-extension name: cb01
 
-if [ "$url_in" != "${url_in//cb01.}" ] &&
-       [ "$scraped" != true ]
+if [[ "$url_in" =~ cb01 ]] 
 then
+
     #cb01_redirect=$(get_location "${url_in//serietv\/}")
     # if url "$cb01_redirect"
     # then
@@ -38,9 +38,10 @@ then
     # else
     #     _log 2
     # fi
-    
-    url_regex_scrape="(staycheck|stayonline)"
-    scrape_url "$url_in"    
+
+    printc 4 "Il mio contributo è stato rifiutato da questo sito, che sembra essere un sito commerciale: manifesta il tuo dissenso e io dissento col sito, che detesto"
+    #url_regex_scrape="(staycheck|stayonline)"
+    #scrape_url "$url_in"    
 fi
 
 if [ "$url_in" != "${url_in//k4pp4.}" ]
