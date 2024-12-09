@@ -609,6 +609,7 @@ no_check_links=(
     speedvideo
     'mega.(co|nz)'
     gofile\.
+    cloudatacdn
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
