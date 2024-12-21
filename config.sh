@@ -610,6 +610,8 @@ no_check_links=(
     'mega.(co|nz)'
     gofile\.
     cloudatacdn
+    kiwix
+    wiki
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
