@@ -25,6 +25,13 @@
 #
 set +o history
 
+TEXTDOMAINDIR=/usr/local/share/locale
+TEXTDOMAIN=zdl
+export TEXTDOMAINDIR
+export TEXTDOMAIN
+
+source /usr/bin/gettext.sh
+
 ## Axel - Cygwin
 function install_axel-cygwin {
     ## source: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
