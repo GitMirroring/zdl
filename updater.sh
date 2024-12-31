@@ -198,8 +198,10 @@ function install_test {
 
 function install_pk {
     local dep="$1"
-    
-    print_c 1 "$(gettext "Installing") $dep"
+
+    command -v gettext &>/dev/null &&
+        print_c 1 "$(gettext "Installing") $dep" ||
+            print_c 1 "Installing $dep" 
 
     ## apt-get yum pacman zypper port
 
@@ -286,6 +288,13 @@ function install_src {
 
 
 function update {
+    if ! command -v gettext &>/dev/null
+    then
+        print_c 3 "You need to install gettext package:"
+        install_pk gettext ||
+            print_c 3 "gettext not installed: zdl installation aborted"
+        exit
+    fi
     PROG=ZigzagDownLoader
     prog=zdl
     BIN="/usr/local/bin"
