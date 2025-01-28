@@ -540,7 +540,7 @@ function run_megadl {
         local msg1=$(header_dl 'ZigzagDownLoader --> MegaDL (megatools package):')
         local msg2=$(pause_msg)
         xterm -tn "xterm-256color"                                       \
-	      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"    \
+	      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull"    \
 	      +bdc -fg grey -bg black -title "MegaDL in $PWD"            \
 	      -e "/bin/bash -i -c \"echo -e \\\"$msg1\n\\\"; megadl \\\"$link\\\"; echo -e \\\"$msg2\\\"; read\"" &
         print_c 1 "$(gettext 'Downloading with "megadl" from "megatools" package')"

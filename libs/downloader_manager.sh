@@ -684,7 +684,7 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
 		   [ ! -e /cygdrive ]
 	    then
 		xterm -tn "xterm-256color"                                              \
-		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12" +bdc      \
+		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull" +bdc   \
 		      -fg grey -bg black -title "ZigzagDownLoader in $PWD"              \
 		      -e "$youtube_dl \"$url_in_file\"" &
 		

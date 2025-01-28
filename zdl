@@ -975,7 +975,7 @@ then
 	else
             #-fa
 	    xterm -tn "xterm-256color"                                                                      \
-		  -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"                                   \
+		  -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull"                                \
 		  +bdc -fg grey -bg black -title "ZigzagDownLoader in $PWD"                                 \
 		  -e "/bin/bash -i -c \"export pid_prog=\$$ ;zdl $parameters \\\"$url\\\" --stop \""
 	fi
@@ -1008,7 +1008,7 @@ then
 	    $prog "$url" $parameters --stop
 	else
 	    xterm -tn "xterm-256color"                                                                      \
-		  -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"                                   \
+		  -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull"                                \
 		  +bdc -fg grey -bg black -title "ZigzagDownLoader in $PWD"                                 \
 		  -e "/bin/bash -i -c \"export pid_prog=\$$ ; zdl $parameters \\\"$url\\\" --stop \"" &
 	fi
@@ -1151,7 +1151,7 @@ then
 		
 	    else
 		xterm -tn "xterm-256color"                                                                          \
-		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:pixelsize=12"                                       \
+		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull"                                    \
 		      +bdc -fg grey -bg black -title "ZigzagDownLoader in $PWD"                                     \
 		      -e "/bin/bash -i -c \"export pid_prog=\$$ ; $prog \\\"$url_in\\\" $stream_params --stop\"" &
 	    fi
