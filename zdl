@@ -769,7 +769,7 @@ then
 	fi
     done
     unset autoupdate
-fi    
+fi
 
 if [ "${args[*]}" != "${args[*]//--update}" ] ||
        [ "${args[*]}" != "${args[*]//-u}" ]
@@ -792,7 +792,7 @@ then
 	    update_updater
 	fi
     done
-    
+
 elif [ "$autoupdate" == "enabled" ] &&
 	 [ "${args[*]}" == "${args[*]//--interactive}" ] &&
 	 [ "${args[*]}" == "${args[*]//-i}" ]
@@ -830,7 +830,7 @@ then
 	if [ "${args[i]}" == '--web-ui' ]
 	then
 	    unset args[i]
-	    run_web_client "${args[@]}" 
+	    run_web_client "${args[@]}"
 	    exit
 	fi
     done
@@ -841,10 +841,10 @@ then
     for ((i=0; i<=$max_args; i++))
     do
 	if [ "${args[i]}" == '--clean' ]
-	then 
+	then
 	    unset args[i]
-	    rm -r ".zdl_tmp"/* 2>/dev/null && 
-		init_msg+="$(sprint_c 1 "$(gettext "Temporary file deleted")\n")" ||            
+	    rm -r ".zdl_tmp"/* 2>/dev/null &&
+		init_msg+="$(sprint_c 1 "$(gettext "Temporary file deleted")\n")" ||
 		    init_msg+="$(sprint_c 3 "$(gettext "Cleaning of temporary files not carried out (non-existent files)")\n")"
 	fi
     done
@@ -2116,7 +2116,7 @@ fi
     then
         xterm_stop
     fi
-
+    
     set -o history
     echo -en "\e[0m\e[J"
     kill %? &>/dev/null
