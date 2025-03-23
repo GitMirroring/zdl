@@ -31,40 +31,20 @@ export TEXTDOMAIN
 
 source /usr/bin/gettext.sh
 
-default_directory=""
+default_directory="--path-gui"
 
-if [ "$1" == "--seldir" ]
-then
-    read -p "Seleziona la directory di destinazione [$PWD]:" directory
+args=( "$@" )
+args=( "${args[*]// /20%}" )
+args=( "${args[*]//&/\&}" )
 
-    if [ ! -d "$directory" ]
-    then
-	unset directory
-    fi
-
-    echo "$directory"
-
-else
-    args=( "$@" )
-    args=( "${args[*]// /20%}" )
-    args=( "${args[*]//&/\&}" )
-
-    xterm -tn "xterm-256color"                                       \
+xterm -tn "xterm-256color"                                       \
 	  -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull" \
 	  +bdc                                                       \
 	  -fg grey                                                   \
 	  -bg black                                                  \
 	  -title "ZigzagDownLoader in $PWD"                          \
 	  -e "/bin/bash -i -c \"export pid_prog=\$$
-if [ ! -d \\\"$default_directory\\\" ]
-then 
-  cd  \\\"\\\$(zdl-xterm --seldir ${args[@]})\\\"
 
-else 
-  cd \\\"$default_directory\\\" 2>/dev/null
+zdl \\\"$default_directory\\\" ${args[*]} --stop \"" &
 
-fi
 
-zdl ${args[*]} --stop \"" &
-
-fi
