@@ -271,14 +271,20 @@ function scrape_url {
             fi
 	fi
 
-
 	if [ -n "$html" ]
 	then
-	    html=$(tr "\t\r\n'" '   "' <<< "$html"            | 
-	     	       grep -Po 'href[\ ]*=[\ ]*[^<>\ ]+'    |
-		       grep -Pv "href[\ ]*=[\ ]*[\"\']*\/"    |
-		       sed -r "s|href=[\"\']*([^\"]+)[\"\']*.*$|\1|g" 2>/dev/null)
-	    # html=$(tr "\t\r\n'" '   "' <<< "$html"            | 
+	    html=$(tr "\t\r\n'" '   "' <<< "$html"                 | 
+	     	       grep -Po 'data-link[\ ]*=[\ ]*[^<>\ ]+'     |
+		       grep -Pv "data-link[\ ]*=[\ ]*[\"\']*\/"    |
+		       sed -r "s|data-link=[\"\']*([^\"]+)[\"\']*.*$|\1|g" 2>/dev/null)
+            
+	    html+="
+"$(tr "\t\r\n'" '   "' <<< "$html"            | 
+	      	       grep -Po 'href[\ ]*=[\ ]*[^<>\ ]+'    |
+	               grep -Pv "href[\ ]*=[\ ]*[\"\']*\/"   |                       
+                       sed -r "s|href=[\"\']*([^\"]+)[\"\']*.*$|\1|g" 2>/dev/null)
+
+            # html=$(tr "\t\r\n'" '   "' <<< "$html"            | 
 	    #  	       grep -Po 'href[\ ]*=[\ ]*[^<>\ #]+'    |
 	    #            grep -Pv "href[\ ]*=[\ ]*[\"\']*\/"    |
 	    #            sed -r "s|href=[\"\']*([^\"]+)[\"\']*.*$|\1|g" 2>/dev/null)
