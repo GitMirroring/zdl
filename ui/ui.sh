@@ -899,10 +899,10 @@ function display_set_livestream {
 	    link=$(sanitize_url "$link")
             tag_link "$link" link
 
-            check_livestream "$link" || {
-                set_link + "$link"
-                return 1
-            }
+#             check_livestream "$link" || {
+#                 set_link + "$link"
+#                 return 1
+#             }
 
         else
             tag_link "${live_streaming_url[opt]}" link
