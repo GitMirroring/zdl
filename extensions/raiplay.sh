@@ -25,7 +25,7 @@
 #
 ## ZDL add-on
 ## zdl-extension types: streaming
-## zdl-extension name: RaiPlay (HD), RaiCultura (HD), RaiScuola (HD), Rai... (HD)
+## zdl-extension name: RaiPlay (HD), RaiPlaySound, RaiCultura (HD), RaiScuola (HD), Rai... (HD)
 
 
 if [[ "$url_in" =~ (raiplay|rai[a-z]*\.it) ]]
@@ -181,6 +181,33 @@ then
             fi           
         fi
 
+        if [[ "$url_in" =~ (raiplaysound\.it\/playlist\/) ]]
+        then
+            while read line
+            do
+                line="https://www.raiplaysound.it${line}"
+                url "$line" && {
+                    if [[ "$url_in" =~ (raiplaysound\.it\/playlist\/) ]]
+                    then
+                        replace_url_in "$line"
+                    fi
+
+                    print_c 4 "$line"
+                    set_link + "$line"
+                }
+                
+            done < <(curl -s "$url_in" |
+                         grep -oP '\/audio\/[^"]+html')                   
+        fi
+        
+        if [[ "$url_in" =~ (^.+\/audio\/[^\/]+) ]]
+        then
+            raisound_data=$($youtube_dl --get-url --get-filename "$url_in")
+            url_in_file=$(head -n1 <<< "$raisound_data")
+            file_in=$(tail -n1 <<< "$raisound_data")
+            sanitize_file_in
+        fi
+        
         if [[ "$url_in" =~ (^.+\/video\/[^\/]+) ]]
         then
             if [[ "$url_in" =~ (\.html$) ]]
@@ -229,7 +256,6 @@ then
 
         if ! url "$url_in_file"
         then
-
             if url "$raiplay_url"
             then
                 get_language_prog
@@ -314,7 +340,7 @@ then
     fi
 
     unset youtubedl_m3u8
-    no_check_links+=( raiplay )
+    no_check_links+=( raiplay raiplaysound )
     
     #downwait_extra=20
     

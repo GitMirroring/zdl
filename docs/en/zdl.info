@@ -481,7 +481,7 @@ _Streaming video skipping browser player:_
      (HD), livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive
      (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
      playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai...
-     (HD), RaiPlay (HD), RaiScuola (HD), Rapidvideo.tv,
+     (HD), RaiPlay (HD), RaiPlaySound, RaiScuola (HD), Rapidvideo.tv,
      Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo
      (HD), Streamango, StreamHide, Streamin, Streamlare (HD),
      StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape,
@@ -1452,26 +1452,26 @@ Tag Table:
 Node: Top1239
 Node: The ZDL command5148
 Node: Streaming/hosting services14141
-Node: Start ZDL18999
-Node: Stop ZDL21408
-Node: Check the downloads22467
-Node: User manuals26555
-Node: Modes26969
-Node: Readline30054
-Node: Editor31528
-Node: Homonymy32696
-Node: IRC/XDCC34232
-Node: Torrent35882
-Node: Filters36729
-Node: Create new extensions37017
-Node: Recommended software and dependencies38759
-Node: Conkeror40379
-Node: zdl-xterm and XXXTerm/Xombrero41350
-Node: Installation and update43269
-Node: Why this program46327
-Node: Tags50028
-Node: Copying55409
-Node: Contacts56491
+Node: Start ZDL19013
+Node: Stop ZDL21422
+Node: Check the downloads22481
+Node: User manuals26569
+Node: Modes26983
+Node: Readline30068
+Node: Editor31542
+Node: Homonymy32710
+Node: IRC/XDCC34246
+Node: Torrent35896
+Node: Filters36743
+Node: Create new extensions37031
+Node: Recommended software and dependencies38773
+Node: Conkeror40393
+Node: zdl-xterm and XXXTerm/Xombrero41364
+Node: Installation and update43283
+Node: Why this program46341
+Node: Tags50042
+Node: Copying55423
+Node: Contacts56505
 
 End Tag Table
 
