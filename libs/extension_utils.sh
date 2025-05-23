@@ -890,7 +890,7 @@ function check_livestream {
                 location=$(urldecode "$location")
             fi
         fi
-        
+
         print_c 4 "Checking livestream link: %s" "$link"
         link=$($youtube_dl -f b --get-url "$link" | tail -n1)
     fi

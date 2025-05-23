@@ -29,15 +29,20 @@
 
 if [[ "$url_in" =~ youtube\.com(\/playlist|.+\/(videos|featured|playlists)$) ]]
 then
+echo 0    
     html=$(curl -s "$url_in")
     ## yt_json=$($youtube_dl --dump-json "$url_in")
+    echo "html0: $html
 
+"
     if [ -z "$html" ]
     then
         yt_location=$(get_location "$url_in")
         html=$(wget -qO- "$yt_location")
     fi
-    
+    echo "html1: $html
+
+"    
     while read yt_link
     do
         yt_link="https://www.youtube.com${yt_link%%'&'*}"
@@ -109,5 +114,6 @@ then
     fi
 
     no_check_links+=( youtube youtu\.be )
+
     end_extension
 fi

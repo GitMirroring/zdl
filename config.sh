@@ -612,6 +612,7 @@ no_check_links=(
     cloudatacdn
     kiwix
     wiki
+    youtube
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
