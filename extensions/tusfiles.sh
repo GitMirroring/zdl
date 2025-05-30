@@ -29,18 +29,22 @@
 
 if [ "$url_in" != "${url_in//dropload}" ]
 then
-    html=$(curl -s "$url_in")
+    if [[ "$url_in" =~ \/(e|d)\/ ]]
+    then
+        replace_url_in "${url_in//${BASH_REMATCH[1]}\//embed-}"
+    fi
+    
+    html=$(curl -s "${url_in//embed-/e/}")
 
     url_in_file=$(grep -oP 'sources\:\[\{file\:\"[^"]+' <<< "$(unpack "$html")")
     url_in_file="${url_in_file#*\"}"
 
-    html_url=$(grep '/d/' <<< "$html")
-    html_url="${html_url#*\"}"
-    html_url="${html_url%%\"*}"
+    file_in=$(curl -s "${url_in//embed-/d/}")
+    file_in=$(grep 'card-header' -A1 <<< "$file_in" | tail -n1)
+    file_in="${file_in##*Download}"
+    file_in="${file_in##\ }"
 
-    file_in=$(curl -s "$html_url" | grep "Download File" -A1 | tail -n1)
-    file_in="${file_in%\(*}"
-    file_in="${file_in%.mp4}".mp4
+    sanitize_file_in
 
     force_dler FFMpeg
     
