@@ -29,70 +29,36 @@
 
 function extract_filmpertutti {
     local url_fpt
-    
+
     if url "$1"
     then
+        get_language_prog
         local html=$(curl -s "$1")
-        local linker_fpt=$(grep -oP '[^"]+protectlinker[^"]+' <<< "$html")
-
-        if ! url "$linker_fpt"
-        then
-            linker_fpt=$(grep -oP 'iframe src="[^"]+' <<< "$html")
-            linker_fpt="${linker_fpt##*\"}"
-        fi
-
-        if url "$linker_fpt"
-        then
-            get_language
-            while read url_fpt 
-            do
-	        if url "$url_fpt"
-	        then
-                    [ -z "$url_in_start" ] &&
-                        url_in_start="$url_fpt"
-                    
-	            set_link + "$url_fpt"
-	            print_c 4 "$(gettext "Redirection"): $url_fpt"
-	        fi
-                
-            done < <(curl -s "$linker_fpt" | grep -oP 'meta-link=\"http[^ ]+' | grep -oP 'http[^"]+')
-        fi
+        get_language
+        
+        grep -oP 'data-link=\"[^"]+' <<< "$html" |
+            grep -v '<!--' |
+            grep http |
+            sed -r 's|data-link\=\"(.+)|\1|g'
     fi
 }
 
 if [[ "$url_in" =~ (filmpertutti|fpt)\. ]]
 then
-    get_language_prog
-
-    if [[ "$url_in" =~ show_video ]]
+    if [[ "$url_in" =~ \/stream\/ ]]
     then
-        extract_filmpertutti "$url_in"
-
-    else
-        while read url_fpt 
+        for fpt_link in $(extract_filmpertutti "$url_in")
         do
-	    if url "$url_fpt"
-	    then
-	        extract_filmpertutti "$url_fpt"
-	    fi
-        done < <(curl -s "$url_in" | grep -oP '[^"]+show_video=true[^"]+' | sed -r 's|\#038\;||g')
-    
-    fi
+            if url "$fpt_link"
+            then
+                [ -z "$start_fpt_link" ] && start_fpt_link="$fpt_link"
 
-    if ! url "$url_in_start" &&
-            [[ ! "$url_in" =~ show_video ]]
-    then
-        extract_filmpertutti "${url_in}?show_video=true"
-    fi
-    
-    get_language    
-    if url "$url_in_start"
-    then
-	replace_url_in "$url_in_start"
-        unset url_in_start
-	print_c 4 "$(gettext "New link to process"): $url_in"
-    else
-        _log 17
+                _log 34 "$fpt_link"
+                set_link + "$fpt_link"
+            fi            
+        done
+
+        [ -n "$start_fpt_link" ] && replace_url_in "$start_fpt_link"
     fi
 fi
 
