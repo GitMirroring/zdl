@@ -49,12 +49,11 @@ then
         url_in_file="${supervideo_data#*\{file\:\"}"
         url_in_file="${url_in_file%%\"*}"
 
-        file_in="${html##*<title>}"
-        file_in="${file_in%%<\/title>*}"
-        file_in="${file_in##*Watch}"
-        file_in="${file_in##\ }"
-        file_in=$(head -n1 <<< "$file_in")
-        file_in="${file_in%%\ }".mp4
+        file_in=$(grep -A1 'download__title' <<< "$html" |
+                      tail -n1 |
+               grep -oP '[a-zA-Z0-9]+.+')
+
+        file_in="${file_in%% }".mp4
 
         get_language
         force_dler FFMpeg
