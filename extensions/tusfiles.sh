@@ -39,11 +39,20 @@ then
     url_in_file=$(grep -oP 'sources\:\[\{file\:\"[^"]+' <<< "$(unpack "$html")")
     url_in_file="${url_in_file#*\"}"
 
-    file_in=$(curl -s "${url_in//embed-/d/}")
-    file_in=$(grep 'card-header' -A1 <<< "$file_in" | tail -n1)
-    file_in="${file_in##*Download}"
-    file_in="${file_in##\ }"
-
+    file_in=$(grep -B1 videoplayer-controlbar <<< "$html" |
+                  head -n1)
+    
+    file_in="${file_in#*<h1>}"
+    file_in="${file_in%</h1>*}"
+    
+    if [ -z "$file_in" ]
+    then
+        file_in=$(curl -s "${url_in//embed-/d/}")
+        file_in=$(grep 'card-header' -A1 <<< "$file_in" | tail -n1)
+        file_in="${file_in##*Download}"
+        file_in="${file_in##\ }"
+    fi
+    
     sanitize_file_in
 
     force_dler FFMpeg
