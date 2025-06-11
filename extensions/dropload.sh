@@ -27,7 +27,8 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: Dropload
 
-if [ "$url_in" != "${url_in//dropload}" ]
+if [ "$url_in" != "${url_in//dropload}" ] &&
+       [[ ! "$url_in" =~ \.mp4 ]]
 then
     if [[ "$url_in" =~ \/(e|d)\/ ]]
     then
