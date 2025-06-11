@@ -45,18 +45,23 @@ then
     
     file_in="${file_in#*<h1>}"
     file_in="${file_in%</h1>*}"
-    
+
     if [ -z "$file_in" ]
     then
-        file_in=$(curl -s "${url_in//embed-/d/}")
-        file_in=$(grep 'card-header' -A1 <<< "$file_in" | tail -n1)
+        file_in_html=$(curl -s "${url_in//embed-/d/}")
+        file_in=$(grep 'card-header' -A1 <<< "$file_in_html" | tail -n1)
         file_in="${file_in##*Download}"
         file_in="${file_in##\ }"
+
+        if [ -z "$file_in" ]
+        then
+            file_in=$(grep 'text-white' -A1 <<< "$file_in_html" | tail -n1)
+            file_in="${file_in##*Download}"
+            file_in=$(sed -r 's|\s*(.+)|\1|g' <<< "$file_in")
+        fi
     fi
     
     sanitize_file_in
-
-    force_dler FFMpeg
-    
+    force_dler FFMpeg 
     end_extension
 fi
