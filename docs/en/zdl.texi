@@ -176,8 +176,6 @@
 @macro menuDev
 @itemize
 @item
-@uref{https://diaspora-fr.org/tags/zdl,,Updates in Diaspora*}
-@item
 @uref{https://savannah.nongnu.org/projects/zdl,,Sevannah/GNU development project}
 @item
 @uref{http://download-mirror.savannah.gnu.org/releases/zdl/,, Release packages of ZDL}
@@ -1493,8 +1491,6 @@ ZDL is released under the GPL license (General Public License, v.3 and later).
 @url{https://nongnu.org/zdl}
 @item
 @url{https://savannah.nongnu.org/projects/zdl}
-@item
-@url{https://diaspora-fr.org/tags/zdl}
 @end itemize
 
 Gianluca Zoni (zoninoz)
