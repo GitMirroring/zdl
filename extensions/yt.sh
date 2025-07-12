@@ -70,7 +70,7 @@ then
     replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     replace_url_in "$(sed -r 's|\&list\=[^&]+||g' <<< "$url_in")"    
     
-    data=$($youtube_dl -f b --get-title --get-url "${url_in}")       
+    data=$($youtube_dl -f best --get-title --get-url "${url_in}")       
     url_in_file="$(tail -n1 <<< "$data")"
     yt_title="$(tail -n2 <<< "$data" | head -n1)"
 
