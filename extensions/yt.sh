@@ -82,7 +82,9 @@ then
     if [[ "$url_in_file" =~ \.m3u8 ]]
     then
         livestream_m3u8="$url_in"
+        get_language
         force_dler FFMpeg
+        get_language_prog
 
         get_livestream_duration_time "$url_in" yt_duration
         get_livestream_start_time "$url_in" yt_start
