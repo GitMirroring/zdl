@@ -258,7 +258,7 @@ then
         
     fi
     
-    no_check_links+=( mixdrop )    
+    no_check_links+=( "${test_mixdrop##*\/}" )    
     end_extension
 fi
 

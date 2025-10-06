@@ -70,9 +70,10 @@ then
     replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     replace_url_in "$(sed -r 's|\&list\=[^&]+||g' <<< "$url_in")"    
     
-    data=$($youtube_dl -f best --get-title --get-url "${url_in}")       
+    data=$($youtube_dl -f b --get-title --get-url "${url_in}")       
+    yt_title="$(head -n1 <<< "$data")"
     url_in_file="$(tail -n1 <<< "$data")"
-    yt_title="$(tail -n2 <<< "$data" | head -n1)"
+
 
     if ! url "$url_in_file"
     then
@@ -81,14 +82,17 @@ then
 
     if [[ "$url_in_file" =~ \.m3u8 ]]
     then
-        livestream_m3u8="$url_in"
         get_language
         force_dler FFMpeg
         get_language_prog
-
-        get_livestream_duration_time "$url_in" yt_duration
-        get_livestream_start_time "$url_in" yt_start
-        yt_title="$yt_title"_$(date +%Y-%m-%d)_"${yt_start//\:/\-}"_"${yt_duration//\:/\-}"
+        
+        if [ "$test_livestream_boolean" == true ]
+        then
+            livestream_m3u8="$url_in"
+            get_livestream_duration_time "$url_in" yt_duration
+            get_livestream_start_time "$url_in" yt_start
+            yt_title="$yt_title"_$(date +%Y-%m-%d)_"${yt_start//\:/\-}"_"${yt_duration//\:/\-}"
+        fi
     fi
     file_in="$yt_title".mp4
     
@@ -111,7 +115,7 @@ then
         sanitize_file_in
     fi
 
-    no_check_links+=( youtube youtu\.be )
+    no_check_links+=( googlevideo youtube youtu\.be )
 
     end_extension
 fi
