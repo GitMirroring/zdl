@@ -45,7 +45,6 @@ fi
 if [[ "${url_in}${test_mixdrop}" =~ (mixdr[o]*p) ]]
 then
     get_location "$url_in" mixdrop_location
-    
 
     if ! url "$mixdrop_location" 
     then
