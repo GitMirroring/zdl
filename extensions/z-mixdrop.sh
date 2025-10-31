@@ -261,7 +261,7 @@ then
 Sec-Fetch-Mode: cors
 Sec-Fetch-Site: cross-site' )
     
-    no_check_links+=( mixdrop "${test_mixdrop##*\/}" )    
+    no_check_links+=( "$url_in" mixdrop "${test_mixdrop##*\/}" )    
     end_extension
 fi
 
