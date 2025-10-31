@@ -69,7 +69,7 @@ then
     file_in="${file_in%</a>*}"
     file_in="${file_in##*>}"
     file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
-    
+
     if grep -q 'p,a,c,k,e,d' <<< "$html" 
     then
         unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
@@ -256,8 +256,12 @@ then
         fi
         
     fi
+
+    headers+=( 'Sec-Fetch-Dest: video
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: cross-site' )
     
-    no_check_links+=( "${test_mixdrop##*\/}" )    
+    no_check_links+=( mixdrop "${test_mixdrop##*\/}" )    
     end_extension
 fi
 
