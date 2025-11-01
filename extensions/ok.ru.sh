@@ -27,9 +27,10 @@
 ## zdl-extension types: streaming
 ## zdl-extension name: ok.ru
 
-if [[ "$url_in" =~ ok\.ru\/video\/ ]]
+if [[ "$url_in" =~ ok\.ru\/video ]]
 then
-    replace_url_in "${url_in//video/videoembed}"
+    [[ "$url_in" =~ ok\.ru\/video\/ ]] &&
+        replace_url_in "${url_in//video/videoembed}"
     
     html=$(curl -s \
                 -A "$user_agent" \
