@@ -24,44 +24,40 @@
 # zoninoz@inventati.org
 #
 
-## zdl-extension types: download
-## zdl-extension name: Voe
+## zdl-extension types: streaming
+## zdl-extension name: ok.ru
 
-if [[ "$url_in" =~ voe\. ]]
+if [[ "$url_in" =~ ok\.ru\/video\/ ]]
 then
+    replace_url_in "${url_in//video/videoembed}"
+    
     html=$(curl -s \
                 -A "$user_agent" \
                 -b "$path_tmp"/cookies.zdl \
                 -c "$path_tmp"/cookies2.zdl \
                 -H 'Upgrade-Insecure-Requests: 1' \
-                "${url_in%\/download}/download")
+                "$url_in")
 
-    voe_location=$(grep "window.location.href = '" <<< "$html" |
-                       head -n1 |
-                       grep -oP "http[^']+")
+    # url_in_file=$(sed -r 's|&quot;|\n|g' <<< "$html" |
+    #                   sed -r 's|u0026|\&|g' |
+    #                   grep m3u8 |
+    #                   tr -d \\)
 
-    html=$(curl -s \
-                -A "$user_agent" \
-                -b "$path_tmp"/cookies2.zdl \
-                -c "$path_tmp"/cookies.zdl \
-                -H 'Upgrade-Insecure-Requests: 1' \
-                "$voe_location")
-    
-    url_in_file=$(grep -oP 'http[^"]+\.mp4[^"]*' <<< "$html")
-    url_in_file="${url_in_file//amp;}"
+    # force_dler FFMpeg
+
+    url_in_file=$(sed -r 's|&quot;|\n|g' <<< "$html" |
+                      sed -r 's|u0026|\&|g'          |
+                      grep -P '^http'                |
+                      grep 'type=1'                  |
+                      grep -v 'ch='                  |
+                      tr -d \\)
     
     file_in=$(get_title "$html")
-    file_in="${file_in#Watch }"
+
     [ -n "$file_in" ] && file_in="${file_in%.mp4}".mp4
 
-    headers+=( 'DNT: 1
-Connection: keep-alive
-Upgrade-Insecure-Requests: 1
-Sec-Fetch-Dest: video
-Sec-Fetch-Mode: cors
-Sec-Fetch-Site: same-origin
-Sec-GPC: 1' )
+    file_in="${file_in#*&quot}"
     no_check_links+=( "$url_in")
-    
+
     end_extension
 fi

@@ -479,18 +479,18 @@ _Streaming video skipping browser player:_
      (HD), Dropload, EasyLoad (HD), Exashare, Facebook, Fanpage,
      Fastvideo, Filemoon, Flashx.tv, IDoWatch, IlFattoQuotidiano, La7
      (HD), livestream), livestream), Metacafe, MuseoGalileo.it, Neodrive
-     (ex Cloudzilla), NeverWasRadio, Nowvideo, Onlystream, pianosolo.it,
-     playtube, Portalevideo.unimi.it, Putstream, RaiCultura (HD), Rai...
-     (HD), RaiPlay (HD), RaiPlaySound, RaiScuola (HD), Rapidvideo.tv,
-     Raptu.com/Rapidvideo.com (HD), Rocvideo, Sockshare (HD), Speedvideo
-     (HD), Streamango, StreamHide, Streamin, Streamlare (HD),
-     StreamSB/SBFull (+ browser to solve g-recaptcha), StreamTape,
-     Supervideo (HD), TED (+sub), Thevideo, TubeOffLine.com (tutti i
-     servizi), Tutti i video in streaming di tipo .m3u8, Tutti i video
-     in streaming di tipo .mpd, Upstream, VidABC, Vidce, VideoKo,
-     Videowood, Vidhappy (RTMP), Vidlox, Vidoza, Vidto, Vidtome, Vimeo
-     (HD), VK (HD), Vupload, Wolfstream (HD), WStream (HD), Youtube (HD,
-     Zinwa (RTMP)
+     (ex Cloudzilla), NeverWasRadio, Nowvideo, ok.ru, Onlystream,
+     pianosolo.it, playtube, Portalevideo.unimi.it, Putstream,
+     RaiCultura (HD), Rai...  (HD), RaiPlay (HD), RaiPlaySound,
+     RaiScuola (HD), Rapidvideo.tv, Raptu.com/Rapidvideo.com (HD),
+     Rocvideo, Sockshare (HD), Speedvideo (HD), Streamango, StreamHide,
+     Streamin, Streamlare (HD), StreamSB/SBFull (+ browser to solve
+     g-recaptcha), StreamTape, Supervideo (HD), TED (+sub), Thevideo,
+     TubeOffLine.com (tutti i servizi), Tutti i video in streaming di
+     tipo .m3u8, Tutti i video in streaming di tipo .mpd, Upstream,
+     VidABC, Vidce, VideoKo, Videowood, Vidhappy (RTMP), Vidlox, Vidoza,
+     Vidto, Vidtome, Vimeo (HD), VK (HD), Vupload, Wolfstream (HD),
+     WStream (HD), Youtube (HD, Zinwa (RTMP)
 _File hosting:_
      Akvideo (HD), Clicknupload, ClipWatching, ddl.to, Deltabit (HD),
      dl.free.fr, Dropbox, Drop.download, Easybytez, EasyLoad (HD), Go4Up
@@ -1452,26 +1452,26 @@ Tag Table:
 Node: Top1239
 Node: The ZDL command5148
 Node: Streaming/hosting services14141
-Node: Start ZDL19013
-Node: Stop ZDL21422
-Node: Check the downloads22481
-Node: User manuals26569
-Node: Modes26983
-Node: Readline30068
-Node: Editor31542
-Node: Homonymy32710
-Node: IRC/XDCC34246
-Node: Torrent35896
-Node: Filters36743
-Node: Create new extensions37031
-Node: Recommended software and dependencies38773
-Node: Conkeror40393
-Node: zdl-xterm and XXXTerm/Xombrero41364
-Node: Installation and update43283
-Node: Why this program46341
-Node: Tags50042
-Node: Copying55423
-Node: Contacts56505
+Node: Start ZDL19021
+Node: Stop ZDL21430
+Node: Check the downloads22489
+Node: User manuals26577
+Node: Modes26991
+Node: Readline30076
+Node: Editor31550
+Node: Homonymy32718
+Node: IRC/XDCC34254
+Node: Torrent35904
+Node: Filters36751
+Node: Create new extensions37039
+Node: Recommended software and dependencies38781
+Node: Conkeror40401
+Node: zdl-xterm and XXXTerm/Xombrero41372
+Node: Installation and update43291
+Node: Why this program46349
+Node: Tags50050
+Node: Copying55431
+Node: Contacts56513
 
 End Tag Table
 
