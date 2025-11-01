@@ -24,39 +24,39 @@
 # zoninoz@inventati.org
 #
 
-
 ## zdl-extension types: download
 ## zdl-extension name: Voe
 
-
 if [[ "$url_in" =~ voe\. ]]
 then
-    get_location "$url_in" voe_location
+    html=$(curl -s \
+                -A "$user_agent" \
+                -b "$path_tmp"/cookies.zdl \
+                -c "$path_tmp"/cookies2.zdl \
+                -H 'Upgrade-Insecure-Requests: 1' \
+                "${url_in%\/download}/download")
 
-    if url "$voe_location"
-    then
-        html=$(curl -v \
-                    -A "$user_agent" \
-                    -b "$path_tmp"/cookies.zdl \
-                    -c "$path_tmp"/cookies2.zdl \
-                    -H 'Upgrade-Insecure-Requests: 1' \
-                    "$voe_location")
-    fi
+    voe_location=$(grep "window.location.href = '" <<< "$html" |
+                       head -n1 |
+                       grep -oP "http[^']+")
 
+    html=$(curl -s \
+                -A "$user_agent" \
+                -b "$path_tmp"/cookies.zdl \
+                -c "$path_tmp"/cookies2.zdl \
+                -H 'Upgrade-Insecure-Requests: 1' \
+                "$voe_location")
+    
+    url_in_file=$(grep -oP 'http[^"]+\.mp4[^"]*' <<< "$html")
+    
     file_in=$(get_title "$html")
     file_in="${file_in#Watch }"
-    [ -n "$file_in" ] && file_in="$file_in".mp4
-    
-    url_in_0=$(grep .m3u8 <<< "$html")
-    url_in_0="${url_in_0%\'*}"
-    url_in_0="${url_in_0##*\'}"
+    [ -n "$file_in" ] && file_in="${file_in%.mp4}".mp4
 
-    print_c 4 "M3U8 master: $url_in_0"    
-    url_in_file="${url_in_0%master.m3u8*}"$(curl -s "$url_in_0" | head -n3 |tail -n1)
-    
-    get_language
-    force_dler FFMpeg
-    get_language_prog
+        headers+=( 'Sec-Fetch-Dest: video
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: cross-site' )
+    no_check_links+=( "$url_in")
     
     end_extension
 fi

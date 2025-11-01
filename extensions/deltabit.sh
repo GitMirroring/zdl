@@ -111,7 +111,7 @@ then
 	    do
 		((deltabit_loops++))
 		html2=$(wget -qO- -t1 -T$max_waiting           \
-			     "http://deltabit.co/dl?op=download_orig&id=${id_deltabit}&mode=${mode_stream}&hash=${hash_deltabit}" \
+			     "https://deltabit.co/dl?op=download_orig&id=${id_deltabit}&mode=${mode_stream}&hash=${hash_deltabit}" \
 			     -o /dev/null)
 
 		url_in_file=$(grep -P 'http.+Download' <<< "$html2" |
