@@ -42,21 +42,27 @@ then
 
     html=$(curl -s \
                 -A "$user_agent" \
-                -b "$path_tmp"/cookies.zdl \
-                -c "$path_tmp"/cookies2.zdl \
+                -b "$path_tmp"/cookies2.zdl \
+                -c "$path_tmp"/cookies.zdl \
                 -H 'Upgrade-Insecure-Requests: 1' \
                 "$voe_location")
     
     url_in_file=$(grep -oP 'http[^"]+\.mp4[^"]*' <<< "$html")
+    url_in_file="${url_in_file//amp;}"
     
     file_in=$(get_title "$html")
     file_in="${file_in#Watch }"
     [ -n "$file_in" ] && file_in="${file_in%.mp4}".mp4
 
-        headers+=( 'Sec-Fetch-Dest: video
+    headers+=( 'DNT: 1
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: video
 Sec-Fetch-Mode: cors
-Sec-Fetch-Site: cross-site' )
+Sec-Fetch-Site: same-origin
+Sec-GPC: 1' )
     no_check_links+=( "$url_in")
+
     
     end_extension
 fi
