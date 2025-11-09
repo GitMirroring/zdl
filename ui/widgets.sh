@@ -198,6 +198,7 @@ function print_header { # $1=label ; $2=color ; $3=header pattern; $4=columns
     shift
 
     columns="$1"
+    [ -z "$columns" ] && columns=$COLUMNS
     [ -z "$columns" ] && columns=$(stty size | cut -d' ' -f2)
     shift
   
