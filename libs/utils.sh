@@ -69,8 +69,8 @@ function htmldecode_regular {
 }
 
 function urlencode {
-    char=( '+' '/' '=' ' ' )
-    encoded=( '%2B' '%2F' '%3D' '%20' )
+    char=( '+' '/' '=' ' ' "'" )
+    encoded=( '%2B' '%2F' '%3D' '%20' '%27' )
 
     text="$1"
     for i in $(seq 0 $(( ${#char[*]}-1 )) )
@@ -82,8 +82,8 @@ function urlencode {
 
 function urlencode_query {
     local var val t i text
-    declare -a char=( '+' '/' '=' ' ' )
-    declare -a encoded=( '%2B' '%2F' '%3D' '%20' )
+    declare -a char=( '+' '/' '=' ' ' "'" )
+    declare -a encoded=( '%2B' '%2F' '%3D' '%20' '%27' )
     declare -a text_splitted=( $(split "$1" '&') )
 
     for t in "${text_splitted[@]}"
@@ -468,6 +468,7 @@ function sanitize_url {
     data="${data%'#20%'}"
     data="${data%'#'}"
     data="${data// /%20}"
+    data="${data//\'/%27}"
     data="${data//'('/%28}"
     data="${data//')'/%29}"
     data="${data//'['/%5B}"

@@ -37,10 +37,16 @@ fi
 ##
 if [[ "$url_in" =~ ^irc:\/\/ ]]
 then
-    replace_url_in "$(tr '[:upper:]' '[:lower:]' <<< "$(sanitize_url "$url_in")")"
-    
-    replace_url_in "${url_in//artikanet.org/arabaphenix.it}"
-    replace_url_in "${url_in//openjoke.org\/tilt/williamgattone.it\/tilt}"
+    xdcc_url_new="$(tr '[:upper:]' '[:lower:]' <<< "$(sanitize_url "$url_in")")"
+
+    xdcc_url_new="${xdcc_url_new//openjoke.net/openjoke.org}"
+    xdcc_url_new="${xdcc_url_new//artikanet.org/arabaphenix.it}"
+    xdcc_url_new="${xdcc_url_new//openjoke.org\/tilt/williamgattone.it\/tilt}"
+    xdcc_url_new="${xdcc_url_new//openjoke.org\/maleventum/williamgattone.it\/maleventum}"
+    xdcc_url_new="${xdcc_url_new//openjoke.org\/serial-tv/arabaphenix.it\/serial-tv}"
+    xdcc_url_new="${xdcc_url_new//openjoke.org\/william\&carola/williamgattone.it\/william\&carola}"
+
+    replace_url_in "$xdcc_url_new"
     
     url_in_file="$url_in"
     downloader_in=DCC_Xfer
