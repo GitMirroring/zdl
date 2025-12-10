@@ -35,7 +35,7 @@ source /usr/bin/gettext.sh
 ## Axel - Cygwin
 function install_axel-cygwin {
     ## source: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-    cygaxel_url="http://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+    cygaxel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
     
     if ! command -v axel &>/dev/null
     then
@@ -307,7 +307,7 @@ function update {
     BIN="/usr/local/bin"
     SHARE="/usr/local/share/zdl"
     ## sources: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-    axel_url="http://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+    axel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
     success="$(gettext "Update completed")"
     failure="$(gettext "Update failed")"
     path_conf="$HOME/.$prog"
@@ -323,7 +323,7 @@ function update {
     if [ ! -f "$path_conf"/.zdl-counter ] &&
            ! command -v zdl &>/dev/null
     then
-        curl -sd 'op=set' http://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null
+        curl -sd 'op=set' https://zoninoz.altervista.org/zdl/zdl-counter.php &>/dev/null
     fi
     # if ! grep -q zoninoz /usr/local/bin/zdl 2>/dev/null &&
     #         [ ! -f "$path_conf"/.zdl-counter ]

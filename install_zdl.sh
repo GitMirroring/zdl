@@ -41,10 +41,10 @@ PROG=ZigzagDownLoader
 prog=zdl
 BIN="/usr/local/bin"
 SHARE="/usr/local/share/zdl"
-URL_ROOT="http://download.savannah.gnu.org/releases/zdl/"
+URL_ROOT="https://download.savannah.gnu.org/releases/zdl/"
 
 ## from: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-cygaxel_url="http://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+cygaxel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
 path_conf="$HOME/.$prog"
 file_conf="$path_conf/$prog.conf"
 installer_zdl="true"
@@ -199,12 +199,14 @@ fi
 #wget -q "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
 #wget -q "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz.sig"
 URL_GIT="http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz"
-URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
+#URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
+URL_MIRROR="https://download.savannah.nongnu.org/releases/zdl/zdl-2.0.tar.gz"
 
 rm -f zdl-2.0.tar.gz.sig zdl-2.0.tar.gz
 while [ ! -f zdl-2.0.tar.gz ]
 do
-    wget "$URL_GIT" -O zdl-2.0.tar.gz 
+    #wget "$URL_GIT" -O zdl-2.0.tar.gz
+    wget "$URL_MIRROR" -O zdl-2.0.tar.gz 
     
     if [ ! -f zdl-2.0.tar.gz ]
     then
