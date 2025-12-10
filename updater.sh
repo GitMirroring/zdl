@@ -312,7 +312,8 @@ function update {
     failure="$(gettext "Update failed")"
     path_conf="$HOME/.$prog"
     file_conf="$path_conf/$prog.conf"
-
+    dir_dest=$PWD
+    
     if [[ -z "$(grep 'shopt -s checkwinsize' $HOME/.bashrc)" ]]
     then
         echo "shopt -s checkwinsize" >> ~/.bashrc 
@@ -431,7 +432,6 @@ function update {
     cp *.sig "$path_conf"/zdl.sig 2>/dev/null
     rm -fr *.gz *.sig "$prog"
     cd ..
-    dir_dest=$PWD
 
     source $SHARE/config.sh
     set_default_conf
