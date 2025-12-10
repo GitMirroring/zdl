@@ -179,11 +179,6 @@ function update_updater {
 	tar -xzf "$package" 2>/dev/null &&
 	    {		
                 date +%s >"$path_conf/version"
-		mv "${package%.tar.gz}" $prog
-
-		## manutenzione: ##############
-		# cp -r $HOME/zdl-git/code $prog
-		cd $prog
 		chmod +rx -R .
 
                 source libs/utils.sh
