@@ -729,7 +729,6 @@ EXTENSIONS:
             
         else
             pause
-            read -p "dir_dest: $dir_dest"
             cd $dir_dest
             $prog "${args[@]}"
             
