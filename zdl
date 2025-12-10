@@ -150,10 +150,16 @@ function update_updater {
         cd /tmp/$prog
         rm -fr *
         
-	while [ ! -f zdl-2.0.tar.gz ]
+	while [ ! -f "$package" ]
 	do
-	    wget "$URL_MIRROR" -O "$package" -o "${gui_log#*\/}"
-
+            if [ "$this_mode" == gui ]
+            then
+                wget "$URL_MIRROR" -O "$package" 2>&1 -o "${gui_log#*\/}"
+            else
+                rm -rf "$package"
+                aria2c "$URL_MIRROR"
+            fi
+            
 	    if [ ! -f "$package" ]
 	    then
 		if [ "$this_mode" != gui ]
