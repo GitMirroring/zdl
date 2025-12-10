@@ -199,8 +199,8 @@ fi
 #wget -q "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
 #wget -q "http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz.sig"
 URL_GIT="http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz"
-#URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
-URL_MIRROR="https://download.savannah.nongnu.org/releases/zdl/zdl-2.0.tar.gz"
+URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
+#URL_MIRROR="https://download.savannah.nongnu.org/releases/zdl/zdl-2.0.tar.gz"
 
 rm -f zdl-2.0.tar.gz.sig zdl-2.0.tar.gz
 while [ ! -f zdl-2.0.tar.gz ]

@@ -151,8 +151,8 @@ function update_updater {
 	#wget "$URL_ROOT" -r -l 1 -A gz -np -nd -q
 	URL_GIT="http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz"
         
-	#URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
-        URL_MIRROR="https://download.savannah.nongnu.org/releases/zdl/zdl-2.0.tar.gz"
+	URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
+        #URL_MIRROR="https://download.savannah.nongnu.org/releases/zdl/zdl-2.0.tar.gz"
         
 	while [ ! -f zdl-2.0.tar.gz ]
 	do
