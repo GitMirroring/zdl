@@ -312,7 +312,6 @@ function update {
     failure="$(gettext "Update failed")"
     path_conf="$HOME/.$prog"
     file_conf="$path_conf/$prog.conf"
-    dir_dest=$PWD
     
     if [[ -z "$(grep 'shopt -s checkwinsize' $HOME/.bashrc)" ]]
     then

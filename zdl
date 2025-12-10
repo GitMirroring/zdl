@@ -135,12 +135,9 @@ function update_updater {
 		    ;;
 	    esac	    
 	fi
+
+        dir_dest=$PWD
 	
-	mkdir -p "$path_tmp"
-	cd "$path_tmp"
-
-	rm -fr *.gz *.sig "$prog" 2>/dev/null
-
 	print_c 1 "$(gettext "Downloading")..."
 
 	#### dal repo git: 
