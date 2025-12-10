@@ -24,7 +24,6 @@
 # zoninoz@inventati.org
 #
 #set -x
-#test
 
 set +o history
 
