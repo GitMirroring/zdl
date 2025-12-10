@@ -731,10 +731,11 @@ EXTENSIONS:
         else
             pause
             cd $dir_dest
+            pause
             $prog "${args[@]}"
             
             set -o history
-            pause
+
             exit
         fi
     fi
