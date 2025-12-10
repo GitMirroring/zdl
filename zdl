@@ -1401,6 +1401,8 @@ fi
 start_mode_in_tty "$this_mode" "$this_tty"
 
 ##########
+read -p test
+
 fclear
 header_z
 ##########
