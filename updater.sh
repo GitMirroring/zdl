@@ -734,6 +734,7 @@ EXTENSIONS:
             $prog "${args[@]}"
             
             set -o history
+            pause
             exit
         fi
     fi
