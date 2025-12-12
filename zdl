@@ -34,8 +34,9 @@ source "$path_usr"/source_all.sh
 
 function update_updater {
     ## "...-mirror..." è quello principale (veloce)
-    URL_ROOT="https://download.savannah.nongnu.org/releases/zdl/"
-
+    #URL_ROOT="https://download.savannah.nongnu.org/releases/zdl/"
+    URL_ROOT="https://download-mirror.savannah.gnu.org/releases/zdl"
+    
     get_conf
     
     if [ "$this_mode" != gui ]
@@ -48,7 +49,7 @@ function update_updater {
     [ ! -f $path_conf/version ] &&
 	echo "0" >"$path_conf/version"
     
-    remote_version=$(curl -s -m 15 "${URL_ROOT}version")
+    remote_version=$(curl -s -m 15 "${URL_ROOT}/version")
     [[ ! "$remote_version" =~ ^([0-9]+)$ ]] &&
 	remote_version=0
     
@@ -141,7 +142,7 @@ function update_updater {
 	#wget "$URL_ROOT" -r -l 1 -A gz -np -nd -q
 	URL_GIT="http://git.savannah.gnu.org/cgit/zdl.git/snapshot/zdl-2.0.tar.gz"
         
-	URL_MIRROR="http://download-mirror.savannah.gnu.org/releases/zdl/zdl-2.0.tar.gz"
+	URL_MIRROR="$URL_ROOT/zdl-2.0.tar.gz"
         #URL_MIRROR="https://download.savannah.nongnu.org/releases/zdl/zdl-2.0.tar.gz"
         
 	package="zdl-2.0.tar.gz"        
