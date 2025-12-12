@@ -733,7 +733,9 @@ function progress_out (chunk,           progress_line, line, cmd, var_temp, arra
     }
     else if (dler == "FFMpeg") {
 	for (y=n; y>0; y--) {
-            if (chunk[y] ~ /video.+muxing\soverhead/) {
+            if (chunk[y] ~ /video.+muxing\soverhead/ ||
+                chunk[y-1] ~ /video.+muxing\soverhead/ ||
+                chunk[y-2] ~ /video.+muxing\soverhead/) {
                 if (chunk[y-2] ~ /Error\smuxing\sa\spacket/) {
                     progress_error[i] = chunk[y]
                     break
