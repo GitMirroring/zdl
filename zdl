@@ -64,7 +64,6 @@ function update_updater {
     if ((local_version < remote_version)) ||
 	   [ "$force_update" == true ]
     then
-
 	if [ "$this_mode" == gui ]
 	then
 	    if [ "$force_update" != true ]
@@ -175,7 +174,7 @@ function update_updater {
 
 	tar -xzf "$package" 2>/dev/null &&
 	    {		
-                date +%s >"$path_conf/version"
+                echo "$remote_version" > "$path_conf/version"
 		chmod +rx -R .
 
                 source libs/utils.sh
