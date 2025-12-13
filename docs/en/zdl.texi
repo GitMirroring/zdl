@@ -176,7 +176,7 @@
 @macro menuDev
 @itemize
 @item
-@uref{https://savannah.nongnu.org/projects/zdl,,Sevannah/GNU development project}
+@uref{https://savannah.nongnu.org/projects/zdl,,Savannah/GNU development project}
 @item
 @uref{http://download-mirror.savannah.gnu.org/releases/zdl/,, Release packages of ZDL}
 @item

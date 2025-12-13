@@ -1,4 +1,4 @@
-This is zdl.info, produced by makeinfo version 7.1.1 from zdl.texi.tmp.
+This is zdl.info, produced by makeinfo version 7.2 from zdl.texi.tmp.
 
 ZigzagDownLoader (ZDL)
 
@@ -827,12 +827,10 @@ file produced within the same directory, while accepted URLs are
 recorded gradually in the file automatically managed by ZDL, such as
 _download queue_.
 
-
    At any time, while entering links via the readline, you can change
 the _download queue_ with the default editor (*note Editor::).  The
 download processes are started by the command ‘M-x’, which closes the
 readline and executes the download queue.
-
 
 
 File: zdl.info,  Node: Editor,  Next: Homonymy,  Prev: Readline,  Up: Top
@@ -858,7 +856,6 @@ runs the default editor for the Bash or for the operating system.  If
 Cygwin is used, the ZDL installer and update functions automatically
 install the _Nano_ editor: it is made available if no other default
 editor is present.
-
 
 
 File: zdl.info,  Node: Homonymy,  Next: IRC/XDCC,  Prev: Editor,  Up: Top
@@ -892,7 +889,6 @@ alternative ways:
      downloading with Axel or Aria2 also overwrites the file from the
      beginning.  This option can be configured as the default behavior
      (‘zdl [-c|--configure]’).
-
 
 
 
@@ -1446,36 +1442,36 @@ _zdl-users - User list_:
 _zdl-devel - Development list_:
 <https://lists.nongnu.org/mailman/listinfo/zdl-devel>
 
-
 
 Tag Table:
-Node: Top1239
-Node: The ZDL command5148
-Node: Streaming/hosting services14141
-Node: Start ZDL19021
-Node: Stop ZDL21430
-Node: Check the downloads22489
-Node: User manuals26577
-Node: Modes26991
-Node: Readline30076
-Node: Editor31550
-Node: Homonymy32718
-Node: IRC/XDCC34254
-Node: Torrent35904
-Node: Filters36751
-Node: Create new extensions37039
-Node: Recommended software and dependencies38781
-Node: Conkeror40401
-Node: zdl-xterm and XXXTerm/Xombrero41372
-Node: Installation and update43291
-Node: Why this program46349
-Node: Tags50050
-Node: Copying55431
-Node: Contacts56513
+Node: Top1237
+Node: The ZDL command5146
+Node: Streaming/hosting services14139
+Node: Start ZDL19019
+Node: Stop ZDL21428
+Node: Check the downloads22487
+Node: User manuals26575
+Node: Modes26989
+Node: Readline30074
+Node: Editor31546
+Node: Homonymy32713
+Node: IRC/XDCC34248
+Node: Torrent35898
+Node: Filters36745
+Node: Create new extensions37033
+Node: Recommended software and dependencies38775
+Node: Conkeror40395
+Node: zdl-xterm and XXXTerm/Xombrero41366
+Node: Installation and update43285
+Node: Why this program46343
+Node: Tags50044
+Node: Copying55425
+Node: Contacts56507
 
 End Tag Table
 
 
 Local Variables:
 coding: utf-8
+Info-documentlanguage: en_US
 End:

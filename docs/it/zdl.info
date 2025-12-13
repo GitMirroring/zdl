@@ -1,4 +1,4 @@
-This is zdl.info, produced by makeinfo version 7.1.1 from zdl.texi.tmp.
+This is zdl.info, produced by makeinfo version 7.2 from zdl.texi.tmp.
 
 ZigzagDownLoader (ZDL)
 
@@ -842,12 +842,10 @@ file di log prodotto all'interno della stessa directory, mentre gli URL
 accettati sono registrati via via nel file gestito automaticamente da
 ZDL, come _coda di download_.
 
-
    In ogni momento, durante l'immissione di link attraverso la readline,
 si può modificare la _coda di download_ con l'editor predefinito (*note
 Editor::).  I processi di download sono avviati dal comando ‘M-x’, che
 chiude la readline ed esegue la coda di download.
-
 
 
 File: zdl.info,  Node: Editor,  Next: Omonimie,  Prev: Readline,  Up: Top
@@ -873,7 +871,6 @@ esegue l'editor predefinito per la Bash o per il sistema operativo.  Nel
 caso si usi Cygwin, l'installatore e le funzioni di aggiornamento di ZDL
 installano automaticamente l'editor _Nano_: è reso disponibile se non è
 presente altro editor predefinito.
-
 
 
 File: zdl.info,  Node: Omonimie,  Next: IRC/XDCC,  Prev: Editor,  Up: Top
@@ -907,7 +904,6 @@ alternativi:
      processare, anche il download con Axel o Aria2 sovrascrive comunque
      il file dall'inizio.  Questa opzione può essere configurata come
      comportamento predefinito (‘zdl [-c|--configure]’).
-
 
 
 
@@ -1475,36 +1471,36 @@ _zdl-users - Lista degli utenti_:
 _zdl-devel - Lista di sviluppo_:
 <https://lists.nongnu.org/mailman/listinfo/zdl-devel>
 
-
 
 Tag Table:
-Node: Top1231
-Node: Il comando ZDL5325
-Node: Servizi streaming/hosting14881
-Node: Avviare ZDL19974
-Node: Arrestare ZDL22506
-Node: Controllare i download23634
-Node: Manuali d'uso27935
-Node: Modi28372
-Node: Readline31712
-Node: Editor33283
-Node: Omonimie34518
-Node: IRC/XDCC36087
-Node: Torrent37810
-Node: Filtri38718
-Node: Creare nuove estensioni39039
-Node: Software consigliati e dipendenze40850
-Node: Conkeror42534
-Node: zdl-xterm e XXXTerm/Xombrero43552
-Node: Installazione e aggiornamento45533
-Node: Perché questo programma48893
-Node: Tags52791
-Node: Copying58128
-Node: Contatti59178
+Node: Top1229
+Node: Il comando ZDL5323
+Node: Servizi streaming/hosting14879
+Node: Avviare ZDL19972
+Node: Arrestare ZDL22504
+Node: Controllare i download23632
+Node: Manuali d'uso27933
+Node: Modi28370
+Node: Readline31710
+Node: Editor33279
+Node: Omonimie34513
+Node: IRC/XDCC36081
+Node: Torrent37804
+Node: Filtri38712
+Node: Creare nuove estensioni39033
+Node: Software consigliati e dipendenze40844
+Node: Conkeror42528
+Node: zdl-xterm e XXXTerm/Xombrero43546
+Node: Installazione e aggiornamento45527
+Node: Perché questo programma48887
+Node: Tags52785
+Node: Copying58122
+Node: Contatti59172
 
 End Tag Table
 
 
 Local Variables:
 coding: utf-8
+Info-documentlanguage: it_IT
 End:
