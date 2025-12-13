@@ -892,7 +892,7 @@ function check_livestream {
         fi
 
         print_c 4 "Checking livestream link: %s" "$link"
-        link=$($youtube_dl -f b --get-url "$link" | tail -n1)
+        link=$($youtube_dl -f b --get-url "$link" 2>/dev/null | tail -n1)
     fi
 
     if [[ "$link" =~ (raiplay.+\/dirette\/|la7.it\/dirette-tv|yt_live_broadcast.+m3u8|dailymotion.+live.+m3u8) ]]
