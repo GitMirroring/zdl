@@ -34,10 +34,13 @@ fi
 
 if ! url "$url_in_file" ||
         test -z "$file_in"
-then        
-    test_mixdrop=$(grep -oP 'https://[^\/]+' <<< "$url_in")
-    get_location "$test_mixdrop" test_mixdrop
-
+then
+    if [[ ! "$url_in" =~ (mega|magnet|irc|xdcc|youtube) ]]
+    then
+        test_mixdrop=$(grep -oP 'https://[^\/]+' <<< "$url_in")
+        get_location "$test_mixdrop" test_mixdrop
+    fi
+    
 else
     unset test_mixdrop
 fi
