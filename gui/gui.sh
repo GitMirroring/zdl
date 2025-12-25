@@ -38,7 +38,7 @@ function get_download_path {
     
     if hash yad
     then
-	path_gui=$(yad --file-selection \
+	path_gui=$(yad --file \
 		       --directory \
 		       --image="$IMAGE2" \
 		       --image-on-top \

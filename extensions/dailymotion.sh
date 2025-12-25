@@ -61,6 +61,9 @@ then
     [ -n "${file_in%.mp4}" ] &&
         file_in="${file_in%.mp4}".mp4 ||
             unset file_in
+
+    [[ "$url_in_file" =~ \.m3u8 ]] &&
+        force_dler FFMpeg
     
     end_extension
 fi
