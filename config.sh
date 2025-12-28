@@ -675,7 +675,7 @@ command -v avconv &>/dev/null && ffmpeg="avconv"
 command -v ffmpeg &>/dev/null && ffmpeg="ffmpeg"
 
 # GUI
-if command -v yad 2>/dev/null
+if command -v yad &>/dev/null
 then
     if yad --help | grep -q multi-progress
     then
