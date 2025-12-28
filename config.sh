@@ -546,7 +546,6 @@ prog_lang='en_US.UTF-8:en'
 
 downloaded_by_zdl=downloaded_by_zdl.txt
 
-
 newip_hosts=(
     rockfile
     uptobox
@@ -675,3 +674,13 @@ export OPENSSL_CONF=/etc/ssl/
 command -v avconv &>/dev/null && ffmpeg="avconv"
 command -v ffmpeg &>/dev/null && ffmpeg="ffmpeg"
 
+# GUI
+if command -v yad 2>/dev/null
+then
+    if yad --help | grep -q multi-progress
+    then
+        yad_opt_progress="--multi-progress"
+    else
+        yad_opt_progress="--progress"
+    fi
+fi

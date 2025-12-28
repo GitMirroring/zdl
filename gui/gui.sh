@@ -1482,7 +1482,7 @@ function display_multiprogress_gui {
 	exe_button_result "$yad_multiprogress_result_file"
 
     done 2>/dev/null |
-	yad --multi-progress \
+	yad $yad_opt_progress \
 	    --align=right \
 	    $yad_bars \
 	    --bar="ZDL:PULSE" \
