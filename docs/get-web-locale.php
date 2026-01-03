@@ -24,7 +24,11 @@ foreach($prefLocales as $key => $value) {
         break;
     }	
 }
-    
+
+if ($lang == "it-it" || $lang == "it-IT" || $lang == "it-ch" || $lang == "it-CH") {
+    $lang = "it";
+}
+
 // Set default language if a `$lang` version of site is not available
 if (!in_array($lang, array_keys($sites)))
     $lang = 'en';
