@@ -677,15 +677,17 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.tmp"
         youtube-dl)
 	    ## provvisorio per youtube-dl non gestito	    
 	    _log 21
-	    echo
+	    print_c 0 ''
 	    header_dl "youtube-dl in $PWD"
 
 	    if [ -n "$DISPLAY" ] &&
 		   [ ! -e /cygdrive ]
 	    then
-		xterm -tn "xterm-256color"                                              \
-		      -xrm "XTerm*faceName: xft:Dejavu Sans Mono:size=9:antialiasing=true:hinting=true:hintstyle=hintsfull" +bdc   \
-		      -fg grey -bg black -title "ZigzagDownLoader in $PWD"              \
+		xterm -tn "xterm-256color"                                   \
+		      -u8                                                    \
+		      -xrm "$xterm_facename"                                 \
+                      +bdc                                                   \
+		      -fg grey -bg black -title "ZigzagDownLoader in $PWD"   \
 		      -e "$youtube_dl \"$url_in_file\"" &
 		
 	    else

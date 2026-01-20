@@ -684,3 +684,6 @@ then
         yad_opt_progress="--progress"
     fi
 fi
+
+xterm_facename='XTerm*faceName: xft:Dejavu sans mono:size=9:antialias=true:hinting=true:hintstyle:hintsfull' 
+
