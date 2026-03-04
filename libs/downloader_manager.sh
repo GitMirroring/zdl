@@ -578,6 +578,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                     url "$url_in_file_audio"
             then
 		nohup $ffmpeg -loglevel info \
+                      -vframes 1 \
                       -i "$url_in_file_video" \
                       -i "$url_in_file_audio" \
                       -c copy \
@@ -595,6 +596,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 		get_livestream_duration_time "$url_in" livestream_time
 
                 nohup $ffmpeg -loglevel info \
+                      -vframes 1 \
 		      -i "$url_in_file" \
 		      -c copy \
 		      -t "$livestream_time" \
@@ -630,6 +632,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                 
 	    else
 		nohup $ffmpeg -loglevel info \
+                      -vframes 1 \
                       -i "$url_in_file" \
                       -c copy \
                       "${file_in}" \
