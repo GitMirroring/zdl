@@ -73,95 +73,95 @@ then
     file_in="${file_in##*>}"
     file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
 
-    if grep -q 'p,a,c,k,e,d' <<< "$html" 
-    then
-        unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
-
-        if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
-        then
-            url_in_file="https:${BASH_REMATCH[1]}"
-            
-        elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
-        then
-            _log 17
-        fi
-
-    elif grep -q iframe <<< "$html"
-    then
-        mixdrop_location="$(grep iframe <<< "$html" | head -n1)"
-        mixdrop_location="${mixdrop_location##*src=\"}"
-        mixdrop_location="${mixdrop_location%%\"*}"        
-        test -n "$mixdrop_location" &&
-            mixdrop_location="https:${mixdrop_location#'https:'}"
-
-        html=$(wget -SO- \
-                    -o /dev/null \
-                    --user-agent="$user_agent" \
-                    --keep-session-cookies \
-                    --save-cookies="$path_tmp"/cookies.zdl \
-                    "$mixdrop_location")
-
-        file_in=$(grep '<div class=\"title' <<< "$html")
-        file_in="${file_in%</a>*}"
-        file_in="${file_in##*>}"
-        file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
-            
-    else
-        mixdrop_location=$(curl -s "${url_in//\/f\///e/}" | grep -P 'iframe.+src=\"\/\/mixdrop')
-        mixdrop_location="${mixdrop_location#*src=\"}"
-        mixdrop_location="https:${mixdrop_location%%\"*}"    
-
-        for iiiiiii in {0..3}
-        do
-            get_location "$mixdrop_location" mixdrop_location_test
-
-            if url "$mixdrop_location_test"
-            then
-                mixdrop_location="$mixdrop_location_test"
-                break
-            else
-                get_location "$url_in" mixdrop_location_test
-                if url "$mixdrop_location_test"
-                then
-                    mixdrop_location="$mixdrop_location_test"
-                    break
-                fi
-            fi
-            countdown- 6
-        done
-        
-        if test -z "$file_in" 
-        then    
-            file_in=$(get_title "$html")
-            file_in="${file_in%%.mp4*}"
-            [[ "$file_in" =~ (302 Found) ]] && unset file_in
-        fi
-               
-        if ! url "$mixdrop_location"
-        then
-            mixdrop_location="$url_in"
-        fi            
-    
-        html=$(curl -s \
-                    -A "$user_agent" \
-                    -H 'Connection: keep-alive' \
-                    -H 'Upgrade-Insecure-Requests: 1' \
-                    -c "$path_tmp"/cookies.zdl \
-                    "$mixdrop_location")
-
-        if test -z "$file_in" 
-        then    
-            file_in=$(get_title "$html")
-            file_in="${file_in%%.mp4*}"
-            [[ "$file_in" =~ (302 Found) ]] && unset file_in
-        fi
-    fi
-
     if [[ "$html" =~ (WE ARE SORRY) ]]
     then
         _log 3
 
     else
+        if grep -q 'p,a,c,k,e,d' <<< "$html" 
+        then
+            unpacked=$(unpack "$(grep 'p,a,c,k,e,d' <<< "$html" |head -n1)")
+
+            if [[ "$unpacked" =~ MDCore\.[a-z]*url\=\"([^\"]+\.mp4[^\"]+)\" ]]
+            then
+                url_in_file="https:${BASH_REMATCH[1]}"
+                
+            elif [[ "${html}" =~ (Video will be converted and ready to play soon) ]]
+            then
+                _log 17
+            fi
+
+        elif grep -q iframe <<< "$html"
+        then
+            mixdrop_location="$(grep iframe <<< "$html" | head -n1)"
+            mixdrop_location="${mixdrop_location##*src=\"}"
+            mixdrop_location="${mixdrop_location%%\"*}"        
+            test -n "$mixdrop_location" &&
+                mixdrop_location="https:${mixdrop_location#'https:'}"
+
+            html=$(wget -SO- \
+                        -o /dev/null \
+                        --user-agent="$user_agent" \
+                        --keep-session-cookies \
+                        --save-cookies="$path_tmp"/cookies.zdl \
+                        "$mixdrop_location")
+
+            file_in=$(grep '<div class=\"title' <<< "$html")
+            file_in="${file_in%</a>*}"
+            file_in="${file_in##*>}"
+            file_in=$(sed -r 's|^[0-9]+\-(.+)|\1|g' <<< "$file_in")
+            
+        else
+            mixdrop_location=$(curl -s "${url_in//\/f\///e/}" | grep -P 'iframe.+src=\"\/\/mixdrop')
+            mixdrop_location="${mixdrop_location#*src=\"}"
+            mixdrop_location="https:${mixdrop_location%%\"*}"    
+
+            for iiiiiii in {0..3}
+            do
+                get_location "$mixdrop_location" mixdrop_location_test
+
+                if url "$mixdrop_location_test"
+                then
+                    mixdrop_location="$mixdrop_location_test"
+                    break
+                else
+                    get_location "$url_in" mixdrop_location_test
+                    if url "$mixdrop_location_test"
+                    then
+                        mixdrop_location="$mixdrop_location_test"
+                        break
+                    fi
+                fi
+                countdown- 6
+            done
+            
+            if test -z "$file_in" 
+            then    
+                file_in=$(get_title "$html")
+                file_in="${file_in%%.mp4*}"
+                [[ "$file_in" =~ (302 Found) ]] && unset file_in
+            fi
+            
+            if ! url "$mixdrop_location"
+            then
+                mixdrop_location="$url_in"
+            fi            
+            
+            html=$(curl -s \
+                        -A "$user_agent" \
+                        -H 'Connection: keep-alive' \
+                        -H 'Upgrade-Insecure-Requests: 1' \
+                        -c "$path_tmp"/cookies.zdl \
+                        "$mixdrop_location")
+
+            if test -z "$file_in" 
+            then    
+                file_in=$(get_title "$html")
+                file_in="${file_in%%.mp4*}"
+                [[ "$file_in" =~ (302 Found) ]] && unset file_in
+            fi
+        fi
+
         # if [[ "$html" =~ window.location\ \=\ \"([^\"]+)\" ]]
         # then
         #     mixdrop_chunk="${BASH_REMATCH[1]}"
