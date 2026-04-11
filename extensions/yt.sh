@@ -69,8 +69,14 @@ if [[ "$url_in" =~ (youtube\.com\/watch|youtu\.be) ]]
 then
     replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     replace_url_in "$(sed -r 's|\&list\=[^&]+||g' <<< "$url_in")"    
+
+    yt_format=$($youtube_dl --list-formats "${url_in}" |
+                    grep -P '1920x1080.+m3u8.+original' |
+                    cut -d' ' -f1)
+
+    [ -z "$yt_format" ] && yt_format='b'
     
-    data=$($youtube_dl -f b --get-title --get-url "${url_in}")       
+    data=$($youtube_dl -f "$yt_format" --get-title --get-url "${url_in}")       
     yt_title="$(head -n1 <<< "$data")"
     url_in_file="$(tail -n1 <<< "$data")"
 

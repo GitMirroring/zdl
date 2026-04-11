@@ -632,7 +632,6 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                 
 	    else
 		nohup $ffmpeg -loglevel info \
-                      -vframes 1 \
                       -i "$url_in_file" \
                       -c copy \
                       "${file_in}" \
