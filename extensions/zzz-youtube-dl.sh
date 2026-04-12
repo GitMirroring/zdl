@@ -35,18 +35,25 @@ if command -v $youtube_dl &>/dev/null &&
        ! dler_type "wget" "$url_in" &&
        ! dler_type "rtmp" "$url_in"
 then
-    $youtube_dl -R 1 \
-	       --get-url \
-	       --get-filename "$url_in" \
-	       --cookies "$path_tmp"/cookies.zdl &>"$path_tmp"/youtube-dl.data &
-    pid_yt_dl=$!
+    yt_format=$($youtube_dl --list-formats "${url_in}" |
+                    grep -P '1920x1080.+m3u8.+original' |
+                    cut -d' ' -f1)
 
+    [ -z "$yt_format" ] && yt_format='b'
+    
+    $youtube_dl -R 1 \
+                -f "$yt_format" \
+                --get-url \
+                --get-filename "$url_in" \
+                --cookies "$path_tmp"/cookies.zdl &>"$path_tmp"/youtube-dl.data &
+    pid_yt_dl=$!
+    
     for i in {20..0}
     do
-	[[ "$this_mode" =~ ^(daemon|lite)$ ]] ||
-	    sprint_c 4 "%d                  \r" $i
-	sleep 1
-	! check_pid $pid_yt_dl && break
+        [[ "$this_mode" =~ ^(daemon|lite)$ ]] ||
+            sprint_c 4 "%d                  \r" $i
+        sleep 1
+        ! check_pid $pid_yt_dl && break
     done
 
     kill -9 $pid_yt_dl
@@ -57,48 +64,48 @@ then
     if ! url "$url_in_file" ||
             [ "$url_in_file" == "$url_in" ]
     then
-	unset file_in url_in_file
+        unset file_in url_in_file
         
     else
         items=( "$path_tmp"/filename_* )
 
         if (( ${#items[@]}>0 ))
         then
-	    for item in ${items[@]}
-	    do
-	        url=$(cat "$item" 2>/dev/null)
-	        if [ "${url%% }" == "$url_in" ]
-	        then
-		    item="${item// /_}"
-		    file_in="${item#*filename_}"
-		    file_in="${file_in%.txt}"
-		    break
+            for item in ${items[@]}
+            do
+                url=$(cat "$item" 2>/dev/null)
+                if [ "${url%% }" == "$url_in" ]
+                then
+                    item="${item// /_}"
+       	            file_in="${item#*filename_}"
+       	            file_in="${file_in%.txt}"
+       	            break
 	        fi
 	    done
         fi
 
         if [ -z "$file_in" ]
         then
-	    file_in="$(tail -n1 <<< "$data")"
-	    file_in="${file_in% _ *}"
+            file_in="$(tail -n1 <<< "$data")"
+            file_in="${file_in% _ *}"
 
-	    ext0=$(grep -o '^\.'"${file_in##*.}" $path_usr/mimetypes.txt | head -n1)
-	    file_in="${file_in%$ext0}"
+            ext0=$(grep -o '^\.'"${file_in##*.}" $path_usr/mimetypes.txt | head -n1)
+            file_in="${file_in%$ext0}"
 	    
-	    ## elimina doppione nel nome del file
-	    if (( $(( ${#file_in}%2 ))==1 ))
+            ## elimina doppione nel nome del file
+            if (( $(( ${#file_in}%2 ))==1 ))
 	    then
-	        length=$(( (${#file_in}-1)/2 ))
-	        [ "${file_in:0:$length}" == "${file_in:$(( $length+1 )):$length}" ] &&
-		    file_in="${file_in:0:$length}"
-	    fi
-	    file_filter "$file_in"
+                length=$(( (${#file_in}-1)/2 ))
+                [ "${file_in:0:$length}" == "${file_in:$(( $length+1 )):$length}" ] &&
+                    file_in="${file_in:0:$length}"
+            fi
+            file_filter "$file_in"
         fi
 
-	[ "$url_in" != "$url_in_file" ] &&
-	    print_c 1 "youtube-dl: $url_in_file" 
+        [ "$url_in" != "$url_in_file" ] &&
+            print_c 1 "youtube-dl: $url_in_file" 
         
-	unset break_loop
+        unset break_loop
     fi
 fi
 
