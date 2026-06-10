@@ -178,7 +178,7 @@ then
                             "$raiplay_url")
                 raiplay_json="$html"
                 raiplay_url=$(grep -oP 'http[^"]+relinker[^"]+' <<< "$html")                
-            fi           
+            fi
         fi
 
         if [[ "$url_in" =~ (raiplaysound\.it\/playlist\/) ]]
@@ -251,6 +251,20 @@ then
             then
                 file_in="${file_in}".mp4
             fi
+
+            # if url "$url_in_file" &&
+            #         [[ "$url_in_file" =~ playlist\.m3u8 ]]
+            # then
+            #     raiplay_data=$($youtube_dl --list-formats "$url_in")
+            #     format_video=$(grep 'video only' <<< "$raiplay_data" |
+            #                        tail -n1 |
+            #                        cut -d' ' -f1)
+            #     format_audio=$(grep 'audio only' <<< "$raiplay_data" |
+            #                        tail -n1 |
+            #                        cut -d' ' -f1)
+            #     url_in_file_video=$($youtube_dl -f "$format_video" --get-url "$url_in")
+            #     url_in_file_audio=$($youtube_dl -f "$format_audio" --get-url "$url_in")
+            # fi
             force_dler FFMpeg
         fi
 

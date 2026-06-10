@@ -577,6 +577,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
             if url "$url_in_file_video" &&
                     url "$url_in_file_audio"
             then
+                echo audio+video
 		nohup $ffmpeg -loglevel info \
                       -vframes 1 \
                       -i "$url_in_file_video" \
