@@ -593,9 +593,9 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
             elif [ "$livestream_m3u8" == "$url_in" ] ||
                    [ "$livestream_m3u8" == "$url_in_file" ]
 	    then
-		local livestream_time
-		get_livestream_duration_time "$url_in" livestream_time
-
+                local livestream_time
+                get_livestream_duration_time "$url_in" livestream_time
+                
                 nohup $ffmpeg -loglevel info \
                       -vframes 1 \
 		      -i "$url_in_file" \
@@ -612,7 +612,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                     set_line_in_file - "$url_in" "$path_tmp"/livestream_run.txt
                 # get_command_pid pid_in $ffmpeg ".+$url_in_file.+$file_in"
                 
-	    elif [ "$youtubedl_m3u8" == "$url_in" ] ||
+            elif [ "$youtubedl_m3u8" == "$url_in" ] ||
                      [ "$youtubedl_m3u8" == "$url_in_file" ]
 	    then
 		# --external-downloader $ffmpeg \
@@ -632,7 +632,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                 #ffmpeg=youtube-dl
                 
 	    else
-		nohup $ffmpeg -loglevel info \
+                nohup $ffmpeg -loglevel info \
                       -i "$url_in_file" \
                       -c copy \
                       "${file_in}" \

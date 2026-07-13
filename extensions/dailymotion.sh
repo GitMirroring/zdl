@@ -56,14 +56,20 @@ then
         	check_linksloop_livestream ||
         	    _log 43
         fi
-      
+
+    elif [[ "$url_in_file" =~ \.m3u8 ]]
+    then
+        youtubedl_m3u8="$url_in"
     fi
+
     [ -n "${file_in%.mp4}" ] &&
         file_in="${file_in%.mp4}".mp4 ||
             unset file_in
 
-    [[ "$url_in_file" =~ \.m3u8 ]] &&
+    if [[ "$url_in_file" =~ \.m3u8 ]]
+    then        
         force_dler FFMpeg
+    fi
     
     end_extension
 fi

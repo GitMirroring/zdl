@@ -612,6 +612,7 @@ no_check_links=(
     kiwix
     wiki
     youtube
+    dailymotion
 )
 #no_check_links=( tusfiles\. nowdownload\. )
 
