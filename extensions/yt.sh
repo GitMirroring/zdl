@@ -70,16 +70,27 @@ then
     replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     replace_url_in "$(sed -r 's|\&list\=[^&]+||g' <<< "$url_in")"    
 
-    yt_format=$($youtube_dl --list-formats "${url_in}" |
-                    grep -P '1920x1080.+m3u8.+original' |
+    yt_formats=$($youtube_dl --list-formats "${url_in}")
+    yt_format=$(grep -P '1920x1080.+m3u8.+original' <<< "$yt_formats"|
                     cut -d' ' -f1)
 
-    [ -z "$yt_format" ] && yt_format='b'
-    
-    data=$($youtube_dl -f "$yt_format" --get-title --get-url "${url_in}")       
-    yt_title="$(head -n1 <<< "$data")"
-    url_in_file="$(tail -n1 <<< "$data")"
+    if [ -z "$yt_format" ] #&& yt_format='b'
+    then
+        yt_format_audio=$(awk '/(default.*m4a)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
+        yt_format_video=$(awk '/(mp4.*m3u8)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
+        
+        url_in_file_audio=$($youtube_dl -f "$yt_format_audio" --get-url "${url_in}")
+        url_in_file_video=$($youtube_dl -f "$yt_format_video" --get-url "${url_in}")
+        yt_title=$($youtube_dl --get-title "${url_in}")
+        force_dler FFMpeg
 
+        url_in_file="$url_in_file_video"
+
+    else    
+        data=$($youtube_dl -f "$yt_format" --get-title --get-url "${url_in}")       
+        yt_title="$(head -n1 <<< "$data")"
+        url_in_file="$(tail -n1 <<< "$data")"
+    fi
 
     if ! url "$url_in_file"
     then

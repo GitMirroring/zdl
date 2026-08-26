@@ -577,12 +577,11 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
             if url "$url_in_file_video" &&
                     url "$url_in_file_audio"
             then
-                echo audio+video
 		nohup $ffmpeg -loglevel info \
-                      -vframes 1 \
                       -i "$url_in_file_video" \
                       -i "$url_in_file_audio" \
-                      -c copy \
+                      -c:v copy \
+                      -c:a aac -map 0:v:0 -map 1:a:0 \
                       "${file_in}" \
                       ${ffmpeg_opts[@]} \
                       -y &> >( 
@@ -591,7 +590,7 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                 pid_in=$!                
                 
             elif [ "$livestream_m3u8" == "$url_in" ] ||
-                   [ "$livestream_m3u8" == "$url_in_file" ]
+                     [ "$livestream_m3u8" == "$url_in_file" ]
 	    then
                 local livestream_time
                 get_livestream_duration_time "$url_in" livestream_time
@@ -616,21 +615,21 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
                      [ "$youtubedl_m3u8" == "$url_in_file" ]
 	    then
 		# --external-downloader $ffmpeg \
-		# --external-downloader-args "-loglevel info" \
-                file_in="${file_in%.???}"
-                file_in="${file_in%.mp4}"
-                file_in="${file_in}.mp4"
-		nohup $youtube_dl \
-                      --continue \
-		      -f best \
-		      --hls-prefer-ffmpeg \
-		      "$youtubedl_m3u8" -o "${file_in}" &> >(
-		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
-	    	        stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
-		pid_in=$!
-                #old_ffmpeg="$ffmpeg"
-                #ffmpeg=youtube-dl
-                
+		    # --external-downloader-args "-loglevel info" \
+                    file_in="${file_in%.???}"
+                    file_in="${file_in%.mp4}"
+                    file_in="${file_in}.mp4"
+		    nohup $youtube_dl \
+                          --continue \
+		          -f best \
+		          --hls-prefer-ffmpeg \
+		          "$youtubedl_m3u8" -o "${file_in}" &> >(
+		        stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	            stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
+		    pid_in=$!
+                    #old_ffmpeg="$ffmpeg"
+                    #ffmpeg=youtube-dl
+                    
 	    else
                 nohup $ffmpeg -loglevel info \
                       -i "$url_in_file" \
@@ -757,6 +756,6 @@ $url_in_file" > "$path_tmp/${file_in}_stdout.ytdl"
         ((loop_lines++))
     done
     print_c 0 "                      "
-            
+    
 }
 
