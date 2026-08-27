@@ -613,6 +613,7 @@ EXTENSIONS:
         deps['ffmpeg']=ffmpeg
         deps['convert']=imagemagick
         deps['tesseract']=tesseract-ocr
+        deps['megadl']=megatools
         ## deps['composer']=composer
         ## php-mbstring
         ##deps['mplayer']=mplayer
