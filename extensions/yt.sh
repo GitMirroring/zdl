@@ -65,7 +65,7 @@ then
         replace_url_in "$url_new"
 fi
 
-if [[ "$url_in" =~ (youtube\.com\/watch|youtu\.be) ]]
+if [[ "$url_in" =~ (youtube\.com\/watch|youtube\.com\/shorts|youtu\.be) ]]
 then
     replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     replace_url_in "$(sed -r 's|\&list\=[^&]+||g' <<< "$url_in")"    
