@@ -76,8 +76,13 @@ then
 
     if [ -z "$yt_format" ] #&& yt_format='b'
     then
-        yt_format_audio=$(awk '/(default.*m4a)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
         yt_format_video=$(awk '/(mp4.*m3u8)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
+        yt_format_audio=$(awk '/(default.*m4a)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
+
+        if [ -z "$yt_format_audio" ]
+        then
+            yt_format_audio=$(awk '/(mp4.*audio.*Default)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
+        fi
         
         url_in_file_audio=$($youtube_dl -f "$yt_format_audio" --get-url "${url_in}")
         url_in_file_video=$($youtube_dl -f "$yt_format_video" --get-url "${url_in}")
