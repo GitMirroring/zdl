@@ -35,7 +35,7 @@ source /usr/bin/gettext.sh
 ## Axel - Cygwin
 function install_axel-cygwin {
     ## source: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-    cygaxel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+    cygaxel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2" #https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
     
     if ! command -v axel &>/dev/null
     then
@@ -307,7 +307,7 @@ function update {
     BIN="/usr/local/bin"
     SHARE="/usr/local/share/zdl"
     ## sources: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-    axel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+    axel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2" #https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
     success="$(gettext "Update completed")"
     failure="$(gettext "Update failed")"
     path_conf="$HOME/.$prog"

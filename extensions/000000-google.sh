@@ -36,6 +36,13 @@ then
 
     google_json=$($youtube_dl --dump-json "$url_in")
     webpage_url=$(node -e "var json = $google_json; console.log(json.webpage_url)")
+
+    if ! url "$webpage_url"
+    then
+        webpage_url=$($youtube_dl --dump-json "$url_in" 2>&1 |
+            grep -oP 'http.+')
+    fi
+    
     replace_url_in "$webpage_url"
 fi
 

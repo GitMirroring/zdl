@@ -44,7 +44,8 @@ SHARE="/usr/local/share/zdl"
 URL_ROOT="https://download.savannah.gnu.org/releases/zdl/"
 
 ## from: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-cygaxel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+#cygaxel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+cygaxel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2"
 path_conf="$HOME/.$prog"
 file_conf="$path_conf/$prog.conf"
 installer_zdl="true"
