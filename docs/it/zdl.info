@@ -15,13 +15,13 @@ Public License for more details.
    You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
-   Copyright © 2011 Gianluca Zoni <<zoninoz@inventati.org>>
+   Copyright © 2011 Gianluca Zoni <<zoninoz@disroot.org>>
 
    For information or to collaborate on the project:
 <https://savannah.nongnu.org/projects/zdl>
 
    Gianluca Zoni (author) <https://z0n1n0z.helioho.st>
-<zoninoz@inventati.org>
+<zoninoz@disroot.org>
 
 INFO-DIR-SECTION Network Applications
 START-INFO-DIR-ENTRY
@@ -1478,29 +1478,29 @@ _zdl-devel - Lista di sviluppo_:
 
 
 Tag Table:
-Node: Top1228
-Node: Il comando ZDL5322
-Node: Servizi streaming/hosting14878
-Node: Avviare ZDL19971
-Node: Arrestare ZDL22503
-Node: Controllare i download23631
-Node: Manuali d'uso27932
-Node: Modi28369
-Node: Readline31709
-Node: Editor33280
-Node: Omonimie34515
-Node: IRC/XDCC36084
-Node: Torrent37807
-Node: Filtri38715
-Node: Creare nuove estensioni39036
-Node: Software consigliati e dipendenze40847
-Node: Conkeror42531
-Node: zdl-xterm e XXXTerm/Xombrero43549
-Node: Installazione e aggiornamento45530
-Node: Perché questo programma48890
-Node: Tags52788
-Node: Copying58125
-Node: Contatti59169
+Node: Top1224
+Node: Il comando ZDL5318
+Node: Servizi streaming/hosting14874
+Node: Avviare ZDL19967
+Node: Arrestare ZDL22499
+Node: Controllare i download23627
+Node: Manuali d'uso27928
+Node: Modi28365
+Node: Readline31705
+Node: Editor33276
+Node: Omonimie34511
+Node: IRC/XDCC36080
+Node: Torrent37803
+Node: Filtri38711
+Node: Creare nuove estensioni39032
+Node: Software consigliati e dipendenze40843
+Node: Conkeror42527
+Node: zdl-xterm e XXXTerm/Xombrero43545
+Node: Installazione e aggiornamento45526
+Node: Perché questo programma48886
+Node: Tags52784
+Node: Copying58121
+Node: Contatti59165
 
 End Tag Table
 

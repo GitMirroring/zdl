@@ -25,14 +25,14 @@
  along with this program. If not, see http://www.gnu.org/licenses/.
  
  Copyright @copyright{} 2011
- Gianluca Zoni <@email{zoninoz@@inventati.org}>
+ Gianluca Zoni <@email{zoninoz@@disroot.org}>
 
  For information or to collaborate on the project:
  @url{https://savannah.nongnu.org/projects/zdl}
  
  Gianluca Zoni (author)
  @url{https://z0n1n0z.helioho.st}
- @email{zoninoz@@inventati.org}
+ @email{zoninoz@@disroot.org}
 
 @end copying
 
@@ -1479,7 +1479,7 @@ In the download directory, ZDL produces temporary files in @file{.zdl_tmp/} and 
 @unnumberedsec COPYING
 @itemize
 @item
-Copyright @copyright{} 2011: Gianluca Zoni (zoninoz) <@email{zoninoz@@inventati.org}>
+Copyright @copyright{} 2011: Gianluca Zoni (zoninoz) <@email{zoninoz@@disroot.org}>
 @item
 ZDL is released under the GPL license (General Public License, v.3 and later).
 @end itemize
