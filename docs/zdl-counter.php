@@ -18,7 +18,7 @@ if (!empty($op)) {
     switch ($op) {
     case "set":
         $text = strval($total + 1);
-        mail ("zoninoz@inventati.org", "zdl: " . $text, "Nuovo aggiornamento ZDL: gli utenti sono " . $text);
+        mail ("zoninoz@disroot.org", "zdl: " . $text, "Nuovo aggiornamento ZDL: gli utenti sono " . $text);
         break;
         
     case "get":

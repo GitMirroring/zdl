@@ -1,7 +1,7 @@
 # ZigzagDownLoader: italian locale
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <zoninoz@inventati.org>, 2011.
+# FIRST AUTHOR <zoninoz@disroot.org>, 2011.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-05 04:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Gianluca Zoni <zoninoz@inventati.org>\n"
+"Last-Translator: Gianluca Zoni <zoninoz@disroot.org>\n"
 "Language-Team: Italiano <it@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"

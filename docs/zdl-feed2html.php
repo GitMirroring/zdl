@@ -13,14 +13,14 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see http://www.gnu.org/licenses/. 
 # 
-# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@disroot.org>
 # 
 # For information or to collaborate on the project:
 # https://savannah.nongnu.org/projects/zdl
 # 
 # Gianluca Zoni (author)
-# http://inventati.org/zoninoz
-# zoninoz@inventati.org
+# http://z0n1n0z.helioho.st
+# zoninoz@disroot.org
 #
 
 function getLocale () {
@@ -151,14 +151,14 @@ ZigzagDownLoader (ZDL)
  along with this program. If not, see http://www.gnu.org/licenses/.
 
  Copyright (C) 2011
- Gianluca Zoni <<zoninoz@inventati.org>>
+ Gianluca Zoni <<zoninoz@disroot.org>>
 
  For information or to collaborate on the project:
  `https://savannah.nongnu.org/projects/zdl'
 
  Gianluca Zoni (author)
- `https://inventati.org/zoninoz'
- <zoninoz@inventati.org>-->
+ `https://z0n1n0z.helioho.st'
+ <zoninoz@disroot.org>-->
 <link rel=\"stylesheet\" type=\"text/css\" href=\"https://www.nongnu.org/zdl/zdl_rss_style.css\">
 </head>
 <body>";

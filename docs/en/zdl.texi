@@ -31,7 +31,7 @@
  @url{https://savannah.nongnu.org/projects/zdl}
  
  Gianluca Zoni (author)
- @url{https://inventati.org/zoninoz}
+ @url{https://z0n1n0z.helioho.st}
  @email{zoninoz@@inventati.org}
 
 @end copying
@@ -1416,11 +1416,11 @@ Download management can be controlled by separate terminals in different modes. 
 @htmlstart
 @unnumbered Copying
 @unnumberedsec Authors
-Gianluca Zoni (zoninoz): @url{http://inventati.org/zoninoz}
+Gianluca Zoni (zoninoz): @url{http://z0n1n0z.helioho.st}
 
 @unnumberedsec Copyright
 Copyright @copyright{} 2011 @*
- Gianluca Zoni (zoninoz): @url{http://inventati.org/zoninoz} @*
+ Gianluca Zoni (zoninoz): @url{http://z0n1n0z.helioho.st} @*
 
  For information or to collaborate on the project: @*
  @url{https://savannah.nongnu.org/projects/zdl}
@@ -1494,7 +1494,7 @@ ZDL is released under the GPL license (General Public License, v.3 and later).
 @end itemize
 
 Gianluca Zoni (zoninoz)
-@url{https://inventati.org/zoninoz}
+@url{https://z0n1n0z.helioho.st}
 
 @c @end man
 

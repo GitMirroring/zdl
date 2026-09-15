@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see http://www.gnu.org/licenses/. 
 # 
-# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@disroot.org>
 # 
 # For information or to collaborate on the project:
 # https://savannah.nongnu.org/projects/zdl
 # 
 # Gianluca Zoni (author)
-# http://inventati.org/zoninoz
-# zoninoz@inventati.org
+# http://z0n1n0z.helioho.st
+# zoninoz@disroot.org
 #
 
 
@@ -321,7 +321,7 @@ Per informazioni e per collaborare al progetto:
   - https://joindiaspora.com/tags/zdl
 
 Gianluca Zoni (zoninoz)
-http://inventati.org/zoninoz
+http://z0n1n0z.helioho.st
 " | less
 
     else
@@ -609,7 +609,7 @@ For information and to collaborate on the project:
   - https://joindiaspora.com/tags/zdl
 
 Gianluca Zoni (zoninoz)
-http://inventati.org/zoninoz
+http://z0n1n0z.helioho.st
 " | less
 
     fi

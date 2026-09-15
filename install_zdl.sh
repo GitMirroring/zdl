@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see http://www.gnu.org/licenses/. 
 # 
-# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@disroot.org>
 # 
 # For information or to collaborate on the project:
 # https://savannah.nongnu.org/projects/zdl
 # 
 # Gianluca Zoni (author)
-# http://inventati.org/zoninoz
-# zoninoz@inventati.org
+# http://z0n1n0z.helioho.st
+# zoninoz@disroot.org
 #
 
 set +o history
@@ -44,7 +44,7 @@ SHARE="/usr/local/share/zdl"
 URL_ROOT="https://download.savannah.gnu.org/releases/zdl/"
 
 ## from: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-#cygaxel_url="https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+#cygaxel_url="https://www.z0n1n0z.helioho.st/html/upload/files/axel-2.4-1.tar.bz2" 
 cygaxel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2"
 path_conf="$HOME/.$prog"
 file_conf="$path_conf/$prog.conf"

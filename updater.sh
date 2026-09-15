@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see http://www.gnu.org/licenses/. 
 # 
-# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@inventati.org>
+# Copyright (C) 2011: Gianluca Zoni (zoninoz) <zoninoz@disroot.org>
 # 
 # For information or to collaborate on the project:
 # https://savannah.nongnu.org/projects/zdl
 # 
 # Gianluca Zoni (author)
-# http://inventati.org/zoninoz
-# zoninoz@inventati.org
+# http://z0n1n0z.helioho.st
+# zoninoz@disroot.org
 #
 set +o history
 
@@ -35,7 +35,7 @@ source /usr/bin/gettext.sh
 ## Axel - Cygwin
 function install_axel-cygwin {
     ## source: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-    cygaxel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2" #https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+    cygaxel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2" #https://www.z0n1n0z.helioho.st/html/upload/files/axel-2.4-1.tar.bz2" 
     
     if ! command -v axel &>/dev/null
     then
@@ -307,7 +307,7 @@ function update {
     BIN="/usr/local/bin"
     SHARE="/usr/local/share/zdl"
     ## sources: http://fd0.x0.to/cygwin/release/axel/axel-2.4-1bl1.tar.bz2
-    axel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2" #https://www.inventati.org/zoninoz/html/upload/files/axel-2.4-1.tar.bz2" 
+    axel_url="http://zoninoz.altervista.org/zdl/axel-2.4-1.tar.bz2" #https://www.z0n1n0z.helioho.st/html/upload/files/axel-2.4-1.tar.bz2" 
     success="$(gettext "Update completed")"
     failure="$(gettext "Update failed")"
     path_conf="$HOME/.$prog"
