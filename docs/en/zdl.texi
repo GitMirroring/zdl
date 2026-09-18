@@ -73,6 +73,10 @@
 @ref{Why this program}:@*The sense of continuous ZIGZAG experimentation@*
 
 @end itemize
+
+<script src="https://liberapay.com/ZDL/widgets/button.js"></script>
+<noscript><a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+
 @end ifhtml
 @ifnothtml
 * Home:Top. ZigzagDownLoader@*
