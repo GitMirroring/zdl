@@ -221,9 +221,57 @@
 <div class="left">
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+
+<div id="zdl-feed-container">Caricamento notizie...</div>
+
 <script type="text/javascript">
-document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://z0n1n0z.helioho.st/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
+document.addEventListener("DOMContentLoaded", function() {
+    // Savannah permette le richieste CORS per i suoi feed
+    fetch("https://savannah.nongnu.org/news/atom.php?group=zdl")
+        .then(response => response.text())
+        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then(data => {
+            const entries = data.querySelectorAll("entry");
+            let lang = (navigator.language || navigator.userLanguage).substring(0, 2);
+            if (lang !== "it" && lang !== "en") lang = "en";
+
+            let html = `<a href="https://savannah.nongnu.org/news/?group_id=11047" target="_blank"><strong>Notizie di ZDL</strong></a><br>`;
+
+            entries.forEach(item => {
+                let title = item.querySelector("title").textContent;
+                let content = item.querySelector("content").textContent;
+                let updated = item.querySelector("updated").textContent;
+                let id = item.querySelector("id").textContent;
+
+                // Logica del filtro lingua [it] o [en]
+                const langRegex = new RegExp('^\\[' + lang + '\\]');
+                const genericLangRegex = /^\[[a-z]{2}\]/;
+
+                if (langRegex.test(title)) {
+                    title = title.replace(langRegex, '').trim();
+                } else if (genericLangRegex.test(title)) {
+                    return; // Salta gli articoli in altre lingue
+                }
+
+                html += `
+                    <hr />
+                    <h3><a href="${id}" target="_blank">${title}</a></h3>
+                    <div>${content}</div>
+                    <div style="font-size:0.8em; color:#555;">Data: ${updated}</div>
+                `;
+            });
+
+            document.getElementById("zdl-feed-container").innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById("zdl-feed-container").innerHTML = "Impossibile caricare le notizie.";
+            console.error(err);
+        });
+});
 </script>
+
+
+
 </div><br>
 @b{ZDL}
 <div class="nav">

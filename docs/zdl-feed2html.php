@@ -75,7 +75,7 @@ function getLocaleParam ($param) {
 }
 
 function displayFeed($url){
-    $getfile = html_entity_decode(file_get_contents($url));
+    // $getfile = html_entity_decode(file_get_contents($url));
     $lang = getLocaleParam('origin');
     
     //$xml = new SimpleXMLElement($getfile);
