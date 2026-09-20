@@ -223,25 +223,26 @@
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 
 
+
+
 <div id="zdl-feed-container" style="height:300px; width:100%; overflow-y:auto; border:none; font-family:sans-serif;">
     Caricamento notizie...
 </div>
 
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
-    // Richiesta incapsulata nel proxy allorigins per aggirare il blocco CORS
-    var targetUrl = "https://savannah.nongnu.org/news/atom.php?group=zdl";
-    var proxyUrl = "https://allorigins.win" + encodeURIComponent(targetUrl);
+    // URL diretto di Savannah, senza intermediari o proxy
+    var myAtomFeed = "https://savannah.nongnu.org/news/atom.php?group=zdl";
 
-    fetch(proxyUrl)
+    // Eseguiamo la richiesta diretta forzando la modalità CORS standard
+    fetch(myAtomFeed, { mode: "cors" })
         .then(function(response) {
             if (!response.ok) throw new Error("Errore di rete");
-            return response.json(); // Il proxy restituisce un oggetto JSON
+            return response.text();
         })
-        .then(function(data) {
-            // Estrazione della stringa XML dal JSON del proxy
+        .then(function(str) {
             var parser = new window.DOMParser();
-            var xmlDoc = parser.parseFromString(data.contents, "text/xml");
+            var xmlDoc = parser.parseFromString(str, "text/xml");
             
             var entries = xmlDoc.querySelectorAll("entry");
             var lang = (navigator.language || navigator.userLanguage).substring(0, 2);
@@ -253,6 +254,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var html = "<a href='https://nongnu.org' target='_blank'><strong>" + feedTitle + "</strong></a>";
             var hasArticles = false;
 
+            // Espressioni regolari scritte senza parentesi graffe per non disturbare Texinfo
             var langRegex = new RegExp("^\\[" + lang + "\\]");
             var genericLangRegex = new RegExp("^\\[[a-z][a-z]\\]");
 
@@ -297,6 +299,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 });
 </script>
+
+
 
 
 </div><br>
