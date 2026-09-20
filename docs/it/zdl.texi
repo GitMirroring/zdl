@@ -222,9 +222,76 @@
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 
+
+
+<div id="zdl-feed-container" style="height:300px; width:100%; overflow-y:auto; border:none; font-family:sans-serif;">
+    Caricamento notizie...
+</div>
+
 <script type="text/javascript">
-document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://zoninoz.altervista.org/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("https://nongnu.org")
+        .then(function(response) {
+            if (!response.ok) throw new Error("Errore feed");
+            return response.text();
+        })
+        .then(function(str) {
+            return new window.DOMParser().parseFromString(str, "text/xml");
+        })
+        .then(function(data) {
+            var entries = data.querySelectorAll("entry");
+            var lang = (navigator.language || navigator.userLanguage).substring(0, 2);
+            if (lang !== "it" && lang !== "en") lang = "en";
+
+            var feedTitle = data.querySelector("title").textContent;
+            var html = "<a href='https://nongnu.org' target='_blank'><strong>" + feedTitle + "</strong></a>";
+            var hasArticles = false;
+
+            // Creazione delle espressioni regolari senza l'uso del backslash
+            var langRegex = new RegExp("^\\[" + lang + "\\]");
+            var genericLangRegex = new RegExp("^\\[[a-z]{2}\\]");
+
+            for (var i = 0; i < entries.length; i++) {
+                var item = entries[i];
+                var title = item.querySelector("title").textContent;
+                var contentEl = item.querySelector("content");
+                var content = contentEl ? contentEl.textContent : "";
+                var updated = item.querySelector("updated").textContent;
+                var id = item.querySelector("id").textContent;
+
+                if (langRegex.test(title)) {
+                    title = title.replace(langRegex, "").trim();
+                } else if (genericLangRegex.test(title)) {
+                    continue;
+                }
+
+                hasArticles = true;
+                var dateFormatted = new Date(updated).toLocaleString(lang === "it" ? "it-IT" : "en-US");
+
+                html += "<hr style='border: 0; border-top: 1px solid #ccc; margin: 15px 0;' />";
+                html += "<h3 style='margin: 0 0 10px 0; font-size: 1.15em;'>";
+                html += "<a href='" + id + "' target='_blank' style='color: #0066cc; text-decoration: none;'>" + title + "</a>";
+                html += "</h3>";
+                html += "<div style='font-size: 0.95em; line-height: 1.4;'>" + content + "</div>";
+                html += "<div class='feed_item_date' style='font-size: 0.8em; color: #666; margin-top: 8px;'>Data: " + dateFormatted + "</div>";
+            }
+
+            if (!hasArticles) {
+                html += "<p>Nessuna notizia disponibile in questa lingua.</p>";
+            }
+
+            document.getElementById("zdl-feed-container").innerHTML = html;
+        })
+        .catch(function(err) {
+            document.getElementById("zdl-feed-container").innerHTML = 
+                "<p>Impossibile caricare le notizie al momento. Visita direttamente <a href='https://nongnu.org' target='_blank'>Savannah</a>.</p>";
+            console.error(err);
+        });
+});
 </script>
+
+
+
 </div><br>
 @b{ZDL}
 <div class="nav">
