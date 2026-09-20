@@ -222,7 +222,7 @@
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 <script type="text/javascript">
-document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
+document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://z0n1n0z.helioho.st/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
 </script>
 </div><br>
 @b{ZDL}
@@ -254,8 +254,8 @@ document.write('<iframe height="300px" width="100%" style="border-style:none;" s
 </div>
 </div>
 <div class="content">
-<a href="https://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en-us.png" alt="English version"></a>
-<a href="https://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
+<a href="https://nongnu.org/zdl/en"><img align="right" src="en-us.png" alt="English version"></a>
+<a href="https://nongnu.org/zdl/it"><img align="right" src="it-it.png" alt="Versione italiana"></a>
 @end html
 @end ifhtml
 @end macro
