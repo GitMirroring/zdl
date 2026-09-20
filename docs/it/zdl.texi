@@ -223,13 +223,13 @@
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 
 
-
 <div id="zdl-feed-container" style="height:300px; width:100%; overflow-y:auto; border:none; font-family:sans-serif;">
     Caricamento notizie...
 </div>
 
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
+    // URL del feed inserito correttamente
     fetch("https://savannah.nongnu.org/news/atom.php?group=zdl")
         .then(function(response) {
             if (!response.ok) throw new Error("Errore feed");
@@ -247,9 +247,9 @@ document.addEventListener("DOMContentLoaded", function() {
             var html = "<a href='https://nongnu.org' target='_blank'><strong>" + feedTitle + "</strong></a>";
             var hasArticles = false;
 
-            // Creazione delle espressioni regolari senza l'uso del backslash
+            // Regex senza parentesi graffe per evitare il crash di Texinfo
             var langRegex = new RegExp("^\\[" + lang + "\\]");
-            var genericLangRegex = new RegExp("^\\[[a-z]{2}\\]");
+            var genericLangRegex = new RegExp("^\\[[a-z][a-z]\\]");
 
             for (var i = 0; i < entries.length; i++) {
                 var item = entries[i];
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(function(err) {
             document.getElementById("zdl-feed-container").innerHTML = 
-                "<p>Impossibile caricare le notizie al momento. Visita direttamente <a href='https://savannah.nongnu.org/news/atom.php?group=zdl' target='_blank'>Savannah</a>.</p>";
+                "<p>Impossibile caricare le notizie al momento. Visita direttamente <a href='https://nongnu.org' target='_blank'>Savannah</a>.</p>";
             console.error(err);
         });
 });
