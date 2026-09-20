@@ -229,35 +229,43 @@
 
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
-    // URL del feed inserito correttamente
-    fetch("https://savannah.nongnu.org/news/atom.php?group=zdl")
+    // Richiesta incapsulata nel proxy allorigins per aggirare il blocco CORS
+    var targetUrl = "https://savannah.nongnu.org/news/atom.php?group=zdl";
+    var proxyUrl = "https://allorigins.win" + encodeURIComponent(targetUrl);
+
+    fetch(proxyUrl)
         .then(function(response) {
-            if (!response.ok) throw new Error("Errore feed");
-            return response.text();
-        })
-        .then(function(str) {
-            return new window.DOMParser().parseFromString(str, "text/xml");
+            if (!response.ok) throw new Error("Errore di rete");
+            return response.json(); // Il proxy restituisce un oggetto JSON
         })
         .then(function(data) {
-            var entries = data.querySelectorAll("entry");
+            // Estrazione della stringa XML dal JSON del proxy
+            var parser = new window.DOMParser();
+            var xmlDoc = parser.parseFromString(data.contents, "text/xml");
+            
+            var entries = xmlDoc.querySelectorAll("entry");
             var lang = (navigator.language || navigator.userLanguage).substring(0, 2);
             if (lang !== "it" && lang !== "en") lang = "en";
 
-            var feedTitle = data.querySelector("title").textContent;
+            var feedTitleEl = xmlDoc.querySelector("title");
+            var feedTitle = feedTitleEl ? feedTitleEl.textContent : "Notizie ZDL";
+            
             var html = "<a href='https://nongnu.org' target='_blank'><strong>" + feedTitle + "</strong></a>";
             var hasArticles = false;
 
-            // Regex senza parentesi graffe per evitare il crash di Texinfo
             var langRegex = new RegExp("^\\[" + lang + "\\]");
             var genericLangRegex = new RegExp("^\\[[a-z][a-z]\\]");
 
             for (var i = 0; i < entries.length; i++) {
                 var item = entries[i];
-                var title = item.querySelector("title").textContent;
+                var titleEl = item.querySelector("title");
+                var title = titleEl ? titleEl.textContent : "";
                 var contentEl = item.querySelector("content");
                 var content = contentEl ? contentEl.textContent : "";
-                var updated = item.querySelector("updated").textContent;
-                var id = item.querySelector("id").textContent;
+                var updatedEl = item.querySelector("updated");
+                var updated = updatedEl ? updatedEl.textContent : "";
+                var idEl = item.querySelector("id");
+                var id = idEl ? idEl.textContent : "";
 
                 if (langRegex.test(title)) {
                     title = title.replace(langRegex, "").trim();
@@ -266,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 hasArticles = true;
-                var dateFormatted = new Date(updated).toLocaleString(lang === "it" ? "it-IT" : "en-US");
+                var dateFormatted = updated ? new Date(updated).toLocaleString(lang === "it" ? "it-IT" : "en-US") : "";
 
                 html += "<hr style='border: 0; border-top: 1px solid #ccc; margin: 15px 0;' />";
                 html += "<h3 style='margin: 0 0 10px 0; font-size: 1.15em;'>";
@@ -289,7 +297,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 });
 </script>
-
 
 
 </div><br>
