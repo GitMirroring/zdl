@@ -230,7 +230,7 @@
 
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
-    fetch("https://nongnu.org")
+    fetch("https://savannah.nongnu.org/news/atom.php?group=zdl")
         .then(function(response) {
             if (!response.ok) throw new Error("Errore feed");
             return response.text();
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(function(err) {
             document.getElementById("zdl-feed-container").innerHTML = 
-                "<p>Impossibile caricare le notizie al momento. Visita direttamente <a href='https://nongnu.org' target='_blank'>Savannah</a>.</p>";
+                "<p>Impossibile caricare le notizie al momento. Visita direttamente <a href='https://savannah.nongnu.org/news/atom.php?group=zdl' target='_blank'>Savannah</a>.</p>";
             console.error(err);
         });
 });
