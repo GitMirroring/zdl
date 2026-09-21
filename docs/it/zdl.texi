@@ -72,9 +72,6 @@
 @ref{Perché questo programma}:@*Il senso di una sperimentazione continua a ZIGZAG@*
 
 @end itemize
-
-<a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
-
 @end ifhtml
 @ifnothtml
 * Home:Top. ZigzagDownLoader@*
@@ -223,7 +220,7 @@
 
 
 <!-- Il box laterale con la larghezza desiderata e lo sfondo scuro -->
-<div id="zdl-news-box" style="width: 98%; height: 300px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; background: #343434; padding: 0px;">
+<div id="zdl-news-box" style="width: 94%; height: 300px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; border-right: 1em solid #343434; background: #343434; padding: 0px;">
     <div style="font: 12px 'Verdana', sans-serif; color: #959595; padding: 10px;">Caricamento notizie...</div>
 </div>
 
@@ -257,6 +254,7 @@
 })();
 </script>
 
+<a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 </div><br>
 @b{ZDL}
 <div class="nav">
