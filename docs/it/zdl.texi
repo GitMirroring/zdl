@@ -221,14 +221,14 @@
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 
-<!-- Box con barra di scorrimento laterale nativa HTML, indistinguibile da un iframe -->
-<div id="zdl-news-box" style="width: 100%; max-width: 320px; height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background-color: #fff;">
-    Caricamento notizie...
+
+<!-- Il box laterale con la larghezza desiderata e lo sfondo scuro -->
+<div id="zdl-news-box" style="width: 100%; max-width: 260px; height: 400px; overflow-y: auto; border: 1px solid #555; background: #343434; padding: 0px;">
+    <div style="font: 12px 'Verdana', sans-serif; color: #959595; padding: 10px;">Caricamento notizie...</div>
 </div>
 
 <script>
 (function() {
-    // URL del tuo script Python su HelioHost configurato per la lingua italiana
     const pythonCgiUrl = 'https://z0n1n0z.helioho.st/cgi-bin/zdl-feed2html.py?origin=it';
 
     fetch(pythonCgiUrl)
@@ -237,20 +237,41 @@
             return response.text();
         })
         .then(htmlContent => {
-            // Estrae solo il corpo utile generato dal CGI se contiene tag <html>/<body>
-            // Se il CGI restituisce già codice pulito, basta: document.getElementById('zdl-news-box').innerHTML = htmlContent;
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlContent, 'text/html');
             const bodyContent = doc.body ? doc.body.innerHTML : htmlContent;
             
-            document.getElementById('zdl-news-box').innerHTML = bodyContent;
+            // Creiamo un wrapper identificato per attivare il CSS dedicato
+            const wrapper = document.createElement('div');
+            wrapper.id = 'zdl-news-inner';
+            wrapper.innerHTML = bodyContent;
+            
+            const targetBox = document.getElementById('zdl-news-box');
+            targetBox.innerHTML = '';
+            targetBox.appendChild(wrapper);
         })
         .catch(error => {
-            document.getElementById('zdl-news-box').innerHTML = '<p style="color:#cc0000; font-family:sans-serif; font-size:12px;">Al momento non è possibile caricare le notizie.</p>';
+            document.getElementById('zdl-news-box').innerHTML = '<div style="padding: 10px; font: 12px \'Verdana\', sans-serif; color:#cc0000;">Al momento non è possibile caricare le notizie.</div>';
             console.error('Errore Fetch:', error);
         });
 })();
 </script>
+
+<!-- Carichiamo il file CSS presente su NonGNU limitando il suo raggio d'azione solo al box delle notizie -->
+<style>
+@import url('https://www.nongnu.org/zdl/zdl_rss_style.css');
+
+/* Sovrascrittura di sicurezza per isolare l'ereditarietà: 
+   applica le regole del foglio di stile SOLO agli elementi figli di #zdl-news-inner */
+#zdl-news-inner { text-align: left; margin-left: 0.5em; color: #959595; font-family: "Verdana", sans-serif; font-size: 12px; }
+#zdl-news-inner a { color: white; text-decoration: none; font-weight: bold; }
+#zdl-news-inner a:hover { text-decoration: underline; }
+#zdl-news-inner ul { margin-left: 0em; list-style-type: square; }
+#zdl-news-inner ol { margin-left: 0em; }
+#zdl-news-inner li { margin-bottom: 0em; }
+#zdl-news-inner .feed_item_date { font-size: 10px; }
+</style>
+
 
 
 </div><br>
