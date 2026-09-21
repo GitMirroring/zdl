@@ -257,6 +257,23 @@
 })();
 </script>
 
+<!-- Carichiamo il file CSS presente su NonGNU limitando il suo raggio d'azione solo al box delle notizie -->
+<style>
+@@import url('https://www.nongnu.org/zdl/zdl_rss_style.css');
+
+/* Sovrascrittura di sicurezza per isolare l'ereditarietà: 
+   applica le regole del foglio di stile SOLO agli elementi figli di #zdl-news-inner */
+#zdl-news-inner { text-align: left; margin-left: 0.5em; color: #959595; font-family: "Verdana", sans-serif; font-size: 12px; }
+#zdl-news-inner a { color: white; text-decoration: none; font-weight: bold; }
+#zdl-news-inner a:hover { text-decoration: underline; }
+#zdl-news-inner ul { margin-left: 0em; list-style-type: square; }
+#zdl-news-inner ol { margin-left: 0em; }
+#zdl-news-inner li { margin-bottom: 0em; }
+#zdl-news-inner .feed_item_date { font-size: 10px; }
+</style>
+
+
+
 </div><br>
 @b{ZDL}
 <div class="nav">
