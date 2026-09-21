@@ -49,15 +49,15 @@ try:
     print(f"""<html lang="{lang}">
 <head>
 <title>ZigzagDownLoader (ZDL)</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="description" content="ZigzagDownLoader (ZDL)">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<link rel="stylesheet" type="text/css" href="https://nongnu.org">
+<link rel="stylesheet" type="text/css" href="https://www.nongnu.org/zdl/zdl_rss_style.css">
 </head>
 <body>""")
 
     # Link principale al gruppo Savannah
-    # print("<a href='https://nongnu.org' target='_blank'>Notizie ZDL</a>")
+    # print("<a href='https://savannah.nongnu.org/news/?group_id=11047' target='_blank'>ZDL News</a>")
 
     # Isoliamo tutte le <entry>
     entries = re.findall(r'<entry\b.*?>(.*?)</entry>', xml_text, re.DOTALL)
