@@ -220,7 +220,7 @@
 
 
 <!-- Il box laterale con la larghezza desiderata e lo sfondo scuro -->
-<div id="zdl-news-box" style="width: 94%; height: 300px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; border-right: 1em solid #343434; background: #343434; padding: 0px;">
+<div id="zdl-news-box" style="width: 92%; height: 300px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; background: #343434; padding-right: 1em;">
     <div style="font: 12px 'Verdana', sans-serif; color: #959595; padding: 10px;">Caricamento notizie...</div>
 </div>
 
