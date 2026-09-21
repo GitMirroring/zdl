@@ -220,9 +220,39 @@
 <div class="left">
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
-<script type="text/javascript">
-document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://z0n1n0z.helioho.st/cgi-bin/zdl-feed2html.py?origin=it"></iframe>');
+
+<!-- Box con barra di scorrimento laterale nativa HTML, indistinguibile da un iframe -->
+<div id="zdl-news-box" style="width: 100%; max-width: 320px; height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background-color: #fff;">
+    Caricamento notizie...
+</div>
+
+<script>
+(function() {
+    // URL del tuo script Python su HelioHost configurato per la lingua italiana
+    const pythonCgiUrl = 'https://z0n1n0z.helioho.st/cgi-bin/zdl-feed2html.py?origin=it';
+
+    fetch(pythonCgiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Risposta del server non valida');
+            return response.text();
+        })
+        .then(htmlContent => {
+            // Estrae solo il corpo utile generato dal CGI se contiene tag <html>/<body>
+            // Se il CGI restituisce già codice pulito, basta: document.getElementById('zdl-news-box').innerHTML = htmlContent;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, 'text/html');
+            const bodyContent = doc.body ? doc.body.innerHTML : htmlContent;
+            
+            document.getElementById('zdl-news-box').innerHTML = bodyContent;
+        })
+        .catch(error => {
+            document.getElementById('zdl-news-box').innerHTML = '<p style="color:#cc0000; font-family:sans-serif; font-size:12px;">Al momento non è possibile caricare le notizie.</p>';
+            console.error('Errore Fetch:', error);
+        });
+})();
 </script>
+
+
 </div><br>
 @b{ZDL}
 <div class="nav">
