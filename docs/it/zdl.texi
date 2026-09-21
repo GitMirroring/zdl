@@ -251,7 +251,7 @@
             targetBox.appendChild(wrapper);
         })
         .catch(error => {
-            document.getElementById('zdl-news-box').innerHTML = '<div style="padding: 10px; font: 12px \'Verdana\', sans-serif; color:#cc0000;">Al momento non è possibile caricare le notizie.</div>';
+            document.getElementById('zdl-news-box').innerHTML = '<div>Al momento non è possibile caricare le notizie.</div>';
             console.error('Errore Fetch:', error);
         });
 })();
@@ -259,7 +259,7 @@
 
 <!-- Carichiamo il file CSS presente su NonGNU limitando il suo raggio d'azione solo al box delle notizie -->
 <style>
-@import url('https://www.nongnu.org/zdl/zdl_rss_style.css');
+@@import url('https://www.nongnu.org/zdl/zdl_rss_style.css');
 
 /* Sovrascrittura di sicurezza per isolare l'ereditarietà: 
    applica le regole del foglio di stile SOLO agli elementi figli di #zdl-news-inner */
