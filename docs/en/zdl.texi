@@ -74,8 +74,7 @@
 
 @end itemize
 
-<script src="https://liberapay.com/ZDL/widgets/button.js"></script>
-<noscript><a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+<a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
 @end ifhtml
 @ifnothtml

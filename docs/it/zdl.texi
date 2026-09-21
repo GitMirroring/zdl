@@ -221,7 +221,7 @@
 <div class="nav">
 <p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 <script type="text/javascript">
-document.write('<iframe height="300px" width="100%" style="border-style:none;" src="http://z0n1n0z.helioho.st/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
+document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://z0n1n0z.helioho.st/cgi-bin/zdl-feed2html.py?origin=it"></iframe>');
 </script>
 </div><br>
 @b{ZDL}
