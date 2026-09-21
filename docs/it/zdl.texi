@@ -174,7 +174,7 @@
 @macro menuDev
 @itemize
 @item
-@uref{https://savannah.nongnu.org/projects/zdl,,Progetto di sviluppo in Savannah/GNU}
+@uref{http://savannah.nongnu.org/projects/zdl,,Progetto di sviluppo in Savannah/GNU}
 @item
 @uref{http://download-mirror.savannah.gnu.org/releases/zdl/,,Pacchetti rilasciati di ZDL}
 @item
@@ -216,7 +216,7 @@
 <div class="container">
 <div class="left">
 <div class="nav">
-<p style='color:#959595;text-align:right;font-weight:bold'><a href='https://savannah.nongnu.org/news/?group_id=11047' target='_blank'>Aggiornamenti</a><a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+<p style='color:#959595;text-align:right;font-weight:bold'><a href='http://savannah.nongnu.org/news/?group_id=11047' target='_blank'>Aggiornamenti</a><a href="http://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="http://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 
 
 <!-- Il box laterale con la larghezza desiderata e lo sfondo scuro -->
@@ -285,8 +285,8 @@
 </div>
 </div>
 <div class="content">
-<a href="https://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en-us.png" alt="English version"></a>
-<a href="https://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it-it.png" alt="Versione italiana"></a>
+<a href="http://nongnu.org/zdl/en"><img align="right" src="http://nongnu.org/zdl/en/en-us.png" alt="English version"></a>
+<a href="http://nongnu.org/zdl/it"><img align="right" src="http://nongnu.org/zdl/it/it-it.png" alt="Versione italiana"></a>
 @end html
 @end ifhtml
 @end macro
@@ -946,7 +946,7 @@ In mancanza dei file temporanei relativi a @emph{link} non ancora processati, è
 Documentazione attualmente disponibile:
 @itemize @bullet
 @item
-ipertesto online: @url{https://nongnu.org/zdl}
+ipertesto online: @url{http://nongnu.org/zdl}
 @item
 ipertesto in formato @emph{info}, consultabile con il comando @command{info zdl} (per migliorarne la navigazione, si consigliano @command{pinfo} oppure @command{emacs})
 @item
@@ -1466,7 +1466,7 @@ Gianluca Zoni (zoninoz): @url{http://z0n1n0z.helioho.st}
  Gianluca Zoni (zoninoz): @url{http://z0n1n0z.helioho.st}@*
 
  For information or to collaborate on the project:@*
- @url{https://savannah.nongnu.org/projects/zdl}
+ @url{http://savannah.nongnu.org/projects/zdl}
 
 @unnumberedsec Licenza di ZigzagDownLoader (ZDL)
  
@@ -1531,7 +1531,7 @@ ZDL è rilasciato con licenza GPL (General Public Licence, v.3 e successive).
 @unnumberedsubsec Per informazioni e per collaborare al progetto:
 @itemize 
 @item
-@url{https://nongnu.org/zdl}
+@url{http://nongnu.org/zdl}
 @item
 @url{https://savannah.nongnu.org/projects/zdl}
 @end itemize

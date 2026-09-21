@@ -740,7 +740,7 @@ Manuali d'uso
 *************
 
 Documentazione attualmente disponibile:
-   • ipertesto online: <https://nongnu.org/zdl>
+   • ipertesto online: <http://nongnu.org/zdl>
    • ipertesto in formato _info_, consultabile con il comando ‘info zdl’
      (per migliorarne la navigazione, si consigliano ‘pinfo’ oppure
      ‘emacs’)
@@ -1436,7 +1436,7 @@ Copyright © 2011
 Gianluca Zoni (zoninoz): <http://z0n1n0z.helioho.st>
 
    For information or to collaborate on the project:
-<https://savannah.nongnu.org/projects/zdl>
+<http://savannah.nongnu.org/projects/zdl>
 
 Licenza di ZigzagDownLoader (ZDL)
 =================================
@@ -1485,22 +1485,22 @@ Node: Avviare ZDL19967
 Node: Arrestare ZDL22499
 Node: Controllare i download23627
 Node: Manuali d'uso27928
-Node: Modi28365
-Node: Readline31705
-Node: Editor33276
-Node: Omonimie34511
-Node: IRC/XDCC36080
-Node: Torrent37803
-Node: Filtri38711
-Node: Creare nuove estensioni39032
-Node: Software consigliati e dipendenze40843
-Node: Conkeror42527
-Node: zdl-xterm e XXXTerm/Xombrero43545
-Node: Installazione e aggiornamento45526
-Node: Perché questo programma48886
-Node: Tags52784
-Node: Copying58121
-Node: Contatti59165
+Node: Modi28364
+Node: Readline31704
+Node: Editor33275
+Node: Omonimie34510
+Node: IRC/XDCC36079
+Node: Torrent37802
+Node: Filtri38710
+Node: Creare nuove estensioni39031
+Node: Software consigliati e dipendenze40842
+Node: Conkeror42526
+Node: zdl-xterm e XXXTerm/Xombrero43544
+Node: Installazione e aggiornamento45525
+Node: Perché questo programma48885
+Node: Tags52783
+Node: Copying58120
+Node: Contatti59163
 
 End Tag Table
 

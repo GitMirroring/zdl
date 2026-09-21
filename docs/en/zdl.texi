@@ -1479,7 +1479,7 @@ Copyright @copyright{} 2011 @*
 @htmlstart
 @unnumbered Contacts
 @unnumberedsec Report a bug (or support request)
-@url{https://savannah.nongnu.org/bugs/?func=additem&amp;group=zdl}
+@url{https://savannah.nongnu.org/bugs/?func=additem&group=zdl}
 
 @unnumberedsec Project mailing list
 @emph{zdl-users - User list}:@* @url{https://lists.nongnu.org/mailman/listinfo/zdl-users}@*@*
