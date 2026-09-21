@@ -216,12 +216,12 @@
 <div class="container">
 <div class="left">
 <div class="nav">
-<p style='color:#959595;text-align:right;font-weight:bold'><a href='https://savannah.nongnu.org/news/?group_id=11047' target='_blank'>News</a><a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+<p style='color:#959595;text-align:right;font-weight:bold'><a href='https://savannah.nongnu.org/news/?group_id=11047' target='_blank'>Aggiornamenti</a><a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
 
 
 <!-- Il box laterale con la larghezza desiderata e lo sfondo scuro -->
-<div id="zdl-news-box" style="width: 92%; height: 300px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; background: #343434; padding-right: 1em;">
-    <div style="font: 12px 'Verdana', sans-serif; color: #959595; padding: 10px;">Caricamento notizie...</div>
+<div id="zdl-news-box" style="width: 92%; height: 350px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; background: #343434; padding-right: 1em;">
+    <div style="font: 12px 'Verdana', sans-serif; color: #959595; padding: 10px;">Caricamento novità...</div>
 </div>
 
 <script>
@@ -248,7 +248,7 @@
             targetBox.appendChild(wrapper);
         })
         .catch(error => {
-            document.getElementById('zdl-news-box').innerHTML = '<div>Al momento non è possibile caricare le notizie.</div>';
+            document.getElementById('zdl-news-box').innerHTML = '<div>Al momento non è possibile caricare le novità.</div>';
             console.error('Errore Fetch:', error);
         });
 })();

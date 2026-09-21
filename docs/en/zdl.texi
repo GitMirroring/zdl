@@ -72,9 +72,6 @@
 @ref{Why this program}:@*The sense of continuous ZIGZAG experimentation@*
 
 @end itemize
-
-<a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
-
 @end ifhtml
 @ifnothtml
 * Home:Top. ZigzagDownLoader@*
@@ -220,10 +217,45 @@
 <div class="container">
 <div class="left">
 <div class="nav">
-<p style='color:#959595;text-align:right;font-weight:bold'>News <a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
-<script type="text/javascript">
-document.write('<iframe height="300px" width="100%" style="border-style:none;" src="https://zoninoz.altervista.org/zdl/zdl-feed2html.php?origin=' + window.location + '"></iframe>');
+<p style='color:#959595;text-align:right;font-weight:bold'><a href='https://savannah.nongnu.org/news/?group_id=11047' target='_blank'>Updates</a><a href="https://savannah.nongnu.org/news/atom.php?group=zdl" target="_blank"><img src="https://savannah.nongnu.org/images/common/feed16.png" style="float:right;margin-left:5px"></a></p>
+
+
+<!-- Il box laterale con la larghezza desiderata e lo sfondo scuro -->
+<div id="zdl-news-box" style="width: 92%; height: 350px; overflow-y: auto; border: 0px solid #343434; border-left: 1em solid #343434; background: #343434; padding-right: 1em;">
+    <div style="font: 12px 'Verdana', sans-serif; color: #959595; padding: 10px;">Loading updates...</div>
+</div>
+
+<script>
+(function() {
+    const pythonCgiUrl = 'https://z0n1n0z.helioho.st/cgi-bin/zdl-feed2html.py?origin=en';
+
+    fetch(pythonCgiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Invalid server response');
+            return response.text();
+        })
+        .then(htmlContent => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, 'text/html');
+            const bodyContent = doc.body ? doc.body.innerHTML : htmlContent;
+            
+            // Creiamo un wrapper identificato per attivare il CSS dedicato
+            const wrapper = document.createElement('div');
+            wrapper.id = 'zdl-news-inner';
+            wrapper.innerHTML = bodyContent;
+            
+            const targetBox = document.getElementById('zdl-news-box');
+            targetBox.innerHTML = '';
+            targetBox.appendChild(wrapper);
+        })
+        .catch(error => {
+            document.getElementById('zdl-news-box').innerHTML = '<div>It is currently not possible to upload the updates.</div>';
+            console.error('Errore Fetch:', error);
+        });
+})();
 </script>
+
+<a href="https://liberapay.com/ZDL/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 </div><br>
 @b{ZDL}
 <div class="nav">
