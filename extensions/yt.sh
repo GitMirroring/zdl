@@ -65,77 +65,357 @@ then
         replace_url_in "$url_new"
 fi
 
-if [[ "$url_in" =~ (youtube\.com\/watch|youtube\.com\/shorts|youtu\.be) ]]
+# System prerequisites check
+if ! command -v jq &> /dev/null
+then
+    print_c 3 "Error ZDL: 'jq' (JSON processor) is required but not installed."
+    
+elif [[ "$url_in" =~ (youtube\.com\/watch|youtube\.com\/shorts|youtu\.be) ]]
 then
     replace_url_in "$(urldecode "$(sed -r 's|(^[^\?]+\?).*&*(v{1}=[^&]+)|\1\2|g' <<< "$url_in")")"    
     replace_url_in "$(sed -r 's|\&list\=[^&]+||g' <<< "$url_in")"    
 
-    yt_formats=$($youtube_dl --list-formats "${url_in}")
-    yt_format=$(grep -P '1920x1080.+m3u8.+original' <<< "$yt_formats"|
-                    cut -d' ' -f1)
+    # Create a secure temporary sandbox directory in the filesystem for subtitle isolation
+    TMP_DIR=$(mktemp -d -t zdl-subs-XXXXXXXXXX)
+    print_c 4 "Temporary sandbox initialized: $TMP_DIR"
 
-    if [ -z "$yt_format" ] #&& yt_format='b'
+    print_c 4 "Extracting metadata and analyzing media streams..."
+    # Atomic call to yt-dlp to minimize network overhead and store JSON payload
+    JSON_DATA=$(yt-dlp -J "$url_in")
+
+    # Sanitize video title to make it compatible with standard filesystem naming conventions
+    TITLE=$(echo "$JSON_DATA" | jq -r '.title | gsub("[\\\\/:*?\"<>|]"; "_")')
+
+    # Detect original video language (fallback to 'und' if missing)
+    ORIGINAL_LANG=$(echo "$JSON_DATA" | jq -r '.language // "und"')
+    ORIGINAL_LANG=$(echo "$ORIGINAL_LANG" | cut -d'-' -f1)
+
+    # Determine target user language (from $LANG or $LANGUAGE)
+    get_language
+    USER_LANG=""
+    if [ -n "$LANG" ]
     then
-        yt_format_video=$(awk '/(mp4.*m3u8)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
-        yt_format_audio=$(awk '/(default.*m4a)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
+        USER_LANG=$(echo "$LANG" | cut -d'_' -f1 | cut -d'.' -f1 | cut -d'-' -f1)
 
-        if [ -z "$yt_format_audio" ]
-        then
-            yt_format_audio=$(awk '/(mp4.*audio.*Default)/ {res = $1} END {if (res) print res}' <<< "$yt_formats")
-        fi
-        
-        url_in_file_audio=$($youtube_dl -f "$yt_format_audio" --get-url "${url_in}")
-        url_in_file_video=$($youtube_dl -f "$yt_format_video" --get-url "${url_in}")
-        yt_title=$($youtube_dl --get-title "${url_in}")
-        force_dler FFMpeg
-
-        url_in_file="$url_in_file_video"
-
-    else    
-        data=$($youtube_dl -f "$yt_format" --get-title --get-url "${url_in}")       
-        yt_title="$(head -n1 <<< "$data")"
-        url_in_file="$(tail -n1 <<< "$data")"
-    fi
-
-    if ! url "$url_in_file"
+    elif [ -n "$LANGUAGE" ]
     then
-	unset file_in url_in_file
+        USER_LANG=$(echo "$LANGUAGE" | cut -d':' -f1 | cut -d'_' -f1 | cut -d'-' -f1)
     fi
-
-    if [[ "$url_in_file" =~ \.m3u8 ]]
-    then
-        get_language
-        force_dler FFMpeg
-        get_language_prog
-        
-        if [ "$test_livestream_boolean" == true ]
-        then
-            livestream_m3u8="$url_in"
-            get_livestream_duration_time "$url_in" yt_duration
-            get_livestream_start_time "$url_in" yt_start
-            yt_title="$yt_title"_$(date +%Y-%m-%d)_"${yt_start//\:/\-}"_"${yt_duration//\:/\-}"
-        fi
-    fi
-    file_in="$yt_title".mp4
+    get_language_prog
     
-    if [ "$downloader_in" == "Axel" ] &&
-	   [ -n "$(axel -o /dev/null "$url_in_file" | grep '403 Forbidden')" ]
-    then
-	force_dler Wget
-    fi
+    # Preferred subtitle language: use USER_LANG if it exists, otherwise the original language
+    PREFERRED_SUB_LANG="${USER_LANG:-$ORIGINAL_LANG}"
 
-    if [[ "$url_in_file" =~ (Age check) ]]
+    print_c 1 "Original language detected: $ORIGINAL_LANG"
+
+    if [ -n "$USER_LANG" ]
     then
-	_log 19
+        print_c 1 "User requested language (\$LANG/\$LANGUAGE): $USER_LANG"
+
     else
-	axel_parts=4
+        print_c 3 "No \$LANG/\$LANGUAGE variable detected"
+    fi
+
+    # ---------------------------------------------------------------------
+    # 1. Video Stream Selection (Optimized target <= 1080p)
+    # ---------------------------------------------------------------------
+    VIDEO_ID=$(echo "$JSON_DATA" | jq -r '[.formats[] | select(.vcodec != "none" and .acodec == "none" and .height <= 1080)] | sort_by(.height) | last | .format_id')
+
+    if [ "$VIDEO_ID" = "null" ] ||
+           [ -z "$VIDEO_ID" ]
+    then
+        print_c 2 "Warning: No video-only stream <= 1080p detected. Falling back to best combined format..."
+        VIDEO_ID=$(echo "$JSON_DATA" | jq -r '[.formats[] | select(.height <= 1080)] | sort_by(.height) | last | .format_id')
+    fi
+    print_c 4 "Selected Video ID for streaming: $VIDEO_ID"
+
+    # ---------------------------------------------------------------------
+    # 2. Multi-language Audio Tracks Analysis & Parsing (Conditional)
+    # ---------------------------------------------------------------------
+    print_c 4 "Mapping and de-duplicating audio tracks..."
+    AUDIO_IDS=()
+    AUDIO_LANGS=()
+    DEFAULT_AUDIO_INDEX=0
+    CURRENT_INDEX=0
+    FOUND_USER_AUDIO=false
+
+    if [ -n "$USER_LANG" ]
+    then
+        print_c 4 "Fast audio mode: targeted extraction for original ($ORIGINAL_LANG) and requested ($USER_LANG) languages..."
+    #     AUDIO_LIST=$(echo "$JSON_DATA" | jq -r --arg orig "$ORIGINAL_LANG" --arg user "$USER_LANG" '
+    #   .formats[] | select(.vcodec == "none" and .acodec != "none") | 
+    #   . as $f |
+    #   (($f.language // "und") | split("-")[0]) as $lang |
+    #   select($lang == $orig or $lang == $user) |
+    #   "\(.format_id) \($f.language // "und") \((.language_preference // 0))"
+    # ')
+        AUDIO_LIST=$(echo "$JSON_DATA" | jq -r --arg orig "$ORIGINAL_LANG" --arg user "$USER_LANG" '
+      [.formats[] | select(.vcodec == "none" and .acodec != "none")] |
+      group_by(.language // "und") |
+      map(
+        sort_by(.abr // .tbr // 0) | last
+      )[] |
+      . as $f |
+      (($f.language // "und") | split("-")[0]) as $lang |
+      select($lang == $orig or $lang == $user) |
+      "\(.format_id) \($f.language // "und") \((.language_preference // 0))"
+    ')
+    else
+        echo "Full scan of all available audio tracks..."
+        # AUDIO_LIST=$(echo "$JSON_DATA" | jq -r '.formats[] | select(.vcodec == "none" and .acodec != "none") | "\(.format_id) \(.language // "und") \((.language_preference // 0))"')
+        AUDIO_LIST=$(echo "$JSON_DATA" | jq -r '
+      [.formats[] | select(.vcodec == "none" and .acodec != "none")] |
+      group_by(.language // "und") |
+      map(
+        sort_by(.abr // .tbr // 0) | last
+      )[] |
+      "\(.format_id) \(.language // "und") \((.language_preference // 0))"
+    ')
+    fi
+
+    while IFS= read -r line
+    do
+        if [ -z "$line" ]
+        then
+            continue
+        fi
+        
+        format_id=$(echo "$line" | awk '{print $1}')
+        lang=$(echo "$line" | awk '{print $2}')
+        pref=$(echo "$line" | awk '{print $3}')
+        
+        clean_audio_lang=$(echo "$lang" | cut -d'-' -f1)
+        
+        AUDIO_IDS+=("$format_id")
+        AUDIO_LANGS+=("$lang")
+        
+        if [ -n "$USER_LANG" ] &&
+               [ "$clean_audio_lang" = "$USER_LANG" ] &&
+               [ "$FOUND_USER_AUDIO" = false ]
+        then
+            DEFAULT_AUDIO_INDEX=$CURRENT_INDEX
+            FOUND_USER_AUDIO=true
+
+        elif [ -z "$USER_LANG" ] && [ "$pref" -ge 0 ]
+        then
+            DEFAULT_AUDIO_INDEX=$CURRENT_INDEX
+
+        elif [ -z "$USER_LANG" ] &&
+                 [ "$DEFAULT_AUDIO_INDEX" -eq 0 ] &&
+                 [ "$clean_audio_lang" = "$ORIGINAL_LANG" ]
+        then
+            DEFAULT_AUDIO_INDEX=$CURRENT_INDEX
+        fi
+        
+        CURRENT_INDEX=$((CURRENT_INDEX + 1))
+        
+    done <<< "$AUDIO_LIST"
+
+    if [ ${#AUDIO_IDS[@]} -eq 0 ]
+    then
+        print_c 2 "Warning: No audio streams found with applied filters. Restoring full audio scan..."
+        # AUDIO_LIST=$(echo "$JSON_DATA" | jq -r '.formats[] | select(.vcodec == "none" and .acodec != "none") | "\(.format_id) \(.language // "und") \((.language_preference // 0))"')
+
+        AUDIO_LIST=$(echo "$JSON_DATA" | jq -r '
+      [.formats[] | select(.vcodec == "none" and .acodec != "none")] |
+      group_by(.language // "und") |
+      map(
+        sort_by(.abr // .tbr // 0) | last
+      )[] |
+      "\(.format_id) \(.language // "und") \((.language_preference // 0))"
+    ')
+
+        while IFS= read -r line
+        do
+            [ -z "$line" ] && continue
+            
+            format_id=$(echo "$line" | awk '{print $1}')
+            lang=$(echo "$line" | awk '{print $2}')
+            pref=$(echo "$line" | awk '{print $3}')
+            AUDIO_IDS+=("$format_id")
+            AUDIO_LANGS+=("$lang")
+            
+        done <<< "$AUDIO_LIST"
+    fi
+
+    print_c 4 "Mapped Audio streams: ${AUDIO_IDS[*]}"
+    print_c 4 "Default audio track set to stream index: $DEFAULT_AUDIO_INDEX"
+
+    # ---------------------------------------------------------------------
+    # 3. Subtitles Download and Structural Inspection (Conditional)
+    # ---------------------------------------------------------------------
+    HAS_SUBS=false
+    SUB_FILES=()
+    SUB_LANGS=()
+
+    if [ -n "$USER_LANG" ]
+    then
+        print_c 1 "Fast subtitle mode: targeted extraction for original ($ORIGINAL_LANG) and requested ($USER_LANG) languages..."
+
+        SUB_LIST=$(echo "$JSON_DATA" | jq -r --arg orig "$ORIGINAL_LANG" --arg user "$USER_LANG" '
+      (.subtitles, .automatic_captions) | select(. != null) | to_entries[] | 
+      select(.key == $orig or .key == $user) |
+      .key as $lang | .value[] | select(.ext == "vtt") | "\($lang) \(.url)"
+    ' 2>/dev/null || true)
+        
+    else
+        print_c 3 "No \$LANG/\$LANGUAGE variable detected: full scan of all available subtitles..."
+
+        SUB_LIST=$(echo "$JSON_DATA" | jq -r '
+      (.subtitles, .automatic_captions) | select(. != null) | to_entries[] | .key as $lang | .value[] | select(.ext == "vtt") | "\($lang) \(.url)"
+    ' 2>/dev/null || true)
+    fi
+
+    if [ -n "$SUB_LIST" ]
+    then
+        while IFS= read -r sub_line
+        do
+            if [ -z "$sub_line" ]
+            then
+                continue
+            fi
+            
+            sub_lang=$(echo "$sub_line" | awk '{print $1}')
+            sub_url=$(echo "$sub_line" | awk '{print $2}')
+            
+            if [[ " ${SUB_LANGS[*]} " =~ " ${sub_lang} " ]]
+            then
+                continue
+            fi
+
+            if [ -n "$sub_url" ] &&
+                   [ "$sub_url" != "null" ]
+            then
+                output_file="$TMP_DIR/sub_${sub_lang}.vtt"
+                
+                if command -v curl &> /dev/null
+                then
+                    curl -s -L "$sub_url" -o "$output_file" || true
+
+                else
+                    wget -q -O "$output_file" "$sub_url" || true
+                fi
+
+                NUM_RIGHE=$(grep -v -E '(^[0-9]:|^[0-9][0-9]:|^$|^Style:|^Kind:|^Language:|^WEBVTT)' "$output_file" 2>/dev/null | wc -l || echo 0)
+
+                if [ -s "$output_file" ] &&
+                       [ "$NUM_RIGHE" -gt 5 ]
+                then
+                    SUB_FILES+=("$output_file")
+                    SUB_LANGS+=("$sub_lang")
+                    HAS_SUBS=true
+                    print_c 1 "   -> [OK] Valid subtitle intercepted: [$sub_lang] ($NUM_RIGHE lines of text)"
+                    
+                else
+                    rm -f "$output_file"
+                fi
+            fi
+            
+        done <<< "$SUB_LIST"
+    fi
+
+    # ---------------------------------------------------------------------
+    # 4. Direct URL Generation for Audio and Video Streaming
+    # ---------------------------------------------------------------------
+    print_c 4 "Resolving remote streaming endpoints..."
+    URL_V=$(yt-dlp -g -f "$VIDEO_ID" "$url_in")
+
+    ARRAY_URL_AUDIO=()
+    for aid in "${AUDIO_IDS[@]}"
+    do
+        URL_A=$(yt-dlp -g -f "$aid" "$url_in")
+        ARRAY_URL_AUDIO+=("$URL_A")
+    done
+
+    # ---------------------------------------------------------------------
+    # 5. Dynamic Compilation of FFmpeg Arguments Array
+    # ---------------------------------------------------------------------
+    ffmpeg_opts=()
+
+    ffmpeg_opts+=("-i" "$URL_V")
+
+    for url_a in "${ARRAY_URL_AUDIO[@]}"
+    do
+        ffmpeg_opts+=("-i" "$url_a")
+    done
+
+    if [ "$HAS_SUBS" = true ]
+    then
+        for sub in "${SUB_FILES[@]}"
+        do
+            ffmpeg_opts+=("-i" "$sub")
+        done
+    fi
+
+    ffmpeg_opts+=("-map" "0:v")
+
+    INPUT_INDEX=1
+    AUDIO_STREAM_INDEX=0
+    
+    for _ in "${ARRAY_URL_AUDIO[@]}"
+    do
+        ffmpeg_opts+=("-map" "${INPUT_INDEX}:a")
+        clean_lang=$(echo "${AUDIO_LANGS[$AUDIO_STREAM_INDEX]}" | cut -d'-' -f1)
+        ffmpeg_opts+=("-metadata:s:a:${AUDIO_STREAM_INDEX}" "language=${clean_lang}")
+        
+        AUDIO_STREAM_INDEX=$((AUDIO_STREAM_INDEX + 1))
+        INPUT_INDEX=$((INPUT_INDEX + 1))
+    done
+
+    DEFAULT_SUB_INDEX=-1
+
+    if [ "$HAS_SUBS" = true ]
+    then
+        SUB_STREAM_INDEX=0
+
+        for _ in "${SUB_FILES[@]}"
+        do
+            ffmpeg_opts+=("-map" "${INPUT_INDEX}:s")
+            sub_lang_item="${SUB_LANGS[$SUB_STREAM_INDEX]}"
+            clean_sub_lang=$(echo "$sub_lang_item" | cut -d'-' -f1)
+            ffmpeg_opts+=("-metadata:s:s:${SUB_STREAM_INDEX}" "language=${clean_sub_lang}")
+            
+            if [ "$clean_sub_lang" = "$PREFERRED_SUB_LANG" ] &&
+                   [ "$DEFAULT_SUB_INDEX" -eq -1 ]
+            then
+                DEFAULT_SUB_INDEX=$SUB_STREAM_INDEX
+            fi
+            
+            SUB_STREAM_INDEX=$((SUB_STREAM_INDEX + 1))
+            INPUT_INDEX=$((INPUT_INDEX + 1))            
+        done
+    fi
+
+    ffmpeg_opts+=("-disposition:a" "none")
+    ffmpeg_opts+=("-disposition:a:${DEFAULT_AUDIO_INDEX}" "default")
+
+    if [ "$HAS_SUBS" = true ]
+    then
+        ffmpeg_opts+=("-disposition:s" "none")
+
+        if [ "$DEFAULT_SUB_INDEX" -ne -1 ]
+        then
+            ffmpeg_opts+=("-disposition:s:${DEFAULT_SUB_INDEX}" "default")
+        fi
     fi
     
-    if [ -n "$file_in" ]
-    then
-        file_in="${file_in//🔴}"
-        sanitize_file_in
-    fi
+    file_in="${TITLE}.mkv"
+    sanitize_file_in
+    
+    ffmpeg_opts+=("-c" "copy" "-c:s" "srt" "$file_in")
+    url_in_file="$url_in"
+    
+    # ---------------------------------------------------------------------
+    # 6. Execution of Finalized Lossless Multiplexing Process
+    # ---------------------------------------------------------------------
+    #echo "Initializing FFmpeg engine for remote stream multiplexing..."
+    #ffmpeg -v warning -stats "${ffmpeg_opts[@]}"
+
+    #echo "[ZDL SUCCESS] Processing complete! File saved locally as: '${TITLE}.mkv'"
+
+    get_language
+    force_dler FFMpeg
+    get_language_prog
 
     no_check_links+=( googlevideo youtube youtu\.be )
 

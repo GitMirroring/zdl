@@ -574,7 +574,17 @@ $playpath" > "$path_tmp/${file_in}_stdout.tmp"
 	    ## URL-FILE.M3U8
 	    rm -f "$path_tmp/${file_in}_stdout.tmp"
 
-            if url "$url_in_file_video" &&
+            if [ "$url_in_file" == "$url_in" ] &&
+                   [ -n "${ffmpeg_opts[*]}" ]
+            then
+                nohup $ffmpeg -loglevel info \
+                      "${ffmpeg_opts[@]}" \
+                      -y &> >( 
+		    stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+	    	        stdbuf -i0 -o0 -e0 grep -P '(Duration|bitrate=|time=|muxing)' >> "$path_tmp/${file_in}_stdout.tmp" ) &
+                pid_in=$!                
+                
+            elif url "$url_in_file_video" &&
                     url "$url_in_file_audio"
             then
 		nohup $ffmpeg -loglevel info \

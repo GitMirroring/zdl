@@ -467,7 +467,7 @@ function main_loop {
                     fi
 		fi
 
-		sanitize_file_in
+	        sanitize_file_in
 
 		if ! check_freespace
 		then

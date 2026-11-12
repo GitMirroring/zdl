@@ -530,6 +530,9 @@ function sanitize_url {
 }
 
 function sanitize_file_in {
+    [[ "${ffmpeg_opts[*]}" =~ "$file_in" ]] &&
+        return 1
+    
     local ext ext0
 
     if [ -z "$file_in" ] &&

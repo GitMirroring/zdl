@@ -516,6 +516,7 @@ EXTENSIONS:
         fi
 
         declare -A deps
+        deps['jq']=jq
         deps['gettext']=gettext
         deps['aria2c']=aria2
         deps['nano']=nano
@@ -580,6 +581,7 @@ EXTENSIONS:
         ## GNU/LINUX
         
         declare -A deps
+        deps['jq']=jq
         deps['gettext']=gettext
         deps['pinfo']=pinfo
         deps['aria2c']=aria2
