@@ -80,7 +80,7 @@ try:
         content_match = re.search(r'<content\b.*?>(.*?)</content>', entry, re.DOTALL)
         descr_articolo = content_match.group(1).strip() if content_match else ""
         
-        # --- FILTRO LINGUA (Stessa logica del tuo if/elseif PHP) ---
+        # --- FILTRO LINGUA (Stessa logica del PHP) ---
         mostra_articolo = False
         titolo_filtrato = raw_title
         
@@ -95,11 +95,11 @@ try:
             
         # --- PRINT ARTICOLO FORMATTATO ---
         if mostra_articolo:
-            print("<hr />")
             print(f"<h3><a href='{link_articolo}' target='_blank'>{titolo_filtrato}</a></h3>")
             print(f"<p>{descr_articolo}</p>")
             print(f"<div class='feed_item_date'>Data: {data_articolo}</div>")
-            
+            print("<hr />")
+			
     # --- DISPLAY TAIL ---
     print("</body></html>")
 

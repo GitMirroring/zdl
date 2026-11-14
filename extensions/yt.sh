@@ -80,8 +80,8 @@ then
     print_c 4 "Temporary sandbox initialized: $TMP_DIR"
 
     print_c 4 "Extracting metadata and analyzing media streams..."
-    # Atomic call to yt-dlp to minimize network overhead and store JSON payload
-    JSON_DATA=$(yt-dlp -J "$url_in")
+    # Atomic call to $youtube_dl to minimize network overhead and store JSON payload
+    JSON_DATA=$($youtube_dl -J "$url_in")
 
     # Sanitize video title to make it compatible with standard filesystem naming conventions
     TITLE=$(echo "$JSON_DATA" | jq -r '.title | gsub("[\\\\/:*?\"<>|]"; "_")')
@@ -318,12 +318,12 @@ then
     # 4. Direct URL Generation for Audio and Video Streaming
     # ---------------------------------------------------------------------
     print_c 4 "Resolving remote streaming endpoints..."
-    URL_V=$(yt-dlp -g -f "$VIDEO_ID" "$url_in")
+    URL_V=$($youtube_dl -g -f "$VIDEO_ID" "$url_in")
 
     ARRAY_URL_AUDIO=()
     for aid in "${AUDIO_IDS[@]}"
     do
-        URL_A=$(yt-dlp -g -f "$aid" "$url_in")
+        URL_A=$($youtube_dl -g -f "$aid" "$url_in")
         ARRAY_URL_AUDIO+=("$URL_A")
     done
 

@@ -29,20 +29,28 @@
 
 if [[ "$url_in" =~ google ]]
 then    
-    # google_location=$(grep -P "url=[^&]+" <<< "$url_in")
-    # google_location="${google_location#*url=}"
-    # google_location="${google_location%%&*}"
-    # google_location=$(urldecode "$google_location")
+    google_location=$(grep -P "url=[^&]+" <<< "$url_in")
+    google_location="${google_location#*url=}"
+    google_location="${google_location%%&*}"
+    google_location=$(urldecode "$google_location")
 
-    google_json=$($youtube_dl --dump-json "$url_in")
-    webpage_url=$(node -e "var json = $google_json; console.log(json.webpage_url)")
-
-    if ! url "$webpage_url"
+    if ! url "$google_location"
     then
-        webpage_url=$($youtube_dl --dump-json "$url_in" 2>&1 |
-            grep -oP 'http.+')
+        google_json=$($youtube_dl --dump-json "$url_in")
+        google_location=$(node -e "var json = $google_json; console.log(json.webpage_url)")
     fi
     
-    replace_url_in "$webpage_url"
+    if ! url "$google_location"
+    then
+        google_location=$($youtube_dl --dump-json "$url_in" 2>&1 |
+            grep -oP 'http.+')
+    fi
+
+    if url "$google_location"
+    then
+        replace_url_in "$google_location"
+    else
+        end_extension
+    fi
 fi
 
