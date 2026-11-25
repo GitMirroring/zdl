@@ -27,6 +27,8 @@
 #
 
 set +o history
+#DEBUG=true
+
 
 path_usr="/usr/local/share/zdl"
 
@@ -2100,8 +2102,9 @@ fi
             print_c 1 "$(gettext "Download completed")" 
             separator-
             print_header
-            
-            rm -rf "$path_tmp"
+
+            test $DEBUG ||
+                rm -rf "$path_tmp"
         fi
         
     else

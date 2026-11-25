@@ -401,7 +401,8 @@ then
     
     file_in="${TITLE}.mkv"
     sanitize_file_in
-    
+
+    ffmpeg_opts+=("-fflags" "+genpts" "-avoid_negative_ts" "make_zero" "-max_interleave_delta" "5000000")
     ffmpeg_opts+=("-c" "copy" "-c:s" "srt" "$file_in")
     url_in_file="$url_in"
     
